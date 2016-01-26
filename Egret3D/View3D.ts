@@ -281,9 +281,10 @@
         * @platform Web,Native
         */
         public delHUD(hud: HUD) {
-
             var index: number = this._hudList.indexOf(hud);
-            this._hudList.splice(index, 1);
+            if (index >= 0 && index < this._hudList.length) {
+                this._hudList.splice(index, 1);
+            }
         }
 
         /**
@@ -308,7 +309,9 @@
         */
         public delWireframe(wireframe: WireframeBase) {
             var index: number = this._wireframeList.indexOf(wireframe);
-            this._wireframeList.splice(index, 1);
+            if (index >= 0 && index < this._wireframeList.length) {
+                this._wireframeList.splice(index, 1);
+            }
         }
 
         /**
