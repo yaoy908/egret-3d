@@ -478,7 +478,6 @@
             data.lightPassUsageData = this.positionPassUsageData;
             data.shadowPassUsageData = this.positionPassUsageData;
 
-            data.diffuseTex = CheckerboardTexture.texture;
             data.textureChange = true;
             data.textureMethodTypes = this.textureMethodTypes; 
 
