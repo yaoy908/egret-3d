@@ -250,9 +250,10 @@
         * @platform Web,Native
         */
         public delHUD(hud: HUD) {
-
             var index: number = this._hudList.indexOf(hud);
-            this._hudList.splice(index, 1);
+            if (index >= 0 && index < this._hudList.length) {
+                this._hudList.splice(index, 1);
+            }
         }
 
         /**
@@ -277,7 +278,9 @@
         */
         public delWireframe(wireframe: WireframeBase) {
             var index: number = this._wireframeList.indexOf(wireframe);
-            this._wireframeList.splice(index, 1);
+            if (index >= 0 && index < this._wireframeList.length) {
+                this._wireframeList.splice(index, 1);
+            }
         }
 
         /**
@@ -482,7 +485,7 @@
 
         /**
         * @language zh_CN
-        * 渲染
+        * 数据更新
         * 渲染中的主循环，可以使用外部时间控制器驱动，也可使用 requestFrame
         * @param time 当前时间
         * @param delay 时间间隔
