@@ -11,7 +11,7 @@
     * @see egret3d.LightGroup
     * @see egret3d.LightBase
     * @see egret3d.PointLight
-    * @see egret3d.SportLight
+    * @see egret3d.SpotLight
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -129,8 +129,8 @@
 
         /**
          * @language zh_CN  
-         * 设置灯光强度
-         * 影响灯光的强弱显示，值的范围0~没有上限，但是值过大会导致画面过度曝光
+         * 设置灯光强度。</p>
+         * 影响灯光的强弱显示，值的范围0~没有上限，但是值过大会导致画面过度曝光。</p>
          */
         public set intensity(value: number) {
             if (this._intensity != value){
@@ -141,8 +141,8 @@
         
         /**
          * @language zh_CN  
-         * 得到灯光强度
-         * 影响灯光的强弱显示，值的范围0~没有上限，但是值过大会导致画面过度曝光
+         * 得到灯光强度。</p>
+         * 影响灯光的强弱显示，值的范围0~没有上限，但是值过大会导致画面过度曝光。</p>
          */
         public get intensity(): number {
             return this._intensity;
@@ -150,8 +150,8 @@
 
         /**
         * @language zh_CN  
-        * 设置灯光强度
-        * 影响灯光的强弱显示，值的范围0~没有上限，但是值过大会导致画面过度曝光
+        * 设置背光灯光强度。</p>
+        * 影响背光灯光的强弱显示，值的范围0~没有上限，但是值过大会导致画面过度曝光。</p>
         */
         public set halfIntensity(value: number) {
             if (this._halfIntensity != value) {
@@ -162,8 +162,8 @@
         
         /**
          * @language zh_CN  
-         * 得到灯光强度
-         * 影响灯光的强弱显示，值的范围0~没有上限，但是值过大会导致画面过度曝光
+         * 得到背光灯光强度。</p>
+         * 影响背光灯光的强弱显示，值的范围0~没有上限，但是值过大会导致画面过度曝光。</p>
          */
         public get halfIntensity(): number {
             return this._halfIntensity;
@@ -171,8 +171,8 @@
                 
         /**
          * @language zh_CN  
-         * 设置灯光环境颜色
-         * 物体在未受到光的直接照射的地方 模拟间接环境光颜色，会影响背光面的颜色
+         * 设置灯光环境颜色。</p>
+         * 物体在未受到光的直接照射的地方 模拟间接环境光颜色，会影响背光面的颜色。</p>
          */
         public set ambient(color: number) {
             this._ambient.w = (color >> 24 & 0xff) / 255;
@@ -184,8 +184,8 @@
         
         /**
          * @language zh_CN  
-         * 获取 灯光环境颜色
-         * 物体在未受到光的直接照射的地方 模拟间接环境光颜色，会影响背光面的颜色
+         * 获取 灯光环境颜色。</p>
+         * 物体在未受到光的直接照射的地方 模拟间接环境光颜色，会影响背光面的颜色。</p>
          * return ambient  灯光环境颜色
          */
         public get ambient(): number {
@@ -194,8 +194,8 @@
                         
         /**
          * @language zh_CN  
-         * 设置灯光漫反射颜色
-         * 直接影响最终灯光的颜色色值 16进制的颜色 例如 red：0xffff0000
+         * 设置灯光漫反射颜色。</p>
+         * 直接影响最终灯光的颜色色值 16进制的颜色, 例如 red：0xffff0000。</p>
          * 也可以通过 diffusePower 来改变这个值的总体强弱
          */
         public set diffuse(color: number) {
@@ -208,9 +208,9 @@
                 
         /**
          * @language zh_CN  
-         * 设置灯光漫反射颜色
-         * 直接影响最终灯光的颜色色值 16进制的颜色 例如 red：0xffff0000
-         * 也可以通过 diffusePower 来改变这个值的总体强弱
+         * 设置灯光漫反射颜色。</p>
+         * 直接影响最终灯光的颜色色值 16进制的颜色 例如 red：0xffff0000。</p>
+         * 也可以通过 diffusePower 来改变这个值的总体强弱。</p>
          * return diffuse
          */
         public get diffuse(): number {
@@ -219,10 +219,10 @@
                                 
         /**
          * @language zh_CN  
-         * 设置灯光镜面高光反射颜色
-         * 在灯光方向与物体和相机成一个反光角度的时候，就会产生反光，高光，而不同的物体会有不同的颜色色值，尤其是金属
-         * 16进制的颜色 例如 red：0xffff0000
-         * 也可以通过 specularPower 来改变这个值的总体强弱
+         * 设置灯光镜面高光反射颜色。</p>
+         * 在灯光方向与物体和相机成一个反光角度的时候，就会产生反光，高光，而不同的物体会有不同的颜色色值，尤其是金属。</p>
+         * 16进制的颜色 例如 red：0xffff0000。</p>
+         * 也可以通过 specularPower 来改变这个值的总体强弱。</p>
          */
         public set specular(color: number) {
             this._specular.w = (color >> 24 & 0xff) / 255;
@@ -234,9 +234,9 @@
                         
         /**
          * @language zh_CN  
-         * 在灯光方向与物体和相机成一个反光角度的时候，就会产生反光，高光，而不同的物体会有不同的颜色色值，尤其是金属
-         * 16进制的颜色 例如 red：0xffff0000
-         * 也可以通过 specularPower 来改变这个值的总体强弱
+         * 在灯光方向与物体和相机成一个反光角度的时候，就会产生反光，高光，而不同的物体会有不同的颜色色值，尤其是金属。</p>
+         * 16进制的颜色 例如 red：0xffff0000。</p>
+         * 也可以通过 specularPower 来改变这个值的总体强弱。</p>
          * return  灯光镜面高光反射颜色
          */
         public get specular(): number {

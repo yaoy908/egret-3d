@@ -3,13 +3,26 @@
     /**
     * @private
     */
-    export class Scene3D extends Object3D {
+    export class Scene3D  {
         public collect: EntityCollect;
         public _sky: Sky;
         public _sphereSky: SphereSky;
+
+        private _root: Object3D = new Object3D();
         constructor() {
-            super();
             this.collect = new EntityCollect(this);
+        }
+        
+        /**
+        * @language zh_CN
+        * 返回渲染根节点
+        * 返回渲染场景的 scene3D 
+        * @returns Object3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get root(): Object3D {
+            return this._root;
         }
 
         /**
@@ -23,7 +36,7 @@
         public set sky(value: Sky) {
             this._sky = value;
             if (this._sky) {
-               this.addChild(this._sky);
+                this._root.addChild(this._sky);
                this._sky.isVisible = false;
             }
         }
@@ -68,6 +81,17 @@
             return this._sphereSky;
         }
 
-
+        /**
+        * @language zh_CN
+        * 将一个 Object3D 实例添加到 Scene3D 实例中。
+        * 将一个 Object3D 实例添加到 Scene3D 实例中。参与scene3D中的显示树优化，并且即时渲染出来
+        * @param  child3D {Object3D}
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public addChild3D(child3D: Object3D) {
+            this._root.addChild(child3D);
+            // to do add renderlist tree
+        }
     }
 } 

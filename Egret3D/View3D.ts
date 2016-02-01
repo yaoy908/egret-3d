@@ -52,18 +52,6 @@
 
         /**
         * @language zh_CN
-        * 返回渲染根节点
-        * 返回渲染场景的 scene3D 
-        * @returns Object3D
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public get root(): Object3D {
-            return this._scene;
-        }
-
-        /**
-        * @language zh_CN
         * 设置场景
         * 设置渲染场景的 scene3D ， 可以将整个渲染 列表替换，可作为游戏中切换游戏场景的主要接口
         * @param scene {Scene3D}
@@ -96,16 +84,16 @@
         */   
         constructor(viewPort: Rectangle, camera: Camera3D = null ) {
 
-            this._context3D = Egret3DDrive.context3D;
-            this._camera = camera || new Camera3D(CameraType.perspective);
-            this._scissorRect = new Rectangle();
             this._viewPort = viewPort;
+            this._camera = camera || new Camera3D(CameraType.perspective);
+
+            this._context3D = Egret3DDrive.context3D;
+
+            this._scissorRect = new Rectangle();
 
             this._scene = new Scene3D();
 
             this._render = RenderManager.getRender(RenderType.defaultRender);
-
-            //this.requestFrameBuffer();
 
             this.x = viewPort.x;
             this.y = viewPort.y;
@@ -250,9 +238,10 @@
         * @platform Web,Native
         */
         public delHUD(hud: HUD) {
-
             var index: number = this._hudList.indexOf(hud);
-            this._hudList.splice(index, 1);
+            if (index >= 0 && index < this._hudList.length) {
+                this._hudList.splice(index, 1);
+            }
         }
 
         /**
@@ -277,7 +266,9 @@
         */
         public delWireframe(wireframe: WireframeBase) {
             var index: number = this._wireframeList.indexOf(wireframe);
-            this._wireframeList.splice(index, 1);
+            if (index >= 0 && index < this._wireframeList.length) {
+                this._wireframeList.splice(index, 1);
+            }
         }
 
         /**
@@ -482,7 +473,7 @@
 
         /**
         * @language zh_CN
-        * 渲染
+        * 数据更新
         * 渲染中的主循环，可以使用外部时间控制器驱动，也可使用 requestFrame
         * @param time 当前时间
         * @param delay 时间间隔

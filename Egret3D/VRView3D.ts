@@ -98,7 +98,7 @@
         private tab: boolean = false;
         /**
         * @language zh_CN
-        * 渲染
+        * 数据更新
         * @param time {Number} 当前时间
         * @param delay {Number} 间隔时间
         * @version Egret 3.0
