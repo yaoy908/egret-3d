@@ -273,29 +273,25 @@
         * @platform Web,Native
         */
         constructor() {
-            window.onmousewheel = (e: MouseWheelEvent) => this.mouseWheel(e);
-            window.onmousedown = (e: MouseEvent) => this.mouseStart(e);
-            window.onmouseup = (e: MouseEvent) => this.mouseEnd(e);
-            window.onmousemove = (e: MouseEvent) => this.mouseMove(e);
-            window.onkeydown = (e: KeyboardEvent) => this.keyDown(e);
-            window.onkeyup = (e: KeyboardEvent) => this.keyUp(e);
-
+            window.addEventListener("mousewheel", (e: MouseWheelEvent) => this.mouseWheel(e));
+            window.addEventListener("mousedown", (e: MouseEvent) => this.mouseStart(e));
+            window.addEventListener("mouseup", (e: MouseEvent) => this.mouseEnd(e));
+            window.addEventListener("mousemove", (e: MouseEvent) => this.mouseMove(e));
+            window.addEventListener("keydown", (e: KeyboardEvent) => this.keyDown(e));
+            window.addEventListener("keyup", (e: KeyboardEvent) => this.keyUp(e));
 
             if (this.canGame()) {
                 window.addEventListener("gamepadconnected", (e: GamepadEvent) => this.ongamepadconnected(e));
                 window.addEventListener("gamepaddisconnected", (e: GamepadEvent) => this.ongamepaddisconnected(e));
             }
 
-
-            window.ontouchstart = (e: TouchEvent) => this.touchStart(e);
-            window.ontouchend = (e: TouchEvent) => this.touchEnd(e);
-            window.ontouchmove = (e: TouchEvent) => this.touchMove(e);
-            window.ontouchcancel = (e: TouchEvent) => this.touchEnd(e);
-
+            window.addEventListener("touchstart", (e: TouchEvent) => this.touchStart(e));
+            window.addEventListener("touchend", (e: TouchEvent) => this.touchEnd(e));
+            window.addEventListener("touchmove", (e: TouchEvent) => this.touchMove(e));
+            window.addEventListener("touchcancel", (e: TouchEvent) => this.touchEnd(e));
 
             window.addEventListener("deviceorientation", (e: DeviceOrientationEvent) => this.ondeviceorientation(e));
             window.addEventListener("devicemotion", (e: DeviceMotionEvent) => this.detectShake(e));
-
         }
 
         /**
