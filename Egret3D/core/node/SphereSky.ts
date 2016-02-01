@@ -8,7 +8,7 @@
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class SphereSky {
+    export class SphereSky extends Object3D {
                                 
         /**
         * @language zh_CN
@@ -25,8 +25,6 @@
         private vsShader: GLSL.ShaderBase;
         private fsShader: GLSL.ShaderBase;
         private sphereGeometry: SphereGeometry;
-        private skyMatrix: Matrix4_4;
-        private normalMatrix: Matrix4_4 = new Matrix4_4();
                         
         /**
         * @language zh_CN
@@ -35,13 +33,13 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(tex1: TextureBase ) {
+        constructor(tex1: TextureBase) {
+            super();
             this.skyTexture = tex1 ;
             this.usage = new MethodUsageData();
             this.vsShader = new GLSL.ShaderBase(null, this.usage);
             this.fsShader = new GLSL.ShaderBase(null, this.usage);
             this.setShader("spheresky_vertex", "spheresky_fragment");
-            this.skyMatrix = new Matrix4_4();
         } 
                                 
         /**
@@ -127,13 +125,7 @@
             context3D.bindVertexBuffer(this.sphereGeometry.sharedVertexBuffer);
             context3D.vertexAttribPointer(this.usage.program3D, this.usage.attribute_position.uniformIndex, 3, Egret3DDrive.FLOAT, false, this.sphereGeometry.vertexSizeInBytes, 0);
             context3D.vertexAttribPointer(this.usage.program3D, this.usage.attribute_uv0.uniformIndex, 2, Egret3DDrive.FLOAT, false, this.sphereGeometry.vertexSizeInBytes, 52 );
-
-            this.skyMatrix.identity();
-            this.skyMatrix.appendTranslation(camera.x, camera.y, camera.z);
-
             context3D.uniformMatrix4fv(this.usage.uniform_ProjectionMatrix.uniformIndex, false, camera.viewProjectionMatrix.rawData);
-            context3D.uniformMatrix4fv(this.usage.uniform_ModelMatrix.uniformIndex, false, this.skyMatrix.rawData );
-
             ///--------texture----------------
             var sampler2D: GLSL.Sampler2D;
             for (var index in this.usage.sampler2DList) {

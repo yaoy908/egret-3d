@@ -104,7 +104,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public renden(time: number, delay: number) {
+        public update(time: number, delay: number) {
 
             super.updateViewSizeData();
 
@@ -148,12 +148,12 @@
             this._context3D.viewPort(this.leftViewPort.x, this.leftViewPort.y, this.leftViewPort.width, this.leftViewPort.height);
             this._camera.tap(CameraType.VR, VRType.left);
             this._context3D.setRenderToTexture(this._leftFrameBuffer.texture.texture, true, 0);
-            if (this._sky) {
-                this._sky.draw(this._context3D, this.camera3D);
-            }
-            if (this._sphereSky) {
-                this._sphereSky.draw(this._context3D, this.camera3D);
-            }
+            //if (this._sky) {
+            //    this._sky.draw(this._context3D, this.camera3D);
+            //}
+            //if (this._sphereSky) {
+            //    this._sphereSky.draw(this._context3D, this.camera3D);
+            //}
             this._context3D.clearDepth(1);
             this._render.draw(time, delay, this._context3D, this._scene.collect, this._camera, this._viewPort);
             this._context3D.setRenderToBackBuffer();
@@ -163,12 +163,12 @@
             this._context3D.viewPort(this.rightViewPort.x, this.rightViewPort.y, this.rightViewPort.width, this.rightViewPort.height);
             this._camera.tap(CameraType.VR, VRType.right);
             this._context3D.setRenderToTexture(this._rightFrameBuffer.texture.texture, true, 0);
-            if (this._sky) {
-                this._sky.draw(this._context3D, this.camera3D);
-            }
-            if (this._sphereSky) {
-                this._sphereSky.draw(this._context3D, this.camera3D);
-            }
+            //if (this._sky) {
+            //    this._sky.draw(this._context3D, this.camera3D);
+            //}
+            //if (this._sphereSky) {
+            //    this._sphereSky.draw(this._context3D, this.camera3D);
+            //}
             this._context3D.clearDepth(1);
             this._render.draw(time, delay, this._context3D, this._scene.collect, this._camera, this._viewPort);
             this._context3D.setRenderToBackBuffer();

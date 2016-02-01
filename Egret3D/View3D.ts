@@ -17,14 +17,17 @@
     export class View3D {
 
         protected _context3D: Context3D;
-        protected _camera: Camera3D;
-        protected _scene: Scene3D; 
-        protected _render: RenderBase;
-        protected _shadowRender: ShadowRender;
+
         protected _width: number = 0;
         protected _height: number = 0;
         protected _x: number = 0;
         protected _y: number = 0;
+
+        protected _camera: Camera3D;
+        protected _scene: Scene3D; 
+        protected _render: RenderBase;
+        protected _shadowRender: ShadowRender;
+
         protected _localPos: Point = new Point();
         protected _globalPos: Point = new Point();
         protected _globalPosDirty: Boolean;
@@ -37,7 +40,6 @@
         protected _useShadow: boolean = false ;
         protected _backImg: HUD;
         protected _postCanvas: PostCanvas;
-        protected _sky: Sky;
         protected _sphereSky: SphereSky;
         protected _postList: Array<PostEffectBase>;
         protected _isDeferred: boolean = false;
@@ -223,41 +225,8 @@
             return this._viewPort;
         }
 
-        /**
-        * @language zh_CN
-        * 设置天空盒子
-        * 设置天空盒子，天空盒子的类型有 cubesky 和 spheresky 两种类型，其中 spheresky 是属于360天空全景照片使用
-        * @param value {Sky} 天空盒子
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public set sky(value: Sky) {
-            this._sky = value;
-        }
+      
 
-        /**
-        * @language zh_CN
-        * 设置天空球
-        * 设置天空盒子，天空盒子的类型有 cubesky 和 spheresky 两种类型，其中 spheresky 是属于360天空全景照片使用
-        * @param value {SphereSky} 天空球
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public set sphereSky(value: SphereSky) {
-            this._sphereSky = value;
-        }
-
-        /**
-        * @language zh_CN
-        * 返回天空盒子
-        * 设置天空盒子，天空盒子的类型有 cubesky 和 spheresky 两种类型，其中 spheresky 是属于360天空全景照片使用
-        * @returns {Sky}
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public get sky(): Sky {
-            return this._sky;
-        }
 
         /**
         * @language zh_CN
@@ -520,7 +489,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public renden(time: number, delay: number) {
+        public update(time: number, delay: number) {
 
             this.updateViewSizeData();
 
@@ -552,16 +521,9 @@
                         RttManager.drawToTexture(time, delay, ShadowRender.frameBuffer.texture.texture, this._context3D, this._shadowRender, this._scene.collect, this._camera, this.viewPort);
                     }
 
-                    if (this._sky) {
-                        this._sky.draw(this._context3D, this.camera3D);
-                    }
-                    else if (this._sphereSky) {
-                        this._sphereSky.draw(this._context3D, this.camera3D);
-                    }
-
                     RttManager.drawToTexture(time, delay, this._sourceFrameBuffer.texture.texture, this._context3D, this._render, this._scene.collect, this._camera, this.viewPort);
 
-                    this._context3D.clearDepth(1);
+                  
 
                     var next: FrameBuffer = this._sourceFrameBuffer;
 
@@ -576,12 +538,7 @@
                     this._postCanvas.draw(this._context3D, this._viewPort);
                 }
                 else {
-                    if (this._sky) {
-                        this._sky.draw(this._context3D, this.camera3D);
-                    }
-                    else if (this._sphereSky) {
-                        this._sphereSky.draw(this._context3D, this.camera3D);
-                    }
+                    
 
                     if (this._useShadow) {
                         RttManager.drawToTexture(time, delay, ShadowRender.frameBuffer.texture.texture, this._context3D, this._shadowRender, this._scene.collect, this._camera, this.viewPort);

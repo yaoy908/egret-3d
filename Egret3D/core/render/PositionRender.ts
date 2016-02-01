@@ -30,7 +30,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public renden(time: number, delay: number, context3D: Context3D, collect: CollectBase, camera: Camera3D, viewPort: Rectangle) {
+        public render(time: number, delay: number, context3D: Context3D, collect: CollectBase, camera: Camera3D, viewPort: Rectangle) {
 
             this._renderList = collect.renderList;
 
@@ -42,7 +42,7 @@
                     continue;
                 }
                 if (this._renderList[this._renderIndex].material != null) {
-                    ///this._renderList[this._renderIndex].material.rendenNormalPass(context3D, camera, this._renderList[this._renderIndex].modelMatrix, this._renderList[this._renderIndex].geomtry, this._renderList[this._renderIndex].animation);
+                    ///this._renderList[this._renderIndex].material.renderNormalPass(context3D, camera, this._renderList[this._renderIndex].modelMatrix, this._renderList[this._renderIndex].geomtry, this._renderList[this._renderIndex].animation);
                 }
             }
 

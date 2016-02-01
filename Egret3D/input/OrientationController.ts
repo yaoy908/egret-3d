@@ -1,9 +1,8 @@
 ﻿module egret3d {
     
     /**
-     * @private
      * @language zh_CN
-     * @class egret3d.OrientationController
+     * @class egret3D.OrientationControler
      * @classdesc
      * 陀螺仪控制器
      */
@@ -12,9 +11,9 @@
         private accGravity: DeviceAcceleration;
         private rotationRate: DeviceRotationRate;
         private orientation: Vector3D = new Vector3D();
-        private screenOrientation: number = 0; 
+        private screenOrientation: number = 0;
 
-        private openDebug: boolean = false; 
+        private openDebug: boolean = false;
         private accDiv: HTMLElement;
         private accGravityDiv: HTMLElement;
         private rotationRateDiv: HTMLElement;
@@ -81,8 +80,8 @@
         */
         public orientationchangeHandler() {
 
-            //if (window.orientation != undefined)
-              //  this.screenOrientation = <number>window.orientation ;
+            if (window.orientation != undefined)
+                this.screenOrientation = <number>window.orientation;
             //.this.state = window.orientation;
         }
 
@@ -110,7 +109,7 @@
             this.orientation.y = event.beta;
             this.orientation.z = event.gamma;
 
-         
+
             if (this.openDebug)
                 this.debug();
         }
@@ -125,11 +124,11 @@
         private state: number = -1;
         private debug() {
             //this.accDiv.innerHTML = "<br><br><br> acc-x:" + this.acc.x + "<br>acc-y:" + this.acc.y + "<br>acc-z:" + this.acc.z ;
-            this.accGravityDiv.innerHTML = "<br><br> Gravity-x:" + this.orientation.x* Matrix3DUtils.RADIANS_TO_DEGREES + "<br>Gravity-y:" + this.orientation.y + "<br>Gravity-z:" + this.orientation.z;
+            this.accGravityDiv.innerHTML = "<br><br> Gravity-x:" + this.orientation.x * Matrix3DUtils.RADIANS_TO_DEGREES + "<br>Gravity-y:" + this.orientation.y + "<br>Gravity-z:" + this.orientation.z;
             //this.rotationRateDiv.innerHTML = "<br> Rate-x:" + this.rotationRate.alpha + "<br>Rate-y:" + this.rotationRate.gamma + "<br>Rate-z:" + this.rotationRate.beta;
-            this.orientationRateDiv.innerHTML = "<br> orientation-x:" + this.fixOritation.x  + "<br>orientation-y:" + this.fixOritation.y + "<br>orientation-z:" + this.fixOritation.z;
+            this.orientationRateDiv.innerHTML = "<br> orientation-x:" + this.fixOritation.x + "<br>orientation-y:" + this.fixOritation.y + "<br>orientation-z:" + this.fixOritation.z;
             //this.orientationRateDiv.innerHTML = "<br> orientation-x:" + this.fixOritation.x * Matrix3DUtils.RADIANS_TO_DEGREES + "<br>orientation-y:" + this.fixOritation.y * Matrix3DUtils.RADIANS_TO_DEGREES + "<br>orientation-z:" + this.fixOritation.z * Matrix3DUtils.RADIANS_TO_DEGREES;
-            this.stateDiv.innerHTML = "<br> state: " + this.state; 
+            this.stateDiv.innerHTML = "<br> state: " + this.state;
         } 
 
         /**
@@ -139,7 +138,7 @@
         */
         public getOrientation(): number {
 
-            switch ( window.screen.msOrientation ) {
+            switch (window.screen.msOrientation) {
                 case 'landscape-primary':
                     return -90;
                 case 'landscape-secondary':
@@ -152,8 +151,8 @@
             // this returns 90 if width is greater then height 
             // and window orientation is undefined OR 0
             // if (!window.orientation && window.innerWidth > window.innerHeight)
-            //   return 90;<number>window.orientation ||
-            return  0;
+            //   return 90;
+            return <number>window.orientation || 0;
         }
 
         private degtorad = Math.PI / 180; // Degree-to-Radian conversion
@@ -171,12 +170,15 @@
         */
         public getQuaternion(alpha: number, beta: number, gamma: number): Quaternion {
 
-
             var _x = beta ? beta * this.degtorad : 0; // beta value
             var _y = gamma ? gamma * this.degtorad : 0; // gamma value
             var _z = alpha ? alpha * this.degtorad : 0; // alpha value
-            var orient = -this.getOrientation() * this.degtorad ;// this.getOrientation()) * this.degtorad ; // O
-            this.state = this.getOrientation(); 
+
+            _x = Math.floor(_x * 100) / 100;
+            _y = Math.floor(_y * 100)/100 ;
+
+            var orient = -this.getOrientation() * this.degtorad;// this.getOrientation()) * this.degtorad ; // O
+            this.state = this.getOrientation();
 
             var cX = Math.cos(_x / 2);
             var cY = Math.cos(_y / 2);
@@ -189,6 +191,7 @@
             //
             // ZXY quaternion construction.
             //
+
             this.q.w = cX * cY * cZ - sX * sY * sZ;
             this.q.x = sX * cY * cZ - cX * sY * sZ;
             this.q.y = cX * sY * cZ + sX * cY * sZ;
@@ -196,31 +199,94 @@
 
             var zee: Vector3D = new Vector3D(0, 0, 1);
             var q0: Quaternion = new Quaternion();
-            q0.fromAxisAngle(zee, orient / Matrix3DUtils.DEGREES_TO_RADIANS);
+            q0.fromAxisAngle(zee, orient);
             this.q.multiply(this.q, q0);                                      // camera looks out the back of the device, not the top
 
             zee.setTo(-1, 0, 0);
-            q0.fromAxisAngle(zee, 90 * this.degtorad / Matrix3DUtils.DEGREES_TO_RADIANS);
-            this.q.multiply(this.q, q0);   
-            return this.q ;
+            q0.fromAxisAngle(zee, 90 * this.degtorad);
+            this.q.multiply(this.q, q0);
+
+            return this.q;
         }
 
-        private front: Vector3D = new Vector3D(0, 0, 200);
-        private test: Vector3D = new Vector3D();
-
+        private fix: Vector3D = new Vector3D();
+        private fixinterpolate: Vector3D = new Vector3D();
+        private fixAxis: Vector3D = new Vector3D();
+        private caheFixAxis: Vector3D = new Vector3D();
+        private steps: number = 1 ;
+        private interpolate: boolean = true;
         /**
         * @language zh_CN
         * 数据更新
         * @param camera3D 当前相机
         */
-        public update(camera3D: Camera3D) {
+        public update(view3D: View3D) {
 
-            this.getQuaternion(this.orientation.x, this.orientation.y, this.orientation.z);
+            this.getBaseQuaternion(this.orientation.x, this.orientation.y, this.orientation.z);
             this.q.toEulerAngles(this.fixOritation);
 
-            camera3D.rotationX = -this.fixOritation.x + this.offsetRotation.x; 
-            camera3D.rotationZ = -this.fixOritation.y + this.offsetRotation.z; 
-            camera3D.rotationY = -this.fixOritation.z + this.offsetRotation.y; 
+            if (this.interpolate) {
+                this.fixinterpolate.x = (this.fixOritation.x - this.fix.x);
+                this.fixinterpolate.y = (this.fixOritation.y - this.fix.y);
+                this.fixinterpolate.z = (this.fixOritation.z - this.fix.z);
+
+                this.caheFixAxis.x = this.fixOritation.x / Math.abs(this.fixOritation.x) ;
+                this.caheFixAxis.y = this.fixOritation.y / Math.abs(this.fixOritation.y) ;
+                this.caheFixAxis.z = this.fixOritation.z / Math.abs(this.fixOritation.z) ; 
+
+                if (this.fixAxis.x == this.caheFixAxis.x && this.fixAxis.y == this.caheFixAxis.y && this.fixAxis.z == this.caheFixAxis.z ) {
+                    this.fix.x += this.fixinterpolate.x / (this.steps + 0.01);
+                    this.fix.y += this.fixinterpolate.y / (this.steps + 0.01);
+                    this.fix.z += this.fixinterpolate.z / (this.steps + 0.01);
+                } else {
+                    this.fix.x = this.fixOritation.x;
+                    this.fix.y = this.fixOritation.y;
+                    this.fix.z = this.fixOritation.z;
+                    this.fixAxis.x = this.caheFixAxis.x;
+                    this.fixAxis.y = this.caheFixAxis.y;
+                    this.fixAxis.z = this.caheFixAxis.z;
+                }
+
+                view3D.camera3D.rotationX = -this.fix.x ;
+                view3D.camera3D.rotationY = -this.fix.y ;
+                view3D.camera3D.rotationZ = this.fix.z ;
+            } else {
+                view3D.camera3D.rotationX = -this.fixOritation.x;
+                view3D.camera3D.rotationY = -this.fixOritation.y;
+                view3D.camera3D.rotationZ = this.fixOritation.z;
+            }
+
+            view3D.scene.rotationX = -90;
+
         }
+
+        private getBaseQuaternion(alpha: number, beta: number, gamma: number) {
+
+            var _x = beta ? beta * this.degtorad : 0; // beta value
+            var _y = gamma ? gamma * this.degtorad : 0; // gamma value
+            var _z = alpha ? alpha * this.degtorad : 0; // alpha value
+
+            var cX = Math.cos(_x / 2);
+            var cY = Math.cos(_y / 2);
+            var cZ = Math.cos(_z / 2);
+            var sX = Math.sin(_x / 2);
+            var sY = Math.sin(_y / 2);
+            var sZ = Math.sin(_z / 2);
+
+            //
+            // ZXY quaternion construction.
+            //
+            var w = cX * cY * cZ - sX * sY * sZ;
+            var x = sX * cY * cZ - cX * sY * sZ;
+            var y = cX * sY * cZ + sX * cY * sZ;
+            var z = cX * cY * sZ + sX * sY * cZ;
+
+            this.q.w = w ;
+            this.q.x = x ;
+            this.q.y = y ;
+            this.q.z = z;
+
+        return this.q ;
+    }
     }
 } 

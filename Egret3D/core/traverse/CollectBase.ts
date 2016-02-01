@@ -16,11 +16,12 @@
         */
         public renderList: Array<Object3D>;
         public mousePickList: Array<Object3D>;
+        public rootNode: Scene3D;
         protected _nodes: Array<Object3D>;
 
         protected _num: number = 0;
 
-        protected _rootNode: Object3D;
+     
         private _tempRootNode: Object3D;
         private _objDict: { [id: number]: number; } = {};
 
@@ -29,11 +30,11 @@
         * constructor
         * @param root 渲染根节点
         */
-        constructor(root:Object3D){
+        constructor(root: Scene3D){
             this.renderList = new Array<Object3D>();
             this.mousePickList = new Array<Object3D>();
             this._nodes = new Array<Object3D>();
-            this._rootNode = root;
+            this.rootNode = root;
         }
                 
         /**

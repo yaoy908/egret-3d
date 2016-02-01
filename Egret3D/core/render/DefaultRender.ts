@@ -32,7 +32,15 @@
             this._renderList = collect.renderList;
             this._numEntity = this._renderList.length;
 
-            ///context3D.gl.clear(context3D.gl.COLOR_BUFFER_BIT | context3D.gl.DEPTH_BUFFER_BIT);
+            if (collect.rootNode._sky) {
+                collect.rootNode.sky.draw(context3D, camera );
+            }
+            else if (collect.rootNode._sphereSky) {
+                collect.rootNode._sphereSky.draw(context3D, camera );
+            }
+
+            context3D.clearDepth(1);
+
             for (this._renderIndex = 0; this._renderIndex < this._numEntity ; this._renderIndex++){
                 this._renderList[this._renderIndex].update(camera, time, delay);
 
@@ -47,7 +55,7 @@
                 if (this._renderList[this._renderIndex].material != null) {
 
                     if (this._renderList[this._renderIndex].material.alpha != 0) {
-                        this._renderList[this._renderIndex].material.rendenDiffusePass(context3D, camera , this._renderList[this._renderIndex].modelMatrix, this._renderList[this._renderIndex].geometry, this._renderList[this._renderIndex].animation);
+                        this._renderList[this._renderIndex].material.renderDiffusePass(context3D, camera , this._renderList[this._renderIndex].modelMatrix, this._renderList[this._renderIndex].geometry, this._renderList[this._renderIndex].animation);
                     }
                 }
             }

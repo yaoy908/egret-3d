@@ -44,7 +44,7 @@
                         if (!this._renderList[this._renderIndex].isVisible) {
                             continue;
                         }
-                        this._renderList[this._renderIndex].material.rendenShadowPass(context3D, ShadowRender.shadowCamera3D , this._renderList[this._renderIndex].modelMatrix, this._renderList[this._renderIndex].geometry, this._renderList[this._renderIndex].animation);
+                        this._renderList[this._renderIndex].material.renderShadowPass(context3D, ShadowRender.shadowCamera3D , this._renderList[this._renderIndex].modelMatrix, this._renderList[this._renderIndex].geometry, this._renderList[this._renderIndex].animation);
                     }
                 }
             }

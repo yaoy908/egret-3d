@@ -80,7 +80,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(root:Object3D) {
+        constructor(root:Scene3D) {
             super(root);
             this.addTag("default");
             this.addTag("terrain");
@@ -348,7 +348,7 @@
             this.mousePickList.length = 0;
 
             this.clearLayerList();
-            this.applyRender(this._rootNode, camera);
+            this.applyRender(this.rootNode, camera);
 
             for (var i: number = 0; i < this._tags.length; ++i) {
                 this._tags[i].clearDepth = true;

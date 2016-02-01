@@ -43,7 +43,7 @@
                 }
 
                 if (this._renderList[this._renderIndex].material != null) {
-                    this._renderList[this._renderIndex].material.rendenDepthPass(context3D, camera, this._renderList[this._renderIndex].modelMatrix, this._renderList[this._renderIndex].geometry, this._renderList[this._renderIndex].animation);
+                    this._renderList[this._renderIndex].material.renderDepthPass(context3D, camera, this._renderList[this._renderIndex].modelMatrix, this._renderList[this._renderIndex].geometry, this._renderList[this._renderIndex].animation);
                 }
             }
         }

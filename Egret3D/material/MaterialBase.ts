@@ -765,7 +765,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public rendenDiffusePass(context3D: Context3D, camera3D: Camera3D, modelMatrix: Matrix4_4,geometry:GeometryBase , animation: IAnimation ) {
+        public renderDiffusePass(context3D: Context3D, camera3D: Camera3D, modelMatrix: Matrix4_4,geometry:GeometryBase , animation: IAnimation ) {
             if (this.outLinePass) {
                 this.outLinePass.draw(context3D, modelMatrix, camera3D, geometry, animation);
             }
@@ -807,7 +807,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public rendenShadowPass(context3D: Context3D, camera3D: Camera3D, modelMatrix: Matrix4_4, geometry: GeometryBase,animation: IAnimation ) {
+        public renderShadowPass(context3D: Context3D, camera3D: Camera3D, modelMatrix: Matrix4_4, geometry: GeometryBase,animation: IAnimation ) {
             if (!this.materialData.passChange) {
                 this.shadowPass.draw(context3D, modelMatrix, camera3D, geometry, animation)
             } else {
@@ -844,7 +844,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public rendenNormalPass(context3D: Context3D, camera3D: Camera3D, modelMatrix: Matrix4_4, geometry: GeometryBase, animation: IAnimation  ) {
+        public renderNormalPass(context3D: Context3D, camera3D: Camera3D, modelMatrix: Matrix4_4, geometry: GeometryBase, animation: IAnimation  ) {
             //if (this.materialData._NormalActiveState) {
             //    this.normalPass.draw(context3D, modelMatrix, camera3D,geometry, animation )
             //} else {
@@ -881,7 +881,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public rendenDepthPass(context3D: Context3D, camera3D: Camera3D, modelMatrix: Matrix4_4, geometry: GeometryBase, animation: IAnimation) {
+        public renderDepthPass(context3D: Context3D, camera3D: Camera3D, modelMatrix: Matrix4_4, geometry: GeometryBase, animation: IAnimation) {
             //if (this.materialData._DepthActiveState) {
             //    this.depthPass.draw(context3D, modelMatrix, camera3D, geometry, animation)
             //} else {
