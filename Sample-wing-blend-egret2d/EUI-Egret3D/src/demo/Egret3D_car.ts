@@ -13,7 +13,7 @@ class Egret3D_car extends SampleBase{
     protected _timeDate: Date = null;
     protected _view3D: egret3d.View3D = null;
     protected _viewPort: egret3d.Rectangle = null;
-    protected _cameraCtl: CameraHoverController= null;
+    protected _cameraCtl: egret3d.HoverController= null;
     
     public constructor(width: number = 800,height: number = 600) {
         super();
@@ -33,7 +33,7 @@ class Egret3D_car extends SampleBase{
         this.resize();
         Assets.startLoad();
         
-        egret3d.Debug.instance.isDebug = true ;
+        //egret3d.Debug.instance.isDebug = true ;
         egret3d.Debug.instance.trace("open debug...");
         
         window.onerror = function(message,url,line) {
@@ -45,18 +45,25 @@ class Egret3D_car extends SampleBase{
         }
     }
     
+    private touchStart(e) {
+        alert("11111");
+    }
     public start3D() {
         var floor_texture_d: egret3d.TextureBase = egret3d.AssetsManager.getInstance().findTexture("f1/texture/white.jpg");
         this._view3D.backImageTexture = floor_texture_d;
         
-        this._cameraCtl = new CameraHoverController(this._view3D.camera3D,null,45,45,200,8,85);
-        this._cameraCtl.useEventDis(this.rect);
+        this._cameraCtl = new egret3d.HoverController(this._view3D.camera3D,null,45,45,200,8,85);
+        //this._cameraCtl.useEventDis(this.rect);
         this._cameraCtl.lookAtPosition = new egret3d.Vector3D(0,10,0);
         this._cameraCtl.minDistance = 80;
         this._cameraCtl.maxDistance = 524;
         
         var f1_car: F1_car = new F1_car();
         this._view3D.addChild3D(f1_car);
+        
+        
+        
+        //window.addEventListener("touchstart",(e) => this.touchStart(e));
         
         window.requestAnimationFrame(() => this.onUpdate());
     }
@@ -71,7 +78,7 @@ class Egret3D_car extends SampleBase{
 
         this._cameraCtl.update();
 
-        this._view3D.renden(this._time,this._delay);
+        this._view3D.update(this._time,this._delay);
 
         requestAnimationFrame(() => this.onUpdate());
     }
