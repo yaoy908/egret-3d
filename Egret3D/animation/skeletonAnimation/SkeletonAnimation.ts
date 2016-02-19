@@ -252,6 +252,28 @@
                 animationState.addTime(delay * this._playSpeed * 5);
             }
 
+            var currentFrameIndex:number = this._enabledSkeletonAnimationClips[this._enabledSkeletonAnimationClips.length - 1].currentFrameIndex;
+
+            if (currentFrameIndex < this._currentFrame) {
+
+                var e: Event3D = new Event3D(SkeletonAnimation.EVENT_PLAY_COMPLETE, this);
+
+                this.dispatchEvent(e);
+            }
+
+            if (this._currentFrame != currentFrameIndex) {
+
+                var e: Event3D = new Event3D(SkeletonAnimation.EVENT_FRAME_CHANGE, this);
+
+                //e.currentTarget = this;
+
+                this.dispatchEvent(e);
+
+                this._currentFrame = currentFrameIndex;
+            }
+
+            
+                  
             if (this._enabledSkeletonAnimationClips.length > 1) {
 
                 animationState = this._enabledSkeletonAnimationClips[0];

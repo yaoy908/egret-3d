@@ -12,7 +12,7 @@
     * @platform Web,Native
     * @includeExample core/node/Sky.ts
     */
-    export class Sky {
+    export class Sky extends Object3D  {
 
         private viewMatIndex: WebGLUniformLocation;
         private skyTexture: SkyTexture;
@@ -24,9 +24,6 @@
         private vsShader: GLSL.ShaderBase;
         private fsShader: GLSL.ShaderBase;
         private cubeGeometry: CubeGeometry;
-
-        private skyMatrix: Matrix4_4;
-        private modelMatrix: Matrix4_4;
                 
         /**
         * @language zh_CN
@@ -35,14 +32,14 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(skyTexture:SkyTexture ) {
+        constructor(skyTexture: SkyTexture) {
+            super();
             this.skyTexture = skyTexture;
             this.usage = new MethodUsageData();
             this.vsShader = new GLSL.ShaderBase(null, this.usage);
             this.fsShader = new GLSL.ShaderBase(null, this.usage);
             this.setShader("sky_vertex", "sky_fragment");
-            this.skyMatrix = new Matrix4_4();
-            this.modelMatrix = new Matrix4_4();
+
         } 
                         
         /**
@@ -129,11 +126,8 @@
             context3D.bindVertexBuffer(this.cubeGeometry.sharedVertexBuffer);
             context3D.vertexAttribPointer(this.usage.program3D, this.usage.attribute_position.uniformIndex, 3, Egret3DDrive.FLOAT, false, this.cubeGeometry.vertexSizeInBytes , 0);
 
-            this.skyMatrix.identity();
-            this.skyMatrix.appendTranslation(camera.x, camera.y, camera.z);
-
             context3D.uniformMatrix4fv(this.usage.uniform_ProjectionMatrix.uniformIndex, false, camera.viewProjectionMatrix.rawData);
-            context3D.uniformMatrix4fv(this.usage.uniform_ModelMatrix.uniformIndex, false, this.skyMatrix.rawData);
+            context3D.uniformMatrix4fv(this.usage.uniform_ModelMatrix.uniformIndex, false, this.modelMatrix.rawData);
           
             ///--------texture----------------
             var sampler3D: GLSL.Sampler3D;
