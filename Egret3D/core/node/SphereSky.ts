@@ -125,7 +125,12 @@
             context3D.bindVertexBuffer(this.sphereGeometry.sharedVertexBuffer);
             context3D.vertexAttribPointer(this.usage.program3D, this.usage.attribute_position.uniformIndex, 3, Egret3DDrive.FLOAT, false, this.sphereGeometry.vertexSizeInBytes, 0);
             context3D.vertexAttribPointer(this.usage.program3D, this.usage.attribute_uv0.uniformIndex, 2, Egret3DDrive.FLOAT, false, this.sphereGeometry.vertexSizeInBytes, 52 );
+
+            this.position = camera.globalPosition;
+
             context3D.uniformMatrix4fv(this.usage.uniform_ProjectionMatrix.uniformIndex, false, camera.viewProjectionMatrix.rawData);
+            context3D.uniformMatrix4fv(this.usage.uniform_ModelMatrix.uniformIndex, false, this.modelMatrix.rawData);
+
             ///--------texture----------------
             var sampler2D: GLSL.Sampler2D;
             for (var index in this.usage.sampler2DList) {

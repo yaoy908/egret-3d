@@ -126,6 +126,7 @@
             context3D.bindVertexBuffer(this.cubeGeometry.sharedVertexBuffer);
             context3D.vertexAttribPointer(this.usage.program3D, this.usage.attribute_position.uniformIndex, 3, Egret3DDrive.FLOAT, false, this.cubeGeometry.vertexSizeInBytes , 0);
 
+            this.modelMatrix.position = camera.globalPosition;
             context3D.uniformMatrix4fv(this.usage.uniform_ProjectionMatrix.uniformIndex, false, camera.viewProjectionMatrix.rawData);
             context3D.uniformMatrix4fv(this.usage.uniform_ModelMatrix.uniformIndex, false, this.modelMatrix.rawData);
           
