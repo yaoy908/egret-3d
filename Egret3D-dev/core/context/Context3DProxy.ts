@@ -1,5 +1,16 @@
 ﻿module egret3d_dev {
-    export class ContextProxy {
+
+    export class Egret3D {
+        static context3DProxy: Context3DProxy; 
+        static request(config: string="", blend2D: boolean = false) {
+            this.context3DProxy = new egret3d_dev.Context3DProxy(blend2D);
+        }
+    }
+
+    export class Context3DProxy {
+
+        private _canvas3DRectangle: Rectangle = new Rectangle();
+        private _canvas: HTMLCanvasElement;
         /**
          * @language zh_CN
          * @private
@@ -22,10 +33,131 @@
         */
         public isLost: boolean;
 
-        constructor(context: WebGLRenderingContext) {
-            this.gl = context; 
+        constructor(blend2D: boolean = false) {
+            this._canvas = document.createElement("canvas");
+            this._canvas.style.position = "absolute";
+            this._canvas.style.zIndex = "0";
+
+            if (document.getElementsByClassName("egret-player").length > 0) {
+                document.getElementsByClassName("egret-player")[0].appendChild(this._canvas);
+            }
+            else {
+                document.body.appendChild(this._canvas);
+            }
+
+            this._canvas.id = "egret3D";
+            this._canvas.oncontextmenu = function () {
+                return false;
+            };
+
+            this.gl = <WebGLRenderingContext>this._canvas.getContext("experimental-webgl");
+
+            if (!this.gl)
+                this.gl = <WebGLRenderingContext>this._canvas.getContext("webgl");
+
+            if (!this.gl)
+                alert("you drivers not suport webgl");
+
+            this.register();
+            console.log("this.context3D ==>", this.gl);
         }
 
+        /**
+       * @language zh_CN
+       * get GPU Context3D 
+       * 注册并初始化相关 GPU 参数配置信息
+       * 用于设置显卡的相关参数
+       * @param GPU_CONFIG
+       * @param canvasRec
+       * @event call
+       */
+        private register() {
+
+            var ext: any = this.gl.getExtension('WEBGL_compressed_texture_s3tc');
+            var OES_texture_float_linear = this.gl.getExtension("OES_texture_float_linear");
+            var OES_texture_float = this.gl.getExtension("OES_texture_float");
+            var OES_texture_half_float = this.gl.getExtension("OES_texture_half_float");
+            var OES_texture_half_float_linear = this.gl.getExtension("OES_texture_half_float_linear");
+            var OES_standard_derivatives = this.gl.getExtension("OES_standard_derivatives");
+            var WEBGL_draw_buffers = this.gl.getExtension("WEBGL_draw_buffers");
+            var WEBGL_depth_texture = this.gl.getExtension("WEBGL_depth_texture");
+
+            ContextConfig.BLEND = this.gl.BLEND;
+
+            DrawMode.TRIANGLES = this.gl.TRIANGLES;
+            DrawMode.POINTS = this.gl.POINTS;
+            DrawMode.LINES = this.gl.LINES;
+            DrawMode.LINE_STRIP = this.gl.LINE_STRIP;
+
+            ContextConfig.FLOAT = this.gl.FLOAT
+            ContextConfig.VERTEX_SHADER = this.gl.VERTEX_SHADER;
+            ContextConfig.FRAGMENT_SHADER = this.gl.FRAGMENT_SHADER;
+
+            ContextConfig.FRONT = this.gl.FRONT;
+            ContextConfig.BACK = this.gl.BACK;
+
+            ContextConfig.DEPTH_BUFFER_BIT = this.gl.DEPTH_BUFFER_BIT;
+            ContextConfig.ELEMENT_ARRAY_BUFFER = this.gl.ELEMENT_ARRAY_BUFFER;
+            ContextConfig.UNSIGNED_SHORT = this.gl.UNSIGNED_SHORT;
+
+            ContextConfig.NEAREST = this.gl.NEAREST;
+            ContextConfig.REPEAT = this.gl.REPEAT;
+            ContextConfig.ONE = this.gl.ONE;
+            ContextConfig.ZERO = this.gl.ZERO;
+            ContextConfig.SRC_ALPHA = this.gl.SRC_ALPHA;
+            ContextConfig.ONE_MINUS_SRC_ALPHA = this.gl.ONE_MINUS_SRC_ALPHA;
+            ContextConfig.SRC_COLOR = this.gl.SRC_COLOR;
+            ContextConfig.ONE_MINUS_SRC_COLOR = this.gl.ONE_MINUS_SRC_COLOR;;
+
+            ContextConfig.ColorFormat_RGB565 = this.gl.RGB565;
+            ContextConfig.ColorFormat_RGBA5551 = this.gl.RGB5_A1;
+            ContextConfig.ColorFormat_RGBA4444 = this.gl.RGBA4;
+            ContextConfig.ColorFormat_RGBA8888 = this.gl.RGBA;
+
+            ContextConfig.DEPTH_TEST = this.gl.DEPTH_TEST;
+            ContextConfig.CULL_FACE = this.gl.CULL_FACE;
+            ContextConfig.BLEND = this.gl.BLEND;
+
+            ContextConfig.LEQUAL = this.gl.LEQUAL;
+
+            if (ext) {
+                ContextConfig.ColorFormat_DXT1_RGB = ext.COMPRESSED_RGB_S3TC_DXT1_EXT;
+                ContextConfig.ColorFormat_DXT1_RGBA = ext.COMPRESSED_RGBA_S3TC_DXT1_EXT;
+                ContextConfig.ColorFormat_DXT3_RGBA = ext.COMPRESSED_RGBA_S3TC_DXT3_EXT;
+                ContextConfig.ColorFormat_DXT5_RGBA = ext.COMPRESSED_RGBA_S3TC_DXT5_EXT;
+            }
+
+            ContextSamplerType.TEXTURE_0 = this.gl.TEXTURE0;
+            ContextSamplerType.TEXTURE_1 = this.gl.TEXTURE1;
+            ContextSamplerType.TEXTURE_2 = this.gl.TEXTURE2;
+            ContextSamplerType.TEXTURE_3 = this.gl.TEXTURE3;
+            ContextSamplerType.TEXTURE_4 = this.gl.TEXTURE4;
+            ContextSamplerType.TEXTURE_5 = this.gl.TEXTURE5;
+            ContextSamplerType.TEXTURE_6 = this.gl.TEXTURE6;
+            ContextSamplerType.TEXTURE_7 = this.gl.TEXTURE7;
+            ContextSamplerType.TEXTURE_8 = this.gl.TEXTURE8;
+
+            console.log("requst GPU Config", this.gl);
+        }
+
+        public backBufferSize(x: number, y: number, width: number, height: number) {
+            this._canvas3DRectangle.x = x; 
+            this._canvas3DRectangle.y = y; 
+            this._canvas3DRectangle.width = width; 
+            this._canvas3DRectangle.height = height; 
+            ContextConfig.canvasRectangle = this._canvas3DRectangle;
+
+            this._canvas3DRectangle.x = x;
+            this._canvas3DRectangle.y = y;
+            this._canvas3DRectangle.width = width;
+            this._canvas3DRectangle.height = height;
+
+            this._canvas.style.left = this._canvas3DRectangle.x.toString() + "px";
+            this._canvas.style.top = this._canvas3DRectangle.y.toString() + "px";
+            this._canvas.width = this._canvas3DRectangle.width;
+            this._canvas.height = this._canvas3DRectangle.height;
+        }
+       
         /**
         * @language zh_CN
         * 版本号
@@ -348,7 +480,6 @@
         public clear(r: number, g: number, b: number, a: number) {
             this.gl.clearColor(r, g, b, a);
             this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-            ///console.log( "clean" , r , g, b, a );
         }
         
         /**
@@ -356,7 +487,7 @@
         * 清除渲染区域的 深度
         * @param depth
         */
-        public clearDepth(depth: number) {
+        public clearDepth(depth: number=1.0) {
             this.gl.clearDepth(depth);
             this.gl.clear(this.gl.DEPTH_BUFFER_BIT);
         }
@@ -620,7 +751,7 @@
         * 开启 绘制模式
         * @param cap 
         */
-        public enbable(cap: number) {
+        public enable(cap: number) {
             this.gl.enable(cap);
         }
 
@@ -631,6 +762,16 @@
         */
         public disable(cap: number) {
             this.gl.disable(cap);
+        }
+
+        /**
+        * @language zh_CN
+        * 开启 深度模式 及 深度测试比较模式
+        * @param flag 
+        * @param compareMode 
+        */
+        public depthFunc(compareMode: number = 0) {
+              this.gl.depthFunc(compareMode);
         }
 
         /**

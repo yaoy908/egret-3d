@@ -91,8 +91,7 @@
          * @language zh_CN
          * 构造函数
          */
-        constructor(texture2D: WebGLTexture) {
-            this.texture = texture2D;
+        constructor() {
             this.border = 0;
             this.useMipmap = true;
             this.imageData = null;
@@ -106,7 +105,7 @@
          * 上传贴图数据给GPU
          * @param context3D 
          */
-        public upload(context3D: ContextProxy) {
+        public upload(context3D: Context3DProxy) {
             if (!this.texture) {
                 this.texture = context3D.creatTexture2D();
                 this.texture.gpu_internalformat = this.internalformat;
@@ -128,7 +127,7 @@
             }
         }
 
-        public uploadForcing(context3D: ContextProxy) {
+        public uploadForcing(context3D: Context3DProxy) {
             this.texture = context3D.creatTexture2D();
             this.texture.gpu_internalformat = this.internalformat;
             this.texture.gpu_colorformat = this.colorformat;
