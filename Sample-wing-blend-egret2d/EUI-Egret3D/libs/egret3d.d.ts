@@ -15331,6 +15331,7 @@ declare module egret3d {
         protected _useShadow: boolean;
         protected _backImg: HUD;
         protected _postCanvas: PostCanvas;
+        protected _sky: Sky;
         protected _sphereSky: SphereSky;
         protected _postList: Array<PostEffectBase>;
         protected _isDeferred: boolean;
@@ -15431,6 +15432,32 @@ declare module egret3d {
         * @platform Web,Native
         */
         viewPort: Rectangle;
+        /**
+        * @language zh_CN
+        * 返回天空盒子
+        * 设置天空盒子，天空盒子的类型有 cubesky 和 spheresky 两种类型，其中 spheresky 是属于360天空全景照片使用
+        * @returns {Sky}
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        /**
+       * @language zh_CN
+       * 设置天空盒子
+       * 设置天空盒子，天空盒子的类型有 cubesky 和 spheresky 两种类型，其中 spheresky 是属于360天空全景照片使用
+       * @param value {Sky} 天空盒子
+       * @version Egret 3.0
+       * @platform Web,Native
+       */
+        sky: Sky;
+        /**
+        * @language zh_CN
+        * 设置天空球
+        * 设置天空盒子，天空盒子的类型有 cubesky 和 spheresky 两种类型，其中 spheresky 是属于360天空全景照片使用
+        * @param value {SphereSky} 天空球
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        sphereSky: SphereSky;
         /**
         * @language zh_CN
         * 添加 HUD 到渲染列表中
