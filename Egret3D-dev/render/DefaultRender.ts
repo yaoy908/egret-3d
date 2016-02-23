@@ -10,7 +10,11 @@
     * @platform Web,Native
     */
     export class DefaultRender extends RenderBase {
-                
+              
+        
+        private _geo: Geometry;                         
+        private _index: number = 0;
+          
         /**
         * @language zh_CN
         * constructor
@@ -20,7 +24,6 @@
         }
 
 
-        private _geo: Geometry;                         
         /**
         * @language zh_CN
         * 把所有需要渲染的对象，依次进行渲染
@@ -55,11 +58,29 @@
                 this._geo = collect.renderList[this._renderIndex].geometry;
                 if (this._geo != null) {
 
-                    for (var i: number = 0; i < this._geo.subGeometrys.length; i++) {
-                        if (this._geo.subGeometrys[i].material.materialData.alpha != 0) {
-                            this._geo.subGeometrys[i].material.renderDiffusePass(time, delay, context3D, collect.renderList[this._renderIndex].modelMatrix, camera, collect.renderList[this._renderIndex].geometry, collect.renderList[this._renderIndex].animation);
+                    //draw xRay pass
+                    this._index = 0;
+                    for (this._index = 0; this._index < this._geo.subGeometrys.length; this._index++) {
+                        if (this._geo.subGeometrys[this._index].material.materialData.alpha != 0) {
+                            //this._geo.subGeometrys[this._index].material.renderDiffusePass(time, delay, context3D, collect.renderList[this._renderIndex].modelMatrix, camera, collect.renderList[this._renderIndex].geometry, collect.renderList[this._renderIndex].animation);
                         }
                     }
+                    //draw outLine pass
+                    this._index = 0;
+                    for (this._index = 0; this._index < this._geo.subGeometrys.length; this._index++) {
+                        if (this._geo.subGeometrys[this._index].material.materialData.alpha != 0) {
+                            //this._geo.subGeometrys[this._index].material.renderDiffusePass(time, delay, context3D, collect.renderList[this._renderIndex].modelMatrix, camera, collect.renderList[this._renderIndex].geometry, collect.renderList[this._renderIndex].animation);
+                        }
+                    }
+                    //draw more pass
+                    this._index = 0;
+                    for (this._index = 0; this._index < this._geo.subGeometrys.length; this._index++) {
+                        if (this._geo.subGeometrys[this._index].material.materialData.alpha != 0) {
+                            this._geo.subGeometrys[this._index].material.renderDiffusePass(time, delay, context3D, collect.renderList[this._renderIndex].modelMatrix, camera, this._geo.subGeometrys[this._index] , collect.renderList[this._renderIndex].animation);
+                        }
+                    }
+
+                   
                 }
             }
         }
