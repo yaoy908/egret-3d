@@ -45,7 +45,7 @@
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class Object3D extends EventTarget {
+    export class Object3D extends EventDispatcher {
 
        /**
         * @private
@@ -1039,7 +1039,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public update(time: number, delay: number,camera:Camera3D) {
+        public update(time: number, delay: number, camera:Camera3D) {
 
         }
 

@@ -23,6 +23,14 @@
         protected _scissorRect: Rectangle = new Rectangle();
         protected _viewMatrix: Matrix4_4 = new Matrix4_4();
 
+        public get camera3D(): Camera3D {
+            return this._camera;
+        }
+
+        public get scene(): Scene3D {
+            return this._scene;
+        }
+
         constructor( ) {
         }
 

@@ -99,7 +99,7 @@
             for (var index in this._materialData.diffusePassUsageData.sampler3DList) {
                 sampler3D = this._materialData.diffusePassUsageData.sampler3DList[index];
                 sampler3D.texture.upload(context3DProxy);
-                context3DProxy.setCubeTextureAt(sampler3D.activeTextureIndex, sampler3D.uniformIndex, sampler3D.index, sampler3D.texture.cubeTexture);
+                //context3DProxy.setCubeTextureAt(sampler3D.activeTextureIndex, sampler3D.uniformIndex, sampler3D.index, sampler3D.texture.cubeTexture);
             }
 
             //for (this.index = 0; this.index < this._materialData.diffusePassUsageData.vsMethodList.length; this.index++) {

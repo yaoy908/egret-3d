@@ -348,7 +348,7 @@
             this.mousePickList.length = 0;
 
             this.clearLayerList();
-            this.applyRender(this.rootNode, camera);
+            this.applyRender(this.rootNode.root, camera);
 
             for (var i: number = 0; i < this._tags.length; ++i) {
                 this._tags[i].clearDepth = true;

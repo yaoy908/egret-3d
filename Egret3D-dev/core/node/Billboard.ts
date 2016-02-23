@@ -21,8 +21,8 @@
         constructor(material:MaterialBase, width:number = 100, height:number = 100) {
             super();
             this.material = material;
-            this.geometry = new PlaneGeometry(width, height);
-            this.box.fillBox(this.geometry.minPos, this.geometry.maxPos);
+            //this.geometry = new PlaneGeometry(width, height);
+            //this.box.fillBox(this.geometry.minPos, this.geometry.maxPos);
         }
 
         /**
@@ -34,7 +34,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public update(camera: Camera3D, time: number, delay: number) {
+        public update(time: number, delay: number, camera: Camera3D) {
             this._qut.fromEulerAngles(-90, 0, 0);
             this._qut.multiply(camera.orientation, this._qut);
             this.orientation = this._qut;

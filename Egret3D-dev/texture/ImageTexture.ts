@@ -43,11 +43,11 @@
          * 上传贴图数据给GPU
          * @param context3D 
          */
-        public upload(context3D: Context3D) {
+        public upload(context3D: Context3DProxy) {
             if (!this.texture) {
                 this.texture = context3D.creatTexture2D();
                 this.texture.gpu_internalformat = InternalFormat.ImageData;
-                this.texture.gpu_colorformat = Egret3DDrive.ColorFormat_RGBA8888;
+                this.texture.gpu_colorformat = ContextConfig.ColorFormat_RGBA8888;
                 this.texture.image = this.imageData;
                 this.useMipmap = false ;
                 context3D.upLoadTextureData(0, this.texture);

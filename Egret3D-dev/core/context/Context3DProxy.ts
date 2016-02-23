@@ -296,7 +296,7 @@
         * 创建 2维贴图
         */
         public creatTexture2D(): TextureBase {
-            var texture: TextureBase = new TextureBase(this.gl.createTexture());
+            var texture: TextureBase = new TextureBase();
             return texture;
         }
 

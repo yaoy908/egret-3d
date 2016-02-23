@@ -78,7 +78,7 @@
          * 更新上传 cube 贴图纹理到GPU 现存中缓存起来
          * @param context3D
          */
-        public upload(context3D:Context3D) {
+        public upload(context3D: Context3DProxy) {
             if (!this.cubeTexture) {
                 this.cubeTexture = context3D.creatCubeTexture();
                 this.cubeTexture.image_front = this.image_front;
