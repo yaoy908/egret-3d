@@ -1,4 +1,4 @@
-﻿module egret3d {
+﻿module egret3d_dev {
                 
     /**
     * @class egret3d.Mesh
