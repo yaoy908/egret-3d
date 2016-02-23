@@ -90,11 +90,11 @@
          * 将video的视频数据实时传输到GPU上
          * @param context3D 
         */
-        public upload(context3D: Context3D) {
+        public upload(context3D: Context3DProxy) {
             if (!this.texture) {
                 this.texture = context3D.creatTexture2D();
-                this.texture.gpu_internalformat = this.internalFormat;
-                this.texture.gpu_colorformat = this.colorFormat;
+                //this.texture.gpu_internalformat = this.internalFormat;
+                //this.texture.gpu_colorformat = this.colorFormat;
                 this.texture.mipmapDatas = this.mimapData;
                 this.texture.image = this.imageData;
                 this.texture.gpu_border = 0;

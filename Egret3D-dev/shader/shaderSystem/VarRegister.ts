@@ -52,7 +52,7 @@
         * @language zh_CN
         * texture
         */
-        public texture: egret3d.TextureBase;
+        public texture: egret3d_dev.TextureBase;
                 
         /**
         * @language zh_CN

@@ -28,13 +28,13 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(geometry: GeometryBase, material: MaterialBase, animation: IAnimation = null) {
+        constructor(geometry: Geometry, material: MaterialBase, animation: IAnimation = null) {
             super();
 
             this.geometry = geometry;
             this.material = material;
             this.animation = animation;
-            this.box.fillBox(this.geometry.minPos, this.geometry.maxPos);
+            //this.box.fillBox(this.geometry.minPos, this.geometry.maxPos);
         }
                         
         /**
@@ -45,7 +45,7 @@
         * @platform Web,Native
         */
         public clone(): Mesh {
-            return new Mesh(this.geometry, this.material, this.animation ? this.animation.clone() : null );
+            return new Mesh(this.geometry, this.material, /*this.animation ? this.animation.clone() :*/ null );
         }
                                 
         /**
@@ -57,13 +57,13 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public update(camera: Camera3D, time: number, delay: number) {
+        public update(time: number, delay: number, camera: Camera3D) {
 
             if (this.isDisable)
                 return;
 
             if (this.animation) {
-                this.animation.updata(time, delay);
+                //this.animation.updata(time, delay);
             }
         }
     }

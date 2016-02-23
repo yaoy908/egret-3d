@@ -31,18 +31,16 @@
         * @platform Web,Native
         */
        
-        public render(time: number, delay: number, context3D: Context3D, collect: CollectBase, camera: Camera3D, viewPort: Rectangle) {
+        public render(time: number, delay: number, context3D: Context3DProxy, collect: CollectBase, camera: Camera3D, viewPort: Rectangle) {
 
-            this._renderList = collect.renderList;
-
-            this._numEntity = this._renderList.length;
+            this._numEntity = collect.renderList.length;
 
             for (this._renderIndex = 0; this._renderIndex < this._numEntity ; this._renderIndex++){
-                this._renderList[this._renderIndex].update(camera, time, delay);
-                if (!this._renderList[this._renderIndex].isVisible) {
+                collect.renderList[this._renderIndex].update(time, delay, camera);
+                if (!collect.renderList[this._renderIndex].isVisible) {
                     continue;
                 }
-                if (this._renderList[this._renderIndex].material != null) {
+                if (collect.renderList[this._renderIndex].material != null) {
                     ///this._renderList[this._renderIndex].material.renderNormalPass(context3D, camera, this._renderList[this._renderIndex].modelMatrix, this._renderList[this._renderIndex].geomtry, this._renderList[this._renderIndex].animation);
                 }
             }
