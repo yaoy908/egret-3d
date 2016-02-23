@@ -18,7 +18,9 @@
         constructor() {
             super();
         }
-                                        
+
+
+        private _geo: Geometry;                         
         /**
         * @language zh_CN
         * 把所有需要渲染的对象，依次进行渲染
@@ -40,9 +42,9 @@
 
             context3D.clearDepth(1);
 
-            for (this._renderIndex = 0; this._renderIndex < this._numEntity ; this._renderIndex++){
+            for (this._renderIndex = 0; this._renderIndex < this._numEntity; this._renderIndex++) {
                 //collect.renderList[this._renderIndex].update(time, delay, camera);
-                if (!collect.renderList[this._renderIndex].isVisible ) {
+                if (!collect.renderList[this._renderIndex].isVisible) {
                     continue;
                 }
                 if (collect.renderList[this._renderIndex].tag && collect.renderList[this._renderIndex].tag.clearDepth && collect.renderList[this._renderIndex].tag.cleanState) {
@@ -50,9 +52,13 @@
                     context3D.clearDepth(1);
                 }
 
-                if (collect.renderList[this._renderIndex].material != null) {
-                    if (collect.renderList[this._renderIndex].material.materialData.alpha != 0) {
-                        collect.renderList[this._renderIndex].material.renderDiffusePass(time,delay,context3D, collect.renderList[this._renderIndex].modelMatrix, camera, collect.renderList[this._renderIndex].geometry, collect.renderList[this._renderIndex].animation);
+                this._geo = collect.renderList[this._renderIndex].geometry;
+                if (this._geo != null) {
+
+                    for (var i: number = 0; i < this._geo.subGeometrys.length; i++) {
+                        if (this._geo.subGeometrys[i].material.materialData.alpha != 0) {
+                            this._geo.subGeometrys[i].material.renderDiffusePass(time, delay, context3D, collect.renderList[this._renderIndex].modelMatrix, camera, collect.renderList[this._renderIndex].geometry, collect.renderList[this._renderIndex].animation);
+                        }
                     }
                 }
             }

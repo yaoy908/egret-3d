@@ -16,7 +16,7 @@
         */
         public renderList: Array<Object3D>;
         public mousePickList: Array<Object3D>;
-        public rootNode: Scene3D;
+        public rootScene: Scene3D;
         protected _nodes: Array<Object3D>;
 
         protected _num: number = 0;
@@ -34,7 +34,7 @@
             this.renderList = new Array<Object3D>();
             this.mousePickList = new Array<Object3D>();
             this._nodes = new Array<Object3D>();
-            this.rootNode = root;
+            this.rootScene = root;
         }
                 
         /**
