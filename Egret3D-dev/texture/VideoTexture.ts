@@ -98,16 +98,16 @@
                 this.texture.mipmapDatas = this.mimapData;
                 this.texture.image = this.imageData;
                 this.texture.gpu_border = 0;
-                context3D.gl.bindTexture(context3D.gl.TEXTURE_2D, this.texture.gpu_texture);
-                context3D.gl.texParameteri(context3D.gl.TEXTURE_2D, context3D.gl.TEXTURE_MAG_FILTER, context3D.gl.LINEAR);
-                context3D.gl.texParameteri(context3D.gl.TEXTURE_2D, context3D.gl.TEXTURE_MIN_FILTER, context3D.gl.NEAREST);
+                Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, this.texture.gpu_texture);
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MAG_FILTER, Context3DProxy.gl.LINEAR);
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, Context3DProxy.gl.NEAREST);
             }
 
             if (this.canUpdataTexture) {
                 this.context.drawImage(this.video, 0, 0, this._width, this._height);
-                context3D.gl.pixelStorei(context3D.gl.UNPACK_ALIGNMENT, 1)
-                context3D.gl.bindTexture(context3D.gl.TEXTURE_2D, this.texture.gpu_texture);
-                context3D.gl.texImage2D(context3D.gl.TEXTURE_2D, 0, context3D.gl.RGB, context3D.gl.RGB, context3D.gl.UNSIGNED_BYTE, this.tmpCanvas );
+                Context3DProxy.gl.pixelStorei(Context3DProxy.gl.UNPACK_ALIGNMENT, 1)
+                Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, this.texture.gpu_texture);
+                Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, 0, Context3DProxy.gl.RGB, Context3DProxy.gl.RGB, Context3DProxy.gl.UNSIGNED_BYTE, this.tmpCanvas );
             }
            
         }

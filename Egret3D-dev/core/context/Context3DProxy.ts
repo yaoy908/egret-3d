@@ -452,7 +452,7 @@
             Context3DProxy.gl.compileShader(shader);
 
             var tmpShader: Shader = new Shader(shader);
-            tmpShader.id = Shader.ID_COUNT++;
+            tmpShader.id = (Shader.ID_COUNT++).toString();
             return tmpShader;
         }
                                         
@@ -467,7 +467,7 @@
             Context3DProxy.gl.compileShader(shader);
 
             var tmpShader: Shader = new Shader(shader);
-            tmpShader.id = Shader.ID_COUNT++;
+            tmpShader.id = (Shader.ID_COUNT++).toString();
             return tmpShader;
         }
 

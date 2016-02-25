@@ -40,18 +40,18 @@
             } else
                 context3DProxy.enable(ContextConfig.CULL_FACE);
 
-            context3DProxy.gl.enable(ContextConfig.BLEND);
+            Context3DProxy.gl.enable(ContextConfig.BLEND);
             context3DProxy.setBlendFactors(this._materialData.blend_src, this._materialData.blend_dest);
 
             if (this._materialData.alphaBlending)
-                context3DProxy.gl.depthMask(false);
+                Context3DProxy.gl.depthMask(false);
 
 
             for (var i: number; i < this._passUsage.methodList.length; i++) {
                 this._passUsage.methodList[i].active(time, delay, context3DProxy, modeltransform, camera3D);
             }
 
-            context3DProxy.gl.useProgram(this._materialData.diffusePassUsageData.program3D.program);
+            Context3DProxy.gl.useProgram(this._materialData.diffusePassUsageData.program3D.program);
             var i: number = 0;
 
             if (this._materialData.materialDataNeedChange) {
@@ -85,11 +85,11 @@
                 sampler2D.texture.upload(context3DProxy);
                 context3DProxy.setTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index, sampler2D.texture.texture);
                 if (this._materialData.materialDataNeedChange) {
-                    var min_filter: number = this._materialData.smooth ? context3DProxy.gl.LINEAR_MIPMAP_LINEAR : context3DProxy.gl.LINEAR;
-                    var mag_filter: number = this._materialData.smooth ? context3DProxy.gl.LINEAR : context3DProxy.gl.LINEAR;
+                    var min_filter: number = this._materialData.smooth ? Context3DProxy.gl.LINEAR_MIPMAP_LINEAR : Context3DProxy.gl.LINEAR;
+                    var mag_filter: number = this._materialData.smooth ? Context3DProxy.gl.LINEAR : Context3DProxy.gl.LINEAR;
 
-                    var wrap_u_filter: number = this._materialData.repeat ? context3DProxy.gl.REPEAT : context3DProxy.gl.CLAMP_TO_EDGE;
-                    var wrap_v_filter: number = this._materialData.repeat ? context3DProxy.gl.REPEAT : context3DProxy.gl.CLAMP_TO_EDGE　;
+                    var wrap_u_filter: number = this._materialData.repeat ? Context3DProxy.gl.REPEAT : Context3DProxy.gl.CLAMP_TO_EDGE;
+                    var wrap_v_filter: number = this._materialData.repeat ? Context3DProxy.gl.REPEAT : Context3DProxy.gl.CLAMP_TO_EDGE　;
                     context3DProxy.setTexture2DSamplerState(min_filter, mag_filter, wrap_u_filter, wrap_v_filter);
                     this._materialData.materialDataNeedChange = false;
                 }
@@ -131,10 +131,10 @@
             //context3DProxy.gl.drawElements(this._materialData.drawMode, geometry.numItems, Egret3DDrive.UNSIGNED_SHORT, 0);
 
             if (this._materialData.alphaBlending)
-                context3DProxy.gl.depthMask(true);
+                Context3DProxy.gl.depthMask(true);
 
             for (var index in this._materialData.diffusePassUsageData.sampler2DList) {
-                context3DProxy.gl.bindTexture(context3DProxy.gl.TEXTURE_2D, null);
+                Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, null);
             }
 
         }
@@ -162,7 +162,7 @@
                 methoda.upload(time, delay, usage, context3DProxy, modeltransform, camera3D);
             }
 
-            ShaderPool.getProgram(vsName, fsName);
+            //ShaderPool.getProgram(vsName, fsName);
         }
     }
 } 
