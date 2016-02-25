@@ -50,10 +50,10 @@
                 if (!collect.renderList[this._renderIndex].isVisible) {
                     continue;
                 }
-                if (collect.renderList[this._renderIndex].tag && collect.renderList[this._renderIndex].tag.clearDepth && collect.renderList[this._renderIndex].tag.cleanState) {
-                    collect.renderList[this._renderIndex].tag.cleanState = false;
-                    context3D.clearDepth(1);
-                }
+                //if (collect.renderList[this._renderIndex].tag && collect.renderList[this._renderIndex].tag.clearDepth && collect.renderList[this._renderIndex].tag.cleanState) {
+                //    collect.renderList[this._renderIndex].tag.cleanState = false;
+                //    context3D.clearDepth(1);
+                //}
 
                 this._geo = collect.renderList[this._renderIndex].geometry;
                 if (this._geo != null) {

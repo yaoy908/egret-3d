@@ -1,5 +1,7 @@
 ﻿module egret3d_dev {
 
+
+
     /**
     * @class egret3d.openGLES.Shader
     * @classdesc
@@ -18,6 +20,22 @@
     */
     export class Shader {
 
+          /**
+        * @language zh_CN
+        * @private
+        * 声明 shader 为顶点 类型
+        * @see egret3d.ShaderPool
+        */
+        static vertex: number = 0;
+
+             /**
+        * @language zh_CN
+        * @private
+        * 声明 shader 为片段 类型
+        * @see egret3d.ShaderPool
+        */
+        static fragment: number = 1; 
+
          /**
         * @language zh_CN
         * @private
@@ -30,7 +48,7 @@
         *  
         * 获取已经有的shader 的ID
         */
-        public id: number;
+        public id: string;
 
         
         /**

@@ -37,11 +37,11 @@
 
             var tag: Object = {typeName:"",cleanDepth:false};
 
-            this.addLayer("layer_0");
-            this.addLayer("layer_1");
-            this.addLayer("layer_2");
-            this.addLayer("layer_3");
-            this.addLayer("layer_4");
+            //this.addLayer("layer_0");
+            //this.addLayer("layer_1");
+            //this.addLayer("layer_2");
+            //this.addLayer("layer_3");
+            //this.addLayer("layer_4");
         }
         
         /**

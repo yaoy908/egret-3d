@@ -428,5 +428,32 @@
         public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry:SubGeometry , animtion:IAnimation) {
             this.diffusePass.active(time,delay,context3DProxy, modeltransform, camera3D)
         }
+
+        public renderXRayPass() {
+        }
+
+        public renderOutlinePass() {
+        }
+
+        public renderNormalPass() {
+        }
+
+        public renderDepthPass() {
+        }
+
+        public renderPositionPass(){
+        }
+
+        public renderUVPass() {
+        }
+
+        public renderScendUVPass() {
+        }
+
+        public renderVertexColorPass() {
+        }
+
+        public renderLightingPass() {
+        }
     }
 } 

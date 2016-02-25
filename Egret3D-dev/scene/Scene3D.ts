@@ -35,6 +35,11 @@
             // to do add renderlist tree
         }
 
+        public removeChild3D(child3D: Object3D) {
+            this._root.removeChild(child3D);
+            // to do add renderlist tree
+        }
+
         public infrustumList(camera: Camera3D): Object3D[] {
             return this._tree.infrustumList(camera);
         }

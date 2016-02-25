@@ -66,6 +66,14 @@
             return this._viewPort.height;
         }
 
+        public addChild3D(child3d: Object3D) {
+            this._scene.addChild3D( child3d );
+        }
+
+        public removeChild3D(child3d: Object3D) {
+            this._scene.removeChild3D(child3d);
+        }
+
         public update(time: number, delay: number) {
 
         }

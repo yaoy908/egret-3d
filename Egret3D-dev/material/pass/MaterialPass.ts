@@ -76,8 +76,8 @@
                 this._materialData.materialSourceData[14] = this._materialData.ambientPower;
                 this._materialData.materialSourceData[15] = this._materialData.normalPower; //保留
             }
+
             //context3DProxy.gl.uniform1fv(this._materialData.diffusePassUsageData.uniform_materialSource.uniformIndex, this._materialData.materialSourceData);
-            
             //texture 2D
             var sampler2D: GLSL.Sampler2D;
             for (var index in this._materialData.diffusePassUsageData.sampler2DList) {
@@ -144,12 +144,25 @@
             this._passUsage.fsShaderNames.length = 0;
 
             var methoda: MethodBase;
+            var vsList: Array<string> = [];
+            var fsList: Array<string> = [];
+            var vsName: string = "";
+            var fsName: string = "";
+
             for (var i: number; i < this._passUsage.methodList.length; i++) {
-                if (this._passUsage.methodList[i].vsShaderName != "") {
-                    this._passUsage.methodList[i].vsShaderName;
+                methoda = this._passUsage.methodList[i];
+                if (methoda.vsShaderName != "") {
+                    vsList.push(methoda.vsShaderName);
+                    vsName += methoda.vsShaderName;
                 }
-                this._passUsage.methodList[i].upload(time, delay, usage, context3DProxy, modeltransform, camera3D);
+                if (methoda.fsShaderName != "") {
+                    fsList.push(methoda.fsShaderName);
+                    fsName += methoda.fsShaderName;
+                }
+                methoda.upload(time, delay, usage, context3DProxy, modeltransform, camera3D);
             }
+
+            ShaderPool.getProgram(vsName, fsName);
         }
     }
 } 

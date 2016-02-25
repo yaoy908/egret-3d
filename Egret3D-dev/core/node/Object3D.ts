@@ -1055,7 +1055,7 @@
         //public getScreenPosition(camera: Camera3D): Vector3D {
         //    this._mat.copyFrom(camera.viewProjectionMatrix);
         //    this._mat.append(this.modelMatrix);
-        //    return this._mat.transformVector(this.globalPosition);
+        //    return this._mat.transformVector(Context3DProxy.globalPosition);
         //}
         
         /**
