@@ -213,6 +213,10 @@
         */
         public updata(time: number, delay: number): void {
 
+            if (!this._playing) {
+                return;
+            }
+
             if (this._enabledSkeletonAnimationClips.length <= 0)
                 return;
 
