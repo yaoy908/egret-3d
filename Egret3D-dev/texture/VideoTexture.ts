@@ -1,7 +1,7 @@
 ﻿module egret3d_dev {
    
     /**
-     * @class egret3d.VideoTexture
+     * @class egret3d_dev.VideoTexture
      * @classdesc
      * VideoTexture 使用 Video 标签采集 video 视频 </p>
      * VideoTexture 仅且暂时只能在pc上正常使用，移动端需要直接与用户交互才可正常生成播放</p>

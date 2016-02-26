@@ -2,7 +2,7 @@
     /**
      * @private
      * @language zh_CN
-     * @class egret3d.PlaneClassification
+     * @class egret3d_dev.PlaneClassification
      * @classdesc
      * 定义 PlaneClassification 常量
      * @version Egret 3.0

@@ -2,7 +2,7 @@
         
     /**
     * @private
-    * @class egret3d.CollectBase
+    * @class egret3d_dev.CollectBase
     * @classdesc
     * @version Egret 3.0
     * @platform Web,Native

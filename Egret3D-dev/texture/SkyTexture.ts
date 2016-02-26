@@ -1,6 +1,6 @@
 ﻿module egret3d_dev {
     /**
-     * @class egret3d.SkyTexture
+     * @class egret3d_dev.SkyTexture
      * @classdesc
      * SkyTexture 类为天空贴图
      *
@@ -18,7 +18,7 @@
      </pre>
      使用示例：</p>
      <pre>
-     var skyTexture: egret3d.SkyTexture = new egret3d.SkyTexture(
+     var skyTexture: egret3d_dev.SkyTexture = new egret3d_dev.SkyTexture(
      <HTMLImageElement>document.getElementById("t1"),
      <HTMLImageElement>document.getElementById("t2"),
      <HTMLImageElement>document.getElementById("t3"),
@@ -27,9 +27,9 @@
      <HTMLImageElement>document.getElementById("t6")
      );
 
-     view3D.sky = new egret3d.Sky(skyTexture);
+     view3D.sky = new egret3d_dev.Sky(skyTexture);
      </pre>
-     * @see egret3d.Sky
+     * @see egret3d_dev.Sky
      * @version Egret 3.0
      * @platform Web,Native
      * @includeExample texture/SkyTexture.ts

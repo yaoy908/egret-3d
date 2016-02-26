@@ -1,14 +1,14 @@
 ﻿module egret3d_dev {
 
     /**
-    * @class egret3d.Object3D
+    * @class egret3d_dev.Object3D
     * @classdesc
     * 拣选类型，拣选时可以分为，包围盒拣选、模型拣选返回模型拣选到的位置、模型拣选返回模型拣选到的UV坐标
     * 这几种拣选方式
     * 设置鼠标拣选的类型，鼠标拣选不同的类型有不同的效果作用，还有性能
     * 需要的拣选精度越高，性能要求就越高，反之亦然
     *
-    * @see egret3d.Picker
+    * @see egret3d_dev.Picker
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -30,7 +30,7 @@
         UVPick
     };
     /**
-    * @class egret3d.Object3D
+    * @class egret3d_dev.Object3D
     * @classdesc
     * 3d空间中的实体对象。
     * 场景图中的Object3D对象是一个树型结构，对象中包含了变换信息.
@@ -38,10 +38,10 @@
     * 的变换信息要结合父对象的变换信息
     * 每个Object3D对象在生成时会创建一个包围盒
     * 
-    * @see egret3d.Vector3D
-    * @see egret3d.Matrix4_4
-    * @see egret3d.Quaternion
-    * @see egret3d.CubeBoxBound
+    * @see egret3d_dev.Vector3D
+    * @see egret3d_dev.Matrix4_4
+    * @see egret3d_dev.Quaternion
+    * @see egret3d_dev.CubeBoxBound
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -224,7 +224,7 @@
         * 设置鼠标的拣选类型，可通过 PickType来进行设置。</p>
         * 快速拣选默认使用 正方形包围盒子。</p>
         * 高精度型需要 PositionPick ， uv pick 等。</p>
-        * @see egret3d.PickType
+        * @see egret3d_dev.PickType
         * @version Egret 3.0
         * @platform Web,Native
         */

@@ -2,7 +2,7 @@
                                 
     /**
     * @private
-    * @class egret3d.NormalRender
+    * @class egret3d_dev.NormalRender
     * @classdesc
     * 法线渲染器,渲染有法线的实现对象
     * @version Egret 3.0

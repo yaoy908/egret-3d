@@ -1,7 +1,7 @@
 ﻿module egret3d_dev {
     /**
      * @language zh_CN
-     * @class egret3d.Matrix4_4
+     * @class egret3d_dev.Matrix4_4
      * @classdesc
      *
      * Matrix4_4 类表示一个转换矩阵，该矩阵确定三维 (3D) 显示对象的位置和方向。

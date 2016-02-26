@@ -2,7 +2,7 @@
 
      /**
      * @private
-     * @class egret3d.Debug
+     * @class egret3d_dev.Debug
      * @classdesc
      * 调试面板
      */

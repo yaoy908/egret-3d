@@ -2,7 +2,7 @@
 
     /**
      * @private
-     * @class egret3d.StringUtil
+     * @class egret3d_dev.StringUtil
      * @classdesc
      * 字符串处理工具类
      */

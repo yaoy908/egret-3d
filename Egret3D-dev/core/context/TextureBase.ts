@@ -1,18 +1,18 @@
 ﻿module egret3d_dev {
 
     /**
-    * @class egret3d.openGLES.Texture2D
+    * @class egret3d_dev.openGLES.Texture2D
     * @classdesc
     * Texture 类表示上载到渲染上下文的二维纹理。</p>
     *
     * 定义一个 2D 纹理，以便在渲染期间使用。</p>
     * 无法直接实例化 Texture。使用 Context3D createTexture() 方法创建实例。</p>
-    * @see egret3d.openGLES.Program3D
-    * @see egret3d.openGLES.IndexBuffer3D
-    * @see egret3d.openGLES.VertexBuffer3D
-    * @see egret3d.openGLES.Texture2D
-    * @see egret3d.openGLES.Shader
-    * @see egret3d.openGLES.CubeTexture
+    * @see egret3d_dev.openGLES.Program3D
+    * @see egret3d_dev.openGLES.IndexBuffer3D
+    * @see egret3d_dev.openGLES.VertexBuffer3D
+    * @see egret3d_dev.openGLES.Texture2D
+    * @see egret3d_dev.openGLES.Shader
+    * @see egret3d_dev.openGLES.CubeTexture
     * @version Egret 3.0
     * @platform Web,Native
     */

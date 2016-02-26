@@ -2,11 +2,11 @@
                     
     /**
     * @private
-    * @class egret3d.Frustum
+    * @class egret3d_dev.Frustum
     * @classdesc
     * 摄像机视椎体,计算出摄像机的可视范围.
     * 
-    * @see egret3d.Camera3D
+    * @see egret3d_dev.Camera3D
     * @version Egret 3.0
     * @platform Web,Native
     */

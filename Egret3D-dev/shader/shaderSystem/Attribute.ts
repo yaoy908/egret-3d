@@ -2,7 +2,7 @@
     
     /**
     * @private
-    * @class egret3d.Attribute
+    * @class egret3d_dev.Attribute
     * @classdesc
     * 变量属性
     * @version Egret 3.0

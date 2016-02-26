@@ -1,7 +1,7 @@
 ﻿module egret3d_dev {
 
     /**
-    * @class egret3d.Layer
+    * @class egret3d_dev.Layer
     * @classdesc
     * Object3D 渲染Layer
     * 每个Layer分两个渲染列表，一个是有alpha的对象列表，另一个是没有alpha的对象列表

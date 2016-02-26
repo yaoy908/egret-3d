@@ -2,7 +2,7 @@
                                                     
     /**
     * @private
-    * @class egret3d.VarConstName
+    * @class egret3d_dev.VarConstName
     * @classdesc
     * shader 变量 名字定义
     * 用户在写自定义shader时，按照引擎中已经列取出来的变量名进行命名

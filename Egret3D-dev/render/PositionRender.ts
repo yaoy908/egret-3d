@@ -2,7 +2,7 @@
                                 
     /**
     * @private
-    * @class egret3d.PositionRender
+    * @class egret3d_dev.PositionRender
     * @classdesc
     * position render
     * @version Egret 3.0

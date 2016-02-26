@@ -1,7 +1,7 @@
 ﻿module egret3d_dev {
     /**
      * @private
-     * @class egret3d.MathUtil
+     * @class egret3d_dev.MathUtil
      * @classdesc
      * @version Egret 3.0
      * @platform Web,Native

@@ -2,7 +2,7 @@
                     
     /**
     * @language zh_CN
-    * @class egret3d.PickResult
+    * @class egret3d_dev.PickResult
     * @classdesc
     * 鼠标拾取返回数据。</p>
     * 鼠标拾取模型上的交点 (本地坐标、世界坐标)。</p>

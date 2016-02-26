@@ -120,7 +120,7 @@
 
     /**
      * @language zh_CN
-     * @class egret3d.Input
+     * @class egret3d_dev.Input
      * @classdesc
      * 处理输入设备,鼠标.键盘.触摸。
      * @includeExample input/Input.ts
@@ -520,13 +520,13 @@
 
             //e.preventDefault();
 
-            //var x1: number = e.targetTouches[0].clientX - egret3d.Egret3DDrive.clientRect.left;
-            //var y1: number = e.targetTouches[0].clientY - egret3d.Egret3DDrive.clientRect.top;
+            //var x1: number = e.targetTouches[0].clientX - egret3d_dev.Egret3DDrive.clientRect.left;
+            //var y1: number = e.targetTouches[0].clientY - egret3d_dev.Egret3DDrive.clientRect.top;
 
             //if (e.targetTouches.length == 2) {
 
-            //    var x2: number = e.targetTouches[1].clientX - egret3d.Egret3DDrive.clientRect.left;
-            //    var y2: number = e.targetTouches[1].clientY - egret3d.Egret3DDrive.clientRect.top;
+            //    var x2: number = e.targetTouches[1].clientX - egret3d_dev.Egret3DDrive.clientRect.left;
+            //    var y2: number = e.targetTouches[1].clientY - egret3d_dev.Egret3DDrive.clientRect.top;
 
             //    this.onPinch(x1, y1, x2, y2);
             //}
@@ -546,16 +546,16 @@
 
             //if (e.targetTouches.length > 1) {
 
-            //    var x: number = e.targetTouches[0].clientX - egret3d.Egret3DDrive.clientRect.left;
-            //    var y: number = e.targetTouches[0].clientY - egret3d.Egret3DDrive.clientRect.top;
-            //    var x1: number = e.targetTouches[1].clientX - egret3d.Egret3DDrive.clientRect.left;
-            //    var y1: number = e.targetTouches[1].clientY - egret3d.Egret3DDrive.clientRect.top;
+            //    var x: number = e.targetTouches[0].clientX - egret3d_dev.Egret3DDrive.clientRect.left;
+            //    var y: number = e.targetTouches[0].clientY - egret3d_dev.Egret3DDrive.clientRect.top;
+            //    var x1: number = e.targetTouches[1].clientX - egret3d_dev.Egret3DDrive.clientRect.left;
+            //    var y1: number = e.targetTouches[1].clientY - egret3d_dev.Egret3DDrive.clientRect.top;
 
             //    this.onPinch(x, y, x1, y1);
             //}
             //else if (e.targetTouches.length == 1) {
 
-            //    this.onSwipe(e.targetTouches[0].clientX - egret3d.Egret3DDrive.clientRect.left, e.targetTouches[0].clientY - egret3d.Egret3DDrive.clientRect.top);
+            //    this.onSwipe(e.targetTouches[0].clientX - egret3d_dev.Egret3DDrive.clientRect.left, e.targetTouches[0].clientY - egret3d_dev.Egret3DDrive.clientRect.top);
             //}
             //else {
 
@@ -579,8 +579,8 @@
             //this.mouseLastX = this.mouseX;
             //this.mouseLastY = this.mouseY;
 
-            //this.mouseX = e.targetTouches[0].clientX - egret3d.Egret3DDrive.clientRect.left;
-            //this.mouseY = e.targetTouches[0].clientY - egret3d.Egret3DDrive.clientRect.top;
+            //this.mouseX = e.targetTouches[0].clientX - egret3d_dev.Egret3DDrive.clientRect.left;
+            //this.mouseY = e.targetTouches[0].clientY - egret3d_dev.Egret3DDrive.clientRect.top;
 
             //this.mouseOffsetX = this.mouseX - this.mouseLastX;
             //this.mouseOffsetY = this.mouseY - this.mouseLastY;
@@ -590,7 +590,7 @@
             //if (e.targetTouches.length > 1) {
 
             //    var newPosition1: Point = new Point(this.mouseX, this.mouseY);
-            //    var newPosition2: Point = new Point(e.targetTouches[1].clientX - egret3d.Egret3DDrive.clientRect.left, e.targetTouches[1].clientY - egret3d.Egret3DDrive.clientRect.top);
+            //    var newPosition2: Point = new Point(e.targetTouches[1].clientX - egret3d_dev.Egret3DDrive.clientRect.left, e.targetTouches[1].clientY - egret3d_dev.Egret3DDrive.clientRect.top);
 
             //    if (this._oldPosition1 == null)
             //        this._oldPosition1 = newPosition1;
@@ -726,8 +726,8 @@
         }
 
         private mouseEnd(e: MouseEvent) {
-            //this.mouseX = e.clientX - egret3d.Egret3DDrive.clientRect.left;
-            //this.mouseY = e.clientY - egret3d.Egret3DDrive.clientRect.top;
+            //this.mouseX = e.clientX - egret3d_dev.Egret3DDrive.clientRect.left;
+            //this.mouseY = e.clientY - egret3d_dev.Egret3DDrive.clientRect.top;
 
             //var k: number = 0;
             //switch (e.button) {
@@ -758,8 +758,8 @@
         }
 
         private mouseStart(e: MouseEvent) {
-            //this.mouseX = e.clientX - egret3d.Egret3DDrive.clientRect.left;
-            //this.mouseY = e.clientY - egret3d.Egret3DDrive.clientRect.top;
+            //this.mouseX = e.clientX - egret3d_dev.Egret3DDrive.clientRect.left;
+            //this.mouseY = e.clientY - egret3d_dev.Egret3DDrive.clientRect.top;
 
             //var k: number = 0;
             //switch (e.button) {
@@ -787,8 +787,8 @@
             //this.mouseLastX = this.mouseX;
             //this.mouseLastY = this.mouseY;
 
-            //this.mouseX = e.clientX - egret3d.Egret3DDrive.clientRect.left;
-            //this.mouseY = e.clientY - egret3d.Egret3DDrive.clientRect.top;
+            //this.mouseX = e.clientX - egret3d_dev.Egret3DDrive.clientRect.left;
+            //this.mouseY = e.clientY - egret3d_dev.Egret3DDrive.clientRect.top;
 
             //this.mouseOffsetX = this.mouseX - this.mouseLastX;
             //this.mouseOffsetY = this.mouseY - this.mouseLastY;

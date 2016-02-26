@@ -1,7 +1,7 @@
 ﻿module egret3d_dev {
     /**
      * @language zh_CN
-     * @class egret3d.Point
+     * @class egret3d_dev.Point
      * @classdesc
      * Point 对象表示二维坐标系统中的某个位置，其中 x 表示水平轴，y 表示垂直轴。
      * @version Egret 3.0

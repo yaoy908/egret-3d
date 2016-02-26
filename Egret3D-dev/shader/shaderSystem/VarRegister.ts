@@ -2,7 +2,7 @@
                                                         
     /**
     * @private
-    * @class egret3d.VarRegister
+    * @class egret3d_dev.VarRegister
     * @classdesc
     * shader 变量 基类
     *

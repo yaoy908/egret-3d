@@ -2,7 +2,7 @@
         
     /**
     * @private
-    * @class egret3d.AttributeType
+    * @class egret3d_dev.AttributeType
     * @classdesc
     *
     * shader中的变量属性类型

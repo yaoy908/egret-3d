@@ -2,7 +2,7 @@
         
     /**
     * @private
-    * @class egret3d.VaryingType
+    * @class egret3d_dev.VaryingType
     * @classdesc
     * shader中varying 变量 类型
     * @version Egret 3.0

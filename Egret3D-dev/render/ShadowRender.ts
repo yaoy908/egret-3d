@@ -2,7 +2,7 @@
 
     /**
     * @private
-    * @class egret3d.ShadowRender
+    * @class egret3d_dev.ShadowRender
     * @classdesc
     * 阴影渲染器
     */

@@ -2,13 +2,13 @@
                                             
     /**
     * @private
-    * @class egret3d.TmpVar
+    * @class egret3d_dev.TmpVar
     * @classdesc
     * 
     * shader中临时变量类型的所有数据
     * 包含变量类型，变量名，变量的值
     *
-    * @see egret3d.AttributeType
+    * @see egret3d_dev.AttributeType
     *
     * @version Egret 3.0
     * @platform Web,Native

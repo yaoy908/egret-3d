@@ -32,7 +32,7 @@ module egret3d_dev {
     /**
      * Endian 类中包含一些值，它们表示用于表示多字节数字的字节顺序。
      * 字节顺序为 bigEndian（最高有效字节位于最前）或 littleEndian（最低有效字节位于最前）。
-     * @class egret3d.Endian
+     * @class egret3d_dev.Endian
      * @classdesc
      */
     export class Endian {

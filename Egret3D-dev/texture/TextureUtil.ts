@@ -1,6 +1,6 @@
 ﻿module egret3d_dev {
     /**
-     * @class egret3d.TextureUtil
+     * @class egret3d_dev.TextureUtil
      * @private
      * @classdesc
      * TextureUtil

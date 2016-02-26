@@ -2,7 +2,7 @@
 
     /**
     * @private
-    * @class egret3d.Entity
+    * @class egret3d_dev.Entity
     * @classdesc
     * 3d空间中的实体对象 extends Object3D
     * @version Egret 3.0

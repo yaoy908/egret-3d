@@ -2,7 +2,7 @@
             
     /**
     * @private
-    * @class egret3d.FuncData
+    * @class egret3d_dev.FuncData
     * @classdesc
     * shader系统工具类，管理所有要用到的shader文件
     * @version Egret 3.0
@@ -121,8 +121,8 @@
         //            this.setupShader(glslUrl,glslData[this.libs[i]]);
         //        }
         //        else{
-        //            var urlloader: egret3d.URLLoader = new egret3d.URLLoader(glslUrl);
-        //            urlloader.onLoadComplete = (loader: egret3d.URLLoader) => this.onCompleteShader(loader);
+        //            var urlloader: egret3d_dev.URLLoader = new egret3d_dev.URLLoader(glslUrl);
+        //            urlloader.onLoadComplete = (loader: egret3d_dev.URLLoader) => this.onCompleteShader(loader);
         //        }
         //    }
 
@@ -131,7 +131,7 @@
         //    }
         //}
 
-        //private onCompleteShader(loader: egret3d.URLLoader) {
+        //private onCompleteShader(loader: egret3d_dev.URLLoader) {
         //    this.setupShader(loader.url,loader.data);
         //}
 

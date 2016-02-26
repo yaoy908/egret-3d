@@ -1,7 +1,7 @@
 ﻿module egret3d_dev {
     /**
      * @language zh_CN
-     * @class egret3d.EyesMatrix
+     * @class egret3d_dev.EyesMatrix
      * @classdesc
      * 可使用 EyesMatrix 类 对左，右眼睛矩阵的操作
      * 它会在摄像机的位置做一个左 右偏移 模拟出眼睛的矩阵

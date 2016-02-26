@@ -13,7 +13,7 @@
                                 
     /**
     * @private
-    * @class egret3d.RenderManager
+    * @class egret3d_dev.RenderManager
     * @classdesc
     * 渲染器管理,管理所有的渲染器对象
     */

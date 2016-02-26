@@ -1,6 +1,6 @@
 ﻿module egret3d_dev{
      /**
-     * @class egret3d.RenderTexture
+     * @class egret3d_dev.RenderTexture
      * @private
      * @classdesc
      * RenderTexture 类为渲染目标纹理，用于离屏渲染中。

@@ -1,7 +1,7 @@
 ﻿module egret3d_dev {
                         
     /**
-    * @class egret3d.SphereSky
+    * @class egret3d_dev.SphereSky
     * @classdesc
     * 天空球
     * 球形的天空盒子，需要sphere的360全景照片，可进行全景照片和video的球形显示

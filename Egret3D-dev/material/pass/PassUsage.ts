@@ -2,7 +2,7 @@
 
      /**
      * @private
-     * @class egret3d.MethodUsageData
+     * @class egret3d_dev.MethodUsageData
      * @classdesc
      * 方法中需要用到的数据。
      * @version Egret 3.0

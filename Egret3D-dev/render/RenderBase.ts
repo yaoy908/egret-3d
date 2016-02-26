@@ -2,7 +2,7 @@
                             
     /**
     * @private
-    * @class egret3d.RenderBase
+    * @class egret3d_dev.RenderBase
     * @classdesc
     * 渲染器基类
     */

@@ -1,7 +1,7 @@
 ﻿module egret3d_dev {
     /**
      * @language zh_CN
-     * @class egret3d.Rectangle
+     * @class egret3d_dev.Rectangle
      * @classdesc
      * Rectangle 类 表示矩形
      * 

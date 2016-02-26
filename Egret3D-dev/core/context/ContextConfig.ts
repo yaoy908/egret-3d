@@ -97,7 +97,7 @@
     }
     /**
      * @private
-     * @class egret3d.ContextSamplerType
+     * @class egret3d_dev.ContextSamplerType
      * @classdesc
      * 贴图采样类型
      */
@@ -177,7 +177,7 @@
     }
 
     /**
-    * @class egret3d.DrawMode
+    * @class egret3d_dev.DrawMode
     * @classdesc
     * 渲染模式
     * LINES 线框显示模式
@@ -235,7 +235,7 @@
 
     /**
     * @private
-    * @class egret3d.Egret3DDrive
+    * @class egret3d_dev.Egret3DDrive
     * @classdesc
     * 3d 驱动 
     */

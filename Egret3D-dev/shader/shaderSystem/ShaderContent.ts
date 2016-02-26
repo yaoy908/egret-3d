@@ -2,7 +2,7 @@
         
     /**
     * @private
-    * @class egret3d.FuncData
+    * @class egret3d_dev.FuncData
     * @classdesc
     * shader函数内容的数据
     * @version Egret 3.0
@@ -29,7 +29,7 @@
         
     /**
     * @private
-    * @class egret3d.ShaderContent
+    * @class egret3d_dev.ShaderContent
     * @classdesc
     * shader文件解析后的数据内容
     * 每种变量类型都进行了规类

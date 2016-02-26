@@ -3,7 +3,7 @@
     /**
 	* @private
     * @language zh_CN
-    * @class egret3d.Mouse3DManager
+    * @class egret3d_dev.Mouse3DManager
     * @classdesc
     * 鼠标事件管理。
     * @version Egret 3.0

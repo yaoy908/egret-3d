@@ -8,7 +8,7 @@
         
          /**
          * @language zh_CN
-         * @class egret3d.MaterialBase
+         * @class egret3d_dev.MaterialBase
          * @classdesc
          * TerrainMaterial,TextureMaterial 的基类。</p>
          * 材质球共有的基础类型，封装了材质球共有的基础数据设置方法。</p>

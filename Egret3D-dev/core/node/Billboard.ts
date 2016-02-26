@@ -1,7 +1,7 @@
 ﻿module egret3d_dev {
     /**
      * @language zh_CN
-     * @class egret3d.Billboard
+     * @class egret3d_dev.Billboard
      * @classdesc
      * 公告板渲染对象 始终面朝摄像机的面板
      * @version Egret 3.0

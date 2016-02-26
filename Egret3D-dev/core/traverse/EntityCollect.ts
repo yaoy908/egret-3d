@@ -1,13 +1,13 @@
 ﻿module egret3d_dev {
             
     /**
-    * @class egret3d.EntityCollect
+    * @class egret3d_dev.EntityCollect
     * @classdesc
     * Object3D 渲染对象收集器,把渲染对象进行可视筛选，
     * 并且划分渲染层级，依次排序到加入列表.
     *
-    * @see egret3d.Scene3D
-    * @see egret3d.View3D
+    * @see egret3d_dev.Scene3D
+    * @see egret3d_dev.View3D
     * @version Egret 3.0
     * @platform Web,Native
     */

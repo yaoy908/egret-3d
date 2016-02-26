@@ -1,7 +1,7 @@
 ﻿module egret3d_dev {
     /**
      * @language zh_CN
-     * @class egret3d.Vector3D
+     * @class egret3d_dev.Vector3D
      * @classdesc
      * 用 Vector3D 表示三维空间中的位置,也可以做4维向量,当为3维向量时w始终为0。</p>
      * 定义了一个三元的浮点向量。</p>

@@ -2,7 +2,7 @@
                                                 
     /**
     * @private
-    * @class egret3d.UniformType
+    * @class egret3d_dev.UniformType
     * @classdesc
     * shader Uniform 变量的类型
     */

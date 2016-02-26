@@ -1,6 +1,6 @@
 ﻿module egret3d_dev{
     /**
-     * @class egret3d.View3D
+     * @class egret3d_dev.View3D
      * @classdesc
      * 渲染视图。</p>
      * view3D 是整个3D引擎的渲染视口，可以控制渲染窗口的大小，渲染的方式。</p>
@@ -8,8 +8,8 @@
      * 交换不同的场景元素 scene3D 。</p>
      * skyBox需要在这里直接设置，有cube sky 和 sphere sky。</p>
      * 整个渲染的主循环通过 render  。</p>
-     * @see egret3d.camera3d
-     * @see egret3d.scene3D
+     * @see egret3d_dev.camera3d
+     * @see egret3d_dev.scene3D
      * @version Egret 3.0
      * @platform Web,Native
      */
@@ -22,6 +22,8 @@
         protected _aspectRatio: number = 1;
         protected _scissorRect: Rectangle = new Rectangle();
         protected _viewMatrix: Matrix4_4 = new Matrix4_4();
+
+        protected _contex3DProxy: Context3DProxy = new Context3DProxy();
 
         public get camera3D(): Camera3D {
             return this._camera;
@@ -75,7 +77,17 @@
         }
 
         public update(time: number, delay: number) {
+            Context3DProxy.gl.enable(ContextConfig.BLEND);
+            Context3DProxy.gl.enable(ContextConfig.CULL_FACE);
 
+            this._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+
+            this._contex3DProxy.clear(0.0, 0.0, 0.0, 1.0);
+
+            this._contex3DProxy.clearDepth(1);
+            this._contex3DProxy.clearStencil(0);
+
+            Context3DProxy.gl.finish();
         }
 
 

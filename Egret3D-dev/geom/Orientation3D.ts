@@ -1,7 +1,7 @@
 ﻿module egret3d_dev {
     /**
      * @language zh_CN
-     * @class egret3d.Orientation3D
+     * @class egret3d_dev.Orientation3D
      * @classdesc
      * 定义 Orientation3D 常量。</p>
      * Matrix4_4.decompose 会分 axisAngle、eulerAngles、quaternion这3种类型进行分解。</p>
@@ -10,8 +10,8 @@
      matrix.decompose(Orientation3D.QUATERNION)
      </pre>
      *
-     * @see egret3d.Matrix4_4
-     * @see egret3d.Quaternion
+     * @see egret3d_dev.Matrix4_4
+     * @see egret3d_dev.Quaternion
      *
      * @version Egret 3.0
      * @platform Web,Native

@@ -3,13 +3,13 @@
     /**
     * @private
     * @private
-    * @class egret3d.Sampler3D
+    * @class egret3d_dev.Sampler3D
     * @classdesc
     * 
     * shader中samplerCube类型变量的所有数据
     * 包含变量类型，变量名，变量的值
     *
-    * @see egret3d.AttributeType
+    * @see egret3d_dev.AttributeType
     *
     * @version Egret 3.0
     * @platform Web,Native

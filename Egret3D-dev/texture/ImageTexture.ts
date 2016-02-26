@@ -1,7 +1,7 @@
 ﻿module egret3d_dev {
 
      /**
-     * @class egret3d.ImageTexture
+     * @class egret3d_dev.ImageTexture
      * @classdesc
      * ImageTexture 类为 图像贴图
      * 
@@ -13,7 +13,7 @@
      * 假设html中已有 &lt;img id="t1" src="xxx.png" /&gt;
      * <pre>
      * var img: HTMLImageElement = <HTMLImageElement>document.getElementById("t1");
-     * var imageTexture: egret3d.ImageTexture = new egret3d.ImageTexture(img);
+     * var imageTexture: egret3d_dev.ImageTexture = new egret3d_dev.ImageTexture(img);
       * </pre>
      * @version Egret 3.0
      * @platform Web,Native

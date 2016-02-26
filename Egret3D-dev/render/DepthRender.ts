@@ -2,7 +2,7 @@
                                 
     /**
     * @private
-    * @class egret3d.DepthRender
+    * @class egret3d_dev.DepthRender
     * @classdesc
     * 深度渲染器 渲染场景中的实体对象
     * @version Egret 3.0
