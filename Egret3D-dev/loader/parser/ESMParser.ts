@@ -76,7 +76,8 @@
                 //geomtry = skinGeomtry;
             }
             else {
-                geomtryData = GeometryData.build(geomtryData);
+                //geomtryData = GeometryData.build(geomtryData);
+                geomtry = GeometryData.buildGeomtry(geomtryData);
 
                 //var staticGeomtry: SubGeometry = new SubGeometry();
 
