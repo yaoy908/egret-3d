@@ -108,6 +108,17 @@
                 
         /**
         * @language zh_CN
+        * shader buffer
+        */
+        public sharedVertexBuffer: VertexBuffer3D;
+        /**
+        * @language zh_CN
+        * shader index
+        */
+        public sharedIndexBuffer: IndexBuffer3D;
+
+        /**
+        * @language zh_CN
         * 顶点坐标数据
         */
         public source_positionData: Array<number> = new Array<number>();
@@ -209,37 +220,30 @@
         private calculateVertexFormat(context3DProxy: Context3DProxy) {
             if (this.vertexFormat & VertexFormat.VF_POSITION) {
                 this.vertexAttLength += Geometry.positionSize;
-                //this.uniforms.push(context3DProxy.getUniformLocation(null, "attribute_position"));
             }
 
             if (this.vertexFormat & VertexFormat.VF_NORMAL) {
                 this.vertexAttLength += Geometry.normalSize;
-                //this.uniforms.push(context3DProxy.getUniformLocation(null, "attribute_normal"));
             }
 
             if (this.vertexFormat & VertexFormat.VF_TANGENT) {
                 this.vertexAttLength += Geometry.tangentSize;
-                //this.uniforms.push(context3DProxy.getUniformLocation(null, "attribute_tangent"));
             }
 
             if (this.vertexFormat & VertexFormat.VF_COLOR) {
                 this.vertexAttLength += Geometry.colorSize;
-                //this.uniforms.push(context3DProxy.getUniformLocation(null, "attribute_vertexColor"));
             }
 
             if (this.vertexFormat & VertexFormat.VF_UV) {
                 this.vertexAttLength += Geometry.uvSize;
-                //this.uniforms.push(context3DProxy.getUniformLocation(null, "attribute_uv0"));
             }
 
             if (this.vertexFormat & VertexFormat.VF_UV2) {
                 this.vertexAttLength += Geometry.uv2Size;
-                //this.uniforms.push(context3DProxy.getUniformLocation(null, "attribute_uv1"));
             }
 
             if (this.vertexFormat & VertexFormat.VF_SKIN) {
                 this.vertexAttLength += Geometry.skinSize;
-                //this.uniforms.push(context3DProxy.getUniformLocation(null, "attribute_uv1"));
             }
 
             for (var i: number = 0; i < this.source_positionData.length / Geometry.positionSize; ++i) {
