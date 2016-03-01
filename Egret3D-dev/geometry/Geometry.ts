@@ -110,37 +110,37 @@
         * @language zh_CN
         * 顶点坐标数据
         */
-        public source_positionData: Array<Vector3D> = new Array<Vector3D>();
+        public source_positionData: Array<number> = new Array<number>();
                         
         /**
         * @language zh_CN
         * 顶点法线数据
         */
-        public source_normalData: Array<Vector3D> = new Array<Vector3D>();
+        public source_normalData: Array<number> = new Array<number>();
                                 
         /**
         * @language zh_CN
         * 顶点切线数据
         */
-        public source_tangentData: Array<Vector3D> = new Array<Vector3D>();
+        public source_tangentData: Array<number> = new Array<number>();
                                 
         /**
         * @language zh_CN
         * 顶点颜色数据
         */
-        public source_colorData: Array<Vector3D> = new Array<Vector3D>();
+        public source_colorData: Array<number> = new Array<number>();
                                 
         /**
         * @language zh_CN
         * 顶点uv数据
         */
-        public source_uvData: Array<UV> = new Array<UV>();
+        public source_uvData: Array<number> = new Array<number>();
                                 
         /**
         * @language zh_CN
         * 顶点第二uv数据
         */
-        public source_uv2Data: Array<UV> = new Array<UV>();
+        public source_uv2Data: Array<number> = new Array<number>();
 
         /**
         * @language zh_CN
@@ -198,19 +198,7 @@
 
         /**
         * @language zh_CN
-        * 包围盒min pos
-        */
-        public minPos: Vector3D = new Vector3D();
-
-        /**
-        * @language zh_CN
-        * 包围盒max pos
-        */
-        public maxPos: Vector3D = new Vector3D();
-        
-        /**
-        * @language zh_CN
-        * 包围盒max pos
+        * geometry子集
         */
         public subGeometrys: Array<SubGeometry>;
 
@@ -254,76 +242,46 @@
                 //this.uniforms.push(context3DProxy.getUniformLocation(null, "attribute_uv1"));
             }
 
-            for (var i: number = 0; i < this.source_positionData.length; ++i) {
+            for (var i: number = 0; i < this.source_positionData.length / Geometry.positionSize; ++i) {
                 if (this.vertexFormat & VertexFormat.VF_POSITION) {
-                    this.verticesData.push(this.source_positionData[i].x);
-                    this.verticesData.push(this.source_positionData[i].y);
-                    this.verticesData.push(this.source_positionData[i].z);
+                    this.verticesData.push(this.source_positionData[i * Geometry.positionSize]);
+                    this.verticesData.push(this.source_positionData[i * Geometry.positionSize + 1]);
+                    this.verticesData.push(this.source_positionData[i * Geometry.positionSize + 2]);
                 }
 
                 if (this.vertexFormat & VertexFormat.VF_NORMAL) {
-                    this.verticesData.push(this.source_normalData[i].x);
-                    this.verticesData.push(this.source_normalData[i].y);
-                    this.verticesData.push(this.source_normalData[i].z);
+                    this.verticesData.push(this.source_normalData[i * Geometry.normalSize]);
+                    this.verticesData.push(this.source_normalData[i * Geometry.normalSize + 1]);
+                    this.verticesData.push(this.source_normalData[i * Geometry.normalSize + 2]);
                 }
 
                 if (this.vertexFormat & VertexFormat.VF_TANGENT) {
-                    this.verticesData.push(this.source_tangentData[i].x);
-                    this.verticesData.push(this.source_tangentData[i].y);
-                    this.verticesData.push(this.source_tangentData[i].z);
+                    this.verticesData.push(this.source_tangentData[i * Geometry.tangentSize]);
+                    this.verticesData.push(this.source_tangentData[i * Geometry.tangentSize + 1]);
+                    this.verticesData.push(this.source_tangentData[i * Geometry.tangentSize + 2]);
                 }
 
                 if (this.vertexFormat & VertexFormat.VF_COLOR) {
-                    this.verticesData.push(this.source_colorData[i].x);
-                    this.verticesData.push(this.source_colorData[i].y);
-                    this.verticesData.push(this.source_colorData[i].z);
-                    this.verticesData.push(this.source_colorData[i].w);
+                    this.verticesData.push(this.source_colorData[i * Geometry.colorSize]);
+                    this.verticesData.push(this.source_colorData[i * Geometry.colorSize + 1]);
+                    this.verticesData.push(this.source_colorData[i * Geometry.colorSize + 2]);
+                    this.verticesData.push(this.source_colorData[i * Geometry.colorSize + 3]);
                 }
 
                 if (this.vertexFormat & VertexFormat.VF_UV) {
-                    this.verticesData.push(this.source_uvData[i].u);
-                    this.verticesData.push(this.source_uvData[i].v);
+                    this.verticesData.push(this.source_uvData[i * Geometry.uvSize]);
+                    this.verticesData.push(this.source_uvData[i * Geometry.uvSize + 1]);
                 }
 
                 if (this.vertexFormat & VertexFormat.VF_UV2) {
-                    this.verticesData.push(this.source_uv2Data[i].u);
-                    this.verticesData.push(this.source_uv2Data[i].v);
+                    this.verticesData.push(this.source_uv2Data[i * Geometry.uv2Size]);
+                    this.verticesData.push(this.source_uv2Data[i * Geometry.uv2Size + 1]);
                 }
 
                 if (this.vertexFormat & VertexFormat.VF_SKIN) {
                     for (var j = 0; j < Geometry.skinSize; ++j) {
                         this.verticesData.push(this.source_SkinData[i * Geometry.skinSize + j]);
                     }
-                }
-            }
-        }
-
-        /**
-        * @language zh_CN
-        * 生成包围盒
-        */
-        public buildBoundBox() {
-            this.minPos.copyFrom(new Vector3D(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE));
-            this.maxPos.copyFrom(new Vector3D(Number.MIN_VALUE, Number.MIN_VALUE, Number.MIN_VALUE));
-            for (var i: number = 0; i < this.verticesData.length; i += this.vertexAttLength) {
-                if (this.maxPos.x < this.verticesData[i]) {
-                    this.maxPos.x = this.verticesData[i];
-                }
-                if (this.maxPos.y < this.verticesData[i + 1]) {
-                    this.maxPos.y = this.verticesData[i + 1];
-                }
-                if (this.maxPos.z < this.verticesData[i + 2]) {
-                    this.maxPos.z = this.verticesData[i + 2];
-                }
-
-                if (this.minPos.x > this.verticesData[i]) {
-                    this.minPos.x = this.verticesData[i];
-                }
-                if (this.minPos.y > this.verticesData[i + 1]) {
-                    this.minPos.y = this.verticesData[i + 1];
-                }
-                if (this.minPos.z > this.verticesData[i + 2]) {
-                    this.minPos.z = this.verticesData[i + 2];
                 }
             }
         }

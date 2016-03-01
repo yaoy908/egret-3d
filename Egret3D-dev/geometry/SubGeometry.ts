@@ -28,10 +28,12 @@
         public count: number = 0;
 
         /**
-        * @language zh_CN
-        * 
-        */
-        public uniforms: Array<any> = new Array<any>();
+         * @language zh_CN
+         * 材质ID
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public matID: number = 0;
         
         /**
         * @language zh_CN

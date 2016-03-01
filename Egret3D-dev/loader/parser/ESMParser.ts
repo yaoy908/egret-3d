@@ -86,8 +86,6 @@
                 //geomtry = staticGeomtry;
             }
 
-            geomtry.buildBoundBox();
-
             //geomtry.textureFile = textureDiffuse;
             //geomtry.textureSpecular = textureSpecular;
             //geomtry.textureBump = textureNormal;
