@@ -9,9 +9,6 @@
      * @platform Web,Native
      */
     export class SubGeometry {
-
-        public matID: number = 0 ;
-        
         /**
          * @language zh_CN
          * 顶点索引
@@ -28,6 +25,14 @@
          */
         public count: number = 0;
 
+        /**
+         * @language zh_CN
+         * 材质ID
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public matID: number = 0;
+        
         /**
         * @language zh_CN
         * 创建一个SubGeometry

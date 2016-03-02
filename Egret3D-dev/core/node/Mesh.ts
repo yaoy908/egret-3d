@@ -34,7 +34,7 @@
             this.geometry = geometry;
             this.material = material;
             this.animation = animation;
-            //this.box.fillBox(this.geometry.minPos, this.geometry.maxPos);
+            this.buildBoundBox();
         }
                         
         /**
@@ -65,6 +65,38 @@
             if (this.animation) {
                 //this.animation.updata(time, delay);
             }
+        }
+
+        /**
+        * @language zh_CN
+        * 生成包围盒
+        */
+        private buildBoundBox() {
+            this.box.min.copyFrom(new Vector3D(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE));
+            this.box.max.copyFrom(new Vector3D(Number.MIN_VALUE, Number.MIN_VALUE, Number.MIN_VALUE));
+            for (var i: number = 0; i < this.geometry.verticesData.length; i += this.geometry.vertexAttLength) {
+                if (this.box.max.x < this.geometry.verticesData[i]) {
+                    this.box.max.x = this.geometry.verticesData[i];
+                }
+                if (this.box.max.y < this.geometry.verticesData[i + 1]) {
+                    this.box.max.y = this.geometry.verticesData[i + 1];
+                }
+                if (this.box.max.z < this.geometry.verticesData[i + 2]) {
+                    this.box.max.z = this.geometry.verticesData[i + 2];
+                }
+
+                if (this.box.min.x > this.geometry.verticesData[i]) {
+                    this.box.min.x = this.geometry.verticesData[i];
+                }
+                if (this.box.min.y > this.geometry.verticesData[i + 1]) {
+                    this.box.min.y = this.geometry.verticesData[i + 1];
+                }
+                if (this.box.min.z > this.geometry.verticesData[i + 2]) {
+                    this.box.min.z = this.geometry.verticesData[i + 2];
+                }
+            }
+
+            this.box.fillBox(this.box.min, this.box.max);
         }
     }
 } 
