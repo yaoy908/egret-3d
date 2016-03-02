@@ -259,7 +259,7 @@
         * @param mipLevel
         * @param texture
         */
-        public upLoadTextureData(mipLevel: number, texture: TextureBase) {
+        public upLoadTextureData(mipLevel: number, texture: Texture2D) {
             Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture.texture);
 
             if (texture.internalformat == InternalFormat.ImageData) {
@@ -270,12 +270,14 @@
             }
             else if (texture.internalformat == InternalFormat.CompressData) {
                 this.upLoadCompressedTexture2D(mipLevel, texture);
+               
             }
             else if (texture.internalformat == InternalFormat.PixelArray) {
                 Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, mipLevel, texture.colorformat, texture.mimapData[mipLevel].width, texture.mimapData[mipLevel].height, texture.border, texture.colorformat, Context3DProxy.gl.UNSIGNED_BYTE, texture.mimapData[mipLevel].data);
-                Context3DProxy.gl.generateMipmap(Context3DProxy.gl.TEXTURE_2D);
             }
 
+            if (texture.useMipmap)
+                Context3DProxy.gl.generateMipmap(Context3DProxy.gl.TEXTURE_2D);
             Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, Context3DProxy.gl.LINEAR_MIPMAP_LINEAR);
             Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MAG_FILTER, Context3DProxy.gl.LINEAR);
             Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_S, Context3DProxy.gl.REPEAT);
@@ -288,7 +290,7 @@
         * @param mipLevel
         * @param texture
         */
-        public upLoadCompressedTexture2D(mipLevel: number, texture: TextureBase) {
+        public upLoadCompressedTexture2D(mipLevel: number, texture: Texture2D) {
             Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture.texture);
             Context3DProxy.gl.compressedTexImage2D(Context3DProxy.gl.TEXTURE_2D, mipLevel, texture.colorformat, texture.mimapData[mipLevel].width, texture.mimapData[mipLevel].height, texture.border, texture.mimapData[mipLevel].data);
         }
@@ -297,8 +299,8 @@
         * @language zh_CN
         * 创建 2维贴图
         */
-        public creatTexture2D(): TextureBase {
-            var texture: TextureBase = new TextureBase();
+        public creatTexture2D(): Texture2D {
+            var texture: Texture2D = new Texture2D();
             return texture;
         }
 
@@ -306,8 +308,9 @@
         * @language zh_CN
         * 创建 Cube贴图
         */
-        public creatCubeTexture(): CubeTexture {
-            return new CubeTexture(Context3DProxy.gl.createTexture());
+        public creatCubeTexture(): Texture3D {
+            var texture: Texture3D = new Texture3D();
+            return texture;
         }
 
         /**
@@ -315,9 +318,9 @@
         *
         * @param tex
         */
-        public uploadCubetexture(tex: CubeTexture) {
+        public uploadCubetexture(tex: Texture3D) {
             /// 创建纹理并绑定纹理数据
-            Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_CUBE_MAP, tex.gpu_texture);
+            Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_CUBE_MAP, tex.texture);
 
             Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_CUBE_MAP_POSITIVE_X, 0, Context3DProxy.gl.RGB, Context3DProxy.gl.RGB, Context3DProxy.gl.UNSIGNED_BYTE, tex.image_right.imageData);
             Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_CUBE_MAP_NEGATIVE_X, 0, Context3DProxy.gl.RGB, Context3DProxy.gl.RGB, Context3DProxy.gl.UNSIGNED_BYTE, tex.image_left.imageData);
@@ -350,9 +353,9 @@
         * @param height
         * @param format
         */
-        public createFramebuffer(width: number, height: number, format: FrameBufferFormat): TextureBase {
+        public createFramebuffer(width: number, height: number, format: FrameBufferFormat): Texture2D {
             var rttframeBuffer = Context3DProxy.gl.createFramebuffer();
-            var texture2D: TextureBase = this.creatTexture2D();
+            var texture2D: Texture2D = this.creatTexture2D();
             var depthRenderbuffer = Context3DProxy.gl.createRenderbuffer();
             Context3DProxy.gl.bindFramebuffer(Context3DProxy.gl.FRAMEBUFFER, rttframeBuffer);
 
@@ -410,7 +413,7 @@
         * @param enableDepthAndStencil
         * @param surfaceSelector
         */
-        public setRenderToTexture(texture: TextureBase, enableDepthAndStencil: Boolean = false, surfaceSelector: number = 0) {
+        public setRenderToTexture(texture: Texture2D, enableDepthAndStencil: Boolean = false, surfaceSelector: number = 0) {
             if (enableDepthAndStencil) {
                 //Context3DProxy.gl.bindRenderbuffer(Context3DProxy.gl.RENDERBUFFER, texture.renderbuffer);
                 //Context3DProxy.gl.renderbufferStorage(Context3DProxy.gl.RENDERBUFFER, Context3DProxy.gl.DEPTH_COMPONENT16, texture.width, texture.height);
@@ -843,7 +846,7 @@
         * @param index 
         * @param texture 
         */
-        public setTexture2DAt(samplerIndex: number, uniLocation: number, index: number, texture: TextureBase) {
+        public setTexture2DAt(samplerIndex: number, uniLocation: number, index: number, texture: Texture2D) {
             Context3DProxy.gl.activeTexture(samplerIndex);
             Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture.texture);
             Context3DProxy.gl.uniform1i(uniLocation, index);
@@ -857,7 +860,7 @@
         * @param index 
         * @param texture 
         */
-        public setCubeTextureAt(samplerIndex: number, uniLocation: number, index: number, texture: TextureBase) {
+        public setCubeTextureAt(samplerIndex: number, uniLocation: number, index: number, texture: Texture3D) {
             Context3DProxy.gl.activeTexture(samplerIndex);
             Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_CUBE_MAP, texture.texture);
             Context3DProxy.gl.uniform1i(uniLocation, index);

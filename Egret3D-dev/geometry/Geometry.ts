@@ -110,8 +110,8 @@
         * @language zh_CN
         * 顶点坐标数据
         */
-        public source_positionData: Array<Vector3D> = new Array<Vector3D>();
-                        
+        public source_positionData: Array<Vector3D> = new Array<Vector3D>(); 
+
         /**
         * @language zh_CN
         * 顶点法线数据
@@ -195,18 +195,6 @@
         * 顶点uv2大小
         */
         public static skinSize: number = 8;
-
-        /**
-        * @language zh_CN
-        * 包围盒min pos
-        */
-        public minPos: Vector3D = new Vector3D();
-
-        /**
-        * @language zh_CN
-        * 包围盒max pos
-        */
-        public maxPos: Vector3D = new Vector3D();
         
         /**
         * @language zh_CN
@@ -298,35 +286,35 @@
             }
         }
 
-        /**
-        * @language zh_CN
-        * 生成包围盒
-        */
-        public buildBoundBox() {
-            this.minPos.copyFrom(new Vector3D(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE));
-            this.maxPos.copyFrom(new Vector3D(Number.MIN_VALUE, Number.MIN_VALUE, Number.MIN_VALUE));
-            for (var i: number = 0; i < this.verticesData.length; i += this.vertexAttLength) {
-                if (this.maxPos.x < this.verticesData[i]) {
-                    this.maxPos.x = this.verticesData[i];
-                }
-                if (this.maxPos.y < this.verticesData[i + 1]) {
-                    this.maxPos.y = this.verticesData[i + 1];
-                }
-                if (this.maxPos.z < this.verticesData[i + 2]) {
-                    this.maxPos.z = this.verticesData[i + 2];
-                }
+        ///**
+        //* @language zh_CN
+        //* 生成包围盒
+        //*/
+        //public buildBoundBox() {
+        //    this.minPos.copyFrom(new Vector3D(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE));
+        //    this.maxPos.copyFrom(new Vector3D(Number.MIN_VALUE, Number.MIN_VALUE, Number.MIN_VALUE));
+        //    for (var i: number = 0; i < this.verticesData.length; i += this.vertexAttLength) {
+        //        if (this.maxPos.x < this.verticesData[i]) {
+        //            this.maxPos.x = this.verticesData[i];
+        //        }
+        //        if (this.maxPos.y < this.verticesData[i + 1]) {
+        //            this.maxPos.y = this.verticesData[i + 1];
+        //        }
+        //        if (this.maxPos.z < this.verticesData[i + 2]) {
+        //            this.maxPos.z = this.verticesData[i + 2];
+        //        }
 
-                if (this.minPos.x > this.verticesData[i]) {
-                    this.minPos.x = this.verticesData[i];
-                }
-                if (this.minPos.y > this.verticesData[i + 1]) {
-                    this.minPos.y = this.verticesData[i + 1];
-                }
-                if (this.minPos.z > this.verticesData[i + 2]) {
-                    this.minPos.z = this.verticesData[i + 2];
-                }
-            }
-        }
+        //        if (this.minPos.x > this.verticesData[i]) {
+        //            this.minPos.x = this.verticesData[i];
+        //        }
+        //        if (this.minPos.y > this.verticesData[i + 1]) {
+        //            this.minPos.y = this.verticesData[i + 1];
+        //        }
+        //        if (this.minPos.z > this.verticesData[i + 2]) {
+        //            this.minPos.z = this.verticesData[i + 2];
+        //        }
+        //    }
+        //}
 
         private drawSubset(context3DProxy: Context3DProxy, sub: SubGeometry) {
 

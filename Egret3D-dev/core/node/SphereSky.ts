@@ -16,7 +16,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public skyTexture: TextureBase;
+        public skyTexture: CubeTexture;
 
         private viewMatIndex: WebGLUniformLocation;
         private vsShaderSource: string;
@@ -33,7 +33,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(tex1: TextureBase) {
+        constructor(tex1: CubeTexture) {
             super();
             this.skyTexture = tex1 ;
             //this.usage = new MethodUsageData();

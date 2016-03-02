@@ -82,8 +82,8 @@
             var sampler2D: GLSL.Sampler2D;
             for (var index in this._materialData.diffusePassUsageData.sampler2DList) {
                 sampler2D = this._materialData.diffusePassUsageData.sampler2DList[index];
-                sampler2D.texture.upload(context3DProxy);
-                context3DProxy.setTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index, sampler2D.texture.texture);
+                //sampler2D.texture.upload(context3DProxy);
+                context3DProxy.setTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index, sampler2D.texture2D );
                 if (this._materialData.materialDataNeedChange) {
                     var min_filter: number = this._materialData.smooth ? Context3DProxy.gl.LINEAR_MIPMAP_LINEAR : Context3DProxy.gl.LINEAR;
                     var mag_filter: number = this._materialData.smooth ? Context3DProxy.gl.LINEAR : Context3DProxy.gl.LINEAR;
@@ -98,7 +98,7 @@
             var sampler3D: GLSL.Sampler3D;
             for (var index in this._materialData.diffusePassUsageData.sampler3DList) {
                 sampler3D = this._materialData.diffusePassUsageData.sampler3DList[index];
-                sampler3D.texture.upload(context3DProxy);
+                //sampler3D.texture.upload(context3DProxy);
                 //context3DProxy.setCubeTextureAt(sampler3D.activeTextureIndex, sampler3D.uniformIndex, sampler3D.index, sampler3D.texture.cubeTexture);
             }
 

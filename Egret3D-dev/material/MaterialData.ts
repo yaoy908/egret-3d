@@ -67,6 +67,14 @@
         */
         //public shadowPassUsageData: PassUsage = new PassUsage(); 
 
+        /**
+        * @language zh_CN
+        * 材质球ID。
+        * <p> 一个合成材质球，可以多维合成，用于标记 subGeometry 所用的材质方法
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public matID: number = 0;
 
         /**
         * @language zh_CN
@@ -93,7 +101,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public shadowMapTex: TextureBase;
+        public shadowMapTex: Texture2D;
 
         /**
         * @language zh_CN
@@ -101,7 +109,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public diffuseTex: TextureBase;//= CheckerboardTexture.texture ;
+        public diffuseTex: Texture2D;//= CheckerboardTexture.texture ;
 
         /**
         * @language zh_CN

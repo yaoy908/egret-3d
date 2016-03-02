@@ -34,15 +34,19 @@
      * @platform Web,Native
      * @includeExample texture/SkyTexture.ts
      */
-    export class SkyTexture extends TextureBase {
+    export class CubeTexture implements ITexture {
 
-        private image_front:TextureBase;
-        private image_back:TextureBase;
-        private image_left:TextureBase;
-        private image_right:TextureBase;
-        private image_up:TextureBase;
-        private image_down:TextureBase;
+        private image_front: Texture2D;
+        private image_back: Texture2D;
+        private image_left: Texture2D;
+        private image_right: Texture2D;
+        private image_up: Texture2D;
+        private image_down: Texture2D;
 
+        public texture2D: Texture2D;
+        public texture3D: Texture3D;
+        public width: number;
+        public height: number;
         /**
          * @language zh_CN
          * 构造函数
@@ -53,15 +57,12 @@
          * @param image_up 顶部HTMLImageElement图片元素
          * @param image_down 底部HTMLImageElement图片元素
          */
-        constructor(image_front:TextureBase,
-                    image_back:TextureBase,
-                    image_left:TextureBase,
-                    image_right:TextureBase,
-                    image_up:TextureBase,
-                    image_down:TextureBase) {
-            super();
-
-            imageData: HTMLImageElement;
+        constructor(image_front: Texture2D,
+            image_back: Texture2D,
+            image_left: Texture2D,
+            image_right: Texture2D,
+            image_up: Texture2D,
+            image_down: Texture2D) {
 
             this.image_front = image_front;
             this.image_back = image_back;
@@ -79,16 +80,22 @@
          * @param context3D
          */
         public upload(context3D: Context3DProxy) {
-            if (!this.cubeTexture) {
-                this.cubeTexture = context3D.creatCubeTexture();
-                this.cubeTexture.image_front = this.image_front;
-                this.cubeTexture.image_back = this.image_back;
-                this.cubeTexture.image_left = this.image_left;
-                this.cubeTexture.image_right = this.image_right;
-                this.cubeTexture.image_up = this.image_up;
-                this.cubeTexture.image_down = this.image_down;
-                context3D.uploadCubetexture(this.cubeTexture);
+            if (!this.texture3D) {
+
+                this.texture3D = context3D.creatCubeTexture();
+                this.texture3D.border = 0;
+
+                this.texture3D.image_front = this.image_front;
+                this.texture3D.image_back = this.image_back;
+                this.texture3D.image_left = this.image_left;
+                this.texture3D.image_right = this.image_right;
+                this.texture3D.image_up = this.image_up;
+                this.texture3D.image_down = this.image_down;
+                context3D.uploadCubetexture(this.texture3D);
             }
+        }
+
+        public uploadForcing(context3D: Context3DProxy) {
         }
     }
 }

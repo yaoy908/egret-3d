@@ -15,7 +15,7 @@
     export class Sky extends Object3D  {
 
         private viewMatIndex: WebGLUniformLocation;
-        private skyTexture: SkyTexture;
+        private skyTexture: CubeTexture;
 
         private vsShaderSource: string;
         private fsShaderSource: string;
@@ -32,7 +32,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(skyTexture: SkyTexture) {
+        constructor(skyTexture: CubeTexture) {
             super();
             this.skyTexture = skyTexture;
             //this.usage = new MethodUsageData();
@@ -98,7 +98,7 @@
 
         private skyUni: any;
         private texUni: any;
-        private test: TextureBase; 
+        private test: CubeTexture; 
         private px: number = 0;
         private py: number = 0;
         private pz: number = 0;

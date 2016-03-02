@@ -9,14 +9,15 @@
      * @platform Web,Native
      * @includeExample texture/RenderTexture.ts
      */
-    export class RenderTexture  {
+    export class RenderTexture extends Texture2D {
         /**
          * @language zh_CN
          * 构造函数  
          * @param texture ITexture2D对象
          */
-        constructor(texture: TextureBase ) {
-            texture.useMipmap = false;
+        constructor() {
+            super();
+            this.useMipmap = false;
         }
     }
 } 

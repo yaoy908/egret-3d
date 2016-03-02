@@ -9,7 +9,8 @@
      * @platform Web,Native
      */
     export class SubGeometry {
-        public material: MaterialBase;
+
+        public matID: number = 0 ;
         
         /**
          * @language zh_CN
@@ -27,12 +28,6 @@
          */
         public count: number = 0;
 
-        /**
-        * @language zh_CN
-        * 
-        */
-        public uniforms: Array<any> = new Array<any>();
-        
         /**
         * @language zh_CN
         * 创建一个SubGeometry
