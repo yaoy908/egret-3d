@@ -17,8 +17,16 @@
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class Mesh extends Object3D {
-                
+    export class Mesh extends Object3D implements IRender{
+
+        public subMaterials: { [matID: number]: SubMaterial };
+
+        public geometry: Geometry;
+        public material: MaterialBase;
+
+        public pickType: number;
+        public bound: Bound;
+
         /**
         * @language zh_CN
         * 构建一个Mesh对象
@@ -28,15 +36,41 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(geometry: Geometry, material: MaterialBase, animation: IAnimation = null) {
+        constructor(geometry: Geometry, material: MaterialBase) {
             super();
 
             this.geometry = geometry;
             this.material = material;
-            this.animation = animation;
-            this.buildBoundBox();
         }
-                        
+
+        // /**
+        //* @language zh_CN
+        //* 设置模型中的geometry
+        //* @param geo 为mesh设置一个顶点模型 geometry
+        //* @version Egret 3.0
+        //* @platform Web,Native
+        //*/
+        //public set geometry(geo: Geometry) {
+        //    if (this.geometry && this.geometry == geo)
+        //        geo.init();
+        //}
+
+        // /**
+        //* @language zh_CN
+        //* 返回模型中的geometry
+        //* @returns 模型中的geometry
+        //* @version Egret 3.0
+        //* @platform Web,Native
+        //*/
+        //public get geometry(): Geometry {
+        //    return this.geometry; 
+        //}
+
+        public init() {
+            if (this.geometry)
+                this.geometry.init();
+        }
+
         /**
         * @language zh_CN
         * 克隆一个模型
@@ -45,7 +79,7 @@
         * @platform Web,Native
         */
         public clone(): Mesh {
-            return new Mesh(this.geometry, this.material, /*this.animation ? this.animation.clone() :*/ null );
+            return new Mesh(this.geometry, this.material );
         }
                                 
         /**
@@ -71,32 +105,32 @@
         * @language zh_CN
         * 生成包围盒
         */
-        private buildBoundBox() {
-            this.box.min.copyFrom(new Vector3D(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE));
-            this.box.max.copyFrom(new Vector3D(Number.MIN_VALUE, Number.MIN_VALUE, Number.MIN_VALUE));
-            for (var i: number = 0; i < this.geometry.verticesData.length; i += this.geometry.vertexAttLength) {
-                if (this.box.max.x < this.geometry.verticesData[i]) {
-                    this.box.max.x = this.geometry.verticesData[i];
-                }
-                if (this.box.max.y < this.geometry.verticesData[i + 1]) {
-                    this.box.max.y = this.geometry.verticesData[i + 1];
-                }
-                if (this.box.max.z < this.geometry.verticesData[i + 2]) {
-                    this.box.max.z = this.geometry.verticesData[i + 2];
-                }
+        //private buildBoundBox() {
+        //    this.box.min.copyFrom(new Vector3D(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE));
+        //    this.box.max.copyFrom(new Vector3D(Number.MIN_VALUE, Number.MIN_VALUE, Number.MIN_VALUE));
+        //    for (var i: number = 0; i < this.geometry.verticesData.length; i += this.geometry.vertexAttLength) {
+        //        if (this.box.max.x < this.geometry.verticesData[i]) {
+        //            this.box.max.x = this.geometry.verticesData[i];
+        //        }
+        //        if (this.box.max.y < this.geometry.verticesData[i + 1]) {
+        //            this.box.max.y = this.geometry.verticesData[i + 1];
+        //        }
+        //        if (this.box.max.z < this.geometry.verticesData[i + 2]) {
+        //            this.box.max.z = this.geometry.verticesData[i + 2];
+        //        }
 
-                if (this.box.min.x > this.geometry.verticesData[i]) {
-                    this.box.min.x = this.geometry.verticesData[i];
-                }
-                if (this.box.min.y > this.geometry.verticesData[i + 1]) {
-                    this.box.min.y = this.geometry.verticesData[i + 1];
-                }
-                if (this.box.min.z > this.geometry.verticesData[i + 2]) {
-                    this.box.min.z = this.geometry.verticesData[i + 2];
-                }
-            }
+        //        if (this.box.min.x > this.geometry.verticesData[i]) {
+        //            this.box.min.x = this.geometry.verticesData[i];
+        //        }
+        //        if (this.box.min.y > this.geometry.verticesData[i + 1]) {
+        //            this.box.min.y = this.geometry.verticesData[i + 1];
+        //        }
+        //        if (this.box.min.z > this.geometry.verticesData[i + 2]) {
+        //            this.box.min.z = this.geometry.verticesData[i + 2];
+        //        }
+        //    }
 
-            this.box.fillBox(this.box.min, this.box.max);
-        }
+        //    this.box.fillBox(this.box.min, this.box.max);
+        //}
     }
 } 

@@ -9,7 +9,6 @@
     export class RenderBase {
 
         ///protected _context3D: Context3D;
-        protected collect: CollectBase;
         protected _renderIndex: number = 0;
         protected _numEntity: number = 0; 
                         
@@ -30,10 +29,8 @@
         * @param collect 渲染对象收集器
         * @param camera 渲染时的相机
         */
-        //public draw( time: number, delay: number, context3DProxy: Context3DProxy, collect: CollectBase , camera:Camera3D ) {
-            //for (var i: number = 0; i < collect.renderList.length; i++ ){
-            //    collect.renderList[i].material.drawPass();
-            //}
-        //}
+        public draw(time: number, delay: number, context3D: Context3DProxy, collect: CollectBase, camera: Camera3D) {
+     
+        }
     }
 } 

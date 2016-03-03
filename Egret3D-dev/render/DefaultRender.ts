@@ -12,8 +12,7 @@
     export class DefaultRender extends RenderBase {
               
         
-        private _mat: MaterialBase;                         
-        private _renderItem: Object3D; 
+        private _renderItem: IRender; 
         /**
         * @language zh_CN
         * constructor
@@ -43,11 +42,11 @@
             //}
 
             context3D.clearDepth(1);
-
+             
             for (this._renderIndex = 0; this._renderIndex < this._numEntity; this._renderIndex++) {
                 this._renderItem = collect.renderList[this._renderIndex] ;
                 //collect.renderList[this._renderIndex].update(time, delay, camera);
-                if (!this._renderItem.isVisible) {
+                if (!this._renderItem.visible) {
                     continue;
                 }
                 //if (collect.renderList[this._renderIndex].tag && collect.renderList[this._renderIndex].tag.clearDepth && collect.renderList[this._renderIndex].tag.cleanState) {
@@ -55,15 +54,10 @@
                 //    context3D.clearDepth(1);
                 //}
 
-                this._mat = this._renderItem.material;
-                if (this._mat != null) {
-                    this._mat.renderDiffusePass(time, delay, context3D, camera , this._renderItem);
-                    //draw xRay pass
-                    //this._mat.renderDiffusePass(time, delay, context3D, this._renderItem.modelMatrix, camera, this._renderItem.geometry , this._renderItem.animation);
-                    //draw outLine pass
-                    //this._mat.renderDiffusePass(time, delay, context3D, this._renderItem.modelMatrix, camera, this._renderItem.geometry, this._renderItem.animation);
-                    //draw more pass
-                    //this._mat.renderDiffusePass(time, delay, context3D, this._renderItem.modelMatrix, camera, this._renderItem.geometry, this._renderItem.animation);
+                if (this._renderItem.material != null) {
+
+                    this._renderItem.material.renderDiffusePass(time, delay, context3D, camera, this._renderItem);
+                   
                 }
             }
         }

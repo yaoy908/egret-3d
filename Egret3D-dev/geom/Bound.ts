@@ -8,7 +8,7 @@
      * @version Egret 3.0
      * @platform Web,Native
      */
-    export class CubeBoxBound {
+    export class Bound {
         
         /**
         * @language zh_CN
@@ -90,7 +90,7 @@
         * 拷贝一个包围盒
         * @param box 
         */
-        public copyFrom(box: CubeBoxBound) {
+        public copyFrom(box: Bound) {
             this.min.copyFrom(box.min);
             this.max.copyFrom(box.max);
             this.calculateBox();
@@ -129,7 +129,7 @@
         * @param boxIntersect 相交的包围盒
         * @returns 成功返回true
         */
-        public intersectAABBs(box2: CubeBoxBound, boxIntersect: CubeBoxBound): boolean {
+        public intersectAABBs(box2: Bound, boxIntersect: Bound): boolean {
             if (this.min.x > box2.max.x) {
                 return false;
             }

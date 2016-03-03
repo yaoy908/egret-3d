@@ -79,6 +79,10 @@
         public bound: any;
         public canPick: boolean;
         public renderLayer: number;
+
+        public mouseChilder: boolean;
+        public enableCulling: boolean;
+        public visible: boolean;
         /**
         * @language zh_CN
         * 当前对象名
@@ -162,7 +166,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public geometry: Geometry = null;
+        //public geometry: Geometry = null;
 
         /**
         * @language zh_CN
@@ -171,7 +175,7 @@
          * @version Egret 3.0
         * @platform Web,Native
         */
-        public material: MaterialBase = null;
+        //public material: MaterialBase = null;
 
         /**
         * @language zh_CN
@@ -180,7 +184,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public box: CubeBoxBound = new CubeBoxBound();
+        //public box: Bound = new Bound();
 
         /**
         * @language zh_CN
@@ -688,7 +692,7 @@
             }
             //this._modeMatrix3D.recompose([this._globalPos, this._globalRot, this._globalSca]);
             this._modeMatrix3D.makeTransform(this._globalPos, this._globalSca, this._globalOrientation);
-            this.box.Transform = this._modeMatrix3D;
+            this.bound.Transform = this._modeMatrix3D;
             this._transformChange = false;
             this.onUpdateTransform();
         }

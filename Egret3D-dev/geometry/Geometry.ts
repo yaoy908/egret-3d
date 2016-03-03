@@ -214,7 +214,11 @@
         public subGeometrys: Array<SubGeometry>;
 
         constructor() {
+        }
 
+        public init() {
+            this.useVertexFormat( VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_COLOR | VertexFormat.VF_UV );
+            this.calculateVertexFormat();
         }
 
         /**

@@ -23,8 +23,8 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(rootScene:Scene3D) {
-            super(rootScene);
+        constructor() {
+            super();
             //this.addTag("default");
             //this.addTag("terrain");
             //this.addTag("terrain_texture");
@@ -246,25 +246,27 @@
         //    }
         //}
 
-        private applyRender(child: Object3D, camera:Camera3D) {
-            this.addRenderList(child, camera);
+        private applyRender(child: any, camera: Camera3D) {
+
+            if (child["material"])
+                this.addRenderList(<IRender>child, camera);
 
             for (var i: number = 0; i < child.childs.length; i++) {
                 this.applyRender(child.childs[i], camera);
             }
         }
 
-        private addRenderList(object3d: Object3D, camera: Camera3D) {
-            if (!object3d.material) return;
+        private addRenderList(renderItem: IRender, camera: Camera3D) {
+            if (!renderItem.material) return;
 
-            if (object3d.enableCut) {
-                if (!camera.isVisibleToCamera(object3d)) {
+            if (renderItem.enableCulling) {
+                if (!camera.isVisibleToCamera(renderItem)) {
                     return;
                 }
             }
 
-            if (object3d.mouseEnable) {
-                this.mousePickList.push(object3d);
+            if (renderItem.mouseEnable) {
+                this.mousePickList.push(renderItem);
             }
 
             //var layer: Layer = this.findLayer(object3d);

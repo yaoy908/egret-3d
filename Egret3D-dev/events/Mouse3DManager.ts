@@ -58,7 +58,7 @@
 
         private onTouchMove(e: TouchEvent) {
             if (!this._collect) return;
-            var ret: Array<Object3D> = Picker.pickObject3DList(this._camera, this._collect.mousePickList);
+            var ret: Array<IRender> = Picker.pickObject3DList(this._camera, this._collect.mousePickList);
             var event: Event3D;
             for (var i: number = 0; i < ret.length; i++) {
                 event = new Event3D(Event3D.TOUCH_MOVE);
@@ -69,7 +69,7 @@
         }
         private onTouchEnd(e: TouchEvent) {
             if (!this._collect) return;
-            var ret: Array<Object3D> = Picker.pickObject3DList(this._camera, this._collect.mousePickList);
+            var ret: Array<IRender> = Picker.pickObject3DList(this._camera, this._collect.mousePickList);
             var event: Event3D;
             for (var i: number = 0; i < ret.length; i++) {
                 event = new Event3D(Event3D.TOUCH_END);
@@ -80,7 +80,7 @@
         }
         private onTouchStart(e: TouchEvent) {
             if (!this._collect) return;
-            var ret: Array<Object3D> = Picker.pickObject3DList(this._camera, this._collect.mousePickList);
+            var ret: Array<IRender> = Picker.pickObject3DList(this._camera, this._collect.mousePickList);
             var event: Event3D;
             for (var i: number = 0; i < ret.length; i++) {
                 event = new Event3D(Event3D.TOUCH_START);

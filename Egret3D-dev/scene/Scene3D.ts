@@ -6,8 +6,9 @@
     export class Scene3D {
         private _tree: TreeBase; 
         private _root: Object3D = new Object3D();
+
         constructor() {
-            this._tree = new TreeBase(this._root );
+            this._tree = new TreeBase(this._root);
         }
         
         /**
@@ -38,6 +39,9 @@
         public removeChild3D(child3D: Object3D) {
             this._root.removeChild(child3D);
             // to do add renderlist tree
+        }
+
+        public update() {
         }
 
         public infrustumList(camera: Camera3D): Object3D[] {

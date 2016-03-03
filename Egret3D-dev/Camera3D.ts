@@ -463,8 +463,8 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public isVisibleToCamera(object: Object3D): boolean {
-            if (this.frustum.inBox(object.box)) {
+        public isVisibleToCamera(renderItem: IRender): boolean {
+            if (this.frustum.inBox(renderItem.bound)) {
                 return true;
             }
             return false;

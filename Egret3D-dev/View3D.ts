@@ -14,16 +14,23 @@
      * @platform Web,Native
      */
     export class View3D {
+        static _contex3DProxy: Context3DProxy = new Context3DProxy();
+
         protected _viewPort: Rectangle = new Rectangle() ; 
         protected _camera: Camera3D;
         protected _scene: Scene3D;
-        //protected _render: RenderBase;
+        protected _render: RenderBase;
 
         protected _aspectRatio: number = 1;
         protected _scissorRect: Rectangle = new Rectangle();
         protected _viewMatrix: Matrix4_4 = new Matrix4_4();
 
-        protected _contex3DProxy: Context3DProxy = new Context3DProxy();
+        protected _entityCollect: EntityCollect;
+
+        constructor() {
+            this._entityCollect = new EntityCollect();
+            this._render = new DefaultRender();
+        }
 
         public get camera3D(): Camera3D {
             return this._camera;
@@ -31,9 +38,6 @@
 
         public get scene(): Scene3D {
             return this._scene;
-        }
-
-        constructor( ) {
         }
 
         public set x(value: number) {
@@ -77,15 +81,16 @@
         }
 
         public update(time: number, delay: number) {
+            this._entityCollect.update(this.camera3D);
             Context3DProxy.gl.enable(ContextConfig.BLEND);
             Context3DProxy.gl.enable(ContextConfig.CULL_FACE);
 
-            this._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+            View3D._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
 
-            this._contex3DProxy.clear(0.0, 0.0, 0.0, 1.0);
-
-            this._contex3DProxy.clearDepth(1);
-            this._contex3DProxy.clearStencil(0);
+            View3D._contex3DProxy.clear(0.0, 0.0, 0.0, 1.0);
+            View3D._contex3DProxy.clearDepth(1);
+            View3D._contex3DProxy.clearStencil(0);
+            this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect,this.camera3D);
 
             Context3DProxy.gl.finish();
         }
