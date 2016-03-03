@@ -217,7 +217,22 @@
 
         }
 
-        private calculateVertexFormat(context3DProxy: Context3DProxy) {
+        /**
+        * @language zh_CN
+        * 使用和定义顶点的数据结构
+        *<p>例如 useVertexFormat( VertexFormat.VF_POSITION )
+        *设置这样的定义后,就会增加这样的数据顶点数据结构，
+        *如果源文件中没有这样的数据结构，
+        *就会通过计算的方式计算补全，
+        *不能计算的就默认为0
+        *@param vertexFormat 需要定义的顶点格式类型 VertexFormat.VF_COLOR | VertexFormat.VF_UV2
+        * this.useVertexFormat( VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_COLOR |  VertexFormat.VF_UV | VertexFormat.VF_UV2 );//定义了一个完整的数据结构
+        */
+        public useVertexFormat(vertexFormat: number) {
+            this.vertexFormat = vertexFormat;
+        }
+
+        private calculateVertexFormat() {
             if (this.vertexFormat & VertexFormat.VF_POSITION) {
                 this.vertexAttLength += Geometry.positionSize;
             }
@@ -289,10 +304,6 @@
                 }
             }
         }
-
-        private drawSubset(context3DProxy: Context3DProxy, sub: SubGeometry) {
-
-            //context3DProxy.drawElement(DrawMode.TRIANGLES, null, sub.start, sub.count);
-        }
+  
     }
 } 
