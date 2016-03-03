@@ -234,9 +234,7 @@
         */
         public useVertexFormat(vertexFormat: number) {
             this.vertexFormat = vertexFormat;
-        }
 
-        private calculateVertexFormat() {
             if (this.vertexFormat & VertexFormat.VF_POSITION) {
                 this.vertexAttLength += Geometry.positionSize;
             }
@@ -264,6 +262,11 @@
             if (this.vertexFormat & VertexFormat.VF_SKIN) {
                 this.vertexAttLength += Geometry.skinSize;
             }
+
+            this.vertexSizeInBytes = this.vertexAttLength * 4;
+        }
+
+        private calculateVertexFormat() {
 
             for (var i: number = 0; i < this.source_positionData.length / Geometry.positionSize; ++i) {
                 if (this.vertexFormat & VertexFormat.VF_POSITION) {
@@ -308,6 +311,5 @@
                 }
             }
         }
-  
     }
 } 

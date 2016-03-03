@@ -314,7 +314,7 @@
                 }
             }
 
-            //GeometryData.buildFaceTangents(target);
+            GeometryData.updateFaceTangents(target);
 
             return target;
         }
@@ -640,31 +640,10 @@
 			//_vertexNormalsDirty = false;
         }
 
-        //private static buildFaceTangents(geomtryData: GeometryData): void {
-
-        //    var iDebug: number = 0;
-
-        //    for (var i: number = 0; i < geomtryData.indices.length; i++) {
-
-        //        geomtryData.vertices.push(
-        //            geomtryData.vertexDatas[i * geomtryData.vertexAttLength],
-        //            geomtryData.vertexDatas[i * geomtryData.vertexAttLength + 1],
-        //            geomtryData.vertexDatas[i * geomtryData.vertexAttLength + 2]
-        //            );
-
-        //        geomtryData.uvs.push(
-        //            geomtryData.vertexDatas[i * geomtryData.vertexAttLength + 13],
-        //            geomtryData.vertexDatas[i * geomtryData.vertexAttLength + 14]
-        //            );
-        //    }
-
-        //    GeometryData.updateFaceTangents(geomtryData);
-        //}
-        /*
-        private static updateFaceTangents(geomtrtData: GeometryData) {
+        private static updateFaceTangents(geometry: Geometry) {
             var i: number = 0;
             var index1: number, index2: number, index3: number;
-            var len: number = geomtrtData.indices.length ;
+            var len: number = geometry.indexData.length;
             var ui: number, vi: number;
             var v0: number;
             var dv1: number, dv2: number;
@@ -673,8 +652,8 @@
             var dx1: number, dy1: number, dz1: number;
             var dx2: number, dy2: number, dz2: number;
             var cx: number, cy: number, cz: number;
-            var vertices: Array<number> = geomtrtData.vertices ;
-            var uvs: Array<number> = geomtrtData.uvs;
+            var vertices: Array<number> = geometry.source_positionData;
+            var uvs: Array<number> = geometry.source_uvData;
 
             var posStride: number = 3;
             var posOffset: number = 0;
@@ -682,26 +661,27 @@
             var texOffset: number = 0;
 
             while (i < len) {
-                index1 = geomtrtData.indices[i];
-                index2 = geomtrtData.indices[i + 1];
-                index3 = geomtrtData.indices[i + 2];
+                index1 = geometry.indexData[i];
+                index2 = geometry.indexData[i + 1];
+                index3 = geometry.indexData[i + 2];
 
-                ui = index1 * 2 ;
-                v0 =  uvs[ui+1];
-                ui = index2 * 2 ;
-                dv1 = uvs[ui+1] - v0;
-                ui = index3 * 2 ;
-                dv2 = uvs[ui+1] - v0;
+                ui = index1 * 2;
+                v0 = uvs[ui + 1];
+                ui = index2 * 2;
+                dv1 = uvs[ui + 1] - v0;
+                ui = index3 * 2;
+                dv2 = uvs[ui + 1] - v0;
 
-                vi = index1 * 3 ;
+                vi = index1 * 3;
                 x0 = vertices[vi];
                 y0 = vertices[vi + 1];
                 z0 = vertices[vi + 2];
-                vi = index2 * 3 ;
+
+                vi = index2 * 3;
                 dx1 = vertices[vi] - x0;
                 dy1 = vertices[vi + 1] - y0;
                 dz1 = vertices[vi + 2] - z0;
-                vi = index3 * 3 ;
+                vi = index3 * 3;
                 dx2 = vertices[vi] - x0;
                 dy2 = vertices[vi + 1] - y0;
                 dz2 = vertices[vi + 2] - z0;
@@ -710,165 +690,43 @@
                 cy = dv2 * dy1 - dv1 * dy2;
                 cz = dv2 * dz1 - dv1 * dz2;
                 denom = 1 / Math.sqrt(cx * cx + cy * cy + cz * cz);
-                geomtrtData.tangts[i++] = denom * cx;
-                geomtrtData.tangts[i++] = denom * cy;
-                geomtrtData.tangts[i++] = denom * cz;
+                geometry.source_tangentData[i++] = denom * cx;
+                geometry.source_tangentData[i++] = denom * cy;
+                geometry.source_tangentData[i++] = denom * cz;
             }
 
-			var i:number;
-            var lenV: number = geomtrtData.vertexDatas.length;
-            var tangentStride: number = geomtrtData.vertexAttLength;
-            var tangentOffset: number = 6;
-            var target: Array<number> = geomtrtData.vertexDatas;
-
-			i = tangentOffset;
-			while (i < lenV) {
-				target[i] = 0.0;
-				target[i + 1] = 0.0;
-				target[i + 2] = 0.0;
-				i += tangentStride;
-			}
-			
             var k: number;
-            var lenI: number = len ;
-            var index: number;
+            var index: number = 0;
             var weight: number;
             var f1: number = 0, f2: number = 1, f3: number = 2;
-			
-			i = 0;
+
+            var i: number = 0;
            
-			while (i < lenI) {
-				weight = 1;
-                index = tangentOffset + geomtrtData.indices[i++]*tangentStride;
-                target[index++] += -geomtrtData.tangts[f1]*weight;
-                target[index++] += geomtrtData.tangts[f2]*weight;
-                target[index] += geomtrtData.tangts[f3]*weight;
-                index = tangentOffset + geomtrtData.indices[i++]*tangentStride;
-                target[index++] += -geomtrtData.tangts[f1]*weight;
-                target[index++] += geomtrtData.tangts[f2]*weight;
-                target[index] += geomtrtData.tangts[f3]*weight;
-                index = tangentOffset + geomtrtData.indices[i++]*tangentStride;
-                target[index++] += -geomtrtData.tangts[f1]*weight;
-                target[index++] += geomtrtData.tangts[f2]*weight;
-                target[index] += geomtrtData.tangts[f3]*weight;
-				f1 += 3;
-				f2 += 3;
-				f3 += 3;
-			}
-			
-			i = tangentOffset;
-			while (i < lenV) {
-				var vx:number = target[i];
-                var vy: number = target[i + 1];
-                var vz: number = target[i + 2];
-                var d: number = 1.0/Math.sqrt(vx*vx + vy*vy + vz*vz);
-				target[i] = vx*d;
-				target[i + 1] = vy*d;
-				target[i + 2] = vz*d;
-				i += tangentStride;
-			}
+            for (var i: number = 0; i < geometry.indexData.length / 3; ++i) {
+                index = i * 3 * 3;
+                geometry.source_tangentData[index + 0] = - geometry.source_tangentData[index + 0];
+                geometry.source_tangentData[index + 1] = geometry.source_tangentData[index + 1];
+                geometry.source_tangentData[index + 2] = geometry.source_tangentData[index + 2];
+                index += 3;
+                geometry.source_tangentData[index + 0] = - geometry.source_tangentData[index + 0];
+                geometry.source_tangentData[index + 1] = geometry.source_tangentData[index + 1];
+                geometry.source_tangentData[index + 2] = geometry.source_tangentData[index + 2];
+                index += 3;
+                geometry.source_tangentData[index + 0] = - geometry.source_tangentData[index + 0];
+                geometry.source_tangentData[index + 1] = geometry.source_tangentData[index + 1];
+                geometry.source_tangentData[index + 2] = geometry.source_tangentData[index + 2];
+            } 
+
+            for (var i: number = 0; i < geometry.source_tangentData.length / 3; ++i) {
+                var vx: number = geometry.source_tangentData[i * 3];
+                var vy: number = geometry.source_tangentData[i * 3 + 1];
+                var vz: number = geometry.source_tangentData[i * 3 + 2];
+                var d: number = 1.0 / Math.sqrt(vx * vx + vy * vy + vz * vz);
+
+                geometry.source_tangentData[i * 3] = vx * d;
+                geometry.source_tangentData[i * 3 + 1] = vy * d;
+                geometry.source_tangentData[i * 3 + 2] = vz * d;
+            }
         }
-        */
-        //private static updateFaceTangents(geometry: Geometry) {
-        //    var i: number = 0;
-        //    var index1: number, index2: number, index3: number;
-        //    var len: number = geometry.indexData.length;
-        //    var ui: number, vi: number;
-        //    var v0: number;
-        //    var dv1: number, dv2: number;
-        //    var denom: number;
-        //    var x0: number, y0: number, z0: number;
-        //    var dx1: number, dy1: number, dz1: number;
-        //    var dx2: number, dy2: number, dz2: number;
-        //    var cx: number, cy: number, cz: number;
-        //    var vertices: Array<Vector3D> = geometry.source_positionData;
-
-
-        //    var uvs: Array<UV> = geometry.source_uvData;
-
-        //    var posStride: number = 3;
-        //    var posOffset: number = 0;
-        //    var texStride: number = 2;
-        //    var texOffset: number = 0;
-
-        //    while (i < len) {
-        //        index1 = geometry.indexData[i];
-        //        index2 = geometry.indexData[i + 1];
-        //        index3 = geometry.indexData[i + 2];
-
-        //        ui = index1 * 2;
-        //        v0 = uvs[ui + 1];
-        //        ui = index2 * 2;
-        //        dv1 = uvs[ui + 1] - v0;
-        //        ui = index3 * 2;
-        //        dv2 = uvs[ui + 1] - v0;
-
-        //        vi = index1 * 3;
-        //        x0 = vertices[vi];
-        //        y0 = vertices[vi + 1];
-        //        z0 = vertices[vi + 2];
-
-        //        vi = index2 * 3;
-        //        dx1 = vertices[vi] - x0;
-        //        dy1 = vertices[vi + 1] - y0;
-        //        dz1 = vertices[vi + 2] - z0;
-        //        vi = index3 * 3;
-        //        dx2 = vertices[vi] - x0;
-        //        dy2 = vertices[vi + 1] - y0;
-        //        dz2 = vertices[vi + 2] - z0;
-
-        //        cx = dv2 * dx1 - dv1 * dx2;
-        //        cy = dv2 * dy1 - dv1 * dy2;
-        //        cz = dv2 * dz1 - dv1 * dz2;
-        //        denom = 1 / Math.sqrt(cx * cx + cy * cy + cz * cz);
-        //        geomtrtData.tangts[i++] = denom * cx;
-        //        geomtrtData.tangts[i++] = denom * cy;
-        //        geomtrtData.tangts[i++] = denom * cz;
-        //    }
-
-        //    var i: number;
-        //    var lenV: number = geomtrtData.vertexDatas.length;
-        //    var tangentStride: number = geomtrtData.vertexAttLength;
-        //    var tangentOffset: number = 6;
-        //    var target: Array<number> = geomtrtData.vertexDatas;
-
-        //    i = tangentOffset;
-        //    while (i < lenV) {
-        //        target[i] = 0.0;
-        //        target[i + 1] = 0.0;
-        //        target[i + 2] = 0.0;
-        //        i += tangentStride;
-        //    }
-
-        //    var k: number;
-        //    var index: number;
-        //    var weight: number;
-        //    var f1: number = 0, f2: number = 1, f3: number = 2;
-
-        //    i = 0;
-
-        //    while (i < len) {
-        //        weight = 1;
-        //        index = tangentOffset + geomtrtData.indices[i++] * tangentStride;
-        //        target[index++] += -geomtrtData.tangts[f1] * weight;
-        //        target[index++] += geomtrtData.tangts[f2] * weight;
-        //        target[index] += geomtrtData.tangts[f3] * weight;
-        //        index = tangentOffset + geomtrtData.indices[i++] * tangentStride;
-        //        target[index++] += -geomtrtData.tangts[f1] * weight;
-        //        target[index++] += geomtrtData.tangts[f2] * weight;
-        //        target[index] += geomtrtData.tangts[f3] * weight;
-        //        index = tangentOffset + geomtrtData.indices[i++] * tangentStride;
-        //        target[index++] += -geomtrtData.tangts[f1] * weight;
-        //        target[index++] += geomtrtData.tangts[f2] * weight;
-        //        target[index] += geomtrtData.tangts[f3] * weight;
-        //        f1 += 3;
-        //        f2 += 3;
-        //        f3 += 3;
-        //    }
-
-        //    for (var i: number = 0; i < geometry.source_tangentData.length; ++i) {
-        //        geometry.source_tangentData[i].normalize();
-        //    }
-        //}
     }
 }
