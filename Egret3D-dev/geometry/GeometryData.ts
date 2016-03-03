@@ -276,12 +276,28 @@
                     if (faceData.uv2Indices && source.source_uv2Data && source.source_uv2Data.length > 0)
                         uv_1 = source.source_uv2Data[faceData.uv2Indices[i] - 1];
 
-                    target.source_positionData.push(vertex);
-                    target.source_normalData.push(normal);
-                    target.source_tangentData.push(new Vector3D());
-                    target.source_colorData.push(color);
-                    target.source_uvData.push(uv_0);
-                    target.source_uv2Data.push(uv_1);
+                    target.source_positionData.push(vertex.x);
+                    target.source_positionData.push(vertex.y);
+                    target.source_positionData.push(vertex.z);
+
+                    target.source_normalData.push(normal.x);
+                    target.source_normalData.push(normal.y);
+                    target.source_normalData.push(normal.z);
+
+                    target.source_tangentData.push(0);
+                    target.source_tangentData.push(0);
+                    target.source_tangentData.push(0);
+
+                    target.source_colorData.push(color.x);
+                    target.source_colorData.push(color.y);
+                    target.source_colorData.push(color.z);
+                    target.source_colorData.push(color.w);
+
+                    target.source_uvData.push(uv_0.u);
+                    target.source_uvData.push(uv_0.v);
+
+                    target.source_uv2Data.push(uv_1.u);
+                    target.source_uv2Data.push(uv_1.v);
 
                     if (source.source_skinData != null && source.source_skinData.length > 0) {
                         target.source_SkinData.push(                //8 skin
