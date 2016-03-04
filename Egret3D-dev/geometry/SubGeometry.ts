@@ -39,5 +39,8 @@
         */
         constructor() {
         }
+
+        public update(time:number,delay:number,program:Program3D,contextPorxy:Context3DProxy) {
+        }
     }
 } 
