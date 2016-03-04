@@ -40,7 +40,7 @@
         constructor() {
         }
 
-        public update(time:number,delay:number,program:Program3D,contextPorxy:Context3DProxy) {
+        public update(time: number, delay: number, passUsage:PassUsage , contextPorxy:Context3DProxy) {
         }
     }
 } 

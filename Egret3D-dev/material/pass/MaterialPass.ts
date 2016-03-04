@@ -24,7 +24,7 @@
                 this.upload(time, delay, this._passUsage, context3DProxy, modeltransform, camera3D);
             }
 
-            subGeometry.update(time, delay,this._passUsage.program3D,context3DProxy);
+            subGeometry.update(time, delay,this._passUsage,context3DProxy);
 
             if (this._materialData.depthTest) {
                 context3DProxy.enable(ContextConfig.DEPTH_TEST);
