@@ -315,36 +315,9 @@
             }
         }
 
-        public update(context3DProxy: Context3DProxy) {
+        public update() {
            //vertex point
-            if (this.vertexFormat & VertexFormat.VF_POSITION) {
-                if (!this.attributes["aVertexPosition"]) {
-                    this.attributes["aVertexPosition"] = context3DProxy.getShaderAttribLocation(effect.program, "aVertexPosition");
-                    Context.instance.enableVertexAttribArray(effect.attribs["aVertexPosition"]);
-                }
-
-                Context.instance.vertexAttribPointer(effect.attribs["aVertexPosition"], Mesh.POSITION_SIZE, Context.FLOAT, false, this.vextexBytes, index);
-
-                index += Mesh.POSITION_SIZE * 4;
-            }
-
-            if (this.vertexFormat & VertexFormat.VF_NORMAL) {
-            }
-
-            if (this.vertexFormat & VertexFormat.VF_TANGENT) {
-            }
-
-            if (this.vertexFormat & VertexFormat.VF_COLOR) {
-            }
-
-            if (this.vertexFormat & VertexFormat.VF_UV) {
-            }
-
-            if (this.vertexFormat & VertexFormat.VF_UV2) {
-            }
-
-            if (this.vertexFormat & VertexFormat.VF_SKIN) {
-            }
+           
         }
     }
 } 

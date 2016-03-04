@@ -136,6 +136,9 @@
         public upload(context3DProxy: Context3DProxy) {
             //to add index buffer
             //to add vertex buffer
+
+            this.geometry.sharedIndexBuffer = context3DProxy.creatIndexBuffer(this.geometry.indexData);
+            this.geometry.sharedVertexBuffer = context3DProxy.creatVertexBuffer(this.geometry.verticesData);
         }
 
         private _i: number; 
@@ -143,7 +146,7 @@
         private _matID: number; 
         public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
             this._i = 0;
-            this.geometry.update();
+            this.geometry.update(context3DProxy);
             for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
                 this._subGeometry = this.geometry.subGeometrys[this._i];
                 this._matID = this._subGeometry.matID;
