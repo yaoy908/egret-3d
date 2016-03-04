@@ -56,7 +56,7 @@
 
                 if (this._renderItem.material != null) {
 
-                    this._renderItem.material.renderDiffusePass(time, delay, context3D, camera, this._renderItem);
+                    this._renderItem.renderDiffusePass(time, delay, context3D, camera);
                    
                 }
             }

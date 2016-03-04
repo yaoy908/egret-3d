@@ -62,6 +62,21 @@
             console.log("this.context3D ==>", Context3DProxy.gl);
         }
 
+       /**
+       * @language zh_CN
+       * 初始化,并创建显示区域的后台缓冲大小。
+       * @param GPU_CONFIG
+       * @param canvasRec
+       * @event call
+       */
+        public creatBackBuffer(x: number, y: number, width: number, height: number) {
+            this._canvas.style.left = x.toString() ; 
+            this._canvas.style.top = y.toString(); 
+            this._canvas.width = width; 
+            this._canvas.height = height;
+            this.viewPort(x,y,width,height);
+        }
+
         /**
        * @language zh_CN
        * get GPU Context3D 

@@ -692,7 +692,7 @@
             }
             //this._modeMatrix3D.recompose([this._globalPos, this._globalRot, this._globalSca]);
             this._modeMatrix3D.makeTransform(this._globalPos, this._globalSca, this._globalOrientation);
-            this.bound.Transform = this._modeMatrix3D;
+            //this.bound.Transform = this._modeMatrix3D;
             this._transformChange = false;
             this.onUpdateTransform();
         }

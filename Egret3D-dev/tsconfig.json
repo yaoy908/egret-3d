@@ -12,6 +12,22 @@
         "events/PickResult.ts",
         "events/IDispatchEvent.ts",
 
+        "geom/UV.ts",
+        "geom/Point.ts",
+        "geom/Vector3D.ts",
+        "geom/Rectangle.ts",
+        "geom/Quaternion.ts",
+        "geom/Orientation3D.ts",
+        "geom/Plane3D.ts",
+        "geom/Matrix4_4.ts",
+        "geom/EyesMatrix.ts",
+        "geom/PlaneClassification.ts",
+        "geom/MathUtil.ts",
+        "geom/Matrix44Utils.ts",
+        "geom/Ray.ts",
+        "geom/Color.ts",
+        "geom/Bound.ts",
+
         "core/context/ContextConfig.ts",
         "core/context/Context3DProxy.ts",
         "core/context/FrameBuffer.ts",
@@ -38,22 +54,6 @@
 
         "data/HashMap.ts",
 
-
-        "geom/UV.ts",
-        "geom/Point.ts",
-        "geom/Vector3D.ts",
-        "geom/Rectangle.ts",
-        "geom/Quaternion.ts",
-        "geom/Orientation3D.ts",
-        "geom/Plane3D.ts",
-        "geom/Matrix4_4.ts",
-        "geom/EyesMatrix.ts",
-        "geom/PlaneClassification.ts",
-        "geom/MathUtil.ts",
-        "geom/Matrix44Utils.ts",
-        "geom/Ray.ts",
-        "geom/Color.ts",
-
         "geometry/FaceData.ts",
         "geometry/Geometry.ts",
         "geometry/GeometryData.ts",
@@ -73,7 +73,6 @@
         "material/pass/PassUsage.ts",
         "material/MaterialBase.ts",
         "material/MaterialData.ts",
-        "material/SubMaterial.ts",
 
         "render/RenderBase.ts",
         "render/DefaultRender.ts",
