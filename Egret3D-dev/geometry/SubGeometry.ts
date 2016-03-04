@@ -39,5 +39,8 @@
         */
         constructor() {
         }
+
+        public update(time: number, delay: number, passUsage:PassUsage , contextPorxy:Context3DProxy) {
+        }
     }
 } 

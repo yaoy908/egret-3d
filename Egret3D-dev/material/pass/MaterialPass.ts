@@ -18,11 +18,13 @@
             }
         }
 
-        public active(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+        public active(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry:SubGeometry, animtion: IAnimation) {
             if (this._passUsage.passNeedReset) {
                 this._passUsage.passNeedReset = false;
                 this.upload(time, delay, this._passUsage, context3DProxy, modeltransform, camera3D);
             }
+
+            subGeometry.update(time, delay,this._passUsage,context3DProxy);
 
             if (this._materialData.depthTest) {
                 context3DProxy.enable(ContextConfig.DEPTH_TEST);
