@@ -25,7 +25,6 @@
         "core/context/Texture3D.ts",
 
         "core/node/Object3D.ts",
-        "core/node/Billboard.ts",
         "core/node/Entity.ts",
         "core/node/Mesh.ts",
         "core/node/Sky.ts",
@@ -35,7 +34,6 @@
         "core/traverse/EntityCollect.ts",
         "core/traverse/Frustum.ts",
         "core/traverse/Layer.ts",
-        "core/traverse/Picker.ts",
         "core/traverse/Tag.ts",
 
         "data/HashMap.ts",
@@ -48,7 +46,6 @@
         "geom/Quaternion.ts",
         "geom/Orientation3D.ts",
         "geom/Plane3D.ts",
-        "geom/CubeBoxBound.ts",
         "geom/Matrix4_4.ts",
         "geom/EyesMatrix.ts",
         "geom/PlaneClassification.ts",
@@ -80,11 +77,6 @@
 
         "render/RenderBase.ts",
         "render/DefaultRender.ts",
-        "render/PositionRender.ts",
-        "render/NormalRender.ts",
-        "render/DepthRender.ts",
-        "render/ShadowRender.ts",
-        "render/RenderManager.ts",
 
         "scene/Scene3D.ts",
         "scene/TreeBase.ts",
@@ -106,7 +98,6 @@
         "shader/ShaderLib.ts",
         "shader/ShaderPool.ts",
 
-        "texture/TextureUtil.ts",
         "texture/ITexture.ts",
         "texture/ImageTexture.ts",
         "texture/CubeTexture.ts",
