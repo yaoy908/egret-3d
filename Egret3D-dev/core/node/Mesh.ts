@@ -136,6 +136,9 @@
         public upload(context3DProxy: Context3DProxy) {
             //to add index buffer
             //to add vertex buffer
+
+            this.geometry.sharedIndexBuffer = context3DProxy.creatIndexBuffer(this.geometry.indexData);
+            this.geometry.sharedVertexBuffer = context3DProxy.creatVertexBuffer(this.geometry.verticesData);
         }
 
         private _i: number; 

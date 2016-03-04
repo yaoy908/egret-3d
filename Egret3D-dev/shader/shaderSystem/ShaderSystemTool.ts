@@ -9,71 +9,7 @@
     * @platform Web,Native
     */
     export class ShaderSystemTool {
-        private libs: string[] = [
-            ///---ok------------------
-            "default_vertex", 
-            "diffuseMap_fragment", 
-            "diffuse_fragmentEnd", 
-            "normalMap_fragment", 
-            "specularMap_fragment", 
-            "diffuseMethod_fragment",
-            "Color_fragment",
-            "directLight_fragment",
-            "spotLight_fragment",
-            "pointLight_fragment", 
-            "skeleton_vertex", 
-            "particle_vertex", 
-            "particle_vertexEnd", 
-            ///---ok------------------
-            ///"LightDiffuse_fragment", 
-            "Shadow_vertex_static",
-            "Shadow_vertex_sksleton", 
-            "Shadow_fragment", 
-            "ShadowMapping_vertex", 
-            "shadowmapping_fragment", 
-            "depthMethod_fragment", 
-            "normalMethod_fragment", 
-            "postCanvas_vertex", 
-            "postCanvas_fragment", 
-            "sky_fragment", 
-            "sky_vertex",  
-            "spheresky_vertex",
-            "spheresky_fragment",
-            "terrainRGBA_fragment", 
-            "warpedImage_fragment",
-            "lightMap_fragment",
-            "EnvironmentMapping_fragment", 
-            "SpecularEnvironmentMappingMethod", 
-            "distanceFog_fragment", 
-            "AOMap_fragment", 
-            "wireframe_vertex",
-            "wireframe_fragment", 
-            "FresnelReflection_fragment", 
-            "PaintFresnelReflection_fragment",
-            "AlphaEnvironmentMapping_fragment",
-            "cubeDiffuseMap_fragment", 
-            ///ok
-
-            ///--particle--
-            "particle_time",
-            "particle_position",
-            "particle_offset",
-            "particle_speed",
-            "particle_billboard",
-            "particle_acceleration",
-            "particle_lifeRotate",
-            "particle_acceleRotate",
-            "particle_scale",
-            "particle_acceleScale",
-            ///--particle--
-            //post----
-            "BrightPassFilter",
-            "GaussianBlurHorizontal",
-            "GaussianBlurVertical",
-            "Composition",
-            "Tonemaping",
-        ];
-
+        
         private _shaderLibs: any = {};
         private _methodLibs: any = {};
         private _loaderDict: { [url: string]: string } = {};

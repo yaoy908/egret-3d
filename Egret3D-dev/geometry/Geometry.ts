@@ -213,6 +213,9 @@
         */
         public subGeometrys: Array<SubGeometry>;
 
+        protected attributes: any = [];
+        protected uniforms: any = [];
+
         constructor() {
         }
 
@@ -315,6 +318,7 @@
         public update(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
             context3DProxy.bindVertexBuffer(this.sharedVertexBuffer);
             context3DProxy.bindVertexBuffer(this.sharedIndexBuffer);
+           
         }
     }
 } 

@@ -34,6 +34,14 @@
         public matID: number = 0;
         
         /**
+         * @language zh_CN
+         * @private
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public geometry: Geometry;
+
+        /**
         * @language zh_CN
         * 创建一个SubGeometry
         */
