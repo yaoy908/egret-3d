@@ -146,7 +146,7 @@
         private _matID: number; 
         public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
             this._i = 0;
-            this.geometry.update(context3DProxy);
+            this.geometry.update();
             for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
                 this._subGeometry = this.geometry.subGeometrys[this._i];
                 this._matID = this._subGeometry.matID;
