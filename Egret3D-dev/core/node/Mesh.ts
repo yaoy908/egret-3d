@@ -143,12 +143,16 @@
         private _matID: number; 
         public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
             this._i = 0;
-            this.geometry.update();
+            this.geometry.update(time, delay,context3DProxy, camera3D);
             for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
                 this._subGeometry = this.geometry.subGeometrys[this._i];
                 this._matID = this._subGeometry.matID;
                 this.subMaterials[this._matID].renderDiffusePass(time, delay, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+              
             }
+
+           
+            
         }
     }
 } 

@@ -18,7 +18,7 @@
             }
         }
 
-        public active(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry:SubGeometry, animtion: IAnimation) {
+        public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry:SubGeometry, animtion: IAnimation) {
             if (this._passUsage.passNeedReset) {
                 this._passUsage.passNeedReset = false;
                 this.upload(time, delay, this._passUsage, context3DProxy, modeltransform, camera3D);
@@ -47,7 +47,6 @@
 
             if (this._materialData.alphaBlending)
                 Context3DProxy.gl.depthMask(false);
-
 
             for (var i: number; i < this._passUsage.methodList.length; i++) {
                 this._passUsage.methodList[i].active(time, delay, context3DProxy, modeltransform, camera3D);
@@ -79,12 +78,10 @@
                 this._materialData.materialSourceData[15] = this._materialData.normalPower; //保留
             }
 
-            //context3DProxy.gl.uniform1fv(this._materialData.diffusePassUsageData.uniform_materialSource.uniformIndex, this._materialData.materialSourceData);
             //texture 2D
             var sampler2D: GLSL.Sampler2D;
             for (var index in this._materialData.diffusePassUsageData.sampler2DList) {
                 sampler2D = this._materialData.diffusePassUsageData.sampler2DList[index];
-                //sampler2D.texture.upload(context3DProxy);
                 context3DProxy.setTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index, sampler2D.texture2D );
                 if (this._materialData.materialDataNeedChange) {
                     var min_filter: number = this._materialData.smooth ? Context3DProxy.gl.LINEAR_MIPMAP_LINEAR : Context3DProxy.gl.LINEAR;
@@ -100,37 +97,7 @@
             var sampler3D: GLSL.Sampler3D;
             for (var index in this._materialData.diffusePassUsageData.sampler3DList) {
                 sampler3D = this._materialData.diffusePassUsageData.sampler3DList[index];
-                //sampler3D.texture.upload(context3DProxy);
-                //context3DProxy.setCubeTextureAt(sampler3D.activeTextureIndex, sampler3D.uniformIndex, sampler3D.index, sampler3D.texture.cubeTexture);
             }
-
-            //for (this.index = 0; this.index < this._materialData.diffusePassUsageData.vsMethodList.length; this.index++) {
-            //    this._materialData.diffusePassUsageData.vsMethodList[this.index].updata(context3D, this._materialData.diffusePassUsageData.program3D, modeltransform, camera3D, geometry, animation);
-            //}
-
-            //if (this._materialData.diffusePassUsageData.uniform_directLightSource) {
-            //    for (i = 0; i < this._materialData.directLightList.length; i++) {
-            //        this._materialData.directLightList[i].updateLightData(i, this._materialData.diffusePassUsageData.directLightData);
-            //    }
-            //    context3D.gl.uniform1fv(this._materialData.diffusePassUsageData.uniform_directLightSource.uniformIndex, this._materialData.diffusePassUsageData.directLightData);
-            //}
-
-            //if (this._materialData.diffusePassUsageData.uniform_sportLightSource) {
-            //    for (i = 0; i < this._materialData.sportLightList.length; i++) {
-            //        this._materialData.sportLightList[i].updateLightData(i, this._materialData.diffusePassUsageData.sportLightData);
-            //    }
-            //    context3D.gl.uniform1fv(this._materialData.diffusePassUsageData.uniform_sportLightSource.uniformIndex, this._materialData.diffusePassUsageData.sportLightData);
-            //}
-
-            //if (this._materialData.diffusePassUsageData.uniform_pointLightSource) {
-            //    for (i = 0; i < this._materialData.pointLightList.length; i++) {
-            //        this._materialData.pointLightList[i].updateLightData(i, this._materialData.diffusePassUsageData.pointLightData);
-            //    }
-            //    context3D.gl.uniform1fv(this._materialData.diffusePassUsageData.uniform_pointLightSource.uniformIndex, this._materialData.diffusePassUsageData.pointLightData);
-            //}
-
-            //context3DProxy.gl.bindBuffer(Egret3DDrive.ELEMENT_ARRAY_BUFFER, geometry.sharedIndexBuffer.buffer);
-            //context3DProxy.gl.drawElements(this._materialData.drawMode, geometry.numItems, Egret3DDrive.UNSIGNED_SHORT, 0);
 
             if (this._materialData.alphaBlending)
                 Context3DProxy.gl.depthMask(true);
@@ -139,6 +106,7 @@
                 Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, null);
             }
 
+            context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count );
         }
 
         public upload(time: number, delay: number, usage: PassUsage, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {

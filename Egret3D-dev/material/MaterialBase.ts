@@ -428,7 +428,7 @@
         }
 
         public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry:SubGeometry , animtion:IAnimation) {
-            this.diffusePass.active(time, delay, context3DProxy, modeltransform, camera3D,subGeometry,animtion);
+            this.diffusePass.draw(time, delay, context3DProxy, modeltransform, camera3D,subGeometry,animtion);
         }
 
         public renderXRayPass() {

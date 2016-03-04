@@ -312,8 +312,9 @@
             }
         }
 
-        public update() {
-           //vertex point
+        public update(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
+            context3DProxy.bindVertexBuffer(this.sharedVertexBuffer);
+            context3DProxy.bindVertexBuffer(this.sharedIndexBuffer);
         }
     }
 } 

@@ -912,6 +912,16 @@
             Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ARRAY_BUFFER, vertexBuffer.buffer);
         }
 
+         /**
+        * @language zh_CN
+        * 绑定顶点索引Buffer
+        * @param vertexBuffer 
+        */
+        public bindIndexBuffer(indexBuffer: IndexBuffer3D) {
+            Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
+
+        }
+
         /**
         * @language zh_CN
         * 绘制模型元素
@@ -931,9 +941,8 @@
         * @param offset 顶点偏移
         * @param length 顶点个数
         */
-        public drawElement(type: number, indexBuffer: IndexBuffer3D, offset: number, length: number) {
-            Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
-            Context3DProxy.gl.drawElements(type, length, Context3DProxy.gl.UNSIGNED_SHORT, offset);
+        public drawElement(type: number, offset: number, length: number) {
+            Context3DProxy.gl.drawElements(type, length, Context3DProxy.gl.UNSIGNED_SHORT, offset );
         }
 
         /**
