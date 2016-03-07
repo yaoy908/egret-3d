@@ -14,6 +14,10 @@
         private static _methodLibs: any = {};
         private _shaderContentDict: any = [];
         private static _instance: ShaderUtil;
+        private vs_begin = "##define vs begin##";
+        private vs_end = "##define vs end##";
+        private fs_begin = "##define fs begin##";
+        private fs_end = "##define fs end##";
 
         /**
         * @language zh_CN
@@ -33,9 +37,41 @@
         * 加载shader文件
         */
         public load() {
+            var del: any = [];
+            var add: any = [];
 
             for (var key in ShaderLib.lib) {
+                var s_pos: number = ShaderLib.lib[key].indexOf(this.vs_begin);
+                var e_pos: number = ShaderLib.lib[key].indexOf(this.vs_end);
+                var isDel: boolean = false;
+                if (s_pos != -1) {
+                    isDel = true;
+                    s_pos += this.vs_begin.length;
+                    del.push(key);
+                    add[key + "vs"] = ShaderLib.lib[key].substr(s_pos, e_pos - s_pos);
+                }
 
+                s_pos = ShaderLib.lib[key].indexOf(this.fs_begin);
+                e_pos = ShaderLib.lib[key].indexOf(this.fs_end);
+
+                if (s_pos != -1) {
+                    s_pos += this.fs_begin.length;
+                    if (isDel) {
+                        del.push(key);
+                    }
+                    add[key + "fs"] = ShaderLib.lib[key].substr(s_pos, e_pos - s_pos);
+                }
+            }
+
+            for (var key in del) {
+                delete ShaderLib.lib[del[key]];
+            }
+
+            for (var key in add) {
+                ShaderLib.lib[key] = add[key];
+            }
+
+            for (var key in ShaderLib.lib) {
                 var content = this.readShader(ShaderLib.lib[key]);
                 this._shaderContentDict[key] = content;
             }
