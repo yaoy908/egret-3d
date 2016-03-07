@@ -48,6 +48,7 @@
         public name: string = "";
 
         public source: string = "";
+
         private funcDict: any = {};
         
         /**

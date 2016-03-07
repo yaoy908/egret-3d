@@ -1,4 +1,5 @@
 ﻿module egret3d_dev {
+
                                             
     /**
     * @private
@@ -9,6 +10,7 @@
     */
     export class ShaderBase {
         
+
         protected index: number = 0;
         protected source: string = "precision highp float;            \t\n";
 
@@ -16,14 +18,15 @@
         protected endShadername: string = "";
         protected stateChange: boolean = false;
 
-        public materialData: MaterialData;
-
         /**
         * @language zh_CN
         * 
         */
         public maxBone: number = 0;
-                        
+
+        public shaderType: number = -1;
+
+        public shader: Shader;
         /**
         * @language zh_CN
         * constructor
@@ -38,8 +41,7 @@
         * 
         * @param shaderName xxx
         */
-        public addShader(shaderName: string) {
-
+        public addUseShaderName(shaderName: string) {
             this.shadersName.push(shaderName);
         }
 
@@ -48,8 +50,7 @@
         * 
         * @param shaderName xxx
         */
-        public addEnd(shaderName: string) {
-
+        public addEndShaderName(shaderName: string) {
             this.endShadername = shaderName ;
         }
 
@@ -58,7 +59,7 @@
         * 
         * @returns string
         */
-        public getShaderSource(passUsage:PassUsage) {
+        public getShader(passUsage:PassUsage) {
 
             if (this.endShadername != "") {
                 var index: number = this.shadersName.indexOf(this.endShadername);
@@ -67,7 +68,7 @@
                 }
             }
 
-            this.source += ShaderUtil.instance.fillShaderContent(this, this.shadersName, passUsage);
+            ShaderUtil.instance.fillShaderContent(this, this.shadersName, passUsage);
         }
     }
 } 

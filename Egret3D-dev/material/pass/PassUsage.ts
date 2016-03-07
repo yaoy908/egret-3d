@@ -257,9 +257,8 @@
 
         //public vertexShaderRegister: ver;
    
-        public vertexShader: VertexShader;
-        public fragmentShader: FragmentShader;
-
+        public vertexShader: ShaderBase;
+        public fragmentShader: ShaderBase;
 
 
         /**

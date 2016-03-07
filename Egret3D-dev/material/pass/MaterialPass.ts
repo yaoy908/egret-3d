@@ -37,6 +37,7 @@
 
         /**
         * @language zh_CN
+        * @private
         * 初始化 UseMethod。
         * @version Egret 3.0
         * @platform Web,Native
@@ -46,34 +47,25 @@
 
             var i: number = 0;
 
-            //this.pixelShader.addMethod(this.diffuseMethod);
-            //this.pixelShader.addShader(this.diffuseMethod.fragMethodName);
             this._passUsage = new PassUsage();
-
-            //if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.DIFFUSE) != -1) {
-            //    this.pixelShader.addShader("diffuseMap_fragment");
+            this._passUsage.vertexShader.shaderType = Shader.vertex; 
+            this._passUsage.fragmentShader.shaderType = Shader.fragment; 
+           
             if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.diffuse) != -1) {
-                this._passUsage.vertexShader.addShader("diffuseMap_fragment");
-            //}
-            //if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.NORMAL) != -1) {
-            //    this.pixelShader.addShader("normalMap_fragment");
-            //}
-            //if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.SPECULAR) != -1) {
-            //    this.pixelShader.addShader("specularMap_fragment");
-            //}
-                this._passUsage.fragmentShader.addShader("diffuseMap_fragment");
+                this._passUsage.vertexShader.addUseShaderName("default_vertex");
+                this._passUsage.fragmentShader.addUseShaderName("diffuseMap_fragment");
             }
             if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.normal) != -1) {
-                this._passUsage.vertexShader.addShader("normalMap_fragment");
-                this._passUsage.fragmentShader.addShader("normalMap_fragment");
+                this._passUsage.vertexShader.addUseShaderName("");
+                this._passUsage.fragmentShader.addUseShaderName("normalMap_fragment");
             }
             if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.specular) != -1) {
-                this._passUsage.vertexShader.addShader("specularMap_fragment");
-                this._passUsage.fragmentShader.addShader("specularMap_fragment");
+                this._passUsage.vertexShader.addUseShaderName("");
+                this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
             }
 
             for (i = 0; i < this._materialData.lightList.length; i++) {
-                this._passUsage.fragmentShader.addShader(LightType[this._materialData.lightList[i].lightType]);
+                this._passUsage.fragmentShader.addUseShaderName(LightType[this._materialData.lightList[i].lightType]);
             }
 
             //if (this.animation) {
@@ -95,54 +87,13 @@
             //    this.pixelShader.addShader(this.shadowMaping.fragMethodName);
             //}
 
-            //this._passUsage.fragmentShader.addShader("diffuse_fragmentEnd");
+            if (this.methodList) {
+                for (var i: number = 0; i < this.methodList.length; i++) {
+                    this._passUsage.vertexShader.addUseShaderName(this.methodList[i].vsShaderName);
+                    this._passUsage.fragmentShader.addUseShaderName(this.methodList[i].fsShaderName);
+                }
+            }
 
-            //if (this.effectMethodList) {
-            //    for (var i: number = 0; i < this.effectMethodList.length; i++) {
-            //        this.pixelShader.addEffectMethod(this.effectMethodList[i]);
-            //        this.pixelShader.addShader(this.effectMethodList[i].fragMethodName);
-            //    }
-            //}
-
-        }
-
-
-        /**
-         * @language zh_CN
-         * 初始化 shader 。
-         * @param context3D {Context3D}
-         * @param geometry {GeometryBase}
-         * @param animation {IAnimation}
-        * @version Egret 3.0
-        * @platform Web,Native
-         */
-        public initShader(context3D: Context3DProxy, geometry: Geometry, animation: IAnimation) {
-            //super.initShader(context3D, geometry, animation);
-
-            //this.vertexShader = new VertexShader(this.materialData, this.materialData.diffusePassUsageData);
-            //this.pixelShader = new PixelShader(this.materialData, this.materialData.diffusePassUsageData);
-
-            //this.materialData.context3D = context3D;
-
-
-            //this.vertexShader.setVertexShader(geometry);
-            //this.initUseMethod();
-
-            //if (animation) {
-            //    animation.initShader(this.vertexShader, this.pixelShader);
-            //}
-
-            //this.vertexShader.build();
-            //this.pixelShader.build();
-
-            //var vs: string = this.vertexShader.getShaderSource();
-            //var fs: string = this.pixelShader.getShaderSource();
-
-            //var vs_shader: IShader = context3D.creatVertexShader(vs);
-            //var fs_shader: IShader = context3D.creatFragmentShader(fs);
-
-            //this.materialData.diffusePassUsageData.program3D = context3D.creatProgram(vs_shader, fs_shader);
-            //this.context3DChange = true;
         }
 
         public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry:SubGeometry, animtion: IAnimation) {
@@ -235,30 +186,9 @@
         public upload(time: number, delay: number, usage: PassUsage, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
 
             if (this._passChange)
-                this.initUseMethod( );
-            //this._passUsage.vsShaderNames.length = 0;
-            //this._passUsage.fsShaderNames.length = 0;
+                this.initUseMethod();
 
-            //var methoda: MethodBase;
-            //var vsList: Array<string> = [];
-            //var fsList: Array<string> = [];
-            //var vsName: string = "";
-            //var fsName: string = "";
-
-            //for (var i: number; i < this._passUsage.methodList.length; i++) {
-            //    methoda = this._passUsage.methodList[i];
-            //    if (methoda.vsShaderName != "") {
-            //        vsList.push(methoda.vsShaderName);
-            //        vsName += methoda.vsShaderName;
-            //    }
-            //    if (methoda.fsShaderName != "") {
-            //        fsList.push(methoda.fsShaderName);
-            //        fsName += methoda.fsShaderName;
-            //    }
-            //    methoda.upload(time, delay, usage, context3DProxy, modeltransform, camera3D);
-            //}
-
-            //ShaderPool.getProgram(vsName, fsName);
+            this._passUsage.program3D = ShaderPool.getProgram(this._passUsage.vertexShader.shader.id, this._passUsage.fragmentShader.shader.id );
         }
     }
 } 

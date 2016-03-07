@@ -32,7 +32,7 @@
         constructor(color: Vector3D) {
             super();
             this._diffuse = color;
-            this._lightType = 2 ;
+            this.lightType = LightType.spotLightlight ;
         }
                                 
         /**

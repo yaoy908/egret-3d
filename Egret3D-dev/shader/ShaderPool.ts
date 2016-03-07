@@ -14,79 +14,51 @@
             this.context = context;
         }
 
-        private static getCombin(list: Array<string>): string {
-            var name: string = "";
-            for (var i: number = 0; i < list.length; i++){
-                name += list[i];
-            }
-            return name;
-        }
-
-        public static getVertexShader(vertexShaderList: Array<string> ) {
-            var name: string = this.getCombin(vertexShaderList);
+        public static getGPUShader( shaderType:number , shaderID:string , source:string ) {
             var shader: Shader;
-            if (this.vsShaderHashMap.isHas(name))
-                shader = this.vsShaderHashMap.getValue(name);
+            if (this.vsShaderHashMap.isHas(shaderID))
+                shader = this.vsShaderHashMap.getValue(shaderID);
             else {
-                shader = this.registerShader(Shader.vertex, vertexShaderList);
-                shader.id = name;
-                this.vsShaderHashMap.add(name,shader);
-            }
-                return shader;
-        }
-
-        public static getFragmentShader(fragmentShaderList: Array<string>) {
-            var name: string = this.getCombin(fragmentShaderList);
-            var shader: Shader;
-            if (this.fsShaderHashMap.isHas(name))
-                shader = this.fsShaderHashMap.getValue(name);
-            else {
-                shader = this.registerShader(Shader.vertex, fragmentShaderList);
-                shader.id = name;
-                this.fsShaderHashMap.add(name, shader);
+                if (shaderType == Shader.vertex) {
+                    shader = this.context.creatVertexShader(source);
+                    shader.id = shaderID;
+                    this.vsShaderHashMap.add(shaderID, shader);
+                } else if (shaderType == Shader.fragment) {
+                    shader = this.context.creatFragmentShader(source);
+                    shader.id = shaderID;
+                    this.fsShaderHashMap.add(shaderID, shader);
+                }
+               
             }
             return shader;
         }
 
-        public static getProgram(vslist: Array<string>, fsList: Array<string>): Program3D {
-            var vsShader: Shader = this.getVertexShader(vslist);
-            var fsShader: Shader = this.getFragmentShader(fsList);
-            var name: string = vsShader.id + fsShader.id;
+        public static getProgram(vs_shaderID: string, fs_shaderID: string): Program3D {
+
+            var vsShader: Shader = this.vsShaderHashMap.getValue(vs_shaderID);
+            var fsShader: Shader = this.fsShaderHashMap.getValue(fs_shaderID);
+            var name: string = vsShader.id + "_" +  fsShader.id;
             var program3D: Program3D;
             if (this.programlib.isHas(name)) {
                 program3D = this.programlib.getValue(name);
             } else {
-                program3D = this.registerProgram(vslist, fsList);
+                program3D = this.registerProgram(vsShader, fsShader);
                 this.programlib.add(name,program3D);
             }
             return this.programlib.getValue(name);
         }
 
-        private static registerShader(shaderType: number, list: Array<string>): Shader {
-            var shaderSourceList: string = "" ;
-            var shader: Shader;
-            for (var i: number = 0; i < list.length; i++){
-                shaderSourceList += ShaderLib.lib[list[i]] ;
-            }
-            if (shaderType == Shader.vertex) {
-                shader = this.context.creatVertexShader(shaderSourceList);
-            } else if (shaderType == Shader.fragment) {
-                shader = this.context.creatFragmentShader(shaderSourceList);
-            }
-            return shader ;
-        }
-
         private static unRegisterShader(list: Array<string>) {
+            //to delet shader
         }
 
-        private static registerProgram(vslist: Array<string>, fsList: Array<string>):Program3D {
-            var vsShader: Shader = this.getVertexShader(vslist);
-            var fsShader: Shader = this.getFragmentShader(fsList);
+        private static registerProgram(vsShader: Shader, fsShader: Shader):Program3D {
             var program3D: Program3D = this.context.creatProgram(vsShader, fsShader);
             return program3D; 
         }
 
         private static unRegisterProgram(vsKey: string, fsKey: string) {
+            //to delet program
         }
     }
 }

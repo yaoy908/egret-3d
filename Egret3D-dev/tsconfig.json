@@ -58,6 +58,7 @@
         "geometry/Geometry.ts",
         "geometry/GeometryData.ts",
         "geometry/SubGeometry.ts",
+        "geometry/CubeGeometry.ts",
 
         "input/input.ts",
         "input/OrientationController.ts",
@@ -73,6 +74,7 @@
         "material/pass/PassUsage.ts",
         "material/MaterialBase.ts",
         "material/MaterialData.ts",
+        "material/ColorMaterial.ts", 
 
         "render/RenderBase.ts",
         "render/DefaultRender.ts",

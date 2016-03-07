@@ -25,13 +25,14 @@
 
         public setData(data: MaterialData) {
             this.materialData = data; 
+            this.initPass();
         }
 
         public getData(): MaterialData {
             return this.materialData; 
         }
 
-        public initPass() {
+        protected initPass() {
             this.diffusePass = new ColorPass(this.materialData);
         }
 
