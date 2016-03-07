@@ -48,7 +48,7 @@
         public name: string = "";
 
         public source: string = "";
-        private funcDict: { [name: string]: string; } = {};
+        private funcDict: any = {};
         
         /**
         * @private
@@ -56,7 +56,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public structDict: { [name: string]: string; } = {};
+        public structDict: any = {};
                 
         /**
         * @private

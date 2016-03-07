@@ -10,6 +10,14 @@
 
         /**
          * @language zh_CN
+         * @private
+         */
+        private static _filterChar: string[] = [" ", "  ", ";", "\n", "\r", "\t", "\n", "\r", "\t"];
+
+
+        /**
+         * @language zh_CN
+         * @private
          * 解析文件内容(按行解析)
          * @param file
          * @returns 行列表
@@ -220,6 +228,7 @@
 
         /**
          * @language zh_CN
+         * @private
          * 筛选文件中的指定字符去掉
          * @param file xxx
          * @returns 筛选后的字符
@@ -292,5 +301,192 @@
             }
         }
 
+        /**
+         * @language zh_CN
+         * @private
+         * @returns
+         */
+        public static  getLineType(line: string): string {
+            var index: number = line.indexOf("{");
+            if (index > 0) {
+                var firstStr: string = line.substr(0, index);
+                if (firstStr.indexOf("struct") >= 0) {
+                    var s_pos: number = firstStr.lastIndexOf(" ");
+                    s_pos++;
+                    var structName: string = firstStr.substr(s_pos, firstStr.length - s_pos);
+                    return ("struct " + structName);
+                }
+                if (firstStr.indexOf("=") < 0) {
+
+                    var pos: number = line.indexOf("(");
+                    var s_pos: number = line.lastIndexOf(" ", pos);
+                    s_pos++;
+                    var func: string = line.substr(s_pos, pos - s_pos);
+
+                    return ("function " + func);
+                }
+            }
+            return "unknown";
+        }
+        
+        /**
+         * @language zh_CN
+         * @private
+         * @returns
+         */
+        public static processStruct(name: string, structStr: string, content: GLSL.ShaderContent) {
+            var pos: number = structStr.lastIndexOf("}");
+            pos++;
+            var end: number = structStr.lastIndexOf(";");
+            var varName = structStr.substr(pos, end - pos);
+            var varList: Array<string> = StringUtil.parseLines(varName);
+            for (var i: number = 0; i < varList.length; ++i) {
+                var varTmp: GLSL.TmpVar = StringUtil.getTemper(name + " " + varList[i] + ";");
+                if (varTmp)
+                    content.addVar(varTmp);
+            }
+        }
+                
+        /**
+         * @language zh_CN
+         * @private
+         * @returns
+         */
+        public static getAttribute(shaderLine: string): GLSL.Attribute {
+            var tempStr: string = shaderLine;
+            var tmpName: string;
+            var valueType: string;
+            var attribute: GLSL.TmpVar;
+            var tempArray: Array<string> = StringUtil.parseLines(tempStr);
+            tmpName = StringUtil.getVarName(tempArray);
+            valueType = StringUtil.getVarType(tempArray);
+            attribute = new GLSL.Attribute(tmpName, valueType);
+            return attribute;
+        }
+
+        /**
+        * @language zh_CN
+        * @private
+        * @returns
+        */
+        public static getTemper(shaderLine: string): GLSL.TmpVar {
+            var tempStr: string = shaderLine;
+            var tmpName: string;
+            var valueType: string;
+            var tmpVar: GLSL.TmpVar;
+            var tempArray: Array<string> = StringUtil.parseLines(tempStr);
+            tmpName = StringUtil.getVarName(tempArray);
+            valueType = StringUtil.getVarType(tempArray);
+            tmpVar = new GLSL.TmpVar(tmpName, valueType);
+            return tmpVar;
+        }
+        
+        /**
+        * @language zh_CN
+        * @private
+        * @returns
+        */
+        public static getVarying(shaderLine: string): GLSL.Varying {
+            var tempStr: string = shaderLine;
+            var varyingName: string;
+            var valueType: string;
+            var varying: GLSL.Varying;
+            var tempArray: Array<string> = StringUtil.parseLines(tempStr);
+            varyingName = StringUtil.getVarName(tempArray);
+            valueType = StringUtil.getVarType(tempArray);
+            varying = new GLSL.Varying(varyingName, valueType );
+            return varying;
+        }
+        
+        /**
+        * @language zh_CN
+        * @private
+        * @returns
+        */
+        public static getUniform(shaderLine: string): GLSL.Uniform {
+            var tempStr: string = shaderLine;
+            var uniformName: string;
+            var valueType: string;
+            var uniform: GLSL.Uniform;
+            var tempArray: Array<string> = StringUtil.parseLines(tempStr);
+            uniformName = StringUtil.getVarName(tempArray);
+            valueType = StringUtil.getVarType(tempArray);
+            uniform = new GLSL.Uniform(uniformName, valueType);
+            return uniform;
+        }
+        
+        /**
+        * @language zh_CN
+        * @private
+        * @returns
+        */
+        public static getConst(shaderLine: string): GLSL.ConstVar {
+            var tempStr: string = shaderLine;
+            var constVarName: string;
+            var valueType: string;
+            var varValue: string;
+            var constVar: GLSL.ConstVar;
+            var tempArray: Array<string> = StringUtil.parseLines(tempStr);
+            constVarName = StringUtil.getVarName(tempArray);
+            valueType = StringUtil.getVarType(tempArray);
+            varValue = StringUtil.getVarValue(tempArray);
+
+            constVar = new GLSL.ConstVar(constVarName, valueType, varValue);
+
+            return constVar;
+        }
+        
+        /**
+        * @language zh_CN
+        * @private
+        * @returns
+        */
+        public static getSampler2D(shaderLine: string): GLSL.Sampler2D {
+            var tempStr: string = shaderLine;
+            var sampler2DName: string;
+            var valueType: string;
+            var sampler2D: GLSL.Sampler2D;
+            var tempArray: Array<string> = StringUtil.parseLines(tempStr);
+            sampler2DName = StringUtil.getVarName(tempArray);
+            sampler2D = new GLSL.Sampler2D(sampler2DName);
+            return sampler2D;
+        }
+        
+        /**
+        * @language zh_CN
+        * @private
+        * @returns
+        */
+        public static getSampler3D(shaderLine: string): GLSL.Sampler3D {
+            var tempStr: string = shaderLine;
+            var sampler3DName: string;
+            var valueType: string;
+            var sampler3D: GLSL.Sampler3D;
+            var tempArray: Array<string> = StringUtil.parseLines(tempStr);
+            sampler3DName = StringUtil.getVarName(tempArray);
+
+            sampler3D = new GLSL.Sampler3D(sampler3DName);
+            return sampler3D;
+        }
+        
+        /**
+        * @language zh_CN
+        * @private
+        * @returns
+        */
+        public static filterCharacter(name: string): string {
+            var src: string = name;
+            var dest: string = src;
+            for (var i: number = 0; i < StringUtil._filterChar.length; ++i) {
+                while (true) {
+                    dest = src.replace(StringUtil._filterChar[i], "");
+                    if (src == dest) {
+                        break;
+                    }
+                    src = dest;
+                }
+            }
+            return dest;
+        }
     }
 }

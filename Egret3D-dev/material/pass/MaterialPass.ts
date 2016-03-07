@@ -27,18 +27,18 @@
         public initUseMethod() {
             var i: number = 0;
 
-            this.pixelShader.addMethod(this.diffuseMethod);
-            this.pixelShader.addShader(this.diffuseMethod.fragMethodName);
+            //this.pixelShader.addMethod(this.diffuseMethod);
+            //this.pixelShader.addShader(this.diffuseMethod.fragMethodName);
 
-            if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.DIFFUSE) != -1) {
-                this.pixelShader.addShader("diffuseMap_fragment");
-            }
-            if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.NORMAL) != -1) {
-                this.pixelShader.addShader("normalMap_fragment");
-            }
-            if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.SPECULAR) != -1) {
-                this.pixelShader.addShader("specularMap_fragment");
-            }
+            //if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.DIFFUSE) != -1) {
+            //    this.pixelShader.addShader("diffuseMap_fragment");
+            //}
+            //if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.NORMAL) != -1) {
+            //    this.pixelShader.addShader("normalMap_fragment");
+            //}
+            //if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.SPECULAR) != -1) {
+            //    this.pixelShader.addShader("specularMap_fragment");
+            //}
 
             //for (i = 0; i < this.materialData.directLightList.length; i++) {
             //    this.pixelShader.addShader("directLight_fragment");
@@ -94,33 +94,33 @@
         * @version Egret 3.0
         * @platform Web,Native
          */
-        public initShader(context3D: Context3D, geometry: GeometryBase, animation: IAnimation) {
-            super.initShader(context3D, geometry, animation);
+        public initShader(context3D: Context3DProxy, geometry: Geometry, animation: IAnimation) {
+            //super.initShader(context3D, geometry, animation);
 
-            this.vertexShader = new VertexShader(this.materialData, this.materialData.diffusePassUsageData);
-            this.pixelShader = new PixelShader(this.materialData, this.materialData.diffusePassUsageData);
+            //this.vertexShader = new VertexShader(this.materialData, this.materialData.diffusePassUsageData);
+            //this.pixelShader = new PixelShader(this.materialData, this.materialData.diffusePassUsageData);
 
-            this.materialData.context3D = context3D;
+            //this.materialData.context3D = context3D;
 
 
-            this.vertexShader.setVertexShader(geometry);
-            this.initUseMethod();
+            //this.vertexShader.setVertexShader(geometry);
+            //this.initUseMethod();
 
-            if (animation) {
-                animation.initShader(this.vertexShader, this.pixelShader);
-            }
+            //if (animation) {
+            //    animation.initShader(this.vertexShader, this.pixelShader);
+            //}
 
-            this.vertexShader.build();
-            this.pixelShader.build();
+            //this.vertexShader.build();
+            //this.pixelShader.build();
 
-            var vs: string = this.vertexShader.getShaderSource();
-            var fs: string = this.pixelShader.getShaderSource();
+            //var vs: string = this.vertexShader.getShaderSource();
+            //var fs: string = this.pixelShader.getShaderSource();
 
-            var vs_shader: IShader = context3D.creatVertexShader(vs);
-            var fs_shader: IShader = context3D.creatFragmentShader(fs);
+            //var vs_shader: IShader = context3D.creatVertexShader(vs);
+            //var fs_shader: IShader = context3D.creatFragmentShader(fs);
 
-            this.materialData.diffusePassUsageData.program3D = context3D.creatProgram(vs_shader, fs_shader);
-            this.context3DChange = true;
+            //this.materialData.diffusePassUsageData.program3D = context3D.creatProgram(vs_shader, fs_shader);
+            //this.context3DChange = true;
         }
 
         public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry:SubGeometry, animtion: IAnimation) {

@@ -15,7 +15,8 @@
         protected shadersName: Array<string> = new Array<string>();
         protected endShadername: string = "";
         protected stateChange: boolean = false;
-        protected shaderContent: GLSL.ShaderContent = new GLSL.ShaderContent() ;
+
+        public materialData: MaterialData;
 
         /**
         * @language zh_CN
@@ -66,11 +67,7 @@
                 }
             }
 
-            ShaderUtil.fillShaderContent(this.shaderContent, this.shadersName, passUsage);
-            this.source += this.shaderContent.source;
+            this.source += ShaderUtil.instance.fillShaderContent(this, this.shadersName, passUsage);
         }
-
-
-
     }
 } 
