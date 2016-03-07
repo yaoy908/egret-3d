@@ -9,7 +9,7 @@
      * @version Egret 3.0
      * @platform Web,Native
      */
-    export class VertexShader extends ShaderBase {
+    export class FragmentShader extends ShaderBase {
 
         /**
         * @language zh_CN
@@ -26,21 +26,32 @@
 
         /**
         * @language zh_CN
+        * 设置顶点着色器。
+        * @param geometry {GeometryBase}
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public setVertexShader() {
+          
+        }
+
+        /**
+        * @language zh_CN
         * 返回 Shader 源。
         * @returns {String}
         * @version Egret 3.0
         * @platform Web,Native
         */
         public getShaderSource(): string {
-            var shaderSource: string = super.getShaderSource();
-            var index: number = shaderSource.lastIndexOf("}");
-            var endS: string = shaderSource.substr(index, shaderSource.length - index);
+            //var shaderSource: string = super.getShaderSource();
+            //var index: number = shaderSource.lastIndexOf("}");
+            //var endS: string = shaderSource.substr(index, shaderSource.length - index);
          
 
-            shaderSource = shaderSource.substr(0, index);
-            shaderSource += "   gl_Position = temp_p; \r\n";
-            shaderSource += endS;
-            return shaderSource;
+            //shaderSource = shaderSource.substr(0, index);
+            //shaderSource += "   gl_Position = temp_p; \r\n";
+            //shaderSource += endS;
+            return "";
         }
 
         /**
@@ -50,9 +61,7 @@
         * @platform Web,Native
         */
         public build( ) {
-                     for (this.index = 0; this.index < this.useage.vsMethodList.length; this.index++){
-                this.useage.vsMethodList[this.index].setMaterialData(this.materialData, this.useage);
-            }
+        
         }
 
         /**
@@ -63,8 +72,7 @@
         * @param method {MethodBase}
         */
         public addMethod(method: MethodBase) {
-            this.stateChange = true;
-            this.useage.vsMethodList.push(method);
+          
         }
 
     }

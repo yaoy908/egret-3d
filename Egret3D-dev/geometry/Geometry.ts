@@ -1,5 +1,10 @@
 ﻿module egret3d_dev {
 
+    export enum GeometryType {
+        normal_geometry,
+        skin_geometry,
+        particle_geometry,
+    }
     /**
      * @language zh_CN
      * @class egret3d_dev.VertexFormat
@@ -73,6 +78,7 @@
          */
         VF_SKIN = 0x0000040,
     }
+
     /**
      * @language zh_CN
      * @class egret3d_dev.Geometry
@@ -82,6 +88,14 @@
      * @platform Web,Native
      */
     export class Geometry {
+
+       /**
+       * @language zh_CN
+       * 模型的类别，是属于 静态模型，还是蒙皮动画模型，还是粒子模型，还是 特定模型
+       * 
+       */
+        public geomtryType: number = -1;
+
         /**
        * @language zh_CN
        * 顶点格式

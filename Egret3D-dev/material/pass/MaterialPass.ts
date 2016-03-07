@@ -3,54 +3,67 @@
     export class MaterialPass {
         protected _passUsage: PassUsage;
         protected _materialData: MaterialData;
+        protected _passChange: boolean = false ;
+
+        public methodList: Array<MethodBase> = new Array<MethodBase>();
+        public methodDatas: Array<MethodData> = new Array<MethodData>();
+
+        public vsShaderNames: Array<string> = new Array<string>();
+        public fsShaderNames: Array<string> = new Array<string>();
+
+
         constructor(materialData: MaterialData) {
             this._materialData = materialData; 
         }
 
         public addMethod(method: MethodBase) {
-            this._passUsage.methodList.push(method);
+            if (method.methodType != -1) {
+                this.methodList.push(method);
+                this._materialData.textureMethodTypes.push(method.methodType);
+                this._passChange = true;
+            }
+            else {
+                new Error( "method.methodType is null" );
+            }
         }
 
         public removeMethod(method: MethodBase) {
-            var index: number = this._passUsage.methodList.indexOf(method);
+            var index: number = this.methodList.indexOf(method);
             if (index != -1) {
-                this._passUsage.methodList.slice(index);
+                this.methodList.slice(index);
+                this._passChange = true;
             }
         }
 
         /**
-               * @language zh_CN
-               * 初始化 UseMethod。
-               * @version Egret 3.0
-               * @platform Web,Native
-               */
+        * @language zh_CN
+        * 初始化 UseMethod。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public initUseMethod() {
+            this._passChange = false ;
+
             var i: number = 0;
 
-            this.pixelShader.addMethod(this.diffuseMethod);
-            this.pixelShader.addShader(this.diffuseMethod.fragMethodName);
+            this._passUsage = new PassUsage();
 
-            if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.DIFFUSE) != -1) {
-                this.pixelShader.addShader("diffuseMap_fragment");
+            if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.diffuse) != -1) {
+                this._passUsage.vertexShader.addShader("diffuseMap_fragment");
+                this._passUsage.fragmentShader.addShader("diffuseMap_fragment");
             }
-            if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.NORMAL) != -1) {
-                this.pixelShader.addShader("normalMap_fragment");
+            if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.normal) != -1) {
+                this._passUsage.vertexShader.addShader("normalMap_fragment");
+                this._passUsage.fragmentShader.addShader("normalMap_fragment");
             }
-            if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.SPECULAR) != -1) {
-                this.pixelShader.addShader("specularMap_fragment");
+            if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.specular) != -1) {
+                this._passUsage.vertexShader.addShader("specularMap_fragment");
+                this._passUsage.fragmentShader.addShader("specularMap_fragment");
             }
 
-            //for (i = 0; i < this.materialData.directLightList.length; i++) {
-            //    this.pixelShader.addShader("directLight_fragment");
-            //}
-
-            //for (i = 0; i < this.materialData.sportLightList.length; i++) {
-            //    this.pixelShader.addShader("spotLight_fragment");
-            //}
-
-            //for (i = 0; i < this.materialData.pointLightList.length; i++) {
-            //    this.pixelShader.addShader("pointLight_fragment");
-            //}
+            for (i = 0; i < this._materialData.lightList.length; i++) {
+                this._passUsage.fragmentShader.addShader(LightType[this._materialData.lightList[i].lightType]);
+            }
 
             //if (this.animation) {
             //    if (this.animation.animaNodeCollection) {
@@ -71,7 +84,7 @@
             //    this.pixelShader.addShader(this.shadowMaping.fragMethodName);
             //}
 
-            //this.pixelShader.addShader("diffuse_fragmentEnd");
+            //this._passUsage.fragmentShader.addShader("diffuse_fragmentEnd");
 
             //if (this.effectMethodList) {
             //    for (var i: number = 0; i < this.effectMethodList.length; i++) {
@@ -80,47 +93,6 @@
             //    }
             //}
 
-
-
-        }
-
-
-        /**
-         * @language zh_CN
-         * 初始化 shader 。
-         * @param context3D {Context3D}
-         * @param geometry {GeometryBase}
-         * @param animation {IAnimation}
-        * @version Egret 3.0
-        * @platform Web,Native
-         */
-        public initShader(context3D: Context3D, geometry: GeometryBase, animation: IAnimation) {
-            super.initShader(context3D, geometry, animation);
-
-            this.vertexShader = new VertexShader(this.materialData, this.materialData.diffusePassUsageData);
-            this.pixelShader = new PixelShader(this.materialData, this.materialData.diffusePassUsageData);
-
-            this.materialData.context3D = context3D;
-
-
-            this.vertexShader.setVertexShader(geometry);
-            this.initUseMethod();
-
-            if (animation) {
-                animation.initShader(this.vertexShader, this.pixelShader);
-            }
-
-            this.vertexShader.build();
-            this.pixelShader.build();
-
-            var vs: string = this.vertexShader.getShaderSource();
-            var fs: string = this.pixelShader.getShaderSource();
-
-            var vs_shader: IShader = context3D.creatVertexShader(vs);
-            var fs_shader: IShader = context3D.creatFragmentShader(fs);
-
-            this.materialData.diffusePassUsageData.program3D = context3D.creatProgram(vs_shader, fs_shader);
-            this.context3DChange = true;
         }
 
         public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry:SubGeometry, animtion: IAnimation) {
@@ -211,27 +183,30 @@
         }
 
         public upload(time: number, delay: number, usage: PassUsage, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
-            this._passUsage.vsShaderNames.length = 0;
-            this._passUsage.fsShaderNames.length = 0;
 
-            var methoda: MethodBase;
-            var vsList: Array<string> = [];
-            var fsList: Array<string> = [];
-            var vsName: string = "";
-            var fsName: string = "";
+            if (this._passChange)
+                this.initUseMethod( );
+            //this._passUsage.vsShaderNames.length = 0;
+            //this._passUsage.fsShaderNames.length = 0;
 
-            for (var i: number; i < this._passUsage.methodList.length; i++) {
-                methoda = this._passUsage.methodList[i];
-                if (methoda.vsShaderName != "") {
-                    vsList.push(methoda.vsShaderName);
-                    vsName += methoda.vsShaderName;
-                }
-                if (methoda.fsShaderName != "") {
-                    fsList.push(methoda.fsShaderName);
-                    fsName += methoda.fsShaderName;
-                }
-                methoda.upload(time, delay, usage, context3DProxy, modeltransform, camera3D);
-            }
+            //var methoda: MethodBase;
+            //var vsList: Array<string> = [];
+            //var fsList: Array<string> = [];
+            //var vsName: string = "";
+            //var fsName: string = "";
+
+            //for (var i: number; i < this._passUsage.methodList.length; i++) {
+            //    methoda = this._passUsage.methodList[i];
+            //    if (methoda.vsShaderName != "") {
+            //        vsList.push(methoda.vsShaderName);
+            //        vsName += methoda.vsShaderName;
+            //    }
+            //    if (methoda.fsShaderName != "") {
+            //        fsList.push(methoda.fsShaderName);
+            //        fsName += methoda.fsShaderName;
+            //    }
+            //    methoda.upload(time, delay, usage, context3DProxy, modeltransform, camera3D);
+            //}
 
             //ShaderPool.getProgram(vsName, fsName);
         }

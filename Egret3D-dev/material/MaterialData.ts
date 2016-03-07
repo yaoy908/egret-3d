@@ -9,7 +9,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        //public textureMethodTypes: TextureMethodType[] = []; 
+        public textureMethodTypes: Array<number> = []; 
 
         /**
         * @language zh_CN
@@ -205,28 +205,12 @@
 
         /**
         * @language zh_CN
-        * 方向光列表。
+        * 灯光存贮列表
+        * 聚光灯列表
         * @version Egret 3.0
         * @platform Web,Native
         */
-        //public directLightList: Array<DirectLight> = new Array<DirectLight>();
-
-        /**
-        * @language zh_CN
-        * 聚光灯列表。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        //public sportLightList: Array<SpotLight> = new Array<SpotLight>();
-
-        /**
-        * @language zh_CN
-        * 点光源列表。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        //public pointLightList: Array<PointLight> = new Array<PointLight>();
-
+        public lightList: Array<LightBase> = new Array<LightBase>();
 
         /**
         * @language zh_CN

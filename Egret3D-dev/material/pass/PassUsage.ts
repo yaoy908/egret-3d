@@ -255,15 +255,10 @@
         public fs_shader: Shader;
         //----------------------------------------------
 
-        public vertexShaderRegister: ver;
-   
+        public vertexShader: VertexShader;
+        public fragmentShader: FragmentShader;
 
 
-        public methodList: Array<MethodBase> = new Array<MethodBase>();
-        public methodDatas: Array<MethodData> = new Array<MethodData>();
-
-        public vsShaderNames: Array<string> = new Array<string>();
-        public fsShaderNames: Array<string> = new Array<string>();
 
         /**
          * @language zh_CN
