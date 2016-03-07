@@ -8,103 +8,13 @@
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class ShaderSystemTool {
+    export class ShaderUtil {
         
-        private _shaderLibs: any = {};
-        private _methodLibs: any = {};
-        private _loaderDict: { [url: string]: string } = {};
-
-        private _loadFunc: Function;
-
-        private _loadList: Array<string> = new Array<string>();
-
-        private _shaderContentDict: { [name: string]: GLSL.ShaderContent } = {};
+        private static _shaderLibs: any = {};
+        private static _methodLibs: any = {};
+        private static _shaderContentDict: { [name: string]: GLSL.ShaderContent } = {};
         private static _filterChar: string[] = [" ", "  ", ";", "\n", "\r", "\t", "\n", "\r", "\t"];
-
-        private static _instance: ShaderSystemTool;
-
-        /**
-        * @language zh_CN
-        *  
-        * 单例
-        */
-        public static get instance(): ShaderSystemTool {
-            if (!this._instance) {
-                this._instance = new ShaderSystemTool();
-            }
-            return this._instance;
-        }
-
-        /**
-        * @language zh_CN
-        * 注册加载shader文件回调
-        * @event func 加载完成响应
-        */
-        public static regist(func: Function) {
-            this.instance._loadFunc = func;
-            //this.instance.load("");
-        }
-
-        //private load(prefixUrl:string) {
-        //    for (var i: number = 0; i < this.libs.length; i++) {
-        //        this._loadList.push(this.libs[i]);
-        //    }
-        //    for (var i: number = 0; i < this.libs.length; i++){
-        //        var glslUrl = prefixUrl+"shader/" + this.libs[i] + ".glsl";
-        //        this._loaderDict[glslUrl] = this.libs[i];
-        //        var glslData = egret3d["glsldata"];
-        //        if (glslData){
-        //            this.setupShader(glslUrl,glslData[this.libs[i]]);
-        //        }
-        //        else{
-        //            var urlloader: egret3d_dev.URLLoader = new egret3d_dev.URLLoader(glslUrl);
-        //            urlloader.onLoadComplete = (loader: egret3d_dev.URLLoader) => this.onCompleteShader(loader);
-        //        }
-        //    }
-
-        //    if (glslData){
-        //        setTimeout(()=>this._loadFunc(this),0)
-        //    }
-        //}
-
-        //private onCompleteShader(loader: egret3d_dev.URLLoader) {
-        //    this.setupShader(loader.url,loader.data);
-        //}
-
-        private setupShader(url:string,data:string){
-            var content: GLSL.ShaderContent = this.readShader(data);
-            content.name = this._loaderDict[url];
-            this._shaderLibs[content.name] = data;
-            this._methodLibs[content.name] = content;
-            this._shaderContentDict[content.name] = content;
-            var index: number = -1;
-            for (var i: number = 0; i < this._loadList.length; ++i) {
-                if (this._loadList[i] == content.name) {
-                    index = i;
-                    break;
-                }
-            }
-
-            if (index >= 0) {
-                this._loadList.splice(index, 1);
-            }
-
-            if (this._loadList.length <= 0) {
-                this._loadFunc(this);
-            }
-        }
-
-
-        /**
-        * @language zh_CN
-        * 得到shader内容
-        * @param name shader 名字
-        * @returns shader内容
-        */
-        public getShaderSource( name:string ): string {
-
-            return this._shaderLibs[name] = this._shaderLibs[name] || "" ;
-        }
+        private static _instance: ShaderUtil;
 
         /**
         * @language zh_CN
@@ -113,11 +23,10 @@
         * @param usage
         * @returns shader 内容
         */
-        public getShader(shaderNameList: Array<string>, usage: PassUsage): GLSL.ShaderContent {
+        public static fillShaderContent(shaderContent: GLSL.ShaderContent,shaderNameList: Array<string>, usage: PassUsage) {
 
             var i: number = 0;
             var varName: string = "";
-            var shaderContent: GLSL.ShaderContent = null;
             for (i = 0; i < shaderNameList.length; ++i) {
                 if (varName != "") {
                     varName += "/";
@@ -186,8 +95,71 @@
             ///    sampler3D.index = i;
             ///    usage.sampler3DList.push(sampler3D);
             ///}
+        }
 
-            return shaderContent;
+        private synthesisShader(content: GLSL.ShaderContent): string {
+                //var i: number; 
+            /////var attribute
+            //for (var key in shaderContent.attributeList) {
+            //    this.connectAtt(shaderContent.attributeList[key]);
+            //}
+            /////var struct
+            //for (var key in shaderContent.structDict) {
+            //    this.connectStruct(shaderContent.structDict[key]);
+            //}
+            /////var varying
+            //for (i = 0; i < shaderContent.varyingList.length; i++) {
+            //    this.connectVarying(shaderContent.varyingList[i]);
+            //}
+            /////temp
+            //for (i = 0; i < shaderContent.tempList.length; i++) {
+            //    this.connectTemp(shaderContent.tempList[i]);
+            //}
+            /////const
+            //for (i = 0; i < shaderContent.constList.length; i++) {
+
+            //    if (shaderContent.constList[i].varName == "max_directLight") {
+            //        shaderContent.constList[i].value = this.materialData.directLightList.length.toString();
+            //    }
+            //    if (shaderContent.constList[i].varName == "bonesNumber") {
+            //        shaderContent.constList[i].value = this.maxBone ;///(<AnimationStateSet>this.geometey.animation).getJointNumber() * 2;
+            //    }
+            //    if (shaderContent.constList[i].varName == "max_sportLight") {
+            //        shaderContent.constList[i].value = this.materialData.sportLightList.length.toString();
+            //    }
+            //    if (shaderContent.constList[i].varName == "max_pointLight") {
+            //        shaderContent.constList[i].value = this.materialData.pointLightList.length.toString();
+            //    }
+            //    this.connectConst(shaderContent.constList[i]);
+            //}
+            /////uniform
+            //for (i = 0; i < shaderContent.uniformList.length; i++) {
+            //    this.connectUniform(shaderContent.uniformList[i]);
+            //}
+            /////sampler
+            //for (i = 0; i < shaderContent.sampler2DList.length; i++) {
+            //    var sampler2D: GLSL.Sampler2D = shaderContent.sampler2DList[i];
+            //    sampler2D = sampler2D.clone();
+            //    this.connectSampler(sampler2D);
+            //    sampler2D.activeTextureIndex = this.getTexture2DIndex(i);
+            //    sampler2D.index = i;
+            //    this.useage.sampler2DList.push(sampler2D);
+            //}
+            /////sampler
+            //for (i = 0; i < shaderContent.sampler3DList.length; i++) {
+            //    var sampler3D: GLSL.Sampler3D = shaderContent.sampler3DList[i]; 
+            //    sampler3D = sampler3D.clone();
+            //    this.connectSampler3D(sampler3D);
+            //    sampler3D.activeTextureIndex = this.getTexture2DIndex(shaderContent.sampler2DList.length+i);
+            //    sampler3D.index = shaderContent.sampler2DList.length + i;
+            //    this.useage.sampler3DList.push(sampler3D);
+            //}
+            /////---------------------------------------------------------------------------------
+            /////---------------------------------------------------------------------------------
+            //for (i = 0; i < shaderContent.funcList.length; i++) {
+            //    this.source += shaderContent.funcList[i].func;
+            //}
+            return "";
         }
 
         ///************************************************************************
@@ -274,7 +246,7 @@
             return content;
         }
 
-        private getLineType(line: string): string {
+        private static getLineType(line: string): string {
             var index: number = line.indexOf("{");
             if (index > 0) {
                 var firstStr: string = line.substr(0, index);
@@ -297,7 +269,7 @@
             return "unknown";
         }
 
-        private getAttribute(shaderLine: string): GLSL.Attribute {
+        private static getAttribute(shaderLine: string): GLSL.Attribute {
             var tempStr: string = shaderLine;
             var tmpName: string;
             var valueType: string;
@@ -309,7 +281,7 @@
             return attribute;
         }
 
-        private getTemper(shaderLine: string): GLSL.TmpVar {
+        private static getTemper(shaderLine: string): GLSL.TmpVar {
             var tempStr: string = shaderLine;
             var tmpName: string;
             var valueType: string;
@@ -321,7 +293,7 @@
             return tmpVar;
         }
 
-        private getVarying(shaderLine: string): GLSL.Varying {
+        private static getVarying(shaderLine: string): GLSL.Varying {
             var tempStr: string = shaderLine;
             var varyingName: string;
             var valueType: string;
@@ -333,7 +305,7 @@
             return varying;
         }
 
-        private getUniform(shaderLine: string): GLSL.Uniform {
+        private static getUniform(shaderLine: string): GLSL.Uniform {
             var tempStr: string = shaderLine;
             var uniformName: string;
             var valueType: string;
@@ -345,7 +317,7 @@
             return uniform;
         }
 
-        private getConst(shaderLine: string): GLSL.ConstVar {
+        private static getConst(shaderLine: string): GLSL.ConstVar {
             var tempStr: string = shaderLine;
             var constVarName: string;
             var valueType: string;
@@ -361,7 +333,7 @@
             return constVar;
         }
 
-        private getSampler2D(shaderLine: string): GLSL.Sampler2D {
+        private static getSampler2D(shaderLine: string): GLSL.Sampler2D {
             var tempStr: string = shaderLine;
             var sampler2DName: string;
             var valueType: string;
@@ -372,7 +344,7 @@
             return sampler2D;
         }
 
-        private getSampler3D(shaderLine: string): GLSL.Sampler3D {
+        private static getSampler3D(shaderLine: string): GLSL.Sampler3D {
             var tempStr: string = shaderLine;
             var sampler3DName: string;
             var valueType: string;
@@ -384,12 +356,12 @@
             return sampler3D;
         }
 
-        private filterCharacter(name: string): string {
+        private static filterCharacter(name: string): string {
             var src: string = name;
             var dest: string = src;
-            for (var i: number = 0; i < ShaderSystemTool._filterChar.length; ++i) {
+            for (var i: number = 0; i < ShaderUtil._filterChar.length; ++i) {
                 while (true) {
-                    dest = src.replace(ShaderSystemTool._filterChar[i], "");
+                    dest = src.replace(ShaderUtil._filterChar[i], "");
                     if (src == dest) {
                         break;
                     }
@@ -399,7 +371,7 @@
             return dest;
         }
 
-        private processStruct(name: string, structStr: string, content: GLSL.ShaderContent) {
+        private static processStruct(name: string, structStr: string, content: GLSL.ShaderContent) {
             var pos: number = structStr.lastIndexOf("}");
             pos++;
             var end: number = structStr.lastIndexOf(";");
@@ -411,5 +383,112 @@
                     content.addVar(varTmp);
             }
         }
+
+
+
+
+       //----------------------------------------------------------------------------------------------------------------
+       //----------------------------------------------------------------------------------------------------------------
+       //----------------------------------------------------------------------------------------------------------------
+       //----------------------------------------------------------------------------------------------------------------
+       //----------------------------------------------------------------------------------------------------------------
+
+        /**
+        * @language zh_CN
+        * 
+        * @param att 
+        */
+        public static connectAtt(att: GLSL.Attribute):string {
+            return "attribute " + att.valueType + " " + att.name + "; \r\n";
+        }
+
+        /**
+        * @language zh_CN
+        * 
+        * @param tempVar 
+        */
+        public static connectTemp(tempVar: GLSL.TmpVar): string {
+           return tempVar.valueType + " " + tempVar.name + "; \r\n";
+        }
+
+        /**
+        * @language zh_CN
+        * 
+        * @param struct 
+        */
+        public static connectStruct(struct: string): string {
+            return struct + " \r\n";
+        }
+
+        /**
+        * @language zh_CN
+        * 
+        * @param constVar 
+        */
+        public static connectConst(constVar: GLSL.ConstVar): string {
+            return "const " + constVar.valueType + " " + constVar.name + " = " + constVar.value + "; \r\n";
+        }
+
+        /**
+        * @language zh_CN
+        * 
+        * @param varying 
+        */
+        public static connectVarying(varying: GLSL.Varying): string {
+            return "varying " + varying.valueType + " " + varying.name + "; \r\n";
+        }
+
+        /**
+        * @language zh_CN
+        * 
+        * @param unifrom 
+        */
+        public static connectUniform(unifrom: GLSL.Uniform): string {
+            return "uniform " + unifrom.valueType + " " + unifrom.name + "; \r\n";
+        }
+        /**
+        * @language zh_CN
+        * 
+        * @param sampler 
+        */
+        public static connectSampler(sampler: GLSL.Sampler2D): string {
+            return "uniform sampler2D " + sampler.name + "; \r\n";
+
+        }
+
+        /**
+        * @language zh_CN
+        * 
+        * @param sampler 
+        */
+        public static connectSampler3D(sampler: GLSL.Sampler3D): string {
+            return "uniform samplerCube " + sampler.name + "; \r\n";
+        }
+
+        private static getTexture2DIndex(i: number): number {
+            switch (i) {
+                case 0:
+                    return ContextSamplerType.TEXTURE_0;
+                case 1:
+                    return ContextSamplerType.TEXTURE_1;
+                case 2:
+                    return ContextSamplerType.TEXTURE_2;
+                case 3:
+                    return ContextSamplerType.TEXTURE_3;
+                case 4:
+                    return ContextSamplerType.TEXTURE_4;
+                case 5:
+                    return ContextSamplerType.TEXTURE_5;
+                case 6:
+                    return ContextSamplerType.TEXTURE_6;
+                case 7:
+                    return ContextSamplerType.TEXTURE_7;
+                case 8:
+                    return ContextSamplerType.TEXTURE_8;
+            }
+
+            throw new Error("texture not big then 8")
+        }
+
     }
 }

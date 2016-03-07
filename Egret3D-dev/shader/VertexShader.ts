@@ -1,4 +1,4 @@
-﻿module egret3d {
+﻿module egret3d_dev {
 
      /**
     * @private
@@ -19,7 +19,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor( materialData: MaterialData, usage: MethodUsageData) {
+        constructor( materialData: MaterialData, usage: PassUsage) {
             super(materialData, usage );
    
         }

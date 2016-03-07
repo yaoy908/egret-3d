@@ -46,6 +46,8 @@
         * @platform Web,Native
         */
         public name: string = "";
+
+        public source: string = "";
         private funcDict: { [name: string]: string; } = {};
         
         /**

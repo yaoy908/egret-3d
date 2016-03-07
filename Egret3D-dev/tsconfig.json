@@ -86,8 +86,6 @@
         "shader/shaderSystem/ConstVar.ts",
         "shader/shaderSystem/Sampler2D.ts",
         "shader/shaderSystem/Sampler3D.ts",
-        "shader/shaderSystem/ShaderContent.ts",
-        "shader/shaderSystem/ShaderSystemTool.ts",
         "shader/shaderSystem/TmpVar.ts",
         "shader/shaderSystem/Uniform.ts",
         "shader/shaderSystem/UniformType.ts",
@@ -96,6 +94,8 @@
         "shader/shaderSystem/VaryingType.ts",
         "shader/ShaderLib.ts",
         "shader/ShaderPool.ts",
+        "shader/shaderSystem/ShaderContent.ts",
+        "shader/shaderSystem/ShaderUtil.ts",
 
         "texture/ITexture.ts",
         "texture/ImageTexture.ts",

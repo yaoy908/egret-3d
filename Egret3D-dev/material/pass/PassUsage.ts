@@ -255,7 +255,7 @@
         public fs_shader: Shader;
         //----------------------------------------------
 
-        public vertexShaderRegister: vertex;
+        public vertexShaderRegister: ver;
    
 
 
