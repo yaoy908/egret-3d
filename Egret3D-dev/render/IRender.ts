@@ -16,7 +16,7 @@
         enableCulling: boolean;
         visible: boolean;
 
-        upload(context3DProxy: Context3DProxy);
+        //upload(context3DProxy: Context3DProxy);
         renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) 
     }
 }

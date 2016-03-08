@@ -101,7 +101,6 @@
                 this._passUsage.passNeedReset = false;
                 this.upload(time, delay, this._passUsage, context3DProxy, modeltransform, camera3D);
             }
-
             subGeometry.update(time, delay,this._passUsage,context3DProxy);
 
             //if (this._materialData.depthTest) {

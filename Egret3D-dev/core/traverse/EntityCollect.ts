@@ -248,7 +248,7 @@
 
         private applyRender(child: any, camera: Camera3D) {
 
-            if (child["material"])
+            if ( child["material"] )
                 this.addRenderList(<IRender>child, camera);
 
             for (var i: number = 0; i < child.childs.length; i++) {
@@ -257,12 +257,13 @@
         }
 
         private addRenderList(renderItem: IRender, camera: Camera3D) {
-            if (!renderItem.material) return;
+            //if (!renderItem.material) return;
 
             if (renderItem.enableCulling) {
                 if (!camera.isVisibleToCamera(renderItem)) {
                     return;
                 }
+                this.renderList.push(renderItem);
             }
 
             if (renderItem.mouseEnable) {
@@ -292,7 +293,7 @@
             this.renderList.length = 0;
             this.mousePickList.length = 0;
 
-            //this.clearLayerList();
+            this.clearLayerList();
             this.applyRender(this.rootScene.root, camera);
 
             //for (var i: number = 0; i < this._tags.length; ++i) {
@@ -329,14 +330,14 @@
         //    return this._tags[0];
         //}
 
-        //protected clearLayerList() {
-        //    for (var i: number = 0; i < this._tags.length; ++i) {
-        //        for (var j: number = 0; j < this._tags[i].layers.length; ++j) {
-        //            this._tags[i].layers[j].objects.length = 0;
-        //            this._tags[i].layers[j].alphaObjects.length = 0;
-        //        }
-        //    }
-        //}
+       protected clearLayerList() {
+           //for (var i: number = 0; i < this._tags.length; ++i) {
+           //    for (var j: number = 0; j < this._tags[i].layers.length; ++j) {
+           //        this._tags[i].layers[j].objects.length = 0;
+           //        this._tags[i].layers[j].alphaObjects.length = 0;
+           //    }
+           //}
+       }
 
         protected sort(a: Object3D, b: Object3D, camera: Camera3D) {
             var dis_0: number = Vector3D.distance(a.globalPosition, camera.position);

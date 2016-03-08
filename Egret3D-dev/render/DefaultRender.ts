@@ -54,11 +54,11 @@
                 //    context3D.clearDepth(1);
                 //}
 
-                if (this._renderItem.material != null) {
+                //if (this._renderItem.material != null) {
 
                     this._renderItem.renderDiffusePass(time, delay, context3D, camera);
                    
-                }
+                //}
             }
         }
     }

@@ -77,12 +77,12 @@
         protected _mat: Matrix4_4 = new Matrix4_4();
 
         public bound: any;
-        public canPick: boolean;
-        public renderLayer: number;
+        public canPick: boolean = false ;
+        public renderLayer: number = 0 ;
 
-        public mouseChilder: boolean;
-        public enableCulling: boolean;
-        public visible: boolean;
+        public mouseChilder: boolean = false ;
+        public enableCulling: boolean = true ;
+        public visible: boolean = true ;
         /**
         * @language zh_CN
         * 当前对象名

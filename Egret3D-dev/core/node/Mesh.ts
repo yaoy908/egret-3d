@@ -23,9 +23,10 @@
 
         public geometry: Geometry;
         public material: MaterialBase;
-
+        
         public pickType: number;
         public bound: Bound;
+
 
         /**
         * @language zh_CN
@@ -41,6 +42,8 @@
 
             this.geometry = geometry;
             this.material = material;
+
+            this.bound = new Bound( new Vector3D(-5,-5,-5) , new Vector3D(5,5,5) );
         }
 
         // /**
@@ -133,14 +136,6 @@
         //    this.box.fillBox(this.box.min, this.box.max);
         //}
 
-        public upload(context3DProxy: Context3DProxy) {
-            //to add index buffer
-            //to add vertex buffer
-
-            this.geometry.sharedIndexBuffer = context3DProxy.creatIndexBuffer(this.geometry.indexData);
-            this.geometry.sharedVertexBuffer = context3DProxy.creatVertexBuffer(this.geometry.verticesData);
-        }
-
         private _i: number; 
         private _subGeometry: SubGeometry;
         private _matID: number; 
@@ -151,11 +146,7 @@
                 this._subGeometry = this.geometry.subGeometrys[this._i];
                 this._matID = this._subGeometry.matID;
                 this.subMaterials[this._matID].renderDiffusePass(time, delay, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
-              
             }
-
-           
-            
         }
     }
 } 

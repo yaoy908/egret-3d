@@ -131,6 +131,8 @@
         */
         public sharedIndexBuffer: IndexBuffer3D;
 
+ 
+
         /**
         * @language zh_CN
         * 顶点坐标数据
@@ -229,6 +231,13 @@
 
         protected attributes: any = [];
         protected uniforms: any = [];
+
+        /**
+        * @language zh_CN
+        * @private
+        * buffer 需要重新提交的时候
+        */
+        private _bufferDiry: boolean = true;
 
         constructor() {
         }
@@ -330,9 +339,17 @@
         }
 
         public update(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
+            if (this._bufferDiry) {
+                this._bufferDiry = false; 
+                this.upload(context3DProxy);
+            }
             context3DProxy.bindVertexBuffer(this.sharedVertexBuffer);
             context3DProxy.bindVertexBuffer(this.sharedIndexBuffer);
-           
+        }
+
+        public upload(context3DProxy: Context3DProxy) {
+            this.sharedIndexBuffer = context3DProxy.creatIndexBuffer(this.indexData);
+            this.sharedVertexBuffer = context3DProxy.creatVertexBuffer(this.verticesData);
         }
     }
 } 

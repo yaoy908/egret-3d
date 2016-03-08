@@ -41,6 +41,8 @@
          */
         public geometry: Geometry;
 
+        private attList: Array<GLSL.Attribute> = new Array<GLSL.Attribute>();
+        private _attributeDiry: boolean = true; 
         /**
         * @language zh_CN
         * 创建一个SubGeometry
@@ -48,79 +50,143 @@
         constructor() {
         }
 
-        public update(time: number, delay: number, passUsage: PassUsage, contextPorxy: Context3DProxy) {
+        public upload(passUsage: PassUsage, contextPorxy: Context3DProxy) {
 
-            var index: number = 0;
+            this._attributeDiry = false ;
+            var offset: number = 0;
+            this.attList.length = 0;
             if (this.geometry.vertexFormat & VertexFormat.VF_POSITION) {
                 if (!passUsage.attribute_position.uniformIndex) {
                     passUsage.attribute_position.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_position.varName);
                 }
-                contextPorxy.vertexAttribPointer(passUsage.program3D, passUsage.attribute_position.uniformIndex, Geometry.positionSize, ContextConfig.FLOAT, false, this.geometry.vertexSizeInBytes, index);
-               
-                index += Geometry.positionSize * 4;
+
+                passUsage.attribute_position.size = Geometry.positionSize;
+                passUsage.attribute_position.dataType = ContextConfig.FLOAT;
+                passUsage.attribute_position.normalized = false;
+                passUsage.attribute_position.stride = this.geometry.vertexSizeInBytes;
+                passUsage.attribute_position.offset = offset;
+
+                this.attList.push(passUsage.attribute_position);
+
+                offset += Geometry.positionSize * 4;
             }
 
             if (this.geometry.vertexFormat & VertexFormat.VF_NORMAL) {
                 if (!passUsage.attribute_normal.uniformIndex) {
                     passUsage.attribute_normal.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_normal.varName);
                 }
-                contextPorxy.vertexAttribPointer(passUsage.program3D, passUsage.attribute_normal.uniformIndex, Geometry.normalSize, ContextConfig.FLOAT, false, this.geometry.vertexSizeInBytes, index);
-               
-                index += Geometry.normalSize * 4;
+
+                passUsage.attribute_normal.size = Geometry.normalSize;
+                passUsage.attribute_normal.dataType = ContextConfig.FLOAT;
+                passUsage.attribute_normal.normalized = false;
+                passUsage.attribute_normal.stride = this.geometry.vertexSizeInBytes;
+                passUsage.attribute_normal.offset = offset;
+
+                this.attList.push(passUsage.attribute_normal);
+
+                offset += Geometry.normalSize * 4;
             }
 
             if (this.geometry.vertexFormat & VertexFormat.VF_TANGENT) {
                 if (!passUsage.attribute_tangent.uniformIndex) {
                     passUsage.attribute_tangent.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_tangent.varName);
                 }
-                contextPorxy.vertexAttribPointer(passUsage.program3D, passUsage.attribute_tangent.uniformIndex, Geometry.tangentSize, ContextConfig.FLOAT, false, this.geometry.vertexSizeInBytes, index);
-               
-                index += Geometry.tangentSize * 4;
+
+                passUsage.attribute_tangent.size = Geometry.tangentSize;
+                passUsage.attribute_tangent.dataType = ContextConfig.FLOAT;
+                passUsage.attribute_tangent.normalized = false;
+                passUsage.attribute_tangent.stride = this.geometry.vertexSizeInBytes;
+                passUsage.attribute_tangent.offset = offset;
+
+                this.attList.push(passUsage.attribute_tangent);
+
+                offset += Geometry.tangentSize * 4;
             }
 
             if (this.geometry.vertexFormat & VertexFormat.VF_COLOR) {
                 if (!passUsage.attribute_color.uniformIndex) {
                     passUsage.attribute_color.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_color.varName);
                 }
-                contextPorxy.vertexAttribPointer(passUsage.program3D, passUsage.attribute_color.uniformIndex, Geometry.colorSize, ContextConfig.FLOAT, false, this.geometry.vertexSizeInBytes, index);
 
-                index += Geometry.colorSize * 4;
+                passUsage.attribute_color.size = Geometry.colorSize;
+                passUsage.attribute_color.dataType = ContextConfig.FLOAT;
+                passUsage.attribute_color.normalized = false;
+                passUsage.attribute_color.stride = this.geometry.vertexSizeInBytes;
+                passUsage.attribute_color.offset = offset;
+
+                this.attList.push(passUsage.attribute_color);
+
+                offset += Geometry.colorSize * 4;
             }
 
             if (this.geometry.vertexFormat & VertexFormat.VF_UV) {
                 if (!passUsage.attribute_uv0.uniformIndex) {
                     passUsage.attribute_uv0.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_uv0.varName);
                 }
-                contextPorxy.vertexAttribPointer(passUsage.program3D, passUsage.attribute_uv0.uniformIndex, Geometry.uvSize, ContextConfig.FLOAT, false, this.geometry.vertexSizeInBytes, index);
 
-                index += Geometry.uvSize * 4;
+                passUsage.attribute_uv0.size = Geometry.uvSize;
+                passUsage.attribute_uv0.dataType = ContextConfig.FLOAT;
+                passUsage.attribute_uv0.normalized = false;
+                passUsage.attribute_uv0.stride = this.geometry.vertexSizeInBytes;
+                passUsage.attribute_uv0.offset = offset;
+
+                this.attList.push(passUsage.attribute_uv0);
+
+                offset += Geometry.uvSize * 4;
             }
 
             if (this.geometry.vertexFormat & VertexFormat.VF_UV2) {
                 if (!passUsage.attribute_uv1.uniformIndex) {
                     passUsage.attribute_uv1.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_uv1.varName);
                 }
-                contextPorxy.vertexAttribPointer(passUsage.program3D, passUsage.attribute_uv1.uniformIndex, Geometry.uv2Size, ContextConfig.FLOAT, false, this.geometry.vertexSizeInBytes, index);
 
-                index += Geometry.uv2Size * 4;
+                passUsage.attribute_uv1.size = Geometry.uv2Size;
+                passUsage.attribute_uv1.dataType = ContextConfig.FLOAT;
+                passUsage.attribute_uv1.normalized = false;
+                passUsage.attribute_uv1.stride = this.geometry.vertexSizeInBytes;
+                passUsage.attribute_uv1.offset = offset;
+
+                this.attList.push(passUsage.attribute_uv1);
+
+                offset += Geometry.uv2Size * 4;
             }
 
             if (this.geometry.vertexFormat & VertexFormat.VF_SKIN) {
                 if (!passUsage.attribute_boneIndex.uniformIndex) {
                     passUsage.attribute_boneIndex.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_boneIndex.varName);
                 }
-                contextPorxy.vertexAttribPointer(passUsage.program3D, passUsage.attribute_boneIndex.uniformIndex, Geometry.skinSize / 2, ContextConfig.FLOAT, false, this.geometry.vertexSizeInBytes, index);
 
-                index += Geometry.skinSize / 2 * 4;
+                passUsage.attribute_boneIndex.size = Geometry.skinSize / 2;
+                passUsage.attribute_boneIndex.dataType = ContextConfig.FLOAT;
+                passUsage.attribute_boneIndex.normalized = false;
+                passUsage.attribute_boneIndex.stride = this.geometry.vertexSizeInBytes;
+                passUsage.attribute_boneIndex.offset = offset;
+
+                this.attList.push(passUsage.attribute_boneIndex);
+
+                offset += Geometry.skinSize / 2 * 4;
 
                 if (!passUsage.attribute_boneWeight.uniformIndex) {
                     passUsage.attribute_boneWeight.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_boneWeight.varName);
                 }
-                contextPorxy.vertexAttribPointer(passUsage.program3D, passUsage.attribute_boneWeight.uniformIndex, Geometry.skinSize / 2, ContextConfig.FLOAT, false, this.geometry.vertexSizeInBytes, index);
+                passUsage.attribute_boneWeight.size = Geometry.skinSize / 2;
+                passUsage.attribute_boneWeight.dataType = ContextConfig.FLOAT;
+                passUsage.attribute_boneWeight.normalized = false;
+                passUsage.attribute_boneWeight.stride = this.geometry.vertexSizeInBytes;
+                passUsage.attribute_boneWeight.offset = offset;
+                this.attList.push(passUsage.attribute_boneWeight);
 
-                index += Geometry.skinSize / 2 * 4;
+                offset += Geometry.skinSize / 2 * 4;
             }
+        }
 
+        public update(time: number, delay: number, passUsage: PassUsage, contextPorxy: Context3DProxy) {
+            if (this._attributeDiry)
+                this.upload(passUsage, contextPorxy);
+
+            for (var i: number = 0; i < this.attList.length; i++){
+                contextPorxy.vertexAttribPointer(passUsage.program3D, this.attList[i].uniformIndex, this.attList[i].size, this.attList[i].dataType, this.attList[i].normalized, this.attList[i].stride, this.attList[i].offset);
+            }
         }
     }
 } 

@@ -10,7 +10,8 @@
     * @platform Web,Native
     */
     export class VarRegister {
-        
+
+
         /**
         * @language zh_CN
         * 值名字
@@ -77,6 +78,12 @@
         * level
         */
         public level: string;
+
+        public size: number;
+        public dataType: number;
+        public normalized: boolean = false ;
+        public stride: number;
+        public offset: number;
                                                 
         /**
         * @language zh_CN

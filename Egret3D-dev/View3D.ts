@@ -105,17 +105,19 @@
         }
          
         public update(time: number, delay: number) {
-            this._entityCollect.update(this.camera3D);
+            this._entityCollect.update(this._camera);
             Context3DProxy.gl.enable(ContextConfig.BLEND);
             Context3DProxy.gl.enable(ContextConfig.CULL_FACE);
-            this.resize(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+
+            if (this._sizeDiry)
+                this.resize(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
 
             View3D._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
 
             View3D._contex3DProxy.clear(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w );
             View3D._contex3DProxy.clearDepth(1);
             View3D._contex3DProxy.clearStencil(0);
-            this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect,this.camera3D);
+            this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera);
 
             Context3DProxy.gl.finish();
         }

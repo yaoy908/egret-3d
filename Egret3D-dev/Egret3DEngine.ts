@@ -43,7 +43,7 @@
                 this._xhr.abort();
             }
 
-            this._xhr.open("GET", this._libUrl, true);
+            this._xhr.open("GET", this._libUrl + "?" + Math.random()*100000, true);
             this._xhr.addEventListener("progress", (e) => Egret3DEngine.onProgress(e), false);
             this._xhr.addEventListener("readystatechange", (e) => Egret3DEngine.onReadyStateChange(e), false);
             this._xhr.addEventListener("error", (e) => Egret3DEngine.onError(e), false);
