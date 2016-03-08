@@ -119,6 +119,8 @@
         "Util/StringUtil.ts",
 
         "Camera3D.ts",
-        "View3D.ts"
+        "View3D.ts",
+        "Egret3DCanvas.ts"
+            
     ]
 }	

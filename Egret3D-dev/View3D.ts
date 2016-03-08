@@ -16,7 +16,7 @@
     export class View3D {
         static _contex3DProxy: Context3DProxy = new Context3DProxy();
 
-        protected _viewPort: Rectangle = new Rectangle() ; 
+        protected _viewPort: Rectangle = new Rectangle();
         protected _camera: Camera3D = new Camera3D();
         protected _scene: Scene3D = new Scene3D();
         protected _render: RenderBase;
@@ -26,7 +26,7 @@
         protected _viewMatrix: Matrix4_4 = new Matrix4_4();
 
         protected _entityCollect: EntityCollect;
-        protected _backColor: Vector3D = new Vector3D(0.3,0.3,0.6,1.0);
+        protected _backColor: Vector3D = new Vector3D(0.3, 0.3, 0.6, 1.0);
 
         private _sizeDiry: boolean = false;
         constructor(x: number, y: number, width: number, height: number) {
@@ -34,21 +34,28 @@
             ShaderUtil.instance.load();
 
             this._entityCollect = new EntityCollect();
-            this._entityCollect.root = this._scene; 
+            this._entityCollect.root = this._scene;
             this._render = new DefaultRender();
 
-            this.x = x; 
-            this.y = y; 
-            this.width = width; 
-            this.height = height ; 
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+
+        public set backColor(value: number) {
+            this._backColor.w = value >> 24 & 255;
+            this._backColor.x = value >> 16 & 255;
+            this._backColor.y = value >> 8 & 255;
+            this._backColor.z = value & 255;
         }
 
         public get camera3D(): Camera3D {
             return this._camera;
         }
 
-        public set camera3D( value:Camera3D ) {
-            this._camera = value; 
+        public set camera3D(value: Camera3D) {
+            this._camera = value;
         }
 
         public get scene(): Scene3D {
@@ -56,13 +63,11 @@
         }
 
         public set scene(sc) {
-            this._scene = sc; 
+            this._scene = sc;
         }
 
         public set x(value: number) {
-            if (this._viewPort.x != value )
-               this._sizeDiry = true;
-            this._viewPort.x = value; 
+            this._viewPort.x = value;
         }
 
         public get x(): number {
@@ -70,8 +75,6 @@
         }
 
         public set y(value: number) {
-            if (this._viewPort.y != value)
-                this._sizeDiry = true;
             this._viewPort.y = value;
         }
 
@@ -80,19 +83,19 @@
         }
 
         public set width(value: number) {
-            if (this._viewPort.width != value)
-                this._sizeDiry = true;
-            this._viewPort.width = value ;
+            this._viewPort.width = value;
+            this._aspectRatio = this._viewPort.width / this._viewPort.height;
+            this._camera.aspectRatio = this._aspectRatio;
         }
 
         public get width(): number {
-            return this._viewPort.width ;
+            return this._viewPort.width;
         }
 
         public set height(value: number) {
-            if (this._viewPort.height != value)
-                this._sizeDiry = true;
             this._viewPort.height = value;
+            this._aspectRatio = this._viewPort.width / this._viewPort.height;
+            this._camera.aspectRatio = this._aspectRatio;
         }
 
         public get height(): number {
@@ -100,48 +103,25 @@
         }
 
         public addChild3D(child3d: Object3D) {
-            this._scene.addChild3D( child3d );
+            this._scene.addChild3D(child3d);
         }
 
         public removeChild3D(child3d: Object3D) {
             this._scene.removeChild3D(child3d);
         }
-         
+
         public update(time: number, delay: number) {
             this._entityCollect.update(this._camera);
-            Context3DProxy.gl.enable(ContextConfig.BLEND);
-            Context3DProxy.gl.enable(ContextConfig.CULL_FACE);
 
-            if (this._sizeDiry)
-                this.resize(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+            View3D._contex3DProxy.viewPort(this._viewPort.x, ContextConfig.canvasRectangle.height - this._viewPort.height - this._viewPort.y , this._viewPort.width, this._viewPort.height);
+            View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, ContextConfig.canvasRectangle.height - this._viewPort.height - this._viewPort.y , this._viewPort.width, this._viewPort.height);
 
-            View3D._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+            View3D._contex3DProxy.clearColor(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w);
+            View3D._contex3DProxy.clear(Context3DProxy.gl.COLOR_BUFFER_BIT | Context3DProxy.gl.DEPTH_BUFFER_BIT);
 
-            View3D._contex3DProxy.clear(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w );
-            View3D._contex3DProxy.clearDepth(1);
-            View3D._contex3DProxy.clearStencil(0);
             this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera);
 
-            Context3DProxy.gl.finish();
         }
-
-
-        public resize(x: number, y: number, width: number, height: number) {
-            this._sizeDiry = false;
-
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height; 
-
-            View3D._contex3DProxy.creatBackBuffer(x,y,width,height);
-        }
-
-
-
-
-
-
 
 
 

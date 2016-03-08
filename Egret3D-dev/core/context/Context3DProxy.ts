@@ -1,16 +1,7 @@
 ﻿module egret3d_dev {
 
-    export class Egret3D {
-        static context3DProxy: Context3DProxy; 
-        static request(config: string="", blend2D: boolean = false) {
-            this.context3DProxy = new egret3d_dev.Context3DProxy(blend2D);
-        }
-    }
-
     export class Context3DProxy {
-
-        private _canvas3DRectangle: Rectangle = new Rectangle();
-        private _canvas: HTMLCanvasElement;
+       
         private _cacheProgram: Program3D;
 
         /**
@@ -35,49 +26,9 @@
         */
         public isLost: boolean;
 
-        constructor(blend2D: boolean = false) {
-            this._canvas = document.createElement("canvas");
-            this._canvas.style.position = "absolute";
-            this._canvas.style.zIndex = "0";
+      
 
-            if (document.getElementsByClassName("egret-player").length > 0) {
-                document.getElementsByClassName("egret-player")[0].appendChild(this._canvas);
-            }
-            else {
-                document.body.appendChild(this._canvas);
-            }
 
-            this._canvas.id = "egret3D";
-            this._canvas.oncontextmenu = function () {
-                return false;
-            };
-
-            Context3DProxy.gl = <WebGLRenderingContext>this._canvas.getContext("experimental-webgl");
-
-            if (!Context3DProxy.gl)
-                Context3DProxy.gl = <WebGLRenderingContext>this._canvas.getContext("webgl");
-
-            if (!Context3DProxy.gl)
-                alert("you drivers not suport webgl");
-
-            this.register();
-            console.log("this.context3D ==>", Context3DProxy.gl);
-        }
-
-       /**
-       * @language zh_CN
-       * 初始化,并创建显示区域的后台缓冲大小。
-       * @param GPU_CONFIG
-       * @param canvasRec
-       * @event call
-       */
-        public creatBackBuffer(x: number, y: number, width: number, height: number) {
-            this._canvas.style.left = x.toString() ; 
-            this._canvas.style.top = y.toString(); 
-            this._canvas.width = width; 
-            this._canvas.height = height;
-            this.viewPort(x,y,width,height);
-        }
 
         /**
        * @language zh_CN
@@ -88,7 +39,7 @@
        * @param canvasRec
        * @event call
        */
-        private register() {
+        public register() {
 
             var ext: any = Context3DProxy.gl.getExtension('WEBGL_compressed_texture_s3tc');
             var OES_texture_float_linear = Context3DProxy.gl.getExtension("OES_texture_float_linear");
@@ -159,24 +110,15 @@
             ShaderPool.register(this);
         }
 
-        public backBufferSize(x: number, y: number, width: number, height: number) {
-            this._canvas3DRectangle.x = x; 
-            this._canvas3DRectangle.y = y; 
-            this._canvas3DRectangle.width = width; 
-            this._canvas3DRectangle.height = height; 
-            ContextConfig.canvasRectangle = this._canvas3DRectangle;
+        //public creatBackBuffer(x: number, y: number, width: number, height: number) {
+        //    this._canvas.style.left = x.toString();
+        //    this._canvas.style.top = y.toString();
+        //    this._canvas.width = width;
+        //    this._canvas.height = height;
+        //    this.viewPort(x, y, width, height);
+        //}
 
-            this._canvas3DRectangle.x = x;
-            this._canvas3DRectangle.y = y;
-            this._canvas3DRectangle.width = width;
-            this._canvas3DRectangle.height = height;
 
-            this._canvas.style.left = this._canvas3DRectangle.x.toString() + "px";
-            this._canvas.style.top = this._canvas3DRectangle.y.toString() + "px";
-            this._canvas.width = this._canvas3DRectangle.width;
-            this._canvas.height = this._canvas3DRectangle.height;
-        }
-       
         /**
         * @language zh_CN
         * 版本号
@@ -478,7 +420,6 @@
                                         
         /**
         * @language zh_CN
-        *
         * @param source
         */
         public creatFragmentShader(source: string): Shader {
@@ -493,26 +434,37 @@
 
         /**
         * @language zh_CN
+        * 清除渲染buffer
+        * @param r
+        * @param g
+        * @param b
+        * @param a
+        */
+        public clear(BUFFER_BIT:number) {
+            Context3DProxy.gl.clear(BUFFER_BIT);
+        }
+
+        /**
+        * @language zh_CN
         * 清除渲染区域的颜色 深度
         * @param r
         * @param g
         * @param b
         * @param a
         */
-        public clear(r: number, g: number, b: number, a: number) {
+        public clearColor(r: number, g: number, b: number, a: number) {
             Context3DProxy.gl.clearColor(r, g, b, a);
-            Context3DProxy.gl.clear(Context3DProxy.gl.COLOR_BUFFER_BIT | Context3DProxy.gl.DEPTH_BUFFER_BIT);
         }
         
-        /**
-        * @language zh_CN
-        * 清除渲染区域的 深度
-        * @param depth
-        */
-        public clearDepth(depth: number=1.0) {
-            Context3DProxy.gl.clearDepth(depth);
-            Context3DProxy.gl.clear(Context3DProxy.gl.DEPTH_BUFFER_BIT);
-        }
+        ///**
+        //* @language zh_CN
+        //* 清除渲染区域的 深度
+        //* @param depth
+        //*/
+        //public clearDepth(depth: number=1.0) {
+        //    Context3DProxy.gl.clearDepth(depth);
+        //    Context3DProxy.gl.clear(Context3DProxy.gl.DEPTH_BUFFER_BIT);
+        //}
 
                 
         /**
@@ -891,7 +843,8 @@
         * 设置矩形裁切区域
         * @param rectangle 
         */
-        public setScissorRectangle(rectangle: Rectangle) {
+        public setScissorRectangle(x: number, y: number, width: number, height: number) {
+            Context3DProxy.gl.scissor(x, y, width, height);
         }
 
         /**

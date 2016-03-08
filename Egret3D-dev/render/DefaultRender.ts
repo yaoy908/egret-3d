@@ -40,9 +40,6 @@
             //else if (collect.rootNode._sphereSky) {
             //    collect.rootNode._sphereSky.draw(context3D, camera );
             //}
-
-            context3D.clearDepth(1);
-             
             for (this._renderIndex = 0; this._renderIndex < this._numEntity; this._renderIndex++) {
                 this._renderItem = collect.renderList[this._renderIndex] ;
                 //collect.renderList[this._renderIndex].update(time, delay, camera);
