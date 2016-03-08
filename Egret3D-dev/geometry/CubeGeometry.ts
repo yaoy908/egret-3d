@@ -120,7 +120,15 @@
                 18, 20, 19, 21, 23, 22,
                 24, 26, 25, 27, 29, 28,
                 30, 32, 31, 33, 35, 34
-                );
+            );
+
+
+            var subGeometry: SubGeometry = new SubGeometry();
+
+            subGeometry.geometry = this;
+            subGeometry.start = 0;
+            subGeometry.count = this.indexData.length;
+            this.subGeometrys.push(subGeometry);
         }
     }
 }
