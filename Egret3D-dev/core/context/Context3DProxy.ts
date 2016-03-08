@@ -832,7 +832,7 @@
         * @param stride 
         * @param offset 
         */
-        public vertexAttribPointer(programe3D: Program3D, index: number, size: number, dataType: number, normalized: boolean, stride: number, offset: number) {
+        public vertexAttribPointer(index: number, size: number, dataType: number, normalized: boolean, stride: number, offset: number) {
             Context3DProxy.gl.vertexAttribPointer(index, size, dataType, normalized, stride, offset);
             Context3DProxy.gl.enableVertexAttribArray(index);
         }

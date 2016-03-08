@@ -102,13 +102,17 @@
             this._passUsage.vertexShader.shader = this._passUsage.vertexShader.getShader(this._passUsage);
             this._passUsage.fragmentShader.shader = this._passUsage.fragmentShader.getShader(this._passUsage);
             this._passUsage.program3D = ShaderPool.getProgram(this._passUsage.vertexShader.shader.id, this._passUsage.fragmentShader.shader.id);
+
+            this._passUsage.uniform_ModelMatrix.uniformIndex = context3DProxy.getUniformLocation(this._passUsage.program3D, "uniform_ModelMatrix");
+            this._passUsage.uniform_ProjectionMatrix.uniformIndex = context3DProxy.getUniformLocation(this._passUsage.program3D,"uniform_ProjectionMatrix");
         }
 
         public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry:SubGeometry, animtion: IAnimation) {
+
             if (this._passChange) {
                 this.upload(time, delay, context3DProxy, modeltransform, camera3D);
             }
-
+            context3DProxy.setProgram(this._passUsage.program3D);
             subGeometry.update(time, delay,this._passUsage,context3DProxy);
 
             //if (this._materialData.depthTest) {
@@ -136,7 +140,6 @@
             //for (var i: number; i < this._passUsage.methodList.length; i++) {
             //    this._passUsage.methodList[i].active(time, delay, context3DProxy, modeltransform, camera3D);
             //}
-            context3DProxy.setProgram(this._passUsage.program3D);
 
             //var i: number = 0;
 
@@ -187,7 +190,13 @@
             //if (this._materialData.alphaBlending)
             //    Context3DProxy.gl.depthMask(true);
 
-            context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count );
+            context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ModelMatrix.uniformIndex, false, modeltransform.rawData);
+            context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.viewProjectionMatrix.rawData);
+
+            context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count);
+
+            //context3DProxy.bindVertexBuffer(null);
+            //context3DProxy.bindIndexBuffer(null);
         }
 
 
