@@ -227,7 +227,7 @@
         * @language zh_CN
         * geometry子集
         */
-        public subGeometrys: Array<SubGeometry>;
+        public subGeometrys: Array<SubGeometry> = new Array<SubGeometry>();
 
         protected attributes: any = [];
         protected uniforms: any = [];

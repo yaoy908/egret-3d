@@ -8,6 +8,8 @@
     },
     "files": [
 
+        "config/TextureMethodType.ts",
+
         "events/Event3D.ts",
         "events/PickResult.ts",
         "events/IDispatchEvent.ts",
@@ -79,7 +81,7 @@
 
         "material/MaterialBase.ts",
 
-        "material/ColorMaterial.ts", 
+        "material/ColorMaterial.ts",
 
         "render/RenderBase.ts",
         "render/DefaultRender.ts",

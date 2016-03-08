@@ -3,7 +3,7 @@
     export class MaterialPass {
         protected _passUsage: PassUsage;
         protected _materialData: MaterialData;
-        protected _passChange: boolean = false ;
+        protected _passChange: boolean = true ;
 
         public methodList: Array<MethodBase> = new Array<MethodBase>();
         public methodDatas: Array<MethodData> = new Array<MethodData>();
@@ -96,11 +96,19 @@
 
         }
 
+        public upload(time: number, delay: number, usage: PassUsage, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+            this._passChange = false;
+            this.initUseMethod();
+            this._passUsage.vertexShader.getShader(usage);
+            this._passUsage.fragmentShader.getShader(usage);
+            this._passUsage.program3D = ShaderPool.getProgram(this._passUsage.vertexShader.shader.id, this._passUsage.fragmentShader.shader.id);
+        }
+
         public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry:SubGeometry, animtion: IAnimation) {
-            if (this._passUsage.passNeedReset) {
-                this._passUsage.passNeedReset = false;
+            if (this._passChange) {
                 this.upload(time, delay, this._passUsage, context3DProxy, modeltransform, camera3D);
             }
+
             subGeometry.update(time, delay,this._passUsage,context3DProxy);
 
             //if (this._materialData.depthTest) {
@@ -182,12 +190,6 @@
             context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count );
         }
 
-        public upload(time: number, delay: number, usage: PassUsage, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
 
-            if (this._passChange)
-                this.initUseMethod();
-
-            this._passUsage.program3D = ShaderPool.getProgram(this._passUsage.vertexShader.shader.id, this._passUsage.fragmentShader.shader.id );
-        }
     }
 } 

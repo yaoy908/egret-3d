@@ -10,13 +10,16 @@
         public initUseMethod() {
             this._passChange = false;
 
+            this._materialData.textureMethodTypes.push(TextureMethodType.color);
+
             var i: number = 0;
 
             this._passUsage = new PassUsage();
+
             this._passUsage.vertexShader.shaderType = Shader.vertex;
             this._passUsage.fragmentShader.shaderType = Shader.fragment;
 
-            if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.diffuse) != -1) {
+            if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.color) != -1) {
                 this._passUsage.vertexShader.addUseShaderName("Color_vertex");
                 this._passUsage.fragmentShader.addUseShaderName("Color_fragment");
             }
@@ -58,6 +61,8 @@
                     this._passUsage.fragmentShader.addUseShaderName(this.methodList[i].fsShaderName);
                 }
             }
+
+
         }
     }
 } 

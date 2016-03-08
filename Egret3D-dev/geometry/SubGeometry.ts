@@ -55,7 +55,7 @@
             this._attributeDiry = false ;
             var offset: number = 0;
             this.attList.length = 0;
-            if (this.geometry.vertexFormat & VertexFormat.VF_POSITION) {
+            if (this.geometry.vertexFormat & VertexFormat.VF_POSITION && passUsage.attribute_position ) {
                 if (!passUsage.attribute_position.uniformIndex) {
                     passUsage.attribute_position.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_position.varName);
                 }
@@ -71,7 +71,7 @@
                 offset += Geometry.positionSize * 4;
             }
 
-            if (this.geometry.vertexFormat & VertexFormat.VF_NORMAL) {
+            if (this.geometry.vertexFormat & VertexFormat.VF_NORMAL && passUsage.attribute_normal ) {
                 if (!passUsage.attribute_normal.uniformIndex) {
                     passUsage.attribute_normal.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_normal.varName);
                 }
@@ -87,7 +87,7 @@
                 offset += Geometry.normalSize * 4;
             }
 
-            if (this.geometry.vertexFormat & VertexFormat.VF_TANGENT) {
+            if (this.geometry.vertexFormat & VertexFormat.VF_TANGENT && passUsage.attribute_tangent) {
                 if (!passUsage.attribute_tangent.uniformIndex) {
                     passUsage.attribute_tangent.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_tangent.varName);
                 }
@@ -103,7 +103,7 @@
                 offset += Geometry.tangentSize * 4;
             }
 
-            if (this.geometry.vertexFormat & VertexFormat.VF_COLOR) {
+            if (this.geometry.vertexFormat & VertexFormat.VF_COLOR && passUsage.attribute_color ) {
                 if (!passUsage.attribute_color.uniformIndex) {
                     passUsage.attribute_color.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_color.varName);
                 }
@@ -119,7 +119,7 @@
                 offset += Geometry.colorSize * 4;
             }
 
-            if (this.geometry.vertexFormat & VertexFormat.VF_UV) {
+            if (this.geometry.vertexFormat & VertexFormat.VF_UV && passUsage.attribute_uv0 ) {
                 if (!passUsage.attribute_uv0.uniformIndex) {
                     passUsage.attribute_uv0.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_uv0.varName);
                 }
@@ -135,7 +135,7 @@
                 offset += Geometry.uvSize * 4;
             }
 
-            if (this.geometry.vertexFormat & VertexFormat.VF_UV2) {
+            if (this.geometry.vertexFormat & VertexFormat.VF_UV2 && passUsage.attribute_uv1) {
                 if (!passUsage.attribute_uv1.uniformIndex) {
                     passUsage.attribute_uv1.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_uv1.varName);
                 }
@@ -151,7 +151,7 @@
                 offset += Geometry.uv2Size * 4;
             }
 
-            if (this.geometry.vertexFormat & VertexFormat.VF_SKIN) {
+            if (this.geometry.vertexFormat & VertexFormat.VF_SKIN && passUsage.attribute_boneWeight ) {
                 if (!passUsage.attribute_boneIndex.uniformIndex) {
                     passUsage.attribute_boneIndex.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_boneIndex.varName);
                 }
@@ -181,12 +181,14 @@
         }
 
         public update(time: number, delay: number, passUsage: PassUsage, contextPorxy: Context3DProxy) {
+
             if (this._attributeDiry)
                 this.upload(passUsage, contextPorxy);
 
             for (var i: number = 0; i < this.attList.length; i++){
                 contextPorxy.vertexAttribPointer(passUsage.program3D, this.attList[i].uniformIndex, this.attList[i].size, this.attList[i].dataType, this.attList[i].normalized, this.attList[i].stride, this.attList[i].offset);
             }
+
         }
     }
 } 

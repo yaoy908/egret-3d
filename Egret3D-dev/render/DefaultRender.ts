@@ -53,12 +53,7 @@
                 //    collect.renderList[this._renderIndex].tag.cleanState = false;
                 //    context3D.clearDepth(1);
                 //}
-
-                //if (this._renderItem.material != null) {
-
-                    this._renderItem.renderDiffusePass(time, delay, context3D, camera);
-                   
-                //}
+                this._renderItem.renderDiffusePass(time, delay, context3D, camera);
             }
         }
     }

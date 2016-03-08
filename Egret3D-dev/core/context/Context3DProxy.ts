@@ -11,6 +11,8 @@
 
         private _canvas3DRectangle: Rectangle = new Rectangle();
         private _canvas: HTMLCanvasElement;
+        private _cacheProgram: Program3D;
+
         /**
          * @language zh_CN
          * @private
@@ -528,7 +530,10 @@
         * @param program
         */
         public setProgram(program: Program3D) {
-            Context3DProxy.gl.useProgram(program.program);
+            if (this._cacheProgram != program) {
+                this._cacheProgram = program;
+                Context3DProxy.gl.useProgram(program.program);
+            }
         }
 
         /**

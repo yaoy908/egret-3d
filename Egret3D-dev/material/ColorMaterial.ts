@@ -2,7 +2,7 @@
     export class ColorMaterial extends MaterialBase {
 
         constructor() {
-            super(null);
+            super();
         }
 
         protected initPass() {

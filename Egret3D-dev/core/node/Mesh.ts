@@ -19,10 +19,9 @@
     */
     export class Mesh extends Object3D implements IRender{
 
-        public subMaterials: { [matID: number]: MaterialBase };
 
         public geometry: Geometry;
-        public material: MaterialBase;
+        public _material: MaterialBase;
         
         public pickType: number;
         public bound: Bound;
@@ -44,6 +43,17 @@
             this.material = material;
 
             this.bound = new Bound( new Vector3D(-5,-5,-5) , new Vector3D(5,5,5) );
+        }
+
+        public set material(mat: MaterialBase) {
+            this._material  = mat ;
+        }
+
+        public get material(): MaterialBase {
+            return this._material ;
+        }
+
+        public setMaterialByID() {
         }
 
         // /**
@@ -145,7 +155,7 @@
             for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
                 this._subGeometry = this.geometry.subGeometrys[this._i];
                 this._matID = this._subGeometry.matID;
-                this.subMaterials[this._matID].renderDiffusePass(time, delay, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+                this._material.renderDiffusePass(time, delay, this._matID , context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
             }
         }
     }

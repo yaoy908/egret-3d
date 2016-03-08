@@ -13,11 +13,6 @@
         /**
          * @language zh_CN
          */
-        public passNeedReset: boolean = true; 
-        
-        /**
-         * @language zh_CN
-         */
         public uniform_1ivs: Array<GLSL.Uniform>;
         /**
          * @language zh_CN
@@ -257,8 +252,8 @@
 
         //public vertexShaderRegister: ver;
    
-        public vertexShader: ShaderBase;
-        public fragmentShader: ShaderBase;
+        public vertexShader: ShaderBase = new ShaderBase();
+        public fragmentShader: ShaderBase = new ShaderBase();
 
 
         /**

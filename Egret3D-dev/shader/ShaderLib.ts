@@ -11,7 +11,8 @@ module egret3d_dev {
 			"vec3 r = reflect(-normalize(eyedir), normal  );              \n" +
 			"vec4 reflectiveColor = textureCube(environmentMapTex,r.xyz); \n" +
 			"diffuse.xyz = mix( diffuse.xyz,reflectiveColor.xyz, 1.0 );   \n" +
-			"}                                                            \n",
+			"}                                                            \n" +
+			"                                                             \n",
 
 			"AOMap_fragment":
 			"uniform sampler2D aoMapTex ;                       \n" +
@@ -94,7 +95,8 @@ module egret3d_dev {
 			"color += att * (diffuse.xyz * NdotL + ambient.xyz);                                                                              \n" +
 			"halfV = normalize(halfVector);                                                                                                   \n" +
 			"NdotHV = max(dot(n,halfV),0.0);                                                                                                  \n" +
-			"color += att * frontMaterial.specular.xyz * light.specular.xyz *                                                                 \n",
+			"color += att * frontMaterial.specular.xyz * light.specular.xyz *                                                                 \n" +
+			"                                                                               pow(NdotHV,frontMaterial.shininess);              \n",
 
 			"BrightPassFilter":
 			"varying vec2 uv ;                                                         \n" +
@@ -160,6 +162,19 @@ module egret3d_dev {
 			"eyedir = varying_eyedir.xyz - varying_pos.xyz ;                                       \n" +
 			"}                                                                                     \n",
 
+			"Color_vertex":
+			"attribute vec3 attribute_position ;                                                       \n" +
+			"attribute vec3 attribute_normal ;                                                         \n" +
+			"attribute vec2 attribute_uv0 ;                                                            \n" +
+			"uniform mat4 uniform_ModelMatrix ;                                                        \n" +
+			"uniform mat4 uniform_ProjectionMatrix ;                                                   \n" +
+			"uniform mat4 uniform_normalMatrix ;                                                       \n" +
+			"varying vec2 varying_uv0  ;                                                               \n" +
+			"void main(void){                                                                          \n" +
+			"highp vec4 temp_p ;                                                                       \n" +
+			"temp_p =  uniform_ProjectionMatrix * uniform_ModelMatrix * vec4(attribute_position,1.0) ; \n" +
+			"}                                                                                         \n",
+
 			"Composition":
 			"varying vec2 uv ;                             \n" +
 			"uniform sampler2D texture2D_1 ;               \n" +
@@ -167,7 +182,8 @@ module egret3d_dev {
 			"void main(void){                              \n" +
 			"vec4 color = texture2D(texture2D_1, uv ) ;    \n" +
 			"color = texture2D(texture2D_2, uv ) + color ; \n" +
-			"gl_FragColor = vec4(color.xyz, 1.0 );         \n",
+			"gl_FragColor = vec4(color.xyz, 1.0 );         \n" +
+			"}                                             \n",
 
 			"cubeDiffuseMap_fragment":
 			"uniform samplerCube diffuseTex ;                             \n" +
@@ -208,7 +224,8 @@ module egret3d_dev {
 			"varying_uv0 = attribute_uv0;                                                             \n" +
 			"varying_uv1 = attribute_uv1;                                                             \n" +
 			"varying_color = attribute_color ;                                                        \n" +
-			"varying_tangent = normalize((uniform_ModelMatrix * vec4( attribute_tangent,0.0 )).xyz) ; \n",
+			"varying_tangent = normalize((uniform_ModelMatrix * vec4( attribute_tangent,0.0 )).xyz) ; \n" +
+			"}                                                                                        \n",
 
 			"depthMethod_fragment":
 			"varying vec4 varying_pos        ;                            \n" +
@@ -397,7 +414,8 @@ module egret3d_dev {
 			"float distFog = max( 0.0 , d - fog.startDistance.x )* fog.startDistance.y;           \n" +
 			"float fogFactor = (1.0-exp(-fog.globalDensity * distFog )) ;                         \n" +
 			"diffuse.xyz = mix( diffuse.xyz  , fog.fogColor , min(fogFactor,1.0) );               \n" +
-			"}                                                                                    \n",
+			"}                                                                                    \n" +
+			"                                                                                     \n",
 
 			"EnvironmentMapping_fragment":
 			"uniform samplerCube environmentMapTex ;                             \n" +
@@ -406,7 +424,8 @@ module egret3d_dev {
 			"vec3 r = reflect(-normalize(eyedir),  normal  );                    \n" +
 			"vec4 reflectiveColor = textureCube(environmentMapTex,r.xyz);        \n" +
 			"diffuse.xyz = mix( diffuse.xyz,reflectiveColor.xyz, reflectValue ); \n" +
-			"}                                                                   \n",
+			"}                                                                   \n" +
+			"                                                                    \n",
 
 			"FresnelReflectionChromaticAberration_fragment":
 			"uniform samplerCube environmentMapTex ;                                                               \n" +
@@ -481,7 +500,8 @@ module egret3d_dev {
 			"tc += texture2D(texture2D_1, uv.xy + vec2( 0.0, float(i) * blurOffset ) ).xyz * weightOffset ; \n" +
 			"tc += texture2D(texture2D_1, uv.xy - vec2( 0.0, float(i) * blurOffset ) ).xyz * weightOffset ; \n" +
 			"}                                                                                              \n" +
-			"gl_FragColor = vec4(tc, 1.0 );                                                                 \n",
+			"gl_FragColor = vec4(tc, 1.0 );                                                                 \n" +
+			"}                                                                                              \n",
 
 			"GaussianBlurVertical":
 			"varying vec2 uv ;                                                                               \n" +
@@ -504,7 +524,9 @@ module egret3d_dev {
 			"gl_FragColor = vec4(tc, 1.0 );                                                                  \n" +
 			"}                                                                                               \n",
 
-            "globalFogMethod_fragment": "",
+			"globalFogMethod_fragment":
+			"",
+
 			"LightDiffuse_fragment":
 			"struct MaterialSource{                                                                                                                                                                              \n" +
 			"vec4 ambient;                                                                                                                                                                                       \n" +
@@ -564,7 +586,8 @@ module egret3d_dev {
 			"specularColor.xyz = light.specular.xyz * frontMaterial.specular.xyz * specularfract  ;                                                                                                              \n" +
 			"}                                                                                                                                                                                                   \n" +
 			"}                                                                                                                                                                                                   \n" +
-			"}                                                                                                                                                                                                   \n",
+			"}                                                                                                                                                                                                   \n" +
+			"//                  }                                                                                                                                                                               \n",
 
 			"lightMap_fragment":
 			"uniform sampler2D lightMapTex ;                                   \n" +
@@ -634,17 +657,20 @@ module egret3d_dev {
 			"particle_acceleration":
 			"attribute vec3 attribute_acceleration ;                                  \n" +
 			"void main(void){                                                         \n" +
-			"localPos.xyz += realTime * realTime * attribute_acceleration.xyz * 0.5 ; \n",
+			"localPos.xyz += realTime * realTime * attribute_acceleration.xyz * 0.5 ; \n" +
+			"}                                                                        \n",
 
 			"particle_acceleRotate":
 			"attribute vec3 attribute_acceleRotate ;                                  \n" +
 			"void main(void){                                                         \n" +
-			"localRot.xyz += realTime * realTime * attribute_acceleRotate.xyz * 0.5 ; \n",
+			"localRot.xyz += realTime * realTime * attribute_acceleRotate.xyz * 0.5 ; \n" +
+			"}                                                                        \n",
 
 			"particle_acceleScale":
 			"attribute vec3 attribute_acceleScale ;                                                      \n" +
 			"void main(void){                                                                            \n" +
-			"localPos.xyz *= (realTime / 1000.0 * realTime / 1000.0) * attribute_acceleScale.xyz * 0.5 ; \n",
+			"localPos.xyz *= (realTime / 1000.0 * realTime / 1000.0) * attribute_acceleScale.xyz * 0.5 ; \n" +
+			"}                                                                                           \n",
 
 			"particle_billboard":
 			"attribute float attribute_billboardXYZ ;                              \n" +
@@ -689,29 +715,38 @@ module egret3d_dev {
 			"vec4(0.0, 0.0, 0.0, 1.0)                                              \n" +
 			");                                                                    \n" +
 			"}                                                                     \n" +
+			"}                                                                     \n" +
 			"}                                                                     \n",
 
 			"particle_color":
 			"attribute vec4 attribute_startColor ; \n" +
 			"attribute vec4 attribute_endColor ;   \n" +
-			"void main(void){                      \n",
+			"void main(void){                      \n" +
+			"}                                     \n",
 
 			"particle_lifeRotate":
 			"attribute vec3 attribute_lifeRotate ;                \n" +
 			"void main(void){                                     \n" +
-			"localRot.xyz += realTime * attribute_lifeRotate.xyz; \n",
+			"localRot.xyz += realTime * attribute_lifeRotate.xyz; \n" +
+			"}                                                    \n",
 
-            "particle_offset": "",
-            "particle_position": "",
-            "particle_scale": 
+			"particle_offset":
+			"",
+
+			"particle_position":
+			"",
+
+			"particle_scale":
 			"attribute vec3 attribute_scale ;                                                          \n" +
 			"void main(void){                                                                          \n" +
-			"localScal.xyz += (attribute_scale.y - attribute_scale.x) * ratioTime + attribute_scale.x; \n",
+			"localScal.xyz += (attribute_scale.y - attribute_scale.x) * ratioTime + attribute_scale.x; \n" +
+			"}                                                                                         \n",
 
 			"particle_speed":
 			"attribute vec3 attribute_speed ;                 \n" +
 			"void main(void){                                 \n" +
-			"localPos.xyz += realTime * attribute_speed.xyz ; \n",
+			"localPos.xyz += realTime * attribute_speed.xyz ; \n" +
+			"}                                                \n",
 
 			"particle_time":
 			"attribute vec4 attribute_time ;                                                \n" +
@@ -736,11 +771,13 @@ module egret3d_dev {
 			"varying_color.w = 0.0 ;                                                        \n" +
 			"realTime = 0.0 ;                                                               \n" +
 			"localPos = vec3(0.0,0.0,0.0);                                                  \n" +
+			"}                                                                              \n" +
 			"}                                                                              \n",
 
 			"particle_uv":
 			"attribute vec2 attribute_uv0 ; \n" +
-			"void main(void){               \n",
+			"void main(void){               \n" +
+			"}                              \n",
 
 			"particle_vertex":
 			"attribute vec4 attribute_position ;     \n" +
@@ -808,11 +845,13 @@ module egret3d_dev {
 			"localPos = vec3(0.0,0.0,0.0) ;          \n" +
 			"localRot = vec3(0.0,0.0,0.0) ;          \n" +
 			"varying_color = vec4(1.0,1.0,1.0,1.0);  \n" +
-			"varying_uv0 = attribute_uv0 ;           \n",
+			"varying_uv0 = attribute_uv0 ;           \n" +
+			"}                                       \n",
 
 			"particle_vertexEnd":
 			"void main(void){                                                                                                                                                                                             \n" +
-			"vec4 temp_p = uniform_ProjectionMatrix * uniform_ModelMatrix * ( (billboardMatrix * (buildRotMat4(localRot) * vec4(attribute_position.xyz * localScal,1.0))) + vec4(attribute_offset.xyz+localPos.xyz,1.0)); \n",
+			"vec4 temp_p = uniform_ProjectionMatrix * uniform_ModelMatrix * ( (billboardMatrix * (buildRotMat4(localRot) * vec4(attribute_position.xyz * localScal,1.0))) + vec4(attribute_offset.xyz+localPos.xyz,1.0)); \n" +
+			"}                                                                                                                                                                                                            \n",
 
 			"pointLight_fragment":
 			"const int max_pointLight = 0 ;                                                                                    \n" +
@@ -850,7 +889,8 @@ module egret3d_dev {
 			"varying vec2 uv ;                             \n" +
 			"uniform sampler2D texture2D_1 ;               \n" +
 			"void main(void){                              \n" +
-			"gl_FragColor = texture2D( texture2D_1 , uv ); \n",
+			"gl_FragColor = texture2D( texture2D_1 , uv ); \n" +
+			"}                                             \n",
 
 			"postCanvas_vertex":
 			"attribute vec3 attribute_position ;                                     \n" +
@@ -859,7 +899,8 @@ module egret3d_dev {
 			"varying vec2 uv ;                                                       \n" +
 			"void main(void){                                                        \n" +
 			"uv = attribute_uv0 ;                                                    \n" +
-			"gl_Position = uniform_ProjectionMatrix * vec4(attribute_position,1.0) ; \n",
+			"gl_Position = uniform_ProjectionMatrix * vec4(attribute_position,1.0) ; \n" +
+			"}                                                                       \n",
 
 			"shadowmapping_fragment":
 			"varying vec4 shadowPosition ;                                                                              \n" +
@@ -909,7 +950,8 @@ module egret3d_dev {
 			"}                                                                              \n" +
 			"vec3 glFragCoord  = (varying_globalpos.xyz / varying_globalpos.w) * 0.5 + 0.5; \n" +
 			"vec4 diffuse = pack( glFragCoord.z );                                          \n" +
-			"}                                                                              \n",
+			"}                                                                              \n" +
+			"                                                                               \n",
 
 			"Shadow_vertex_sksleton":
 			"attribute vec3 attribute_position ;                                                       \n" +
@@ -969,10 +1011,12 @@ module egret3d_dev {
 			"varying_eyeNormal =  (uniform_normalMatrix*vec4(attribute_normal,0.0) ).xyz ;             \n" +
 			"varying_uv0 = attribute_uv0;                                                              \n" +
 			"varying_color = vec4(attribute_tangent,1.0) ;                                             \n" +
-			"varying_tangent = normalize((uniform_ModelMatrix * vec4( attribute_tangent,0.0 )).xyz) ;  \n",
+			"varying_tangent = normalize((uniform_ModelMatrix * vec4( attribute_tangent,0.0 )).xyz) ;  \n" +
+			"}                                                                                         \n",
 
 			"Shadow_vertex_static":
-			"void main(void){ \n",
+			"void main(void){ \n" +
+			"}                \n",
 
 			"skeleton_vertex":
 			"attribute vec3 attribute_position ;                                                       \n" +
@@ -1030,7 +1074,8 @@ module egret3d_dev {
 			"varying_eyeNormal =  (uniform_normalMatrix*vec4(attribute_normal,0.0) ).xyz ;             \n" +
 			"varying_uv0 = attribute_uv0;                                                              \n" +
 			"varying_color = vec4(1.0,1.0,1.0,1.0) ;                                                   \n" +
-			"varying_tangent = normalize((uniform_ModelMatrix * vec4( attribute_tangent,0.0 )).xyz) ;  \n",
+			"varying_tangent = normalize((uniform_ModelMatrix * vec4( attribute_tangent,0.0 )).xyz) ;  \n" +
+			"}                                                                                         \n",
 
 			"SkyLightShader":
 			"uniform vec4 uniform_skyLightSource ;                                                    \n" +
@@ -1043,7 +1088,8 @@ module egret3d_dev {
 			"return frontColor ;                                                                      \n" +
 			"}                                                                                        \n" +
 			"void main(){                                                                             \n" +
-			"lightColor.xyz = skyLight() ;                                                            \n",
+			"lightColor.xyz = skyLight() ;                                                            \n" +
+			"}                                                                                        \n",
 
 			"sky_fragment":
 			"uniform samplerCube sky_texture ;                      \n" +
@@ -1061,7 +1107,8 @@ module egret3d_dev {
 			"varying vec3 varying_pos        ;                                                      \n" +
 			"void main(void){                                                                       \n" +
 			"varying_pos =  attribute_position ;                                                    \n" +
-			"gl_Position = uniform_ProjectionMatrix * uniform_ModelMatrix * vec4(varying_pos,1.0) ; \n",
+			"gl_Position = uniform_ProjectionMatrix * uniform_ModelMatrix * vec4(varying_pos,1.0) ; \n" +
+			"}                                                                                      \n",
 
 			"SpecularEnvironmentMappingMethod":
 			"uniform samplerCube environmentMapTex ;                      \n" +
@@ -1103,7 +1150,8 @@ module egret3d_dev {
 			"float pi = 3.1415926 ;                                             \n" +
 			"uv.x = vEyeNormal.x / pi + 0.5 ;                                   \n" +
 			"uv.y = vEyeNormal.y / pi + 0.5 ;                                   \n" +
-			"uv = attribute_uv0 ;                                               \n",
+			"uv = attribute_uv0 ;                                               \n" +
+			"}                                                                  \n",
 
 			"sportLight_fragment":
 			"const int max_sportLight = 1 ;                                                                                                                                  \n" +
@@ -1256,12 +1304,14 @@ module egret3d_dev {
 			"}else{                                                                                            \n" +
 			"newColor = texture2D (texture2D_1, vec2(warp_coord.x,warp_coord.y) );                             \n" +
 			"}                                                                                                 \n" +
-			"gl_FragColor = newColor;                                                                          \n",
+			"gl_FragColor = newColor;                                                                          \n" +
+			"	}                                                                                                \n",
 
 			"wireframe_fragment":
 			"varying vec4 varying_color ;  \n" +
 			"void main(void){              \n" +
-			"gl_FragColor = varying_color; \n",
+			"gl_FragColor = varying_color; \n" +
+			"}                             \n",
 
 			"wireframe_vertex":
 			"attribute vec3 attribute_position ;                                                           \n" +
@@ -1273,7 +1323,8 @@ module egret3d_dev {
 			"void main(void){                                                                              \n" +
 			"varying_color = uniform_color;                                                                \n" +
 			"gl_PointSize = uniform_pointSize;                                                             \n" +
-			"gl_Position = uniform_ProjectionMatrix * uniform_ModelMatrix * vec4(attribute_position,1.0) ; \n",
+			"gl_Position = uniform_ProjectionMatrix * uniform_ModelMatrix * vec4(attribute_position,1.0) ; \n" +
+			"}                                                                                             \n",
 
 
 		};

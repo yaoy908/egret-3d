@@ -1,9 +1,9 @@
 ﻿module egret3d_dev {
     export class MaterialBase {
 
+        
+
         public diffusePass: MaterialPass; 
-
-
         public materialData: MaterialData;
          /**
          * @language zh_CN
@@ -428,7 +428,7 @@
             }
         }
 
-        public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry:SubGeometry , animtion:IAnimation) {
+        public renderDiffusePass(time: number, delay: number, maetID: number , context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation) {
             this.diffusePass.draw(time, delay, context3DProxy, modeltransform, camera3D,subGeometry,animtion);
         }
 

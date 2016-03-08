@@ -1,6 +1,5 @@
 ﻿module egret3d_dev {
     export interface IRender extends IDispatchEvent{
-        subMaterials: { [matID: number]: MaterialBase };
         childs: Array<Object3D>;
 
         geometry: Geometry;
