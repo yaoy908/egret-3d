@@ -8,8 +8,8 @@
     *
     */
     export class HashMap {
-        private data: { [key: string]: any };
-        private list: Array<any>;
+        private data: { [key: string]: any } = [];
+        private list: Array<any> = new Array<any>();
 
         constructor(useOrderList: boolean = false) {
             if (useOrderList) {

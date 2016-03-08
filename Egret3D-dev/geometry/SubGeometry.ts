@@ -186,7 +186,8 @@
                 this.upload(passUsage, contextPorxy);
 
             for (var i: number = 0; i < this.attList.length; i++){
-                contextPorxy.vertexAttribPointer(passUsage.program3D, this.attList[i].uniformIndex, this.attList[i].size, this.attList[i].dataType, this.attList[i].normalized, this.attList[i].stride, this.attList[i].offset);
+                if (this.attList[i].uniformIndex>=0)
+                    contextPorxy.vertexAttribPointer(passUsage.program3D, this.attList[i].uniformIndex, this.attList[i].size, this.attList[i].dataType, this.attList[i].normalized, this.attList[i].stride, this.attList[i].offset);
             }
 
         }

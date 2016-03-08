@@ -12,7 +12,6 @@
         
 
         protected index: number = 0;
-        protected source: string = "precision highp float;            \t\n";
 
         protected shadersName: Array<string> = new Array<string>();
         protected endShadername: string = "";
@@ -59,7 +58,7 @@
         * 
         * @returns string
         */
-        public getShader(passUsage:PassUsage) {
+        public getShader(passUsage:PassUsage):Shader {
 
             if (this.endShadername != "") {
                 var index: number = this.shadersName.indexOf(this.endShadername);
@@ -68,7 +67,7 @@
                 }
             }
 
-            ShaderUtil.instance.fillShaderContent(this, this.shadersName, passUsage);
+            return ShaderUtil.instance.fillShaderContent(this, this.shadersName, passUsage);
         }
     }
 } 

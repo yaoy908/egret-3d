@@ -96,17 +96,17 @@
 
         }
 
-        public upload(time: number, delay: number, usage: PassUsage, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+        public upload(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
             this._passChange = false;
             this.initUseMethod();
-            this._passUsage.vertexShader.getShader(usage);
-            this._passUsage.fragmentShader.getShader(usage);
+            this._passUsage.vertexShader.shader = this._passUsage.vertexShader.getShader(this._passUsage);
+            this._passUsage.fragmentShader.shader = this._passUsage.fragmentShader.getShader(this._passUsage);
             this._passUsage.program3D = ShaderPool.getProgram(this._passUsage.vertexShader.shader.id, this._passUsage.fragmentShader.shader.id);
         }
 
         public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry:SubGeometry, animtion: IAnimation) {
             if (this._passChange) {
-                this.upload(time, delay, this._passUsage, context3DProxy, modeltransform, camera3D);
+                this.upload(time, delay, context3DProxy, modeltransform, camera3D);
             }
 
             subGeometry.update(time, delay,this._passUsage,context3DProxy);

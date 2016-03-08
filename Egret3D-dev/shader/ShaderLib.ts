@@ -109,71 +109,20 @@ module egret3d_dev {
 			"}                                                                         \n",
 
 			"Color_fragment":
-			"mat3 TBN ;                                                                            \n" +
-			"struct MaterialSource{                                                                \n" +
-			"vec3 diffuse;                                                                         \n" +
-			"vec3 ambient;                                                                         \n" +
-			"vec3 specular;                                                                        \n" +
-			"float alpha;                                                                          \n" +
-			"float cutAlpha;                                                                       \n" +
-			"float shininess;                                                                      \n" +
-			"float diffusePower;                                                                   \n" +
-			"float specularPower;                                                                  \n" +
-			"float ambientPower;                                                                   \n" +
-			"float normalPower;                                                                    \n" +
-			"};                                                                                    \n" +
-			"varying vec4 varying_pos        ;                                                     \n" +
-			"varying highp vec2 varying_uv0  ;                                                     \n" +
-			"varying vec2 varying_uv1        ;                                                     \n" +
-			"varying vec3 varying_eyeNormal  ;                                                     \n" +
-			"varying vec4 varying_color		;                                                         \n" +
-			"varying vec3 varying_eyedir		;                                                        \n" +
-			"varying vec3 varying_tangent	;                                                        \n" +
-			"uniform float uniform_materialSource[16];                                             \n" +
-			"vec4 test  ;                                                                          \n" +
-			"vec4 diffuse  ;                                                                       \n" +
-			"vec3 light    ;                                                                       \n" +
-			"vec4 specular ;                                                                       \n" +
-			"vec3 normal  ;                                                                        \n" +
-			"vec3 eyedir  ;                                                                        \n" +
-			"vec4 ttt  ;                                                                           \n" +
-			"void main() {                                                                         \n" +
-			"test = vec4(1.0,1.0,1.0,1.0);                                                         \n" +
-			"ttt = vec4(1.0,1.0,1.0,0.0);                                                          \n" +
-			"diffuse = vec4(1.0,1.0,1.0,1.0);                                                      \n" +
-			"light   = vec3(0.0,0.0,0.0);                                                          \n" +
-			"normal = varying_eyeNormal ;                                                          \n" +
-			"MaterialSource materialSource = MaterialSource(                                       \n" +
-			"vec3(uniform_materialSource[0],uniform_materialSource[1],uniform_materialSource[2]) , \n" +
-			"vec3(uniform_materialSource[3],uniform_materialSource[4],uniform_materialSource[5]) , \n" +
-			"vec3(uniform_materialSource[6],uniform_materialSource[7],uniform_materialSource[8]) , \n" +
-			"uniform_materialSource[9] ,                                                           \n" +
-			"uniform_materialSource[10] ,                                                          \n" +
-			"uniform_materialSource[11] ,                                                          \n" +
-			"uniform_materialSource[12] ,                                                          \n" +
-			"uniform_materialSource[13] ,                                                          \n" +
-			"uniform_materialSource[14] ,                                                          \n" +
-			"uniform_materialSource[15]                                                            \n" +
-			") ;                                                                                   \n" +
-			"specular = vec4(materialSource.specular,0.0);                                         \n" +
-			"TBN[0] = -varying_tangent ;                                                           \n" +
-			"TBN[2] = normalize( normal.xyz ) ;                                                    \n" +
-			"TBN[1] = normalize( cross(TBN[0],TBN[2]) );                                           \n" +
-			"eyedir = varying_eyedir.xyz - varying_pos.xyz ;                                       \n" +
-			"}                                                                                     \n",
+			"vec4 endColor ;                   \n" +
+			"void main() {                     \n" +
+			"endColor = vec4(1.0,0.0,0.0,1.0); \n" +
+			"}                                 \n",
 
 			"Color_vertex":
-			"attribute vec3 attribute_position ;                                                       \n" +
-			"attribute vec3 attribute_normal ;                                                         \n" +
-			"attribute vec2 attribute_uv0 ;                                                            \n" +
-			"uniform mat4 uniform_ModelMatrix ;                                                        \n" +
-			"uniform mat4 uniform_ProjectionMatrix ;                                                   \n" +
-			"uniform mat4 uniform_normalMatrix ;                                                       \n" +
-			"varying vec2 varying_uv0  ;                                                               \n" +
-			"void main(void){                                                                          \n" +
-			"highp vec4 temp_p ;                                                                       \n" +
-			"temp_p =  uniform_ProjectionMatrix * uniform_ModelMatrix * vec4(attribute_position,1.0) ; \n" +
-			"}                                                                                         \n",
+			"attribute vec3 attribute_position ;                                                            \n" +
+			"attribute vec3 attribute_normal ;                                                              \n" +
+			"uniform mat4 uniform_ModelMatrix ;                                                             \n" +
+			"uniform mat4 uniform_ProjectionMatrix ;                                                        \n" +
+			"vec4 endPosition ;                                                                             \n" +
+			"void main(void){                                                                               \n" +
+			"endPosition =  uniform_ProjectionMatrix * uniform_ModelMatrix * vec4(attribute_position,1.0) ; \n" +
+			"}                                                                                              \n",
 
 			"Composition":
 			"varying vec2 uv ;                             \n" +
@@ -416,6 +365,19 @@ module egret3d_dev {
 			"diffuse.xyz = mix( diffuse.xyz  , fog.fogColor , min(fogFactor,1.0) );               \n" +
 			"}                                                                                    \n" +
 			"                                                                                     \n",
+
+			"end_fs":
+			"vec4 endColor ;            \n" +
+			"void main() {              \n" +
+			"gl_FragColor =  endColor ; \n" +
+			"}                          \n",
+
+			"end_vs":
+			"vec4 endPosition ;           \n" +
+			"void main() {                \n" +
+			"gl_Position =  endPosition ; \n" +
+			"}                            \n" +
+			"                             \n",
 
 			"EnvironmentMapping_fragment":
 			"uniform samplerCube environmentMapTex ;                             \n" +

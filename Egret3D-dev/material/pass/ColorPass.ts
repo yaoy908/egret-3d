@@ -36,6 +36,9 @@
                 this._passUsage.fragmentShader.addUseShaderName(LightType[this._materialData.lightList[i].lightType]);
             }
 
+            this._passUsage.vertexShader.addEndShaderName("end_vs"); 
+            this._passUsage.fragmentShader.addEndShaderName("end_fs");
+
             //if (this.animation) {
             //    if (this.animation.animaNodeCollection) {
             //        var vsShaderNames: string[] = this.animation.animaNodeCollection.getNodesVertexShaders();

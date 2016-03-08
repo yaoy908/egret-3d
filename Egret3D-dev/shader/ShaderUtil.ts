@@ -74,6 +74,7 @@
             for (var key in ShaderLib.lib) {
                 var content = this.readShader(ShaderLib.lib[key]);
                 this._shaderContentDict[key] = content;
+                content.name = key;
             }
         }
 
@@ -163,7 +164,7 @@
         * @param usage
         * @returns shader 内容
         */
-        public fillShaderContent(shaderBase:ShaderBase, shaderNameList: Array<string>, usage: PassUsage) {
+        public fillShaderContent(shaderBase: ShaderBase, shaderNameList: Array<string>, usage: PassUsage): Shader {
 
             var shaderContent: GLSL.ShaderContent;
             var i: number = 0;
@@ -176,7 +177,7 @@
             }
             if (this._shaderContentDict[varName] == undefined) {
                 shaderContent = new GLSL.ShaderContent();
-
+                shaderContent.name = varName;
                 for (i = 0; i < shaderNameList.length; ++i) {
                     var tempContent: GLSL.ShaderContent = this._shaderContentDict[shaderNameList[i]];
                     shaderContent.addContent(tempContent);
@@ -229,12 +230,13 @@
                 shaderContent = this._shaderContentDict[varName];
             }
 
-            ShaderPool.getGPUShader(shaderBase.shaderType, shaderContent.name, shaderContent.source);
+            return ShaderPool.getGPUShader(shaderBase.shaderType, shaderContent.name, shaderContent.source);
         }
 
         private synthesisShader(content: GLSL.ShaderContent, shaderBase:ShaderBase) {
 
-            var source: string = "";
+             var source: string = "precision highp float;            \t\n";
+
             var i: number; 
             ///var attribute
             for (var key in content.attributeList) {

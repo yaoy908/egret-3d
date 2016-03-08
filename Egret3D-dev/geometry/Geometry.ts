@@ -100,13 +100,13 @@
        * @language zh_CN
        * 顶点格式
        */
-        public vertexFormat: number;
+        public vertexFormat: number = 0 ;
 
         /**
         * @language zh_CN
         * 顶点属性长度
         */
-        public vertexAttLength: number;
+        public vertexAttLength: number = 0 ;
 
         /**
         * @language zh_CN
@@ -344,7 +344,7 @@
                 this.upload(context3DProxy);
             }
             context3DProxy.bindVertexBuffer(this.sharedVertexBuffer);
-            context3DProxy.bindVertexBuffer(this.sharedIndexBuffer);
+            context3DProxy.bindIndexBuffer(this.sharedIndexBuffer);
         }
 
         public upload(context3DProxy: Context3DProxy) {

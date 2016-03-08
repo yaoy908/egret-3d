@@ -14,7 +14,7 @@
             this.context = context;
         }
 
-        public static getGPUShader( shaderType:number , shaderID:string , source:string ) {
+        public static getGPUShader( shaderType:number , shaderID:string , source:string ):Shader {
             var shader: Shader;
             if (this.vsShaderHashMap.isHas(shaderID))
                 shader = this.vsShaderHashMap.getValue(shaderID);

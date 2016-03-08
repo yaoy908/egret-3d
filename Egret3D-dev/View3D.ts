@@ -29,7 +29,10 @@
         protected _backColor: Vector3D = new Vector3D(0.3,0.3,0.6,1.0);
 
         private _sizeDiry: boolean = false;
-        constructor(x: number, y: number, width:number , height:number ) {
+        constructor(x: number, y: number, width: number, height: number) {
+
+            ShaderUtil.instance.load();
+
             this._entityCollect = new EntityCollect();
             this._entityCollect.root = this._scene; 
             this._render = new DefaultRender();
