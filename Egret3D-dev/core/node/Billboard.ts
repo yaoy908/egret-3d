@@ -7,7 +7,7 @@
      * @version Egret 3.0
      * @platform Web,Native
      */
-    export class Billboard extends Object3D{
+    export class Billboard extends Mesh{
 
         /**
          * @language zh_CN
@@ -18,11 +18,9 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        constructor(material:MaterialBase, width:number = 100, height:number = 100) {
-            super();
-            this.material = material;
-            //this.geometry = new PlaneGeometry(width, height);
-            //this.box.fillBox(this.geometry.minPos, this.geometry.maxPos);
+        constructor(material: MaterialBase, width:number = 100, height:number = 100) {
+            super(null, material);
+            this.geometry = new PlaneGeometry(width, height);
         }
 
         /**

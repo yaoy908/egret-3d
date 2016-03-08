@@ -34,6 +34,11 @@
         */
         public indexData: Array<number> = new Array<number>();
 
+        /**
+        * @language zh_CN
+        * 顶点长度
+        */
+        public vexLength: number = 3;
                                 
         /**
         * @language zh_CN
