@@ -1,10 +1,17 @@
 ﻿module egret3d_dev {
-    export class Class_Mesh{
+    export class Class_Mesh extends Class_View3D{
         constructor() {
-            var mat: MaterialBase = new MaterialBase();
+            super();
 
-            var geometery: Geometry = new Geometry();
-            var mesh: Mesh = new Mesh(geometery,mat);
+            var a: number = Math.random() ;
+
+            var mat: ColorMaterial = new ColorMaterial();
+
+            var geometery: CubeGeometry = new CubeGeometry();
+            var mesh: Mesh = new Mesh(geometery, mat);
+            this._view.addChild3D(mesh);
+
+            this.update(0, 0);
         }
     }
 }
