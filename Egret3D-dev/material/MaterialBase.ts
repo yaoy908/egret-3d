@@ -26,6 +26,7 @@
         public setData(data: MaterialData) {
             this.materialData = data; 
             this.initPass();
+            this.blendMode = BlendMode.NORMAL;
         }
 
         public getData(): MaterialData {
@@ -37,13 +38,42 @@
         }
 
         /**
-       * @language zh_CN
-       * 设置材质 diffuseColor。
-       * 设置 16 进制的漫反射颜色
-       * @param color {Number}
-       * @version Egret 3.0
-       * @platform Web,Native
-       */
+        * @language zh_CN
+        * 设置模型渲染模式。模型可以以顶点的方式渲染，线框渲染（会需要特定模型），三角形渲染
+        * DrawMode.POINTS
+        * rawMode.LINES
+        * DrawMode.TRIANGLES
+        * @default DrawMode.TRIANGLES
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set drawMode(mode: number) {
+         
+            this.materialData.drawMode = mode; 
+        }
+
+        /**
+        * @language zh_CN
+        * 设置模型渲染模式。模型可以以顶点的方式渲染，线框渲染（会需要特定模型），三角形渲染
+        * DrawMode.POINTS
+        * rawMode.LINES
+        * DrawMode.TRIANGLES
+        * @default DrawMode.TRIANGLES
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get drawMode(): number {
+            return this.materialData.drawMode;
+        }
+
+        /**
+        * @language zh_CN
+        * 设置材质 diffuseColor。
+        * 设置 16 进制的漫反射颜色
+        * @param color {Number}
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set diffuseColor(color: number) {
             this.materialData.materialDataNeedChange = true;
             this.materialData.diffuseColor = color;

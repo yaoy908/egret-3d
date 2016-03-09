@@ -8,6 +8,7 @@
         private time: number = 0;
         private view3DS: Array<View3D> = new Array<View3D>();
         private sizeDiry: boolean = true;
+        private enterFrameFun:Function ;
 
         constructor(blend2D: boolean = false) {
             this.canvas = document.createElement("canvas");
@@ -95,6 +96,9 @@
         }
 
         public update(delay: number) {
+
+            if (this.enterFrameFun)
+                this.enterFrameFun();
 
             Context3DProxy.gl.enable(ContextConfig.BLEND);
             Context3DProxy.gl.enable(ContextConfig.CULL_FACE);

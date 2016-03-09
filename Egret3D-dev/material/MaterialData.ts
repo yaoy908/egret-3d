@@ -443,7 +443,7 @@
         /**
          * @language zh_CN
          */
-        public materialSourceData: Float32Array;//12
+        public materialSourceData: Float32Array = new Float32Array(16);//12
 
         /**
          * @language zh_CN
