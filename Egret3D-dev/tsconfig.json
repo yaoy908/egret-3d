@@ -10,9 +10,11 @@
 
         "config/TextureMethodType.ts",
 
-        "events/Event3D.ts",
         "events/PickResult.ts",
         "events/IDispatchEvent.ts",
+        "events/Event3D.ts",
+        "events/MouseEvent3D.ts",
+        "events/EventDispatcher.ts",
 
         "geom/UV.ts",
         "geom/Point.ts",

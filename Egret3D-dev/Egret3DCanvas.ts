@@ -1,5 +1,5 @@
 ﻿module egret3d_dev {
-    export class Egret3DCanvas {
+    export class Egret3DCanvas extends EventDispatcher {
         static context3DProxy: Context3DProxy;
  
         private canvas3DRectangle: Rectangle = new Rectangle();
@@ -8,9 +8,12 @@
         private time: number = 0;
         private view3DS: Array<View3D> = new Array<View3D>();
         private sizeDiry: boolean = true;
-        private enterFrameFun:Function ;
+
+
+        private _enterFrameEvent3D: Event3D;
 
         constructor(blend2D: boolean = false) {
+            super();
             this.canvas = document.createElement("canvas");
             this.canvas.style.position = "absolute";
             this.canvas.style.zIndex = "0";
@@ -39,6 +42,13 @@
 
             Egret3DCanvas.context3DProxy .register();
             console.log("this.context3D ==>", Context3DProxy.gl);
+
+            this.initEvent();
+        }
+
+        public initEvent() {
+            this._enterFrameEvent3D = new Event3D(Event3D.ENTER_FRAME);
+            this._enterFrameEvent3D.target = this;
         }
 
         public set x(value: number) {
@@ -97,8 +107,9 @@
 
         public update(delay: number) {
 
-            if (this.enterFrameFun)
-                this.enterFrameFun();
+            this._enterFrameEvent3D.time += delay;
+            this._enterFrameEvent3D.delay = delay;
+            this.dispatchEvent( this._enterFrameEvent3D );
 
             Context3DProxy.gl.enable(ContextConfig.BLEND);
             Context3DProxy.gl.enable(ContextConfig.CULL_FACE);
