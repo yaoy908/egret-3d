@@ -1,10 +1,11 @@
 ﻿
 function jsOnload() {
-    var view: egret3d_dev.Class_View3D = new egret3d_dev.Class_View3D();
+    //var view: egret3d_dev.Class_Mesh = new egret3d_dev.Class_Mesh();
+    var view: egret3d_dev.Class_DirectLight = new egret3d_dev.Class_DirectLight();
+
 }
 
 window.onload = () => {
 
     egret3d_dev.Egret3DEngine.preload(() => jsOnload());
-
-};
+}
