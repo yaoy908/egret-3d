@@ -174,82 +174,83 @@
                     varName += "/";
                 }
                 varName += shaderNameList[i];
-
-                varName += "/d" + usage.maxDirectLight;
-                varName += "/s" + usage.maxSpotLight;
-                varName += "/p" + usage.maxPointLight;
-                varName += "/b" + usage.maxBone;
             }
+
+            varName += "/d" + usage.maxDirectLight;
+            varName += "/s" + usage.maxSpotLight;
+            varName += "/p" + usage.maxPointLight;
+            varName += "/b" + usage.maxBone;
+
             if (this._shaderContentDict[varName] == undefined) {
                 shaderContent = new GLSL.ShaderContent();
                 shaderContent.name = varName;
-                for (i = 0; i < shaderNameList.length; ++i) {
-                    var tempContent: GLSL.ShaderContent = this._shaderContentDict[shaderNameList[i]];
-                    shaderContent.addContent(tempContent);
-                }
-
-                this._shaderContentDict[varName] = shaderContent;
-                shaderContent.name = varName;
-
-                for (i = 0; i < shaderContent.attributeList.length; i++) {
-                    varName = shaderContent.attributeList[i].varName;
-                    usage[varName] = shaderContent.attributeList[i].clone();
-                }
-
-                for (i = 0; i < shaderContent.varyingList.length; i++) {
-                    varName = shaderContent.varyingList[i].varName;
-                    if (!usage[varName]) {
-                        usage[varName] = shaderContent.varyingList[i].clone();
-                    }
-                }
-
-                for (i = 0; i < shaderContent.tempList.length; i++) {
-                    varName = shaderContent.tempList[i].varName;
-                    usage[varName] = shaderContent.tempList[i].clone();
-                }
-
-                for (i = 0; i < shaderContent.uniformList.length; i++) {
-                    varName = shaderContent.uniformList[i].varName;
-                    usage[varName] = shaderContent.uniformList[i].clone();
-                }
-
-                var constR: GLSL.ConstVar; 
-                for (i = 0; i < shaderContent.constList.length; i++) {
-                    varName = shaderContent.constList[i].varName;
-                    constR = shaderContent.constList[i].clone();
-                    usage[varName] = constR;
-                    switch (varName) {
-                        case "max_directLight":
-                            constR.value = usage.maxDirectLight; 
-                            break;
-                        case "max_spotLight":
-                            constR.value = usage.maxSpotLight;
-                            break;
-                        case "max_pointLight":
-                            constR.value = usage.maxSpotLight;
-                            break;
-                        case "maxBone":
-                            constR.value = usage.maxBone;
-                            break;
-                    }
-                }
-
-                for (i = 0; i < shaderContent.sampler2DList.length; i++) {
-                    varName = shaderContent.sampler2DList[i].varName;
-                    usage[varName] = shaderContent.sampler2DList[i].clone();
-                }
-
-                for (i = 0; i < shaderContent.sampler3DList.length; i++) {
-                    varName = shaderContent.sampler3DList[i].varName;
-                    usage[varName] = shaderContent.sampler3DList[i].clone();
-                }
-
-                this.synthesisShader(shaderContent, shaderBase);
-
             }
             else {
                 shaderContent = this._shaderContentDict[varName];
             }
+
+            for (i = 0; i < shaderNameList.length; ++i) {
+                var tempContent: GLSL.ShaderContent = this._shaderContentDict[shaderNameList[i]];
+                shaderContent.addContent(tempContent);
+            }
+
+            this._shaderContentDict[varName] = shaderContent;
+            shaderContent.name = varName;
+
+            for (i = 0; i < shaderContent.attributeList.length; i++) {
+                varName = shaderContent.attributeList[i].varName;
+                usage[varName] = shaderContent.attributeList[i].clone();
+            }
+
+            for (i = 0; i < shaderContent.varyingList.length; i++) {
+                varName = shaderContent.varyingList[i].varName;
+                if (!usage[varName]) {
+                    usage[varName] = shaderContent.varyingList[i].clone();
+                }
+            }
+
+            for (i = 0; i < shaderContent.tempList.length; i++) {
+                varName = shaderContent.tempList[i].varName;
+                usage[varName] = shaderContent.tempList[i].clone();
+            }
+
+            for (i = 0; i < shaderContent.uniformList.length; i++) {
+                varName = shaderContent.uniformList[i].varName;
+                usage[varName] = shaderContent.uniformList[i].clone();
+            }
+
+            var constR: GLSL.ConstVar;
+            for (i = 0; i < shaderContent.constList.length; i++) {
+                varName = shaderContent.constList[i].varName;
+                constR = shaderContent.constList[i].clone();
+                usage[varName] = constR;
+                switch (varName) {
+                    case "max_directLight":
+                        constR.value = usage.maxDirectLight;
+                        break;
+                    case "max_spotLight":
+                        constR.value = usage.maxSpotLight;
+                        break;
+                    case "max_pointLight":
+                        constR.value = usage.maxSpotLight;
+                        break;
+                    case "maxBone":
+                        constR.value = usage.maxBone;
+                        break;
+                }
+            }
+
+            for (i = 0; i < shaderContent.sampler2DList.length; i++) {
+                varName = shaderContent.sampler2DList[i].varName;
+                usage[varName] = shaderContent.sampler2DList[i].clone();
+            }
+
+            for (i = 0; i < shaderContent.sampler3DList.length; i++) {
+                varName = shaderContent.sampler3DList[i].varName;
+                usage[varName] = shaderContent.sampler3DList[i].clone();
+            }
+
+            this.synthesisShader(shaderContent, shaderBase);
 
             return ShaderPool.getGPUShader(shaderBase.shaderType, shaderContent.name, shaderContent.source);
         }

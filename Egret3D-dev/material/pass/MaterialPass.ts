@@ -103,8 +103,10 @@
                 }
                 //if (this.lightGroup.spotLightList.length)
                 //    this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
-                //if (this.lightGroup.pointLightList.length)
-                //    this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
+                if (this.lightGroup.pointLightList.length) {
+                    this._passUsage.pointLightData = new Float32Array(PointLight.stride * this.lightGroup.pointLightList.length);
+                    this._passUsage.fragmentShader.addUseShaderName("pointLight_fragment");
+                }
             }
 
             if (this.methodList) {
@@ -212,10 +214,10 @@
             var i: number = 0;
             if (this.lightGroup) {
                 for (i = 0; i < this._passUsage.maxDirectLight; i++) {
-                    this.lightGroup.directLightList[i].updateLightData(i, this._passUsage.directLightData );
+                    this.lightGroup.directLightList[i].updateLightData(i, this._passUsage.directLightData);
                 }
                 for (i = 0; i < this._passUsage.maxSpotLight; i++) {
-                    this.lightGroup.spotLightList[i].updateLightData(i, this._passUsage.spotLightData );
+                    this.lightGroup.spotLightList[i].updateLightData(i, this._passUsage.spotLightData);
                 }
                 for (i = 0; i < this._passUsage.maxPointLight; i++) {
                     this.lightGroup.pointLightList[i].updateLightData(i, this._passUsage.pointLightData);

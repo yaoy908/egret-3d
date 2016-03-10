@@ -25,6 +25,8 @@ module egret3d_dev {
 			"vec4 specular ; \n" +
 			"vec3 normal  ; \n" +
 			"vec3 eyedir  ; \n" +
+			"vec4 light ; \n" +
+			"vec4 ambient; \n" +
 			"void main() { \n" +
 			"MaterialSource materialSource ; \n" +
 			"materialSource.diffuse.x = uniform_materialSource[0]; \n" +
@@ -112,8 +114,11 @@ module egret3d_dev {
 
 			"end_fs":
 			"vec4 endColor ; \n" +
+			"vec4 specular ; \n" +
+			"vec4 light ; \n" +
+			"vec3 ambient; \n" +
 			"void main() { \n" +
-			"endColor.xyz = endColor.xyz + light.xyz; \n" +
+			"endColor.xyz = endColor.xyz + light.xyz + specular.xyz + ambient.xyz ; \n" +
 			"gl_FragColor =  endColor ; \n" +
 			"} \n",
 
