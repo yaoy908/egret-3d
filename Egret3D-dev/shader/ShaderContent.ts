@@ -225,7 +225,6 @@
                     if (otherContent.attributeList[i].name == this.attributeList[j].name) {
                         if (otherContent.attributeList[i].valueType != this.attributeList[j].valueType ||
                             otherContent.attributeList[i].key != this.attributeList[j].key) {
-                            console.log("Error :addContent");
                         }
 
                         isAdd = false;
@@ -244,7 +243,6 @@
                     if (otherContent.varyingList[i].name == this.varyingList[j].name) {
                         if (otherContent.varyingList[i].valueType != this.varyingList[j].valueType ||
                             otherContent.varyingList[i].key != this.varyingList[j].key) {
-                            console.log("Error :addContent");
                         }
 
                         isAdd = false;
@@ -263,7 +261,6 @@
                     if (otherContent.uniformList[i].name == this.uniformList[j].name) {
                         if (otherContent.uniformList[i].valueType != this.uniformList[j].valueType ||
                             otherContent.uniformList[i].key != this.uniformList[j].key) {
-                            console.log("Error :addContent");
                         }
 
                         isAdd = false;
@@ -282,7 +279,6 @@
                     if (otherContent.constList[i].name == this.constList[j].name) {
                         if (otherContent.constList[i].valueType != this.constList[j].valueType ||
                             otherContent.constList[i].key != this.constList[j].key) {
-                            console.log("Error :addContent");
                         }
 
                         isAdd = false;
@@ -300,7 +296,6 @@
                     if (otherContent.tempList[i].name == this.tempList[j].name) {
                         if (otherContent.tempList[i].valueType != this.tempList[j].valueType ||
                             otherContent.tempList[i].key != this.tempList[j].key) {
-                            console.log("Error :addContent");
                         }
 
                         isAdd = false;
