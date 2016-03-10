@@ -9,6 +9,7 @@ struct DirectLight{
     float halfIntensity;
 };
 
+vec4 light ;
 void calculateDirectLight( MaterialSource materialSource ){
 	float specularfract ;
 	vec3 halfV,ldir;
