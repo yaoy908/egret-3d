@@ -229,9 +229,6 @@
         */
         public subGeometrys: Array<SubGeometry> = new Array<SubGeometry>();
 
-        protected attributes: any = [];
-        protected uniforms: any = [];
-
         /**
         * @language zh_CN
         * @private
@@ -242,6 +239,10 @@
         constructor() {
         }
 
+        /**
+        * @language zh_CN
+        * @private
+        */
         public init() {
             this.useVertexFormat( VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_COLOR | VertexFormat.VF_UV );
             this.calculateVertexFormat();
@@ -291,8 +292,14 @@
 
             this.vertexSizeInBytes = this.vertexAttLength * 4;
         }
-
-        private calculateVertexFormat() {
+                
+        /**
+        * @language zh_CN
+        * @根据顶点格式生成顶点buffer
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public calculateVertexFormat() {
 
             for (var i: number = 0; i < this.source_positionData.length / Geometry.positionSize; ++i) {
                 if (this.vertexFormat & VertexFormat.VF_POSITION) {

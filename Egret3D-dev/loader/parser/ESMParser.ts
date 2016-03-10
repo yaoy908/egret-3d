@@ -62,28 +62,16 @@
             ESMParser.readBoneSkinInfo(bytes, geomtryData, skeleton, version);
 
             var geomtry: Geometry;
-
+            var vertexFormat: number = 0;
             if (geomtryData.source_skinData.length > 0) {
 
-                //var skinGeomtry: SkinGeometry = new SkinGeometry();
-
-                //skinGeomtry.vertexAttLength = geomtryData.vertexAttLength = 17 + 8;
-
-                //geomtryData = GeometryData.build(geomtryData);
-
-                //skinGeomtry.setGeomtryData(geomtryData.indices, geomtryData.vertexDatas, skeleton);
-
-                //geomtry = skinGeomtry;
+                vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV | VertexFormat.VF_SKIN;
+                geomtry = GeometryData.buildGeomtry(geomtryData, vertexFormat);
             }
             else {
-                //geomtryData = GeometryData.build(geomtryData);
-                geomtry = GeometryData.buildGeomtry(geomtryData);
+                vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV | VertexFormat.VF_UV2;
+                geomtry = GeometryData.buildGeomtry(geomtryData, vertexFormat);
 
-                //var staticGeomtry: SubGeometry = new SubGeometry();
-
-                //staticGeomtry.setGeomtryData(geomtryData.indices, geomtryData.vertexDatas);
-
-                //geomtry = staticGeomtry;
             }
 
             //geomtry.textureFile = textureDiffuse;

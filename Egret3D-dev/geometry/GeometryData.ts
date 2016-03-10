@@ -229,11 +229,13 @@
 
         /**
         * @language zh_CN
+        * 
         * 构建顶点数据数组
         * @param source 未组合顶点数据的GeometryData对象
+        * @param vertexFormat 生成顶点格式
         * @returns 经过组合并生成顶点数据数组的新GeometryData对象
         */
-        public static buildGeomtry(source: GeometryData): Geometry {
+        public static buildGeomtry(source: GeometryData, vertexFormat: number): Geometry {
 
             if (null == source.source_faceData || source.source_faceData.length <= 0 || null == source.source_vertexData || source.source_vertexData.length <= 0)
                 return null;
@@ -241,7 +243,7 @@
             var target: Geometry = new Geometry();
             target.indexData = [];
             target.verticesData = [];
-            target.vertexAttLength = source.vertexAttLength;
+            target.useVertexFormat(vertexFormat);
 
             var faceData: FaceData = null;
             var vertex: Vector3D = null;
@@ -254,13 +256,8 @@
 
                 faceData = source.source_faceData[faceIndex];
 
-                target.indexData.push(
-                    faceIndex * 3 + 0,
-                    faceIndex * 3 + 2,
-                    faceIndex * 3 + 1
-                );
-
                 for (var i: number = 0; i < 3; i++) {
+                    target.indexData.push(faceIndex * 3 + i);
 
                     vertex = source.source_vertexData[faceData.vertexIndices[i] - 1];
 
@@ -315,6 +312,14 @@
             }
 
             GeometryData.updateFaceTangents(target);
+            target.calculateVertexFormat();
+            
+
+            var subGeometry: SubGeometry = new SubGeometry();
+            subGeometry.geometry = target;
+            subGeometry.start = 0;
+            subGeometry.count = target.indexData.length;
+            target.subGeometrys.push(subGeometry);
 
             return target;
         }
