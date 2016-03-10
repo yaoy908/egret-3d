@@ -9,7 +9,25 @@
         modelMatrix: Matrix4_4;
 
         pickType: number;
+
+        /**
+        * @language zh_CN
+        * 对象模型包围盒。</p>
+        * 每个场景物件都需要有的 包围盒子，可以自定义包围盒形状大小，也可以根据模型本身生成。</p>
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         bound: Bound;
+
+        /**
+        * @language zh_CN
+        * 鼠标检测数据
+        * @private
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        pickResult: PickResult;
+
         mouseEnable: boolean;
         mouseChilder: boolean;
         enableCulling: boolean;

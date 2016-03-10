@@ -329,10 +329,6 @@
                 rotation.x = bytes.readFloat() * Matrix3DUtils.RADIANS_TO_DEGREES;
                 rotation.y = bytes.readFloat() * Matrix3DUtils.RADIANS_TO_DEGREES;
                 rotation.z = bytes.readFloat() * Matrix3DUtils.RADIANS_TO_DEGREES;
-                /*orientation.x = bytes.readFloat();
-                orientation.y = bytes.readFloat();
-                orientation.z = bytes.readFloat();
-                orientation.w = bytes.readFloat();*/
 
                 scaling.x = bytes.readFloat();
                 scaling.y = bytes.readFloat();

@@ -2,7 +2,7 @@
     /**
      * @private
      * @language zh_CN
-     * @class egret3d_dev.Joint
+     * @class egret3d.Joint
      * @classdesc
      * Joint 类表示骨骼关节，属于骨架类的组成部分， Joint类属于骨架实现的内部类，无需直接实例化。
      * 

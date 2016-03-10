@@ -2,7 +2,9 @@
     export class Egret3DCanvas extends EventDispatcher {
         static context3DProxy: Context3DProxy;
  
+        public clientRect: ClientRect;
         private canvas3DRectangle: Rectangle = new Rectangle();
+
         private canvas: HTMLCanvasElement;
 
         private time: number = 0;
@@ -43,6 +45,8 @@
             Egret3DCanvas.context3DProxy .register();
             console.log("this.context3D ==>", Context3DProxy.gl);
 
+            this.clientRect = this.canvas.getBoundingClientRect();
+            Input.instance.canvas = this;
             this.initEvent();
         }
 
