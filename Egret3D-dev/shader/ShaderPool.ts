@@ -25,10 +25,9 @@
                     this.vsShaderHashMap.add(shaderID, shader);
                 } else if (shaderType == Shader.fragment) {
                     shader = this.context.creatFragmentShader(source);
-                    shader.id = shaderID;
+                    shader.id = shaderID; 
                     this.fsShaderHashMap.add(shaderID, shader);
                 }
-               
             }
             return shader;
         }

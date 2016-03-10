@@ -174,6 +174,11 @@
                     varName += "/";
                 }
                 varName += shaderNameList[i];
+
+                varName += "/d" + usage.maxDirectLight;
+                varName += "/s" + usage.maxSpotLight;
+                varName += "/p" + usage.maxPointLight;
+                varName += "/b" + usage.maxBone;
             }
             if (this._shaderContentDict[varName] == undefined) {
                 shaderContent = new GLSL.ShaderContent();
@@ -208,9 +213,25 @@
                     usage[varName] = shaderContent.uniformList[i].clone();
                 }
 
+                var constR: GLSL.ConstVar; 
                 for (i = 0; i < shaderContent.constList.length; i++) {
                     varName = shaderContent.constList[i].varName;
-                    usage[varName] = shaderContent.constList[i].clone();
+                    constR = shaderContent.constList[i].clone();
+                    usage[varName] = constR;
+                    switch (varName) {
+                        case "max_directLight":
+                            constR.value = usage.maxDirectLight; 
+                            break;
+                        case "max_spotLight":
+                            constR.value = usage.maxSpotLight;
+                            break;
+                        case "max_pointLight":
+                            constR.value = usage.maxSpotLight;
+                            break;
+                        case "maxBone":
+                            constR.value = usage.maxBone;
+                            break;
+                    }
                 }
 
                 for (i = 0; i < shaderContent.sampler2DList.length; i++) {

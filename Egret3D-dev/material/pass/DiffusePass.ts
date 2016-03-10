@@ -34,9 +34,9 @@
                 this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
             }
 
-            for (i = 0; i < this._materialData.lightList.length; i++) {
-                this._passUsage.fragmentShader.addUseShaderName(LightType[this._materialData.lightList[i].lightType]);
-            }
+            //for (i = 0; i < this._materialData.lightList.length; i++) {
+            //    this._passUsage.fragmentShader.addUseShaderName(LightType[this._materialData.lightList[i].lightType]);
+            //}
 
             //if (this.animation) {
             //    if (this.animation.animaNodeCollection) {

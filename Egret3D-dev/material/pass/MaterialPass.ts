@@ -11,7 +11,8 @@
         public vsShaderNames: Array<string> = new Array<string>();
         public fsShaderNames: Array<string> = new Array<string>();
 
-        public uniformList: Array<GLSL.Uniform> = new Array<GLSL.Uniform>();
+        public lightGroup: LightGroup;
+        private normalMatrix: Matrix4_4 = new Matrix4_4();
         constructor(materialData: MaterialData) {
             this._materialData = materialData;
         }
@@ -34,8 +35,13 @@
                 this._passChange = true;
             }
         }
+
         protected materialDataChange() {
             this._materialData.materialDataNeedChange = true;
+        }
+
+        protected restProgram() {
+
         }
 
         /**
@@ -67,10 +73,6 @@
                 this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
             }
 
-            for (i = 0; i < this._materialData.lightList.length; i++) {
-                this._passUsage.fragmentShader.addUseShaderName(LightType[this._materialData.lightList[i].lightType]);
-            }
-
             //if (this.animation) {
             //    if (this.animation.animaNodeCollection) {
             //        var vsShaderNames: string[] = this.animation.animaNodeCollection.getNodesVertexShaders();
@@ -89,6 +91,21 @@
             //    this.vertexShader.addShader(this.shadowMaping.vertexMethodName);
             //    this.pixelShader.addShader(this.shadowMaping.fragMethodName);
             //}
+
+            if (this.lightGroup) {
+                this._passUsage.maxDirectLight = this.lightGroup.directLightList.length;
+                this._passUsage.maxSpotLight = this.lightGroup.spotLightList.length;
+                this._passUsage.maxPointLight = this.lightGroup.pointLightList.length;
+
+                if (this.lightGroup.directLightList.length) {
+                    this._passUsage.directLightData = new Float32Array(DirectLight.stride * this.lightGroup.directLightList.length);
+                    this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
+                }
+                //if (this.lightGroup.spotLightList.length)
+                //    this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
+                //if (this.lightGroup.pointLightList.length)
+                //    this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
+            }
 
             if (this.methodList) {
                 for (var i: number = 0; i < this.methodList.length; i++) {
@@ -145,8 +162,6 @@
             if (this._materialData.alphaBlending)
                 Context3DProxy.gl.depthMask(false);
 
-            var i: number = 0;
-
             if (this._materialData.materialDataNeedChange) {
                 //this._materialData.materialDataNeedChange = false;
                 this._materialData.materialSourceData[0] = (this._materialData.diffuseColor >> 16 & 0xff) / 255.0;
@@ -194,11 +209,39 @@
             //    sampler3D = this._materialData.diffusePassUsageData.sampler3DList[index];
             //}
 
+            var i: number = 0;
+            if (this.lightGroup) {
+                for (i = 0; i < this._passUsage.maxDirectLight; i++) {
+                    this.lightGroup.directLightList[i].updateLightData(i, this._passUsage.directLightData );
+                }
+                for (i = 0; i < this._passUsage.maxSpotLight; i++) {
+                    this.lightGroup.spotLightList[i].updateLightData(i, this._passUsage.spotLightData );
+                }
+                for (i = 0; i < this._passUsage.maxPointLight; i++) {
+                    this.lightGroup.pointLightList[i].updateLightData(i, this._passUsage.pointLightData);
+                }
+
+                if (this._passUsage.uniform_directLightSource)
+                    context3DProxy.uniform1fv(this._passUsage.uniform_directLightSource.uniformIndex, this._passUsage.directLightData);
+                if (this._passUsage.uniform_sportLightSource)
+                    context3DProxy.uniform1fv(this._passUsage.uniform_sportLightSource.uniformIndex, this._passUsage.spotLightData);
+                if (this._passUsage.uniform_pointLightSource)
+                    context3DProxy.uniform1fv(this._passUsage.uniform_pointLightSource.uniformIndex, this._passUsage.pointLightData);
+            }
+
             if (this._materialData.alphaBlending)
                 Context3DProxy.gl.depthMask(true);
 
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ModelMatrix.uniformIndex, false, modeltransform.rawData);
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.viewProjectionMatrix.rawData);
+
+            this.normalMatrix.copyFrom(modeltransform);
+            this.normalMatrix.invert();
+            this.normalMatrix.transpose();
+            //this.normalMatrix.appendScale(1,1,1);
+
+            context3DProxy.uniformMatrix4fv(this._passUsage.uniform_normalMatrix.uniformIndex, false, this.normalMatrix.rawData);
+            context3DProxy.uniform3f(this._passUsage.uniform_eyepos.uniformIndex, camera3D.x, camera3D.y, camera3D.z);
 
             context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count);
 

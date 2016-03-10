@@ -255,6 +255,14 @@
         public vertexShader: ShaderBase = new ShaderBase();
         public fragmentShader: ShaderBase = new ShaderBase();
 
+        public maxDirectLight: number = 0;
+        public maxSpotLight: number = 0;
+        public maxPointLight: number = 0; 
+        public maxBone: number = 0; 
+
+        public directLightData: Float32Array ;
+        public spotLightData: Float32Array ;
+        public pointLightData: Float32Array ;
 
         /**
          * @language zh_CN

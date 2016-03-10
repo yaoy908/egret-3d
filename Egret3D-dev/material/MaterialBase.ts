@@ -1,10 +1,11 @@
 ﻿module egret3d_dev {
     export class MaterialBase {
 
-        
-
         public diffusePass: MaterialPass; 
+
         public materialData: MaterialData;
+
+        private _lightGroup: LightGroup;
          /**
          * @language zh_CN
          * @class egret3d_dev.MaterialBase
@@ -37,6 +38,11 @@
             this.diffusePass = new ColorPass(this.materialData);
         }
 
+        public set lightGroup(group: LightGroup) {
+            this._lightGroup = group; 
+            this.diffusePass.lightGroup = group;
+        }
+
         /**
         * @language zh_CN
         * 设置模型渲染模式。模型可以以顶点的方式渲染，线框渲染（会需要特定模型），三角形渲染
@@ -48,7 +54,6 @@
         * @platform Web,Native
         */
         public set drawMode(mode: number) {
-         
             this.materialData.drawMode = mode; 
         }
 

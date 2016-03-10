@@ -13,14 +13,6 @@
 
         /**
         * @language zh_CN
-        * diffuse pass usage 数据。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public diffusePassUsageData: PassUsage = new PassUsage(); 
-
-        /**
-        * @language zh_CN
         * 深度 pass usage data。
         * @version Egret 3.0
         * @platform Web,Native
@@ -210,7 +202,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public lightList: Array<LightBase> = new Array<LightBase>();
+        //public lightList: Array<LightBase> = new Array<LightBase>();
 
         /**
         * @language zh_CN
@@ -468,7 +460,6 @@
         public clone(): MaterialData {
 
             var data: MaterialData = new MaterialData();
-            data.diffusePassUsageData = this.diffusePassUsageData;
             //data.depthPassUsageData = this.depthPassUsageData;
             //data.normalPassUsageData = this.normalPassUsageData;
             //data.positionPassUsageData = this.positionPassUsageData;
@@ -530,8 +521,6 @@
         */
         public dispose() {
 
-            if (this.diffusePassUsageData)
-                this.diffusePassUsageData.dispose();
             //if (this.depthPassUsageData)
             //    this.depthPassUsageData.dispose();
             //if (this.normalPassUsageData)

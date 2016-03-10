@@ -50,6 +50,12 @@
         "core/node/Sky.ts",
         "core/node/SphereSky.ts",
 
+        "lights/LightBase.ts",
+        "lights/PointLight.ts",
+        "lights/SpotLight.ts",
+        "lights/DirectLight.ts",
+        "lights/LightGroup.ts",
+
         "core/traverse/CollectBase.ts",
         "core/traverse/EntityCollect.ts",
         "core/traverse/Frustum.ts",

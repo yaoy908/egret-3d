@@ -50,6 +50,14 @@
         */
         static ENTER_FRAME: string = "enter_frame"; 
 
+        /**
+        * @language zh_CN
+        * RESIZE 定义 修改大小时发生。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static RESIZE: string = "resize"; 
+
         //----------------------------------------------------
         //----------------------------------------------------
         //----------------------------------------------------

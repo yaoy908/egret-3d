@@ -50,6 +50,7 @@
          * 点光源列表
          */
         public pointLightList: Array<PointLight>;
+
         /**
         * @language zh_CN
         * constructor
