@@ -256,8 +256,12 @@
 
                 faceData = source.source_faceData[faceIndex];
 
+                target.indexData.push(
+                    faceIndex * 3 + 0,
+                    faceIndex * 3 + 2,
+                    faceIndex * 3 + 1);
+
                 for (var i: number = 0; i < 3; i++) {
-                    target.indexData.push(faceIndex * 3 + i);
 
                     vertex = source.source_vertexData[faceData.vertexIndices[i] - 1];
 
