@@ -118,7 +118,7 @@ module egret3d_dev {
 			"vec4 light ; \n" +
 			"vec3 ambient; \n" +
 			"void main() { \n" +
-			"endColor.xyz = endColor.xyz + light.xyz + specular.xyz + ambient.xyz ; \n" +
+			"endColor.xyz = endColor.xyz * light.xyz + materialSource.specular.xyz * specular.xyz + materialSource.ambient.xyz * ambient.xyz ; \n" +
 			"gl_FragColor =  endColor ; \n" +
 			"} \n",
 
