@@ -1,31 +1,16 @@
 ﻿module egret3d_dev {
+    export class EAMVersion {
+        static versionDictionary: any = {
+            1: (bytes: ByteArray) => EAMVersion.parserVersion_1(bytes),
+        };
 
-    /**
-     * @private 
-     * @language zh_CN
-     * @class egret3d.EAMParser
-     * @classdesc
-     * 用 EAMParser 类 解析.eam 文件
-     */
-    export class EAMParser {
-
-       /**
-        * @language zh_CN
-        * @param datas 加载的二进制流
-        * @returns SkeletonAnimationClip
-        */
-        public static parse(datas: ArrayBuffer): SkeletonAnimationClip {
-
-            var bytes: ByteArray = new ByteArray(datas);
-
+        public static parserVersion_1(bytes: ByteArray): SkeletonAnimationClip {
             var boneCount: number = bytes.readUnsignedByte();
 
-            var animationName: string = bytes.readUTF();
-
-            var sampling:number = bytes.readUnsignedByte();
+            var sampling: number = bytes.readUnsignedByte();
 
             if (boneCount <= 0)
-                return new SkeletonAnimationClip(animationName);
+                return new SkeletonAnimationClip();
 
             var boneNameArray: Array<string> = new Array<string>();
             var parentBoneNameArray: Array<string> = new Array<string>();
@@ -49,7 +34,7 @@
 
                 for (var j: number = 0; j < boneCount; j++) {
 
-                    var jointPose: Joint = new Joint( boneNameArray[j] );
+                    var jointPose: Joint = new Joint(boneNameArray[j]);
 
                     jointPose.parent = parentBoneNameArray[j];
 
@@ -68,10 +53,10 @@
                     pose.frameTime = skeletonPose.frameTime - 160 / 2;
 
                     var currentSkeletonPose: Skeleton = poseArray[poseArray.length - 1];
-                
+
                     for (var j: number = 0; j < boneCount; j++) {
 
-                        var jointPose: Joint = new Joint( currentSkeletonPose.joints[j].name );
+                        var jointPose: Joint = new Joint(currentSkeletonPose.joints[j].name);
 
                         jointPose.parent = currentSkeletonPose.joints[j].parent;
 
@@ -88,18 +73,18 @@
 
                         pose.joints.push(jointPose);
                     }
-                
+
                     poseArray.push(pose);
                 }
 
                 poseArray.push(skeletonPose);
             }
 
-            var skeletonAnimationClip: SkeletonAnimationClip = new SkeletonAnimationClip(animationName);
+            var skeletonAnimationClip: SkeletonAnimationClip = new SkeletonAnimationClip();
             skeletonAnimationClip.sampling = sampling;
             skeletonAnimationClip.frameCount = frameCount * 2;
             skeletonAnimationClip.poseArray = poseArray;
             return skeletonAnimationClip;
         }
     }
-}
+} 

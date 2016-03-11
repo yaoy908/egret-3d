@@ -84,7 +84,10 @@
         "input/input.ts",
         "input/OrientationController.ts",
 
-        "loader/parser/ESMParser.ts",
+        "loader/parser/EAM/EAMParser.ts",
+        "loader/parser/EAM/EAMVersion.ts",
+        "loader/parser/ESM/ESMParser.ts",
+        "loader/parser/ESM/ESMVersion.ts",
         "loader/URLLoader.ts",
 
         "material/pass/MethodData.ts",

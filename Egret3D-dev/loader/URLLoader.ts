@@ -387,9 +387,9 @@
                     this._data = geomtry;
                     break;
                 case URLLoader.DATAFORMAT_EAM:
-                    //var skeletonAnimationClip:SkeletonAnimationClip = EAMParser.parse(this._xhr.response);
+                    var skeletonAnimationClip:SkeletonAnimationClip = EAMParser.parse(this._xhr.response);
 
-                    //this._data = skeletonAnimationClip;
+                    this._data = skeletonAnimationClip;
                     break;
                 case URLLoader.DATAFORMAT_ECA:
 

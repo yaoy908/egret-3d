@@ -31,7 +31,7 @@
         private _parent: SkeletonAnimation = null;
         private _poseArray: Array<Skeleton> = null;
 
-        constructor(animName: string) {
+        constructor(animName: string = null) {
             this._animName = animName;
         }
 

@@ -152,34 +152,6 @@
 
         /**
         * @language zh_CN
-        * 动作对象，控制骨骼动画。</p>
-        * 可拓展的动画功能属性，动画功能的驱动类总接口。</p>
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public animation: IAnimation = null;
-
-        /**
-        * @language zh_CN
-        * 网格信息。</p>
-         * geometry 为渲染对象的网格信息 ，渲染对象需要 vertexBuffer  和 indexBuffer 信息 及顶点着色器shade。</p>
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        //public geometry: Geometry = null;
-
-        /**
-        * @language zh_CN
-        * 材质信息。</p>
-         * 赋予对象节点可供渲染的材质球属性，让对象加入可渲染实体列表，及渲染对象与对象之间的混合，排序。</p>
-         * @version Egret 3.0
-        * @platform Web,Native
-        */
-        //public material: MaterialBase = null;
-
-
-        /**
-        * @language zh_CN
         * 是否控制，当摄像机被绑定摄像机动画时，这个值为false.
         * @private
         * @version Egret 3.0

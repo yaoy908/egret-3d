@@ -22,7 +22,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        VF_POSITION = 0x0000001,
+        VF_POSITION = 0x00000001,
 
         /**
          * @private
@@ -31,7 +31,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        VF_NORMAL = 0x0000002,
+        VF_NORMAL = 0x00000002,
                         
         /**
          * @private
@@ -40,7 +40,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        VF_TANGENT = 0x0000004,
+        VF_TANGENT = 0x00000004,
         
         /**
          * @private
@@ -49,7 +49,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        VF_COLOR = 0x0000008,
+        VF_COLOR = 0x00000008,
         
         /**
          * @private
@@ -58,7 +58,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        VF_UV = 0x0000010,
+        VF_UV = 0x00000010,
                 
         /**
          * @private
@@ -67,7 +67,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        VF_UV2 = 0x0000020,
+        VF_UV2 = 0x00000020,
 
         /**
          * @private
@@ -76,7 +76,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        VF_SKIN = 0x0000040,
+        VF_SKIN = 0x00000040,
     }
 
     /**
@@ -175,6 +175,7 @@
         */
         public source_SkinData: Array<number> = new Array<number>();
 
+        public skeleton: Skeleton;
         /**
         * @language zh_CN
         * 顶点字节数
