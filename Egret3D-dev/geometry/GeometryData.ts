@@ -280,9 +280,7 @@
                     target.source_positionData.push(vertex.y);
                     target.source_positionData.push(vertex.z);
 
-                    target.source_normalData.push(normal.x);
-                    target.source_normalData.push(normal.y);
-                    target.source_normalData.push(normal.z);
+              
 
                     target.source_tangentData.push(0);
                     target.source_tangentData.push(0);

@@ -69,6 +69,13 @@
         "geometry/GeometryData.ts",
         "geometry/SubGeometry.ts",
         "geometry/CubeGeometry.ts",
+        "geometry/CylinderGeometry.ts",
+        "geometry/SphereGeometry.ts",
+        "geometry/PlaneGeometry.ts",
+
+
+        
+        
 
         "input/input.ts",
         "input/OrientationController.ts",
