@@ -464,10 +464,7 @@
          * @platform Web,Native
          */
         public isVisibleToCamera(renderItem: IRender): boolean {
-            if (this.frustum.inBox(renderItem.bound)) {
-                return true;
-            }
-            return false;
+            return renderItem.bound.inBound(this.frustum);
         }
     }
 } 

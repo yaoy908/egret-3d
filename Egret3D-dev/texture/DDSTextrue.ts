@@ -1,4 +1,8 @@
 ﻿module egret3d_dev {
+    
+    /**
+     * @private 
+     */
     export class DDSTexture implements ITexture {
 
         public width: number;

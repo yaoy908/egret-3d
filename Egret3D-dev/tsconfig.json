@@ -38,6 +38,7 @@
         "geom/Ray.ts",
         "geom/Color.ts",
         "geom/Bound.ts",
+        "geom/BoundBox.ts",
 
         "controller/ControllerBase.ts",
         "controller/LookAtController.ts",

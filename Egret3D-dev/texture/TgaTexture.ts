@@ -1,4 +1,8 @@
 ﻿module egret3d_dev {
+
+    /**
+     * @private 
+     */
     export class TGATexture implements ITexture {
 
         public width: number;

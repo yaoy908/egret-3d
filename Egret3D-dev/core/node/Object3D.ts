@@ -177,17 +177,6 @@
         */
         public isDisable: boolean = false;
 
-        /**
-        * @language zh_CN
-        * 鼠标拣选类型。</p>
-        * 设置鼠标的拣选类型，可通过 PickType来进行设置。</p>
-        * 快速拣选默认使用 正方形包围盒子。</p>
-        * 高精度型需要 PositionPick ， uv pick 等。</p>
-        * @see egret3d_dev.PickType
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public pickType: PickType = PickType.BoundPick;
 
         /**
         * @language zh_CN
