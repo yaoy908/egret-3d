@@ -39,6 +39,10 @@
         "geom/Color.ts",
         "geom/Bound.ts",
 
+        "controller/ControllerBase.ts",
+        "controller/LookAtController.ts",
+        "controller/HoverController.ts",
+
         "core/context/ContextConfig.ts",
         "core/context/Context3DProxy.ts",
         "core/context/FrameBuffer.ts",
