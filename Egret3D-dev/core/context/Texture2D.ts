@@ -37,14 +37,14 @@
         * @private
         * 纹理贴图的颜色模式
         */
-        public colorformat: number;
+        public colorFormat: number;
 
         /**
         * @language zh_CN
         * @private
         * 纹理贴图标准的格式
         */
-        public internalformat: InternalFormat;
+        public internalFormat: InternalFormat;
 
         /**
         * @language zh_CN
@@ -103,8 +103,8 @@
             this.border = 0;
             this.useMipmap = true;
             this.imageData = null;
-            this.colorformat = ContextConfig.ColorFormat_RGBA8888;
-            this.internalformat = InternalFormat.PixelArray;
+            this.colorFormat = ContextConfig.ColorFormat_RGBA8888;
+            this.internalFormat = InternalFormat.PixelArray;
             this.mimapData = new Array<MipmapData>();
         }
     }

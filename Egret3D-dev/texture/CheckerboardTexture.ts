@@ -50,8 +50,8 @@
             if (!this.texture2D) {
                 this.texture2D = context3D.creatTexture2D();
                 this.texture2D.border = 0; 
-                this.texture2D.internalformat = InternalFormat.PixelArray;
-                this.texture2D.colorformat = ContextConfig.ColorFormat_RGBA8888;
+                this.texture2D.internalFormat = InternalFormat.PixelArray;
+                this.texture2D.colorFormat = ContextConfig.ColorFormat_RGBA8888;
 
                 this.texture2D.mimapData = new Array<MipmapData>();
                 this.texture2D.mimapData.push(new MipmapData(this._pixelArray, this._width, this._height));

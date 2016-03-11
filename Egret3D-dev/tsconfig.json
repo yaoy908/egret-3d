@@ -84,6 +84,13 @@
         "input/input.ts",
         "input/OrientationController.ts",
 
+        "loader/parser/DDS.ts",
+        "loader/parser/DDSParser.ts",
+        "loader/parser/PVR.ts",
+        "loader/parser/PVRParser.ts",
+        "loader/parser/TGA.ts",
+        "loader/parser/TGAParser.ts",
+
         "loader/parser/EAM/EAMParser.ts",
         "loader/parser/EAM/EAMVersion.ts",
         "loader/parser/ESM/ESMParser.ts",
@@ -132,6 +139,9 @@
 
         "texture/ITexture.ts",
         "texture/ImageTexture.ts",
+        "texture/DDSTextrue.ts",
+        "texture/TGATexture.ts",
+        "texture/PVRTexture.ts",
         "texture/CubeTexture.ts",
         "texture/CheckerboardTexture.ts",
         "texture/VideoTexture.ts",

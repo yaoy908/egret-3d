@@ -376,10 +376,10 @@
                     };
                     return;
                 case URLLoader.DATAFORMAT_DDS:
-                    //this._data = DDSParser.parse(this._xhr.response);
+                    this._data = DDSParser.parse(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_TGA:
-                    //this._data = TGAParser.parse(this._xhr.response);
+                    this._data = TGAParser.parse(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_ESM:
                     var geomtry:Geometry = ESMParser.parse(this._xhr.response);
