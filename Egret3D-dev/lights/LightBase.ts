@@ -73,7 +73,7 @@
          *@private
          * @param value 背光强度
          */
-        protected _halfIntensity: number = 0.5;
+        protected _halfIntensity: number = 0.0;
  
         /**
          * @language zh_CN  

@@ -167,15 +167,15 @@
 
         /**
          * @language zh_CN
-         * 设置材质 specularPower 值。
-         * 设置材质 高光颜色的强度 值。
+         * 设置材质 gloss 值。
+         * 设置材质 镜面平滑程度 值。
          * @param value {Number}
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public set specularPower(value: number) {
-            if (this.materialData.specularPower != value) {
-                this.materialData.specularPower = value;
+        public set gloss(value: number) {
+            if (this.materialData.gloss != value) {
+                this.materialData.gloss = value;
                 this.materialData.materialDataNeedChange = true;
             }
         }
@@ -183,13 +183,13 @@
         /**
          * @language zh_CN
          * 返回材质 specularPower 值。
-         * 返回材质 高光颜色的强度 值。
+         * 设置材质 镜面平滑程度 值。
          * @returns {Number}
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public get specularPower(): number {
-            return this.materialData.specularPower;
+        public get gloss(): number {
+            return this.materialData.gloss;
         }
 
 
