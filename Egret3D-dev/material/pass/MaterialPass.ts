@@ -86,8 +86,10 @@
                     this._passUsage.directLightData = new Float32Array(DirectLight.stride * this.lightGroup.directLightList.length);
                     this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
                 }
-                //if (this.lightGroup.spotLightList.length)
-                //    this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
+                if (this.lightGroup.spotLightList.length) {
+                    this._passUsage.spotLightData = new Float32Array(SpotLight.stride * this.lightGroup.spotLightList.length);
+                    this._passUsage.fragmentShader.addUseShaderName("spotLight_fragment");
+                }
                 if (this.lightGroup.pointLightList.length) {
                     this._passUsage.pointLightData = new Float32Array(PointLight.stride * this.lightGroup.pointLightList.length);
                     this._passUsage.fragmentShader.addUseShaderName("pointLight_fragment");
@@ -111,7 +113,7 @@
             this._passUsage.program3D = ShaderPool.getProgram(this._passUsage.vertexShader.shader.id, this._passUsage.fragmentShader.shader.id);
 
             for (var property in this._passUsage) {
-                if ((<string>property).indexOf("uniform") != -1) {
+                if ((<string>property).indexOf("uniform") != -1) { 
                     if (this._passUsage[property]) {
                         (<GLSL.Uniform>this._passUsage[property]).uniformIndex = context3DProxy.getUniformLocation(this._passUsage.program3D, property);
                     }
@@ -168,7 +170,7 @@
                 this._materialData.materialSourceData[11] = this._materialData.shininess;
 
                 this._materialData.materialSourceData[12] = this._materialData.diffusePower;
-                this._materialData.materialSourceData[13] = this._materialData.specularPower;
+                this._materialData.materialSourceData[13] = this._materialData.gloss;
                 this._materialData.materialSourceData[14] = this._materialData.ambientPower;
                 this._materialData.materialSourceData[15] = this._materialData.normalPower; //保留
             }

@@ -232,7 +232,7 @@
                         constR.value = usage.maxSpotLight;
                         break;
                     case "max_pointLight":
-                        constR.value = usage.maxSpotLight;
+                        constR.value = usage.maxPointLight;
                         break;
                     case "bonesNumber":
                         shaderBase.maxBone = usage.maxBone;

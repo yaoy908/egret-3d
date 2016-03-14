@@ -364,12 +364,12 @@
 
         /**
         * @language zh_CN
-        * specularPower 值。
+        * 光照光滑程度，会影响反光的面积，强度。
         * @default 1.0
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public specularPower: number = 1.0; 
+        public gloss: number = 1.0; 
 
         /**
         * @language zh_CN
@@ -503,7 +503,7 @@
             data.shininess = this.shininess;
             data.cutAlpha = this.cutAlpha;
             data.alpha = this.alpha;
-            data.specularPower = this.specularPower;
+            data.gloss = this.gloss;
             data.ambientPower = this.ambientPower;
             data.diffusePower = this.diffusePower;
             data.normalPower = this.normalPower;

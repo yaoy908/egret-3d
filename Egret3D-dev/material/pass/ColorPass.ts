@@ -41,10 +41,14 @@
                     this._passUsage.directLightData = new Float32Array(DirectLight.stride * this.lightGroup.directLightList.length);
                     this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
                 }
-                //if (this.lightGroup.spotLightList.length)
-                //    this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
-                //if (this.lightGroup.pointLightList.length)
-                //    this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
+                if (this.lightGroup.spotLightList.length) {
+                    this._passUsage.spotLightData = new Float32Array(SpotLight.stride * this.lightGroup.spotLightList.length);
+                    this._passUsage.fragmentShader.addUseShaderName("spotLight_fragment");
+                }
+                if (this.lightGroup.pointLightList.length) {
+                    this._passUsage.pointLightData = new Float32Array(PointLight.stride * this.lightGroup.pointLightList.length);
+                    this._passUsage.fragmentShader.addUseShaderName("pointLight_fragment");
+                }
             }
 
             if (animation) {

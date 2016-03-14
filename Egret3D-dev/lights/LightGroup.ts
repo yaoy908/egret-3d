@@ -62,46 +62,27 @@
         }
 
         /**
-         * @language en_US 
-         * @param light 
-         */
-        /**
          * @language zh_CN
-         * 增加一个方向光
+         * 为灯光组,添加一个灯光
          * @param light  Direct Light
          */
-        public addDirectLight(light: DirectLight) {
-            this.directLightList.push(light);
-            this.lightNum++;
+        public addLight(light: LightBase) {
+            switch (light.lightType){
+                case LightType.directlight:
+                    this.directLightList.push(<DirectLight>light);
+                    this.lightNum++;
+                    break;
+
+                case LightType.pointlight:
+                    this.pointLightList.push(<PointLight>light);
+                    this.lightNum++;
+                    break;
+
+                case LightType.spotLightlight:
+                    this.spotLightList.push(<SpotLight>light);
+                    this.lightNum++;
+                    break;
+            }
         }
-
-        /**
-         * @language en_US 
-         * @param light 
-         */
-        /**
-         * @language zh_CN 
-         * 增加一个聚光灯
-         * @param light Spot Light
-         */
-        public addSpotLight(light: SpotLight) {
-            this.spotLightList.push(light);
-            this.lightNum++;
-        } 
-
-        /**
-         * @language en_US
-         * @param light 
-         */
-        /**
-         * @language zh_CN
-         * 增加一个点光源
-         * @param light  Point Light
-         */
-        public addPointLight(light: PointLight) {
-            this.pointLightList.push(light);
-            this.lightNum++;
-        }
-
     }
 } 
