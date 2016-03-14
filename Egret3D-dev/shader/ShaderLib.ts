@@ -5,7 +5,7 @@ module egret3d_dev {
  			"Color_fragment":
 			"uniform float uniform_materialSource[16] ; \n" +
 			"struct MaterialSource{ \n" +
-			"vec3 diffuse; \n" +
+			"vec3 diffuse ; \n" +
 			"vec3 ambient; \n" +
 			"vec3 specular; \n" +
 			"float alpha; \n" +
