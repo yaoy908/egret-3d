@@ -199,30 +199,30 @@
 
             for (i = 0; i < shaderContent.attributeList.length; i++) {
                 varName = shaderContent.attributeList[i].varName;
-                usage[varName] = shaderContent.attributeList[i].clone();
+                usage[varName] = shaderContent.attributeList[i];
             }
 
             for (i = 0; i < shaderContent.varyingList.length; i++) {
                 varName = shaderContent.varyingList[i].varName;
                 if (!usage[varName]) {
-                    usage[varName] = shaderContent.varyingList[i].clone();
+                    usage[varName] = shaderContent.varyingList[i];
                 }
             }
 
             for (i = 0; i < shaderContent.tempList.length; i++) {
                 varName = shaderContent.tempList[i].varName;
-                usage[varName] = shaderContent.tempList[i].clone();
+                usage[varName] = shaderContent.tempList[i];
             }
 
             for (i = 0; i < shaderContent.uniformList.length; i++) {
                 varName = shaderContent.uniformList[i].varName;
-                usage[varName] = shaderContent.uniformList[i].clone();
+                usage[varName] = shaderContent.uniformList[i];
             }
 
             var constR: GLSL.ConstVar;
             for (i = 0; i < shaderContent.constList.length; i++) {
                 varName = shaderContent.constList[i].varName;
-                constR = shaderContent.constList[i].clone();
+                constR = shaderContent.constList[i];
                 usage[varName] = constR;
                 switch (varName) {
                     case "max_directLight":
@@ -243,12 +243,12 @@
 
             for (i = 0; i < shaderContent.sampler2DList.length; i++) {
                 varName = shaderContent.sampler2DList[i].varName;
-                usage[varName] = shaderContent.sampler2DList[i].clone();
+                usage[varName] = shaderContent.sampler2DList[i];
             }
 
             for (i = 0; i < shaderContent.sampler3DList.length; i++) {
                 varName = shaderContent.sampler3DList[i].varName;
-                usage[varName] = shaderContent.sampler3DList[i].clone();
+                usage[varName] = shaderContent.sampler3DList[i];
             }
 
             this.synthesisShader(shaderContent, shaderBase);
@@ -279,19 +279,6 @@
             }
             ///const
             for (i = 0; i < content.constList.length; i++) {
-
-                //if (content.constList[i].varName == "max_directLight") {
-                //    content.constList[i].value = shader.materialData.directLightList.length.toString();
-                //}
-                if (content.constList[i].varName == "bonesNumber") {
-                    content.constList[i].value = shaderBase.maxBone;///(<AnimationStateSet>this.geometey.animation).getJointNumber() * 2;
-                }
-                //if (content.constList[i].varName == "max_sportLight") {
-                //    content.constList[i].value = shader.materialData.sportLightList.length.toString();
-                //}
-                //if (content.constList[i].varName == "max_pointLight") {
-                //    content.constList[i].value = shader.materialData.pointLightList.length.toString();
-                //}
                 source += ShaderUtil.connectConst(content.constList[i]);
             }
             ///uniform

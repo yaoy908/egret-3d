@@ -45,6 +45,32 @@
         }
 
         /**
+       * @language zh_CN
+       * 重置纹理。
+       * @version Egret 3.0
+       * @platform Web,Native
+       */
+        protected resetTexture() {
+            //--------texture----------------
+            var sampler2D: GLSL.Sampler2D;
+            for (var index in this._passUsage.sampler2DList) {
+                sampler2D = this._passUsage.sampler2DList[index];
+                if (this.materialData[sampler2D.varName]) {
+                    sampler2D.texture = this.materialData[sampler2D.varName];
+                }
+            }
+
+            var sampler3D: GLSL.Sampler3D;
+            for (var index in this.materialData.diffusePassUsageData.sampler3DList) {
+                sampler3D = this.materialData.diffusePassUsageData.sampler3DList[index];
+                if (this.materialData[sampler3D.varName]) {
+                    sampler3D.texture = this.materialData[sampler3D.varName];
+                }
+            }
+            this.materialData.textureChange = false;
+        }   
+
+        /**
         * @language zh_CN
         * @private
         * 初始化 UseMethod。
@@ -112,6 +138,8 @@
             this._passUsage.fragmentShader.shader = this._passUsage.fragmentShader.getShader(this._passUsage);
             this._passUsage.program3D = ShaderPool.getProgram(this._passUsage.vertexShader.shader.id, this._passUsage.fragmentShader.shader.id);
 
+            this.resetTexture();
+
             for (var property in this._passUsage) {
                 if ((<string>property).indexOf("uniform") != -1) { 
                     if (this._passUsage[property]) {
@@ -178,25 +206,25 @@
             context3DProxy.uniform1fv(this._passUsage.uniform_materialSource.uniformIndex, this._materialData.materialSourceData);
 
             //texture 2D
-            //var sampler2D: GLSL.Sampler2D;
-            //for (var index in this._passUsage.sampler2DList) {
-            //    sampler2D = this._passUsage.sampler2DList[index];
-            //    context3DProxy.setTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index, sampler2D.texture2D );
-            //    if (this._materialData.materialDataNeedChange) {
-            //        var min_filter: number = this._materialData.smooth ? Context3DProxy.gl.LINEAR_MIPMAP_LINEAR : Context3DProxy.gl.LINEAR;
-            //        var mag_filter: number = this._materialData.smooth ? Context3DProxy.gl.LINEAR : Context3DProxy.gl.LINEAR;
-            //
-            //        var wrap_u_filter: number = this._materialData.repeat ? Context3DProxy.gl.REPEAT : Context3DProxy.gl.CLAMP_TO_EDGE;
-            //        var wrap_v_filter: number = this._materialData.repeat ? Context3DProxy.gl.REPEAT : Context3DProxy.gl.CLAMP_TO_EDGE　;
-            //        context3DProxy.setTexture2DSamplerState(min_filter, mag_filter, wrap_u_filter, wrap_v_filter);
-            //        this._materialData.materialDataNeedChange = false;
-            //    }
-            //}
+            var sampler2D: GLSL.Sampler2D;
+            for (var index in this._passUsage.sampler2DList) {
+                sampler2D = this._passUsage.sampler2DList[index];
+                context3DProxy.setTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index, sampler2D.texture2D );
+                if (this._materialData.materialDataNeedChange) {
+                    var min_filter: number = this._materialData.smooth ? Context3DProxy.gl.LINEAR_MIPMAP_LINEAR : Context3DProxy.gl.LINEAR;
+                    var mag_filter: number = this._materialData.smooth ? Context3DProxy.gl.LINEAR : Context3DProxy.gl.LINEAR;
+            
+                    var wrap_u_filter: number = this._materialData.repeat ? Context3DProxy.gl.REPEAT : Context3DProxy.gl.CLAMP_TO_EDGE;
+                    var wrap_v_filter: number = this._materialData.repeat ? Context3DProxy.gl.REPEAT : Context3DProxy.gl.CLAMP_TO_EDGE　;
+                    context3DProxy.setTexture2DSamplerState(min_filter, mag_filter, wrap_u_filter, wrap_v_filter);
+                    this._materialData.materialDataNeedChange = false;
+                }
+            }
 
-            //var sampler3D: GLSL.Sampler3D;
-            //for (var index in this._materialData.diffusePassUsageData.sampler3DList) {
-            //    sampler3D = this._materialData.diffusePassUsageData.sampler3DList[index];
-            //}
+            var sampler3D: GLSL.Sampler3D;
+            for (var index in this._passUsage.sampler3DList) {
+                sampler3D = this._passUsage.sampler3DList[index];
+            }
 
             var i: number = 0;
             if (this.lightGroup) {
