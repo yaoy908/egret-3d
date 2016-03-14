@@ -31,7 +31,7 @@
         private _parent: SkeletonAnimation = null;
         private _poseArray: Array<Skeleton> = null;
 
-        constructor(animName: string) {
+        constructor(animName: string = null) {
             this._animName = animName;
         }
 
@@ -132,6 +132,14 @@
         */
         public get animationName(): string {
             return this._animName;
+        }
+
+        /**
+        * @language zh_CN
+        * 动画名称
+        */
+        public set animationName(name: string) {
+            this._animName = name;
         }
 
         /**

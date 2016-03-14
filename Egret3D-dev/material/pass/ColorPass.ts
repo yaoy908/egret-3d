@@ -7,7 +7,7 @@
        * @version Egret 3.0
        * @platform Web,Native
        */
-        public initUseMethod() {
+        public initUseMethod(animation: IAnimation) {
             this._passChange = false;
 
             this._materialData.textureMethodTypes.push(TextureMethodType.color);
@@ -49,6 +49,10 @@
                     this._passUsage.pointLightData = new Float32Array(PointLight.stride * this.lightGroup.pointLightList.length);
                     this._passUsage.fragmentShader.addUseShaderName("pointLight_fragment");
                 }
+            }
+
+            if (animation) {
+                this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
             }
 
             this._passUsage.vertexShader.addEndShaderName("end_vs"); 

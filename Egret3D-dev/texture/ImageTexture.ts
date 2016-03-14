@@ -49,8 +49,8 @@
         public upload(context3D: Context3DProxy) {
             if (!this.texture2D) {
                 this.texture2D = context3D.creatTexture2D();
-                this.texture2D.internalformat = InternalFormat.ImageData;
-                this.texture2D.colorformat = ContextConfig.ColorFormat_RGBA8888;
+                this.texture2D.internalFormat = InternalFormat.ImageData;
+                this.texture2D.colorFormat = ContextConfig.ColorFormat_RGBA8888;
                 context3D.upLoadTextureData(0, this.texture2D);
             }
         }

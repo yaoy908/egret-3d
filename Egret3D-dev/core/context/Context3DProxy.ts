@@ -221,18 +221,18 @@
         public upLoadTextureData(mipLevel: number, texture: Texture2D) {
             Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture.texture);
 
-            if (texture.internalformat == InternalFormat.ImageData) {
+            if (texture.internalFormat == InternalFormat.ImageData) {
                 Context3DProxy.gl.pixelStorei(Context3DProxy.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
 
                 Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, 0, Context3DProxy.gl.RGBA, Context3DProxy.gl.RGBA, Context3DProxy.gl.UNSIGNED_BYTE, texture.imageData);
                 Context3DProxy.gl.generateMipmap(Context3DProxy.gl.TEXTURE_2D);
             }
-            else if (texture.internalformat == InternalFormat.CompressData) {
+            else if (texture.internalFormat == InternalFormat.CompressData) {
                 this.upLoadCompressedTexture2D(mipLevel, texture);
                
             }
-            else if (texture.internalformat == InternalFormat.PixelArray) {
-                Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, mipLevel, texture.colorformat, texture.mimapData[mipLevel].width, texture.mimapData[mipLevel].height, texture.border, texture.colorformat, Context3DProxy.gl.UNSIGNED_BYTE, texture.mimapData[mipLevel].data);
+            else if (texture.internalFormat == InternalFormat.PixelArray) {
+                Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, mipLevel, texture.colorFormat, texture.mimapData[mipLevel].width, texture.mimapData[mipLevel].height, texture.border, texture.colorFormat, Context3DProxy.gl.UNSIGNED_BYTE, texture.mimapData[mipLevel].data);
             }
 
             if (texture.useMipmap)
@@ -251,7 +251,7 @@
         */
         public upLoadCompressedTexture2D(mipLevel: number, texture: Texture2D) {
             Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture.texture);
-            Context3DProxy.gl.compressedTexImage2D(Context3DProxy.gl.TEXTURE_2D, mipLevel, texture.colorformat, texture.mimapData[mipLevel].width, texture.mimapData[mipLevel].height, texture.border, texture.mimapData[mipLevel].data);
+            Context3DProxy.gl.compressedTexImage2D(Context3DProxy.gl.TEXTURE_2D, mipLevel, texture.colorFormat, texture.mimapData[mipLevel].width, texture.mimapData[mipLevel].height, texture.border, texture.mimapData[mipLevel].data);
         }
 
         /**

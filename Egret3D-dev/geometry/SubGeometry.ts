@@ -119,7 +119,7 @@
                 offset += Geometry.colorSize * 4;
             }
 
-            if (this.geometry.vertexFormat & VertexFormat.VF_UV && passUsage.attribute_uv0 ) {
+            if (this.geometry.vertexFormat & VertexFormat.VF_UV0 && passUsage.attribute_uv0 ) {
                 if (!passUsage.attribute_uv0.uniformIndex) {
                     passUsage.attribute_uv0.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_uv0.varName);
                 }
@@ -135,7 +135,7 @@
                 offset += Geometry.uvSize * 4;
             }
 
-            if (this.geometry.vertexFormat & VertexFormat.VF_UV2 && passUsage.attribute_uv1) {
+            if (this.geometry.vertexFormat & VertexFormat.VF_UV1 && passUsage.attribute_uv1) {
                 if (!passUsage.attribute_uv1.uniformIndex) {
                     passUsage.attribute_uv1.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_uv1.varName);
                 }

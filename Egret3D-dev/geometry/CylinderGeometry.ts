@@ -32,7 +32,7 @@
         * 生成网格
         */
         public buildGeomtry() {
-            this.useVertexFormat(VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_COLOR | VertexFormat.VF_UV | VertexFormat.VF_UV2);
+            this.useVertexFormat(VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 | VertexFormat.VF_UV1);
 
             this.verticesData = new Array<number>();
 
