@@ -76,7 +76,6 @@
 
         "data/HashMap.ts",
 
-        "geometry/FaceData.ts",
         "geometry/Geometry.ts",
         "geometry/GeometryData.ts",
         "geometry/SubGeometry.ts",
