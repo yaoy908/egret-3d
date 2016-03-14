@@ -53,7 +53,13 @@ module egret3d_dev {
 			"Color_vertex":
 			"attribute vec3 attribute_position ; \n" +
 			"attribute vec3 attribute_normal ; \n" +
+			"attribute vec3 attribute_tangent ; \n" +
 			"attribute vec4 attribute_color ; \n" +
+			"attribute vec2 attribute_uv0 ; \n" +
+			"attribute vec4 attribute_boneIndex ; \n" +
+			"attribute vec4 attribute_boneWeight ; \n" +
+			"const int bonesNumber = 0; \n" +
+			"uniform vec4 uniform_PoseMatrix[bonesNumber]; \n" +
 			"uniform mat4 uniform_ModelMatrix ; \n" +
 			"uniform mat4 uniform_ProjectionMatrix ; \n" +
 			"uniform mat4 uniform_normalMatrix ; \n" +
@@ -63,8 +69,32 @@ module egret3d_dev {
 			"varying vec4 varying_color  ; \n" +
 			"varying vec3 varying_eyedir  ; \n" +
 			"vec4 endPosition ; \n" +
+			"mat4 buildMat4(int index){ \n" +
+			"vec4 quat = uniform_PoseMatrix[index * 2 + 0]; \n" +
+			"vec4 translation = uniform_PoseMatrix[index * 2 + 1]; \n" +
+			"float xx = quat.x * quat.x; \n" +
+			"float xy = quat.x * quat.y; \n" +
+			"float xz = quat.x * quat.z; \n" +
+			"float xw = quat.x * quat.w; \n" +
+			"float yy = quat.y * quat.y; \n" +
+			"float yz = quat.y * quat.z; \n" +
+			"float yw = quat.y * quat.w; \n" +
+			"float zz = quat.z * quat.z; \n" +
+			"float zw = quat.z * quat.w; \n" +
+			"return mat4( \n" +
+			"1.0 - 2.0 * (yy + zz),		2.0 * (xy + zw),		2.0 * (xz - yw),		0, \n" +
+			"2.0 * (xy - zw),				1.0 - 2.0 * (xx + zz),	2.0 * (yz + xw),		0, \n" +
+			"2.0 * (xz + yw),				2.0 * (yz - xw),		1.0 - 2.0 * (xx + yy),	0, \n" +
+			"translation.x,				translation.y,			translation.z,			1 \n" +
+			"); \n" +
+			"} \n" +
 			"void main(void){ \n" +
-			"endPosition =  vec4(attribute_position,1.0) ; \n" +
+			"endPosition = vec4(0.0, 0.0, 0.0, 0.0) ; \n" +
+			"vec4 temp_position = vec4(attribute_position, 1.0) ; \n" +
+			"endPosition += buildMat4(int(attribute_boneIndex.x)) * temp_position * attribute_boneWeight.x; \n" +
+			"endPosition += buildMat4(int(attribute_boneIndex.y)) * temp_position * attribute_boneWeight.y; \n" +
+			"endPosition += buildMat4(int(attribute_boneIndex.z)) * temp_position * attribute_boneWeight.z; \n" +
+			"endPosition += buildMat4(int(attribute_boneIndex.w)) * temp_position * attribute_boneWeight.w; \n" +
 			"endPosition =  uniform_ModelMatrix * endPosition ; \n" +
 			"varying_eyedir = uniform_eyepos ; \n" +
 			"varying_pos =  endPosition ; \n" +

@@ -222,7 +222,6 @@
                     faceIndex * 3 + 1);
 
                 for (var i: number = 0; i < 3; i++) {
-
                     index = source.vertexIndices[faceIndex * 3 + i] * Geometry.positionSize;
                     vertex.x = source.source_vertexData[index + 0];
                     vertex.y = source.source_vertexData[index + 1];
@@ -253,40 +252,58 @@
                         uv_1.v = source.source_uv2Data[index + 1];
                     }
 
-                    target.source_positionData.push(vertex.x);
-                    target.source_positionData.push(vertex.y);
-                    target.source_positionData.push(vertex.z);
+                    if (vertexFormat & VertexFormat.VF_POSITION) {
+                        target.source_positionData.push(vertex.x);
+                        target.source_positionData.push(vertex.y);
+                        target.source_positionData.push(vertex.z);
+                    }
 
-                    target.source_normalData.push(normal.x);
-                    target.source_normalData.push(normal.y);
-                    target.source_normalData.push(normal.z);
+                    if (vertexFormat & VertexFormat.VF_NORMAL) {
+                        target.source_normalData.push(normal.x);
+                        target.source_normalData.push(normal.y);
+                        target.source_normalData.push(normal.z);
+                    }
 
-                    target.source_tangentData.push(0);
-                    target.source_tangentData.push(0);
-                    target.source_tangentData.push(0);
+                    if (vertexFormat & VertexFormat.VF_TANGENT) {
+                        target.source_tangentData.push(0);
+                        target.source_tangentData.push(0);
+                        target.source_tangentData.push(0);
+                    }
 
-                    target.source_colorData.push(color.x);
-                    target.source_colorData.push(color.y);
-                    target.source_colorData.push(color.z);
-                    target.source_colorData.push(color.w);
+                    if (vertexFormat & VertexFormat.VF_COLOR) {
+                        target.source_colorData.push(color.x);
+                        target.source_colorData.push(color.y);
+                        target.source_colorData.push(color.z);
+                        target.source_colorData.push(color.w);
+                    }
 
-                    target.source_uvData.push(uv_0.u);
-                    target.source_uvData.push(uv_0.v);
+                    if (vertexFormat & VertexFormat.VF_UV0) {
+                        target.source_uvData.push(uv_0.u);
+                        target.source_uvData.push(uv_0.v);
+                    }
 
-                    target.source_uv2Data.push(uv_1.u);
-                    target.source_uv2Data.push(uv_1.v);
+                    if (vertexFormat & VertexFormat.VF_UV1) {
 
-                    if (source.source_skinData != null && source.source_skinData.length > 0) {
-                        index = source.vertexIndices[faceIndex * 3 + i] * Geometry.skinSize;
-                        target.source_SkinData.push(
-                            source.source_skinData[index + 0],
-                            source.source_skinData[index + 2],
-                            source.source_skinData[index + 4],
-                            source.source_skinData[index + 6],
-                            source.source_skinData[index + 1],
-                            source.source_skinData[index + 3],
-                            source.source_skinData[index + 5],
-                            source.source_skinData[index + 7]);
+                        target.source_uv2Data.push(uv_1.u);
+                        target.source_uv2Data.push(uv_1.v);
+                    }
+
+                    if (vertexFormat & VertexFormat.VF_SKIN) {
+                        if (source.source_skinData != null && source.source_skinData.length > 0) {
+                            index = source.vertexIndices[faceIndex * 3 + i] * Geometry.skinSize;
+                            target.source_SkinData.push(
+                                source.source_skinData[index + 0],
+                                source.source_skinData[index + 2],
+                                source.source_skinData[index + 4],
+                                source.source_skinData[index + 6],
+                                source.source_skinData[index + 1],
+                                source.source_skinData[index + 3],
+                                source.source_skinData[index + 5],
+                                source.source_skinData[index + 7]);
+                        }
+                        else {
+                            target.source_SkinData.push(0, 0, 0, 0, 0, 0, 0, 0);
+                        }
                     }
                 }
             }

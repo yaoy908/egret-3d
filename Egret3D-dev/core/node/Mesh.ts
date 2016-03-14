@@ -127,12 +127,12 @@
         * @platform Web,Native
         */
         public update(time: number, delay: number, camera: Camera3D) {
-
+            super.update(time, delay, camera);
             if (this.isDisable)
                 return;
 
             if (this.animation) {
-                this.animation.updata(time, delay);
+                this.animation.update(time, delay);
             }
         }
 

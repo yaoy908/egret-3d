@@ -51,7 +51,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public initUseMethod() {
+        public initUseMethod(animation: IAnimation) {
             this._passChange = false;
 
             var i: number = 0;
@@ -73,24 +73,9 @@
                 this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
             }
 
-            //if (this.animation) {
-            //    if (this.animation.animaNodeCollection) {
-            //        var vsShaderNames: string[] = this.animation.animaNodeCollection.getNodesVertexShaders();
-            //        var fsShaderNames: string[] = this.animation.animaNodeCollection.getNodesFragmentShaders();
-            //        for (i = 0; i < vsShaderNames.length; i++) {
-            //            this.vertexShader.addShader(vsShaderNames[i]);
-            //        }
-            //        for (i = 0; i < fsShaderNames.length; i++) {
-            //            this.pixelShader.addShader(fsShaderNames[i]);
-            //        }
-            //    }
-            //}
-
-            //if (this.materialData.acceptShadow && this.shadowMaping) {
-            //    this.pixelShader.addMethod(this.shadowMaping);
-            //    this.vertexShader.addShader(this.shadowMaping.vertexMethodName);
-            //    this.pixelShader.addShader(this.shadowMaping.fragMethodName);
-            //}
+            if (animation) {
+                this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
+            }
 
             if (this.lightGroup) {
                 this._passUsage.maxDirectLight = this.lightGroup.directLightList.length;
@@ -118,9 +103,9 @@
 
         }
 
-        public upload(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+        public upload(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, animation: IAnimation) {
             this._passChange = false;
-            this.initUseMethod();
+            this.initUseMethod(animation);
             this._passUsage.vertexShader.shader = this._passUsage.vertexShader.getShader(this._passUsage);
             this._passUsage.fragmentShader.shader = this._passUsage.fragmentShader.getShader(this._passUsage);
             this._passUsage.program3D = ShaderPool.getProgram(this._passUsage.vertexShader.shader.id, this._passUsage.fragmentShader.shader.id);
@@ -137,7 +122,7 @@
         public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation) {
 
             if (this._passChange) {
-                this.upload(time, delay, context3DProxy, modeltransform, camera3D);
+                this.upload(time, delay, context3DProxy, modeltransform, camera3D, animtion);
             }
             context3DProxy.setProgram(this._passUsage.program3D);
             subGeometry.update(time, delay, this._passUsage, context3DProxy);
@@ -245,8 +230,11 @@
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_normalMatrix.uniformIndex, false, this.normalMatrix.rawData);
             context3DProxy.uniform3f(this._passUsage.uniform_eyepos.uniformIndex, camera3D.x, camera3D.y, camera3D.z);
 
-            context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count);
+            if (animtion) {
+                context3DProxy.uniform4fv(this._passUsage.uniform_PoseMatrix.uniformIndex, animtion.skeletonAnimationController.currentSkeletonMatrixData);
+            }
 
+            context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count);
         }
 
 

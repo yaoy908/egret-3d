@@ -41,11 +41,11 @@
             var geomtry: Geometry;
             var vertexFormat: number = 0;
             if (geomtryData.source_skinData.length > 0) {
-                vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV | VertexFormat.VF_SKIN;
+                vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 | VertexFormat.VF_SKIN;
                 geomtry = GeometryData.buildGeomtry(geomtryData, vertexFormat);
             }
             else {
-                vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV | VertexFormat.VF_UV2;
+                vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 | VertexFormat.VF_UV1;
                 geomtry = GeometryData.buildGeomtry(geomtryData, vertexFormat);
             }
             return geomtry;

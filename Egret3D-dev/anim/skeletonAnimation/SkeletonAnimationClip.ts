@@ -136,6 +136,14 @@
 
         /**
         * @language zh_CN
+        * 动画名称
+        */
+        public set animationName(name: string) {
+            this._animName = name;
+        }
+
+        /**
+        * @language zh_CN
         * 动画长度
         */
         public get length(): number {

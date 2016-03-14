@@ -38,7 +38,7 @@
                 }
             }
 
-            if (description & VertexFormat.VF_UV) {
+            if (description & VertexFormat.VF_UV0) {
                 var uvCount: number = bytes.readInt();
                 for (var i: number = 0; i < uvCount; i++) {
                     geomtry.source_uvData.push(bytes.readFloat());
@@ -46,7 +46,7 @@
                 }
             }
 
-            if (description & VertexFormat.VF_UV2) {
+            if (description & VertexFormat.VF_UV1) {
                 var uvCount: number = bytes.readInt();
                 for (var i: number = 0; i < uvCount; i++) {
                     geomtry.source_uv2Data.push(bytes.readFloat());
@@ -73,13 +73,13 @@
                     geomtry.colorIndices.push(bytes.readUnsignedInt());
                 }
 
-                if (description & VertexFormat.VF_UV) {
+                if (description & VertexFormat.VF_UV0) {
                     geomtry.uvIndices.push(bytes.readUnsignedInt());
                     geomtry.uvIndices.push(bytes.readUnsignedInt());
                     geomtry.uvIndices.push(bytes.readUnsignedInt());
                 }
 
-                if (description & VertexFormat.VF_UV2) {
+                if (description & VertexFormat.VF_UV1) {
                     geomtry.uv2Indices.push(bytes.readUnsignedInt());
                     geomtry.uv2Indices.push(bytes.readUnsignedInt());
                     geomtry.uv2Indices.push(bytes.readUnsignedInt());

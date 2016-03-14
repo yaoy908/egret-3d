@@ -65,6 +65,7 @@
         visible: boolean;
 
         //upload(context3DProxy: Context3DProxy);
+        update(time: number, delay: number, camera: Camera3D);
         renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) 
     }
 }

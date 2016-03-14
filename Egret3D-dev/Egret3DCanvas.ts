@@ -7,12 +7,15 @@
 
         private canvas: HTMLCanvasElement;
 
-        private time: number = 0;
         private view3DS: Array<View3D> = new Array<View3D>();
         private sizeDiry: boolean = true;
 
 
         private _enterFrameEvent3D: Event3D;
+
+        protected _time: number = 0;
+        protected _delay: number = 0;
+        protected _timeDate: Date = null;
 
         constructor(blend2D: boolean = false) {
             super();
@@ -111,8 +114,13 @@
 
         public update(delay: number) {
 
-            this._enterFrameEvent3D.time += delay;
-            this._enterFrameEvent3D.delay = delay;
+            this._timeDate = new Date();
+            this._delay = this._timeDate.getTime() - this._time;
+            this._time = this._timeDate.getTime();
+
+
+            this._enterFrameEvent3D.time += this._time;
+            this._enterFrameEvent3D.delay = this._delay;
             this.dispatchEvent( this._enterFrameEvent3D );
 
             Context3DProxy.gl.enable(ContextConfig.BLEND);
@@ -123,7 +131,7 @@
             View3D._contex3DProxy.setScissorRectangle(this.canvas3DRectangle.x, this.canvas3DRectangle.y, this.canvas3DRectangle.width, this.canvas3DRectangle.height);
 
             for (var i: number = 0; i < this.view3DS.length; i++){
-                this.view3DS[i].update(this.time,delay);
+                this.view3DS[i].update(this._time, this._delay);
             }
 
             View3D._contex3DProxy.flush();

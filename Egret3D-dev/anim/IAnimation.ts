@@ -57,7 +57,7 @@
         * @param time 总时间
         * @param delay 帧间隔时间
         */
-        updata(time: number, delay: number): void;
+        update(time: number, delay: number): void;
 
         /**
         * @language zh_CN

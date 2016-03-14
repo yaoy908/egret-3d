@@ -47,7 +47,7 @@
 
         private buildGeometry(): void {
 
-            this.useVertexFormat(VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV);
+            this.useVertexFormat(VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0);
 
             var x: number, y: number;
             var numIndices: number;

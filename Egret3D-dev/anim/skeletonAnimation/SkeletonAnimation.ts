@@ -211,7 +211,7 @@
         * @param time 总时间
         * @param delay 延迟时间
         */
-        public updata(time: number, delay: number): void {
+        public update(time: number, delay: number): void {
 
             if (!this._playing) {
                 return;
