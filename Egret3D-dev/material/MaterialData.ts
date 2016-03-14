@@ -1,4 +1,9 @@
 ﻿module egret3d_dev {
+
+    /**
+     * @class egret3d_dev.MaterialData
+     * @private
+     */
     export class MaterialData {
         /**
         * @private
@@ -93,7 +98,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public shadowMapTex: Texture2D;
+        public shadowMapTex: ITexture;
 
         /**
         * @language zh_CN
@@ -101,7 +106,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public diffuseTex: Texture2D;//= CheckerboardTexture.texture ;
+        public diffuseTex: ITexture;//= CheckerboardTexture.texture ;
 
         /**
         * @language zh_CN

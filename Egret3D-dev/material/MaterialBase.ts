@@ -37,10 +37,49 @@
         protected initPass() {
             this.diffusePass = new ColorPass(this.materialData);
         }
-
+        
+        /**
+         * @language zh_CN
+         * 设置材质 lightGroup 。
+         * 设置材质球接受的灯光组。
+         * @param lightGroup {LightGroup}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public set lightGroup(group: LightGroup) {
             this._lightGroup = group; 
             this.diffusePass.lightGroup = group;
+        }
+
+        /**
+         * @language zh_CN
+         * 设置材质 diffuseTexture 。
+         * 设置材质球的漫反射贴图。
+         * @param texture {TextureBase}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public set diffuseTexture(texture: ITexture) {
+            if (texture) {
+                this.materialData.diffuseTex = texture;
+                this.materialData.textureChange = true;
+
+                if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.diffuse) == -1) {
+                    this.materialData.textureMethodTypes.push(TextureMethodType.diffuse);
+                }
+            }
+        }
+
+        /**
+        * @language zh_CN
+        * 返回材质 diffuseTexture。
+        * 返回材质球的漫反射贴图。
+        * @returns {TextureBase}
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get diffuseTexture(): ITexture {
+            return this.materialData.diffuseTex;
         }
 
         /**

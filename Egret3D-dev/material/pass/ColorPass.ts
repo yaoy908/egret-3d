@@ -54,33 +54,12 @@
             this._passUsage.vertexShader.addEndShaderName("end_vs"); 
             this._passUsage.fragmentShader.addEndShaderName("end_fs");
 
-            //if (this.animation) {
-            //    if (this.animation.animaNodeCollection) {
-            //        var vsShaderNames: string[] = this.animation.animaNodeCollection.getNodesVertexShaders();
-            //        var fsShaderNames: string[] = this.animation.animaNodeCollection.getNodesFragmentShaders();
-            //        for (i = 0; i < vsShaderNames.length; i++) {
-            //            this.vertexShader.addShader(vsShaderNames[i]);
-            //        }
-            //        for (i = 0; i < fsShaderNames.length; i++) {
-            //            this.pixelShader.addShader(fsShaderNames[i]);
-            //        }
-            //    }
-            //}
-
-            //if (this.materialData.acceptShadow && this.shadowMaping) {
-            //    this.pixelShader.addMethod(this.shadowMaping);
-            //    this.vertexShader.addShader(this.shadowMaping.vertexMethodName);
-            //    this.pixelShader.addShader(this.shadowMaping.fragMethodName);
-            //}
-
             if (this.methodList) {
                 for (var i: number = 0; i < this.methodList.length; i++) {
                     this._passUsage.vertexShader.addUseShaderName(this.methodList[i].vsShaderName);
                     this._passUsage.fragmentShader.addUseShaderName(this.methodList[i].fsShaderName);
                 }
             }
-
-
         }
     }
 } 
