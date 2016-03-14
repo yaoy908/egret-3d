@@ -8,8 +8,9 @@ struct PointLight{
 };
 
 void calculatePointLight(MaterialSource materialSource){
-	vec3 ldir,vReflect;
+	vec3 ldir,ndir,vReflect,N;
     float NdotL,dist,lambertTerm;
+	N = normalize(normal);
 	for(int i = 0 ; i < max_pointLight ; i++){
 		PointLight L;
 		L.lightPos = vec3(uniform_pointLightSource[i*7],uniform_pointLightSource[i*7+1],uniform_pointLightSource[i*7+2]);
@@ -17,15 +18,15 @@ void calculatePointLight(MaterialSource materialSource){
 		L.intensity = uniform_pointLightSource[i*7+6];
 
 		ldir = L.lightPos - varying_pos.xyz ;
-		dist = length(ldir);
-		ldir = normalize(ldir );
-		NdotL = max(dot(normal,ldir),0.0);
+		ndir = normalize(ldir);
+		dist = length(ndir);
+		NdotL = clamp(dot(N,ndir),0.0,1.0);
 		lambertTerm = ( L.intensity  ) / ( dist * dist )  ;
-		light.xyz += lambertTerm * (NdotL * L.color.xyz)  ;
+		light.xyz = lambertTerm * (NdotL * L.color.xyz)  ;
 
 		if(lambertTerm>=0.0){
-			 vReflect = normalize( materialSource.gloss * dot( normal, ldir ) * normal - ldir );
-			 specular.xyz = specular.xyz * min(pow( max( 0.0 , dot(vReflect,eyedir) ) , materialSource.shininess  ),1.0);
+		  vReflect = normalize(2.0*NdotL*N - ndir); 
+		  specular.xyz += L.color * pow( clamp( dot(vReflect,normalize(eyedir)) ,0.0,1.0), materialSource.shininess ) ;	
 		}
 	};
 }
