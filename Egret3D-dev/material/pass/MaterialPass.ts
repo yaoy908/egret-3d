@@ -55,19 +55,19 @@
             var sampler2D: GLSL.Sampler2D;
             for (var index in this._passUsage.sampler2DList) {
                 sampler2D = this._passUsage.sampler2DList[index];
-                if (this.materialData[sampler2D.varName]) {
-                    sampler2D.texture = this.materialData[sampler2D.varName];
+                if (this._materialData[sampler2D.varName]) {
+                    sampler2D.texture = this._materialData[sampler2D.varName];
                 }
             }
 
             var sampler3D: GLSL.Sampler3D;
-            for (var index in this.materialData.diffusePassUsageData.sampler3DList) {
-                sampler3D = this.materialData.diffusePassUsageData.sampler3DList[index];
-                if (this.materialData[sampler3D.varName]) {
-                    sampler3D.texture = this.materialData[sampler3D.varName];
+            for (var index in this._passUsage.sampler3DList) {
+                sampler3D = this._passUsage.sampler3DList[index];
+                if (this._materialData[sampler3D.varName]) {
+                    sampler3D.texture = this._materialData[sampler3D.varName];
                 }
             }
-            this.materialData.textureChange = false;
+            this._materialData.textureChange = false;
         }   
 
         /**
@@ -147,6 +147,12 @@
                     }
                 }
             }
+
+            var sampler2D: GLSL.Sampler2D;
+            for (var index in this._passUsage.sampler2DList) {
+                sampler2D = this._passUsage.sampler2DList[index];
+                sampler2D.uniformIndex = context3DProxy.getUniformLocation(this._passUsage.program3D, sampler2D.varName);
+            }
         }
 
         public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation) {
@@ -209,7 +215,8 @@
             var sampler2D: GLSL.Sampler2D;
             for (var index in this._passUsage.sampler2DList) {
                 sampler2D = this._passUsage.sampler2DList[index];
-                context3DProxy.setTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index, sampler2D.texture2D );
+                sampler2D.texture.upload(context3DProxy);
+                context3DProxy.setTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index, sampler2D.texture.texture2D );
                 if (this._materialData.materialDataNeedChange) {
                     var min_filter: number = this._materialData.smooth ? Context3DProxy.gl.LINEAR_MIPMAP_LINEAR : Context3DProxy.gl.LINEAR;
                     var mag_filter: number = this._materialData.smooth ? Context3DProxy.gl.LINEAR : Context3DProxy.gl.LINEAR;

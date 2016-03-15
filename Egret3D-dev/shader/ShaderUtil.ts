@@ -241,15 +241,21 @@
                 }
             }
 
+            ///sampler
             for (i = 0; i < shaderContent.sampler2DList.length; i++) {
-                varName = shaderContent.sampler2DList[i].varName;
-                usage[varName] = shaderContent.sampler2DList[i];
+                var sampler2D: GLSL.Sampler2D = shaderContent.sampler2DList[i];
+                sampler2D.activeTextureIndex = ShaderUtil.getTexture2DIndex(i);
+                sampler2D.index = i;
             }
+            usage.sampler2DList = shaderContent.sampler2DList;
 
+            ///sampler
             for (i = 0; i < shaderContent.sampler3DList.length; i++) {
-                varName = shaderContent.sampler3DList[i].varName;
-                usage[varName] = shaderContent.sampler3DList[i];
+                var sampler3D: GLSL.Sampler3D = shaderContent.sampler3DList[i];
+                sampler3D.activeTextureIndex = ShaderUtil.getTexture2DIndex(shaderContent.sampler2DList.length + i);
+                sampler3D.index = shaderContent.sampler2DList.length + i;
             }
+            usage.sampler3DList = shaderContent.sampler3DList;
 
             this.synthesisShader(shaderContent, shaderBase);
 
@@ -288,20 +294,12 @@
             ///sampler
             for (i = 0; i < content.sampler2DList.length; i++) {
                 var sampler2D: GLSL.Sampler2D = content.sampler2DList[i];
-                sampler2D = sampler2D.clone();
                 source += ShaderUtil.connectSampler(sampler2D);
-                sampler2D.activeTextureIndex = ShaderUtil.getTexture2DIndex(i);
-                sampler2D.index = i;
-                //this.useage.sampler2DList.push(sampler2D);
             }
             ///sampler
             for (i = 0; i < content.sampler3DList.length; i++) {
                 var sampler3D: GLSL.Sampler3D = content.sampler3DList[i];
-                sampler3D = sampler3D.clone();
                 source += ShaderUtil.connectSampler3D(sampler3D);
-                sampler3D.activeTextureIndex = ShaderUtil.getTexture2DIndex(content.sampler2DList.length + i);
-                sampler3D.index = content.sampler2DList.length + i;
-                //this.useage.sampler3DList.push(sampler3D);
             }
             ///---------------------------------------------------------------------------------
             ///---------------------------------------------------------------------------------

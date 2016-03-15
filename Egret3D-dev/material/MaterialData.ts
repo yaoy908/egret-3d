@@ -106,7 +106,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public diffuseTex: ITexture;//= CheckerboardTexture.texture ;
+        public diffuseTexture: ITexture;//= CheckerboardTexture.texture ;
 
         /**
         * @language zh_CN
@@ -476,7 +476,7 @@
 
             data.drawMode = this.drawMode;
             //data.context3D = this.context3D;
-            data.diffuseTex = this.diffuseTex;
+            data.diffuseTexture = this.diffuseTexture;
             //data.specularTex = this.specularTex;
             //data.lightMapTex = this.lightMapTex;
             //data.environmentMapTex = this.environmentMapTex;

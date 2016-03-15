@@ -103,6 +103,58 @@ module egret3d_dev {
 			"varying_color = attribute_color ; \n" +
 			"} \n",
 
+			"diffuse_fragment":
+			"uniform float uniform_materialSource[16] ; \n" +
+			"uniform sampler2D diffuseTexture; \n" +
+			"struct MaterialSource{ \n" +
+			"vec3 diffuse; \n" +
+			"vec3 ambient; \n" +
+			"vec3 specular; \n" +
+			"float alpha; \n" +
+			"float cutAlpha; \n" +
+			"float shininess; \n" +
+			"float diffusePower; \n" +
+			"float specularPower; \n" +
+			"float ambientPower; \n" +
+			"float normalPower; \n" +
+			"}; \n" +
+			"varying vec4 varying_pos        ; \n" +
+			"varying vec3 varying_eyeNormal  ; \n" +
+			"varying vec4 varying_color  ; \n" +
+			"varying vec3 varying_eyedir  ; \n" +
+			"varying vec2 varying_uv0; \n" +
+			"vec4 endColor ; \n" +
+			"vec4 diffuse  ; \n" +
+			"vec4 specular ; \n" +
+			"vec3 normal  ; \n" +
+			"vec3 eyedir  ; \n" +
+			"vec4 light ; \n" +
+			"vec4 ambient; \n" +
+			"void main() { \n" +
+			"MaterialSource materialSource ; \n" +
+			"materialSource.diffuse.x = uniform_materialSource[0]; \n" +
+			"materialSource.diffuse.y = uniform_materialSource[1]; \n" +
+			"materialSource.diffuse.z = uniform_materialSource[2]; \n" +
+			"materialSource.ambient.x = uniform_materialSource[3]; \n" +
+			"materialSource.ambient.y = uniform_materialSource[4]; \n" +
+			"materialSource.ambient.z = uniform_materialSource[5]; \n" +
+			"materialSource.specular.x = uniform_materialSource[6]; \n" +
+			"materialSource.specular.y = uniform_materialSource[7]; \n" +
+			"materialSource.specular.z = uniform_materialSource[8]; \n" +
+			"materialSource.alpha = uniform_materialSource[9]; \n" +
+			"materialSource.cutAlpha = uniform_materialSource[10]; \n" +
+			"materialSource.shininess = uniform_materialSource[11]; \n" +
+			"materialSource.diffusePower = uniform_materialSource[12]; \n" +
+			"materialSource.specularPower = uniform_materialSource[13]; \n" +
+			"materialSource.ambientPower = uniform_materialSource[14]; \n" +
+			"materialSource.normalPower = uniform_materialSource[15]; \n" +
+			"normal = varying_eyeNormal; \n" +
+			"endColor = vec4(materialSource.diffuse,materialSource.alpha); \n" +
+			"diffuse = texture2D(diffuseTexture , varying_uv0 ); \n" +
+			"endColor = endColor; \n" +
+			"eyedir = varying_eyedir.xyz - varying_pos.xyz ; \n" +
+			"} \n",
+
 			"diffuse_vertex":
 			"attribute vec3 attribute_position ; \n" +
 			"attribute vec3 attribute_normal ; \n" +
@@ -121,7 +173,7 @@ module egret3d_dev {
 			"varying vec3 varying_eyeNormal  ; \n" +
 			"varying vec4 varying_color  ; \n" +
 			"varying vec3 varying_eyedir  ; \n" +
-			"varying vec3 varying_uv0; \n" +
+			"varying vec2 varying_uv0; \n" +
 			"vec4 endPosition ; \n" +
 			"mat4 buildMat4(int index){ \n" +
 			"vec4 quat = uniform_PoseMatrix[index * 2 + 0]; \n" +
@@ -201,8 +253,8 @@ module egret3d_dev {
 			"vec4 light ; \n" +
 			"vec3 ambient; \n" +
 			"void main() { \n" +
-			"endColor.xyz = endColor.xyz * light.xyz + specular.xyz * materialSource.specular + ambient.xyz ; \n" +
-			"gl_FragColor = endColor ; \n" +
+			"endColor.xyz = endColor.xyz * light.xyz + specular.xyz * materialSource.specular + ambient.xyz + diffuse.xyz; \n" +
+			"gl_FragColor = endColor; \n" +
 			"} \n",
 
 			"end_vs":

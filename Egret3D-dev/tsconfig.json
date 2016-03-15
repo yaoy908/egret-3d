@@ -111,6 +111,7 @@
         "material/MaterialBase.ts",
 
         "material/ColorMaterial.ts",
+        "material/TextureMaterial.ts",
 
         "render/RenderBase.ts",
         "render/DefaultRender.ts",

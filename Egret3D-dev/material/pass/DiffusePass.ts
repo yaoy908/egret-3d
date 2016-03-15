@@ -30,7 +30,7 @@
 
             if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.color) != -1) {
                 this._passUsage.vertexShader.addUseShaderName("diffuse_vertex");
-                this._passUsage.fragmentShader.addUseShaderName("Color_fragment");
+                this._passUsage.fragmentShader.addUseShaderName("diffuse_fragment");
             }
             if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.normal) != -1) {
                 this._passUsage.vertexShader.addUseShaderName("");

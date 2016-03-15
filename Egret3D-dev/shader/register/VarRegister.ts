@@ -53,7 +53,7 @@
         * @language zh_CN
         * texture
         */
-        public texture2D: Texture2D;
+        public texture: ITexture;
                 
         /**
         * @language zh_CN

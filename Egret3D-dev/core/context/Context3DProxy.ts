@@ -260,6 +260,7 @@
         */
         public creatTexture2D(): Texture2D {
             var texture: Texture2D = new Texture2D();
+            texture.texture = Context3DProxy.gl.createTexture();
             return texture;
         }
 

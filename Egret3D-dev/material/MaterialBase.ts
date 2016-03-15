@@ -61,7 +61,7 @@
          */
         public set diffuseTexture(texture: ITexture) {
             if (texture) {
-                this.materialData.diffuseTex = texture;
+                this.materialData.diffuseTexture = texture;
                 this.materialData.textureChange = true;
 
                 if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.diffuse) == -1) {
@@ -79,7 +79,7 @@
         * @platform Web,Native
         */
         public get diffuseTexture(): ITexture {
-            return this.materialData.diffuseTex;
+            return this.materialData.diffuseTexture;
         }
 
         /**
