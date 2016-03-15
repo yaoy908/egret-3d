@@ -1,3 +1,3 @@
 GLSLPacker.exe
-copy ".\ShaderLib.ts" "..\Egret3D-dev\shader\ShaderLib.ts"
+copy ".\ShaderLib.ts" "..\Egret3D\shader\ShaderLib.ts"
 pause

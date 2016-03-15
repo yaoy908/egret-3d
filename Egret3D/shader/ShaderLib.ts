@@ -254,7 +254,7 @@ module egret3d {
 			"vec3 ambient; \n" +
 			"void main() { \n" +
 			"endColor.xyz = endColor.xyz * light.xyz + specular.xyz * materialSource.specular + ambient.xyz + diffuse.xyz; \n" +
-			"gl_FragColor = endColor; \n" +
+			"gl_FragColor = endColor ; \n" +
 			"} \n",
 
 			"end_vs":
