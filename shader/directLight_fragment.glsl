@@ -31,8 +31,10 @@ void calculateDirectLight( MaterialSource materialSource ){
       
 		  float halfLambertTerm = clamp(dot(N,-ldir),0.0,1.0); 
 		  light.xyz += ( halfLambertTerm * l.halfColor * 0.25 + l.halfColor * 0.25 ) * l.halfIntensity; 
-		  vReflect = normalize(2.0*NdotL*N - ndir); 
-		  specular.xyz += l.diffuse * pow( clamp( dot(vReflect,normalize(eyedir)) ,0.0,1.0), materialSource.shininess ) ;	
+		  if( lambertTerm > 0.0 ){
+				vReflect = normalize(2.0*NdotL*N - ndir); 
+				specular.xyz += l.diffuse * pow( clamp( dot(vReflect,normalize(eyedir)) ,0.0,1.0), materialSource.shininess ) ;	
+		  }
     }; 
 }
 
