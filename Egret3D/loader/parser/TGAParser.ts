@@ -18,9 +18,9 @@
         /**
          * @language zh_CN
          * @param buffer 二进制流
-         * @returns TexureBase
+         * @returns TGATexture
          */
-        public static parse(buffer:ArrayBuffer):TextureBase {
+        public static parse(buffer:ArrayBuffer): TGATexture {
             var TGA_TYPE_NO_DATA = 0,
                 TGA_TYPE_INDEXED = 1,
                 TGA_TYPE_RGB = 2,
@@ -423,10 +423,11 @@
             var result = tgaParse(use_rle, use_pal, header, offset, content);
             var rgbaData = getTgaRGBA(header.width, header.height, result.pixel_data, result.palettes);
 
-            var texture: TextureBase = new TextureBase();
-            texture.internalFormat = InternalFormat.PixelArray;
-            texture.colorFormat = Egret3DDrive.ColorFormat_RGBA8888;
-            texture.mimapData.push(new MipmapData(rgbaData, header.width, header.height));
+            var texture: TGATexture = new TGATexture();
+            texture.texture2D = new Texture2D();
+            texture.texture2D.internalFormat = InternalFormat.PixelArray;
+            texture.texture2D.colorFormat = ContextConfig.ColorFormat_RGBA8888;
+            texture.texture2D.mimapData.push(new MipmapData(rgbaData, header.width, header.height));
             return texture;
         }
     }

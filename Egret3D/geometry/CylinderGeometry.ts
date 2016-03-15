@@ -15,7 +15,7 @@
      * @platform Web,Native
      * @includeExample geometry/CylinderGeometry.ts
      */
-    export class CylinderGeometry extends SubGeometry {
+    export class CylinderGeometry extends Geometry {
 
         /**
         * @language zh_CN
@@ -32,10 +32,9 @@
         * 生成网格
         */
         public buildGeomtry() {
+            this.useVertexFormat(VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 | VertexFormat.VF_UV1);
 
-            var vertices = new Array<number>();
-
-            var vertexIndices = new Array<number>();
+            this.verticesData = new Array<number>();
 
             var m_nSegments: number = 10;
             var m_rRadius: number = 10;
@@ -52,12 +51,12 @@
 
                 var z0: number  = m_rRadius * Math.cos(nCurrentSegment * rDeltaSegAngle);
 
-                vertices.push(
+                this.verticesData.push(
                     x0, 0.0 + (m_rHeight / 2.0), z0, x0, 0.0, z0, 1, 1, 1, 1, 1.0, 0.0, 0, 0,
                     x0, 0.0 - (m_rHeight / 2.0), z0, x0, 0.0, z0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
             }
 
-            vertices.push(0.0, 0.0  + (m_rHeight / 2.0), 0.0, 0.0, 1.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
+            this.verticesData.push(0.0, 0.0  + (m_rHeight / 2.0), 0.0, 0.0, 1.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
 
             for (nCurrentSegment = 0; nCurrentSegment <= m_nSegments; nCurrentSegment++)
             {
@@ -67,20 +66,18 @@
                 //float tu0 = (0.5f * sinf(nCurrentSegment * rDeltaSegAngle)) + 0.5f;
                 //float tv0 = (0.5f * cosf(nCurrentSegment * rDeltaSegAngle)) + 0.5f;
 
-                vertices.push(x0, 0.0  + (m_rHeight / 2.0), z0, 0.0, 1.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
+                this.verticesData.push(x0, 0.0  + (m_rHeight / 2.0), z0, 0.0, 1.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
             }
 
-            vertices.push(0.0, 0.0 - (m_rHeight / 2.0), 0.0, 0.0, -1.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
+            this.verticesData.push(0.0, 0.0 - (m_rHeight / 2.0), 0.0, 0.0, -1.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
 
             for (nCurrentSegment = m_nSegments; nCurrentSegment >= 0; nCurrentSegment--)
             {
                 var  x0: number  = m_rRadius * Math.sin(nCurrentSegment * rDeltaSegAngle);
                 var z0: number  = m_rRadius * Math.cos(nCurrentSegment * rDeltaSegAngle);
 
-                vertices.push(x0, 0.0 - (m_rHeight / 2.0), z0, 0.0, -1.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
-             }
-
-            this.setGeomtryData(vertexIndices, vertices);
+                this.verticesData.push(x0, 0.0 - (m_rHeight / 2.0), z0, 0.0, -1.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
+            }
         }
     }
 } 

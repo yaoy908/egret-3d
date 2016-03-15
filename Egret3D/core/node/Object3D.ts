@@ -58,7 +58,6 @@
         protected static s_id: number = 0;
 
         protected _modeMatrix3D: Matrix4_4 = new Matrix4_4();
-
         protected _transformChange: boolean = true;
 
         protected _pos: Vector3D = new Vector3D();
@@ -77,6 +76,13 @@
         protected _active: boolean = false;
         protected _mat: Matrix4_4 = new Matrix4_4();
 
+        public bound: any;
+        public canPick: boolean = false ;
+        public renderLayer: number = 0 ;
+
+        public mouseChilder: boolean = false ;
+        public enableCulling: boolean = true ;
+        public visible: boolean = true ;
         /**
         * @language zh_CN
         * 当前对象名
@@ -146,51 +152,6 @@
 
         /**
         * @language zh_CN
-        * 动作对象，控制骨骼动画。</p>
-        * 可拓展的动画功能属性，动画功能的驱动类总接口。</p>
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public animation: IAnimation = null;
-
-        /**
-        * @language zh_CN
-        * 网格信息。</p>
-         * geometry 为渲染对象的网格信息 ，渲染对象需要 vertexBuffer  和 indexBuffer 信息 及顶点着色器shade。</p>
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public geometry: GeometryBase = null;
-
-        /**
-        * @language zh_CN
-        * 材质信息。</p>
-         * 赋予对象节点可供渲染的材质球属性，让对象加入可渲染实体列表，及渲染对象与对象之间的混合，排序。</p>
-         * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public material: MaterialBase = null;
-
-        /**
-        * @language zh_CN
-        * 对象模型包围盒。</p>
-        * 每个场景物件都需要有的 包围盒子，可以自定义包围盒形状大小，也可以根据模型本身生成。</p>
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public box: CubeBoxBound = new CubeBoxBound();
-
-        /**
-        * @language zh_CN
-        * 鼠标检测数据
-        * @private
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public pickerData: PickResult = new PickResult();
-
-        /**
-        * @language zh_CN
         * 是否控制，当摄像机被绑定摄像机动画时，这个值为false.
         * @private
         * @version Egret 3.0
@@ -216,17 +177,6 @@
         */
         public isDisable: boolean = false;
 
-        /**
-        * @language zh_CN
-        * 鼠标拣选类型。</p>
-        * 设置鼠标的拣选类型，可通过 PickType来进行设置。</p>
-        * 快速拣选默认使用 正方形包围盒子。</p>
-        * 高精度型需要 PositionPick ， uv pick 等。</p>
-        * @see egret3d.PickType
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public pickType: PickType = PickType.BoundPick;
 
         /**
         * @language zh_CN
@@ -686,7 +636,7 @@
             }
             //this._modeMatrix3D.recompose([this._globalPos, this._globalRot, this._globalSca]);
             this._modeMatrix3D.makeTransform(this._globalPos, this._globalSca, this._globalOrientation);
-            this.box.Transform = this._modeMatrix3D;
+            //this.bound.Transform = this._modeMatrix3D;
             this._transformChange = false;
             this.onUpdateTransform();
         }
@@ -1037,7 +987,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public update(camera: Camera3D, time: number, delay: number) {
+        public update(time: number, delay: number, camera:Camera3D) {
 
         }
 
@@ -1050,11 +1000,11 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public getScreenPosition(camera: Camera3D): Vector3D {
-            this._mat.copyFrom(camera.viewProjectionMatrix);
-            this._mat.append(this.modelMatrix);
-            return this._mat.transformVector(this.globalPosition);
-        }
+        //public getScreenPosition(camera: Camera3D): Vector3D {
+        //    this._mat.copyFrom(camera.viewProjectionMatrix);
+        //    this._mat.append(this.modelMatrix);
+        //    return this._mat.transformVector(Context3DProxy.globalPosition);
+        //}
         
         /**
         * @language zh_CN
@@ -1067,15 +1017,15 @@
             if (this.parent)
                 this.parent.removeChild(this);
 
-            if (this.geometry) {
-                this.geometry.dispose();
-                this.geometry = null;
-            }
+            //if (this.geometry) {
+            //    this.geometry.dispose();
+            //    this.geometry = null;
+            //}
 
-            if (this.material) {
-                this.material.dispose();
-                this.material = null;
-            }
+            //if (this.material) {
+            //    this.material.dispose();
+            //    this.material = null;
+            //}
 
             for (var i: number = 0; i < this.childs.length; i++) {
                 this.childs[i].dispose();

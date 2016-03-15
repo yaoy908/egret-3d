@@ -32,7 +32,7 @@
         constructor(dir: Vector3D) {
             super();
             dir.normalize();
-            this._lightType = 0;
+            this.lightType = LightType.directlight;
             this._rot.x = dir.x;
             this._rot.y = dir.y;
             this._rot.z = dir.z;

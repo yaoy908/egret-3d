@@ -1,4 +1,4 @@
-﻿module egret3d_dev {
+﻿module egret3d {
     export class Class_Import extends Class_View3D {
 
         private box: Mesh;

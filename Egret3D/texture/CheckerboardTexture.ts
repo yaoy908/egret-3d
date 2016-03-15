@@ -17,7 +17,7 @@
      * @platform Web,Native
      * @includeExample texture/CheckerboardTexture.ts
      */
-    export class CheckerboardTexture extends TextureBase {
+    export class CheckerboardTexture implements ITexture {
 
         /**
          * @language zh_CN
@@ -28,18 +28,17 @@
         private _height: number = 32;
         private _pixelArray: Uint8Array;
 
+        public width: number;
+        public height: number;
+        public texture2D: Texture2D;
+        public texture3D: Texture3D;
 
         /**
          * @language zh_CN
          * 构造函数
          */
         constructor() {
-            super();
-
             this.buildCheckerboard();
-
-            this.mimapData = new Array<MipmapData>();
-            this.mimapData.push(new MipmapData(this._pixelArray, this._width, this._height));
         }
 
         /**
@@ -47,15 +46,17 @@
          * 上传贴图数据给GPU
          * @param context3D 
          */
-        public upload(context3D: Context3D) {
-            if (!this.texture) {
-                this.texture = context3D.creatTexture2D();
-                this.texture.gpu_border = 0; 
-                this.texture.gpu_internalformat = InternalFormat.PixelArray;
-                this.texture.gpu_colorformat = Egret3DDrive.ColorFormat_RGBA8888;
-                this.texture.mipmapDatas = this.mimapData;
-                this.useMipmap = false;
-                context3D.upLoadTextureData(0, this.texture);
+        public upload(context3D: Context3DProxy) {
+            if (!this.texture2D) {
+                this.texture2D = context3D.creatTexture2D();
+                this.texture2D.border = 0; 
+                this.texture2D.internalFormat = InternalFormat.PixelArray;
+                this.texture2D.colorFormat = ContextConfig.ColorFormat_RGBA8888;
+
+                this.texture2D.mimapData = new Array<MipmapData>();
+                this.texture2D.mimapData.push(new MipmapData(this._pixelArray, this._width, this._height));
+                this.texture2D.useMipmap = false;
+                context3D.upLoadTextureData(0, this.texture2D);
             }
         }
 
@@ -64,7 +65,7 @@
 
                 this._pixelArray = new Uint8Array(this._width * this._height * 4);
 
-                var colors: egret3d.Color[] = [egret3d.Color.white(), egret3d.Color.black()];
+                var colors: Color[] = [Color.white(), Color.black()];
 
                 var colorIndex = 0;
 
@@ -78,7 +79,7 @@
                         }
 
                         if ((y % blockSize) == 0 && x == 0) {
-                            var tmp: egret3d.Color = colors[0];
+                            var tmp: Color = colors[0];
                             colors[0] = colors[1];
                             colors[1] = tmp;
                             colorIndex = 0;
@@ -91,6 +92,9 @@
                     }
                 }
             }
+        }
+        
+        public uploadForcing(context3D: Context3DProxy) {
         }
     }
 }

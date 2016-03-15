@@ -22,7 +22,7 @@
         */
         public x: number = 0;
         
-        /**
+        /**  
         * @language zh_CN
         * 矩形左上角的 y 坐标
         */

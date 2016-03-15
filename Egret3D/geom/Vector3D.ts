@@ -574,6 +574,11 @@
             this.y = parseFloat(strS[1]);
             this.z = parseFloat(strS[2]);
         }
+
+
+
+
+
     }
 
 }

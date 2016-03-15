@@ -25,9 +25,9 @@
          * @language zh_CN
          * @param buffer 二进制
          * @param loadMipmaps 是否加载mipmaps
-         * @returns TextureBase
+         * @returns DDSTexture
          */
-        public static parse(buffer: ArrayBuffer, loadMipmaps:boolean = true):TextureBase {
+        public static parse(buffer: ArrayBuffer, loadMipmaps:boolean = true):DDSTexture {
             var dds: DDS = new DDS();
             var headerLengthInt = 31; // The header length in 32 bit ints
             var off_magic = 0;
@@ -151,11 +151,11 @@
 
             //是否软解DXT;
             var useSoftwareSolution: boolean = false;
-            if (dds.format == DDSFormat.RGB_S3TC_DXT1_FORMAT && Egret3DDrive.ColorFormat_DXT1_RGB == 0)
+            if (dds.format == DDSFormat.RGB_S3TC_DXT1_FORMAT && ContextConfig.ColorFormat_DXT1_RGB == 0)
                 useSoftwareSolution = true;
-            else if (dds.format == DDSFormat.RGBA_S3TC_DXT3_FORMAT && Egret3DDrive.ColorFormat_DXT3_RGBA == 0)
+            else if (dds.format == DDSFormat.RGBA_S3TC_DXT3_FORMAT && ContextConfig.ColorFormat_DXT3_RGBA == 0)
                 useSoftwareSolution = true;
-            else if (dds.format == DDSFormat.RGBA_S3TC_DXT5_FORMAT && Egret3DDrive.ColorFormat_DXT5_RGBA == 0)
+            else if (dds.format == DDSFormat.RGBA_S3TC_DXT5_FORMAT && ContextConfig.ColorFormat_DXT5_RGBA == 0)
                 useSoftwareSolution = true;
 
             for (var face = 0; face < faces; face++) {
@@ -186,23 +186,25 @@
                 height = dds.height;
             }
 
-            var texture: TextureBase = new TextureBase();
+            var texture: DDSTexture = new DDSTexture();
+
+            texture.texture2D = new Texture2D();
 
             if (useSoftwareSolution) {
-                texture.internalFormat = InternalFormat.PixelArray;
-                texture.colorFormat = Egret3DDrive.ColorFormat_RGBA8888;
+                texture.texture2D.internalFormat = InternalFormat.PixelArray;
+                texture.texture2D.colorFormat = ContextConfig.ColorFormat_RGBA8888;
             }
             else {
-                texture.internalFormat = InternalFormat.CompressData;
+                texture.texture2D.internalFormat = InternalFormat.CompressData;
                 if (FOURCC_DXT1 == fourCC)
-                    texture.colorFormat = Egret3DDrive.ColorFormat_DXT1_RGB;
+                    texture.texture2D.colorFormat = ContextConfig.ColorFormat_DXT1_RGB;
                 else if (FOURCC_DXT3 == fourCC)
-                    texture.colorFormat = Egret3DDrive.ColorFormat_DXT3_RGBA;
+                    texture.texture2D.colorFormat = ContextConfig.ColorFormat_DXT3_RGBA;
                 else if (FOURCC_DXT5 == fourCC)
-                    texture.colorFormat = Egret3DDrive.ColorFormat_DXT5_RGBA;
+                    texture.texture2D.colorFormat = ContextConfig.ColorFormat_DXT5_RGBA;
             }
             
-            texture.mimapData = dds.mipmaps;
+            texture.texture2D.mimapData = dds.mipmaps;
             return texture;
         }
        
@@ -611,25 +613,6 @@
             }
 
             return colorArray;
-        }
-    }
-
-    /**
-     * @private 
-     */
-    class DDS {
-        public mipmaps: Array<egret3d.MipmapData>;
-        public width: number;
-        public height: number;
-        public format: number;
-        public mipmapCount: number;
-        public isCubemap: boolean;
-        constructor() {
-            this.mipmaps = new Array<egret3d.MipmapData>();
-            this.width = 0;
-            this.height = 0;
-            this.format = null;
-            this.mipmapCount = 1;
         }
     }
 }

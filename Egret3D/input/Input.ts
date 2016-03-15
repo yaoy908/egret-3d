@@ -129,6 +129,15 @@
      */
     export class Input {
 
+        
+        /**
+        * @language zh_CN
+        * @private
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public canvas: Egret3DCanvas;
+
         /**
         * @language zh_CN
         * 当前鼠标X坐标。
@@ -233,7 +242,7 @@
         * @language zh_CN
         * 加速度。
         * @version Egret 3.0
-        * @platform Web,Native
+        * @platform Web,Native  
         */
         public _acceleration: Vector3D = new Vector3D();
         /**
@@ -329,11 +338,11 @@
 
         private _gp: boolean = false;
         private ongamepaddisconnected(e: GamepadEvent) {
-            Debug.instance.trace("Gamepad disconnected!");
+            //Debug.instance.trace("Gamepad disconnected!");
             this._gp = false;
         }
         private ongamepadconnected(e: GamepadEvent) {
-            Debug.instance.trace("Gamepad connected!");
+            //Debug.instance.trace("Gamepad connected!");
             this._gp = true;
         }
 
@@ -421,7 +430,7 @@
             v = this.getGamepadStick2();
             html += "Stick 2" + ": " + v.x + "," + v.y + "<br/>";
 
-            Debug.instance.trace(html);
+            //Debug.instance.trace(html);
         }
 
         private detectShake(evt: DeviceMotionEvent) {
@@ -520,13 +529,13 @@
 
             e.preventDefault();
 
-            var x1: number = e.targetTouches[0].clientX - egret3d.Egret3DDrive.clientRect.left;
-            var y1: number = e.targetTouches[0].clientY - egret3d.Egret3DDrive.clientRect.top;
+            var x1: number = e.targetTouches[0].clientX - this.canvas.clientRect.left;
+            var y1: number = e.targetTouches[0].clientY - this.canvas.clientRect.top;
 
             if (e.targetTouches.length == 2) {
 
-                var x2: number = e.targetTouches[1].clientX - egret3d.Egret3DDrive.clientRect.left;
-                var y2: number = e.targetTouches[1].clientY - egret3d.Egret3DDrive.clientRect.top;
+                var x2: number = e.targetTouches[1].clientX - this.canvas.clientRect.left;
+                var y2: number = e.targetTouches[1].clientY - this.canvas.clientRect.top;
 
                 this.onPinch(x1, y1, x2, y2);
             }
@@ -546,16 +555,16 @@
 
             if (e.targetTouches.length > 1) {
 
-                var x: number = e.targetTouches[0].clientX - egret3d.Egret3DDrive.clientRect.left;
-                var y: number = e.targetTouches[0].clientY - egret3d.Egret3DDrive.clientRect.top;
-                var x1: number = e.targetTouches[1].clientX - egret3d.Egret3DDrive.clientRect.left;
-                var y1: number = e.targetTouches[1].clientY - egret3d.Egret3DDrive.clientRect.top;
+                var x: number = e.targetTouches[0].clientX - this.canvas.clientRect.left;
+                var y: number = e.targetTouches[0].clientY - this.canvas.clientRect.top;
+                var x1: number = e.targetTouches[1].clientX - this.canvas.clientRect.left;
+                var y1: number = e.targetTouches[1].clientY - this.canvas.clientRect.top;
 
                 this.onPinch(x, y, x1, y1);
             }
             else if (e.targetTouches.length == 1) {
 
-                this.onSwipe(e.targetTouches[0].clientX - egret3d.Egret3DDrive.clientRect.left, e.targetTouches[0].clientY - egret3d.Egret3DDrive.clientRect.top);
+                this.onSwipe(e.targetTouches[0].clientX - this.canvas.clientRect.left, e.targetTouches[0].clientY - this.canvas.clientRect.top);
             }
             else {
 
@@ -579,8 +588,8 @@
             this.mouseLastX = this.mouseX;
             this.mouseLastY = this.mouseY;
 
-            this.mouseX = e.targetTouches[0].clientX - egret3d.Egret3DDrive.clientRect.left;
-            this.mouseY = e.targetTouches[0].clientY - egret3d.Egret3DDrive.clientRect.top;
+            this.mouseX = e.targetTouches[0].clientX - this.canvas.clientRect.left;
+            this.mouseY = e.targetTouches[0].clientY - this.canvas.clientRect.top;
 
             this.mouseOffsetX = this.mouseX - this.mouseLastX;
             this.mouseOffsetY = this.mouseY - this.mouseLastY;
@@ -590,7 +599,7 @@
             if (e.targetTouches.length > 1) {
 
                 var newPosition1: Point = new Point(this.mouseX, this.mouseY);
-                var newPosition2: Point = new Point(e.targetTouches[1].clientX - egret3d.Egret3DDrive.clientRect.left, e.targetTouches[1].clientY - egret3d.Egret3DDrive.clientRect.top);
+                var newPosition2: Point = new Point(e.targetTouches[1].clientX - this.canvas.clientRect.left, e.targetTouches[1].clientY - this.canvas.clientRect.top);
 
                 if (this._oldPosition1 == null)
                     this._oldPosition1 = newPosition1;
@@ -726,8 +735,8 @@
         }
 
         private mouseEnd(e: MouseEvent) {
-            this.mouseX = e.clientX - egret3d.Egret3DDrive.clientRect.left;
-            this.mouseY = e.clientY - egret3d.Egret3DDrive.clientRect.top;
+            this.mouseX = e.clientX - this.canvas.clientRect.left;
+            this.mouseY = e.clientY - this.canvas.clientRect.top;
 
             var k: number = 0;
             switch (e.button) {
@@ -758,8 +767,8 @@
         }
 
         private mouseStart(e: MouseEvent) {
-            this.mouseX = e.clientX - egret3d.Egret3DDrive.clientRect.left;
-            this.mouseY = e.clientY - egret3d.Egret3DDrive.clientRect.top;
+            this.mouseX = e.clientX - this.canvas.clientRect.left;
+            this.mouseY = e.clientY - this.canvas.clientRect.top;
 
             var k: number = 0;
             switch (e.button) {
@@ -787,8 +796,8 @@
             this.mouseLastX = this.mouseX;
             this.mouseLastY = this.mouseY;
 
-            this.mouseX = e.clientX - egret3d.Egret3DDrive.clientRect.left;
-            this.mouseY = e.clientY - egret3d.Egret3DDrive.clientRect.top;
+            this.mouseX = e.clientX - this.canvas.clientRect.left;
+            this.mouseY = e.clientY - this.canvas.clientRect.top;
 
             this.mouseOffsetX = this.mouseX - this.mouseLastX;
             this.mouseOffsetY = this.mouseY - this.mouseLastY;

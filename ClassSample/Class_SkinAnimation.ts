@@ -1,4 +1,4 @@
-﻿module egret3d_dev {
+﻿module egret3d {
     export class Class_SkinAnimation extends Class_View3D {
 
         private laohu: Mesh;
@@ -22,7 +22,10 @@
 
         protected onLoad(e: URLLoader, name: string) {
             if (name == "Mon_04") {
-                var mat: ColorMaterial = new ColorMaterial(0xff0000);
+                var img: HTMLImageElement = <HTMLImageElement>document.getElementById("mon");
+                var tex: ImageTexture = new ImageTexture(img);
+
+                var mat: TextureMaterial = new TextureMaterial(tex);
                 var ge: Geometry = e.data;
                 var mesh: Mesh = new Mesh(e.data, mat);
 
@@ -38,10 +41,7 @@
                 mesh.material.lightGroup = lights;
                 this.laohu = mesh;
 
-                var img: HTMLImageElement = <HTMLImageElement>document.getElementById("mon");
-                var tex: ImageTexture = new ImageTexture(img);
 
-                mesh.material.diffuseTexture = tex;
                 var load: URLLoader = new URLLoader("resource/laohu/Bonezero.eam");
                 load.onLoadComplete = (e: URLLoader) => this.onAnimation(e, "Bonezero", mesh);
             } 

@@ -36,7 +36,7 @@
          */
         constructor( color:number ) {
             super();
-            this._lightType = 1; 
+            this.lightType = LightType.pointlight ; 
             this.diffuse = color;
         }
 
