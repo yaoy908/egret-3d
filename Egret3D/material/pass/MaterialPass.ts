@@ -54,6 +54,9 @@
        * @platform Web,Native
        */
         protected resetTexture() {
+            if (this._materialData.textureChange == false) {
+                return;
+            }
             //--------texture----------------
             var sampler2D: GLSL.Sampler2D;
             for (var index in this._passUsage.sampler2DList) {
@@ -141,8 +144,6 @@
             this._passUsage.fragmentShader.shader = this._passUsage.fragmentShader.getShader(this._passUsage);
             this._passUsage.program3D = ShaderPool.getProgram(this._passUsage.vertexShader.shader.id, this._passUsage.fragmentShader.shader.id);
 
-            this.resetTexture();
-
             for (var property in this._passUsage) {
                 if ((<string>property).indexOf("uniform") != -1) { 
                     if (this._passUsage[property]) {
@@ -214,6 +215,7 @@
 
             context3DProxy.uniform1fv(this._passUsage.uniform_materialSource.uniformIndex, this._materialData.materialSourceData);
 
+            this.resetTexture();
             //texture 2D
             var sampler2D: GLSL.Sampler2D;
             for (var index in this._passUsage.sampler2DList) {
