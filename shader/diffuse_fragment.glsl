@@ -49,9 +49,10 @@ void main() {
 	materialSource.ambientPower = uniform_materialSource[14];
 	materialSource.normalPower = uniform_materialSource[15];
 
+	materialSource.diffuse.xyz = materialSource.diffuse * materialSource.diffusePower ;
+	materialSource.specular.xyz = materialSource.specular * materialSource.specularPower ;
+	materialSource.ambient.xyz = materialSource.ambient * materialSource.ambientPower ;
 	normal = varying_eyeNormal;
-	//specular = vec4(materialSource.specular,0.0);
-
 	endColor = vec4(materialSource.diffuse,materialSource.alpha);
 	diffuse = texture2D(diffuseTexture , varying_uv0 );
 	endColor = endColor;

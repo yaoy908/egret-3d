@@ -1,5 +1,7 @@
 module egret3d {
-
+	/**
+	* @private
+	*/
 	export class ShaderLib {
 		static lib: { [key:string]: string } = 
 		{
@@ -46,6 +48,9 @@ module egret3d {
 			"materialSource.specularPower = uniform_materialSource[13]; \n" +
 			"materialSource.ambientPower = uniform_materialSource[14]; \n" +
 			"materialSource.normalPower = uniform_materialSource[15]; \n" +
+			"materialSource.diffuse.xyz = materialSource.diffuse * materialSource.diffusePower ; \n" +
+			"materialSource.specular.xyz = materialSource.specular * materialSource.specularPower ; \n" +
+			"materialSource.ambient.xyz = materialSource.ambient * materialSource.ambientPower ; \n" +
 			"normal = varying_eyeNormal; \n" +
 			"endColor = vec4(materialSource.diffuse,materialSource.alpha); \n" +
 			"eyedir = varying_eyedir.xyz - varying_pos.xyz ; \n" +
@@ -149,6 +154,9 @@ module egret3d {
 			"materialSource.specularPower = uniform_materialSource[13]; \n" +
 			"materialSource.ambientPower = uniform_materialSource[14]; \n" +
 			"materialSource.normalPower = uniform_materialSource[15]; \n" +
+			"materialSource.diffuse.xyz = materialSource.diffuse * materialSource.diffusePower ; \n" +
+			"materialSource.specular.xyz = materialSource.specular * materialSource.specularPower ; \n" +
+			"materialSource.ambient.xyz = materialSource.ambient * materialSource.ambientPower ; \n" +
 			"normal = varying_eyeNormal; \n" +
 			"endColor = vec4(materialSource.diffuse,materialSource.alpha); \n" +
 			"diffuse = texture2D(diffuseTexture , varying_uv0 ); \n" +
@@ -251,10 +259,11 @@ module egret3d {
 			"end_fs":
 			"vec4 endColor ; \n" +
 			"vec4 specular ; \n" +
+			"vec4 diffuse ; \n" +
 			"vec4 light ; \n" +
 			"vec3 ambient; \n" +
 			"void main() { \n" +
-			"endColor.xyz = endColor.xyz * light.xyz + specular.xyz * materialSource.specular + ambient.xyz + diffuse.xyz; \n" +
+			"endColor.xyz = (diffuse.xyz * (endColor.xyz * light.xyz) ) + (specular.xyz * materialSource.specular.xyz) + (diffuse.xyz * materialSource.ambient.xyz) ; \n" +
 			"gl_FragColor = endColor ; \n" +
 			"} \n",
 

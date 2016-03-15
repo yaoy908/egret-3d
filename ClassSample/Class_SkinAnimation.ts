@@ -3,6 +3,8 @@
 
         private laohu: Mesh;
         private view1: View3D;
+        private lights: LightGroup = new LightGroup();
+
         constructor() {
             super();
 
@@ -16,6 +18,11 @@
             var load: URLLoader = new URLLoader("resource/laohu/Mon_04.esm");
             load.onLoadComplete = (e: URLLoader) => this.onLoad(e, "Mon_04");
 
+
+            var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));
+            dirLight.diffuse = 0xffffff;
+            this.lights.addLight(dirLight);
+
             this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, (e) => this.update(e));
         }
@@ -26,6 +33,10 @@
                 var tex: ImageTexture = new ImageTexture(img);
 
                 var mat: TextureMaterial = new TextureMaterial(tex);
+                mat.shininess = 20.0;
+                mat.ambientColor = 0xffffff;
+                mat.ambientPower = 0.5;
+
                 var ge: Geometry = e.data;
                 var mesh: Mesh = new Mesh(e.data, mat);
 
@@ -34,11 +45,7 @@
                 }
                 this.view1.addChild3D(mesh);
 
-                var lights: LightGroup = new LightGroup();
-                var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));
-                dirLight.diffuse = 0xff0000ff;
-                lights.addLight(dirLight);
-                mesh.material.lightGroup = lights;
+                mesh.material.lightGroup = this.lights;
                 this.laohu = mesh;
 
 
