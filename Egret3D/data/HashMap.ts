@@ -1,7 +1,8 @@
 ﻿module egret3d {
 
     /*
-    * @public 
+    * @class egret3d.CollectBase
+    * @classdesc
     * 用来做数据存储使用 hash map 映射表
     * <p> 通用的hash map 映射表  key为键 value为任意类型的值 
     * <p> 还可以通过开启开关使用双线列表能正常使用list带有顺序的存储方式

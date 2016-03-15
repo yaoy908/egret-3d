@@ -3,11 +3,7 @@ attribute vec3 attribute_normal ;
 attribute vec3 attribute_tangent ;
 attribute vec4 attribute_color ;
 attribute vec2 attribute_uv0 ;
-attribute vec4 attribute_boneIndex ;
-attribute vec4 attribute_boneWeight ;
 
-const int bonesNumber = 0;
-uniform vec4 uniform_PoseMatrix[bonesNumber];
 uniform mat4 uniform_ModelMatrix ;
 uniform mat4 uniform_ProjectionMatrix ;
 uniform mat4 uniform_normalMatrix ;
@@ -52,12 +48,8 @@ void main(void){
    endPosition = vec4(0.0, 0.0, 0.0, 0.0) ;
 
    vec4 temp_position = vec4(attribute_position, 1.0) ;
-   endPosition += buildMat4(int(attribute_boneIndex.x)) * temp_position * attribute_boneWeight.x;
-   endPosition += buildMat4(int(attribute_boneIndex.y)) * temp_position * attribute_boneWeight.y;
-   endPosition += buildMat4(int(attribute_boneIndex.z)) * temp_position * attribute_boneWeight.z;
-   endPosition += buildMat4(int(attribute_boneIndex.w)) * temp_position * attribute_boneWeight.w;
 
-   endPosition =  uniform_ModelMatrix * endPosition ;
+   endPosition =  uniform_ModelMatrix * temp_position ;
 
    varying_eyedir = uniform_eyepos ;
    varying_pos =  endPosition ;
