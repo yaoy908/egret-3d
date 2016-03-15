@@ -57,7 +57,7 @@
          * @language zh_CN
          * 是否使用mipmap
          */
-        public useMipmap: boolean;
+        public useMipmap: boolean = true ;
 
         /**
          * @language zh_CN

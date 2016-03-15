@@ -221,7 +221,7 @@
                 sampler2D.texture.upload(context3DProxy);
                 context3DProxy.setTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index, sampler2D.texture.texture2D );
                 if (this._materialData.materialDataNeedChange) {
-                    var min_filter: number = this._materialData.smooth ? Context3DProxy.gl.LINEAR_MIPMAP_LINEAR : Context3DProxy.gl.LINEAR;
+                    var min_filter: number = (this._materialData.smooth && sampler2D.texture.texture2D.useMipmap) ? Context3DProxy.gl.LINEAR_MIPMAP_LINEAR : Context3DProxy.gl.LINEAR;
                     var mag_filter: number = this._materialData.smooth ? Context3DProxy.gl.LINEAR : Context3DProxy.gl.LINEAR;
             
                     var wrap_u_filter: number = this._materialData.repeat ? Context3DProxy.gl.REPEAT : Context3DProxy.gl.CLAMP_TO_EDGE;
