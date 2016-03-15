@@ -13,11 +13,18 @@ struct MaterialSource{
 	float normalPower;
 };
 
+varying vec4 varying_pos        ;
+varying vec3 varying_eyeNormal  ;
+varying vec4 varying_color  ;
+varying vec3 varying_eyedir  ;
+
 vec4 endColor ;
 vec4 diffuse  ;
 vec4 specular ;
 vec3 normal  ;
-
+vec3 eyedir  ;
+vec4 light ;
+vec4 ambient;
 void main() {
 	
 	MaterialSource materialSource ; 
@@ -41,9 +48,13 @@ void main() {
 	materialSource.ambientPower = uniform_materialSource[14];
 	materialSource.normalPower = uniform_materialSource[15];
 
+	normal = varying_eyeNormal;
 	//specular = vec4(materialSource.specular,0.0);
 
 	endColor = vec4(materialSource.diffuse,materialSource.alpha);
+
+    eyedir = varying_eyedir.xyz - varying_pos.xyz ; 
+
 	//endColor = vec4(0.1,0.0,0.0,1.0);
 }
 

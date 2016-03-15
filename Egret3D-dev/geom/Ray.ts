@@ -115,15 +115,15 @@
         /**
         * @language zh_CN
         * 检测射线相交模型
-        * @param mesh 检测的模型
+        * @param renderItem 检测的模型
         * @param inPos 相交点
         * @returns 相交返回true
         * @version Egret 3.0
         * @platform Web,Native
         */
-        //public IntersectMeshEx(mesh: Mesh, uv_offset: number, result:PickResult): boolean {
-        //    return this.IntersectMesh(mesh.geometry.verticesData, mesh.geometry.indexData, mesh.geometry.vertexAttLength, mesh.geometry.indexData.length / 3, uv_offset, mesh.modelMatrix, result);
-        //}
+        public IntersectMeshEx(renderItem: IRender, uv_offset: number, result:PickResult): boolean {
+            return this.IntersectMesh(renderItem.geometry.verticesData, renderItem.geometry.indexData, renderItem.geometry.vertexAttLength, renderItem.geometry.indexData.length / 3, uv_offset, renderItem.modelMatrix, result);
+        }
                         
         /**
         * @language zh_CN
@@ -174,8 +174,7 @@
                 for (var j: number = 0; j < 3; ++j) {
                     var index: number = indexData[3 * i + j];
                     pos.setTo(verticesData[offset * index + 0], verticesData[offset * index + 1], verticesData[offset * index + 2]);
-                    //多余的矩阵操作 changeByZwt
-                    //pos.copyFrom(mMat.transformVector(pos));
+                    pos.copyFrom(mMat.transformVector(pos));
 
                     triangle[j].x = pos.x;
                     triangle[j].y = pos.y;
@@ -189,11 +188,8 @@
                         u = ret[1];
                         v = ret[2];
                     }
-
-                    
                 }
             }
-
 
             if (face < faces && face >= 0) {
                 for (var i: number = 0; i < 3; ++i) {

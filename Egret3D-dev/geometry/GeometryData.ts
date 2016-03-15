@@ -28,7 +28,13 @@
         * @language zh_CN
         * 顶点长度
         */
-        public vertLen: number;
+        public vertLen: number = 0;
+
+        /**
+        * @language zh_CN
+        * 面数
+        */
+        public faces: number = 0;
 
         /**
         * @language zh_CN
@@ -40,19 +46,19 @@
         * @language zh_CN
         * 顶点数据
         */
-        public source_vertexData: Array<Vector3D> = new Array<Vector3D>();
+        public source_vertexData: Array<number> = new Array<number>();
         
         /**
         * @language zh_CN
         * 顶点色数据
         */
-        public source_vertexColorData: Array<Vector3D> = new Array<Vector3D>();
+        public source_vertexColorData: Array<number> = new Array<number>();
         
         /**
         * @language zh_CN
         * 顶点法线
         */
-        public source_normalData: Array<Vector3D> = new Array<Vector3D>();
+        public source_normalData: Array<number> = new Array<number>();
 
         /**
         * @language zh_CN
@@ -64,19 +70,13 @@
         * @language zh_CN
         * 顶点uv数据
         */
-        public source_uvData: Array<UV> = new Array<UV>();
+        public source_uvData: Array<number> = new Array<number>();
 
         /**
         * @language zh_CN
         * 顶点uv2数据
         */
-        public source_uv2Data: Array<UV> = new Array<UV>();
-
-        /**
-        * @language zh_CN
-        * 每个3角面的数据
-        */
-        public source_faceData: Array<FaceData> = new Array<FaceData>();
+        public source_uv2Data: Array<number> = new Array<number>();
 
         /**
         * @language zh_CN
@@ -142,285 +142,289 @@
         public faceWeights: Array<number> = new Array<number>();
 
         /**
+          * @language zh_CN
+          * 顶点索引数据
+          */
+        public vertexIndices: Array<number> = new Array<number>();
+
+        /**
+        * @language zh_CN
+        * uv索引数据
+        */
+        public uvIndices: Array<number> = new Array<number>();
+
+        /**
+        * @language zh_CN
+        * uv2索引数据
+        */
+        public uv2Indices: Array<number> = new Array<number>();
+
+        /**
+        * @language zh_CN
+        * 法线索引数据
+        */
+        public normalIndices: Array<number> = new Array<number>();
+
+        /**
+        * @language zh_CN
+        * 顶点色索引数据
+        */
+        public colorIndices: Array<number> = new Array<number>();
+
+        /**
+        * @language zh_CN
+        * 索引数据数组
+        */
+        public indexIds: Array<any> = new Array<any>(); // used for real index lookups
+
+        public skeleton: Skeleton;
+        /**
         * @language zh_CN
         * 顶点数据数组
         */
         public vertexDatas: Array<number>;
 
-        /**
-        * @language zh_CN
-        * 构建顶点数据数组
-        * @param source 未组合顶点数据的GeometryData对象
-        * @returns 经过组合并生成顶点数据数组的新GeometryData对象
-        */
-        public static build(source: GeometryData): GeometryData {
+        public textureDiffuse: string;
 
-            if (null == source.source_faceData || source.source_faceData.length <= 0 || null == source.source_vertexData || source.source_vertexData.length <= 0)
-                return null;
+        public textureSpecular: string;
 
-            var target: GeometryData = new GeometryData();
-            target.indices = [];
-            target.vertexDatas = [];
-            target.vertexAttLength = source.vertexAttLength;
-
-            var faceData: FaceData = null;
-            var vertex: Vector3D = null;
-            var normal: Vector3D = new Vector3D(1.0, 1.0, 1.0);
-            var color: Vector3D = new Vector3D(1.0, 1.0, 1.0, 1.0);
-            var uv_0: UV = new UV(1, 0);
-            var uv_1: UV = new UV(1, 0);
-
-            for (var faceIndex: number = 0; faceIndex < source.source_faceData.length; faceIndex++) {
-
-                faceData = source.source_faceData[faceIndex];
-
-                target.indices.push(
-                    faceIndex * 3 + 0,
-                    faceIndex * 3 + 2,
-                    faceIndex * 3 + 1
-                    );
-
-                for (var i: number = 0; i < 3; i++) {
-
-                    vertex = source.source_vertexData[faceData.vertexIndices[i] - 1];
-
-                    if (faceData.normalIndices && source.source_normalData && source.source_normalData.length > 0 )
-                        normal = source.source_normalData[faceData.normalIndices[i] - 1];
-
-                    if (faceData.colorIndices && source.source_vertexColorData && source.source_vertexColorData.length > 0)
-                        color = source.source_vertexColorData[faceData.colorIndices[i] - 1];
-
-                    if (faceData.uvIndices && source.source_uvData && source.source_uvData.length > 0)
-                        uv_0 = source.source_uvData[faceData.uvIndices[i] - 1];
-
-                    if (faceData.uv2Indices && source.source_uv2Data && source.source_uv2Data.length > 0)
-                        uv_1 = source.source_uv2Data[faceData.uv2Indices[i] - 1];
-
-                    target.vertexDatas.push(
-                        vertex.x, vertex.y, vertex.z,           //3 pos
-                        normal.x, normal.y, normal.z,           //3 normal
-                        0.0, 0.0, 0.0,                          //3 tangent
-                        color.r, color.g, color.b, color.a,     //4 color
-                        uv_0.u, uv_0.v,                         //2 uv1
-                        uv_1.u, uv_1.v                          //2 uv2
-                        );
-
-                    if (source.source_skinData != null && source.source_skinData.length > 0) {
-
-                        target.vertexDatas.push(                //8 skin
-                            source.source_skinData[(faceData.vertexIndices[i] - 1) * 8 + 0],
-                            source.source_skinData[(faceData.vertexIndices[i] - 1) * 8 + 2],
-                            source.source_skinData[(faceData.vertexIndices[i] - 1) * 8 + 4],
-                            source.source_skinData[(faceData.vertexIndices[i] - 1) * 8 + 6],
-                            source.source_skinData[(faceData.vertexIndices[i] - 1) * 8 + 1],
-                            source.source_skinData[(faceData.vertexIndices[i] - 1) * 8 + 3],
-                            source.source_skinData[(faceData.vertexIndices[i] - 1) * 8 + 5],
-                            source.source_skinData[(faceData.vertexIndices[i] - 1) * 8 + 7]
-                            );
-                    }
-                }
-            }
-
-            //GeometryData.buildFaceTangents(target);
-
-            return target;
-        }
-
+        public textureNormal: string;
 
         /**
         * @language zh_CN
+        * 
         * 构建顶点数据数组
         * @param source 未组合顶点数据的GeometryData对象
+        * @param vertexFormat 生成顶点格式
         * @returns 经过组合并生成顶点数据数组的新GeometryData对象
         */
-        public static buildGeomtry(source: GeometryData): Geometry {
-
-            if (null == source.source_faceData || source.source_faceData.length <= 0 || null == source.source_vertexData || source.source_vertexData.length <= 0)
-                return null;
+        public static buildGeomtry(source: GeometryData, vertexFormat: number): Geometry {
 
             var target: Geometry = new Geometry();
             target.indexData = [];
             target.verticesData = [];
-            target.vertexAttLength = source.vertexAttLength;
+            target.useVertexFormat(vertexFormat);
 
-            var faceData: FaceData = null;
-            var vertex: Vector3D = null;
+            target.skeleton = source.skeleton;
+
+            var vertex: Vector3D = new Vector3D();
             var normal: Vector3D = new Vector3D(1.0, 1.0, 1.0);
             var color: Vector3D = new Vector3D(1.0, 1.0, 1.0, 1.0);
             var uv_0: UV = new UV(1, 0);
             var uv_1: UV = new UV(1, 0);
 
-            for (var faceIndex: number = 0; faceIndex < source.source_faceData.length; faceIndex++) {
-
-                faceData = source.source_faceData[faceIndex];
+            var index: number = 0;
+            for (var faceIndex: number = 0; faceIndex < source.faces; faceIndex++) {
 
                 target.indexData.push(
                     faceIndex * 3 + 0,
                     faceIndex * 3 + 2,
-                    faceIndex * 3 + 1
-                );
+                    faceIndex * 3 + 1);
 
                 for (var i: number = 0; i < 3; i++) {
+                    index = source.vertexIndices[faceIndex * 3 + i] * Geometry.positionSize;
+                    vertex.x = source.source_vertexData[index + 0];
+                    vertex.y = source.source_vertexData[index + 1];
+                    vertex.z = source.source_vertexData[index + 2];
 
-                    vertex = source.source_vertexData[faceData.vertexIndices[i] - 1];
+                    if (source.normalIndices && source.source_normalData && source.source_normalData.length > 0) {
+                        index = source.normalIndices[faceIndex * 3 + i] * Geometry.normalSize;
+                        normal.x = source.source_normalData[index + 0];
+                        normal.y = source.source_normalData[index + 1];
+                        normal.z = source.source_normalData[index + 2];
+                    }
 
-                    if (faceData.normalIndices && source.source_normalData && source.source_normalData.length > 0)
-                        normal = source.source_normalData[faceData.normalIndices[i] - 1];
+                    if (source.colorIndices && source.source_vertexColorData && source.source_vertexColorData.length > 0) {
+                        index = source.colorIndices[faceIndex * 3 + i] * Geometry.colorSize;
+                        color.x = source.source_vertexColorData[index + 0];
+                        color.y = source.source_vertexColorData[index + 1];
+                        color.z = source.source_vertexColorData[index + 2];
+                        color.z = source.source_vertexColorData[index + 3];
+                    }
+                    if (source.uvIndices && source.source_uvData && source.source_uvData.length > 0) {
+                        index = source.uvIndices[faceIndex * 3 + i] * Geometry.uvSize;
+                        uv_0.u = source.source_uvData[index + 0];
+                        uv_0.v = source.source_uvData[index + 1];
+                    }
+                    if (source.uv2Indices && source.source_uv2Data && source.source_uv2Data.length > 0) {
+                        index = source.uv2Indices[faceIndex * 3 + i] * Geometry.uvSize;
+                        uv_1.u = source.source_uv2Data[index + 0];
+                        uv_1.v = source.source_uv2Data[index + 1];
+                    }
 
-                    if (faceData.colorIndices && source.source_vertexColorData && source.source_vertexColorData.length > 0)
-                        color = source.source_vertexColorData[faceData.colorIndices[i] - 1];
+                    if (vertexFormat & VertexFormat.VF_POSITION) {
+                        target.source_positionData.push(vertex.x);
+                        target.source_positionData.push(vertex.y);
+                        target.source_positionData.push(vertex.z);
+                    }
 
-                    if (faceData.uvIndices && source.source_uvData && source.source_uvData.length > 0)
-                        uv_0 = source.source_uvData[faceData.uvIndices[i] - 1];
+                    if (vertexFormat & VertexFormat.VF_NORMAL) {
+                        target.source_normalData.push(normal.x);
+                        target.source_normalData.push(normal.y);
+                        target.source_normalData.push(normal.z);
+                    }
 
-                    if (faceData.uv2Indices && source.source_uv2Data && source.source_uv2Data.length > 0)
-                        uv_1 = source.source_uv2Data[faceData.uv2Indices[i] - 1];
+                    if (vertexFormat & VertexFormat.VF_TANGENT) {
+                        target.source_tangentData.push(0);
+                        target.source_tangentData.push(0);
+                        target.source_tangentData.push(0);
+                    }
 
-                    target.source_positionData.push(vertex.x);
-                    target.source_positionData.push(vertex.y);
-                    target.source_positionData.push(vertex.z);
+                    if (vertexFormat & VertexFormat.VF_COLOR) {
+                        target.source_colorData.push(color.x);
+                        target.source_colorData.push(color.y);
+                        target.source_colorData.push(color.z);
+                        target.source_colorData.push(color.w);
+                    }
 
-              
+                    if (vertexFormat & VertexFormat.VF_UV0) {
+                        target.source_uvData.push(uv_0.u);
+                        target.source_uvData.push(uv_0.v);
+                    }
 
-                    target.source_tangentData.push(0);
-                    target.source_tangentData.push(0);
-                    target.source_tangentData.push(0);
+                    if (vertexFormat & VertexFormat.VF_UV1) {
 
-                    target.source_colorData.push(color.x);
-                    target.source_colorData.push(color.y);
-                    target.source_colorData.push(color.z);
-                    target.source_colorData.push(color.w);
+                        target.source_uv2Data.push(uv_1.u);
+                        target.source_uv2Data.push(uv_1.v);
+                    }
 
-                    target.source_uvData.push(uv_0.u);
-                    target.source_uvData.push(uv_0.v);
-
-                    target.source_uv2Data.push(uv_1.u);
-                    target.source_uv2Data.push(uv_1.v);
-
-                    if (source.source_skinData != null && source.source_skinData.length > 0) {
-                        target.source_SkinData.push(                //8 skin
-                            source.source_skinData[(faceData.vertexIndices[i] - 1) * Geometry.skinSize + 0],
-                            source.source_skinData[(faceData.vertexIndices[i] - 1) * Geometry.skinSize + 2],
-                            source.source_skinData[(faceData.vertexIndices[i] - 1) * Geometry.skinSize + 4],
-                            source.source_skinData[(faceData.vertexIndices[i] - 1) * Geometry.skinSize + 6],
-                            source.source_skinData[(faceData.vertexIndices[i] - 1) * Geometry.skinSize + 1],
-                            source.source_skinData[(faceData.vertexIndices[i] - 1) * Geometry.skinSize + 3],
-                            source.source_skinData[(faceData.vertexIndices[i] - 1) * Geometry.skinSize + 5],
-                            source.source_skinData[(faceData.vertexIndices[i] - 1) * Geometry.skinSize + 7]
-                        );
+                    if (vertexFormat & VertexFormat.VF_SKIN) {
+                        if (source.source_skinData != null && source.source_skinData.length > 0) {
+                            index = source.vertexIndices[faceIndex * 3 + i] * Geometry.skinSize;
+                            target.source_SkinData.push(
+                                source.source_skinData[index + 0],
+                                source.source_skinData[index + 2],
+                                source.source_skinData[index + 4],
+                                source.source_skinData[index + 6],
+                                source.source_skinData[index + 1],
+                                source.source_skinData[index + 3],
+                                source.source_skinData[index + 5],
+                                source.source_skinData[index + 7]);
+                        }
+                        else {
+                            target.source_SkinData.push(0, 0, 0, 0, 0, 0, 0, 0);
+                        }
                     }
                 }
             }
 
             GeometryData.updateFaceTangents(target);
+            target.calculateVertexFormat();
+            
+
+            var subGeometry: SubGeometry = new SubGeometry();
+            subGeometry.geometry = target;
+            subGeometry.start = 0;
+            subGeometry.count = target.indexData.length;
+            target.subGeometrys.push(subGeometry);
 
             return target;
         }
 
-        private static translateMaterialGroup(geomtryData: GeometryData): GeometryData {
-            var faces: Array<FaceData> = geomtryData.source_faceData;
-            var face: FaceData;
-            var numFaces: number = faces.length;
-            var numVerts: number;
+        //private static translateMaterialGroup(geomtryData: GeometryData): GeometryData {
+        //    var faces: Array<FaceData> = geomtryData.source_faceData;
+        //    var face: FaceData;
+        //    var numFaces: number = faces.length;
+        //    var numVerts: number;
 
-            var targetGeomtryData: GeometryData = new GeometryData();
+        //    var targetGeomtryData: GeometryData = new GeometryData();
 
-            targetGeomtryData.vertexAttLength = geomtryData.vertexAttLength;
+        //    targetGeomtryData.vertexAttLength = geomtryData.vertexAttLength;
 
-            var j: number;
-            for (var i: number = 0; i < numFaces; ++i) {
-                face = faces[i];
-                numVerts = face.indexIds.length - 1;
-                for (j = 1; j < numVerts; ++j) {
-                    this.translateVertexData(face, j, geomtryData, targetGeomtryData);
-                    this.translateVertexData(face, 0, geomtryData, targetGeomtryData);
-                    this.translateVertexData(face, j + 1, geomtryData, targetGeomtryData);
-                }
-            }
-            if (targetGeomtryData.vertices.length > 0) {
-                targetGeomtryData.vertLen = (targetGeomtryData.vertices.length / 3) * geomtryData.vertexAttLength;
-               targetGeomtryData.vertexDatas = new Array<number>(targetGeomtryData.vertLen)
+        //    var j: number;
+        //    for (var i: number = 0; i < numFaces; ++i) {
+        //        face = faces[i];
+        //        numVerts = face.indexIds.length - 1;
+        //        for (j = 1; j < numVerts; ++j) {
+        //            this.translateVertexData(face, j, geomtryData, targetGeomtryData);
+        //            this.translateVertexData(face, 0, geomtryData, targetGeomtryData);
+        //            this.translateVertexData(face, j + 1, geomtryData, targetGeomtryData);
+        //        }
+        //    }
+        //    if (targetGeomtryData.vertices.length > 0) {
+        //        targetGeomtryData.vertLen = (targetGeomtryData.vertices.length / 3) * geomtryData.vertexAttLength;
+        //       targetGeomtryData.vertexDatas = new Array<number>(targetGeomtryData.vertLen)
 
-                //this.updateFaceTangents(targetGeomtryData);
-                //this.updateFaceNormals(targetGeomtryData);
-                this.combinGeomtryData(targetGeomtryData);
-            }
+        //        //this.updateFaceTangents(targetGeomtryData);
+        //        //this.updateFaceNormals(targetGeomtryData);
+        //        this.combinGeomtryData(targetGeomtryData);
+        //    }
 
-            return targetGeomtryData;
-        }
+        //    return targetGeomtryData;
+        //}
 
-        private static translateVertexData(face: FaceData, vertexIndex: number, sourceGeomtryData: GeometryData, targetGeomtryData: GeometryData) {
-            var index: number;
-            var vertex: Vector3D;
-            var color: Vector3D;
-            var vertexNormal: Vector3D;
-            var uv: UV;
+        //private static translateVertexData(face: FaceData, vertexIndex: number, sourceGeomtryData: GeometryData, targetGeomtryData: GeometryData) {
+        //    var index: number;
+        //    var vertex: Vector3D;
+        //    var color: Vector3D;
+        //    var vertexNormal: Vector3D;
+        //    var uv: UV;
 
-            if (!targetGeomtryData.indices[face.indexIds[vertexIndex]]) {
+        //    if (!targetGeomtryData.indices[face.indexIds[vertexIndex]]) {
 
-                index = targetGeomtryData.vertexIndex;
-                targetGeomtryData.indices[face.indexIds[vertexIndex]] = ++targetGeomtryData.vertexIndex;
+        //        index = targetGeomtryData.vertexIndex;
+        //        targetGeomtryData.indices[face.indexIds[vertexIndex]] = ++targetGeomtryData.vertexIndex;
 
-                vertex = sourceGeomtryData.source_vertexData[face.vertexIndices[vertexIndex] - 1];
-                targetGeomtryData.vertices.push(vertex.x, vertex.y, vertex.z);
+        //        vertex = sourceGeomtryData.source_vertexData[face.vertexIndices[vertexIndex] - 1];
+        //        targetGeomtryData.vertices.push(vertex.x, vertex.y, vertex.z);
 
-                if (sourceGeomtryData.source_vertexColorData != null && sourceGeomtryData.source_vertexColorData.length > 0) {
-                    color = sourceGeomtryData.source_vertexColorData[face.vertexIndices[vertexIndex] - 1]
+        //        if (sourceGeomtryData.source_vertexColorData != null && sourceGeomtryData.source_vertexColorData.length > 0) {
+        //            color = sourceGeomtryData.source_vertexColorData[face.vertexIndices[vertexIndex] - 1]
 
-                    targetGeomtryData.verticesColor.push(color.r, color.g, color.b, color.a);
-                }
+        //            targetGeomtryData.verticesColor.push(color.r, color.g, color.b, color.a);
+        //        }
 
-                if (sourceGeomtryData.source_skinData != null && sourceGeomtryData.source_skinData.length > 0) {
+        //        if (sourceGeomtryData.source_skinData != null && sourceGeomtryData.source_skinData.length > 0) {
 
-                    targetGeomtryData.skinMesh.push(
-                        sourceGeomtryData.source_skinData[(face.vertexIndices[vertexIndex] - 1) * 8 + 0],
-                        sourceGeomtryData.source_skinData[(face.vertexIndices[vertexIndex] - 1) * 8 + 2],
-                        sourceGeomtryData.source_skinData[(face.vertexIndices[vertexIndex] - 1) * 8 + 4],
-                        sourceGeomtryData.source_skinData[(face.vertexIndices[vertexIndex] - 1) * 8 + 6],
-                        sourceGeomtryData.source_skinData[(face.vertexIndices[vertexIndex] - 1) * 8 + 1],
-                        sourceGeomtryData.source_skinData[(face.vertexIndices[vertexIndex] - 1) * 8 + 3],
-                        sourceGeomtryData.source_skinData[(face.vertexIndices[vertexIndex] - 1) * 8 + 5],
-                        sourceGeomtryData.source_skinData[(face.vertexIndices[vertexIndex] - 1) * 8 + 7]
-                        );
-                }
+        //            targetGeomtryData.skinMesh.push(
+        //                sourceGeomtryData.source_skinData[(face.vertexIndices[vertexIndex] - 1) * 8 + 0],
+        //                sourceGeomtryData.source_skinData[(face.vertexIndices[vertexIndex] - 1) * 8 + 2],
+        //                sourceGeomtryData.source_skinData[(face.vertexIndices[vertexIndex] - 1) * 8 + 4],
+        //                sourceGeomtryData.source_skinData[(face.vertexIndices[vertexIndex] - 1) * 8 + 6],
+        //                sourceGeomtryData.source_skinData[(face.vertexIndices[vertexIndex] - 1) * 8 + 1],
+        //                sourceGeomtryData.source_skinData[(face.vertexIndices[vertexIndex] - 1) * 8 + 3],
+        //                sourceGeomtryData.source_skinData[(face.vertexIndices[vertexIndex] - 1) * 8 + 5],
+        //                sourceGeomtryData.source_skinData[(face.vertexIndices[vertexIndex] - 1) * 8 + 7]
+        //                );
+        //        }
 
-                if (face.normalIndices.length > 0) {
-                    vertexNormal = sourceGeomtryData.source_normalData[face.normalIndices[vertexIndex] - 1];
-                    targetGeomtryData.normals.push(vertexNormal.x, vertexNormal.y, vertexNormal.z);
-                }
+        //        if (face.normalIndices.length > 0) {
+        //            vertexNormal = sourceGeomtryData.source_normalData[face.normalIndices[vertexIndex] - 1];
+        //            targetGeomtryData.normals.push(vertexNormal.x, vertexNormal.y, vertexNormal.z);
+        //        }
 
-                if (face.uvIndices.length > 0) {
+        //        if (face.uvIndices.length > 0) {
 
-                    try {
-                        uv = sourceGeomtryData.source_uvData[face.uvIndices[vertexIndex] - 1];
-                        targetGeomtryData.uvs.push(uv.u, uv.v);
+        //            try {
+        //                uv = sourceGeomtryData.source_uvData[face.uvIndices[vertexIndex] - 1];
+        //                targetGeomtryData.uvs.push(uv.u, uv.v);
 
-                        if (sourceGeomtryData.source_uv2Data.length > 0) {
-                            uv = sourceGeomtryData.source_uv2Data[face.uv2Indices[vertexIndex] - 1];
-                            targetGeomtryData.uv2s.push(uv.u, uv.v);
-                        }
-                    } catch (e) {
+        //                if (sourceGeomtryData.source_uv2Data.length > 0) {
+        //                    uv = sourceGeomtryData.source_uv2Data[face.uv2Indices[vertexIndex] - 1];
+        //                    targetGeomtryData.uv2s.push(uv.u, uv.v);
+        //                }
+        //            } catch (e) {
 
-                        switch (vertexIndex) {
-                            case 0:
-                                targetGeomtryData.uvs.push(0, 1);
-                                break;
-                            case 1:
-                                targetGeomtryData.uvs.push(.5, 0);
-                                break;
-                            case 2:
-                                targetGeomtryData.uvs.push(1, 1);
-                        }
-                    }
+        //                switch (vertexIndex) {
+        //                    case 0:
+        //                        targetGeomtryData.uvs.push(0, 1);
+        //                        break;
+        //                    case 1:
+        //                        targetGeomtryData.uvs.push(.5, 0);
+        //                        break;
+        //                    case 2:
+        //                        targetGeomtryData.uvs.push(1, 1);
+        //                }
+        //            }
 
 
-                }
+        //        }
 
-            } else
-                index = targetGeomtryData.indices[face.indexIds[vertexIndex]] - 1;
+        //    } else
+        //        index = targetGeomtryData.indices[face.indexIds[vertexIndex]] - 1;
 
-            targetGeomtryData.indices.push(index);
-        }
+        //    targetGeomtryData.indices.push(index);
+        //}
 
         /**
         * 4 pos

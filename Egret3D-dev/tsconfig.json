@@ -7,7 +7,6 @@
         "out": "./egret3d.js"
     },
     "files": [
-
         "config/TextureMethodType.ts",
 
         "events/PickResult.ts",
@@ -15,9 +14,14 @@
         "events/Event3D.ts",
         "events/MouseEvent3D.ts",
         "events/EventDispatcher.ts",
-        "events/Mouse3DManager.ts",
 
-        
+        "anim/IAnimation.ts",
+        "anim/AnimNodeBase.ts",
+        "anim/AnimaNodeCollection.ts",
+        "anim/skeletonAnimation/Joint.ts",
+        "anim/skeletonAnimation/Skeleton.ts",
+        "anim/skeletonAnimation/SkeletonAnimation.ts",
+        "anim/skeletonAnimation/SkeletonAnimationClip.ts",
 
         "geom/UV.ts",
         "geom/Point.ts",
@@ -34,6 +38,11 @@
         "geom/Ray.ts",
         "geom/Color.ts",
         "geom/Bound.ts",
+        "geom/BoundBox.ts",
+
+        "controller/ControllerBase.ts",
+        "controller/LookAtController.ts",
+        "controller/HoverController.ts",
 
         "core/context/ContextConfig.ts",
         "core/context/Context3DProxy.ts",
@@ -64,29 +73,28 @@
         "core/traverse/Frustum.ts",
         "core/traverse/Layer.ts",
         "core/traverse/Tag.ts",
-        "core/traverse/Picker.ts",
-
-        
 
         "data/HashMap.ts",
 
-        "geometry/FaceData.ts",
         "geometry/Geometry.ts",
         "geometry/GeometryData.ts",
         "geometry/SubGeometry.ts",
         "geometry/CubeGeometry.ts",
-        "geometry/CylinderGeometry.ts",
-        "geometry/SphereGeometry.ts",
-        "geometry/PlaneGeometry.ts",
-
-
-        
-        
 
         "input/input.ts",
         "input/OrientationController.ts",
 
-        "loader/parser/ESMParser.ts",
+        "loader/parser/DDS.ts",
+        "loader/parser/DDSParser.ts",
+        "loader/parser/PVR.ts",
+        "loader/parser/PVRParser.ts",
+        "loader/parser/TGA.ts",
+        "loader/parser/TGAParser.ts",
+
+        "loader/parser/EAM/EAMParser.ts",
+        "loader/parser/EAM/EAMVersion.ts",
+        "loader/parser/ESM/ESMParser.ts",
+        "loader/parser/ESM/ESMVersion.ts",
         "loader/URLLoader.ts",
 
         "material/pass/MethodData.ts",
@@ -131,6 +139,9 @@
 
         "texture/ITexture.ts",
         "texture/ImageTexture.ts",
+        "texture/DDSTextrue.ts",
+        "texture/TGATexture.ts",
+        "texture/PVRTexture.ts",
         "texture/CubeTexture.ts",
         "texture/CheckerboardTexture.ts",
         "texture/VideoTexture.ts",

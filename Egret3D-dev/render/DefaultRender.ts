@@ -46,6 +46,7 @@
                 if (!this._renderItem.visible) {
                     continue;
                 }
+                this._renderItem.update(time, delay, camera);
                 //if (collect.renderList[this._renderIndex].tag && collect.renderList[this._renderIndex].tag.clearDepth && collect.renderList[this._renderIndex].tag.cleanState) {
                 //    collect.renderList[this._renderIndex].tag.cleanState = false;
                 //    context3D.clearDepth(1);

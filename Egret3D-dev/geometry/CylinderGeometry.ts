@@ -26,90 +26,58 @@
 
             this.buildGeomtry();
         }
-
+                                                
         /**
         * @language zh_CN
         * 生成网格
         */
         public buildGeomtry() {
-            this.useVertexFormat(VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_COLOR | VertexFormat.VF_UV | VertexFormat.VF_UV2);
+            this.useVertexFormat(VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 | VertexFormat.VF_UV1);
 
             this.verticesData = new Array<number>();
-            this.indexData = new Array<number>();
 
-            var m_nSegments: number = 20;
-            var m_rRadius: number = 100;
-            var m_rHeight: number = 200;
+            var m_nSegments: number = 10;
+            var m_rRadius: number = 10;
+            var m_rHeight: number = 60;
 
-            var nCurrentSegment: number = 20;
+            var nCurrentSegment: number = 10;
 
-            var rDeltaSegAngle: number = (2.0 * Math.PI / m_nSegments);
-            var rSegmentLength: number = 1.0 / m_nSegments;
+            var  rDeltaSegAngle: number  = (2.0 * Math.PI / m_nSegments);
+            var rSegmentLength: number  = 1.0  / m_nSegments;
 
-            for (nCurrentSegment = 0; nCurrentSegment <= m_nSegments; nCurrentSegment++) {
+            for (nCurrentSegment = 0; nCurrentSegment <= m_nSegments; nCurrentSegment++)
+            {
                 var x0: number = m_rRadius * Math.sin(nCurrentSegment * rDeltaSegAngle);
 
-                var z0: number = m_rRadius * Math.cos(nCurrentSegment * rDeltaSegAngle);
+                var z0: number  = m_rRadius * Math.cos(nCurrentSegment * rDeltaSegAngle);
 
                 this.verticesData.push(
                     x0, 0.0 + (m_rHeight / 2.0), z0, x0, 0.0, z0, 1, 1, 1, 1, 1.0, 0.0, 0, 0,
-                    x0, 0.0 - (m_rHeight / 2.0), z0, x0, 0.0, z0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
+                    x0, 0.0 - (m_rHeight / 2.0), z0, x0, 0.0, z0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
             }
 
-            var len_base = this.verticesData.length / 14;
-            //console.log(str);
-            var topCenter = this.verticesData.length;
-            this.verticesData.push(0.0, 0.0 + (m_rHeight / 2.0), 0.0, 0.0, 1.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
-            //for (nCurrentSegment = 0; nCurrentSegment <= m_nSegments; nCurrentSegment++) {
-            //    var x0: number = m_rRadius * Math.sin(nCurrentSegment * rDeltaSegAngle);
-            //    var z0: number = m_rRadius * Math.cos(nCurrentSegment * rDeltaSegAngle);
+            this.verticesData.push(0.0, 0.0  + (m_rHeight / 2.0), 0.0, 0.0, 1.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
 
-            //    this.verticesData.push(x0, 0.0 + (m_rHeight / 2.0), z0, 0.0, 1.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
-            //}
-            var buttomCenter = this.verticesData.length;
+            for (nCurrentSegment = 0; nCurrentSegment <= m_nSegments; nCurrentSegment++)
+            {
+                var  x0: number  = m_rRadius * Math.sin(nCurrentSegment * rDeltaSegAngle);
+                var z0: number  = m_rRadius * Math.cos(nCurrentSegment * rDeltaSegAngle);
+
+                //float tu0 = (0.5f * sinf(nCurrentSegment * rDeltaSegAngle)) + 0.5f;
+                //float tv0 = (0.5f * cosf(nCurrentSegment * rDeltaSegAngle)) + 0.5f;
+
+                this.verticesData.push(x0, 0.0  + (m_rHeight / 2.0), z0, 0.0, 1.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
+            }
+
             this.verticesData.push(0.0, 0.0 - (m_rHeight / 2.0), 0.0, 0.0, -1.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
-            //for (nCurrentSegment = m_nSegments; nCurrentSegment >= 0; nCurrentSegment--) {
-            //    var x0: number = m_rRadius * Math.sin(nCurrentSegment * rDeltaSegAngle);
-            //    var z0: number = m_rRadius * Math.cos(nCurrentSegment * rDeltaSegAngle);
 
-            //    this.verticesData.push(x0, 0.0 - (m_rHeight / 2.0), z0, 0.0, -1.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
-            //}
+            for (nCurrentSegment = m_nSegments; nCurrentSegment >= 0; nCurrentSegment--)
+            {
+                var  x0: number  = m_rRadius * Math.sin(nCurrentSegment * rDeltaSegAngle);
+                var z0: number  = m_rRadius * Math.cos(nCurrentSegment * rDeltaSegAngle);
 
-            for (var i = 0; i < len_base; i++) {
-                if ((i & 1) != 0) {
-                    this.indexData.push(
-
-                        i,
-                        i + 1 >= len_base ? i + 1 - len_base : i + 1,
-                        i + 2 >= len_base ? i + 2 - len_base : i + 2,
-
-                        topCenter,
-                        i,
-                        i + 2 >= len_base ? i + 2 - len_base : i + 2
-
-                    );
-                } else {
-                    this.indexData.push(
-
-                        i + 1 >= len_base ? i + 1 - len_base : i + 1,
-                        i,
-                        i + 2 >= len_base ? i + 2 - len_base : i + 2,
-
-
-                        i,
-                        buttomCenter,
-                        i + 2 >= len_base ? i + 2 - len_base : i + 2
-
-                    );
-                }
+                this.verticesData.push(x0, 0.0 - (m_rHeight / 2.0), z0, 0.0, -1.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
             }
-
-
-            var subGeometry: SubGeometry = new SubGeometry();
-            subGeometry.geometry = this;
-            subGeometry.start = 0;
-            subGeometry.count = this.indexData.length;
-            this.subGeometrys.push(subGeometry);
         }
     }
 } 

@@ -37,7 +37,7 @@
         }
 
         private buildSphere() {
-            this.useVertexFormat(VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV | VertexFormat.VF_UV2);
+            this.useVertexFormat(VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 | VertexFormat.VF_UV1);
 
             var i: number = 0, j: number = 0, triIndex: number = 0 ;
             var numVerts: number = (this._segmentsH + 1) * (this._segmentsW + 1);
@@ -157,13 +157,6 @@
                     index += skip;
                 }
             }
-
-
-            var subGeometry: SubGeometry = new SubGeometry();
-            subGeometry.geometry = this;
-            subGeometry.start = 0;
-            subGeometry.count = this.indexData.length;
-            this.subGeometrys.push(subGeometry);
         }
     }
 }

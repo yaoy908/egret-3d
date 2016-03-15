@@ -22,7 +22,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        VF_POSITION = 0x0000001,
+        VF_POSITION = 0x00000001,
 
         /**
          * @private
@@ -31,7 +31,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        VF_NORMAL = 0x0000002,
+        VF_NORMAL = 0x00000002,
                         
         /**
          * @private
@@ -40,7 +40,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        VF_TANGENT = 0x0000004,
+        VF_TANGENT = 0x00000004,
         
         /**
          * @private
@@ -49,7 +49,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        VF_COLOR = 0x0000008,
+        VF_COLOR = 0x00000008,
         
         /**
          * @private
@@ -58,7 +58,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        VF_UV = 0x0000010,
+        VF_UV0 = 0x00000010,
                 
         /**
          * @private
@@ -67,7 +67,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        VF_UV2 = 0x0000020,
+        VF_UV1 = 0x00000020,
 
         /**
          * @private
@@ -76,7 +76,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        VF_SKIN = 0x0000040,
+        VF_SKIN = 0x00000040,
     }
 
     /**
@@ -175,6 +175,7 @@
         */
         public source_SkinData: Array<number> = new Array<number>();
 
+        public skeleton: Skeleton;
         /**
         * @language zh_CN
         * 顶点字节数
@@ -229,9 +230,6 @@
         */
         public subGeometrys: Array<SubGeometry> = new Array<SubGeometry>();
 
-        protected attributes: any = [];
-        protected uniforms: any = [];
-
         /**
         * @language zh_CN
         * @private
@@ -242,8 +240,12 @@
         constructor() {
         }
 
+        /**
+        * @language zh_CN
+        * @private
+        */
         public init() {
-            this.useVertexFormat( VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_COLOR | VertexFormat.VF_UV );
+            this.useVertexFormat( VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 );
             this.calculateVertexFormat();
         }
 
@@ -255,8 +257,8 @@
         *如果源文件中没有这样的数据结构，
         *就会通过计算的方式计算补全，
         *不能计算的就默认为0
-        *@param vertexFormat 需要定义的顶点格式类型 VertexFormat.VF_COLOR | VertexFormat.VF_UV2
-        * this.useVertexFormat( VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_COLOR |  VertexFormat.VF_UV | VertexFormat.VF_UV2 );//定义了一个完整的数据结构
+        *@param vertexFormat 需要定义的顶点格式类型 VertexFormat.VF_COLOR | VertexFormat.VF_UV1
+        * this.useVertexFormat( VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_COLOR |  VertexFormat.VF_UV0 | VertexFormat.VF_UV1 );//定义了一个完整的数据结构
         */
         public useVertexFormat(vertexFormat: number) {
             this.vertexFormat = vertexFormat;
@@ -277,11 +279,11 @@
                 this.vertexAttLength += Geometry.colorSize;
             }
 
-            if (this.vertexFormat & VertexFormat.VF_UV) {
+            if (this.vertexFormat & VertexFormat.VF_UV0) {
                 this.vertexAttLength += Geometry.uvSize;
             }
 
-            if (this.vertexFormat & VertexFormat.VF_UV2) {
+            if (this.vertexFormat & VertexFormat.VF_UV1) {
                 this.vertexAttLength += Geometry.uv2Size;
             }
 
@@ -291,8 +293,14 @@
 
             this.vertexSizeInBytes = this.vertexAttLength * 4;
         }
-
-        private calculateVertexFormat() {
+                
+        /**
+        * @language zh_CN
+        * @根据顶点格式生成顶点buffer
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public calculateVertexFormat() {
 
             for (var i: number = 0; i < this.source_positionData.length / Geometry.positionSize; ++i) {
                 if (this.vertexFormat & VertexFormat.VF_POSITION) {
@@ -320,12 +328,12 @@
                     this.verticesData.push(this.source_colorData[i * Geometry.colorSize + 3]);
                 }
 
-                if (this.vertexFormat & VertexFormat.VF_UV) {
+                if (this.vertexFormat & VertexFormat.VF_UV0) {
                     this.verticesData.push(this.source_uvData[i * Geometry.uvSize]);
                     this.verticesData.push(this.source_uvData[i * Geometry.uvSize + 1]);
                 }
 
-                if (this.vertexFormat & VertexFormat.VF_UV2) {
+                if (this.vertexFormat & VertexFormat.VF_UV1) {
                     this.verticesData.push(this.source_uv2Data[i * Geometry.uv2Size]);
                     this.verticesData.push(this.source_uv2Data[i * Geometry.uv2Size + 1]);
                 }

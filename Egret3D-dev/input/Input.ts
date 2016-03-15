@@ -129,6 +129,15 @@
      */
     export class Input {
 
+        
+        /**
+        * @language zh_CN
+        * @private
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public canvas: Egret3DCanvas;
+
         /**
         * @language zh_CN
         * 当前鼠标X坐标。
@@ -175,7 +184,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public mouseLastX: number = 0;
+        public mouseLastX: number = 0; 
         /**
         * @language zh_CN
         * 上一次鼠标Y坐标。
@@ -518,27 +527,25 @@
 
         private touchStart(e: TouchEvent) {
 
-            console.log("touchStart");
+            e.preventDefault();
 
-            //e.preventDefault();
+            var x1: number = e.targetTouches[0].clientX - this.canvas.clientRect.left;
+            var y1: number = e.targetTouches[0].clientY - this.canvas.clientRect.top;
 
-            //var x1: number = e.targetTouches[0].clientX - egret3d_dev.Egret3DDrive.clientRect.left;
-            //var y1: number = e.targetTouches[0].clientY - egret3d_dev.Egret3DDrive.clientRect.top;
+            if (e.targetTouches.length == 2) {
 
-            //if (e.targetTouches.length == 2) {
+                var x2: number = e.targetTouches[1].clientX - this.canvas.clientRect.left;
+                var y2: number = e.targetTouches[1].clientY - this.canvas.clientRect.top;
 
-            //    var x2: number = e.targetTouches[1].clientX - egret3d_dev.Egret3DDrive.clientRect.left;
-            //    var y2: number = e.targetTouches[1].clientY - egret3d_dev.Egret3DDrive.clientRect.top;
+                this.onPinch(x1, y1, x2, y2);
+            }
+            else if (e.targetTouches.length == 1) {
+                this.onSwipe(x1, y1);
+            }
 
-            //    this.onPinch(x1, y1, x2, y2);
-            //}
-            //else if (e.targetTouches.length == 1) {
-            //    this.onSwipe(x1, y1);
-            //}
-
-            //for (var i: number = 0; i < this._touchStartCallback.length; i++) {
-            //    this._touchStartCallback[i](e);
-            //}
+            for (var i: number = 0; i < this._touchStartCallback.length; i++) {
+                this._touchStartCallback[i](e);
+            }
         }
 
         private _oldPosition1: Point = null;
@@ -546,83 +553,82 @@
 
         private touchEnd(e: TouchEvent) {
 
-            //if (e.targetTouches.length > 1) {
+            if (e.targetTouches.length > 1) {
 
-            //    var x: number = e.targetTouches[0].clientX - egret3d_dev.Egret3DDrive.clientRect.left;
-            //    var y: number = e.targetTouches[0].clientY - egret3d_dev.Egret3DDrive.clientRect.top;
-            //    var x1: number = e.targetTouches[1].clientX - egret3d_dev.Egret3DDrive.clientRect.left;
-            //    var y1: number = e.targetTouches[1].clientY - egret3d_dev.Egret3DDrive.clientRect.top;
+                var x: number = e.targetTouches[0].clientX - this.canvas.clientRect.left;
+                var y: number = e.targetTouches[0].clientY - this.canvas.clientRect.top;
+                var x1: number = e.targetTouches[1].clientX - this.canvas.clientRect.left;
+                var y1: number = e.targetTouches[1].clientY - this.canvas.clientRect.top;
 
-            //    this.onPinch(x, y, x1, y1);
-            //}
-            //else if (e.targetTouches.length == 1) {
+                this.onPinch(x, y, x1, y1);
+            }
+            else if (e.targetTouches.length == 1) {
 
-            //    this.onSwipe(e.targetTouches[0].clientX - egret3d_dev.Egret3DDrive.clientRect.left, e.targetTouches[0].clientY - egret3d_dev.Egret3DDrive.clientRect.top);
-            //}
-            //else {
+                this.onSwipe(e.targetTouches[0].clientX - this.canvas.clientRect.left, e.targetTouches[0].clientY - this.canvas.clientRect.top);
+            }
+            else {
 
-            //    this._oldPosition1 = null;
-            //    this._oldPosition2 = null;
-            //    this._time = 0;
+                this._oldPosition1 = null;
+                this._oldPosition2 = null;
+                this._time = 0;
 
-            //    for (var i: number = 0; i < this._listenerKeyUp.length; ++i) {
-            //        this._listenerKeyUp[i](KeyCode.Key_Mouse_Left);
-            //    }
-            //}
+                for (var i: number = 0; i < this._listenerKeyUp.length; ++i) {
+                    this._listenerKeyUp[i](KeyCode.Key_Mouse_Left);
+                }
+            }
 
-            //for (var i: number = 0; i < this._touchEndCallback.length; i++) {
-            //    this._touchEndCallback[i](e);
-            //}
+            for (var i: number = 0; i < this._touchEndCallback.length; i++) {
+                this._touchEndCallback[i](e);
+            }
         }
 
 
         private touchMove(e: TouchEvent) {
 
+            this.mouseLastX = this.mouseX;
+            this.mouseLastY = this.mouseY;
 
-            //this.mouseLastX = this.mouseX;
-            //this.mouseLastY = this.mouseY;
+            this.mouseX = e.targetTouches[0].clientX - this.canvas.clientRect.left;
+            this.mouseY = e.targetTouches[0].clientY - this.canvas.clientRect.top;
 
-            //this.mouseX = e.targetTouches[0].clientX - egret3d_dev.Egret3DDrive.clientRect.left;
-            //this.mouseY = e.targetTouches[0].clientY - egret3d_dev.Egret3DDrive.clientRect.top;
+            this.mouseOffsetX = this.mouseX - this.mouseLastX;
+            this.mouseOffsetY = this.mouseY - this.mouseLastY;
 
-            //this.mouseOffsetX = this.mouseX - this.mouseLastX;
-            //this.mouseOffsetY = this.mouseY - this.mouseLastY;
+            e.preventDefault();
 
-            //e.preventDefault();
+            if (e.targetTouches.length > 1) {
 
-            //if (e.targetTouches.length > 1) {
+                var newPosition1: Point = new Point(this.mouseX, this.mouseY);
+                var newPosition2: Point = new Point(e.targetTouches[1].clientX - this.canvas.clientRect.left, e.targetTouches[1].clientY - this.canvas.clientRect.top);
 
-            //    var newPosition1: Point = new Point(this.mouseX, this.mouseY);
-            //    var newPosition2: Point = new Point(e.targetTouches[1].clientX - egret3d_dev.Egret3DDrive.clientRect.left, e.targetTouches[1].clientY - egret3d_dev.Egret3DDrive.clientRect.top);
+                if (this._oldPosition1 == null)
+                    this._oldPosition1 = newPosition1;
+                if (this._oldPosition2 == null)
+                    this._oldPosition2 = newPosition2;
 
-            //    if (this._oldPosition1 == null)
-            //        this._oldPosition1 = newPosition1;
-            //    if (this._oldPosition2 == null)
-            //        this._oldPosition2 = newPosition2;
-
-            //    if (this.isEnlarge(this._oldPosition1, this._oldPosition2, newPosition1, newPosition2))
-            //        this.wheelDelta = 120;
-            //    else
-            //        this.wheelDelta = -120;
-
-
-            //    this._oldPosition1 = newPosition1;
-            //    this._oldPosition2 = newPosition2;
+                if (this.isEnlarge(this._oldPosition1, this._oldPosition2, newPosition1, newPosition2))
+                    this.wheelDelta = 120;
+                else
+                    this.wheelDelta = -120;
 
 
+                this._oldPosition1 = newPosition1;
+                this._oldPosition2 = newPosition2;
 
-            //    for (var i: number = 0; i < this._mouseWheelFunc.length; ++i) {
-            //        this._mouseWheelFunc[i]();
-            //    }
 
-            //}
-            //else {
-            //    this._listenerSwipe();
-            //}
 
-            //for (var i: number = 0; i < this._touchMoveCallback.length; i++) {
-            //    this._touchMoveCallback[i](e);
-            //}
+                for (var i: number = 0; i < this._mouseWheelFunc.length; ++i) {
+                    this._mouseWheelFunc[i]();
+                }
+
+            }
+            else {
+                this._listenerSwipe();
+            }
+
+            for (var i: number = 0; i < this._touchMoveCallback.length; i++) {
+                this._touchMoveCallback[i](e);
+            }
         }
 
 
@@ -729,10 +735,8 @@
         }
 
         private mouseEnd(e: MouseEvent) {
-            this.mouseX = e.clientX;
-            this.mouseY = e.clientY;
-            //this.mouseX = e.clientX - egret3d_dev.Egret3DDrive.clientRect.left;
-            //this.mouseY = e.clientY - egret3d_dev.Egret3DDrive.clientRect.top;
+            this.mouseX = e.clientX - this.canvas.clientRect.left;
+            this.mouseY = e.clientY - this.canvas.clientRect.top;
 
             var k: number = 0;
             switch (e.button) {
@@ -763,13 +767,10 @@
         }
 
         private mouseStart(e: MouseEvent) {
-            this.mouseX = e.clientX;
-            this.mouseY = e.clientY;
+            this.mouseX = e.clientX - this.canvas.clientRect.left;
+            this.mouseY = e.clientY - this.canvas.clientRect.top;
 
-            //this.mouseX = e.clientX - egret3d_dev.Egret3DDrive.clientRect.left;
-            //this.mouseY = e.clientY - egret3d_dev.Egret3DDrive.clientRect.top;
-
-            var k: KeyCode = 0;
+            var k: number = 0;
             switch (e.button) {
                 case 0:
                     k = KeyCode.Key_Mouse_Left;
@@ -784,6 +785,7 @@
 
             if (k != 0) {
                 this._keyStatus[k] = true;
+
                 for (var i: number = 0; i < this._listenerKeyDown.length; ++i) {
                     this._listenerKeyDown[i](k);
                 }
@@ -791,15 +793,15 @@
         }
 
         private mouseMove(e: MouseEvent) {
-
             this.mouseLastX = this.mouseX;
             this.mouseLastY = this.mouseY;
-            this.mouseX = e.clientX;
-            this.mouseY = e.clientY;
-            //this.mouseX = e.clientX - egret3d_dev.Egret3DDrive.clientRect.left;
-            //this.mouseY = e.clientY - egret3d_dev.Egret3DDrive.clientRect.top;
+
+            this.mouseX = e.clientX - this.canvas.clientRect.left;
+            this.mouseY = e.clientY - this.canvas.clientRect.top;
+
             this.mouseOffsetX = this.mouseX - this.mouseLastX;
             this.mouseOffsetY = this.mouseY - this.mouseLastY;
+
             for (var i: number = 0; i < this._mouseMoveFunc.length; ++i) {
                 this._mouseMoveFunc[i](e);
             }
@@ -853,7 +855,7 @@
             var dy = startY - endY;
             var dx = endX - startX;
             var result = 0;
-
+ 
             //如果滑动距离太短
             if (Math.abs(dx) < 2 && Math.abs(dy) < 2) {
                 return result;
