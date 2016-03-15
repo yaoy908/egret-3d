@@ -5,6 +5,8 @@
         private view1: View3D;
         private lights: LightGroup = new LightGroup();
 
+        private cameraCtl: LookAtController;
+
         constructor() {
             super();
 
@@ -22,6 +24,10 @@
             var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));
             dirLight.diffuse = 0xffffff;
             this.lights.addLight(dirLight);
+
+            this.cameraCtl = new LookAtController(view1.camera3D, new Object3D());
+            this.cameraCtl.distance = 1000;
+            this.cameraCtl.rotationX = 60;
 
             this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, (e) => this.update(e));
@@ -63,9 +69,7 @@
         }
 
         public update(e: Event3D) {
-            if (this.laohu) {
-                this.laohu.rotationY++;
-            }
+            this.cameraCtl.update();
         }
     }
 }
