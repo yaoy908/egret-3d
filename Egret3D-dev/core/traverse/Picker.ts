@@ -1,4 +1,4 @@
-﻿module egret3d_dev{
+﻿module egret3d_dev {
 
     /**
     * @class egret3d_dev.Picker
@@ -20,7 +20,7 @@
     */
     export class Picker {
         protected static ray: Ray = new Ray();
-                                                        
+
         /**
         * @language zh_CN
         * 返回鼠标拾取对象得到的所有对象,调用之前到设置被拣选对象的pickType.
@@ -30,21 +30,24 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public static pickObject3DList(view:View3D, camera: Camera3D, objects: Array<IRender>): Array<IRender> {
+        public static pickObject3DList(view: View3D, camera: Camera3D, objects: Array<IRender>): Array<IRender> {
             var ret: Array<IRender> = new Array<IRender>();
             var ray: Ray = this.ray;
             ray.CalculateAndTransformRay(view.width, view.height, camera.modelMatrix, camera.projectMatrix, Input.instance.mouseX, Input.instance.mouseY);
+
+          
             for (var i: number = 0; i < objects.length; ++i) {
                 var renderItem: IRender = objects[i];
                 var inPos: Vector3D = new Vector3D();
                 switch (renderItem.pickType) {
                     case PickType.BoundPick:
-                        //if (renderItem.bound != null) {
-                        //    if (ray.IntersectMesh(renderItem.bound.vexData, renderItem.bound.indexData, renderItem.bound.vexLength, renderItem.bound.indexData.length / 3, 0, renderItem.modelMatrix, renderItem.pickResult)) {
-                        //        var target: PickResult = new PickResult();
-                        //        ret.push(objects[i]);
-                        //    }
-                        //}
+                        if (renderItem.bound != null) {
+                            var target: PickResult = new PickResult();
+                            var result = ray.IntersectMesh(renderItem.bound.vexData, renderItem.bound.indexData, renderItem.bound.vexLength, renderItem.bound.indexData.length / 3, 0, renderItem.modelMatrix, target);
+                            if (result) {
+                                ret.push(objects[i]);
+                            }
+                        }
                         break;
                     case PickType.PositionPick:
                         //if (ray.IntersectMeshEx(renderItem, 13, renderItem.pickResult)) {

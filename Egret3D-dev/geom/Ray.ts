@@ -174,7 +174,8 @@
                 for (var j: number = 0; j < 3; ++j) {
                     var index: number = indexData[3 * i + j];
                     pos.setTo(verticesData[offset * index + 0], verticesData[offset * index + 1], verticesData[offset * index + 2]);
-                    pos.copyFrom(mMat.transformVector(pos));
+                    //多余的矩阵操作 changeByZwt
+                    //pos.copyFrom(mMat.transformVector(pos));
 
                     triangle[j].x = pos.x;
                     triangle[j].y = pos.y;
@@ -188,8 +189,11 @@
                         u = ret[1];
                         v = ret[2];
                     }
+
+                    
                 }
             }
+
 
             if (face < faces && face >= 0) {
                 for (var i: number = 0; i < 3; ++i) {

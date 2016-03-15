@@ -175,7 +175,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public mouseLastX: number = 0; 
+        public mouseLastX: number = 0;
         /**
         * @language zh_CN
         * 上一次鼠标Y坐标。
@@ -518,6 +518,8 @@
 
         private touchStart(e: TouchEvent) {
 
+            console.log("touchStart");
+
             //e.preventDefault();
 
             //var x1: number = e.targetTouches[0].clientX - egret3d_dev.Egret3DDrive.clientRect.left;
@@ -575,6 +577,7 @@
 
 
         private touchMove(e: TouchEvent) {
+
 
             //this.mouseLastX = this.mouseX;
             //this.mouseLastY = this.mouseY;
@@ -726,76 +729,80 @@
         }
 
         private mouseEnd(e: MouseEvent) {
+            this.mouseX = e.clientX;
+            this.mouseY = e.clientY;
             //this.mouseX = e.clientX - egret3d_dev.Egret3DDrive.clientRect.left;
             //this.mouseY = e.clientY - egret3d_dev.Egret3DDrive.clientRect.top;
 
-            //var k: number = 0;
-            //switch (e.button) {
-            //    case 0:
-            //        k = KeyCode.Key_Mouse_Left;
-            //        break;
-            //    case 2:
-            //        k = KeyCode.Key_Mouse_Right;
-            //        break;
-            //    case 1:
-            //        k = KeyCode.Key_Mouse_Mid;
-            //        break;
-            //}
+            var k: number = 0;
+            switch (e.button) {
+                case 0:
+                    k = KeyCode.Key_Mouse_Left;
+                    break;
+                case 2:
+                    k = KeyCode.Key_Mouse_Right;
+                    break;
+                case 1:
+                    k = KeyCode.Key_Mouse_Mid;
+                    break;
+            }
 
-            //if (k != 0) {
-            //    if (this._keyStatus[k]) {
-            //        for (var i: number = 0; i < this._listenerKeyClick.length; ++i) {
-            //            this._listenerKeyClick[i](k);
-            //        }
-            //    }
+            if (k != 0) {
+                if (this._keyStatus[k]) {
+                    for (var i: number = 0; i < this._listenerKeyClick.length; ++i) {
+                        this._listenerKeyClick[i](k);
+                    }
+                }
 
-            //    this._keyStatus[k] = false;
+                this._keyStatus[k] = false;
 
-            //    for (var i: number = 0; i < this._listenerKeyUp.length; ++i) {
-            //        this._listenerKeyUp[i](k);
-            //    }
-            //}
+                for (var i: number = 0; i < this._listenerKeyUp.length; ++i) {
+                    this._listenerKeyUp[i](k);
+                }
+            }
         }
 
         private mouseStart(e: MouseEvent) {
+            this.mouseX = e.clientX;
+            this.mouseY = e.clientY;
+
             //this.mouseX = e.clientX - egret3d_dev.Egret3DDrive.clientRect.left;
             //this.mouseY = e.clientY - egret3d_dev.Egret3DDrive.clientRect.top;
 
-            //var k: number = 0;
-            //switch (e.button) {
-            //    case 0:
-            //        k = KeyCode.Key_Mouse_Left;
-            //        break;
-            //    case 2:
-            //        k = KeyCode.Key_Mouse_Right;
-            //        break;
-            //    case 1:
-            //        k = KeyCode.Key_Mouse_Mid;
-            //        break;
-            //}
+            var k: KeyCode = 0;
+            switch (e.button) {
+                case 0:
+                    k = KeyCode.Key_Mouse_Left;
+                    break;
+                case 2:
+                    k = KeyCode.Key_Mouse_Right;
+                    break;
+                case 1:
+                    k = KeyCode.Key_Mouse_Mid;
+                    break;
+            }
 
-            //if (k != 0) {
-            //    this._keyStatus[k] = true;
-
-            //    for (var i: number = 0; i < this._listenerKeyDown.length; ++i) {
-            //        this._listenerKeyDown[i](k);
-            //    }
-            //}
+            if (k != 0) {
+                this._keyStatus[k] = true;
+                for (var i: number = 0; i < this._listenerKeyDown.length; ++i) {
+                    this._listenerKeyDown[i](k);
+                }
+            }
         }
 
         private mouseMove(e: MouseEvent) {
-            //this.mouseLastX = this.mouseX;
-            //this.mouseLastY = this.mouseY;
 
+            this.mouseLastX = this.mouseX;
+            this.mouseLastY = this.mouseY;
+            this.mouseX = e.clientX;
+            this.mouseY = e.clientY;
             //this.mouseX = e.clientX - egret3d_dev.Egret3DDrive.clientRect.left;
             //this.mouseY = e.clientY - egret3d_dev.Egret3DDrive.clientRect.top;
-
-            //this.mouseOffsetX = this.mouseX - this.mouseLastX;
-            //this.mouseOffsetY = this.mouseY - this.mouseLastY;
-
-            //for (var i: number = 0; i < this._mouseMoveFunc.length; ++i) {
-            //    this._mouseMoveFunc[i](e);
-            //}
+            this.mouseOffsetX = this.mouseX - this.mouseLastX;
+            this.mouseOffsetY = this.mouseY - this.mouseLastY;
+            for (var i: number = 0; i < this._mouseMoveFunc.length; ++i) {
+                this._mouseMoveFunc[i](e);
+            }
         }
 
         private mouseWheel(e: MouseWheelEvent) {
@@ -846,7 +853,7 @@
             var dy = startY - endY;
             var dx = endX - startX;
             var result = 0;
- 
+
             //如果滑动距离太短
             if (Math.abs(dx) < 2 && Math.abs(dy) < 2) {
                 return result;

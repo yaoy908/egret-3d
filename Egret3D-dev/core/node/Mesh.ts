@@ -1,5 +1,5 @@
 ﻿module egret3d_dev {
-                
+
     /**
     * @class egret3d_dev.Mesh
     * @classdesc
@@ -17,12 +17,12 @@
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class Mesh extends Object3D implements IRender{
+    export class Mesh extends Object3D implements IRender {
 
 
         public geometry: Geometry;
         public _material: MaterialBase;
-        
+
         public pickType: number;
         public bound: Bound;
 
@@ -42,20 +42,19 @@
             this.geometry = geometry;
             this.material = material;
 
-            this.bound = new Bound( new Vector3D(-5,-5,-5) , new Vector3D(5,5,5) );
+            this.bound = new Bound(new Vector3D(-30, -30, -30), new Vector3D(30, 30, 30));
         }
 
         public set material(mat: MaterialBase) {
-            this._material  = mat ;
+            this._material = mat;
         }
 
         public get material(): MaterialBase {
-            return this._material ;
+            return this._material;
         }
 
         public setMaterialByID() {
         }
-
         // /**
         //* @language zh_CN
         //* 设置模型中的geometry
@@ -92,9 +91,9 @@
         * @platform Web,Native
         */
         public clone(): Mesh {
-            return new Mesh(this.geometry, this.material );
+            return new Mesh(this.geometry, this.material);
         }
-                                
+
         /**
         * @language zh_CN
         * 当前对象数据更新，只有在视锥内的对象才会执行此更新
@@ -146,16 +145,16 @@
         //    this.box.fillBox(this.box.min, this.box.max);
         //}
 
-        private _i: number; 
+        private _i: number;
         private _subGeometry: SubGeometry;
-        private _matID: number; 
+        private _matID: number;
         public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
             this._i = 0;
-            this.geometry.update(time, delay,context3DProxy, camera3D);
+            this.geometry.update(time, delay, context3DProxy, camera3D);
             for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
                 this._subGeometry = this.geometry.subGeometrys[this._i];
                 this._matID = this._subGeometry.matID;
-                this._material.renderDiffusePass(time, delay, this._matID , context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+                this._material.renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
             }
         }
     }

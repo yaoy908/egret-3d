@@ -102,6 +102,10 @@
             return this._viewPort.height;
         }
 
+        public get entityCollect(): EntityCollect {
+            return this._entityCollect;
+        }
+
         public addChild3D(child3d: Object3D) {
             this._scene.addChild3D(child3d);
         }
