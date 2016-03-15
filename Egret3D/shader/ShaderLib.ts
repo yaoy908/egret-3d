@@ -1,4 +1,5 @@
 module egret3d {
+
 	export class ShaderLib {
 		static lib: { [key:string]: string } = 
 		{

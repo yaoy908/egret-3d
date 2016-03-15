@@ -1,4 +1,8 @@
 ﻿module egret3d {
+    
+    /**
+    * @private
+    */
     export class ColorMaterial extends MaterialBase {
 
         constructor( color:number = 0xcccccc ) {

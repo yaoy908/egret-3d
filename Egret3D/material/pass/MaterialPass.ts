@@ -1,5 +1,8 @@
 ﻿module egret3d {
-
+    
+    /**
+    * @private
+    */
     export class MaterialPass {
         protected _passUsage: PassUsage;
         protected _materialData: MaterialData;

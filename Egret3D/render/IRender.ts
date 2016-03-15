@@ -1,5 +1,12 @@
 ﻿module egret3d {
     export interface IRender extends IDispatchEvent{
+                
+        /**
+        * @language zh_CN
+        * 子对象列表。</p>
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         childs: Array<Object3D>;
         
         /**

@@ -1,4 +1,8 @@
 ﻿module egret3d {
+
+    /**
+    * @private
+    */
     export class ShaderPool {
         //总shader的map容器
         static programlib: HashMap = new HashMap();

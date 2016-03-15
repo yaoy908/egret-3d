@@ -1,4 +1,8 @@
 ﻿module egret3d {
+    
+    /**
+    * @private
+    */
     export class MethodBase {
 
         public methodType: number = -1 ;
