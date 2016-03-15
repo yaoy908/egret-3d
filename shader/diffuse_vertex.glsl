@@ -17,7 +17,8 @@ varying vec4 varying_pos        ;
 varying vec3 varying_eyeNormal  ;
 varying vec4 varying_color  ;
 varying vec3 varying_eyedir  ;
-varying vec3 varying_uv0;
+varying vec2 varying_uv0;
+
 vec4 endPosition ;
 
 mat4 buildMat4(int index){
