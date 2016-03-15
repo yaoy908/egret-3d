@@ -4,6 +4,6 @@ vec4 light ;
 vec3 ambient;
 
 void main() {
-		endColor.xyz = endColor.xyz * light.xyz + specular.xyz * materialSource.specular + ambient.xyz ;
+		endColor.xyz = endColor.xyz * light.xyz + specular.xyz * materialSource.specular + ambient.xyz + diffuse;
         gl_FragColor = endColor ;
 }
