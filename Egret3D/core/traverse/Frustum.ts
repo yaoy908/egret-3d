@@ -12,7 +12,7 @@
     */
     export class Frustum {
         
-        public box: CubeBoxBound;
+        public box: BoundBox;
 
         private _vtxNum: number = 8;
         private _planeNum: number = 6;
@@ -48,7 +48,7 @@
             for (var i: number = 0; i < 6; ++i) {
                 this._plane.push(new Plane3D());
             }
-            this.box = new CubeBoxBound(new Vector3D(), new Vector3D());
+            this.box = new BoundBox(new Vector3D(), new Vector3D());
             ///this.box = new CubeBoxBound(new Vector3D(99999.0, 99999.0, 99999.0), new Vector3D(-99999.0, -99999.0, -99999.0));
             this.center = new Vector3D();
         }
@@ -226,7 +226,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public inBox(box: CubeBoxBound): boolean {
+        public inBox(box: BoundBox): boolean {
             var v: Array<Vector3D> = new Array<Vector3D>();
             var dis: number = 0;
 

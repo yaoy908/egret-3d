@@ -1,11 +1,11 @@
 ﻿
 function jsOnload() {
-    //var view: egret3d_dev.Class_Mesh = new egret3d_dev.Class_Mesh();
-    var view: egret3d_dev.Class_SkinAnimation = new egret3d_dev.Class_SkinAnimation();
+    //var view: egret3d.Class_Mesh = new egret3d.Class_Mesh();
+    var view: egret3d.Class_SkinAnimation = new egret3d.Class_SkinAnimation();
 
 }
 
 window.onload = () => {
 
-    egret3d_dev.Egret3DEngine.preload(() => jsOnload());
+    egret3d.Egret3DEngine.preload(() => jsOnload());
 }

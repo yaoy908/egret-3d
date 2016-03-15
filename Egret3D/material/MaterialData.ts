@@ -1,16 +1,10 @@
 ﻿module egret3d {
 
-     /**
-    * @private
-     * @language zh_CN
+    /**
      * @class egret3d.MaterialData
-     * @classdesc
-     * 材质数据。
-     * @version Egret 3.0
-     * @platform Web,Native
+     * @private
      */
     export class MaterialData {
-
         /**
         * @private
         * @language zh_CN
@@ -20,15 +14,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public textureMethodTypes: TextureMethodType[] = []; 
-
-        /**
-        * @language zh_CN
-        * diffuse pass usage 数据。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public diffusePassUsageData: MethodUsageData = new MethodUsageData(); 
+        public textureMethodTypes: Array<number> = []; 
 
         /**
         * @language zh_CN
@@ -36,7 +22,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public depthPassUsageData: MethodUsageData = new MethodUsageData(); 
+        //public depthPassUsageData: PassUsage = new PassUsage(); 
 
         /**
         * @language zh_CN
@@ -44,7 +30,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public normalPassUsageData: MethodUsageData = new MethodUsageData(); 
+        //public normalPassUsageData: PassUsage = new PassUsage(); 
 
         /**
         * @language zh_CN
@@ -52,7 +38,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public positionPassUsageData: MethodUsageData = new MethodUsageData(); 
+        //public positionPassUsageData: PassUsage = new PassUsage(); 
 
         /**
         * @language zh_CN
@@ -60,7 +46,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public postPassUsageData: MethodUsageData = new MethodUsageData(); 
+        //public postPassUsageData: PassUsage = new PassUsage(); 
 
         /**
         * @language zh_CN
@@ -68,7 +54,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public lightPassUsageData: MethodUsageData = new MethodUsageData(); 
+        //public lightPassUsageData: PassUsage = new PassUsage(); 
 
         /**
         * @language zh_CN
@@ -76,8 +62,16 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public shadowPassUsageData: MethodUsageData = new MethodUsageData(); 
+        //public shadowPassUsageData: PassUsage = new PassUsage(); 
 
+        /**
+        * @language zh_CN
+        * 材质球ID。
+        * <p> 一个合成材质球，可以多维合成，用于标记 subGeometry 所用的材质方法
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public matID: number = 0;
 
         /**
         * @language zh_CN
@@ -86,7 +80,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public drawMode: number = DrawMode.TRIANGLES ; 
+        public drawMode: number = DrawMode.TRIANGLES; 
 
 
         /**
@@ -95,7 +89,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public context3D: Context3D;
+        //public context3D: Context3D;
 
   
         /**
@@ -104,7 +98,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public shadowMapTex: TextureBase;
+        public shadowMapTex: ITexture;
 
         /**
         * @language zh_CN
@@ -112,7 +106,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public diffuseTex: TextureBase;//= CheckerboardTexture.texture ;
+        public diffuseTexture: ITexture;//= CheckerboardTexture.texture ;
 
         /**
         * @language zh_CN
@@ -121,7 +115,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public normalTex: TextureBase = CheckerboardTexture.texture;
+        //public normalTex: TextureBase = CheckerboardTexture.texture;
 
         /**
         * @language zh_CN
@@ -130,7 +124,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public specularTex: TextureBase = CheckerboardTexture.texture;
+        //public specularTex: TextureBase = CheckerboardTexture.texture;
 
         /**
         * @language zh_CN
@@ -139,7 +133,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public lightMapTex: TextureBase = CheckerboardTexture.texture;
+        //public lightMapTex: TextureBase = CheckerboardTexture.texture;
 
         /**
         * @language zh_CN
@@ -148,7 +142,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public aoMapTex: TextureBase = CheckerboardTexture.texture;
+        //public aoMapTex: TextureBase = CheckerboardTexture.texture;
 
         /**
         * @language zh_CN
@@ -157,7 +151,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public environmentMapTex: TextureBase = CheckerboardTexture.texture;
+        //public environmentMapTex: TextureBase = CheckerboardTexture.texture;
 
 
         /**
@@ -167,7 +161,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public maskTex: TextureBase = CheckerboardTexture.texture ;
+        //public maskTex: TextureBase = CheckerboardTexture.texture;
 
         /**
         * @language zh_CN
@@ -176,7 +170,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public splat_0Tex: TextureBase = CheckerboardTexture.texture;
+        //public splat_0Tex: TextureBase = CheckerboardTexture.texture;
 
         /**
         * @language zh_CN
@@ -185,7 +179,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public splat_1Tex: TextureBase = CheckerboardTexture.texture;
+        //public splat_1Tex: TextureBase = CheckerboardTexture.texture;
 
         /**
         * @language zh_CN
@@ -194,7 +188,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public splat_2Tex: TextureBase = CheckerboardTexture.texture;
+        //public splat_2Tex: TextureBase = CheckerboardTexture.texture;
 
         /**
         * @language zh_CN
@@ -203,33 +197,17 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public splat_3Tex: TextureBase = CheckerboardTexture.texture;
+        //public splat_3Tex: TextureBase = CheckerboardTexture.texture;
 
 
         /**
         * @language zh_CN
-        * 方向光列表。
+        * 灯光存贮列表
+        * 聚光灯列表
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public directLightList: Array<DirectLight> = new Array<DirectLight>();
-
-        /**
-        * @language zh_CN
-        * 聚光灯列表。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public sportLightList: Array<SpotLight> = new Array<SpotLight>();
-
-        /**
-        * @language zh_CN
-        * 点光源列表。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public pointLightList: Array<PointLight> = new Array<PointLight>();
-
+        //public lightList: Array<LightBase> = new Array<LightBase>();
 
         /**
         * @language zh_CN
@@ -256,7 +234,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public acceptShadow: boolean = true ;
+        public acceptShadow: boolean = true;
 
         /**
         * @language zh_CN
@@ -283,7 +261,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public blendMode: BlendMode = BlendMode.NORMAL ; 
+        public blendMode: BlendMode = BlendMode.NORMAL; 
 
         /**
         * @language zh_CN
@@ -299,7 +277,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public blend_dest: number ;
+        public blend_dest: number;
 
         /**
         * @language zh_CN
@@ -336,7 +314,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public specularColor: number = 0xffffff ;
+        public specularColor: number = 0xffffff;
 
         /**
         * @language zh_CN
@@ -386,12 +364,12 @@
 
         /**
         * @language zh_CN
-        * specularPower 值。
+        * 光照光滑程度，会影响反光的面积，强度。
         * @default 1.0
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public specularPower: number = 1.0; 
+        public gloss: number = 1.0; 
 
         /**
         * @language zh_CN
@@ -456,9 +434,26 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public cullFrontOrBack: number = Egret3DDrive.BACK;
+        public cullFrontOrBack: number = ContextConfig.BACK;
 
+        //data
+        /**
+         * @language zh_CN
+         */
+        public materialSourceData: Float32Array = new Float32Array(16);//12
 
+        /**
+         * @language zh_CN
+         */
+        public directLightData: Float32Array; 
+        /**
+         * @language zh_CN
+         */
+        public sportLightData: Float32Array;
+        /**
+         * @language zh_CN
+         */
+        public pointLightData: Float32Array;
 
         /**
         * @language zh_CN
@@ -470,28 +465,26 @@
         public clone(): MaterialData {
 
             var data: MaterialData = new MaterialData();
-            data.diffusePassUsageData = this.diffusePassUsageData;
-            data.depthPassUsageData = this.depthPassUsageData;
-            data.normalPassUsageData = this.normalPassUsageData;
-            data.positionPassUsageData = this.positionPassUsageData;
-            data.postPassUsageData = this.positionPassUsageData;
-            data.lightPassUsageData = this.positionPassUsageData;
-            data.shadowPassUsageData = this.positionPassUsageData;
-
-            data.textureChange = true;
-            data.textureMethodTypes = this.textureMethodTypes; 
+            //data.depthPassUsageData = this.depthPassUsageData;
+            //data.normalPassUsageData = this.normalPassUsageData;
+            //data.positionPassUsageData = this.positionPassUsageData;
+            //data.postPassUsageData = this.positionPassUsageData;
+            //data.lightPassUsageData = this.positionPassUsageData;
+            //data.shadowPassUsageData = this.positionPassUsageData;
+            //data.textureChange = true;
+            //data.textureMethodTypes = this.textureMethodTypes;
 
             data.drawMode = this.drawMode;
-            data.context3D = this.context3D;
-            data.diffuseTex = this.diffuseTex;
-            data.specularTex = this.specularTex;
-            data.lightMapTex = this.lightMapTex;
-            data.environmentMapTex = this.environmentMapTex;
+            //data.context3D = this.context3D;
+            data.diffuseTexture = this.diffuseTexture;
+            //data.specularTex = this.specularTex;
+            //data.lightMapTex = this.lightMapTex;
+            //data.environmentMapTex = this.environmentMapTex;
             data.shadowMapTex = this.shadowMapTex;
-            data.splat_0Tex = this.splat_0Tex;
-            data.splat_1Tex = this.splat_1Tex;
-            data.splat_2Tex = this.splat_2Tex;
-            data.splat_3Tex = this.splat_3Tex;
+            //data.splat_0Tex = this.splat_0Tex;
+            //data.splat_1Tex = this.splat_1Tex;
+            //data.splat_2Tex = this.splat_2Tex;
+            //data.splat_3Tex = this.splat_3Tex;
 
             data.layer = this.layer;
             data.castShadow = this.castShadow;
@@ -510,7 +503,7 @@
             data.shininess = this.shininess;
             data.cutAlpha = this.cutAlpha;
             data.alpha = this.alpha;
-            data.specularPower = this.specularPower;
+            data.gloss = this.gloss;
             data.ambientPower = this.ambientPower;
             data.diffusePower = this.diffusePower;
             data.normalPower = this.normalPower;
@@ -533,36 +526,34 @@
         */
         public dispose() {
 
-            if (this.diffusePassUsageData)
-                this.diffusePassUsageData.dispose();
-            if (this.depthPassUsageData)
-                this.depthPassUsageData.dispose();
-            if (this.normalPassUsageData)
-                this.normalPassUsageData.dispose();
-            if (this.normalPassUsageData)
-                this.normalPassUsageData.dispose();
-            if (this.positionPassUsageData)
-                this.positionPassUsageData.dispose();
-            if (this.postPassUsageData)
-                this.postPassUsageData.dispose();
-            if (this.lightPassUsageData)
-                this.lightPassUsageData.dispose();
-            if (this.shadowPassUsageData)
-                this.shadowPassUsageData.dispose();
+            //if (this.depthPassUsageData)
+            //    this.depthPassUsageData.dispose();
+            //if (this.normalPassUsageData)
+            //    this.normalPassUsageData.dispose();
+            //if (this.normalPassUsageData)
+            //    this.normalPassUsageData.dispose();
+            //if (this.positionPassUsageData)
+            //    this.positionPassUsageData.dispose();
+            //if (this.postPassUsageData)
+            //    this.postPassUsageData.dispose();
+            //if (this.lightPassUsageData)
+            //    this.lightPassUsageData.dispose();
+            //if (this.shadowPassUsageData)
+            //    this.shadowPassUsageData.dispose();
 
-            if (this.directLightList.length>0){
-                this.directLightList.length = 0;
-                this.directLightList = null; 
-            }
-            if (this.sportLightList.length > 0) {
-                this.sportLightList.length = 0;
-                this.sportLightList = null;
-            }
-            if (this.pointLightList.length > 0) {
-                this.pointLightList.length = 0;
-                this.pointLightList = null;
-            }
+            //if (this.directLightList.length > 0) {
+            //    this.directLightList.length = 0;
+            //    this.directLightList = null;
+            //}
+            //if (this.sportLightList.length > 0) {
+            //    this.sportLightList.length = 0;
+            //    this.sportLightList = null;
+            //}
+            //if (this.pointLightList.length > 0) {
+            //    this.pointLightList.length = 0;
+            //    this.pointLightList = null;
+            //}
 
         }
     }
-} 
+}  

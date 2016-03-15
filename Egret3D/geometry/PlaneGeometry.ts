@@ -13,7 +13,7 @@
      * @platform Web,Native
      * @includeExample geometry/PlaneGeometry.ts
      */
-    export class PlaneGeometry extends SubGeometry {
+    export class PlaneGeometry extends Geometry {
 
         private _segmentsW: number = 1;
         private _segmentsH: number = 1;
@@ -46,8 +46,9 @@
         }
 
         private buildGeometry(): void {
-            var vertices: Array<number>;
-            var indices: Array<number>;
+
+            this.useVertexFormat(VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0);
+
             var x: number, y: number;
             var numIndices: number;
             var base: number;
@@ -58,8 +59,8 @@
 
             numIndices = this._segmentsH * this._segmentsW * 6;
 
-            vertices = new Array<number>(numVertices * stride);
-            indices = new Array<number>(numIndices);
+            this.verticesData = new Array<number>(numVertices * stride);
+            this.indexData = new Array<number>(numIndices);
 
             numIndices = 0;
             var point: Vector3D = new Vector3D();
@@ -69,25 +70,25 @@
                     x = (xi / this._segmentsW - .5) * this._width;
                     y = (yi / this._segmentsH - .5) * this._height;
                 
-                    vertices[index++] = x;
-                    vertices[index++] = 0;
-                    vertices[index++] = y;
+                    this.verticesData[index++] = x;
+                    this.verticesData[index++] = 0;
+                    this.verticesData[index++] = y;
 
-                    vertices[index++] = 0;
-                    vertices[index++] = 1;
-                    vertices[index++] = 0;
+                    this.verticesData[index++] = 0;
+                    this.verticesData[index++] = 1;
+                    this.verticesData[index++] = 0;
 
-                    vertices[index++] = 1;
-                    vertices[index++] = 0;
-                    vertices[index++] = 0;
+                    this.verticesData[index++] = 1;
+                    this.verticesData[index++] = 0;
+                    this.verticesData[index++] = 0;
 
-                    vertices[index++] = 1;
-                    vertices[index++] = 1;
-                    vertices[index++] = 1;
-                    vertices[index++] = 1;
+                    this.verticesData[index++] = 1;
+                    this.verticesData[index++] = 1;
+                    this.verticesData[index++] = 1;
+                    this.verticesData[index++] = 1;
 
-                    vertices[index++] = (xi / this._segmentsW) * this._scaleU ;
-                    vertices[index++] = (1 - yi / this._segmentsH) * this._scaleV ;
+                    this.verticesData[index++] = (xi / this._segmentsW) * this._scaleU ;
+                    this.verticesData[index++] = (1 - yi / this._segmentsH) * this._scaleV ;
 
                     index += skip;
 
@@ -95,21 +96,17 @@
                         base = xi + yi * tw;
                         var mult: number = 1;
 
-                        indices[numIndices++] = base * mult;
-                        indices[numIndices++] = (base + tw + 1) * mult;
-                        indices[numIndices++] = (base + tw) * mult;
+                        this.indexData[numIndices++] = base * mult;
+                        this.indexData[numIndices++] = (base + tw + 1) * mult;
+                        this.indexData[numIndices++] = (base + tw) * mult;
 
-                        indices[numIndices++] = base * mult;
-                        indices[numIndices++] = (base + 1) * mult;
-                        indices[numIndices++] = (base + tw + 1) * mult;
+                        this.indexData[numIndices++] = base * mult;
+                        this.indexData[numIndices++] = (base + 1) * mult;
+                        this.indexData[numIndices++] = (base + tw + 1) * mult;
 
                     }
                 }
             }
-
-            this.setGeomtryData(indices, vertices);
-            this.buildBoundBox();
-
         }
     }
 }

@@ -30,30 +30,70 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public static pickObject3DList(camera: Camera3D, objects: Array<Object3D>): Array<Object3D> {
-            var ret: Array<Object3D> = new Array<Object3D>();
+        public static pickObject3DList(canvas: Egret3DCanvas, view:View3D, camera: Camera3D, objects: Array<IRender>): Array<IRender> {
+            var ret: Array<IRender> = new Array<IRender>();
             var ray: Ray = this.ray;
-            ray.CalculateAndTransformRay(Egret3DDrive.canvasRectangle.width, Egret3DDrive.canvasRectangle.height, camera.modelMatrix, camera.projectMatrix, Input.instance.mouseX, Input.instance.mouseY);
+
+            var x: number = Input.instance.mouseX - view.x;
+            var y: number = Input.instance.mouseY - view.y;
+
+            ray.CalculateAndTransformRay(view.width, view.height, camera.modelMatrix, camera.projectMatrix, x, y);
             for (var i: number = 0; i < objects.length; ++i) {
-                var mesh: egret3d.Mesh = <egret3d.Mesh>objects[i];
+                var renderItem: IRender = objects[i];
                 var inPos: Vector3D = new Vector3D();
-                switch (mesh.pickType) {
+                switch (renderItem.pickType) {
                     case PickType.BoundPick:
-                        if (mesh.box != null) {
-                            if (ray.IntersectMesh(mesh.box.vexData, mesh.box.indexData, 3, mesh.box.indexData.length / 3, 0, mesh.modelMatrix, mesh.pickerData)) {
+                        if (renderItem.bound != null) {
+                            if (ray.IntersectMesh(renderItem.bound.vexData, renderItem.bound.indexData, renderItem.bound.vexLength, renderItem.bound.indexData.length / 3, 0, renderItem.modelMatrix, renderItem.pickResult)) {
                                 var target: PickResult = new PickResult();
                                 ret.push(objects[i]);
                             }
                         }
                         break;
                     case PickType.PositionPick:
-                        if (ray.IntersectMeshEx(mesh, 13, mesh.pickerData)) {
+
+                        var uvoffset: number = 0;
+
+                        if (renderItem.geometry.vertexFormat & VertexFormat.VF_POSITION) {
+                            uvoffset += Geometry.positionSize;
+                        }
+
+                        if (renderItem.geometry.vertexFormat & VertexFormat.VF_NORMAL) {
+                            uvoffset += Geometry.normalSize;
+                        }
+
+                        if (renderItem.geometry.vertexFormat & VertexFormat.VF_TANGENT) {
+                            uvoffset += Geometry.tangentSize;
+                        }
+
+                        if (renderItem.geometry.vertexFormat & VertexFormat.VF_COLOR) {
+                            uvoffset += Geometry.colorSize;
+                        }
+
+                        if (ray.IntersectMeshEx(renderItem, uvoffset, renderItem.pickResult)) {
                             var target: PickResult = new PickResult();
                             ret.push(objects[i]);
                         }
                         break;
                     case PickType.UVPick:
-                        if (ray.IntersectMeshEx(mesh, 13, mesh.pickerData)) {
+                        var uvoffset: number = 0;
+
+                        if (renderItem.geometry.vertexFormat & VertexFormat.VF_POSITION) {
+                            uvoffset += Geometry.positionSize;
+                        }
+
+                        if (renderItem.geometry.vertexFormat & VertexFormat.VF_NORMAL) {
+                            uvoffset += Geometry.normalSize;
+                        }
+
+                        if (renderItem.geometry.vertexFormat & VertexFormat.VF_TANGENT) {
+                            uvoffset += Geometry.tangentSize;
+                        }
+
+                        if (renderItem.geometry.vertexFormat & VertexFormat.VF_COLOR) {
+                            uvoffset += Geometry.colorSize;
+                        }
+                        if (ray.IntersectMeshEx(renderItem, uvoffset, renderItem.pickResult)) {
                             var target: PickResult = new PickResult();
                             ret.push(objects[i]);
                         }

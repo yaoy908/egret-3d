@@ -382,7 +382,7 @@
                     this._data = TGAParser.parse(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_ESM:
-                    var geomtry:GeometryBase = ESMParser.parse(this._xhr.response);
+                    var geomtry:Geometry = ESMParser.parse(this._xhr.response);
 
                     this._data = geomtry;
                     break;
@@ -393,13 +393,13 @@
                     break;
                 case URLLoader.DATAFORMAT_ECA:
 
-                    var cameraAnimationController:CameraAnimationController = ECAParser.parse(this._xhr.response);
+                    ///var cameraAnimationController:CameraAnimationController = ECAParser.parse(this._xhr.response);
 
-                    this._data = cameraAnimationController;
+                    //this._data = cameraAnimationController;
                     break;
                 case URLLoader.DATAFORMAT_PVR:
-                    var pvr:PVR = PVRParser.parse(this._xhr.response);
-                    this._data = pvr;
+                    //var pvr:PVR = PVRParser.parse(this._xhr.response);
+                    //this._data = pvr;
                     break;
 
                 default:

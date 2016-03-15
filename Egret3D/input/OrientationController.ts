@@ -256,7 +256,7 @@
                 view3D.camera3D.rotationZ = this.fixOritation.z;
             }
 
-            view3D.scene.rotationX = -90;
+            //view3D.scene.rotationX = -90;
 
         }
 

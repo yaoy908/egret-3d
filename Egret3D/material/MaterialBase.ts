@@ -1,194 +1,113 @@
 ﻿module egret3d {
-    
-    /**
-    * @private
-    */
-    export enum TextureMethodType{
-        DIFFUSE,
-        NORMAL,
-        SPECULAR,
-        RGBATERRAIN
-    }
-
-     /**
-     * @language zh_CN
-     * @class egret3d.MaterialBase
-     * @classdesc
-     * TerrainMaterial,TextureMaterial 的基类。</p>
-     * 材质球共有的基础类型，封装了材质球共有的基础数据设置方法。</p>
-     * 不同的渲染通道pass。</p>
-     * @version Egret 3.0
-     * @platform Web,Native
-     */
     export class MaterialBase {
 
-        /**
-         * @private
-         * @language zh_CN
-         * 材质数据。
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
+        public diffusePass: MaterialPass; 
+
         public materialData: MaterialData;
 
-        /**
-         * @private
+        private _lightGroup: LightGroup;
+         /**
          * @language zh_CN
-         * diffuse pass。
+         * @class egret3d.MaterialBase
+         * @classdesc
+         * TerrainMaterial,TextureMaterial 的基类。</p>
+         * 材质球共有的基础类型，封装了材质球共有的基础数据设置方法。</p>
+         * 不同的渲染通道pass。</p>
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public diffusePass: MaterialPassBase;
-        /**
-         * @private
-         * @language zh_CN
-         * shadow pass。
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public shadowPass    : ShadowMapPass ;
-        /**
-         * @private
-         * @language zh_CN
-         * 法线pass。
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public normalPass: NormalMapPass;
-        /**
-         * @private
-         * @language zh_CN
-         * depthPass。
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public depthPass: DepthMapPass;
-        /**
-         * @private
-         * @language zh_CN
-         * position pass。
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public positionPass: MaterialPassBase;
-        /**
-         * @private
-         * @language zh_CN
-         * outLin pass。
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public outLinePass: MaterialPassBase;
-        /**
-         * @private
-        * @language zh_CN
-        * 创建一个新的 MethodBase 对象。
-        * @param materialData {MaterialData}
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        constructor(materialData: MaterialData = null) {
+        constructor(materialData: MaterialData=null) {
             if (materialData == null) {
-                this.materialData = new MaterialData();
-                this.materialData.diffusePassUsageData.materialSourceData = new Float32Array(16);
-            } else {
-                this.materialData = materialData; 
+                this.setData(new MaterialData());
             }
-            this.setData(this.materialData);
-            
+            else
+                this.setData(materialData);
         }
 
-        /**
-         * @private
-        * @language zh_CN
-        * 初始化 MatPass。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        protected initMatPass() {
-            throw new Error( "cant't constructor parent" );
+        public setData(data: MaterialData) {
+            this.materialData = data; 
+            this.initPass();
+            this.blendMode = BlendMode.NORMAL;
         }
 
-        /**
-        * @language zh_CN
-        * 设置材质球数据。
-        * 设置材质球的数据data，今后的工具编辑器会直接使用
-        * @param materialData {MaterialData}
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public setData(matData: MaterialData) {
-            if (this.materialData) {
-                this.materialData.dispose();
-            } 
-
-            this.materialData = matData;
-            this.ambientColor = this.materialData.ambientColor;
-            this.ambientPower = this.materialData.ambientPower;
-            this.normalPower = this.materialData.normalPower;
-            this.specularColor = this.materialData.specularColor;
-            this.specularPower = this.materialData.specularPower;
-            this.blendMode = this.materialData.blendMode;
-        }
-
-        /**
-         * @language zh_CN
-         * 返回材质球数据。
-         * 返回材质球数据。
-         * @returns {MaterialData}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
         public getData(): MaterialData {
             return this.materialData; 
         }
 
+        protected initPass() {
+            this.diffusePass = new ColorPass(this.materialData);
+        }
+        
         /**
-        * @language zh_CN
-        * 添加材质 DiffusePass 方法。
-        * 添加自定义的 材质球渲染通道，渲染不同的pass
-        * @param method {MethodBase}
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public addDiffusePassMothod(method: MethodBase) {
-            this.diffusePass.addMethod(method);
+         * @language zh_CN
+         * 设置材质 lightGroup 。
+         * 设置材质球接受的灯光组。
+         * @param lightGroup {LightGroup}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public set lightGroup(group: LightGroup) {
+            this._lightGroup = group; 
+            this.diffusePass.lightGroup = group;
+        }
+
+        /**
+         * @language zh_CN
+         * 设置材质 diffuseTexture 。
+         * 设置材质球的漫反射贴图。
+         * @param texture {TextureBase}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public set diffuseTexture(texture: ITexture) {
+            if (texture) {
+                this.materialData.diffuseTexture = texture;
+                this.materialData.textureChange = true;
+
+                if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.diffuse) == -1) {
+                    this.materialData.textureMethodTypes.push(TextureMethodType.diffuse);
+                }
+            }
         }
 
         /**
         * @language zh_CN
-        * 添加材质 DiffusePassEffect 方法。
-        * 添加材质球的特效找色片段，其着色shader会加入到最后一行
-        * @param method {EffectMethod}
+        * 返回材质 diffuseTexture。
+        * 返回材质球的漫反射贴图。
+        * @returns {TextureBase}
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public addDiffusePassEffectMothod(method: EffectMethod) {
-            this.diffusePass.addEffectMethod(method);
+        public get diffuseTexture(): ITexture {
+            return this.materialData.diffuseTexture;
         }
 
         /**
         * @language zh_CN
-        * 设置材质 shadowMaping 方法。
-        * 设置材质 接受阴影的方法，如果要 接受阴影必须设置 acceptShadow 和maping方式
-        * @param method {ShadowMapingMethod}
+        * 设置模型渲染模式。模型可以以顶点的方式渲染，线框渲染（会需要特定模型），三角形渲染
+        * DrawMode.POINTS
+        * rawMode.LINES
+        * DrawMode.TRIANGLES
+        * @default DrawMode.TRIANGLES
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public set shadowMapingMethod(method: ShadowMapingMethod) {
-            this.diffusePass.shadowMaping = method;
+        public set drawMode(mode: number) {
+            this.materialData.drawMode = mode; 
         }
 
         /**
         * @language zh_CN
-        * 返回 shadowMaping 方法。
-        * 返回 阴影的maping 方式。
-        * @returns {ShadowMapingMethod}
+        * 设置模型渲染模式。模型可以以顶点的方式渲染，线框渲染（会需要特定模型），三角形渲染
+        * DrawMode.POINTS
+        * rawMode.LINES
+        * DrawMode.TRIANGLES
+        * @default DrawMode.TRIANGLES
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public get shadowMapingMethod( ): ShadowMapingMethod {
-            return this.diffusePass.shadowMaping;
+        public get drawMode(): number {
+            return this.materialData.drawMode;
         }
 
         /**
@@ -201,7 +120,7 @@
         */
         public set diffuseColor(color: number) {
             this.materialData.materialDataNeedChange = true;
-            this.materialData.diffuseColor = color ;
+            this.materialData.diffuseColor = color;
         }
 
         /**
@@ -240,7 +159,7 @@
          * @platform Web,Native
          */
         public set alpha(value: number) {
-            if (this.materialData.alpha != value){
+            if (this.materialData.alpha != value) {
                 this.materialData.alpha = value;
                 this.materialData.materialDataNeedChange = true;
             }
@@ -287,15 +206,15 @@
 
         /**
          * @language zh_CN
-         * 设置材质 specularPower 值。
-         * 设置材质 高光颜色的强度 值。
+         * 设置材质 gloss 值。
+         * 设置材质 镜面平滑程度 值。
          * @param value {Number}
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public set specularPower(value: number) {
-            if (this.materialData.specularPower != value) {
-                this.materialData.specularPower = value;
+        public set gloss(value: number) {
+            if (this.materialData.gloss != value) {
+                this.materialData.gloss = value;
                 this.materialData.materialDataNeedChange = true;
             }
         }
@@ -303,13 +222,13 @@
         /**
          * @language zh_CN
          * 返回材质 specularPower 值。
-         * 返回材质 高光颜色的强度 值。
+         * 设置材质 镜面平滑程度 值。
          * @returns {Number}
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public get specularPower(): number {
-            return this.materialData.specularPower;
+        public get gloss(): number {
+            return this.materialData.gloss;
         }
 
 
@@ -405,14 +324,14 @@
          * @platform Web,Native
          */
         public set castShadow(value: boolean) {
-            this.materialData.castShadow  = value;
+            this.materialData.castShadow = value;
             if (value) {
-                if (!ShadowRender.frameBuffer) {
-                    alert("要使用shadow view3D.useShadow = true ");
-                } else {
-                    if (!this.shadowPass)
-                        this.shadowPass = new ShadowMapPass(this.materialData);
-                }
+                //if (!ShadowRender.frameBuffer) {
+                //    alert("要使用shadow view3D.useShadow = true ");
+                //} else {
+                //    if (!this.shadowPass)
+                //        this.shadowPass = new ShadowMapPass(this.materialData);
+                //}
             }
         }
 
@@ -425,7 +344,7 @@
          * @platform Web,Native
          */
         public get castShadow(): boolean {
-            return this.materialData.castShadow ;
+            return this.materialData.castShadow;
         }
 
         /**
@@ -440,14 +359,14 @@
             this.materialData.acceptShadow = value;
         }
 
-         /**
-         * @language zh_CN
-         * 返回材质 acceptShadow 值。
-         * 返回材质是否接受阴影，设置了之后必须要给 shadowmaping 的方法。
-         * @returns {boolean}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
+        /**
+        * @language zh_CN
+        * 返回材质 acceptShadow 值。
+        * 返回材质是否接受阴影，设置了之后必须要给 shadowmaping 的方法。
+        * @returns {boolean}
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get acceptShadow(): boolean {
             return this.materialData.acceptShadow;
         }
@@ -460,19 +379,19 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public set smooth(val:boolean) {
+        public set smooth(val: boolean) {
             this.materialData.smooth = val;
         }
-         /**
-         * @language zh_CN
-         * 返回材质 smooth 值。
-         * 返回 材质纹理的采样方式，是否抗锯齿，是否精细显示。的开关
-         * @returns {boolean}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
+        /**
+        * @language zh_CN
+        * 返回材质 smooth 值。
+        * 返回 材质纹理的采样方式，是否抗锯齿，是否精细显示。的开关
+        * @returns {boolean}
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get smooth(): boolean {
-            return this.materialData.smooth; 
+            return this.materialData.smooth;
         }
         /**
          * @language zh_CN
@@ -485,14 +404,14 @@
         public set repeat(val: boolean) {
             this.materialData.repeat = val;
         }
-         /**
-         * @language zh_CN
-         * 返回材质 repeat 值。
-         * 返回材质 是否进行纹理重复采样的方式开关。
-         * @returns {boolean}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
+        /**
+        * @language zh_CN
+        * 返回材质 repeat 值。
+        * 返回材质 是否进行纹理重复采样的方式开关。
+        * @returns {boolean}
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get repeat(): boolean {
             return this.materialData.repeat;
         }
@@ -507,14 +426,14 @@
         public set bothside(val: boolean) {
             this.materialData.bothside = val;
         }
-         /**
-         * @language zh_CN
-         * 返回材质 bothside 值。
-        * 返回是否显示双面的开关，一般情况不需要。
-         * @returns {boolean}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
+        /**
+        * @language zh_CN
+        * 返回材质 bothside 值。
+       * 返回是否显示双面的开关，一般情况不需要。
+        * @returns {boolean}
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get bothside(): boolean {
             return this.materialData.bothside;
         }
@@ -553,351 +472,65 @@
             this.materialData.blendMode = value;
             switch (value) {
                 case BlendMode.NORMAL:
-                    this.materialData.blend_src = Egret3DDrive.ONE;
-                    this.materialData.blend_dest = Egret3DDrive.ZERO;
+                    this.materialData.blend_src = ContextConfig.ONE;
+                    this.materialData.blend_dest = ContextConfig.ZERO;
                     break;
                 case BlendMode.LAYER:
-                    this.materialData.blend_src = Egret3DDrive.SRC_ALPHA;
-                    this.materialData.blend_dest = Egret3DDrive.ZERO;
-                    this.materialData.alphaBlending = true ;
+                    this.materialData.blend_src = ContextConfig.SRC_ALPHA;
+                    this.materialData.blend_dest = ContextConfig.ZERO;
+                    this.materialData.alphaBlending = true;
                     break;
                 case BlendMode.MULTIPLY:
-                    this.materialData.blend_src = Egret3DDrive.ZERO;
-                    this.materialData.blend_dest = Egret3DDrive.SRC_COLOR;
+                    this.materialData.blend_src = ContextConfig.ZERO;
+                    this.materialData.blend_dest = ContextConfig.SRC_COLOR;
                     this.materialData.alphaBlending = true;
                     break;
                 case BlendMode.ADD:
-                    this.materialData.blend_src = Egret3DDrive.SRC_ALPHA;
-                    this.materialData.blend_dest = Egret3DDrive.ONE;
-                    this.materialData.alphaBlending = true ;
+                    this.materialData.blend_src = ContextConfig.SRC_ALPHA;
+                    this.materialData.blend_dest = ContextConfig.ONE;
+                    this.materialData.alphaBlending = true;
                     break;
                 case BlendMode.ALPHA:
-                    this.materialData.blend_src = Egret3DDrive.SRC_ALPHA;
-                    this.materialData.blend_dest = Egret3DDrive.ONE_MINUS_SRC_ALPHA;
+                    this.materialData.blend_src = ContextConfig.SRC_ALPHA;
+                    this.materialData.blend_dest = ContextConfig.ONE_MINUS_SRC_ALPHA;
                     this.materialData.alphaBlending = true;
                     break;
                 case BlendMode.SCREEN:
-                    this.materialData.blend_src = Egret3DDrive.ONE;
-                    this.materialData.blend_dest = Egret3DDrive.ONE_MINUS_SRC_COLOR;
+                    this.materialData.blend_src = ContextConfig.ONE;
+                    this.materialData.blend_dest = ContextConfig.ONE_MINUS_SRC_COLOR;
                     break;
             }
         }
 
-        /**
-         * @private
-         * @language zh_CN
-         * 设置材质 Outline 样式。
-         * @param color {Number}
-         * @param thickness {Number}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public setOutlineStyler(color: number, thickness: number) {
-            if (!this.outLinePass){
-                //this.outLinePass = new OutLinePass();
-            }
+        public renderDiffusePass(time: number, delay: number, maetID: number , context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation) {
+            this.diffusePass.draw(time, delay, context3DProxy, modeltransform, camera3D,subGeometry,animtion);
         }
 
-        /**
-         * @language zh_CN
-         * 设置材质 depthTest。
-         * 设置物件渲染，是否需要进行深度排序的开关。
-         * @param value {boolean}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public set depthTest(value: boolean) {
-            this.materialData.depthTest = value; 
+        public renderXRayPass() {
         }
 
-         /**
-         * @language zh_CN
-         * 返回材质 depthTest 值。
-         * 返回物件渲染，是否需要进行深度排序的开关。
-         * @returns {boolean}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public get depthTest(): boolean {
-            return this.materialData.depthTest; 
+        public renderOutlinePass() {
         }
 
-         /**
-         * @language zh_CN
-         * 返回材质 blendMode 值。
-         * 返回材质 blendMode 值。
-         * @returns {boolean}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public get blendMode(): BlendMode {
-            return this.materialData.blendMode ;
+        public renderNormalPass() {
         }
 
-        /**
-         * @language zh_CN
-         * 设置材质 lightGroup 。
-         * 设置材质球接受的灯光组。
-         * @param lightGroup {LightGroup}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public set lightGroup(lightGroup: LightGroup) {
-            this.materialData.directLightList = lightGroup.directLightList;
-            this.materialData.sportLightList = lightGroup.spotLightList;
-            this.materialData.pointLightList = lightGroup.pointLightList;
+        public renderDepthPass() {
         }
 
-        /**
-         * @language zh_CN
-         * 设置材质 diffuseTexture 。
-         * 设置材质球的漫反射贴图。
-         * @param texture {TextureBase}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public set diffuseTexture(texture: TextureBase) {
-            if (texture) {
-                this.materialData.diffuseTex = texture;
-                this.materialData.textureChange = true;
-
-                if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.DIFFUSE) == -1) {
-                    this.materialData.textureMethodTypes.push(TextureMethodType.DIFFUSE);
-                }
-            }
+        public renderPositionPass(){
         }
 
-         /**
-         * @language zh_CN
-         * 返回材质 diffuseTexture。
-         * 返回材质球的漫反射贴图。
-         * @returns {TextureBase}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public get diffuseTexture(): TextureBase {
-            return this.materialData.diffuseTex;
+        public renderUVPass() {
         }
 
-        /**
-         * @language zh_CN
-         * 设置材质 normalTexture 。
-         * 设置材质球的凹凸法线贴图。
-         * @param texture {TextureBase}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public set normalTexture(texture: TextureBase) {
-            if (texture) {
-                this.materialData.normalTex = texture;
-                this.materialData.textureChange = true;
-
-                if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.NORMAL) == -1) {
-                    this.materialData.textureMethodTypes.push(TextureMethodType.NORMAL);
-                    this.materialData.passChange = true;
-                }
-     
-            }
+        public renderScendUVPass() {
         }
 
-        /**
-         * @language zh_CN
-         * 设置材质 specularTexture 。
-         * 设置材质球的高光贴图。
-         * @param texture {TextureBase}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public set specularTexture(texture: TextureBase) {
-            if (texture) {
-                this.materialData.specularTex = texture;
-                this.materialData.textureChange = true;
-                if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.SPECULAR) == -1) {
-                    this.materialData.textureMethodTypes.push(TextureMethodType.SPECULAR);
-                    this.materialData.passChange = true;
-                }
-            }
+        public renderVertexColorPass() {
         }
 
-        /**
-         * @language zh_CN
-         * 克隆材质。
-         * 返回新的材质球，但是共用材质纹理，和着色器。
-         * @returns {MaterialBase}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public clone(): MaterialBase {
-            var mat: MaterialBase = new MaterialBase(this.materialData.clone());
-            return mat;
+        public renderLightingPass() {
         }
-
-        /**
-         * @private
-         * @language zh_CN
-         * 激活 DiffusePass
-         * @param context3D {Context3D}
-         * @param camera3D {Camera3D}
-         * @param modelMatrix {Matrix4_4}
-         * @param geometry {GeometryBase}
-         * @param animation {IAnimation}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public activateDiffusePass(context3D: Context3D, camera3D: Camera3D, modelMatrix: Matrix4_4, geometry: GeometryBase, animation: IAnimation) {
-            if (this.outLinePass){
-                this.outLinePass.initShader(context3D, geometry, animation);
-                this.outLinePass.activate(context3D, modelMatrix, camera3D, geometry, animation);
-            }
-            this.diffusePass.initShader(context3D, geometry, animation);
-            this.diffusePass.activate(context3D, modelMatrix, camera3D, geometry, animation);
-        }
-
-        /**
-         * @private
-         * @language zh_CN
-         * 渲染 DiffusePass
-         * @param context3D {Context3D}
-         * @param camera3D {Camera3D}
-         * @param modelMatrix {Matrix4_4}
-         * @param geometry {GeometryBase}
-         * @param animation {IAnimation}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public renderDiffusePass(context3D: Context3D, camera3D: Camera3D, modelMatrix: Matrix4_4,geometry:GeometryBase , animation: IAnimation ) {
-            if (this.outLinePass) {
-                this.outLinePass.draw(context3D, modelMatrix, camera3D, geometry, animation);
-            }
-            if (!this.materialData.passChange) {
-                this.diffusePass.draw(context3D, modelMatrix, camera3D, geometry, animation);
-            } else {
-                this.activateDiffusePass(context3D, camera3D, modelMatrix, geometry, animation);
-                this.materialData.passChange = false ;
-            }
-        }
-
-        /**
-         * @private
-         * @language zh_CN
-         * 激活 ShadowPass
-         * @param context3D {Context3D}
-         * @param camera3D {Camera3D}
-         * @param modelMatrix {Matrix4_4}
-         * @param geometry {GeometryBase}
-         * @param animation {IAnimation}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public activateShadowPass(context3D: Context3D, camera3D: Camera3D, modelMatrix: Matrix4_4, geometry: GeometryBase,animation: IAnimation ) {
-            this.shadowPass.initShader(context3D, geometry, animation);
-            this.shadowPass.activate(context3D, modelMatrix, camera3D, geometry , animation );
-        }
-
-        /**
-         * @private
-         * @language zh_CN
-         * 渲染 ShadowPass
-         * @language zh_CN
-         * @param context3D {Context3D}
-         * @param camera3D {Camera3D}
-         * @param modelMatrix {Matrix4_4}
-         * @param geometry {GeometryBase}
-         * @param animation {IAnimation}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public renderShadowPass(context3D: Context3D, camera3D: Camera3D, modelMatrix: Matrix4_4, geometry: GeometryBase,animation: IAnimation ) {
-            if (!this.materialData.passChange) {
-                this.shadowPass.draw(context3D, modelMatrix, camera3D, geometry, animation)
-            } else {
-                this.activateShadowPass(context3D, camera3D, modelMatrix, geometry, animation);
-            }
-        }
-
-        /**
-         * @private
-         * @language zh_CN
-         * 激活 NormalPass
-         * @language zh_CN
-         * @param context3D {Context3D}
-         * @param camera3D {Camera3D}
-         * @param modelMatrix {Matrix4_4}
-         * @param geometry {GeometryBase}
-         * @param animation {IAnimation}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public activateNormalPass(context3D: Context3D, camera3D: Camera3D, modelMatrix: Matrix4_4, geometry: GeometryBase, animation: IAnimation ) {
-            this.normalPass.initShader(context3D, geometry, animation);
-            this.normalPass.activate(context3D, modelMatrix, camera3D, geometry,  animation );
-        }
-        /**
-         * @private
-         * @language zh_CN
-         * 渲染 NormalPass
-         * @param context3D {Context3D}
-         * @param camera3D {Camera3D}
-         * @param modelMatrix {Matrix4_4}
-         * @param geometry {GeometryBase}
-         * @param animation {IAnimation}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public renderNormalPass(context3D: Context3D, camera3D: Camera3D, modelMatrix: Matrix4_4, geometry: GeometryBase, animation: IAnimation  ) {
-            //if (this.materialData._NormalActiveState) {
-            //    this.normalPass.draw(context3D, modelMatrix, camera3D,geometry, animation )
-            //} else {
-            //    this.materialData._NormalActiveState = true;
-            //    this.activateNormalPass(context3D, camera3D,modelMatrix,geometry, animation);
-            //}
-        }
-
-        /**
-         * @private
-         * @language zh_CN
-         * 激活 DepthPass
-         * @param context3D {Context3D}
-         * @param camera3D {Camera3D}
-         * @param modelMatrix {Matrix4_4}
-         * @param geometry {GeometryBase}
-         * @param animation {IAnimation}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public activateDepthPass(context3D: Context3D, camera3D: Camera3D, modelMatrix: Matrix4_4, geometry: GeometryBase, animation: IAnimation) {
-            this.depthPass.initShader(context3D, geometry, animation);
-            this.depthPass.activate(context3D, modelMatrix, camera3D, geometry, animation);
-        }
-        /**
-         * @private
-         * @language zh_CN
-         * 渲染 DepthPass
-         * @param context3D {Context3D}
-         * @param camera3D {Camera3D}
-         * @param modelMatrix {Matrix4_4}
-         * @param geometry {GeometryBase}
-         * @param animation {IAnimation}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public renderDepthPass(context3D: Context3D, camera3D: Camera3D, modelMatrix: Matrix4_4, geometry: GeometryBase, animation: IAnimation) {
-            //if (this.materialData._DepthActiveState) {
-            //    this.depthPass.draw(context3D, modelMatrix, camera3D, geometry, animation)
-            //} else {
-            //    this.materialData._DepthActiveState = true;
-            //    this.activateDepthPass(context3D, camera3D, modelMatrix, geometry, animation);
-            //}
-        }
-        /**
-         * @language zh_CN
-         * 销毁
-         * 进行材质球的纹理，着色器回收，相关的克隆对象会受影响
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public dispose() {
-        }
-      
     }
 } 

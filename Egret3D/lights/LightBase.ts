@@ -1,5 +1,10 @@
 ﻿module egret3d {
-            
+
+    export enum LightType {
+        pointlight,
+        directlight,
+        spotLightlight,
+    }
     /**
     * @class egret3d.DirectLight
     * @classdesc
@@ -22,7 +27,7 @@
          *@private
          * 类型
          */
-        protected _lightType: number = -1 ;
+        public lightType: number = -1 ;
         /**
          * @language zh_CN  
          *@private
@@ -68,7 +73,7 @@
          *@private
          * @param value 背光强度
          */
-        protected _halfIntensity: number = 0.5;
+        protected _halfIntensity: number = 0.0;
  
         /**
          * @language zh_CN  

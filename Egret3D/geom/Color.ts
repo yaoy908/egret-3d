@@ -102,15 +102,15 @@
         * @param colorFormat 格式
         * @returns 颜色
         */
-        public getColor(colorFormat: number = Egret3DDrive.ColorFormat_RGBA8888): number {
+        public getColor(colorFormat: number = ContextConfig.ColorFormat_RGBA8888): number {
 
-            if (colorFormat == Egret3DDrive.ColorFormat_RGB565)
+            if (colorFormat == ContextConfig.ColorFormat_RGB565)
                 return 0;
 
-            if (colorFormat == Egret3DDrive.ColorFormat_RGBA5551)
+            if (colorFormat == ContextConfig.ColorFormat_RGBA5551)
                 return 0;
 
-            if (colorFormat == Egret3DDrive.ColorFormat_RGBA4444)
+            if (colorFormat == ContextConfig.ColorFormat_RGBA4444)
                 return 0;
             
             return this.r << 24 | this.g << 16 | this.b << 8 | this.a;

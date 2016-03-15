@@ -12,7 +12,7 @@
         private static scriptSource: Array<string>;
         private static importList: Array<string> = new Array<string>();
         private static _xhr: XMLHttpRequest ;
-        private static _libUrl: string = "/Egret3D/tsconfig.json";
+        private static _libUrl: string = "/Egret3D-dev/tsconfig.json";
         private static _complete:Function ;
         private static getXHR(): any {
             var xhr: any = null;
@@ -43,7 +43,7 @@
                 this._xhr.abort();
             }
 
-            this._xhr.open("GET", this._libUrl, true);
+            this._xhr.open("GET", this._libUrl + "?" + Math.random()*100000, true);
             this._xhr.addEventListener("progress", (e) => Egret3DEngine.onProgress(e), false);
             this._xhr.addEventListener("readystatechange", (e) => Egret3DEngine.onReadyStateChange(e), false);
             this._xhr.addEventListener("error", (e) => Egret3DEngine.onError(e), false);
@@ -79,7 +79,7 @@
             var obj = eval("(" + source + ")");
 
             for (var i: number = 0; i < obj.files.length; ++i) {
-                this.importList[i] = "/js/Egret3D/";
+                this.importList[i] = "/js/Egret3D-dev/";
                 this.importList[i] += obj.files[i];
                 this.importList[i] = this.importList[i].replace(".ts", ".js");
             }

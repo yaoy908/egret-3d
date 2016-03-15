@@ -29,10 +29,10 @@
          * constructor 
          * @param color {Vector3D}
          */
-        constructor(color: Vector3D) {
+        constructor(color: number) {
             super();
-            this._diffuse = color;
-            this._lightType = 2 ;
+            this.diffuse = color;
+            this.lightType = LightType.spotLightlight ;
         }
                                 
         /**
@@ -158,9 +158,9 @@
             lightData[index * SpotLight.stride + 1] = this.y;
             lightData[index * SpotLight.stride + 2] = this.z;
           
-            lightData[index * SpotLight.stride + 3] = this._rot.x;
-            lightData[index * SpotLight.stride + 4] = this._rot.y;
-            lightData[index * SpotLight.stride + 5] = this._rot.z;
+            lightData[index * SpotLight.stride + 3] = this._rot.x * MathUtil.DEGREES_TO_RADIANS ;
+            lightData[index * SpotLight.stride + 4] = this._rot.y * MathUtil.DEGREES_TO_RADIANS ;
+            lightData[index * SpotLight.stride + 5] = this._rot.z * MathUtil.DEGREES_TO_RADIANS ; 
          
             lightData[index * SpotLight.stride + 6] = this._diffuse.x;
             lightData[index * SpotLight.stride + 7] = this._diffuse.y;

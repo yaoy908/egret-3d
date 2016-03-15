@@ -18,7 +18,7 @@
      * @version Egret 3.0
      * @platform Web,Native
      */
-    export class ImageTexture extends TextureBase  {
+    export class ImageTexture implements ITexture {
 
         /**
          * @language zh_CN
@@ -27,14 +27,17 @@
          */
         public imageData: HTMLImageElement;
 
+        public width: number;
+        public height: number;
+        public texture2D: Texture2D;
+        public texture3D: Texture3D;
+
         /**
          * @language zh_CN
          * 构造函数
          * @param img HTMLImageElement（网页图像元素）
          */
         constructor(img: HTMLImageElement) {
-            super();
-
             this.imageData = img;
         }
 
@@ -43,15 +46,19 @@
          * 上传贴图数据给GPU
          * @param context3D 
          */
-        public upload(context3D: Context3D) {
-            if (!this.texture) {
-                this.texture = context3D.creatTexture2D();
-                this.texture.gpu_internalformat = InternalFormat.ImageData;
-                this.texture.gpu_colorformat = Egret3DDrive.ColorFormat_RGBA8888;
-                this.texture.image = this.imageData;
-                this.useMipmap = false ;
-                context3D.upLoadTextureData(0, this.texture);
+        public upload(context3D: Context3DProxy) {
+            if (!this.texture2D) {
+                this.texture2D = context3D.creatTexture2D();
+                this.texture2D.internalFormat = InternalFormat.ImageData;
+                this.texture2D.imageData = this.imageData;
+                this.texture2D.colorFormat = ContextConfig.ColorFormat_RGBA8888;
+                context3D.upLoadTextureData(0, this.texture2D);
             }
         }
+
+        public uploadForcing(context3D: Context3DProxy) {
+        }
+
+    
     }
 }

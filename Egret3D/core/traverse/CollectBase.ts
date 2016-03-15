@@ -14,15 +14,15 @@
         * @language zh_CN
         * 可渲染对象列表
         */
-        public renderList: Array<Object3D>;
-        public mousePickList: Array<Object3D>;
-        public rootNode: Scene3D;
-        protected _nodes: Array<Object3D>;
+        public renderList: Array<IRender>;
+        public mousePickList: Array<IRender>;
+        public rootScene: Scene3D;
+        protected _nodes: Array<IRender>;
 
         protected _num: number = 0;
 
      
-        private _tempRootNode: Object3D;
+        private _tempRootNode: IRender;
         private _objDict: { [id: number]: number; } = {};
 
         /**
@@ -30,11 +30,18 @@
         * constructor
         * @param root 渲染根节点
         */
-        constructor(root: Scene3D){
-            this.renderList = new Array<Object3D>();
-            this.mousePickList = new Array<Object3D>();
-            this._nodes = new Array<Object3D>();
-            this.rootNode = root;
+        constructor(){
+            this.renderList = new Array<IRender>();
+            this.mousePickList = new Array<IRender>();
+            this._nodes = new Array<IRender>();
+        }
+
+        public set root(rootScene: Scene3D) {
+            this.rootScene = rootScene;
+        }
+
+        public get root(): Scene3D {
+            return this.rootScene;
         }
                 
         /**
@@ -54,7 +61,7 @@
         * @param obj 要查找的对象
         * @returns 返回对象在渲染列表的下标
         */
-        public findRenderObject(obj: Object3D): number {
+        public findRenderObject(obj: IRender): number {
             for (var i: number = 0; i < this.renderList.length; ++i) {
                 if (this.renderList[i] === obj) {
                     return i;

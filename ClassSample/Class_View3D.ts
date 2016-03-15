@@ -1,4 +1,4 @@
-﻿module egret3d_dev {
+﻿module egret3d {
     export class Class_View3D {
 
         protected _egret3DCanvas: Egret3DCanvas;

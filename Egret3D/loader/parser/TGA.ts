@@ -1,4 +1,4 @@
-﻿module Egret3D {
+﻿module egret3d {
     /**
      * @private 
      */
