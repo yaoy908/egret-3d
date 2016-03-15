@@ -29,7 +29,12 @@
             this._passUsage.fragmentShader.shaderType = Shader.fragment;
 
             if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.color) != -1) {
-                this._passUsage.vertexShader.addUseShaderName("diffuse_vertex");
+                if (animation) {
+                    this._passUsage.vertexShader.addUseShaderName("skeleton_vertex");
+                }
+                else {
+                    this._passUsage.vertexShader.addUseShaderName("diffuse_vertex");
+                }
                 this._passUsage.fragmentShader.addUseShaderName("diffuse_fragment");
             }
             if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.normal) != -1) {
