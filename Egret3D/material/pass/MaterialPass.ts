@@ -290,7 +290,8 @@
                 context3DProxy.uniform4fv(this._passUsage.uniform_PoseMatrix.uniformIndex, animtion.skeletonAnimationController.currentSkeletonMatrixData);
             }
 
-            context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count);
+           context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count);
+            // context3DProxy.drawArrays(this._materialData.drawMode, subGeometry.start, subGeometry.count);
         }
 
 
