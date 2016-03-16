@@ -62,7 +62,7 @@
         "core/context/Shader.ts",
         "core/context/Texture3D.ts",
 
-        "render/IRender",
+        "render/IRender.ts",
         "core/node/Object3D.ts",
         "core/node/Entity.ts",
         "core/node/Mesh.ts",
