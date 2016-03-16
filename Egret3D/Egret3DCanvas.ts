@@ -130,6 +130,7 @@
             View3D._contex3DProxy.viewPort(this.canvas3DRectangle.x, this.canvas3DRectangle.y, this.canvas3DRectangle.width, this.canvas3DRectangle.height);
             View3D._contex3DProxy.setScissorRectangle(this.canvas3DRectangle.x, this.canvas3DRectangle.y, this.canvas3DRectangle.width, this.canvas3DRectangle.height);
 
+            CameraManager.instance.update(this._time, this._delay);
             for (var i: number = 0; i < this.view3DS.length; i++){
                 this.view3DS[i].update(this._time, this._delay);
             }

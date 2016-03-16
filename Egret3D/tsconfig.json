@@ -163,6 +163,9 @@
         "Util/Debug.ts",
         "Util/StringUtil.ts",
 
+        "camera/CameraAnimationController.ts",
+        "camera/CameraManager.ts",
+
         "Camera3D.ts",
         "View3D.ts",
         "Egret3DCanvas.ts"

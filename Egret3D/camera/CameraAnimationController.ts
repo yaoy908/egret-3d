@@ -18,6 +18,14 @@
         * @platform Web,Native
         */
         public cameraAnimationFrames: Array<CameraAnimationFrame> = [];
+        
+        /**
+        * @language zh_CN
+        * 相机动画名字
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public name: string;
 
 
         private _camera: Camera3D;
@@ -72,6 +80,17 @@
             this._playTime = 0;
             this._camera.isController = false;
             this._playing = true;
+        }
+
+        /**
+        * @language zh_CN
+        * 停止播放相机动画
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public stop(): void {
+            this._camera.isController = true;
+            this._playing = false;
         }
 
         /**
