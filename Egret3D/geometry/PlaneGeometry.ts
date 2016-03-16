@@ -15,12 +15,13 @@
      */
     export class PlaneGeometry extends Geometry {
 
+      
         private _segmentsW: number = 1;
         private _segmentsH: number = 1;
         private _width: number = 500.0;
         private _height: number = 500.0;
-        private _scaleU: number = 1; 
-        private _scaleV: number = 1; 
+        private _scaleU: number = 1;
+        private _scaleV: number = 1;
         private _rotation: Vector3D;
 
         /**
@@ -33,7 +34,7 @@
         * @param uScale U缩放
         * @param vScale V缩放
         */
-        constructor(width: number = 500, height: number = 500, segmentsW: number = 1, segmentsH: number = 1, uScale: number = 1, vScale: number = 1 ) {
+        constructor(width: number = 500, height: number = 500, segmentsW: number = 1, segmentsH: number = 1, uScale: number = 1, vScale: number = 1) {
             super();
             this._width = width;
             this._height = height;
@@ -69,7 +70,7 @@
                 for (var xi: number = 0; xi <= this._segmentsW; ++xi) {
                     x = (xi / this._segmentsW - .5) * this._width;
                     y = (yi / this._segmentsH - .5) * this._height;
-                
+
                     this.verticesData[index++] = x;
                     this.verticesData[index++] = 0;
                     this.verticesData[index++] = y;
@@ -87,8 +88,8 @@
                     this.verticesData[index++] = 1;
                     this.verticesData[index++] = 1;
 
-                    this.verticesData[index++] = (xi / this._segmentsW) * this._scaleU ;
-                    this.verticesData[index++] = (1 - yi / this._segmentsH) * this._scaleV ;
+                    this.verticesData[index++] = (xi / this._segmentsW) * this._scaleU;
+                    this.verticesData[index++] = (1 - yi / this._segmentsH) * this._scaleV;
 
                     index += skip;
 
@@ -107,6 +108,12 @@
                     }
                 }
             }
+
+            var subGeometry: SubGeometry = new SubGeometry();
+            subGeometry.geometry = this;
+            subGeometry.start = 0;
+            subGeometry.count = this.indexData.length;
+            this.subGeometrys.push(subGeometry);
         }
     }
 }

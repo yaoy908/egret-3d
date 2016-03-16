@@ -11,11 +11,11 @@
     export class Event3D {
 
         /**
-        * @language zh_CN
-        * EVENT_LOAD_COMPLETE 常量定义 load_complete 事件对象的 type 属性的值。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
+       * @language zh_CN
+       * EVENT_LOAD_COMPLETE 常量定义 load_complete 事件对象的 type 属性的值。
+       * @version Egret 3.0
+       * @platform Web,Native
+       */
         static LOAD_COMPLETE: string = "load_complete";
 
         /**
@@ -48,7 +48,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        static ENTER_FRAME: string = "enter_frame"; 
+        static ENTER_FRAME: string = "enter_frame";
 
         /**
         * @language zh_CN
@@ -56,7 +56,57 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        static RESIZE: string = "resize"; 
+        static RESIZE: string = "resize";
+
+        /**
+        * @language zh_CN
+        * TOUCH_MOVE 常量定义 onTouchMove 事件对象的 type 属性的值。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static TOUCH_MOVE: string = "onTouchMove";
+        /**
+        * @language zh_CN
+        * TOUCH_END 常量定义 onTouchEnd 事件对象的 type 属性的值。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static TOUCH_END: string = "onTouchEnd";
+        /**
+        * @language zh_CN
+        * TOUCH_START 常量定义 onTouchStart 事件对象的 type 属性的值。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static TOUCH_START: string = "onTouchStart";
+        /**
+        * @language zh_CN
+        * MOUSE_CLICK 常量定义 onClick 事件对象的 type 属性的值。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static MOUSE_CLICK: string = "onClick";
+        /**
+        * @language zh_CN
+        * MOUSE_DOWN 常量定义 onMouseDown 事件对象的 type 属性的值。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static MOUSE_DOWN: string = "onMouseDown";
+        /**
+        * @language zh_CN
+        * MOUSE_UP 常量定义 onMouseUp 事件对象的 type 属性的值。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static MOUSE_UP: string = "onMouseUp";
+        /**
+        * @language zh_CN
+        * MOUSE_MOVE 常量定义 onMouseMove 事件对象的 type 属性的值。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static MOUSE_MOVE: string = "onMouseMove";
 
         //----------------------------------------------------
         //----------------------------------------------------
@@ -79,7 +129,7 @@
         * @platform Web,Native
         */
         public target: any;
-      
+
         /**
         * @language zh_CN
         * 3D引擎中的事件的类型
@@ -98,9 +148,9 @@
         */
         public data: string;
 
-        public time: number = 0 ; 
+        public time: number = 0;
 
-        public delay: number = 0; 
+        public delay: number = 0;
 
         public handler: Function;
 

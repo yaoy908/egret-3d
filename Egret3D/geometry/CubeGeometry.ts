@@ -124,7 +124,6 @@
 
 
             var subGeometry: SubGeometry = new SubGeometry();
-
             subGeometry.geometry = this;
             subGeometry.start = 0;
             subGeometry.count = this.indexData.length;

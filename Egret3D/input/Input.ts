@@ -767,6 +767,9 @@
         }
 
         private mouseStart(e: MouseEvent) {
+
+            console.log("mouseStart");
+
             this.mouseX = e.clientX - this.canvas.clientRect.left;
             this.mouseY = e.clientY - this.canvas.clientRect.top;
 

@@ -26,7 +26,7 @@
         * @param segmentsW 宽度分段数
         * @param segmentsH 高度分段数
         */
-        constructor(r: number = 100.0, segmentsW: number = 15, segmentsH: number = 15 ){
+        constructor(r: number = 100.0, segmentsW: number = 15, segmentsH: number = 15) {
             super();
 
             this._radius = r;
@@ -39,17 +39,17 @@
         private buildSphere() {
             this.useVertexFormat(VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 | VertexFormat.VF_UV1);
 
-            var i: number = 0, j: number = 0, triIndex: number = 0 ;
+            var i: number = 0, j: number = 0, triIndex: number = 0;
             var numVerts: number = (this._segmentsH + 1) * (this._segmentsW + 1);
-            var stride: number = this.vertexAttLength ;
+            var stride: number = this.vertexAttLength;
             var skip: number = stride - 9;
 
-            this.verticesData = new Array<number>(numVerts * stride );
-            this.indexData = new Array<number>((this._segmentsH - 1) * this._segmentsW * 6 );
+            this.verticesData = new Array<number>(numVerts * stride);
+            this.indexData = new Array<number>((this._segmentsH - 1) * this._segmentsW * 6);
 
-            var startIndex: number = 0 ;
-            var index: number = 0 ;
-            var comp1: number = 0, comp2: number = 0, t1: number = 0, t2: number = 0 ;
+            var startIndex: number = 0;
+            var index: number = 0;
+            var comp1: number = 0, comp2: number = 0, t1: number = 0, t2: number = 0;
 
             for (j = 0; j <= this._segmentsH; ++j) {
 
@@ -66,46 +66,46 @@
                     var normLen: number = 1 / Math.sqrt(x * x + y * y + z * z);
                     var tanLen: number = Math.sqrt(y * y + x * x);
 
-                        t1 = 0;
-                        t2 = tanLen > .007 ? x / tanLen : 0;
-                        comp1 = -z;
-                        comp2 = y;
+                    t1 = 0;
+                    t2 = tanLen > .007 ? x / tanLen : 0;
+                    comp1 = -z;
+                    comp2 = y;
 
-                        if (i == this._segmentsW) {
+                    if (i == this._segmentsW) {
 
-                            this.verticesData[index++] = this.verticesData[startIndex];
-                            this.verticesData[index++] = this.verticesData[startIndex + 1];
-                            this.verticesData[index++] = this.verticesData[startIndex + 2];
-                       
-                            this.verticesData[index++] = x * normLen;;
-                            this.verticesData[index++] = comp1 * normLen;;
-                            this.verticesData[index++] = comp2 * normLen;;
+                        this.verticesData[index++] = this.verticesData[startIndex];
+                        this.verticesData[index++] = this.verticesData[startIndex + 1];
+                        this.verticesData[index++] = this.verticesData[startIndex + 2];
 
-                            this.verticesData[index++] = tanLen > .007 ? -y / tanLen : 1;
-                            this.verticesData[index++] = t1;
-                            this.verticesData[index++] = t2;
+                        this.verticesData[index++] = x * normLen;;
+                        this.verticesData[index++] = comp1 * normLen;;
+                        this.verticesData[index++] = comp2 * normLen;;
 
-                            this.verticesData[index + 0] = 1.0;
-                            this.verticesData[index + 1] = 1.0;
-                            this.verticesData[index + 2] = 1.0;
-                            this.verticesData[index + 3 ] = 1.0 ;
+                        this.verticesData[index++] = tanLen > .007 ? -y / tanLen : 1;
+                        this.verticesData[index++] = t1;
+                        this.verticesData[index++] = t2;
+
+                        this.verticesData[index + 0] = 1.0;
+                        this.verticesData[index + 1] = 1.0;
+                        this.verticesData[index + 2] = 1.0;
+                        this.verticesData[index + 3] = 1.0;
 
                     } else {
-                            this.verticesData[index++] = x;
-                            this.verticesData[index++] = comp1;
-                            this.verticesData[index++] = comp2;
+                        this.verticesData[index++] = x;
+                        this.verticesData[index++] = comp1;
+                        this.verticesData[index++] = comp2;
 
-                            this.verticesData[index++] = x * normLen;
-                            this.verticesData[index++] = comp1 * normLen;
-                            this.verticesData[index++] = comp2 * normLen;
-                            this.verticesData[index++] = tanLen > .007 ? -y / tanLen : 1;
-                            this.verticesData[index++] = t1;
-                            this.verticesData[index++] = t2;
+                        this.verticesData[index++] = x * normLen;
+                        this.verticesData[index++] = comp1 * normLen;
+                        this.verticesData[index++] = comp2 * normLen;
+                        this.verticesData[index++] = tanLen > .007 ? -y / tanLen : 1;
+                        this.verticesData[index++] = t1;
+                        this.verticesData[index++] = t2;
 
-                            this.verticesData[index] = 1.0;
-                            this.verticesData[index + 1] = 1.0;
-                            this.verticesData[index + 2] = 1.0;
-                            this.verticesData[index + 3 ] = 1.0;
+                        this.verticesData[index] = 1.0;
+                        this.verticesData[index + 1] = 1.0;
+                        this.verticesData[index + 2] = 1.0;
+                        this.verticesData[index + 3] = 1.0;
                     }
 
                     if (i > 0 && j > 0) {
@@ -143,20 +143,27 @@
             }
 
             //var i: number, j: number;
-            var stride: number = 17 ;
+            var stride: number = 17;
             var numUvs: number = (this._segmentsH + 1) * (this._segmentsW + 1) * stride;
             var data: Array<number>;
             var skip: number = stride - 2;
 
 
-            var index: number = 13 ;
+            var index: number = 13;
             for (j = 0; j <= this._segmentsH; ++j) {
                 for (i = 0; i <= this._segmentsW; ++i) {
-                    this.verticesData[index++] = (i / this._segmentsW) ;
+                    this.verticesData[index++] = (i / this._segmentsW);
                     this.verticesData[index++] = (j / this._segmentsH);
                     index += skip;
                 }
             }
+
+
+            var subGeometry: SubGeometry = new SubGeometry();
+            subGeometry.geometry = this;
+            subGeometry.start = 0;
+            subGeometry.count = this.indexData.length;
+            this.subGeometrys.push(subGeometry);
         }
     }
 }
