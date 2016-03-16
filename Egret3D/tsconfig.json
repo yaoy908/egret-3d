@@ -81,7 +81,6 @@
         "core/traverse/Tag.ts",
         "core/traverse/Picker.ts",
 
-
         "data/HashMap.ts",
 
         "geometry/Geometry.ts",
@@ -91,10 +90,6 @@
         "geometry/CylinderGeometry.ts",
         "geometry/PlaneGeometry.ts",
         "geometry/SphereGeometry.ts",
-
-        
-        
-
         
         "input/input.ts",
         "input/OrientationController.ts",
@@ -121,12 +116,13 @@
         "material/pass/MaterialPass.ts",
         "material/pass/ColorPass.ts",
         "material/pass/DiffusePass.ts",
-
+        "material/pass/CubePass.ts",
 
         "material/MaterialBase.ts",
 
         "material/ColorMaterial.ts",
         "material/TextureMaterial.ts",
+        "material/CubeTextureMaterial.ts",
 
         "render/RenderBase.ts",
         "render/DefaultRender.ts",

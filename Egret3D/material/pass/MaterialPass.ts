@@ -157,6 +157,12 @@
                 sampler2D = this._passUsage.sampler2DList[index];
                 sampler2D.uniformIndex = context3DProxy.getUniformLocation(this._passUsage.program3D, sampler2D.varName);
             }
+
+            var sampler3D: GLSL.Sampler2D;
+            for (var index in this._passUsage.sampler3DList) {
+                sampler3D = this._passUsage.sampler3DList[index];
+                sampler3D.uniformIndex = context3DProxy.getUniformLocation(this._passUsage.program3D, sampler3D.varName);
+            }
         }
 
         public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation) {
@@ -213,7 +219,9 @@
                 this._materialData.materialSourceData[15] = this._materialData.normalPower; //保留
             }
 
-            context3DProxy.uniform1fv(this._passUsage.uniform_materialSource.uniformIndex, this._materialData.materialSourceData);
+            if (this._passUsage.uniform_materialSource) {
+                context3DProxy.uniform1fv(this._passUsage.uniform_materialSource.uniformIndex, this._materialData.materialSourceData);
+            }
 
             this.resetTexture();
             //texture 2D
@@ -236,6 +244,8 @@
             var sampler3D: GLSL.Sampler3D;
             for (var index in this._passUsage.sampler3DList) {
                 sampler3D = this._passUsage.sampler3DList[index];
+                sampler3D.texture.upload(context3DProxy);
+                context3DProxy.setCubeTextureAt(sampler3D.activeTextureIndex, sampler3D.uniformIndex, sampler3D.index, sampler3D.texture.texture3D);
             }
 
             var i: number = 0;
@@ -269,8 +279,12 @@
             this.normalMatrix.transpose();
             //this.normalMatrix.appendScale(1,1,1);
 
-            context3DProxy.uniformMatrix4fv(this._passUsage.uniform_normalMatrix.uniformIndex, false, this.normalMatrix.rawData);
-            context3DProxy.uniform3f(this._passUsage.uniform_eyepos.uniformIndex, camera3D.x, camera3D.y, camera3D.z);
+            if (this._passUsage.uniform_normalMatrix) {
+                context3DProxy.uniformMatrix4fv(this._passUsage.uniform_normalMatrix.uniformIndex, false, this.normalMatrix.rawData);
+            }
+            if (this._passUsage.uniform_eyepos) {
+                context3DProxy.uniform3f(this._passUsage.uniform_eyepos.uniformIndex, camera3D.x, camera3D.y, camera3D.z);
+            }
 
             if (animtion) {
                 context3DProxy.uniform4fv(this._passUsage.uniform_PoseMatrix.uniformIndex, animtion.skeletonAnimationController.currentSkeletonMatrixData);
