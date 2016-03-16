@@ -33,7 +33,29 @@
         private _mouseDown: boolean = false;
         private _mouseRightDown: boolean = false;
         private _keyArray: Array<boolean> = new Array<boolean>();
-        constructor(targetObject: Object3D = null, lookAtObject: Object3D = null, panAngle: number = 0, tiltAngle: number = 90, distance: number = 100, minTiltAngle: number = -90, maxTiltAngle: number = 90, minPanAngle: number = NaN, maxPanAngle: number = NaN, steps: number = 8, yFactor: number = 2, wrapPanAngle: boolean = false) {
+
+        
+        /**
+        * @language zh_CN
+        * @param targetObject 控制的目标相机，目标对象
+        * @param lookAtObject 相机看向的对象
+        * @param panAngle 相机看向的对象
+        * @param tiltAngle 相机看向的对象
+        * @param distance 相机看向的对象
+        * @param minTiltAngle 相机看向的对象
+        * @param maxTiltAngle 相机看向的对象
+        * @param minPanAngle 相机看向的对象
+        * @param maxPanAngle 相机看向的对象
+        * @param steps 相机看向的对象
+        * @param yFactor 相机看向的对象
+        * @param wrapPanAngle 相机看向的对象
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor(targetObject: Object3D = null, lookAtObject: Object3D = null,
+            panAngle: number = 0, tiltAngle: number = 90, distance: number = 100,
+            minTiltAngle: number = -90, maxTiltAngle: number = 90, minPanAngle: number = NaN,
+            maxPanAngle: number = NaN, steps: number = 8, yFactor: number = 2, wrapPanAngle: boolean = false) {
             super(targetObject, lookAtObject);
 
             this.distance = distance;

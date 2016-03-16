@@ -366,10 +366,9 @@
                     this._data = skeletonAnimationClip;
                     break;
                 case URLLoader.DATAFORMAT_ECA:
+                    var cameraAnimationController:CameraAnimationController = ECAParser.parse(this._xhr.response);
 
-                    ///var cameraAnimationController:CameraAnimationController = ECAParser.parse(this._xhr.response);
-
-                    //this._data = cameraAnimationController;
+                    this._data = cameraAnimationController;
                     break;
                 case URLLoader.DATAFORMAT_PVR:
                     //var pvr:PVR = PVRParser.parse(this._xhr.response);
@@ -396,7 +395,6 @@
             Debug.instance.trace("loaderror, url: ", this._url);
             console.log("load error", event);
         }
-
 
         private getXHR():any {
             var xhr:any = null;

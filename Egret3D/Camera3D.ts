@@ -127,6 +127,8 @@
 
         private _tempQuat: Quaternion = new Quaternion();
 
+        protected _animation: any = [];
+
         /**
          * @language zh_CN        
          * constructor
@@ -134,9 +136,10 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        constructor(cameraType: CameraType = CameraType.perspective ) {
+        constructor(cameraType: CameraType = CameraType.perspective) {
             super();
             this.cameraType = cameraType;
+            CameraManager.instance.addCamera(this);
         }
 
         /**
@@ -465,6 +468,51 @@
          */
         public isVisibleToCamera(renderItem: IRender): boolean {
             return renderItem.bound.inBound(this.frustum);
+        }
+        
+        /**
+         * @language zh_CN
+         * 增加相机动画
+         * @param name 相机动画名字
+         * @param ani 相机动画
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public addAnimation(name: string, ani: CameraAnimationController) {
+            this._animation[name] = ani;
+        }
+        
+        /**
+        * @language zh_CN
+        * 播放某个动画
+        * 根据动画名字来播放，指定摄像机，并且控制动画是否循环播放
+        * @param name 动画名
+        * @param isLoop 是否循环
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public play(name: string, isLoop: boolean = false) {
+            if (this._animation[name]) {
+                this._animation[name].bindCamera(this);
+                this._animation[name].play(isLoop);
+            }
+        }
+
+        /**
+        * @private
+        * @language zh_CN
+        * 当前对象数据更新
+        * @private
+        * @param camera 当前渲染的摄相机
+        * @param time 当前时间
+        * @param delay 每帧时间间隔
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public update(time: number, delay: number, camera: Camera3D) {
+            for (var key in this._animation) {
+                this._animation[key].update(time, delay);
+            }
         }
     }
 } 
