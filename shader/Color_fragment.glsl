@@ -25,6 +25,7 @@ vec3 normal  ;
 vec3 eyedir  ;
 vec4 light ;
 vec4 ambient;
+vec4 diffuseTex;
 void main() {
 	
 	MaterialSource materialSource ; 
@@ -56,7 +57,8 @@ void main() {
 	endColor = vec4(materialSource.diffuse,materialSource.alpha);
     eyedir = varying_eyedir.xyz - varying_pos.xyz ; 
 
-	//endColor = vec4(0.1,0.0,0.0,1.0);
+	diffuseTex = vec4(1.0,1.0,1.0,1.0);
+	ambient = vec4(1.0,1.0,1.0,1.0);
 }
 
 
