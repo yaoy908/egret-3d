@@ -18,8 +18,8 @@
             this.cameraCrl = new LookAtController(this.view1.camera3D, new Object3D());
             this.cameraCrl.distance = 1000;
 
-            //var texLoad: URLLoader = new URLLoader("resource/chahu/Plane001.esm");
-            //texLoad.onLoadComplete = (e) => this.ontextload(e);
+            var texLoad: URLLoader = new URLLoader("resource/chahu\\Plane001.esm");
+            texLoad.onLoadComplete = (e) => this.ontextload(e);
 
 
             var cubeTexture: CubeTexture = CubeTexture.createCubeTexture(

@@ -1,4 +1,4 @@
-const int max_sportLight = 0 ;
+const int max_sportLight = 1 ;
 uniform float uniform_sportLightSource[14*max_sportLight] ;
 
 struct SpotLight{
@@ -27,6 +27,8 @@ void calculateSpotLight( MaterialSource materialSource ){
 		L.linearAttenuation = uniform_sportLightSource[i*max_sportLight+12]; 
 		L.quadrAttenuation = uniform_sportLightSource[i*max_sportLight+13]; 
 
+		ambient.xyz += L.spotColor.xyz ;
+
 		ld = L.lightPos - varying_pos.xyz ; 
 		ndir = normalize(ld); 
 		vec3 D = normalize(L.spotDirection); 
@@ -37,14 +39,16 @@ void calculateSpotLight( MaterialSource materialSource ){
 			NdotL = max(dot(N,ndir),0.0); 
 			lambertTerm = 1.0 /  (dist * dist)  ; 
 			lambertTerm = lambertTerm * NdotL ; 
+
 			vec3 color = lambertTerm * L.spotColor.xyz ; 
-			lambertTerm = (1.0 - (1.0 - SpotFactor) * 1.0/(1.0 - L.spotCosCutoff)); 
-			light.xyz = color * lambertTerm ; 
 
 			if(lambertTerm>0.0){
 				vReflect = normalize(2.0*NdotL*N - ndir); 
 				specular.xyz += pow( clamp( dot(vReflect,eyedir) ,0.0,1.0),materialSource.shininess )* L.spotColor ;	
 			}
+
+			lambertTerm = (1.0 - (1.0 - SpotFactor) * 1.0/(1.0 - L.spotCosCutoff)); 
+			light.xyz = color * lambertTerm ; 
 		}
   } 
 }

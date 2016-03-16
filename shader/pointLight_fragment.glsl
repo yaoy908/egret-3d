@@ -17,14 +17,16 @@ void calculatePointLight(MaterialSource materialSource){
 		L.color = vec3(uniform_pointLightSource[i*7+3],uniform_pointLightSource[i*7+4],uniform_pointLightSource[i*7+5]);
 		L.intensity = uniform_pointLightSource[i*7+6];
 
+		ambient.xyz += L.color.xyz ;
 		ldir = L.lightPos - varying_pos.xyz ;
 		ndir = normalize(ldir);
 		dist = length(ndir);
-		NdotL = clamp(dot(N,ndir),0.0,1.0);
-		lambertTerm = ( L.intensity  ) / ( dist * dist )  ;
-		light.xyz = lambertTerm * (NdotL * L.color.xyz)  ;
+		NdotL = clamp(dot( N , ndir ),0.0,1.0);
 
-		if(lambertTerm>=0.0){
+		lambertTerm = ( L.intensity  ) / ( dist * dist ) *NdotL ;
+		light.xyz = lambertTerm *  L.color.xyz  ;
+
+		if(lambertTerm>0.0){
 		  vReflect = normalize(2.0*NdotL*N - ndir); 
 		  specular.xyz += L.color * pow( clamp( dot(vReflect,normalize(eyedir)) ,0.0,1.0), materialSource.shininess ) ;	
 		}

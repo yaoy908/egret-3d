@@ -21,6 +21,7 @@ varying vec2 varying_uv0;
 
 vec4 endColor ;
 vec4 diffuse  ;
+vec4 diffuseTex  ;
 vec4 specular ;
 vec3 normal  ;
 vec3 eyedir  ;
@@ -52,13 +53,10 @@ void main() {
 	materialSource.diffuse.xyz = materialSource.diffuse * materialSource.diffusePower ;
 	materialSource.specular.xyz = materialSource.specular * materialSource.specularPower ;
 	materialSource.ambient.xyz = materialSource.ambient * materialSource.ambientPower ;
-	normal = varying_eyeNormal;
-	endColor = vec4(materialSource.diffuse,materialSource.alpha);
-	diffuse = texture2D(diffuseTexture , varying_uv0 );
-	endColor = endColor;
-    eyedir = varying_eyedir.xyz - varying_pos.xyz ; 
 
-	//endColor = vec4(0.1,0.0,0.0,1.0);
+	normal = varying_eyeNormal;
+	diffuseTex = texture2D(diffuseTexture , varying_uv0 );
+    eyedir = varying_eyedir.xyz - varying_pos.xyz ; 
 }
 
 
