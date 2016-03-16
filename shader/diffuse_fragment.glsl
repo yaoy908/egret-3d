@@ -54,6 +54,7 @@ void main() {
 	materialSource.specular.xyz = materialSource.specular * materialSource.specularPower ;
 	materialSource.ambient.xyz = materialSource.ambient * materialSource.ambientPower ;
 
+	ambient = vec4(1.0,1.0,1.0,1.0);
 	normal = varying_eyeNormal;
 	diffuseTex = texture2D(diffuseTexture , varying_uv0 );
     eyedir = varying_eyedir.xyz - varying_pos.xyz ; 

@@ -17,7 +17,7 @@ void calculatePointLight(MaterialSource materialSource){
 		L.color = vec3(uniform_pointLightSource[i*7+3],uniform_pointLightSource[i*7+4],uniform_pointLightSource[i*7+5]);
 		L.intensity = uniform_pointLightSource[i*7+6];
 
-		ambient.xyz += L.color.xyz ;
+		ambient.xyz *= L.color.xyz ;
 		ldir = L.lightPos - varying_pos.xyz ;
 		ndir = normalize(ldir);
 		dist = length(ndir);

@@ -27,7 +27,7 @@ void calculateSpotLight( MaterialSource materialSource ){
 		L.linearAttenuation = uniform_sportLightSource[i*max_sportLight+12]; 
 		L.quadrAttenuation = uniform_sportLightSource[i*max_sportLight+13]; 
 
-		ambient.xyz += L.spotColor.xyz ;
+		ambient.xyz *= L.spotColor.xyz ;
 
 		ld = L.lightPos - varying_pos.xyz ; 
 		ndir = normalize(ld); 

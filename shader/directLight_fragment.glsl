@@ -22,7 +22,7 @@ void calculateDirectLight( MaterialSource materialSource ){
 		  L.intensity = uniform_directLightSource[i*7+9]; 
 		  L.halfIntensity = uniform_directLightSource[i*7+10]; 
       
-		  ambient.xyz += L.diffuse.xyz ;
+		  ambient.xyz *= L.diffuse.xyz ;
 		  ldir = L.direction ;       
 		  ndir = normalize(L.direction) ; 
 		  NdotL = clamp(dot( N , ndir ),0.0,1.0);
