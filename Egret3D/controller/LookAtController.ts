@@ -99,7 +99,7 @@
 
 
         private mouseWheel() {
-            this.setEyesLength(this._eyesLength - Input.instance.wheelDelta * 0.1);
+            this.distance = this._eyesLength - Input.instance.wheelDelta * 0.1;
         }
 
         private mouseMove() {
@@ -182,12 +182,24 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public setEyesLength(length: number) {
+        public set distance(length: number) {
 
             this._eyesLength = length;
             if (this._eyesLength < 1) {
                 this._eyesLength = 1;
             }
+        }
+
+        
+        /**
+        * @language zh_CN
+        * 得到目标和相机的距离
+        * @returns number 距离
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get distance() :number{
+            return this._eyesLength;
         }
         
         /**
@@ -200,6 +212,18 @@
         public set rotationX(x: number) {
             this._rotaAngle.x = x;
         }
+
+
+        /**
+        * @language zh_CN
+        * 得到相机x轴旋转
+        * @returns x 旋转角度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get rotationX(): number {
+            return this._rotaAngle.x;
+        }
         
         /**
         * @language zh_CN
@@ -211,7 +235,18 @@
         public set rotationY(y: number) {
             this._rotaAngle.y = y;
         }
-        
+
+        /**
+        * @language zh_CN
+        * 得到相机x轴旋转
+        * @returns y 旋转角度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get rotationY(): number {
+            return this._rotaAngle.y;
+        }
+
         /**
         * @language zh_CN
         * 设置相机z轴旋转
@@ -221,6 +256,17 @@
         */
         public set rotationZ(z: number) {
             this._rotaAngle.z = z;
+        }
+
+        /**
+        * @language zh_CN
+        * 得到相机x轴旋转
+        * @returns z 旋转角度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get rotationZ(): number {
+            return this._rotaAngle.z;
         }
 
         /**

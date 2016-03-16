@@ -41,8 +41,10 @@ void calculateSpotLight( MaterialSource materialSource ){
 			lambertTerm = (1.0 - (1.0 - SpotFactor) * 1.0/(1.0 - L.spotCosCutoff)); 
 			light.xyz = color * lambertTerm ; 
 
-			vReflect = normalize(2.0*NdotL*N - ndir); 
-			specular.xyz += pow( clamp( dot(vReflect,eyedir) ,0.0,1.0),materialSource.shininess )* L.spotColor ;	
+			if(lambertTerm>0.0){
+				vReflect = normalize(2.0*NdotL*N - ndir); 
+				specular.xyz += pow( clamp( dot(vReflect,eyedir) ,0.0,1.0),materialSource.shininess )* L.spotColor ;	
+			}
 		}
   } 
 }

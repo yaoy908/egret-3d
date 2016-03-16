@@ -54,6 +54,9 @@
        * @platform Web,Native
        */
         protected resetTexture() {
+            if (this._materialData.textureChange == false) {
+                return;
+            }
             //--------texture----------------
             var sampler2D: GLSL.Sampler2D;
             for (var index in this._passUsage.sampler2DList) {
@@ -141,8 +144,6 @@
             this._passUsage.fragmentShader.shader = this._passUsage.fragmentShader.getShader(this._passUsage);
             this._passUsage.program3D = ShaderPool.getProgram(this._passUsage.vertexShader.shader.id, this._passUsage.fragmentShader.shader.id);
 
-            this.resetTexture();
-
             for (var property in this._passUsage) {
                 if ((<string>property).indexOf("uniform") != -1) { 
                     if (this._passUsage[property]) {
@@ -214,6 +215,7 @@
 
             context3DProxy.uniform1fv(this._passUsage.uniform_materialSource.uniformIndex, this._materialData.materialSourceData);
 
+            this.resetTexture();
             //texture 2D
             var sampler2D: GLSL.Sampler2D;
             for (var index in this._passUsage.sampler2DList) {
@@ -221,7 +223,7 @@
                 sampler2D.texture.upload(context3DProxy);
                 context3DProxy.setTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index, sampler2D.texture.texture2D );
                 if (this._materialData.materialDataNeedChange) {
-                    var min_filter: number = this._materialData.smooth ? Context3DProxy.gl.LINEAR_MIPMAP_LINEAR : Context3DProxy.gl.LINEAR;
+                    var min_filter: number = (this._materialData.smooth && sampler2D.texture.texture2D.useMipmap) ? Context3DProxy.gl.LINEAR_MIPMAP_LINEAR : Context3DProxy.gl.LINEAR;
                     var mag_filter: number = this._materialData.smooth ? Context3DProxy.gl.LINEAR : Context3DProxy.gl.LINEAR;
             
                     var wrap_u_filter: number = this._materialData.repeat ? Context3DProxy.gl.REPEAT : Context3DProxy.gl.CLAMP_TO_EDGE;

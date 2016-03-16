@@ -24,6 +24,11 @@
         "anim/skeletonAnimation/SkeletonAnimation.ts",
         "anim/skeletonAnimation/SkeletonAnimationClip.ts",
 
+        "audio/Channel.ts",
+        "audio/Channel3d.ts",
+        "audio/Sound.ts",
+        "audio/AudioManager.ts",
+
         "geom/UV.ts",
         "geom/Point.ts",
         "geom/Vector3D.ts",

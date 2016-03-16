@@ -424,10 +424,9 @@
             var rgbaData = getTgaRGBA(header.width, header.height, result.pixel_data, result.palettes);
 
             var texture: TGATexture = new TGATexture();
-            texture.texture2D = new Texture2D();
-            texture.texture2D.internalFormat = InternalFormat.PixelArray;
-            texture.texture2D.colorFormat = ContextConfig.ColorFormat_RGBA8888;
-            texture.texture2D.mimapData.push(new MipmapData(rgbaData, header.width, header.height));
+            texture.internalFormat = InternalFormat.PixelArray;
+            texture.colorFormat = ContextConfig.ColorFormat_RGBA8888;
+            texture.mimapData.push(new MipmapData(rgbaData, header.width, header.height));
             return texture;
         }
     }

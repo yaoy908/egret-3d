@@ -187,24 +187,22 @@
             }
 
             var texture: DDSTexture = new DDSTexture();
-
-            texture.texture2D = new Texture2D();
-
+            
             if (useSoftwareSolution) {
-                texture.texture2D.internalFormat = InternalFormat.PixelArray;
-                texture.texture2D.colorFormat = ContextConfig.ColorFormat_RGBA8888;
+                texture.internalFormat = InternalFormat.PixelArray;
+                texture.colorFormat = ContextConfig.ColorFormat_RGBA8888;
             }
             else {
-                texture.texture2D.internalFormat = InternalFormat.CompressData;
+                texture.internalFormat = InternalFormat.CompressData;
                 if (FOURCC_DXT1 == fourCC)
-                    texture.texture2D.colorFormat = ContextConfig.ColorFormat_DXT1_RGB;
+                    texture.colorFormat = ContextConfig.ColorFormat_DXT1_RGB;
                 else if (FOURCC_DXT3 == fourCC)
-                    texture.texture2D.colorFormat = ContextConfig.ColorFormat_DXT3_RGBA;
+                    texture.colorFormat = ContextConfig.ColorFormat_DXT3_RGBA;
                 else if (FOURCC_DXT5 == fourCC)
-                    texture.texture2D.colorFormat = ContextConfig.ColorFormat_DXT5_RGBA;
+                    texture.colorFormat = ContextConfig.ColorFormat_DXT5_RGBA;
             }
             
-            texture.texture2D.mimapData = dds.mipmaps;
+            texture.mimapData = dds.mipmaps;
             return texture;
         }
        

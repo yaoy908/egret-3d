@@ -223,9 +223,7 @@
 
             if (texture.internalFormat == InternalFormat.ImageData) {
                 Context3DProxy.gl.pixelStorei(Context3DProxy.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
-
                 Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, 0, Context3DProxy.gl.RGBA, Context3DProxy.gl.RGBA, Context3DProxy.gl.UNSIGNED_BYTE, texture.imageData);
-                Context3DProxy.gl.generateMipmap(Context3DProxy.gl.TEXTURE_2D);
             }
             else if (texture.internalFormat == InternalFormat.CompressData) {
                 this.upLoadCompressedTexture2D(mipLevel, texture);
@@ -237,6 +235,7 @@
 
             if (texture.useMipmap)
                 Context3DProxy.gl.generateMipmap(Context3DProxy.gl.TEXTURE_2D);
+
             Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, Context3DProxy.gl.LINEAR_MIPMAP_LINEAR);
             Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MAG_FILTER, Context3DProxy.gl.LINEAR);
             Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_S, Context3DProxy.gl.REPEAT);
@@ -250,7 +249,7 @@
         * @param texture
         */
         public upLoadCompressedTexture2D(mipLevel: number, texture: Texture2D) {
-            Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture.texture);
+            //Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture.texture);
             Context3DProxy.gl.compressedTexImage2D(Context3DProxy.gl.TEXTURE_2D, mipLevel, texture.colorFormat, texture.mimapData[mipLevel].width, texture.mimapData[mipLevel].height, texture.border, texture.mimapData[mipLevel].data);
         }
 
