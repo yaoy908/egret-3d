@@ -36,8 +36,6 @@
             eventManager.onInit();
             this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
-            this._egret3DCanvas.removeEventListener(Event3D.ENTER_FRAME, this, this.update);
-
         }
 
         private onMouseDown(code: number): void {
