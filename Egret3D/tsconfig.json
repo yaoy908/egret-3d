@@ -14,7 +14,7 @@
         "events/Event3D.ts",
         "events/MouseEvent3D.ts",
         "events/EventDispatcher.ts",
-        "events/Mouse3DManager.ts",
+        "events/EventManager.ts",
 
         "anim/IAnimation.ts",
         "anim/AnimNodeBase.ts",

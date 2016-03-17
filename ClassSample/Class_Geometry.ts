@@ -26,7 +26,7 @@
             this.cube.material.lightGroup = lights;
 
             this._egret3DCanvas.start();
-            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, (e) => this.update(e));
+            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
 
         }
 

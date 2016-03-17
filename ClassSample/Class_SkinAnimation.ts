@@ -40,7 +40,7 @@
             this.cameraCtl.rotationX = 60;
 
             this._egret3DCanvas.start();
-            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, (e) => this.update(e));
+            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
         }
 
         protected mat: TextureMaterial;
@@ -69,8 +69,8 @@
                 loadtex.onLoadComplete = (e: URLLoader) => this.onLoadTexture(e, mat, "Mon_04");
                 var load: URLLoader = new URLLoader("resource/laohu/Bonezero.eam");
                 load.onLoadComplete = (e: URLLoader) => this.onAnimation(e, "Bonezero", mesh);
-            } 
-          
+            }
+
         }
 
         protected onLoadTexture(e: URLLoader, mat: TextureMaterial, name: string) {

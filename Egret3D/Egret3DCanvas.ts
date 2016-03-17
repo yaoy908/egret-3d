@@ -1,7 +1,7 @@
 ﻿module egret3d {
     export class Egret3DCanvas extends EventDispatcher {
         static context3DProxy: Context3DProxy;
- 
+
         public clientRect: ClientRect;
         private canvas3DRectangle: Rectangle = new Rectangle();
 
@@ -45,7 +45,7 @@
             if (!Context3DProxy.gl)
                 alert("you drivers not suport webgl");
 
-            Egret3DCanvas.context3DProxy .register();
+            Egret3DCanvas.context3DProxy.register();
             console.log("this.context3D ==>", Context3DProxy.gl);
 
             this.clientRect = this.canvas.getBoundingClientRect();
@@ -94,11 +94,14 @@
         public get height(): number {
             return this.canvas3DRectangle.height;
         }
-     
+
+        public get view3Ds(): Array<View3D> {
+            return this.view3DS;
+        }
 
         public addView3D(view3D: View3D) {
             var index: number = this.view3DS.indexOf(view3D);
-            if (index==-1)
+            if (index == -1)
                 this.view3DS.push(view3D);
         }
 
@@ -121,7 +124,7 @@
 
             this._enterFrameEvent3D.time += this._time;
             this._enterFrameEvent3D.delay = this._delay;
-            this.dispatchEvent( this._enterFrameEvent3D );
+            this.dispatchEvent(this._enterFrameEvent3D);
 
             Context3DProxy.gl.enable(ContextConfig.BLEND);
             Context3DProxy.gl.enable(ContextConfig.CULL_FACE);
@@ -131,7 +134,7 @@
             View3D._contex3DProxy.setScissorRectangle(this.canvas3DRectangle.x, this.canvas3DRectangle.y, this.canvas3DRectangle.width, this.canvas3DRectangle.height);
 
             CameraManager.instance.update(this._time, this._delay);
-            for (var i: number = 0; i < this.view3DS.length; i++){
+            for (var i: number = 0; i < this.view3DS.length; i++) {
                 this.view3DS[i].update(this._time, this._delay);
             }
 
@@ -146,7 +149,7 @@
         * @param canvasRec
         * @event call
         */
-        private resize(x:number,y:number,width:number,height:number) {
+        private resize(x: number, y: number, width: number, height: number) {
             this.canvas3DRectangle.x = x;
             this.canvas3DRectangle.y = y;
             this.canvas3DRectangle.width = width;
