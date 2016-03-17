@@ -44,6 +44,7 @@
         }
 
         public uploadForcing(context3D: Context3DProxy) {
+            context3D.upLoadTextureData(0, this.texture2D);
         }
     }
 }

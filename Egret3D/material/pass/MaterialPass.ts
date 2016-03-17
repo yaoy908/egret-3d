@@ -53,10 +53,7 @@
        * @version Egret 3.0
        * @platform Web,Native
        */
-        protected resetTexture() {
-            if (this._materialData.textureChange == false) {
-                return;
-            }
+        protected resetTexture(context3DProxy: Context3DProxy) {
             //--------texture----------------
             var sampler2D: GLSL.Sampler2D;
             for (var index in this._passUsage.sampler2DList) {
@@ -223,7 +220,9 @@
                 context3DProxy.uniform1fv(this._passUsage.uniform_materialSource.uniformIndex, this._materialData.materialSourceData);
             }
 
-            this.resetTexture();
+            if (this._materialData.textureChange) {
+                this.resetTexture(context3DProxy);
+            }
             //texture 2D
             var sampler2D: GLSL.Sampler2D;
             for (var index in this._passUsage.sampler2DList) {
