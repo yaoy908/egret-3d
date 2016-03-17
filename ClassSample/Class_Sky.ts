@@ -36,7 +36,7 @@
             this.view1.addChild3D(sky);
 
             this._egret3DCanvas.start();
-            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, (e) => this.update(e));
+            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
         }
 
         protected ontextload(e: URLLoader) {

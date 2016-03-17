@@ -24,10 +24,10 @@
             this.ctl = new HoverController(view1.camera3D);
 
             this._egret3DCanvas.start();
-            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, (e) => this.update(e));
+            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
         }
 
-        protected onLoad(e: URLLoader, name:string) {
+        protected onLoad(e: URLLoader, name: string) {
             var mat: ColorMaterial = new ColorMaterial(0xcccccc);
             var mesh: Mesh = new Mesh(e.data, mat);
             this.view1.addChild3D(mesh);
@@ -39,7 +39,7 @@
             lights.addLight(dirLight);
             mesh.material.lightGroup = lights;
 
-            this.box = mesh; 
+            this.box = mesh;
         }
 
         public update(e: Event3D) {
