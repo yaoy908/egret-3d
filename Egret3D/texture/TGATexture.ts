@@ -38,8 +38,16 @@
 
                 this.texture2D.internalFormat = this.internalFormat;
                 this.texture2D.colorFormat = this.colorFormat;
-                this.texture2D.mimapData = this.mimapData;                
-                context3D.upLoadTextureData(0, this.texture2D);
+                this.texture2D.mimapData = this.mimapData;         
+
+                if (this.mimapData && this.mimapData.length > 0) {
+                    for (var i: number = 0; i < this.mimapData.length; i++) {
+                        context3D.upLoadTextureData(i, this.texture2D);
+                    }
+                }
+                else {
+                    context3D.upLoadTextureData(0, this.texture2D);
+                }
             }
         }
 
