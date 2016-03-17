@@ -67,27 +67,14 @@
 
                 var loadtex: URLLoader = new URLLoader("resource/laohu/Mon_04.png");
                 loadtex.onLoadComplete = (e: URLLoader) => this.onLoadTexture(e, mat, "Mon_04");
-
-
-                var loadtex2: URLLoader = new URLLoader("resource/laohu/hero_27.png");
-                loadtex2.onLoadComplete = (e: URLLoader) => this.onLoadTexture(e, mat, "hero_27");
-
                 var load: URLLoader = new URLLoader("resource/laohu/Bonezero.eam");
                 load.onLoadComplete = (e: URLLoader) => this.onAnimation(e, "Bonezero", mesh);
             } 
           
         }
 
-        protected tex1;
-        protected tex2;
-
-        protected onLoadTexture(e: URLLoader, mat: TextureMaterial, name:string) {
-            if (name == "Mon_04") {
-                this.tex1 = e.data;
-            }
-            else {
-                this.tex2 = e.data;
-            }
+        protected onLoadTexture(e: URLLoader, mat: TextureMaterial, name: string) {
+            mat.diffuseTexture = e.data;
         }
 
         protected onAnimation(e: URLLoader, name: string, mesh: Mesh) {
@@ -97,26 +84,8 @@
             mesh.animation.skeletonAnimationController.play(name);
         }
 
-        protected aaa: number = 0;
-
         public update(e: Event3D) {
             this.cameraCtl.update();
-            if (this.mat) {
-
-                this.aaa++;
-
-                if (this.aaa % 2 == 0) {
-                    if (this.tex1) {
-                        this.mat.diffuseTexture = this.tex1;
-                    }
-                }
-                else {
-                    if (this.tex2) {
-                        this.mat.diffuseTexture = this.tex2;
-                    }
-                }
-            }
-
         }
     }
 }

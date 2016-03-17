@@ -290,7 +290,6 @@
             }
 
            context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count);
-            // context3DProxy.drawArrays(this._materialData.drawMode, subGeometry.start, subGeometry.count);
         }
 
 
