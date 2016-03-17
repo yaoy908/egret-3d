@@ -1,5 +1,5 @@
 ﻿module egret3d {
-            
+
     /**
     * @language zh_CN
     * @class egret3d.EventDispatcher
@@ -13,7 +13,7 @@
          * @language zh_CN
          * @private 
          */
-        protected listeners: any = {} ;
+        protected listeners: any = {};
 
         /**
          * @language zh_CN
@@ -28,7 +28,7 @@
                 for (var i: number = 0; i < this.listeners[event3D.type].length; i++) {
                     var listener: EventListener = this.listeners[event3D.type][i];
                     try {
-                        listener.handler(event3D);
+                        listener.handler.call(listener.thisObject, event3D);
                     } catch (error) {
                         if (window.console) {
                             console.error(error.stack);
@@ -49,12 +49,11 @@
          * @version Egret 3.0
          * @platform Web,Native
         */
-        public addEventListener(type: string, callback: Function, priolity: number = 0): void {
+        public addEventListener(type: string, thisObject: any, callback: Function, priolity: number = 0): void {
             if (this.listeners[type] == null) {
                 this.listeners[type] = [];
             }
-
-            this.listeners[type].push(new EventListener(type, callback, priolity));
+            this.listeners[type].push(new EventListener(type, thisObject, callback, priolity));
             this.listeners[type].sort(function (listener1: EventListener, listener2: EventListener) {
                 return listener2.priolity - listener1.priolity;
             });
@@ -67,12 +66,13 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public removeEventListener(type: string, callback: Function): void {
-            if (this.hasEventListener(type, callback)) {
+        public removeEventListener(type: string, thisObject: any, callback: Function): void {
+            if (this.hasEventListener(type, thisObject, callback)) {
                 for (var i: number = 0; i < this.listeners[type].length; i++) {
                     var listener: EventListener = this.listeners[type][i];
-                    if (listener.equalCurrentListener(type, callback)) {
+                    if (listener.equalCurrentListener(type, thisObject, callback)) {
                         listener.handler = null;
+                        listener.thisObject = null;
                         this.listeners[type].splice(i, 1);
                         return;
                     }
@@ -85,7 +85,7 @@
                 for (var i: number = 0; i < this.listeners[eventType].len; i++) {
                 }
             }
-               
+
         }
 
         /**
@@ -120,11 +120,11 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public hasEventListener(type: string, callback: Function): boolean {
+        public hasEventListener(type: string, thisObject: any, callback: Function): boolean {
             if (this.listeners[type] == null) return false;
             for (var i: number = 0; i < this.listeners[type].length; i++) {
                 var listener: EventListener = this.listeners[type][i];
-                if (listener.equalCurrentListener(type, callback)) {
+                if (listener.equalCurrentListener(type, thisObject, callback)) {
                     return true;
                 }
             }
@@ -152,7 +152,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(public type: string = null, public handler: Function = null, public priolity: number = 0) {
+        constructor(public type: string = null, public thisObject: any = null, public handler: Function = null, public priolity: number = 0) {
         }
 
         /**
@@ -163,8 +163,8 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public equalCurrentListener(type: string, handler: Function): boolean {
-            if (this.type == type && this.handler == handler) {
+        public equalCurrentListener(type: string, thisObject: any, handler: Function): boolean {
+            if (this.type == type && this.thisObject == thisObject && this.handler == handler) {
                 return true;
             }
             return false;
@@ -173,5 +173,5 @@
 
 
 
-  
+
 }

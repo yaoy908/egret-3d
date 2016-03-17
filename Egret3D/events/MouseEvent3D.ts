@@ -10,19 +10,33 @@
    * @platform Web,Native
    */
     export class MouseEvent3D extends Event3D{
-        static MOUSE_MOVE: string = "MOUSE_MOVE";
-        static MOUSE_OVER: string = "MOUSE_OVER";
-        static MOUSE_OUT: string = "MOUSE_OUT";
-
-        static MOUSE_LEFT_CLICK: string = "MOUSE_LEFT_CLICK";
-        static MOUSE_LEFT_UP: string = "MOUSE_LEFT_UP";
-        static MOUSE_LEFT_DOWN: string = "MOUSE_LEFT_DOWN";
-
-        static MOUSE_RIGHT_CLICK: string = "MOUSE_RIGHT_CLICK";
-        static MOUSE_RIGHT_UP: string = "MOUSE_RIGHT_UP";
-        static MOUSE_RIGHT_DOWN: string = "MOUSE_RIGHT_DOWN";
-
-        static TOUCH_START: string = "TOUCH_START";
-        static TOUCH_END: string = "TOUCH_END";
+       /**
+        * @language zh_CN
+        * MOUSE_CLICK 常量定义 onClick 事件对象的 type 属性的值。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static MOUSE_CLICK: string = "onClick";
+        /**
+        * @language zh_CN
+        * MOUSE_DOWN 常量定义 onMouseDown 事件对象的 type 属性的值。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static MOUSE_DOWN: string = "onMouseDown";
+        /**
+        * @language zh_CN
+        * MOUSE_UP 常量定义 onMouseUp 事件对象的 type 属性的值。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static MOUSE_UP: string = "onMouseUp";
+        /**
+        * @language zh_CN
+        * MOUSE_MOVE 常量定义 onMouseMove 事件对象的 type 属性的值。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static MOUSE_MOVE: string = "onMouseMove";
     }
 }

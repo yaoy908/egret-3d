@@ -123,7 +123,7 @@
         }
         private onMouseClick(code: number) {
             if (!this._collect || !this.isMouseTriggerByKeyCode(code)) return;
-            this.sendEvent(code, Event3D.MOUSE_CLICK);
+            //this.sendEvent(code, MouseEvent3D.MOUSE_CLICK);
             //var ret: Array<IRender> = Picker.pickObject3DList(this._view, this._camera, this._collect.mousePickList);
             //var event: Event3D;
             //for (var i: number = 0; i < ret.length; i++) {
@@ -134,9 +134,8 @@
             //}
         }
         private onMouseDown(code: number) {
-            console.log("onMouseDown");
             if (!this._collect || !this.isMouseTriggerByKeyCode(code)) return;
-            this.sendEvent(code, Event3D.MOUSE_DOWN);
+            this.sendEvent(code, MouseEvent3D.MOUSE_DOWN, this._collect.mousePickList);
             //if (!this._collect) return;
             //var ret: Array<IRender> = Picker.pickObject3DList(this._view, this._camera, this._collect.mousePickList);
             //var event: Event3D;
@@ -149,7 +148,7 @@
         }
         private onMouseUp(code: number) {
             if (!this._collect || !this.isMouseTriggerByKeyCode(code)) return;
-            this.sendEvent(code, Event3D.MOUSE_UP);
+            this.sendEvent(code, MouseEvent3D.MOUSE_UP, this._collect.mousePickList);
             //if (!this._collect) return;
             //var ret: Array<IRender> = Picker.pickObject3DList(this._view, this._camera, this._collect.mousePickList);
             //var event: Event3D;
@@ -162,7 +161,7 @@
         }
         private onMouseMove(e: MouseEvent) {
             if (!this._collect) return;
-            this.sendEvent(e, Event3D.MOUSE_MOVE);
+            this.sendEvent(e, MouseEvent3D.MOUSE_MOVE, this._collect.mousePickList);
             //var ret: Array<IRender> = Picker.pickObject3DList(this._view, this._camera, this._collect.mousePickList);
             //var event: Event3D;
             //for (var i: number = 0; i < ret.length; i++) {
@@ -180,8 +179,8 @@
        * @version Egret 3.0
        * @platform Web,Native
        */
-        private sendEvent(e: any, typeStr: string): void {
-            var ret: Array<IRender> = Picker.pickObject3DList(this._canvas, this._view, this._camera, this._collect.mousePickList);
+        private sendEvent(e: any, typeStr: string, collect: Array<IRender>): void {
+            var ret: Array<IRender> = Picker.pickObject3DList(this._canvas, this._view, this._camera, collect);
             var event: Event3D;
             for (var i: number = 0; i < ret.length; i++) {
                 event = new Event3D(typeStr, e);

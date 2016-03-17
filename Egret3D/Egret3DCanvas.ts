@@ -94,7 +94,10 @@
         public get height(): number {
             return this.canvas3DRectangle.height;
         }
-     
+
+        public get view3Ds(): Array<View3D> {
+            return this.view3DS;
+        }
 
         public addView3D(view3D: View3D) {
             var index: number = this.view3DS.indexOf(view3D);

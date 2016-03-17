@@ -30,7 +30,7 @@
             this.cameraCtl.rotationX = 60;
 
             this._egret3DCanvas.start();
-            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, (e) => this.update(e));
+            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
         }
 
         protected onLoad(e: URLLoader, name: string) {
@@ -57,8 +57,8 @@
 
                 var load: URLLoader = new URLLoader("resource/laohu/Bonezero.eam");
                 load.onLoadComplete = (e: URLLoader) => this.onAnimation(e, "Bonezero", mesh);
-            } 
-          
+            }
+
         }
 
         protected onAnimation(e: URLLoader, name: string, mesh: Mesh) {
