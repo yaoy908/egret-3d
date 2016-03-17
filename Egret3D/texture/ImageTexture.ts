@@ -71,8 +71,8 @@
                 this.texture2D.internalFormat = InternalFormat.ImageData;
                 this.texture2D.imageData = this.imageData;
                 this.texture2D.colorFormat = ContextConfig.ColorFormat_RGBA8888;
+                context3D.upLoadTextureData(0, this.texture2D);
             }
-            context3D.upLoadTextureData(0, this.texture2D);
         }
 
         /**
