@@ -1,7 +1,7 @@
 ﻿
 function jsOnload() {
     //var view: egret3d.Class_Mesh = new egret3d.Class_Mesh();
-    var view: egret3d.Class_Sky = new egret3d.Class_Sky();
+    var view: egret3d.Class_SkinAnimation = new egret3d.Class_SkinAnimation();
 
 }
 

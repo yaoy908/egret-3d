@@ -43,16 +43,17 @@
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, (e) => this.update(e));
         }
 
+        protected mat: TextureMaterial;
         protected onLoad(e: URLLoader, name: string) {
             if (name == "Mon_04") {
                 var img: HTMLImageElement = <HTMLImageElement>document.getElementById("mon");
                 var tex: ImageTexture = new ImageTexture(img);
 
-                var mat: TextureMaterial = new TextureMaterial(tex);
+                var mat: TextureMaterial = new TextureMaterial();
                 mat.shininess = 20.0;
                 mat.ambientColor = 0xffffff;
                 mat.ambientPower = 0.5;
-
+                this.mat = mat;
                 var ge: Geometry = e.data;
                 var mesh: Mesh = new Mesh(e.data, mat);
 
@@ -64,11 +65,16 @@
                 mesh.material.lightGroup = this.lights;
                 this.laohu = mesh;
 
-
+                var loadtex: URLLoader = new URLLoader("resource/laohu/Mon_04.png");
+                loadtex.onLoadComplete = (e: URLLoader) => this.onLoadTexture(e, mat, "Mon_04");
                 var load: URLLoader = new URLLoader("resource/laohu/Bonezero.eam");
                 load.onLoadComplete = (e: URLLoader) => this.onAnimation(e, "Bonezero", mesh);
             } 
           
+        }
+
+        protected onLoadTexture(e: URLLoader, mat: TextureMaterial, name: string) {
+            mat.diffuseTexture = e.data;
         }
 
         protected onAnimation(e: URLLoader, name: string, mesh: Mesh) {
