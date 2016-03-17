@@ -83,6 +83,68 @@
         }
 
         /**
+         * @language zh_CN
+         * 设置材质 normalTexture 。
+         * 设置材质球的凹凸法线贴图。
+         * @param texture {TextureBase}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public set normalTexture(texture: ITexture) {
+            if (texture) {
+                this.materialData.normalTexture = texture;
+                this.materialData.textureChange = true;
+
+                if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.normal) == -1) {
+                    this.materialData.textureMethodTypes.push(TextureMethodType.normal);
+                    this.materialData.passChange = true;
+                }
+
+            }
+        }
+        
+        /**
+         * @language zh_CN
+         * 得到材质球的凹凸法线贴图。
+         * @returns ITexture 
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public get normalTexture(): ITexture {
+            return this.materialData.normalTexture;
+        }
+
+        /**
+         * @language zh_CN
+         * 设置材质 specularTexture 。
+         * 设置材质球的高光贴图。
+         * @param texture {TextureBase}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public set specularTexture(texture: ITexture) {
+            if (texture) {
+                this.materialData.specularTexture = texture;
+                this.materialData.textureChange = true;
+                if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.specular) == -1) {
+                    this.materialData.textureMethodTypes.push(TextureMethodType.specular);
+                    this.materialData.passChange = true;
+                }
+            }
+        }
+
+        /**
+         * @language zh_CN
+         * 得到材质球的高光贴图。
+         * @returns ITexture 
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public get specularTexture(): ITexture {
+            return this.materialData.specularTexture;
+        }
+
+        /**
         * @language zh_CN
         * 设置模型渲染模式。模型可以以顶点的方式渲染，线框渲染（会需要特定模型），三角形渲染
         * DrawMode.POINTS

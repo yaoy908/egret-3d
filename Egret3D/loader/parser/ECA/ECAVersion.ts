@@ -1,4 +1,11 @@
 ﻿module egret3d {
+        
+    /**
+     * @private 
+     * @language zh_CN
+     * @class egret3d.ECAVersion
+     * @classdesc
+     */
     export class ECAVersion {
         static versionDictionary: any = {
             1: (bytes: ByteArray) => ECAVersion.parserVersion_1(bytes),

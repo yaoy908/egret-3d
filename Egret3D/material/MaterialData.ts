@@ -1,8 +1,8 @@
 ﻿module egret3d {
 
     /**
-     * @class egret3d.MaterialData
      * @private
+     * @class egret3d.MaterialData
      */
     export class MaterialData {
         /**
@@ -81,16 +81,6 @@
         * @platform Web,Native
         */
         public drawMode: number = DrawMode.TRIANGLES; 
-
-
-        /**
-        * @language zh_CN
-        * Context3D 设备。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        //public context3D: Context3D;
-
   
         /**
         * @language zh_CN
@@ -115,7 +105,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        //public normalTex: TextureBase = CheckerboardTexture.texture;
+        public normalTexture: ITexture = CheckerboardTexture.texture;
 
         /**
         * @language zh_CN
@@ -124,7 +114,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        //public specularTex: TextureBase = CheckerboardTexture.texture;
+        public specularTexture: ITexture = CheckerboardTexture.texture;
 
         /**
         * @language zh_CN

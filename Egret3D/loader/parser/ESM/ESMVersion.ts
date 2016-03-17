@@ -1,4 +1,12 @@
 ﻿module egret3d {
+    
+    /**
+     * @private 
+     * @language zh_CN
+     * @class egret3d.ESMVersion
+     * @classdesc
+     * 
+     */
     export class ESMVersion {
         static versionDictionary: any = {
             1: (bytes: ByteArray, geomtry: GeometryData) => ESMVersion.parserVersion_1(bytes, geomtry),
