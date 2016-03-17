@@ -192,8 +192,6 @@
                 this.materialData.diffusePassUsageData.effectMethodList[this.index].activateEffect(context3D, this.materialData.diffusePassUsageData, this.materialData , modeltransform, camera3D, geometry, animation);
             }
 
-            this.resetTexture();
-
             //--------texture----------------
             var sampler2D: GLSL.Sampler2D;
             for (var index in this.materialData.diffusePassUsageData.sampler2DList) {
@@ -258,6 +256,10 @@
             }
             context3D.gl.uniform1fv(this.materialData.diffusePassUsageData.uniform_materialSource.uniformIndex, this.materialData.diffusePassUsageData.materialSourceData);
             
+            if (this.materialData.textureChange) {
+                this.resetTexture();
+            }
+
             //texture 2D
             var sampler2D: GLSL.Sampler2D;
             for (var index in this.materialData.diffusePassUsageData.sampler2DList) {
