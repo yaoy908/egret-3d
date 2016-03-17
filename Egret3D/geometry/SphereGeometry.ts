@@ -22,21 +22,22 @@
         /**
         * @language zh_CN
         * 构造函数
+         * @param front 是否正面渲染
         * @param r 半径
         * @param segmentsW 宽度分段数
         * @param segmentsH 高度分段数
         */
-        constructor(r: number = 100.0, segmentsW: number = 15, segmentsH: number = 15) {
+        constructor(front: boolean = true, r: number = 100.0, segmentsW: number = 15, segmentsH: number = 15) {
             super();
 
             this._radius = r;
             this._segmentsW = segmentsW;
             this._segmentsH = segmentsH;
 
-            this.buildSphere();
+            this.buildSphere(front);
         }
 
-        private buildSphere() {
+        private buildSphere(front: boolean = true) {
             this.useVertexFormat(VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 | VertexFormat.VF_UV1);
 
             var i: number = 0, j: number = 0, triIndex: number = 0;
@@ -119,22 +120,50 @@
                             this.verticesData[index - 8] = this.verticesData[startIndex + 1];
                             this.verticesData[index - 7] = this.verticesData[startIndex + 2];
 
-                            this.indexData[triIndex++] = a;
-                            this.indexData[triIndex++] = d;
-                            this.indexData[triIndex++] = c;
+                            if (front) {
+                                this.indexData[triIndex++] = a;
+                                this.indexData[triIndex++] = d;
+                                this.indexData[triIndex++] = c;
+                            }
+                            else {
+                                this.indexData[triIndex++] = a;
+                                this.indexData[triIndex++] = c;
+                                this.indexData[triIndex++] = d;
+                            }
+                            
 
                         } else if (j == 1) {
-                            this.indexData[triIndex++] = a;
-                            this.indexData[triIndex++] = c;
-                            this.indexData[triIndex++] = b;
+
+                            if (front) {
+                                this.indexData[triIndex++] = a;
+                                this.indexData[triIndex++] = c;
+                                this.indexData[triIndex++] = b;
+                            }
+                            else {
+                                this.indexData[triIndex++] = a;
+                                this.indexData[triIndex++] = b;
+                                this.indexData[triIndex++] = c;
+                            }
+                          
 
                         } else {
-                            this.indexData[triIndex++] = a;
-                            this.indexData[triIndex++] = d
-                            this.indexData[triIndex++] = c;
-                            this.indexData[triIndex++] = a;
-                            this.indexData[triIndex++] = c;
-                            this.indexData[triIndex++] = b;
+
+                            if (front) {
+                                this.indexData[triIndex++] = a;
+                                this.indexData[triIndex++] = d
+                                this.indexData[triIndex++] = c;
+                                this.indexData[triIndex++] = a;
+                                this.indexData[triIndex++] = c;
+                                this.indexData[triIndex++] = b;
+                            }
+                            else {
+                                this.indexData[triIndex++] = a;
+                                this.indexData[triIndex++] = c
+                                this.indexData[triIndex++] = d;
+                                this.indexData[triIndex++] = a;
+                                this.indexData[triIndex++] = b;
+                                this.indexData[triIndex++] = c;
+                            }
                         }
                     }
 

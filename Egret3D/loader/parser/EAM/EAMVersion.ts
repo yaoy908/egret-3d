@@ -1,4 +1,12 @@
 ﻿module egret3d {
+        
+    /**
+     * @private 
+     * @language zh_CN
+     * @class egret3d.EAMVersion
+     * @classdesc
+     * 
+     */
     export class EAMVersion {
         static versionDictionary: any = {
             1: (bytes: ByteArray) => EAMVersion.parserVersion_1(bytes),

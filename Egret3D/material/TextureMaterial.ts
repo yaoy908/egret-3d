@@ -32,12 +32,6 @@
         }
 
         protected initMatPass() {
-            //if (this.diffuseTexture instanceof SkyTexture) {
-            //    this.diffusePass = new CubeDiffuseMapPass(this.materialData);
-            //}
-            //else {
-            //    this.diffusePass = new DiffuseMapPass(this.materialData);
-            //}
             this.diffusePass = new DiffusePass(this.materialData);
         }
 

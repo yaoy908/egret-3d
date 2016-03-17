@@ -82,10 +82,7 @@
          * @param context3D 
          */
         public uploadForcing(context3D: Context3DProxy) {
-            this.texture2D.imageData = this.imageData;
             context3D.upLoadTextureData(0, this.texture2D);
         }
-
-    
     }
 }

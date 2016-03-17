@@ -1,5 +1,5 @@
 ﻿module egret3d {
-    export class Class_Mesh extends Class_View3D {
+    export class Class_Mesh extends Class_View3D{
 
         private cube: Mesh;
         constructor() {
@@ -24,7 +24,7 @@
             view3.backColor = 0xff0000ff;
             this._egret3DCanvas.addView3D(view3);
 
-            var view4: View3D = new View3D(200, 200, 200, 200);
+            var view4: View3D = new View3D(200,200, 200, 200);
             view4.camera3D.lookAt(new Vector3D(0, 0, -1000), new Vector3D(0, 0, 0));
             view4.backColor = 0xffff00ff;
             this._egret3DCanvas.addView3D(view4);
@@ -36,7 +36,7 @@
 
             this._egret3DCanvas.start();
 
-            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
+            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, (e) => this.update(e));
         }
 
         public update(e: Event3D) {

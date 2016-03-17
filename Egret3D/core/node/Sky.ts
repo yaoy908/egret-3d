@@ -12,132 +12,37 @@
     * @platform Web,Native
     * @includeExample core/node/Sky.ts
     */
-    export class Sky extends Object3D  {
+    export class Sky extends Mesh  {
+       
+        private _camera: Camera3D;
 
-        private viewMatIndex: WebGLUniformLocation;
-        private skyTexture: CubeTexture;
-
-        private vsShaderSource: string;
-        private fsShaderSource: string;
-
-        //private usage: MethodUsageData;
-        private vsShader: Shader;
-        private fsShader: Shader;
-        private cubeGeometry: Geometry;
-                
         /**
         * @language zh_CN
         * 构建一个天空盒子对象
-        * @param skyTexture 天空盒子贴图
+        * @param cubMaterial 天空盒子贴图材质 
+        * @param camera 天空盒子渲染相机
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(skyTexture: CubeTexture) {
-            super();
-            this.skyTexture = skyTexture;
-            //this.usage = new MethodUsageData();
-            this.vsShader = new Shader(null);
-            this.fsShader = new Shader(null);
-            this.setShader("sky_vertex", "sky_fragment");
-
+        constructor(cubMaterial: CubeTextureMaterial, camera: Camera3D = null) {
+            super(new CubeGeometry(false, 800, 800), cubMaterial);
+            this._camera = camera;
         } 
                         
         /**
         * @language zh_CN
-        * 设置渲染用的shader文件名字
-        * @param vsName vs文件名
-        * @param fsName fs文件名
+        * 当前对象数据更新，只有在视锥内的对象才会执行此更新
+        * @param camera 当前渲染的摄相机
+        * @param time 当前时间
+        * @param delay 每帧时间间隔
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public setShader(vsName: string, fsName: string) {
-            //this.vsShader.addShader(vsName);
-            //this.fsShader.addShader(fsName);
-
-            //this.vsShaderSource = this.vsShader.getShaderSource();
-            //this.fsShaderSource = this.fsShader.getShaderSource();
+        public update(time: number, delay: number, camera: Camera3D) {
+            super.update(time, delay, camera);
+            if (this._camera) {
+                this.position = this._camera.globalPosition;
+            }
         }
-
-        private rebuild(context3D: Context3DProxy) {
-            var vertexShader: Shader = context3D.creatVertexShader(this.vsShaderSource);
-            var fragmentShader: Shader = context3D.creatFragmentShader(this.fsShaderSource);
-
-            //this.usage.program3D = context3D.creatProgram(vertexShader, fragmentShader);
-
-            //if (this.usage.program3D) {
-            //    context3D.setProgram(this.usage.program3D);
-            //}
-
-            this.cubeGeometry = this.cubeGeometry || new Geometry( );
-            //if (!this.cubeGeometry.sharedVertexBuffer) {
-            //    this.cubeGeometry.sharedVertexBuffer = context3D.creatVertexBuffer(this.cubeGeometry.verticesData);
-            //    this.cubeGeometry.numberOfVertices = this.cubeGeometry.verticesData.length / this.cubeGeometry.vertexAttLength;
-            //    this.cubeGeometry.vertexSizeInBytes = this.cubeGeometry.positionSize * Float32Array.BYTES_PER_ELEMENT + ///pos 0
-            //    3 * Float32Array.BYTES_PER_ELEMENT + ///normal 12
-            //    3 * Float32Array.BYTES_PER_ELEMENT + ///tangent 24
-            //    4 * Float32Array.BYTES_PER_ELEMENT + ///color 36 
-            //    2 * Float32Array.BYTES_PER_ELEMENT + ///uv 52
-            //    2 * Float32Array.BYTES_PER_ELEMENT; ///uv2 60
-            //    this.cubeGeometry.sharedIndexBuffer = context3D.creatIndexBuffer(this.cubeGeometry.indexData);
-            //}
-
-            //this.usage.attribute_position.uniformIndex = context3D.getShaderAttribLocation(this.usage.program3D, "attribute_position");
-            //this.usage.uniform_ProjectionMatrix.uniformIndex = context3D.getUniformLocation(this.usage.program3D, "uniform_ProjectionMatrix");
-            //this.usage.uniform_ModelMatrix.uniformIndex = context3D.getUniformLocation(this.usage.program3D, "uniform_ModelMatrix");
-
-            /////--------texture----------------
-            //var sampler3D: GLSL.Sampler3D;
-            //for (var index in this.usage.sampler3DList) {
-            //    sampler3D = this.usage.sampler3DList[index];
-            //    sampler3D.uniformIndex = context3D.getUniformLocation(this.usage.program3D, sampler3D.varName);
-            //    if (sampler3D.varName=="sky_texture"){
-            //        sampler3D.texture = this.skyTexture;
-            //    }
-            //}
-        }
-
-        private skyUni: any;
-        private texUni: any;
-        private test: CubeTexture; 
-        private px: number = 0;
-        private py: number = 0;
-        private pz: number = 0;
-
-        private offest: Vector3D = new Vector3D(); 
-                                
-        /**
-        * @language zh_CN
-        * 提交数据给GPU渲染当前天空盒子
-        * @param context3D 设备上下文
-        * @param camera 渲染时的相机
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public draw(context3D: Context3DProxy, camera:Camera3D ) {
-
-            //if (!this.usage.program3D)
-            //    this.rebuild(context3D);
-
-            //context3D.setProgram(this.usage.program3D);
-
-            //context3D.gl.enable(Egret3DDrive.CULL_FACE)
-            //context3D.gl.cullFace(Egret3DDrive.FRONT);
-
-            //context3D.bindVertexBuffer(this.cubeGeometry.sharedVertexBuffer);
-            //context3D.vertexAttribPointer(this.usage.program3D, this.usage.attribute_position.uniformIndex, 3, Egret3DDrive.FLOAT, false, this.cubeGeometry.vertexSizeInBytes , 0);
-
-            //context3D.uniformMatrix4fv(this.usage.uniform_ProjectionMatrix.uniformIndex, false, camera.viewProjectionMatrix.rawData);
-            //context3D.uniformMatrix4fv(this.usage.uniform_ModelMatrix.uniformIndex, false, this.modelMatrix.rawData);
-          
-            /////--------texture----------------
-            //var sampler3D: GLSL.Sampler3D;
-            //for (var index in this.usage.sampler3DList) {
-            //  sampler3D = this.usage.sampler3DList[index];
-            //  sampler3D.texture.upload(context3D);
-            //  context3D.setCubeTextureAt(sampler3D.activeTextureIndex , sampler3D.uniformIndex, sampler3D.index , sampler3D.texture.cubeTexture );
-            //}
-            //context3D.drawElement(DrawMode.TRIANGLES, this.cubeGeometry.sharedIndexBuffer, 0, this.cubeGeometry.numItems);
-        }
-
     }
 } 

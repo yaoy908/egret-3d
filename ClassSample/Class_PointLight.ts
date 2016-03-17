@@ -3,6 +3,9 @@
 
         private plane: Mesh;
         protected view1: View3D;
+
+        private lights: LightGroup = new LightGroup();
+
         constructor() {
             super();
 
@@ -21,7 +24,9 @@
 
         protected ontextload(e: URLLoader) {
 
-            var mesh: Mesh = new Mesh(e.data, new TextureMaterial());
+            var mat: TextureMaterial = new TextureMaterial();
+            mat.ambientPower = 1.0;
+            var mesh: Mesh = new Mesh(e.data, mat);
             this.plane = mesh;
             this.view1.addChild3D(mesh);
         }

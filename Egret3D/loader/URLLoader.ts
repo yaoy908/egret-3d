@@ -1,4 +1,5 @@
 ﻿module egret3d {
+
     /**
      * @language zh_CN
      * @class egret3d.URLLoader
@@ -13,9 +14,7 @@
      *@platform Web,Native
      */
     export class URLLoader {
-        /**
-         * @language en_US
-         */
+
         /**
          * @private
          * @language zh_CN
@@ -26,9 +25,6 @@
         private _url:string = "";
 
         /**
-         * @language en_US
-         */
-        /**
          * @private
          * @language zh_CN
          * 加载的数据.
@@ -37,9 +33,7 @@
          */
         private _data:any = null;
         private _xhr:XMLHttpRequest;
-        /**
-         * @language en_US
-         */
+
         /**
          * @language zh_CN
          * 控制以哪种方式接收加载的数据.
@@ -49,9 +43,7 @@
          * @platform Web,Native
          */
         private _dataformat:string = null;
-        /**
-         * @language en_US
-         */
+
         /**
          * @language zh_CN
          * 加载完成的回调函数.
@@ -61,10 +53,15 @@
          */
         public onLoadComplete:Function = null;
 
-
+        
         /**
-         * @language en_US
+         * @language zh_CN
+         * 文件名字
+         * @version Egret 3.0
+         *@platform Web,Native
          */
+        public fileName: string;
+
         /**
          * @language zh_CN
          * 加载失败的回调函数
@@ -72,9 +69,7 @@
          * @platform Web,Native
          */
         public onLoadError:Function = null;
-        /**
-         * @language en_US
-         */
+
         /**
          * @language zh_CN
          * 加载过程调用的函数
@@ -84,18 +79,13 @@
         public onLoadProgress:Function = null;
 
         /**
-         * @language en_US
-         */
-        /**
          * @language zh_CN
          * 以二进制方式接收加载的数据
          * @version Egret 3.0
          * @platform Web,Native
          */
         public static DATAFORMAT_BINARY:string = "binary";
-        /**
-         * @language en_US
-         */
+
         /**
          * @language zh_CN
          * 以文本的方式接收加载的数据
@@ -104,9 +94,7 @@
          * @platform Web,Native
          */
         public static DATAFORMAT_TEXT:string = "text";
-        /**
-         * @language en_US
-         */
+
         /**
          * @language zh_CN
          * 以音频的方式接收加载的数据
@@ -116,9 +104,6 @@
         public static DATAFORMAT_SOUND:string = "sound";
 
         /**
-         * @language en_US
-         */
-        /**
          * @language zh_CN
          * 以图像的方式接收加载的数据
          * 支持jpg.png.等格式
@@ -126,9 +111,7 @@
          * @platform Web,Native
          */
         public static DATAFORMAT_BITMAP:string = "bitmap";
-        /**
-         * @language en_US
-         */
+
         /**
          * @language zh_CN
          * 以DDS的方式接收加载的数据
@@ -136,9 +119,7 @@
          * @platform Web,Native
          */
         public static DATAFORMAT_DDS:string = "dds";
-        /**
-         * @language en_US
-         */
+
         /**
          * @language zh_CN
          * 以TGA的方式接收加载的数据
@@ -146,9 +127,7 @@
          * @platform Web,Native
          */
         public static DATAFORMAT_TGA:string = "tga";
-        /**
-         * @language en_US
-         */
+
         /**
          * @language zh_CN
          * 以ESM格式接收加载的数据
@@ -157,9 +136,7 @@
          * @platform Web,Native
          */
         public static DATAFORMAT_ESM:string = "esm";
-        /**
-         * @language en_US
-         */
+
         /**
          * @language zh_CN
          * 以EAM格式接收加载的数据
@@ -168,9 +145,7 @@
          * @platform Web,Native
          */
         public static DATAFORMAT_EAM:string = "eam";
-        /**
-         * @language en_US
-         */
+
         /**
          * @language zh_CN
          * 以ECA格式接收加载的数据
@@ -179,10 +154,7 @@
          * @platform Web,Native
          */
         public static DATAFORMAT_ECA:string = "eca";
-        /**
-         * @language en_US
 
-         */
         /**
          * @private
          * @language zh_CN
@@ -191,9 +163,7 @@
          * @platform Web,Native
          */
         public static DATAFORMAT_PVR:string = "pvr";
-        /**
-         * @language en_US
-         */
+     
         /**
          * @language zh_CN
          * 构造函数
@@ -229,6 +199,10 @@
             if (null == this._dataformat) {
 
                 this._dataformat = URLLoader.DATAFORMAT_TEXT;
+
+                var endPos: number = this._url.lastIndexOf(".");
+                var startPos: number = this._url.lastIndexOf("/");
+
 
                 if (this._url.length >= 4) switch (this._url.substr(this._url.length - 4, 4).toLowerCase()) {
                     case ".dds":
@@ -392,10 +366,9 @@
                     this._data = skeletonAnimationClip;
                     break;
                 case URLLoader.DATAFORMAT_ECA:
+                    var cameraAnimationController:CameraAnimationController = ECAParser.parse(this._xhr.response);
 
-                    ///var cameraAnimationController:CameraAnimationController = ECAParser.parse(this._xhr.response);
-
-                    //this._data = cameraAnimationController;
+                    this._data = cameraAnimationController;
                     break;
                 case URLLoader.DATAFORMAT_PVR:
                     //var pvr:PVR = PVRParser.parse(this._xhr.response);
@@ -422,7 +395,6 @@
             Debug.instance.trace("loaderror, url: ", this._url);
             console.log("load error", event);
         }
-
 
         private getXHR():any {
             var xhr:any = null;

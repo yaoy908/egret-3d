@@ -2,7 +2,7 @@
     export class Class_MouseEvent extends Class_View3D {
 
         private cube: Mesh;
-        //private mouse3DManager: Mouse3DManager;
+        private mouse3DManager: Mouse3DManager;
         private view1: View3D;
         constructor() {
             super();
@@ -15,10 +15,10 @@
 
 
             this.cube.mouseEnable = true;
-            this.cube.addEventListener(MouseEvent3D.MOUSE_DOWN, this, this.onMouseDown);
-            this.cube.addEventListener(MouseEvent3D.MOUSE_UP, this, this.onMouseUp);
-            this.cube.addEventListener(MouseEvent3D.MOUSE_CLICK, this, this.onClick);
-            this.cube.addEventListener(MouseEvent3D.MOUSE_MOVE, this, this.onMouseMove);
+            this.cube.addEventListener(Event3D.MOUSE_DOWN, (e) => this.onMouseDown(e));
+            this.cube.addEventListener(Event3D.MOUSE_UP, (e) => this.onMouseUp(e));
+            this.cube.addEventListener(Event3D.MOUSE_CLICK, (e) => this.onClick(e));
+            this.cube.addEventListener(Event3D.MOUSE_MOVE, (e) => this.onMouseMove(e));
 
 
             this.view1 = new View3D(0, 0, window.innerWidth, window.innerHeight);
@@ -32,10 +32,10 @@
             dirLight.diffuse = 0xff0000ff;
             lights.addLight(dirLight);
             this.cube.material.lightGroup = lights;
-            var eventManager: EventManager = new EventManager(this._egret3DCanvas);
-            eventManager.onInit();
+            this.mouse3DManager = new Mouse3DManager(this.view1.camera3D, this.view1, this._egret3DCanvas);
             this._egret3DCanvas.start();
-            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
+            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, (e) => this.update(e));
+
         }
 
         private onMouseDown(code: number): void {
@@ -51,13 +51,9 @@
             console.log("onMouseMove");
         }
         public update(e: Event3D) {
-            //this.mouse3DManager.update(this.view1.entityCollect);
-            this.cube.rotationY = this.cube.rotationY + 0.5;
-            this.cube.rotationX = this.cube.rotationX + 0.5;
+            this.mouse3DManager.update(this.view1.entityCollect);
+            this.cube.rotationY += 0.5;
+            this.cube.rotationX += 0.5;
         }
     }
-
-
-
-
-}
+} 

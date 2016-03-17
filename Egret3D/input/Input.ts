@@ -129,7 +129,7 @@
      */
     export class Input {
 
-
+        
         /**
         * @language zh_CN
         * @private
@@ -184,7 +184,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public mouseLastX: number = 0;
+        public mouseLastX: number = 0; 
         /**
         * @language zh_CN
         * 上一次鼠标Y坐标。
@@ -229,6 +229,8 @@
         * @platform Web,Native
         */
         public onGamepadStick2: Function = null;
+
+
         /**
         * @language zh_CN
         * 旋转。
@@ -736,7 +738,18 @@
             this.mouseX = e.clientX - this.canvas.clientRect.left;
             this.mouseY = e.clientY - this.canvas.clientRect.top;
 
-            var k: number = this.GetKeyCodeByMouseEventNumber(e.button);
+            var k: number = 0;
+            switch (e.button) {
+                case 0:
+                    k = KeyCode.Key_Mouse_Left;
+                    break;
+                case 2:
+                    k = KeyCode.Key_Mouse_Right;
+                    break;
+                case 1:
+                    k = KeyCode.Key_Mouse_Mid;
+                    break;
+            }
 
             if (k != 0) {
                 if (this._keyStatus[k]) {
@@ -755,14 +768,27 @@
 
         private mouseStart(e: MouseEvent) {
 
+            console.log("mouseStart");
+
             this.mouseX = e.clientX - this.canvas.clientRect.left;
             this.mouseY = e.clientY - this.canvas.clientRect.top;
 
-            var k: number = this.GetKeyCodeByMouseEventNumber(e.button);
-           
+            var k: number = 0;
+            switch (e.button) {
+                case 0:
+                    k = KeyCode.Key_Mouse_Left;
+                    break;
+                case 2:
+                    k = KeyCode.Key_Mouse_Right;
+                    break;
+                case 1:
+                    k = KeyCode.Key_Mouse_Mid;
+                    break;
+            }
 
             if (k != 0) {
                 this._keyStatus[k] = true;
+
                 for (var i: number = 0; i < this._listenerKeyDown.length; ++i) {
                     this._listenerKeyDown[i](k);
                 }
@@ -821,7 +847,7 @@
 
         /**
         * @language zh_CN
-        * 根据MouseEvent和终点返回方向
+        * 根据起点和终点返回方向
         * @param  startX {Number} 起点X坐标
         * @param  startY {Number} 起点Y坐标
         * @param  endX   {Number} 终点X坐标
@@ -832,7 +858,7 @@
             var dy = startY - endY;
             var dx = endX - startX;
             var result = 0;
-
+ 
             //如果滑动距离太短
             if (Math.abs(dx) < 2 && Math.abs(dy) < 2) {
                 return result;
@@ -865,28 +891,6 @@
                 //缩小手势
                 return false;
             }
-        }
-
-        /**
-        * @language zh_CN
-        * 获取鼠标事件枚举
-        * @param  value {MouseEvent.number} 鼠标点击值
-        * @returns result {KeyCode} 鼠标行为枚举
-        */
-        public GetKeyCodeByMouseEventNumber(value: number): KeyCode {
-            var k: KeyCode = 0;
-            switch (value) {
-                case 0:
-                    k = KeyCode.Key_Mouse_Left;
-                    break;
-                case 2:
-                    k = KeyCode.Key_Mouse_Right;
-                    break;
-                case 1:
-                    k = KeyCode.Key_Mouse_Mid;
-                    break;
-            }
-            return k;
         }
     }
 }

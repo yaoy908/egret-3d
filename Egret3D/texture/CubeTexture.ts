@@ -47,6 +47,7 @@
         public texture3D: Texture3D;
         public width: number;
         public height: number;
+
         /**
          * @language zh_CN
          * 构造函数
@@ -70,8 +71,47 @@
             this.image_right = image_right;
             this.image_up = image_up;
             this.image_down = image_down;
-
         }
+
+        /**
+         * @language zh_CN
+         * 创建CubuTexture
+         * @param image_front 前部HTMLImageElement图片元素
+         * @param image_back 背部HTMLImageElement图片元素
+         * @param image_left 左部HTMLImageElement图片元素
+         * @param image_right 右部HTMLImageElement图片元素
+         * @param image_up 顶部HTMLImageElement图片元素
+         * @param image_down 底部HTMLImageElement图片元素
+         */
+        public static createCubeTexture(image_front: HTMLImageElement,
+            image_back: HTMLImageElement,
+            image_left: HTMLImageElement,
+            image_right: HTMLImageElement,
+            image_up: HTMLImageElement,
+            image_down: HTMLImageElement): CubeTexture {
+
+            var front: Texture2D = new Texture2D();
+            front.imageData = image_front;
+
+            var back: Texture2D = new Texture2D();
+            back.imageData = image_back;
+
+            var left: Texture2D = new Texture2D();
+            left.imageData = image_left;
+
+            var right: Texture2D = new Texture2D();
+            right.imageData = image_right;
+
+            var up: Texture2D = new Texture2D();
+            up.imageData = image_up;
+
+            var down: Texture2D = new Texture2D();
+            down.imageData = image_down;
+
+            var cubeTexture: CubeTexture = new CubeTexture(front, back, left, right, up, down);
+            return cubeTexture;
+        }
+
 
         /**
         * @language zh_CN
@@ -114,6 +154,7 @@
         }
 
         public uploadForcing(context3D: Context3DProxy) {
+
         }
     }
 }

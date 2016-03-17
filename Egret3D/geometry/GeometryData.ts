@@ -184,11 +184,11 @@
         */
         public vertexDatas: Array<number>;
 
+        public textureNormal: string;
+
         public textureDiffuse: string;
 
         public textureSpecular: string;
-
-        public textureNormal: string;
 
         /**
         * @language zh_CN

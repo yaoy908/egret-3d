@@ -1,5 +1,5 @@
 ﻿module egret3d {
-    export class Class_DirectLight extends Class_View3D {
+    export class Class_DirectLight extends Class_View3D{
 
         private cube: Mesh;
         constructor() {
@@ -13,13 +13,13 @@
             var geometery2: CubeGeometry = new CubeGeometry();
             var cube2: Mesh = new Mesh(geometery, mat);
 
-            var view1: View3D = new View3D(0, 0, window.innerWidth, window.innerHeight);
+            var view1: View3D = new View3D(0, 0, window.innerWidth , window.innerHeight);
             view1.camera3D.lookAt(new Vector3D(0, 0, -1000), new Vector3D(0, 0, 0));
             view1.backColor = 0xff000000;
 
             this._egret3DCanvas.addView3D(view1);
 
-            cube2.x = 80;
+            cube2.x = 80 ;
             view1.addChild3D(this.cube);
             view1.addChild3D(cube2);
 
@@ -32,7 +32,7 @@
             this.cube.material.lightGroup = lights;
 
             this._egret3DCanvas.start();
-            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
+            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, (e) => this.update(e));
         }
 
         public update(e: Event3D) {
