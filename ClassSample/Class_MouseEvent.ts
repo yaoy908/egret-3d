@@ -15,10 +15,10 @@
 
 
             this.cube.mouseEnable = true;
-            //this.cube.addEventListener(MouseEvent3D.MOUSE_DOWN, this, this.onMouseDown);
-            //this.cube.addEventListener(MouseEvent3D.MOUSE_UP, this, this.onMouseUp);
-            //this.cube.addEventListener(MouseEvent3D.MOUSE_CLICK, this, this.onClick);
-            //this.cube.addEventListener(MouseEvent3D.MOUSE_MOVE, this, this.onMouseMove);
+            this.cube.addEventListener(MouseEvent3D.MOUSE_DOWN, this, this.onMouseDown);
+            this.cube.addEventListener(MouseEvent3D.MOUSE_UP, this, this.onMouseUp);
+            this.cube.addEventListener(MouseEvent3D.MOUSE_CLICK, this, this.onClick);
+            this.cube.addEventListener(MouseEvent3D.MOUSE_MOVE, this, this.onMouseMove);
 
 
             this.view1 = new View3D(0, 0, window.innerWidth, window.innerHeight);
