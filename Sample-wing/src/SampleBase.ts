@@ -1,129 +1,47 @@
-class SampleBase{
+/**
+ *
+ * @author 
+ *
+ */
     
-    protected _removeID: number = -1; 
-    private _resizeTime: number = -1;
-    protected resize() {
-        if(this._resizeTime == -1) {
-            this._resizeTime = setTimeout(() => this.setResize(),300);
-        }
+class SampleBase {
+    
+    protected _egret3DCanvas: egret3d.Egret3DCanvas;
+    protected _view: egret3d.View3D;
+    private globalTime: number;
+    constructor() {
+        // 
+        this._egret3DCanvas = new egret3d.Egret3DCanvas();
+        this._egret3DCanvas.x = 0;
+        this._egret3DCanvas.y = 0;
+        this._egret3DCanvas.width = window.innerWidth;
+        this._egret3DCanvas.height = window.innerHeight;
+        this._egret3DCanvas.start();
+        
+        this._egret3DCanvas.start();
+        this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME, this.update, this);
+        
+        this._view = new egret3d.View3D(this._egret3DCanvas.x,this._egret3DCanvas.y,this._egret3DCanvas.width,this._egret3DCanvas.height);
+        this._view.backColor = 0xff000000;
+        this._egret3DCanvas.addView3D(this._view);
+        
+        this.onInit();
     }
     
-    protected onResize(x:number, y:number, width:number,height:number){
+    protected ontime()
+    {
+        var a = this;
+    }
+    
+    protected onInit(){
         
     }
-
-    private setResize() {
-        clearTimeout(this._resizeTime);
-        this._resizeTime = -1;
-        this.onResize(0,0,document.body.clientWidth,document.body.clientHeight);
-        this.resizeUI();
+    
+    protected onUpdate(time: number, delay:number){
+        
     }
     
-    constructor() {
-
-        this.initView();
-
-        egret3d.AssetsManager.getInstance().addEventListener(egret3d.Event3D.EVENT_LOAD_PROGRESS, (e: egret3d.Event3D) => this.progress(e));
+    public update(e: egret3d.Event3D) {
+        this.onUpdate(e.time, e.delay);
     }
-
-
-    private progress(e: egret3d.Event3D) {
-        var loading = document.getElementById("loading");
-        var progressDiv = document.getElementById("loadingtiao");
-
-        var percent = egret3d.AssetsManager.getInstance().loadCompleteNumber / egret3d.AssetsManager.getInstance().loadTotalNumber;
-        var value = Math.floor(percent * 100);
-        var width = Math.floor(loading.clientWidth * percent);
-
-        (document.getElementById("percent")).innerHTML = "Loading......" + (value > 100 ? 100 : value) + "% ......";
-
-
-        progressDiv.style.width = (width > loading.clientWidth ? loading.clientWidth : width) + 'px';
-    }
-
-    public remove(){
-        clearTimeout(this._removeID);
-        var ui = document.getElementById("mask");
-        document.body.style.backgroundColor = "#000000";
-        document.body.removeChild(ui);
-    }
-
-    
-    public resizeUI() {
-        var w = document.body.clientWidth;
-
-        var mask = document.getElementById("mask");
-
-        if(mask) {
-            var div = document.getElementById("loading");
-            div.style.width = w * 0.5 + "px";
-            div.style.top = "40%";
-            div.style.left = (w - w * 0.5) * 0.5 + "px";
-        }
-    }
-
-    private initView(): void {
-
-        var w = document.body.clientWidth;
-
-        var mask = document.createElement("div");
-        mask.id = "mask";
-        mask.style.position = "absolute";
-        mask.style.width = "100%";
-        mask.style.height = "100%";
-        mask.style.backgroundColor = "#545454";
-        mask.style.zIndex = '100';
-        document.body.appendChild(mask)
-
-        var div = document.createElement("div");
-        div.id = "loading";
-        div.style.position = 'absolute';
-        div.style.width = w * 0.5 + "px";
-        div.style.top = '40%';
-        div.style.left = (w - w * 0.5) * 0.5 + "px";
-
-        document.body.style.backgroundColor = "#545454";
-        mask.appendChild(div);
-
-
-        var img = document.createElement("img");
-        img.src = "resource/logo.png";
-        img.style.position = 'absolute';
-        img.style.left = (div.clientWidth - 85) * .5 + "px";
-
-
-        var loadingcao = document.createElement("div");
-        loadingcao.id = "loadingcao";
-        loadingcao.style.borderRadius = "15px 15px 15px 15px";
-        loadingcao.style.backgroundColor = '#404040';
-        loadingcao.style.width = div.clientWidth + 'px';
-        loadingcao.style.height = '5px';
-        loadingcao.style.position = 'absolute';
-        loadingcao.style.top = 100 + 'px';
-
-        var loadingtiao = document.createElement("div");
-        loadingtiao.id = "loadingtiao";
-        loadingtiao.style.borderRadius = "15px 15px 15px 15px";
-        loadingtiao.style.backgroundColor = '#ffffff';
-        loadingtiao.style.height = '5px';
-        loadingtiao.style.position = 'absolute';
-        loadingtiao.style.top = 100 + 'px';
-
-
-        var textWidth = 150;
-        var percent = document.createElement("div");
-        percent.id = "percent";
-        percent.style.width = textWidth + "px";
-        percent.style.color = "#000000";
-        percent.style.position = 'absolute';
-        percent.style.left = (div.clientWidth - textWidth) * .5 + "px";
-        percent.style.top = 140 + 'px';
-        percent.style.textShadow = "#fff 1px 0 2px,#fff 0 1px 2px,#fff -1px 0 2px,#fff 0 -1px 2px";
-
-        div.appendChild(loadingcao);
-        div.appendChild(loadingtiao);
-        div.appendChild(img);
-        div.appendChild(percent);
-
-    }
-} 
+}

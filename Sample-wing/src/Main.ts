@@ -1,8 +1,8 @@
 class Main extends egret.DisplayObjectContainer {
 
-    private sample: SampleBase = null;
+    private sample:SampleBase;
     public constructor() {
         super();
-        this.sample = new Sample_Character();
+        this.sample = new SampleBox();
     }
 }
