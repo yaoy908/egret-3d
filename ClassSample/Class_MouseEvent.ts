@@ -27,6 +27,11 @@
             this.cube.addEventListener(MouseEvent3D.MOUSE_OVER, this, this.onMouseOver);
 
 
+            this.cube.addEventListener(TouchEvent3D.TOUCH_MOVE, this, this.onTouchMove);
+            this.cube.addEventListener(TouchEvent3D.TOUCH_DOWN, this, this.onTouchDown);
+            this.cube.addEventListener(TouchEvent3D.TOUCH_UP, this, this.onTouchUp);
+
+
             this.view1 = new View3D(0, 0, window.innerWidth, window.innerHeight);
             this.view1.camera3D.lookAt(new Vector3D(0, 0, -1000), new Vector3D(0, 0, 0));
             this.view1.backColor = 0xff000000;
@@ -59,6 +64,18 @@
         private onMouseOver(e: MouseEvent): void {
             console.log("onMouseOver" + this.overIndex++);
         }
+
+        private onTouchMove(e: TouchEvent) {
+            Debug.instance.trace("onTouchMove" + this.moveIndex++);
+        }
+        private onTouchDown(e: TouchEvent) {
+            Debug.instance.trace("onTouchDown");
+        }
+        private onTouchUp(e: TouchEvent) {
+            Debug.instance.trace("onTouchUp");
+
+        }
+
         public update(e: Event3D) {
             //this.mouse3DManager.update(this.view1.entityCollect);
             this.cube.rotationY = this.cube.rotationY + 0.5;
