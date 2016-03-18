@@ -313,7 +313,7 @@
 
         private onReadyStateChange(event:Event):void {
             if (this._xhr.readyState == 4) {
-                if (this._xhr.status >= 400 /*|| this._xhr.status == 0*/) {
+                if (this._xhr.status >= 400 || this._xhr.status == 0) {
                     console.log(this._url, "load fail");
                 } else {
                     this.loadComplete();

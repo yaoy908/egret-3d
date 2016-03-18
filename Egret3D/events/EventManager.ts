@@ -14,7 +14,9 @@
         private _canvas: Egret3DCanvas;
 
         private _mouseEvent3D: MouseEvent3D;
-       
+        private _touchEvent3D: TouchEvent3D;
+
+
         private get _view3ds(): Array<View3D> {
             return this._canvas.view3Ds;
         }
@@ -31,17 +33,24 @@
             this._canvas = canvas;
             this._canvas.view3Ds
             this._mouseEvent3D = new MouseEvent3D();
-
+            this._touchEvent3D = new TouchEvent3D();
+        }
+        /**
+        * @language zh_CN
+        * 初始化，完成事件注册
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public onInit(): void {
             Input.instance.addListenerKeyClick((code: number) => this.onMouseClick(code));
             Input.instance.addListenerKeyDown((code: number) => this.onMouseDown(code));
             Input.instance.addListenerKeyUp((code: number) => this.onMouseUp(code));
             Input.instance.addListenerMouseMove((e: MouseEvent) => this.onMouseMove(e));
             Input.instance.addListenerMouseOver((e: MouseEvent) => this.onMouseOver(e));
-            Input.instance.addTouchStartCallback((e: TouchEvent) => this.onTouchStart(e));
-            Input.instance.addTouchEndCallback((e: TouchEvent) => this.onTouchEnd(e));
+            Input.instance.addTouchDownCallback((e: TouchEvent) => this.onTouchDown(e));
+            Input.instance.addTouchUpCallback((e: TouchEvent) => this.onTouchUp(e));
             Input.instance.addTouchMoveCallback((e: TouchEvent) => this.onTouchMove(e));
         }
-
         /**
         * @language zh_CN
         * 清理EventManager
@@ -68,7 +77,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        private sendEvent(e: any, typeStr: string): void {
+        private sendEvent(e: any, typeStr: string, func: Function): void {
             var canvas = this._canvas;
             if (!canvas) {
                 return;
@@ -81,15 +90,30 @@
                 }
                 var collect = view.entityCollect.mousePickList;
                 var ret: Array<IRender> = Picker.pickObject3DList(canvas, view, view.camera3D, collect);
-                for (var i: number = 0; i < ret.length; i++) {
-                    this._mouseEvent3D.eventType = typeStr;
-                    this._mouseEvent3D.data = e;
-                    this._mouseEvent3D.currentTarget = ret[i];
-                    this._mouseEvent3D.pickResult = ret[i].pickResult;
-                    ret[i].dispatchEvent(this._mouseEvent3D);
+                var len = ret.length;
+                var render: IRender;
+                for (var i: number = 0; i < len; i++) {
+                    render = ret[i];
+                    render.dispatchEvent(func.call(this, typeStr, e, render));
                 }
             }
         }
+        private initMouseEvent3D(typeStr: string, e: any, render: IRender): MouseEvent3D {
+            this._mouseEvent3D.eventType = typeStr;
+            this._mouseEvent3D.data = e;
+            this._mouseEvent3D.currentTarget = render;
+            this._mouseEvent3D.pickResult = render.pickResult;
+            return this._mouseEvent3D;
+        }
+        private initTouchEvent3D(typeStr: string, e: any, render: IRender): TouchEvent3D {
+            this._touchEvent3D.eventType = typeStr;
+            this._touchEvent3D.data = e;
+            this._touchEvent3D.currentTarget = render;
+            this._touchEvent3D.pickResult = render.pickResult;
+            return this._touchEvent3D;
+        }
+
+
         /**
         * @language zh_CN
         * 鼠标触发判断。
@@ -107,55 +131,31 @@
             return code === KeyCode.Key_Mouse_Right || code == KeyCode.Key_Mouse_Left;
         }
         private onTouchMove(e: TouchEvent) {
-            //if (!this._collect) return;
-            //var ret: Array<IRender> = Picker.pickObject3DList(this._view, this._camera, this._collect.mousePickList);
-            //var event: Event3D;
-            //for (var i: number = 0; i < ret.length; i++) {
-            //    event = new Event3D(Event3D.TOUCH_MOVE, e);
-            //    event.currentTarget = ret[i];
-            //    //event.data = e;
-            //    ret[i].dispatchEvent(event);
-            //}
+            this.sendEvent(e, TouchEvent3D.TOUCH_MOVE, this.initTouchEvent3D);
         }
-        private onTouchEnd(e: TouchEvent) {
-            //if (!this._collect) return;
-            //var ret: Array<IRender> = Picker.pickObject3DList(this._view, this._camera, this._collect.mousePickList);
-            //var event: Event3D;
-            //for (var i: number = 0; i < ret.length; i++) {
-            //    event = new Event3D(Event3D.TOUCH_END, e);
-            //    event.currentTarget = ret[i];
-            //    //event.data = e;
-            //    ret[i].dispatchEvent(event);
-            //}
+        private onTouchUp(e: TouchEvent) {
+            this.sendEvent(e, TouchEvent3D.TOUCH_UP, this.initTouchEvent3D);
         }
-        private onTouchStart(e: TouchEvent) {
-            //if (!this._collect) return;
-            //var ret: Array<IRender> = Picker.pickObject3DList(this._view, this._camera, this._collect.mousePickList);
-            //var event: Event3D;
-            //for (var i: number = 0; i < ret.length; i++) {
-            //    event = new Event3D(Event3D.TOUCH_START, e);
-            //    event.currentTarget = ret[i];
-            //    //event.data = e;
-            //    ret[i].dispatchEvent(event);
-            //}
+        private onTouchDown(e: TouchEvent) {
+            this.sendEvent(e, TouchEvent3D.TOUCH_DOWN, this.initTouchEvent3D);
         }
         private onMouseClick(code: number) {
             if (!this.isMouseTrigger(code)) return;
-            this.sendEvent(code, MouseEvent3D.MOUSE_CLICK);
+            this.sendEvent(code, MouseEvent3D.MOUSE_CLICK, this.initMouseEvent3D);
         }
         private onMouseDown(code: number) {
             if (!this.isMouseTrigger(code)) return;
-            this.sendEvent(code, MouseEvent3D.MOUSE_DOWN);
+            this.sendEvent(code, MouseEvent3D.MOUSE_DOWN, this.initMouseEvent3D);
         }
         private onMouseUp(code: number) {
             if (!this.isMouseTrigger(code)) return;
-            this.sendEvent(code, MouseEvent3D.MOUSE_UP);
+            this.sendEvent(code, MouseEvent3D.MOUSE_UP, this.initMouseEvent3D);
         }
         private onMouseMove(e: MouseEvent) {
-            this.sendEvent(e, MouseEvent3D.MOUSE_MOVE);
+            this.sendEvent(e, MouseEvent3D.MOUSE_MOVE, this.initMouseEvent3D);
         }
         private onMouseOver(e: MouseEvent) {
-            this.sendEvent(e, MouseEvent3D.MOUSE_OVER);
+            this.sendEvent(e, MouseEvent3D.MOUSE_OVER, this.initMouseEvent3D);
         }
     }
 }   

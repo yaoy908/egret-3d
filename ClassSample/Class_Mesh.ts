@@ -36,7 +36,7 @@
 
             this._egret3DCanvas.start();
 
-            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
+            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
         }
 
         public update(e: Event3D) {

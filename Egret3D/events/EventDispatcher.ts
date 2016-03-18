@@ -44,13 +44,12 @@
         * @param type {string} 事件的类型。
         * @param callback {Function} 处理事件的侦听器函数。此函数必须接受 Event3D 对象作为其唯一的参数，并且不能返回任何结果，
         * 如下面的示例所示： function(evt:Event3D):void 函数可以有任何名称。
-        * @param thisObject {any} 侦听函数的对象
         * @param  priority {number} 事件侦听器的优先级。优先级由一个带符号的 32 位整数指定。数字越大，优先级越高。优先级为 n 的所有侦听器会在
         * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
          * @version Egret 3.0
          * @platform Web,Native
         */
-        public addEventListener(type: string, callback: Function, thisObject: any, priolity: number = 0): void {
+        public addEventListener(type: string, thisObject: any, callback: Function, priolity: number = 0): void {
             if (this.listeners[type] == null) {
                 this.listeners[type] = [];
             }
@@ -64,11 +63,10 @@
          * 移除事件侦听器。
          * @param type {string} 事件名。
          * @param callback {Function} 侦听函数。
-         * @param thisObject {any} 侦听函数的对象
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public removeEventListener(type: string, callback: Function, thisObject: any): void {
+        public removeEventListener(type: string, thisObject: any, callback: Function): void {
             if (this.hasEventListener(type, thisObject, callback)) {
                 for (var i: number = 0; i < this.listeners[type].length; i++) {
                     var listener: EventListener = this.listeners[type][i];
