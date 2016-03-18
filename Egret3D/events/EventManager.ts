@@ -11,22 +11,10 @@
     */
     export class EventManager {
 
-        /**
-         * @language zh_CN
-         * 主画布
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
         private _canvas: Egret3DCanvas;
 
         private _mouseEvent3D: MouseEvent3D;
-
-        /**
-         * @language zh_CN
-         * 渲染视图群
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
+       
         private get _view3ds(): Array<View3D> {
             return this._canvas.view3Ds;
         }
@@ -35,7 +23,7 @@
         /**
         * @language zh_CN
         * 构造函数
-        * @param view 渲染视图
+        * @param canvas 画布
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -75,8 +63,8 @@
         /**
          * @language zh_CN
          * 分发事件。
-         * @param e 事件参数
-         * @param e 事件类型
+         * @param e {any} 事件参数
+         * @param typeStr {string} 事件类型
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -105,7 +93,7 @@
         /**
         * @language zh_CN
         * 鼠标触发判断。
-        * @param code KeyCode枚举类型
+        * @param e {any}
         * @version Egret 3.0
         * @platform Web,Native
         */
