@@ -40,7 +40,7 @@
             this.cameraCtl.rotationX = 60;
 
             this._egret3DCanvas.start();
-            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
+            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
         }
 
         protected mat: TextureMaterial;
@@ -65,8 +65,8 @@
                 mesh.material.lightGroup = this.lights;
                 this.laohu = mesh;
 
-                var loadtex: URLLoader = new URLLoader("resource/laohu/Mon_04.png");
-                loadtex.onLoadComplete = (e: URLLoader) => this.onLoadTexture(e, mat, "Mon_04");
+                var loadtex: URLLoader = new URLLoader("resource/cloudy_noon_FR.dds");
+                loadtex.onLoadComplete = (e: URLLoader) => this.onLoadTexture(e, mat, "cloudy_noon_FR");
                 var load: URLLoader = new URLLoader("resource/laohu/Bonezero.eam");
                 load.onLoadComplete = (e: URLLoader) => this.onAnimation(e, "Bonezero", mesh);
             }

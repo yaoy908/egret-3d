@@ -43,14 +43,7 @@
             this._canvas = canvas;
             this._canvas.view3Ds
             this._mouseEvent3D = new MouseEvent3D();
-        }
-        /**
-        * @language zh_CN
-        * 初始化，完成事件注册
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public onInit(): void {
+
             Input.instance.addListenerKeyClick((code: number) => this.onMouseClick(code));
             Input.instance.addListenerKeyDown((code: number) => this.onMouseDown(code));
             Input.instance.addListenerKeyUp((code: number) => this.onMouseUp(code));
@@ -60,6 +53,7 @@
             Input.instance.addTouchEndCallback((e: TouchEvent) => this.onTouchEnd(e));
             Input.instance.addTouchMoveCallback((e: TouchEvent) => this.onTouchMove(e));
         }
+
         /**
         * @language zh_CN
         * 清理EventManager

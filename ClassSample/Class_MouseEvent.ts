@@ -20,11 +20,11 @@
 
 
             this.cube.mouseEnable = true;
-            this.cube.addEventListener(MouseEvent3D.MOUSE_DOWN, this, this.onMouseDown);
-            this.cube.addEventListener(MouseEvent3D.MOUSE_UP, this, this.onMouseUp);
-            this.cube.addEventListener(MouseEvent3D.MOUSE_CLICK, this, this.onClick);
-            this.cube.addEventListener(MouseEvent3D.MOUSE_MOVE, this, this.onMouseMove);
-            this.cube.addEventListener(MouseEvent3D.MOUSE_OVER, this, this.onMouseOver);
+            this.cube.addEventListener(MouseEvent3D.MOUSE_DOWN, this.onMouseDown, this);
+            this.cube.addEventListener(MouseEvent3D.MOUSE_UP, this.onMouseUp, this);
+            this.cube.addEventListener(MouseEvent3D.MOUSE_CLICK, this.onClick, this);
+            this.cube.addEventListener(MouseEvent3D.MOUSE_MOVE, this.onMouseMove, this);
+            this.cube.addEventListener(MouseEvent3D.MOUSE_OVER, this.onMouseOver, this);
 
 
             this.view1 = new View3D(0, 0, window.innerWidth, window.innerHeight);
@@ -38,10 +38,8 @@
             dirLight.diffuse = 0xff0000ff;
             lights.addLight(dirLight);
             this.cube.material.lightGroup = lights;
-            var eventManager: EventManager = new EventManager(this._egret3DCanvas);
-            eventManager.onInit();
             this._egret3DCanvas.start();
-            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
+            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
         }
 
         private onMouseDown(code: number): void {
