@@ -99,9 +99,9 @@
                 }
                 var collect = view.entityCollect.mousePickList;
                 var ret: Array<IRender> = Picker.pickObject3DList(canvas, view, view.camera3D, collect);
-                var event: Event3D;
                 for (var i: number = 0; i < ret.length; i++) {
-                    this._mouseEvent3D = new MouseEvent3D(typeStr, e);
+                    this._mouseEvent3D.eventType = typeStr;
+                    this._mouseEvent3D.data = e;
                     this._mouseEvent3D.currentTarget = ret[i];
                     this._mouseEvent3D.pickResult = ret[i].pickResult;
                     ret[i].dispatchEvent(this._mouseEvent3D);
@@ -173,7 +173,7 @@
             this.sendEvent(e, MouseEvent3D.MOUSE_MOVE);
         }
         private onMouseOver(e: MouseEvent) {
-             this.sendEvent(e, MouseEvent3D.MOUSE_OVER);
+            this.sendEvent(e, MouseEvent3D.MOUSE_OVER);
         }
     }
 }   
