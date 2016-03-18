@@ -38,5 +38,13 @@
          * @platform Web,Native
          */
         static MOUSE_MOVE: string = "onMouseMove";
+        /**
+         * @language zh_CN
+         * MOUSE_OVER 常量定义 onMouseMove 事件对象的 type 属性的值。
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        static MOUSE_OVER : string = "onMouseOver";
+
     }
 }
