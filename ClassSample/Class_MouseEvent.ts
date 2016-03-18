@@ -20,16 +20,16 @@
 
 
             this.cube.mouseEnable = true;
-            this.cube.addEventListener(MouseEvent3D.MOUSE_DOWN, this, this.onMouseDown);
-            this.cube.addEventListener(MouseEvent3D.MOUSE_UP, this, this.onMouseUp);
-            this.cube.addEventListener(MouseEvent3D.MOUSE_CLICK, this, this.onClick);
-            this.cube.addEventListener(MouseEvent3D.MOUSE_MOVE, this, this.onMouseMove);
-            this.cube.addEventListener(MouseEvent3D.MOUSE_OVER, this, this.onMouseOver);
+            this.cube.addEventListener(MouseEvent3D.MOUSE_DOWN, this.onMouseDown, this);
+            this.cube.addEventListener(MouseEvent3D.MOUSE_UP, this.onMouseUp, this);
+            this.cube.addEventListener(MouseEvent3D.MOUSE_CLICK, this.onClick, this);
+            this.cube.addEventListener(MouseEvent3D.MOUSE_MOVE, this.onMouseMove, this);
+            this.cube.addEventListener(MouseEvent3D.MOUSE_OVER, this.onMouseOver, this);
 
 
-            this.cube.addEventListener(TouchEvent3D.TOUCH_MOVE, this, this.onTouchMove);
-            this.cube.addEventListener(TouchEvent3D.TOUCH_DOWN, this, this.onTouchDown);
-            this.cube.addEventListener(TouchEvent3D.TOUCH_UP, this, this.onTouchUp);
+            this.cube.addEventListener(TouchEvent3D.TOUCH_MOVE, this.onTouchMove, this);
+            this.cube.addEventListener(TouchEvent3D.TOUCH_DOWN, this.onTouchDown, this);
+            this.cube.addEventListener(TouchEvent3D.TOUCH_UP, this.onTouchUp, this);
 
 
             this.view1 = new View3D(0, 0, window.innerWidth, window.innerHeight);
@@ -43,8 +43,7 @@
             dirLight.diffuse = 0xff0000ff;
             lights.addLight(dirLight);
             this.cube.material.lightGroup = lights;
-            var eventManager: EventManager = new EventManager(this._egret3DCanvas);
-            eventManager.onInit();
+           
             this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
         }

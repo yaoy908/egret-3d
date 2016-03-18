@@ -49,7 +49,7 @@
          * @version Egret 3.0
          * @platform Web,Native
         */
-        public addEventListener(type: string, thisObject: any, callback: Function, priolity: number = 0): void {
+        public addEventListener(type: string, callback: Function, thisObject: any, priolity: number = 0): void {
             if (this.listeners[type] == null) {
                 this.listeners[type] = [];
             }
@@ -66,7 +66,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public removeEventListener(type: string, thisObject: any, callback: Function): void {
+        public removeEventListener(type: string, callback: Function, thisObject: any): void {
             if (this.hasEventListener(type, thisObject, callback)) {
                 for (var i: number = 0; i < this.listeners[type].length; i++) {
                     var listener: EventListener = this.listeners[type][i];
