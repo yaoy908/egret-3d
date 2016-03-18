@@ -45,7 +45,6 @@
                     case PickType.BoundPick:
                         if (renderItem.bound != null) {
                             if (ray.IntersectMesh(renderItem.bound.vexData, renderItem.bound.indexData, renderItem.bound.vexLength, renderItem.bound.indexData.length / 3, 0, renderItem.modelMatrix, renderItem.pickResult)) {
-                                var target: PickResult = new PickResult();
                                 ret.push(objects[i]);
                             }
                         }
@@ -71,7 +70,6 @@
                         }
 
                         if (ray.IntersectMeshEx(renderItem, uvoffset, renderItem.pickResult)) {
-                            var target: PickResult = new PickResult();
                             ret.push(objects[i]);
                         }
                         break;
@@ -94,7 +92,6 @@
                             uvoffset += Geometry.colorSize;
                         }
                         if (ray.IntersectMeshEx(renderItem, uvoffset, renderItem.pickResult)) {
-                            var target: PickResult = new PickResult();
                             ret.push(objects[i]);
                         }
                         break;

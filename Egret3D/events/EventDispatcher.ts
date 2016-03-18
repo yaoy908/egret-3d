@@ -23,10 +23,10 @@
          * @platform Web,Native
          */
         public dispatchEvent(event3D: Event3D) {
-            if (this.listeners[event3D.type] != null) {
+            if (this.listeners[event3D.eventType] != null) {
                 event3D.currentTarget = this;
-                for (var i: number = 0; i < this.listeners[event3D.type].length; i++) {
-                    var listener: EventListener = this.listeners[event3D.type][i];
+                for (var i: number = 0; i < this.listeners[event3D.eventType].length; i++) {
+                    var listener: EventListener = this.listeners[event3D.eventType][i];
                     try {
                         listener.handler.call(listener.thisObject, event3D);
                     } catch (error) {
@@ -49,15 +49,21 @@
          * @version Egret 3.0
          * @platform Web,Native
         */
-        public addEventListener(type: string, thisObject: any, callback: Function, priolity: number = 0): void {
+        public addEventListener(type: string, callback: Function, thisObject: any, priolity: number = 0): number {
             if (this.listeners[type] == null) {
                 this.listeners[type] = [];
             }
-            this.listeners[type].push(new EventListener(type, thisObject, callback, priolity));
+
+            var listener: any = new EventListener(type, thisObject, callback, priolity);
+            listener.id = ++EventListener.event_id_count;
+            this.listeners[type].push(listener);
             this.listeners[type].sort(function (listener1: EventListener, listener2: EventListener) {
                 return listener2.priolity - listener1.priolity;
             });
+
+            return listener.id;
         }
+
         /**
          * @language zh_CN
          * 移除事件侦听器。
@@ -66,7 +72,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public removeEventListener(type: string, thisObject: any, callback: Function): void {
+        public removeEventListener(type: string, callback: Function, thisObject: any): void {
             if (this.hasEventListener(type, thisObject, callback)) {
                 for (var i: number = 0; i < this.listeners[type].length; i++) {
                     var listener: EventListener = this.listeners[type][i];
@@ -74,6 +80,28 @@
                         listener.handler = null;
                         listener.thisObject = null;
                         this.listeners[type].splice(i, 1);
+                        return;
+                    }
+                }
+            }
+        }
+
+        /**
+         * @language zh_CN
+         * 移除事件侦听器。
+         * @param id  事件id, addEventListener 的返回值.
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public removeEventListenerAt(id: number): void {
+
+            for (var key in this.listeners) {
+                for (var i: number = 0; i < this.listeners[key].length; i++) {
+                    var listener = this.listeners[key][i];
+                    if (listener.id == id) {
+                        listener.handler = null;
+                        listener.thisObject = null;
+                        this.listeners[key].splice(i, 1);
                         return;
                     }
                 }
@@ -142,6 +170,11 @@
     * @platform Web,Native
     */
     class EventListener {
+
+        /**
+        * @private
+        */
+        public static event_id_count = 0;
 
         /**
         * @language zh_CN

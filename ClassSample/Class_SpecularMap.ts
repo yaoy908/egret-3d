@@ -19,7 +19,7 @@
             this.ctl.distance = 1000;
 
             this._egret3DCanvas.start();
-            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
+            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
 
             var po: DirectLight = new DirectLight(new Vector3D(-0.8,1.0,0.0));
             po.y = 50;

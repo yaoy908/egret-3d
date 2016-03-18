@@ -312,7 +312,7 @@
         * @platform Web,Native
         * @param callback {Function} 手指按下事件的侦听函数
         */
-        public addTouchStartCallback(callback: Function): void {
+        public addTouchDownCallback(callback: Function): void {
             this._touchStartCallback.push(callback);
         }
 
@@ -323,7 +323,7 @@
         * @platform Web,Native
         * @param callback {Function} 手指弹起事件的侦听函数
         */
-        public addTouchEndCallback(callback: Function): void {
+        public addTouchUpCallback(callback: Function): void {
             this._touchEndCallback.push(callback);
         }
 
@@ -587,6 +587,7 @@
 
         private touchMove(e: TouchEvent) {
 
+
             this.mouseLastX = this.mouseX;
             this.mouseLastY = this.mouseY;
 
@@ -597,6 +598,7 @@
             this.mouseOffsetY = this.mouseY - this.mouseLastY;
 
             e.preventDefault();
+
 
             if (e.targetTouches.length > 1) {
 
@@ -625,7 +627,9 @@
 
             }
             else {
-                this._listenerSwipe();
+                if (this._listenerSwipe != null) {
+                    this._listenerSwipe();
+                }
             }
 
             for (var i: number = 0; i < this._touchMoveCallback.length; i++) {
@@ -645,13 +649,13 @@
             this._mouseMoveFunc.push(func);
         }
 
-         /**
-        * @language zh_CN
-        * 添加鼠标脱离事件的侦听器函数。
-        * @version Egret 3.0
-        * @platform Web,Native
-        * @param func {Function} 处理鼠标移事件的侦听器函数
-        */
+        /**
+       * @language zh_CN
+       * 添加鼠标脱离事件的侦听器函数。
+       * @version Egret 3.0
+       * @platform Web,Native
+       * @param func {Function} 处理鼠标移事件的侦听器函数
+       */
         public addListenerMouseOver(func: Function) {
             this._mouseOverFunc.push(func);
         }
@@ -800,8 +804,6 @@
         }
 
         private mouseOver(e: MouseEvent) {
-            console.log("mouseOver");
-            
             for (var i: number = 0; i < this._mouseOverFunc.length; ++i) {
                 this._mouseOverFunc[i](e);
             }

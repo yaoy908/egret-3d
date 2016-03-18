@@ -19,7 +19,7 @@
             this.ctl.distance = 1000;
 
             this._egret3DCanvas.start();
-            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
+            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
 
             var po: PointLight = new PointLight(0xffffff);
             po.y = 200;

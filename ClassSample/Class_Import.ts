@@ -24,7 +24,7 @@
             this.ctl = new HoverController(view1.camera3D);
 
             this._egret3DCanvas.start();
-            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
+            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
         }
 
         protected onLoad(e: URLLoader, name: string) {

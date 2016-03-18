@@ -1,6 +1,6 @@
 ﻿
 function jsOnload() {
-    var sample: egret3d.Class_NormalMap = new egret3d.Class_NormalMap();
+    var sample: egret3d.Class_MouseEvent = new egret3d.Class_MouseEvent();
 }
 
 window.onload = () => {

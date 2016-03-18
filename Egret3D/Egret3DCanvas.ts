@@ -16,9 +16,11 @@
         protected _time: number = 0;
         protected _delay: number = 0;
         protected _timeDate: Date = null;
+        protected _envetManager: EventManager;
 
         constructor(blend2D: boolean = false) {
             super();
+            this._envetManager = new EventManager(this);
             this.canvas = document.createElement("canvas");
             this.canvas.style.position = "absolute";
             this.canvas.style.zIndex = "0";
