@@ -49,23 +49,37 @@ mat4 buildMat4(int index){
 
 void main(void){
 
-   endPosition = vec4(0.0, 0.0, 0.0, 0.0) ;
+	endPosition = vec4(0.0, 0.0, 0.0, 0.0) ;
+	vec4 temp_n = vec4(0.0, 0.0, 0.0, 0.0);
+	
+	vec4 temp_position = vec4(attribute_position, 1.0) ;
+	vec4 temp_normal = vec4(attribute_normal, 0.0) ;
 
-   vec4 temp_position = vec4(attribute_position, 1.0) ;
-   endPosition += buildMat4(int(attribute_boneIndex.x)) * temp_position * attribute_boneWeight.x;
-   endPosition += buildMat4(int(attribute_boneIndex.y)) * temp_position * attribute_boneWeight.y;
-   endPosition += buildMat4(int(attribute_boneIndex.z)) * temp_position * attribute_boneWeight.z;
-   endPosition += buildMat4(int(attribute_boneIndex.w)) * temp_position * attribute_boneWeight.w;
+	mat4 m0 = buildMat4(int(attribute_boneIndex.x));
+	mat4 m1 = buildMat4(int(attribute_boneIndex.y));
+	mat4 m2 = buildMat4(int(attribute_boneIndex.z));
+	mat4 m3 = buildMat4(int(attribute_boneIndex.w));
 
-   endPosition =  uniform_ModelMatrix * endPosition ;
+	endPosition += m0 * temp_position * attribute_boneWeight.x;
+	endPosition += m1 * temp_position * attribute_boneWeight.y;
+	endPosition += m2 * temp_position * attribute_boneWeight.z;
+	endPosition += m3 * temp_position * attribute_boneWeight.w;
 
-   varying_eyedir = uniform_eyepos ;
-   varying_pos =  endPosition ;
+	
+	temp_n += m0 * temp_normal * attribute_boneWeight.x;
+	temp_n += m1 * temp_normal * attribute_boneWeight.y;
+	temp_n += m2 * temp_normal * attribute_boneWeight.z;
+	temp_n += m3 * temp_normal * attribute_boneWeight.w;
 
-   endPosition = uniform_ProjectionMatrix * endPosition ;
+	endPosition =  uniform_ModelMatrix * endPosition ;
+
+	varying_eyedir = uniform_eyepos ;
+	varying_pos =  endPosition ;
+
+	endPosition = uniform_ProjectionMatrix * endPosition ;
    
-   varying_eyeNormal =  (uniform_normalMatrix*vec4(attribute_normal,0.0) ).xyz ;
+	varying_eyeNormal =  (uniform_normalMatrix * vec4(normalize(temp_n.xyz),0.0)).xyz ;
 
-   varying_uv0 = attribute_uv0;
-   varying_color = attribute_color ;
+	varying_uv0 = attribute_uv0;
+	varying_color = attribute_color ;
 }
