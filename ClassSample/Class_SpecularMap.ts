@@ -5,6 +5,7 @@
 
         private ctl; HoverController;
         protected plane: Mesh;
+        protected matPlane: TextureMaterial;
         constructor() {
             super();
 
@@ -20,8 +21,16 @@
             this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this, this.update);
 
-            this.plane = new Mesh(new PlaneGeometry(), new TextureMaterial());
+            this.matPlane = new TextureMaterial();
+            this.plane = new Mesh(new PlaneGeometry(), this.matPlane);
             this.view1.addChild3D(this.plane);
+
+            var load: URLLoader = new URLLoader("resource/map/plane.png");
+            load.onLoadComplete = (e: URLLoader) => this.onLoad(e, this.matPlane);
+        }
+
+        protected onLoad(load: URLLoader, mat: TextureMaterial) {
+            mat.diffuseTexture = load.data;
         }
 
         public update(e: Event3D) {
