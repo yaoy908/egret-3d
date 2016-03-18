@@ -1,5 +1,5 @@
 ﻿module egret3d {
-    export class Class_NormalMap extends Class_View3D {
+    export class Class_SpecularMap extends Class_View3D {
 
         private view1: View3D;
 
