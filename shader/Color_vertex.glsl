@@ -24,11 +24,12 @@ void main(void){
    endPosition =  uniform_ModelMatrix * temp_position ;
 
    varying_eyedir = uniform_eyepos ;
+
    varying_pos =  endPosition ;
 
    endPosition = uniform_ProjectionMatrix * endPosition ;
    
-   varying_eyeNormal =  (uniform_normalMatrix*vec4(attribute_normal,0.0) ).xyz ;
+   varying_eyeNormal =  (uniform_ProjectionMatrix*uniform_normalMatrix*vec4(attribute_normal,0.0) ).xyz ;
 
    varying_color = attribute_color ;
 }

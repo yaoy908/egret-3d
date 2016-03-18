@@ -14,7 +14,7 @@ varying vec3 varying_eyeNormal  ;
 varying vec4 varying_color  ;
 varying vec3 varying_eyedir  ;
 varying vec2 varying_uv0;
-
+varying vec3 varying_tangent	;
 vec4 endPosition ;
 
 void main(void){
@@ -30,7 +30,8 @@ void main(void){
 
    endPosition = uniform_ProjectionMatrix * endPosition ;
    
-   varying_eyeNormal =  (uniform_normalMatrix*vec4(attribute_normal,0.0) ).xyz ;
+   varying_eyeNormal =  (uniform_ProjectionMatrix*uniform_normalMatrix*vec4(attribute_normal,0.0) ).xyz ;
+   varying_tangent = attribute_tangent ;
 
    varying_uv0 = attribute_uv0;
    varying_color = attribute_color ;
