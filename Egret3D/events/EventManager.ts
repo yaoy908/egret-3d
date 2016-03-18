@@ -19,6 +19,8 @@
          */
         private _canvas: Egret3DCanvas;
 
+        private _mouseEvent3D: MouseEvent3D;
+
         /**
          * @language zh_CN
          * 渲染视图群
@@ -40,6 +42,7 @@
         constructor(canvas: Egret3DCanvas) {
             this._canvas = canvas;
             this._canvas.view3Ds
+            this._mouseEvent3D = new MouseEvent3D();
         }
         /**
         * @language zh_CN
@@ -98,9 +101,10 @@
                 var ret: Array<IRender> = Picker.pickObject3DList(canvas, view, view.camera3D, collect);
                 var event: Event3D;
                 for (var i: number = 0; i < ret.length; i++) {
-                    event = new Event3D(typeStr, e);
-                    event.currentTarget = ret[i];
-                    ret[i].dispatchEvent(event);
+                    this._mouseEvent3D = new MouseEvent3D(typeStr, e);
+                    this._mouseEvent3D.currentTarget = ret[i];
+                    this._mouseEvent3D.pickResult = ret[i].pickResult;
+                    ret[i].dispatchEvent(this._mouseEvent3D);
                 }
             }
         }

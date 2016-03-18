@@ -69,7 +69,13 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public currentTarget: any;
+        private _currentTarget: any;
+        public get currentTarget(): any {
+            return this._currentTarget;
+        }
+        public set currentTarget(value: any) {
+            this._currentTarget = value;
+        }
 
         /**
         * @language zh_CN
@@ -78,7 +84,13 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public target: any;
+        private _target: any;
+        public get target(): any {
+            return this._target;
+        }
+        public set target(value: any) {
+            this._target = value;
+        }
 
         /**
         * @language zh_CN
@@ -87,8 +99,13 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public type: string;
-
+        private _eventType: string;
+        public get eventType(): string {
+            return this._eventType;
+        }
+        public set eventType(value: string) {
+            this._eventType = value;
+        }
         /**
         * @language zh_CN
         * 附加数据。
@@ -96,13 +113,39 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public data: string;
+        private _data: string;
+        public get data(): string {
+            return this._data;
+        }
+        public set data(value: string) {
+            this._data = value;
+        }
 
-        public time: number = 0;
 
-        public delay: number = 0;
+        private _time: number = 0;
+        public get time(): number {
+            return this._time;
+        }
+        public set time(value: number) {
+            this._time = value;
+        }
 
-        public handler: Function;
+        private _delay: number = 0;
+        public get delay(): number {
+            return this._delay;
+        }
+        public set delay(value: number) {
+            this._delay = value;
+        }
+
+
+        private _handler: Function;
+        public get handler(): Function {
+            return this._handler;
+        }
+        public set handler(value: Function) {
+            this._handler = value;
+        }
 
         /**
         * @language zh_CN
@@ -113,7 +156,7 @@
         * @platform Web,Native
         */
         constructor(eventType: string = null, data: any = null) {
-            this.type = eventType;
+            this.eventType = eventType;
             this.data = data;
         }
     }

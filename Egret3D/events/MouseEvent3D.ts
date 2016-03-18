@@ -44,7 +44,14 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        static MOUSE_OVER : string = "onMouseOver";
+        static MOUSE_OVER: string = "onMouseOver";
 
+        private _pickResult: PickResult;
+        public get pickResult(): PickResult {
+            return this._pickResult;
+        }
+        public set pickResult(value: PickResult) {
+            this._pickResult = value;
+        }
     }
 }

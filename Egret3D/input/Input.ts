@@ -800,8 +800,6 @@
         }
 
         private mouseOver(e: MouseEvent) {
-            console.log("mouseOver");
-            
             for (var i: number = 0; i < this._mouseOverFunc.length; ++i) {
                 this._mouseOverFunc[i](e);
             }
