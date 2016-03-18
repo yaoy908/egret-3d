@@ -38,7 +38,8 @@
 
                 this.texture2D.internalFormat = this.internalFormat;
                 this.texture2D.colorFormat = this.colorFormat;
-                this.texture2D.mimapData = this.mimapData;         
+                this.texture2D.mimapData = this.mimapData;
+                this.useMipmap = true;   
 
                 if (this.mimapData && this.mimapData.length > 0) {
                     for (var i: number = 0; i < this.mimapData.length; i++) {
