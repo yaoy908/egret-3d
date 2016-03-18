@@ -2886,7 +2886,7 @@ var egret;
              * @private
              */
             p.prevent = function (event) {
-                event.stopPropagation();
+                //event.stopPropagation();
                 if (event["isScroll"] != true && !this.canvas['userTyping']) {
                     event.preventDefault();
                 }
