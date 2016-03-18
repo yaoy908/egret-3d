@@ -204,6 +204,7 @@
         private _listenerSwipe: Function = null;
 
         private _mouseMoveFunc: Array<Function> = new Array<Function>();
+        private _mouseOverFunc: Array<Function> = new Array<Function>();
         private _mouseWheelFunc: Array<Function> = new Array<Function>();
 
         private _ondeviceorientation: Array<Function> = new Array<Function>();
@@ -286,6 +287,7 @@
             window.addEventListener("mousedown", (e: MouseEvent) => this.mouseStart(e));
             window.addEventListener("mouseup", (e: MouseEvent) => this.mouseEnd(e));
             window.addEventListener("mousemove", (e: MouseEvent) => this.mouseMove(e));
+            window.addEventListener("mouseover", (e: MouseEvent) => this.mouseOver(e));
             window.addEventListener("keydown", (e: KeyboardEvent) => this.keyDown(e));
             window.addEventListener("keyup", (e: KeyboardEvent) => this.keyUp(e));
 
@@ -643,6 +645,17 @@
             this._mouseMoveFunc.push(func);
         }
 
+         /**
+        * @language zh_CN
+        * 添加鼠标脱离事件的侦听器函数。
+        * @version Egret 3.0
+        * @platform Web,Native
+        * @param func {Function} 处理鼠标移事件的侦听器函数
+        */
+        public addListenerMouseOver(func: Function) {
+            this._mouseOverFunc.push(func);
+        }
+
         /**
         * @language zh_CN
         * 添加鼠标滚轮事件的侦听器函数。
@@ -757,8 +770,6 @@
 
         private mouseStart(e: MouseEvent) {
 
-            console.log("mouseStart");
-
             this.mouseX = e.clientX - this.canvas.clientRect.left;
             this.mouseY = e.clientY - this.canvas.clientRect.top;
 
@@ -785,6 +796,14 @@
 
             for (var i: number = 0; i < this._mouseMoveFunc.length; ++i) {
                 this._mouseMoveFunc[i](e);
+            }
+        }
+
+        private mouseOver(e: MouseEvent) {
+            console.log("mouseOver");
+            
+            for (var i: number = 0; i < this._mouseOverFunc.length; ++i) {
+                this._mouseOverFunc[i](e);
             }
         }
 

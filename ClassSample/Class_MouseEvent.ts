@@ -1,11 +1,16 @@
 ﻿module egret3d {
     export class Class_MouseEvent extends Class_View3D {
 
+        private moveIndex: number = 0;
+        private overIndex: number = 0;
         private cube: Mesh;
         //private mouse3DManager: Mouse3DManager;
         private view1: View3D;
         constructor() {
             super();
+
+
+
             var img: HTMLImageElement = <HTMLImageElement>document.getElementById("mon");
             var tex: ImageTexture = new ImageTexture(img);
             var mat: TextureMaterial = new TextureMaterial(tex);
@@ -19,6 +24,7 @@
             this.cube.addEventListener(MouseEvent3D.MOUSE_UP, this, this.onMouseUp);
             this.cube.addEventListener(MouseEvent3D.MOUSE_CLICK, this, this.onClick);
             this.cube.addEventListener(MouseEvent3D.MOUSE_MOVE, this, this.onMouseMove);
+            this.cube.addEventListener(MouseEvent3D.MOUSE_OVER, this, this.onMouseOver);
 
 
             this.view1 = new View3D(0, 0, window.innerWidth, window.innerHeight);
@@ -48,7 +54,10 @@
             console.log("onClick");
         }
         private onMouseMove(e: MouseEvent): void {
-            console.log("onMouseMove");
+            console.log("onMouseMove" + this.moveIndex++);
+        }
+        private onMouseOver(e: MouseEvent): void {
+            console.log("onMouseOver" + this.overIndex++);
         }
         public update(e: Event3D) {
             //this.mouse3DManager.update(this.view1.entityCollect);
