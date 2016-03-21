@@ -10,7 +10,7 @@ class SampleBase {
     protected _view: egret3d.View3D;
     private globalTime: number;
     constructor() {
-        // 
+        // 创建canvas
         this._egret3DCanvas = new egret3d.Egret3DCanvas();
         this._egret3DCanvas.x = 0;
         this._egret3DCanvas.y = 0;
