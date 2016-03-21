@@ -48,24 +48,38 @@ mat4 buildMat4(int index){
 }
 
 void main(void){
-   vec4 temp_p = vec4(0.0, 0.0, 0.0, 0.0) ;
+	vec4 temp_p = vec4(0.0, 0.0, 0.0, 0.0) ;
+	vec4 temp_n = vec4(0.0, 0.0, 0.0, 0.0);
 
-   vec4 temp_position = vec4(attribute_position, 1.0) ;
-   temp_p += buildMat4(int(attribute_boneIndex.x)) * temp_position * attribute_boneWeight.x;
-   temp_p += buildMat4(int(attribute_boneIndex.y)) * temp_position * attribute_boneWeight.y;
-   temp_p += buildMat4(int(attribute_boneIndex.z)) * temp_position * attribute_boneWeight.z;
-   temp_p += buildMat4(int(attribute_boneIndex.w)) * temp_position * attribute_boneWeight.w;
+	vec4 temp_position = vec4(attribute_position, 1.0) ;
+	vec4 temp_normal = vec4(attribute_normal, 0.0);
 
-   temp_p =  uniform_ModelMatrix * temp_p;
-   varying_eyedir = uniform_eyepos.xyz ;
-   varying_pos =  temp_p ;
-   temp_p = uniform_ProjectionMatrix * temp_p ;
-   gl_Position = temp_p ;
-   varying_pos.w = -temp_p.z / 128.0 + 0.5 ;
-   varying_eyeNormal =  (uniform_normalMatrix*vec4(attribute_normal,0.0) ).xyz ;
-   varying_uv0 = attribute_uv0;
-   varying_color = vec4(1.0,1.0,1.0,1.0) ;
-   //varying_eyepos = uniform_eyepos ;
+	mat4 m0 = buildMat4(int(attribute_boneIndex.x));
+	mat4 m1 = buildMat4(int(attribute_boneIndex.y));
+	mat4 m2 = buildMat4(int(attribute_boneIndex.z));
+	mat4 m3 = buildMat4(int(attribute_boneIndex.w));
 
-   varying_tangent = normalize((uniform_ModelMatrix * vec4( attribute_tangent,0.0 )).xyz) ; 
+	temp_p += m0 * temp_position * attribute_boneWeight.x;
+	temp_p += m1 * temp_position * attribute_boneWeight.y;
+	temp_p += m2 * temp_position * attribute_boneWeight.z;
+	temp_p += m3 * temp_position * attribute_boneWeight.w;
+
+	temp_n += m0 * temp_normal * attribute_boneWeight.x;
+	temp_n += m1 * temp_normal * attribute_boneWeight.y;
+	temp_n += m2 * temp_normal * attribute_boneWeight.z;
+	temp_n += m3 * temp_normal * attribute_boneWeight.w;
+
+
+	temp_p =  uniform_ModelMatrix * temp_p;
+	varying_eyedir = uniform_eyepos.xyz ;
+	varying_pos =  temp_p ;
+	temp_p = uniform_ProjectionMatrix * temp_p ;
+	gl_Position = temp_p ;
+	varying_pos.w = -temp_p.z / 128.0 + 0.5 ;
+	varying_eyeNormal =  (uniform_normalMatrix * vec4(normalize(temp_n.xyz),0.0)).xyz ;
+	varying_uv0 = attribute_uv0;
+	varying_color = vec4(1.0,1.0,1.0,1.0) ;
+	//varying_eyepos = uniform_eyepos ;
+
+	varying_tangent = normalize((uniform_ModelMatrix * vec4( attribute_tangent,0.0 )).xyz) ; 
 }
