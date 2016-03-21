@@ -68,6 +68,7 @@
         "core/node/Camera3D.ts",
         "core/node/Entity.ts",
         "core/node/Mesh.ts",
+        "core/node/Billboard.ts",
         "core/node/Sky.ts",
         "core/node/SphereSky.ts",
 

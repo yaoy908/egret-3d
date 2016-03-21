@@ -16,6 +16,7 @@
          */
         public static parse(datas: ArrayBuffer): CameraAnimationController {
             var bytes: ByteArray = new ByteArray(datas);
+            var fileFormat: string = bytes.readUTF();
             var version: number = bytes.readUnsignedInt();
             return ECAVersion.versionDictionary[version](bytes);
         }

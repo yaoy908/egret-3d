@@ -16,6 +16,7 @@
         */
         public static parse(datas: ArrayBuffer): SkeletonAnimationClip {
             var bytes: ByteArray = new ByteArray(datas);
+            var fileFormat: string = bytes.readUTF();
             var version: number = bytes.readUnsignedInt();
             return EAMVersion.versionDictionary[version](bytes);
         }
