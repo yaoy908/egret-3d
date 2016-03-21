@@ -76,7 +76,7 @@ void main(void){
 	temp_p = uniform_ProjectionMatrix * temp_p ;
 	gl_Position = temp_p ;
 	varying_pos.w = -temp_p.z / 128.0 + 0.5 ;
-	varying_eyeNormal =  (uniform_normalMatrix * normalize(temp_n.xyz)).xyz ;
+	varying_eyeNormal =  (uniform_normalMatrix * vec4(normalize(temp_n.xyz),0.0)).xyz ;
 	varying_uv0 = attribute_uv0;
 	varying_color = vec4(1.0,1.0,1.0,1.0) ;
 	//varying_eyepos = uniform_eyepos ;
