@@ -111,6 +111,7 @@
         "loader/parser/ECA/ECAVersion.ts",
         "loader/parser/ESM/ESMParser.ts",
         "loader/parser/ESM/ESMVersion.ts",
+        "loader/parser/ParserUtils.ts",
         "loader/URLLoader.ts",
 
         "material/pass/MethodData.ts",
