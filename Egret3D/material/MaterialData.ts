@@ -409,16 +409,6 @@
 
         /**
         * @language zh_CN
-        * passChange
-        * @default true
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public passChange: boolean = true;
-
-
-        /**
-        * @language zh_CN
         * cullFrontOrBack。
         * @default Egret3DDrive.BACK
         * @version Egret 3.0
@@ -498,7 +488,6 @@
             data.diffusePower = this.diffusePower;
             data.normalPower = this.normalPower;
 
-            data.passChange = this.passChange;
             data.materialDataNeedChange = this.materialDataNeedChange;
             data.textureChange = true;
 

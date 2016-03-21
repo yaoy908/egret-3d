@@ -66,6 +66,7 @@
 
                 if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.diffuse) == -1) {
                     this.materialData.textureMethodTypes.push(TextureMethodType.diffuse);
+                    this.diffusePass.passInvalid();
                 }
             }
         }
@@ -97,7 +98,7 @@
 
                 if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.normal) == -1) {
                     this.materialData.textureMethodTypes.push(TextureMethodType.normal);
-                    this.materialData.passChange = true;
+                    this.diffusePass.passInvalid();
                 }
 
             }
@@ -128,7 +129,7 @@
                 this.materialData.textureChange = true;
                 if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.specular) == -1) {
                     this.materialData.textureMethodTypes.push(TextureMethodType.specular);
-                    this.materialData.passChange = true;
+                    this.diffusePass.passInvalid();
                 }
             }
         }

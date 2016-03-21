@@ -1,11 +1,11 @@
 ﻿module egret3d {
     export class Class_NormalMap extends Class_View3D {
 
-        private view1: View3D;
-
-        private ctl; HoverController;
+        protected view1: View3D;
+        protected ctl; HoverController;
         protected plane: Mesh;
         protected matPlane: TextureMaterial;
+        protected lights: LightGroup = new LightGroup();
         constructor() {
             super();
 
@@ -21,17 +21,30 @@
             this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
 
+            var po: PointLight = new PointLight(0xffffff);
+            po.y = 200;
+            po.z = 200;
+            this.lights.addLight(po);
+
             this.matPlane = new TextureMaterial();
+            this.matPlane.lightGroup = this.lights;
             this.plane = new Mesh(new PlaneGeometry(), this.matPlane);
             this.view1.addChild3D(this.plane);
 
-            var load: URLLoader = new URLLoader("resource/map/plane.png");
-            load.onLoadComplete = (e: URLLoader) => this.onLoad(e, this.matPlane);
+            var loadDiffuse: URLLoader = new URLLoader("resource/floor/WOOD_1.png");
+            loadDiffuse.onLoadComplete = (e: URLLoader) => this.onLoadDiffuse(e, this.matPlane);
+
+            var loadNormal: URLLoader = new URLLoader("resource/floor/wood_1N.png");
+            loadNormal.onLoadComplete = (e: URLLoader) => this.onLoadNormal(e, this.matPlane);
 
         }
 
-        protected onLoad(load: URLLoader, mat: TextureMaterial) {
+        protected onLoadDiffuse(load: URLLoader, mat: TextureMaterial) {
             mat.diffuseTexture = load.data;
+        }
+
+        protected onLoadNormal(load: URLLoader, mat: TextureMaterial) {
+            mat.normalTexture = load.data;
         }
 
         public update(e: Event3D) {

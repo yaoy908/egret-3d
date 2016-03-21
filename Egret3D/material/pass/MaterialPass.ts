@@ -43,8 +43,8 @@
             this._materialData.materialDataNeedChange = true;
         }
 
-        protected restProgram() {
-
+        public passInvalid() {
+            this._passChange = true;
         }
 
         /**
@@ -273,7 +273,7 @@
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ModelMatrix.uniformIndex, false, modeltransform.rawData);
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.viewProjectionMatrix.rawData);
 
-            this.normalMatrix.copyFrom(modeltransform);
+            this.normalMatrix.append(modeltransform);
             this.normalMatrix.invert();
             this.normalMatrix.transpose();
             //this.normalMatrix.appendScale(1,1,1);

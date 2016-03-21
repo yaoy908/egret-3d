@@ -1,11 +1,11 @@
 ﻿module egret3d {
     export class Class_SpecularMap extends Class_View3D {
 
-        private view1: View3D;
-
-        private ctl; HoverController;
+        protected view1: View3D;
+        protected ctl; HoverController;
         protected plane: Mesh;
         protected matPlane: TextureMaterial;
+        protected lights: LightGroup = new LightGroup();
         constructor() {
             super();
 
@@ -21,16 +21,41 @@
             this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
 
+            var po: DirectLight = new DirectLight(new Vector3D(-0.8,1.0,0.0));
+            po.y = 50;
+            po.intensity = 0.7 ; 
+            this.lights.addLight(po);
+
             this.matPlane = new TextureMaterial();
-            this.plane = new Mesh(new PlaneGeometry(), this.matPlane);
+            this.matPlane.lightGroup = this.lights;
+            this.matPlane.ambientPower = 0.3;
+            this.matPlane.repeat = true;
+            this.plane = new Mesh(new PlaneGeometry(1000,1000,10,10,2,2), this.matPlane);
             this.view1.addChild3D(this.plane);
 
-            var load: URLLoader = new URLLoader("resource/map/plane.png");
-            load.onLoadComplete = (e: URLLoader) => this.onLoad(e, this.matPlane);
+            var loadDiffuse: URLLoader = new URLLoader("resource/floor/WOOD_1.png");
+            loadDiffuse.onLoadComplete = (e: URLLoader) => this.onLoadDiffuse(e, this.matPlane);
+
+            var loadNormal: URLLoader = new URLLoader("resource/floor/wood_1N.png");
+            loadNormal.onLoadComplete = (e: URLLoader) => this.onLoadNormal(e, this.matPlane);
+
+            var loadSpeular: URLLoader = new URLLoader("resource/floor/wood_1S.png");
+            loadSpeular.onLoadComplete = (e: URLLoader) => this.onLoadSpecular(e, this.matPlane);
+
+            
+
         }
 
-        protected onLoad(load: URLLoader, mat: TextureMaterial) {
+        protected onLoadDiffuse(load: URLLoader, mat: TextureMaterial) {
             mat.diffuseTexture = load.data;
+        }
+
+        protected onLoadNormal(load: URLLoader, mat: TextureMaterial) {
+            mat.normalTexture = load.data;
+        }
+
+        protected onLoadSpecular(load: URLLoader, mat: TextureMaterial) {
+            mat.specularTexture = load.data;
         }
 
         public update(e: Event3D) {

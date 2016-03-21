@@ -18,7 +18,7 @@
         */
         public initUseMethod(animation: IAnimation) {
             this._passChange = false;
-
+            //this._materialData.passChange = false;
             this._materialData.textureMethodTypes.push(TextureMethodType.color);
 
             var i: number = 0;
@@ -38,11 +38,11 @@
                 this._passUsage.fragmentShader.addUseShaderName("diffuse_fragment");
             }
             if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.normal) != -1) {
-                this._passUsage.vertexShader.addUseShaderName("");
+                //this._passUsage.vertexShader.addUseShaderName("");
                 this._passUsage.fragmentShader.addUseShaderName("normalMap_fragment");
             }
             if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.specular) != -1) {
-                this._passUsage.vertexShader.addUseShaderName("");
+                //this._passUsage.vertexShader.addUseShaderName("");
                 this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
             }
 
