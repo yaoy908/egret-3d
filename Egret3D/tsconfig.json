@@ -65,6 +65,7 @@
 
         "render/IRender.ts",
         "core/node/Object3D.ts",
+        "core/node/Camera3D.ts",
         "core/node/Entity.ts",
         "core/node/Mesh.ts",
         "core/node/Sky.ts",
@@ -170,7 +171,6 @@
         "camera/CameraAnimationController.ts",
         "camera/CameraManager.ts",
 
-        "Camera3D.ts",
         "View3D.ts",
         "Egret3DCanvas.ts"
             
