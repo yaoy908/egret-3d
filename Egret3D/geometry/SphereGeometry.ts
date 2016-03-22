@@ -22,19 +22,18 @@
         /**
         * @language zh_CN
         * 构造函数
-         * @param front 是否正面渲染
         * @param r 半径
         * @param segmentsW 宽度分段数
         * @param segmentsH 高度分段数
         */
-        constructor(front: boolean = true, r: number = 100.0, segmentsW: number = 15, segmentsH: number = 15) {
+        constructor(r: number = 100.0, segmentsW: number = 15, segmentsH: number = 15) {
             super();
 
             this._radius = r;
             this._segmentsW = segmentsW;
             this._segmentsH = segmentsH;
 
-            this.buildSphere(front);
+            this.buildSphere(true);
         }
 
         private buildSphere(front: boolean = true) {

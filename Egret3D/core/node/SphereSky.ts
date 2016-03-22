@@ -20,8 +20,9 @@
         * @platform Web,Native
         */
         constructor(material: MaterialBase, camera: Camera3D = null) {
-            super(new SphereGeometry(false), material);
+            super(new SphereGeometry(10000), material);
             this._camera = camera;
+            material.cullMode = ContextConfig.FRONT;
         } 
 
         /**

@@ -28,7 +28,7 @@
             po.z = 200;
             this.lights.addLight(po);
 
-            var pointMesh: Mesh = new Mesh(new SphereGeometry(false, 15, 25, 25), new ColorMaterial());
+            var pointMesh: Mesh = new Mesh(new SphereGeometry(15, 25, 25), new ColorMaterial());
             pointMesh.y = 200;
             pointMesh.z = 200;
             this.view1.addChild3D(pointMesh);

@@ -25,8 +25,9 @@
         * @platform Web,Native
         */
         constructor(cubMaterial: CubeTextureMaterial, camera: Camera3D = null) {
-            super(new CubeGeometry(false, 800, 800), cubMaterial);
+            super(new CubeGeometry(10000, 10000, 10000), cubMaterial);
             this._camera = camera;
+            cubMaterial.cullMode = ContextConfig.FRONT;
         } 
                         
         /**

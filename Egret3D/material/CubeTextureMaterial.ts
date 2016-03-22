@@ -5,7 +5,7 @@
     * @class egret3d.CubeTextureMaterial
     * @classdesc
     * cube纹理材质。
-    * 
+    * 6张无缝连接的贴图，使一个cube的6个面贴上不同的贴图。
     * 
     * @version Egret 3.0
     * @platform Web,Native
@@ -13,13 +13,13 @@
     export class CubeTextureMaterial extends MaterialBase {
         /**
          * @language zh_CN
-         * 创建一个新的 TextureMaterial 对象。
-         * @param texture {ITexture}
+         * 创建一个新的 CubeTextureMaterial 对象。
+         * @param texture {CubeTexture}
          * @param materialData {MaterialData}
          * @version Egret 3.0
          * @platform Web,Native
          */
-        constructor(texture: ITexture = null, materialData: MaterialData = null) {
+        constructor(texture: CubeTexture = null, materialData: MaterialData = null) {
             super(materialData);
             this.diffuseTexture = texture;
             this.initMatPass();
@@ -38,7 +38,7 @@
          * @platform Web,Native
          */
         public clone(): CubeTextureMaterial {
-            var mat: CubeTextureMaterial = new CubeTextureMaterial(this.diffuseTexture, this.materialData.clone());
+            var mat: CubeTextureMaterial = new CubeTextureMaterial(<CubeTexture>this.diffuseTexture, this.materialData.clone());
             return mat;
         }
     }

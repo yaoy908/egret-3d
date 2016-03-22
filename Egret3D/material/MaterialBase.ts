@@ -503,7 +503,7 @@
 
         /**
        * @language zh_CN
-       * 设置 cull 模式。
+       * 设置 cull 模式 正面渲染三角形或者背面渲染三角形。
        * @param value {Number}
        * @version Egret 3.0
        * @platform Web,Native
@@ -565,34 +565,104 @@
             }
         }
 
+        /**
+         * @language zh_CN
+         * @private
+         * @param value {BlendMode}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public renderDiffusePass(time: number, delay: number, maetID: number , context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation) {
             this.diffusePass.draw(time, delay, context3DProxy, modeltransform, camera3D,subGeometry,animtion);
         }
-
+        
+        /**
+         * @language zh_CN
+         * @private
+         * @param value {BlendMode}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public renderXRayPass() {
         }
-
+        
+        /**
+         * @language zh_CN
+         * @private
+         * @param value {BlendMode}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public renderOutlinePass() {
         }
-
+        
+        /**
+         * @language zh_CN
+         * @private
+         * @param value {BlendMode}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public renderNormalPass() {
         }
-
+        
+        /**
+         * @language zh_CN
+         * @private
+         * @param value {BlendMode}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public renderDepthPass() {
         }
-
+        
+        /**
+         * @language zh_CN
+         * @private
+         * @param value {BlendMode}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public renderPositionPass(){
         }
-
+        
+        /**
+         * @language zh_CN
+         * @private
+         * @param value {BlendMode}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public renderUVPass() {
         }
-
+        
+        /**
+         * @language zh_CN
+         * @private
+         * @param value {BlendMode}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public renderScendUVPass() {
         }
-
+        
+        /**
+         * @language zh_CN
+         * @private
+         * @param value {BlendMode}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public renderVertexColorPass() {
         }
-
+        
+        /**
+         * @language zh_CN
+         * @private
+         * @param value {BlendMode}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public renderLightingPass() {
         }
     }

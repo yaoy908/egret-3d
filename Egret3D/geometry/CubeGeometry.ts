@@ -41,17 +41,16 @@
         /**
         * @language zh_CN
         * 构造函数
-        * @param front 是否正面渲染
         * @param width 宽度
         * @param height 高度
         * @param depth 深度
         */
-        constructor(front:boolean = true, width: number = 80, height: number = 80, depth: number = 80 ) {
+        constructor(width: number = 80, height: number = 80, depth: number = 80 ) {
             super();
             this.width = width;
             this.height = height;
             this.depth = depth;
-            this.buildGeomtry(front);
+            this.buildGeomtry(true);
         }
 
         /**
