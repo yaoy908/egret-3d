@@ -34,15 +34,8 @@
         public draw(time: number, delay: number, context3D: Context3DProxy, collect: CollectBase, camera: Camera3D) {
             this._numEntity = collect.renderList.length;
 
-            //if (collect.rootNode._sky) {
-            //    collect.rootNode.sky.draw(context3D, camera );
-            //}
-            //else if (collect.rootNode._sphereSky) {
-            //    collect.rootNode._sphereSky.draw(context3D, camera );
-            //}
             for (this._renderIndex = 0; this._renderIndex < this._numEntity; this._renderIndex++) {
                 this._renderItem = collect.renderList[this._renderIndex] ;
-                //collect.renderList[this._renderIndex].update(time, delay, camera);
                 if (!this._renderItem.visible) {
                     continue;
                 }

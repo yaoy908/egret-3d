@@ -27,6 +27,12 @@
         * 顶点长度
         */
         public vexLength: number = 3;
+        
+        /**
+        * @language zh_CN
+        * 子包围盒
+        */
+        public childBound: Bound;
 
         public inBound(frustum: Frustum): boolean{
             return true;

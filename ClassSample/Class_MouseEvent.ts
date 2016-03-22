@@ -29,8 +29,7 @@
 
             this.cube.addEventListener(TouchEvent3D.TOUCH_MOVE, this.onTouchMove, this);
             this.cube.addEventListener(TouchEvent3D.TOUCH_DOWN, this.onTouchDown, this);
-            this.cube.addEventListener(TouchEvent3D.TOUCH_UP, this.onTouchUp, this);
-
+            var id = this.cube.addEventListener(TouchEvent3D.TOUCH_UP, this.onTouchUp, this);
 
             this.view1 = new View3D(0, 0, window.innerWidth, window.innerHeight);
             this.view1.camera3D.lookAt(new Vector3D(0, 0, -1000), new Vector3D(0, 0, 0));

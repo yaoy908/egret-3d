@@ -1,6 +1,6 @@
 ﻿module egret3d {
     export interface IRender extends IDispatchEvent{
-                
+
         /**
         * @language zh_CN
         * 子对象列表。</p>
@@ -46,7 +46,17 @@
         */
         modelMatrix: Matrix4_4;
 
-        pickType: number;
+        /**
+        * @language zh_CN
+        * 鼠标拣选类型。</p>
+        * 设置鼠标的拣选类型，可通过 PickType来进行设置。</p>
+        * 快速拣选默认使用 正方形包围盒子。</p>
+        * 高精度型需要 PositionPick ， uv pick 等。</p>
+        * @see egret3d.PickType
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        pickType: PickType;
 
         /**
         * @language zh_CN
@@ -59,16 +69,53 @@
 
         /**
         * @language zh_CN
+        * 对象模型当前使用包围盒。
+        * @see mouseChilder 根据这个值取不同的包围盒为true取大包围盒 false取子包围盒
+        * 
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        currentBound: Bound;
+
+        /**
+        * @language zh_CN
         * 鼠标检测数据
-        * @private
         * @version Egret 3.0
         * @platform Web,Native
         */
         pickResult: PickResult;
 
+        /**
+        * @language zh_CN
+        * 是否鼠标检测列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         mouseEnable: boolean;
+
+        /**
+        * @language zh_CN
+        * 是否开启检测LOD盒子，每个物体的碰撞盒子中有一个小的盒子，当开启这个盒子后，
+        * 鼠标检测就是用的这个小盒子来进行检测
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         mouseChilder: boolean;
+                
+        /**
+        * @language zh_CN
+        * @private
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         enableCulling: boolean;
+                
+        /**
+        * @language zh_CN
+        * 是否可见
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         visible: boolean;
 
         //upload(context3DProxy: Context3DProxy);

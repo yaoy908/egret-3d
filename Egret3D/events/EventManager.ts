@@ -34,14 +34,7 @@
             this._canvas.view3Ds
             this._mouseEvent3D = new MouseEvent3D();
             this._touchEvent3D = new TouchEvent3D();
-        }
-        /**
-        * @language zh_CN
-        * 初始化，完成事件注册
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public onInit(): void {
+
             Input.instance.addListenerKeyClick((code: number) => this.onMouseClick(code));
             Input.instance.addListenerKeyDown((code: number) => this.onMouseDown(code));
             Input.instance.addListenerKeyUp((code: number) => this.onMouseUp(code));
@@ -51,6 +44,7 @@
             Input.instance.addTouchUpCallback((e: TouchEvent) => this.onTouchUp(e));
             Input.instance.addTouchMoveCallback((e: TouchEvent) => this.onTouchMove(e));
         }
+      
         /**
         * @language zh_CN
         * 清理EventManager
@@ -91,13 +85,66 @@
                 var collect = view.entityCollect.mousePickList;
                 var ret: Array<IRender> = Picker.pickObject3DList(canvas, view, view.camera3D, collect);
                 var len = ret.length;
-                var render: IRender;
+                var render: IRender = null;
+                var dis: number = Number.MAX_VALUE;
+                var temp_dis: number = 0;
+                var object3d: Mesh = null;
+                var mouseChilder: boolean = false;
                 for (var i: number = 0; i < len; i++) {
-                    render = ret[i];
-                    render.dispatchEvent(func.call(this, typeStr, e, render));
+                    object3d = <Mesh>ret[i];
+                    temp_dis = Vector3D.distance(object3d.globalPosition, view.camera3D.globalPosition);
+                    if (temp_dis < dis) {
+                        dis = temp_dis;
+                        render = ret[i];
+                    }
+
+                    if (object3d.mouseChilder) {
+                        mouseChilder = object3d.mouseChilder;
+                    }
                 }
+
+                if (ret.length > 0) {
+
+                    if (ret.length == 1 && render) {
+                        render.dispatchEvent(func.call(this, typeStr, e, render));
+                    }
+                    else {
+
+                        if (mouseChilder) {
+                            ret = Picker.pickObject3DList(canvas, view, view.camera3D, ret, true);
+                            dis = Number.MAX_VALUE;
+                            len = ret.length;
+                            if (len <= 0) {
+                                if (render) {
+                                    render.dispatchEvent(func.call(this, typeStr, e, render));
+                                }
+                            }
+                            else {
+                                render = null;
+                                for (var i: number = 0; i < len; i++) {
+                                    object3d = <Mesh>ret[i];
+                                    temp_dis = Vector3D.distance(object3d.globalPosition, view.camera3D.globalPosition);
+                                    if (temp_dis < dis) {
+                                        dis = temp_dis;
+                                        render = ret[i];
+                                    }
+                                }
+                                if (render) {
+                                    render.dispatchEvent(func.call(this, typeStr, e, render));
+                                }
+                            }
+                        }
+                        else {
+                            if (render) {
+                                render.dispatchEvent(func.call(this, typeStr, e, render));
+                            }
+                        }
+                    }
+                }
+                
             }
         }
+
         private initMouseEvent3D(typeStr: string, e: any, render: IRender): MouseEvent3D {
             this._mouseEvent3D.eventType = typeStr;
             this._mouseEvent3D.data = e;

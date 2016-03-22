@@ -67,6 +67,22 @@
         */
         public bound: Bound;
 
+
+        /**
+        * @language zh_CN
+        * 对象模型当前使用包围盒。
+        * @see mouseChilder 根据这个值取不同的包围盒为true取大包围盒 false取子包围盒
+        * 
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get currentBound(): Bound {
+            if (this.mouseChilder) {
+                return this.bound.childBound;
+            }
+            return this.bound;
+        }
+
         /**
         * @language zh_CN
         * 鼠标检测数据
@@ -76,6 +92,31 @@
         */
         public pickResult: PickResult = new PickResult();
 
+
+        /**
+        * @language zh_CN
+        * 是否鼠标检测列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public mouseEnable: boolean = false;
+
+        /**
+        * @language zh_CN
+        * 是否开启检测LOD盒子，每个物体的碰撞盒子中有一个小的盒子，当开启这个盒子后，
+        * 鼠标检测就是用的这个小盒子来进行检测
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        mouseChilder: boolean = false;
+
+        /**
+        * @language zh_CN
+        * 是否可见
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public visible: boolean = true;
 
         /**
         * @language zh_CN
@@ -168,6 +209,20 @@
             }
 
             bound.fillBox(bound.min, bound.max);
+            bound.childBound = new BoundBox();
+            var max: Vector3D = new Vector3D();
+            var min: Vector3D = new Vector3D();
+
+            max.x = bound.center.x + bound.width / 4;
+            max.y = bound.center.y + bound.heigth / 4;
+            max.z = bound.center.z + bound.depth / 4;
+
+            min.x = bound.center.x - bound.width / 4;
+            min.y = bound.center.y - bound.heigth / 4;
+            min.z = bound.center.z - bound.depth / 4;
+
+            (<BoundBox>bound.childBound).fillBox(min, max);
+
             return bound;
         }
 
