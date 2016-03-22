@@ -1,6 +1,7 @@
 ﻿module egret3d {
             
     /**
+    * @private
     * @class egret3d.EntityCollect
     * @classdesc
     * Object3D 渲染对象收集器,把渲染对象进行可视筛选，

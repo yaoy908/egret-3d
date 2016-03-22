@@ -5,6 +5,7 @@
     * @classdesc
     * 摄像机管理器
     * 管理所有摄像机动画
+    * @see egret3d.Camera3D
     * @version Egret 3.0
     * @platform Web,Native
     */

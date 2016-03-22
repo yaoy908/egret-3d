@@ -13,7 +13,6 @@
      * 
      * @version Egret 3.0
      * @platform Web,Native
-     * @includeExample geometry/CylinderGeometry.ts
      */
     export class CylinderGeometry extends Geometry {
 

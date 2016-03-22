@@ -1,10 +1,19 @@
 ﻿module egret3d {
-
+    
+    /**
+     * @language zh_CN
+     * @class egret3d.GeometryType
+     * @private
+     * @classdesc
+     * @version Egret 3.0
+     * @platform Web,Native
+     */
     export enum GeometryType {
         normal_geometry,
         skin_geometry,
         particle_geometry,
     }
+
     /**
      * @language zh_CN
      * @class egret3d.VertexFormat
@@ -84,6 +93,10 @@
      * @class egret3d.Geometry
      * @classdesc
      * 表示几何形状 子集
+     * @see egret3d.VertexBuffer3D
+     * @see egret3d.IndexBuffer3D
+     * @see egret3d.SubGeometry
+     *
      * @version Egret 3.0
      * @platform Web,Native
      */

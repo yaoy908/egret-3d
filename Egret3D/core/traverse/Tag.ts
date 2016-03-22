@@ -1,6 +1,7 @@
 ﻿module egret3d {
 
     /**
+    * @private
     * @class egret3d.Layer
     * @classdesc
     * Object3D 渲染Layer

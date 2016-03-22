@@ -199,7 +199,7 @@
 
         /**
         * @language zh_CN
-        * 设置2D纹理状态
+        * 设置2D纹理状态 来确定贴图的采样方式
         * @param min_filter
         * @param mag_filter
         * @param wrap_u_filter
@@ -244,7 +244,7 @@
 
         /**
         * @language zh_CN
-        * 提交2D压缩纹理
+        * 提交2D压缩纹理，用硬件来解析dds贴图
         * @param mipLevel
         * @param texture
         */
@@ -254,7 +254,7 @@
 
         /**
         * @language zh_CN
-        * 创建 2维贴图
+        * 创建 2维贴图 向显卡提交buffer申请 并创建Texture2D对象
         */
         public creatTexture2D(): Texture2D {
             var texture: Texture2D = new Texture2D();
@@ -264,7 +264,7 @@
 
         /**
         * @language zh_CN
-        * 创建 Cube贴图
+        * 创建 Cube贴图 向显卡提交buffer申请 并创建Texture3D对象
         */
         public creatCubeTexture(): Texture3D {
             var texture: Texture3D = new Texture3D();
@@ -274,7 +274,7 @@
 
         /**
         * @language zh_CN
-        *
+        * @private
         * @param tex
         */
         public uploadCubetexture(tex: Texture3D) {
@@ -307,7 +307,7 @@
         
         /**
         * @language zh_CN
-        *
+        * @private
         * @param width
         * @param height
         * @param format
@@ -367,7 +367,7 @@
                 
         /**
         * @language zh_CN
-        *
+        * @private
         * @param texture
         * @param enableDepthAndStencil
         * @param surfaceSelector
@@ -393,6 +393,7 @@
                         
         /**
         * @language zh_CN
+        * @private
         *
         */
         public setRenderToBackBuffer() {
@@ -405,8 +406,8 @@
                                 
         /**
         * @language zh_CN
-        *
-        * @param source
+        * 向显卡请求创建顶点shader对象 
+        * @param source shader代码内容 
         */
         public creatVertexShader(source: string): Shader {
             var shader: WebGLShader = Context3DProxy.gl.createShader(Context3DProxy.gl.VERTEX_SHADER);
@@ -420,7 +421,8 @@
                                         
         /**
         * @language zh_CN
-        * @param source
+        * 向显卡请求创建片段shader对象 
+        * @param source shader代码内容 
         */
         public creatFragmentShader(source: string): Shader {
             var shader: WebGLShader = Context3DProxy.gl.createShader(Context3DProxy.gl.FRAGMENT_SHADER);
@@ -435,10 +437,7 @@
         /**
         * @language zh_CN
         * 清除渲染buffer
-        * @param r
-        * @param g
-        * @param b
-        * @param a
+        * @param BUFFER_BIT r g b a 0x00000000
         */
         public clear(BUFFER_BIT:number) {
             Context3DProxy.gl.clear(BUFFER_BIT);
@@ -447,10 +446,10 @@
         /**
         * @language zh_CN
         * 清除渲染区域的颜色 深度
-        * @param r
-        * @param g
-        * @param b
-        * @param a
+        * @param r 红色值
+        * @param g 绿色值
+        * @param b 蓝色值
+        * @param a alpha值
         */
         public clearColor(r: number, g: number, b: number, a: number) {
             Context3DProxy.gl.clearColor(r, g, b, a);
@@ -470,7 +469,7 @@
         /**
         * @language zh_CN
         * 清除渲染区域的 模板
-        * @param stencil
+        * @param stencil 模板值
         */
         public clearStencil(stencil: number) {
             Context3DProxy.gl.clearStencil(stencil);
@@ -479,7 +478,7 @@
         /**
         * @language zh_CN
         * 使用显卡着色器
-        * @param program
+        * @param program 设置当学显卡当前渲染程序
         */
         public setProgram(program: Program3D) {
             if (this._cacheProgram != program) {
@@ -501,9 +500,9 @@
         
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
-        * @param x
+        * 传值给shader一个float
+        * @param location 指明要更改的uniform变量
+        * @param x  uniform变量变量值
         */
         public uniform1f(location: any, x: number): void {
             Context3DProxy.gl.uniform1f(location, x);
@@ -511,9 +510,9 @@
                 
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
-        * @param v
+        * 传值给shader 一个vec3(float, float, float) 也可以是一个vec3数组
+        * @param location 指明要更改的uniform变量
+        * @param v uniform变量变量值Float32Array[3]
         */
         public uniform1fv(location: any, v: any): void {
             Context3DProxy.gl.uniform1fv(location, v);
@@ -521,9 +520,9 @@
                 
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
-        * @param x
+        * 传值给shader一个int
+        * @param location 指明要更改的uniform变量
+        * @param x uniform变量变量值
         */
         public uniform1i(location: any, x: number): void {
             Context3DProxy.gl.uniform1i(location, x);
@@ -531,9 +530,9 @@
                 
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
-        * @param v
+        * 传值给shader一个int数组
+        * @param location 指明要更改的uniform变量
+        * @param v int数组的值
         */
         public uniform1iv(location: any, v: Int32Array): void {
             Context3DProxy.gl.uniform1iv(location, v);
@@ -541,10 +540,10 @@
                 
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
-        * @param x
-        * @param y
+        * 传值给shader两个float
+        * @param location 指明要更改的uniform变量
+        * @param x float x 的值
+        * @param y float y 的值
         */
         public uniform2f(location: any, x: number, y: number): void {
             Context3DProxy.gl.uniform2f(location, x, y);
@@ -552,9 +551,9 @@
                         
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
-        * @param v
+        * 传值给shader vec(float, float)
+        * @param location 指明要更改的uniform变量
+        * @param v Float32Array[2]
         */
         public uniform2fv(location: any, v: any): void {
             Context3DProxy.gl.uniform2fv(location, v);
@@ -562,10 +561,10 @@
                 
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
-        * @param x
-        * @param y
+        * 传值给shader 两个int值
+        * @param location 指明要更改的uniform变量
+        * @param x number x 的值
+        * @param y number y 的值
         */
         public uniform2i(location: any, x: number, y: number): void {
             Context3DProxy.gl.uniform2i(location, x, y);
@@ -574,7 +573,7 @@
         /**
         * @language zh_CN
         * 传值给shader
-        * @param location
+        * @param location 指明要更改的uniform变量
         * @param v
         */
         public uniform2iv(location: any, v: Int32Array): void {
@@ -583,8 +582,8 @@
                         
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
+        * 传值给shader 3个float
+        * @param location 指明要更改的uniform变量
         * @param x
         * @param y
         * @param z
@@ -595,9 +594,9 @@
                                         
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
-        * @param v
+        * 传值给shader vec3(float, float, float)
+        * @param location 指明要更改的uniform变量
+        * @param v Float32Array[3]
         */
         public uniform3fv(location: any, v: any): void {
             Context3DProxy.gl.uniform3fv(location, v);
@@ -605,8 +604,8 @@
                                 
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
+        * 传值给shader 3个int
+        * @param location 指明要更改的uniform变量
         * @param x
         * @param y
         * @param z
@@ -617,9 +616,9 @@
                                                 
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
-        * @param v
+        * 传值给shader vec3(int, int, int)
+        * @param location 指明要更改的uniform变量
+        * @param v Int32Array[3]
         */
         public uniform3iv(location: any, v: Int32Array): void {
             Context3DProxy.gl.uniform3iv(location, v);
@@ -627,8 +626,8 @@
                                         
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
+        * 传值给shader 4个float值
+        * @param location 指明要更改的uniform变量
         * @param x
         * @param y
         * @param z
@@ -640,9 +639,9 @@
                                                         
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
-        * @param v
+        * 传值给shader vec(float, float, float, float)
+        * @param location 指明要更改的uniform变量
+        * @param v Float32Array[4]
         */
         public uniform4fv(location: any, v: any): void {
             Context3DProxy.gl.uniform4fv(location, v);
@@ -650,9 +649,9 @@
                                                 
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
-        * @param x
+        * 传值给shader 4个int值
+        * @param location 指明要更改的uniform变量
+        * @param x 
         * @param y
         * @param z
         * @param w
@@ -663,9 +662,9 @@
                                                                 
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
-        * @param v
+        * 传值给shader vec4(int, int, int, int)
+        * @param location 指明要更改的uniform变量
+        * @param v Int32Array[4]
         */
         public uniform4iv(location: any, v: Int32Array): void {
             Context3DProxy.gl.uniform4iv(location, v);
@@ -673,10 +672,10 @@
                                                                 
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
-        * @param transpose
-        * @param value
+        * 传值给shader 2 * 2矩阵 
+        * @param location 指明要更改的uniform变量
+        * @param transpose 是否转置
+        * @param value 矩阵值 Float32Array[4]
         */
         public uniformMatrix2fv(location: any, transpose: boolean, value: any): void {
             Context3DProxy.gl.uniformMatrix2fv(location, transpose, value);
@@ -684,10 +683,10 @@
                                                                         
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
-        * @param transpose
-        * @param value
+        * 传值给shader 3 * 3矩阵 
+        * @param location 指明要更改的uniform变量
+        * @param transpose 是否转置
+        * @param value 矩阵值 Float32Array[9]
         */
         public uniformMatrix3fv(location: any, transpose: boolean, value: any): void {
             Context3DProxy.gl.uniformMatrix3fv(location, transpose, value);
@@ -695,10 +694,10 @@
                                                                         
         /**
         * @language zh_CN
-        * 传值给shader
-        * @param location
-        * @param transpose
-        * @param value
+        * 传值给shader 4 * 4矩阵 
+        * @param location 指明要更改的uniform变量
+        * @param transpose 是否转置
+        * @param value 矩阵值 Float32Array[16]
         */
         public uniformMatrix4fv(location: any, transpose: boolean, value: any): void {
             Context3DProxy.gl.uniformMatrix4fv(location, transpose, value);
@@ -718,6 +717,8 @@
         * @language zh_CN
         * 设置 绘制剔除模式
         * @param mode 
+        * @see egret3d.ContextConfig.FRONT
+        * @see egret3d.ContextConfig.BACK
         */
         public setCulling(mode: number) {
             Context3DProxy.gl.cullFace(mode);
@@ -775,14 +776,13 @@
 
         /**
         * @language zh_CN
-        * 指定顶点着色器变量索引 及机构
-        * @param programe3D 
-        * @param index 
-        * @param size 
-        * @param dataType 
-        * @param normalized 
-        * @param stride 
-        * @param offset 
+        * 指定顶点着色器变量索引及结构
+        * @param index 变量索引
+        * @param size  数据个数
+        * @param dataType  数据类型
+        * @param normalized 是否单位化
+        * @param stride 字节数
+        * @param offset 当前变量字节偏移
         */
         public vertexAttribPointer(index: number, size: number, dataType: number, normalized: boolean, stride: number, offset: number) {
             Context3DProxy.gl.vertexAttribPointer(index, size, dataType, normalized, stride, offset);
@@ -791,6 +791,7 @@
 
         /**
         * @language zh_CN
+        * @private
         * 实时传入显卡顶点着色器变量数组数据
         * @param floats 
         * @param offest 
@@ -802,6 +803,7 @@
 
         /**
         * @language zh_CN
+        * @private
         * 实时传入显卡片段着色器变量数组数据
         * @param floats 
         * @param offest 
@@ -813,10 +815,11 @@
         /**
         * @language zh_CN
         * 设置贴图采样 第一个参数并不是类型
-        * @param samplerIndex 
+        * @param samplerIndex  ContextSamplerType
         * @param uniLocation 
         * @param index 
         * @param texture 
+        * @see egret3d.ContextSamplerType
         */
         public setTexture2DAt(samplerIndex: number, uniLocation: number, index: number, texture: Texture2D) {
             Context3DProxy.gl.activeTexture(samplerIndex);
@@ -827,10 +830,11 @@
         /**
         * @language zh_CN
         * 设置贴图采样 第一个参数并不是类型
-        * @param samplerIndex 
+        * @param samplerIndex  ContextSamplerType
         * @param uniLocation 
         * @param index 
         * @param texture 
+        * @see egret3d.ContextSamplerType
         */
         public setCubeTextureAt(samplerIndex: number, uniLocation: number, index: number, texture: Texture3D) {
             Context3DProxy.gl.activeTexture(samplerIndex);
@@ -840,6 +844,7 @@
 
         /**
         * @language zh_CN
+        * @private
         * 设置矩形裁切区域
         * @param rectangle 
         */
@@ -849,6 +854,7 @@
 
         /**
         * @language zh_CN
+        * @private
         * 设置模板测试
         */
         public setStencilReferenceValue() {
@@ -856,9 +862,10 @@
 
         /**
         * @language zh_CN
+        * @private
         * 设置模板测试
         */
-        setStencilActions(triangleFace: string, compareMode: string, actionOnBothPass: string, actionOnDepthFail: string, actionOnDepthPassStencilFail: string) {
+        public setStencilActions(triangleFace: string, compareMode: string, actionOnBothPass: string, actionOnDepthFail: string, actionOnDepthPassStencilFail: string) {
         }
 
         /**
@@ -905,6 +912,7 @@
 
         /**
         * @language zh_CN
+        * @private
         * 绘制提交
         */
         public flush() {

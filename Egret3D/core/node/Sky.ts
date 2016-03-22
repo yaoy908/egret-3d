@@ -5,7 +5,8 @@
     * @classdesc
     * 场景中天空盒子，是6面体cube，以6张无缝结合的贴图构成.
     *
-    * @see egret3d.Skytexture
+    * @see egret3d.CubeTexture
+    * @see egret3d.CubeTextureMaterial
     *
     * 示例:
     * @version Egret 3.0

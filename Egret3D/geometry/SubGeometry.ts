@@ -1,10 +1,12 @@
 ﻿module egret3d {
 
     /**
+     * @private
      * @language zh_CN
      * @class egret3d.SubGeometry
      * @classdesc
      * 表示几何形状 子集
+     * @see egret3d.Geometry
      * @version Egret 3.0
      * @platform Web,Native
      */
@@ -43,6 +45,7 @@
 
         private attList: Array<GLSL.Attribute> = new Array<GLSL.Attribute>();
         private _attributeDiry: boolean = true; 
+
         /**
         * @language zh_CN
         * 创建一个SubGeometry
@@ -196,6 +199,12 @@
             }
         }
 
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public update(time: number, delay: number, passUsage: PassUsage, contextPorxy: Context3DProxy) {
 
             if (this._attributeDiry)
