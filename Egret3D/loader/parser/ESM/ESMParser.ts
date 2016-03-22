@@ -18,7 +18,8 @@
         public static parse(datas: ArrayBuffer): Geometry {
 
             var bytes: ByteArray = new ByteArray(datas);
-            var fileFormat: string = bytes.readUTF();
+            var fileFormatBytes: ByteArray = new ByteArray();
+            bytes.readBytes(fileFormatBytes, 0, 3);
             var version: number = bytes.readUnsignedInt();
             var geomtryData: GeometryData = new GeometryData();
             ESMVersion.versionDictionary[version](bytes, geomtryData);
