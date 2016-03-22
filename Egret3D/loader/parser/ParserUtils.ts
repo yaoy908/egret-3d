@@ -35,9 +35,9 @@
             bytes.readBytes(fileFormatBytes, 0, 3);
             bytes.position = 0;
             var fileFormat: number = 0;
-            fileFormat |= fileFormatBytes.readByte() << 16;
-            fileFormat |= fileFormatBytes.readByte() << 8;
-            fileFormat |= fileFormatBytes.readByte();
+            fileFormat |= fileFormatBytes.readUnsignedByte() << 16;
+            fileFormat |= fileFormatBytes.readUnsignedByte() << 8;
+            fileFormat |= fileFormatBytes.readUnsignedByte();
             switch (fileFormat) {
                 case 0x00444453: // dds
                     this.datas = DDSParser.parse(buffer);
@@ -46,27 +46,37 @@
                         this.onLoadComplete(this);
                     }
                     break;
+                case 0x00000002:
+                case 0x00000010:
+                    this.datas = TGAParser.parse(buffer);
+                    this.dataFormat = ".tga";
+                    if (this.onLoadComplete) {
+                        this.onLoadComplete(this);
+                    }
+                    break;
                 case 0x00FFD8FF: // jpg
+                    var blob: Blob = new Blob([buffer]);
                     this.dataFormat = ".jpg";
                     var img = document.createElement("img");
                     if (window['createObjectURL'] != undefined) { // basic
-                        img.src = window['createObjectURL'](buffer);
+                        img.src = window['createObjectURL'](blob);
                     } else if (window['URL'] != undefined) { // mozilla(firefox)
-                        img.src = window['URL'].createObjectURL(buffer);
+                        img.src = window['URL'].createObjectURL(blob);
                     } else if (window['webkitURL'] != undefined) { // webkit or chrome
-                        img.src = window['webkitURL'].createObjectURL(buffer);
+                        img.src = window['webkitURL'].createObjectURL(blob);
                     }
                     img.onload = () => this.onLoad(img);
                     break;
                 case 0x0089504E: // png
+                    var blob: Blob = new Blob([buffer]);
                     this.dataFormat = ".png";
                     var img = document.createElement("img");
                     if (window['createObjectURL'] != undefined) { // basic
-                        img.src = window['createObjectURL'](buffer);
+                        img.src = window['createObjectURL'](blob);
                     } else if (window['URL'] != undefined) { // mozilla(firefox)
-                        img.src = window['URL'].createObjectURL(buffer);
+                        img.src = window['URL'].createObjectURL(blob);
                     } else if (window['webkitURL'] != undefined) { // webkit or chrome
-                        img.src = window['webkitURL'].createObjectURL(buffer);
+                        img.src = window['webkitURL'].createObjectURL(blob);
                     }
                     img.onload = () => this.onLoad(img);
                     break;
