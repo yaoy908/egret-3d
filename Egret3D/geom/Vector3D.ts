@@ -516,20 +516,63 @@
         * @language zh_CN
         * 当前Vector3D减去a Vector3D 结果返回新实例
         * @param a 减去的Vector3D
+        * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
         * @returns 结果返回
         */
-        public subtract(a: Vector3D): Vector3D {
-            return new Vector3D(this.x - a.x, this.y - a.y, this.z - a.z);
+        public subtract(a: Vector3D, target: Vector3D = null): Vector3D {
+            if (!target) {
+                target = new Vector3D();
+            }
+            target.setTo(this.x - a.x, this.y - a.y, this.z - a.z);
+            return target;
         }
 
         /**
         * @language zh_CN
         * 当前Vector3D乘other Vector3D 结果返回新实例
         * @param a 相乘的Vector3D
+        * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
         * @returns 结果返回
         */
-        public multiply(other: Vector3D): Vector3D {
-            return new Vector3D(this.x * other.x, this.y * other.y, this.z * other.z);
+        public multiply(other: Vector3D, target: Vector3D = null): Vector3D {
+            if (!target) {
+                target = new Vector3D();
+            }
+
+            var x0: number = this.x;
+            var y0: number = this.y;
+            var z0: number = this.z;
+
+            var x1: number = other.x;
+            var y1: number = other.y;
+            var z1: number = other.z;
+
+            target.setTo(x0 * x1, y0 * y1, z0 * z1);
+            return target;
+        }
+        
+        /**
+        * @language zh_CN
+        * 当前Vector3D除以other Vector3D 结果返回新实例
+        * @param a 相除的Vector3D
+        * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
+        * @returns 结果返回
+        */
+        public divided(other: Vector3D, target: Vector3D = null): Vector3D {
+            if (!target) {
+                target = new Vector3D();
+            }
+
+            var x0: number = this.x;
+            var y0: number = this.y;
+            var z0: number = this.z;
+
+            var x1: number = other.x;
+            var y1: number = other.y;
+            var z1: number = other.z;
+
+            target.setTo(x0 / x1, y0 / y1, z0 / z1);
+            return target;
         }
         
         /**
@@ -574,12 +617,6 @@
             this.y = parseFloat(strS[1]);
             this.z = parseFloat(strS[2]);
         }
-
-
-
-
-
     }
-
 }
 

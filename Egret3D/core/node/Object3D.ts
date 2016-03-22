@@ -73,6 +73,7 @@
         protected _globalOrientation = new Quaternion();
 
         protected _qut: Quaternion = new Quaternion();
+        protected _vec: Vector3D = new Vector3D();
         protected _active: boolean = false;
         protected _mat: Matrix4_4 = new Matrix4_4();
 
@@ -715,6 +716,26 @@
             }
             return this._globalPos;
         }
+
+        /**
+        * @language zh_CN
+        * 设置 object 世界位置
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalPosition(pos: Vector3D) {
+            if (this.parent) {
+                this.parent.globalOrientation.inverse(this._qut);
+                pos.subtract(this._globalPos, this._vec);
+                this._qut.rotatePoint(this._vec, this._vec);
+                this._vec.divided(this._globalSca, this._vec);
+
+                this.position = this._vec;
+            }
+            else {
+                this.position = pos;
+            }
+        }
                                                         
         /**
         * @language zh_CN
@@ -729,6 +750,18 @@
                 this.modelMatrix;
             }
             return this._globalRot;
+        }
+
+
+        /**
+        * @language zh_CN
+        * 设置 object 世界旋转
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalRotation(rot: Vector3D) {
+            this._qut.fromEulerAngles(rot.x, rot.y, rot.z);
+            this.globalOrientation = this._qut;
         }
                                                         
         /**
@@ -745,10 +778,26 @@
             }
             return this._globalSca;
         }
-                                                        
+
         /**
         * @language zh_CN
-        * 返回 object 世界旋转
+        * 设置 object 世界旋转
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalScale(sca: Vector3D) {
+            if (this.parent) {
+                this.parent.globalScale.divided(sca, this._vec);
+                this.scale = this._vec;
+            }
+            else {
+                this.scale = sca;
+            }
+        }
+                                                  
+        /**
+        * @language zh_CN 
+        * 返回 object 世界旋转 四元数
         * 返回世界坐标系的 全局旋转信息，数据类型是 四元素
         * @returns object 世界旋转
         * @version Egret 3.0
@@ -759,6 +808,23 @@
                 this.modelMatrix;
             }
             return this._globalOrientation;
+        }
+
+        /**
+        * @language zh_CN
+        * 设置 object 世界旋转 四元数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalOrientation(ori: Quaternion) {
+            if (this.parent) {
+                this.parent.globalOrientation.inverse(this._qut);
+                this._qut.multiply(this._qut, ori); 
+                this.orientation = this._qut;
+            }
+            else {
+                this.orientation = ori;
+            }
         }
 
         /**
