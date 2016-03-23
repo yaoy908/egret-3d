@@ -496,7 +496,7 @@
         * @param target 旋转后的坐标对象。如果为null，将创建一个新的对象
         * @returns 返回旋转后的坐标对象
         */
-        public rotatePoint(vector: Vector3D, target: Vector3D = null): Vector3D {
+        public transformVector(vector: Vector3D, target: Vector3D = null): Vector3D {
             var x1: number, y1: number, z1: number, w1: number;
             var x2: number = vector.x, y2: number = vector.y, z2: number = vector.z;
 

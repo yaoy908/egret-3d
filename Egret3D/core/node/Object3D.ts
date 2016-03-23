@@ -683,7 +683,7 @@
 
                 this._globalSca.copyFrom(parentScale.multiply(this._sca));
 
-                parentOrientation.rotatePoint(parentScale.multiply(this._pos), this._globalPos);
+                parentOrientation.transformVector(parentScale.multiply(this._pos), this._globalPos);
                 this._globalPos.copyFrom(this._globalPos.add(this.parent.globalPosition));
             }
             else {
@@ -727,7 +727,7 @@
             if (this.parent) {
                 this.parent.globalOrientation.inverse(this._qut);
                 pos.subtract(this.parent.globalPosition, this._vec);
-                this._qut.rotatePoint(this._vec, this._vec);
+                this._qut.transformVector(this._vec, this._vec);
                 this._vec.divided(this.parent.globalScale, this._vec);
 
                 this.position = this._vec;
