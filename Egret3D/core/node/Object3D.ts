@@ -726,9 +726,9 @@
         public set globalPosition(pos: Vector3D) {
             if (this.parent) {
                 this.parent.globalOrientation.inverse(this._qut);
-                pos.subtract(this._globalPos, this._vec);
+                pos.subtract(this.parent.globalPosition, this._vec);
                 this._qut.rotatePoint(this._vec, this._vec);
-                this._vec.divided(this._globalSca, this._vec);
+                this._vec.divided(this.parent.globalScale, this._vec);
 
                 this.position = this._vec;
             }
@@ -787,7 +787,7 @@
         */
         public set globalScale(sca: Vector3D) {
             if (this.parent) {
-                this.parent.globalScale.divided(sca, this._vec);
+                sca.divided(this.parent.globalScale, this._vec);
                 this.scale = this._vec;
             }
             else {
