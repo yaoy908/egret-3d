@@ -30,9 +30,6 @@
 
         private _sizeDiry: boolean = false;
         constructor(x: number, y: number, width: number, height: number) {
-
-            ShaderUtil.instance.load();
-
             this._entityCollect = new EntityCollect();
             this._entityCollect.root = this._scene;
             this._render = new DefaultRender();
@@ -44,10 +41,14 @@
         }
 
         public set backColor(value: number) {
-            this._backColor.w = value >> 24 & 255;
-            this._backColor.x = value >> 16 & 255;
-            this._backColor.y = value >> 8 & 255;
-            this._backColor.z = value & 255;
+            this._backColor.w = (value >> 24 & 0xff) / 255;
+            this._backColor.x = (value >> 16 & 0xff) / 255;
+            this._backColor.y = (value >> 8 & 0xff) / 255;
+            this._backColor.z = (value & 0xff) / 255;
+        }
+
+        public get backColor(): number {
+            return (this._backColor.w * 255 << 24) | (this._backColor.x * 255 << 16) | (this._backColor.y * 255 << 8) | (this._backColor.z * 255);
         }
 
         public get camera3D(): Camera3D {
