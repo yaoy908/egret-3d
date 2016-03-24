@@ -73,6 +73,7 @@
         protected _globalOrientation = new Quaternion();
 
         protected _qut: Quaternion = new Quaternion();
+        protected _vec: Vector3D = new Vector3D();
         protected _active: boolean = false;
         protected _mat: Matrix4_4 = new Matrix4_4();
 
@@ -682,7 +683,7 @@
 
                 this._globalSca.copyFrom(parentScale.multiply(this._sca));
 
-                parentOrientation.rotatePoint(parentScale.multiply(this._pos), this._globalPos);
+                parentOrientation.transformVector(parentScale.multiply(this._pos), this._globalPos);
                 this._globalPos.copyFrom(this._globalPos.add(this.parent.globalPosition));
             }
             else {
@@ -691,16 +692,86 @@
                 this._globalSca.copyFrom(this._sca);
                 this._globalRot.copyFrom(this._rot);
             }
-            //this._modeMatrix3D.recompose([this._globalPos, this._globalRot, this._globalSca]);
             this._modeMatrix3D.makeTransform(this._globalPos, this._globalSca, this._globalOrientation);
-            //this.bound.Transform = this._modeMatrix3D;
             this._transformChange = false;
             this.onUpdateTransform();
         }
 
         protected onUpdateTransform() {
         }
-                                                
+
+        /**
+        * @language zh_CN
+        * 返回 object 世界位置 x
+        * @returns object 世界位置x
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get globalX(): number {
+            return this.globalPosition.x;
+        }
+
+        /**
+        * @language zh_CN
+        * 返回 object 世界位置 y
+        * @returns object 世界位置 y
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get globalY(): number {
+            return this.globalPosition.y;
+        }
+
+
+        /**
+        * @language zh_CN
+        * 返回 object 世界位置 z
+        * @returns object 世界位置 z
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get globalZ(): number {
+            return this.globalPosition.z;
+        }
+
+        /**
+        * @language zh_CN
+        * 设置 object 世界位置 x
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalX(value: number) {
+            this._vec.copyFrom(this.globalPosition);
+            this._vec.x = value;
+            this.globalPosition = this._vec; 
+        }
+
+        /**
+        * @language zh_CN
+        * 设置 object 世界位置 y
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalY(value: number) {
+            this._vec.copyFrom(this.globalPosition);
+            this._vec.y = value;
+            this.globalPosition = this._vec; 
+        }
+
+
+
+        /**
+        * @language zh_CN
+        * 设置 object 世界位置 z
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalZ(value: number) {
+            this._vec.copyFrom(this.globalPosition);
+            this._vec.z = value;
+            this.globalPosition = this._vec; 
+        }
+                                               
         /**
         * @language zh_CN
         * 返回 object 世界位置
@@ -715,7 +786,99 @@
             }
             return this._globalPos;
         }
-                                                        
+
+        /**
+        * @language zh_CN
+        * 设置 object 世界位置
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalPosition(pos: Vector3D) {
+            if (this.parent) {
+                this.parent.globalOrientation.inverse(this._qut);
+                pos.subtract(this.parent.globalPosition, this._vec);
+                this._qut.transformVector(this._vec, this._vec);
+                this._vec.divided(this.parent.globalScale, this._vec);
+
+                this.position = this._vec;
+            }
+            else {
+                this.position = pos;
+            }
+        }
+
+
+        /**
+        * @language zh_CN
+        * 返回 object 世界旋转x
+        * @returns object 世界旋转x
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get globalRotationX(): number {
+            return this.globalRotation.x;
+        }
+
+
+        /**
+        * @language zh_CN
+        * 返回 object 世界旋转y
+        * @returns object 世界旋转y
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get globalRotationY(): number {
+            return this.globalRotation.y;
+        }
+
+
+        /**
+        * @language zh_CN
+        * 返回 object 世界旋转z
+        * @returns object 世界旋转z
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get globalRotationZ(): number {
+            return this.globalRotation.z;
+        }
+
+        /**
+        * @language zh_CN
+        * 设置 object 世界旋转 x
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalRotationX(value: number) {
+            this._vec.copyFrom(this.globalRotation);
+            this._vec.x = value;
+            this.globalRotation = this._vec;
+        }
+
+        /**
+        * @language zh_CN
+        * 设置 object 世界旋转 y
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalRotationY(value: number) {
+            this._vec.copyFrom(this.globalRotation);
+            this._vec.y = value;
+            this.globalRotation = this._vec;
+        }
+
+        /**
+        * @language zh_CN
+        * 设置 object 世界旋转 z
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalRotationZ(value: number) {
+            this._vec.copyFrom(this.globalRotation);
+            this._vec.z = value;
+            this.globalRotation = this._vec;
+        }    
+                                            
         /**
         * @language zh_CN
         * 返回 object 世界旋转
@@ -729,6 +892,18 @@
                 this.modelMatrix;
             }
             return this._globalRot;
+        }
+
+
+        /**
+        * @language zh_CN
+        * 设置 object 世界旋转
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalRotation(rot: Vector3D) {
+            this._qut.fromEulerAngles(rot.x, rot.y, rot.z);
+            this.globalOrientation = this._qut;
         }
                                                         
         /**
@@ -745,10 +920,93 @@
             }
             return this._globalSca;
         }
-                                                        
+
         /**
         * @language zh_CN
-        * 返回 object 世界旋转
+        * 设置 object 世界缩放
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalScale(sca: Vector3D) {
+            if (this.parent) {
+                sca.divided(this.parent.globalScale, this._vec);
+                this.scale = this._vec;
+            }
+            else {
+                this.scale = sca;
+            }
+        }
+
+        /**
+        * @language zh_CN
+        * 设置 object 世界缩放 x
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalScaleX(value: number) {
+            this._vec.copyFrom(this.globalScale);
+            this._vec.x = value;
+            this.globalScale = this._vec;
+        }
+
+        /**
+        * @language zh_CN
+        * 设置 object 世界缩放 y
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalScaleY(value: number) {
+            this._vec.copyFrom(this.globalScale);
+            this._vec.y = value;
+            this.globalScale = this._vec;
+        }
+
+        /**
+        * @language zh_CN
+        * 设置 object 世界缩放 z
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalScaleZ(value: number) {
+            this._vec.copyFrom(this.globalScale);
+            this._vec.z = value;
+            this.globalScale = this._vec;
+        }
+             
+        /**
+        * @language zh_CN
+        * 获取 object 世界缩放 x
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get globalScaleX(): number {
+            return this.globalScale.x;
+        }
+
+
+        /**
+        * @language zh_CN
+        * 获取 object 世界缩放 y
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get globalScaleY(): number {
+            return this.globalScale.y;
+        }
+
+        /**
+        * @language zh_CN
+        * 获取 object 世界缩放 z
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get globalScaleZ(): number {
+            return this.globalScale.z;
+        }
+                                       
+        /**
+        * @language zh_CN 
+        * 返回 object 世界旋转 四元数
         * 返回世界坐标系的 全局旋转信息，数据类型是 四元素
         * @returns object 世界旋转
         * @version Egret 3.0
@@ -759,6 +1017,23 @@
                 this.modelMatrix;
             }
             return this._globalOrientation;
+        }
+
+        /**
+        * @language zh_CN
+        * 设置 object 世界旋转 四元数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set globalOrientation(ori: Quaternion) {
+            if (this.parent) {
+                this.parent.globalOrientation.inverse(this._qut);
+                this._qut.multiply(this._qut, ori); 
+                this.orientation = this._qut;
+            }
+            else {
+                this.orientation = ori;
+            }
         }
 
         /**

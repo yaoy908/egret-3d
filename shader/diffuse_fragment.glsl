@@ -19,10 +19,10 @@ varying vec4 varying_color  ;
 varying vec3 varying_eyedir  ;
 varying vec2 varying_uv0;
 
-vec4 endColor ;
-vec4 diffuse  ;
-vec4 diffuseTex  ;
-vec4 specular ;
+vec4 endColor;
+vec4 specular;
+vec4 diffuse;
+vec4 diffuseTex;
 vec3 normal  ;
 vec3 eyedir  ;
 vec4 light ;
@@ -56,7 +56,7 @@ void main() {
 
 	ambient = vec4(1.0,1.0,1.0,1.0);
 	specularTexColor = vec4(1.0,1.0,1.0,1.0);
-
+	specular = vec4(0.0,0.0,0.0,0.0);
 	normal = varying_eyeNormal;
 	diffuseTex = texture2D(diffuseTexture , varying_uv0 );
     eyedir = varying_eyedir.xyz - varying_pos.xyz ; 

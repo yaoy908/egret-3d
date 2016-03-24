@@ -446,6 +446,29 @@
         }
 
         /**
+        * @language zh_CN
+        * 返回一个把当前四元数取逆后的四元数
+        * @param target 如果当前参数为null那么就会new一个新的四元数对象返回
+        */
+        public inverse(target: Quaternion = null): Quaternion {
+            if (!target) {
+                target = new Quaternion();
+            }
+
+            var norm: number = this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z;
+    
+            if (norm > 0.0) {
+                var invNorm = 1.0 / norm;
+                target.w = this.w * invNorm;
+                target.x = -this.x * invNorm;
+                target.y = -this.y * invNorm;
+                target.z = -this.z * invNorm;
+            }
+
+            return target;
+        }
+
+        /**
         * @language en_US
         * Clones the quaternion.
         * @returns An exact duplicate of the current Quaternion.
@@ -473,7 +496,7 @@
         * @param target 旋转后的坐标对象。如果为null，将创建一个新的对象
         * @returns 返回旋转后的坐标对象
         */
-        public rotatePoint(vector: Vector3D, target: Vector3D = null): Vector3D {
+        public transformVector(vector: Vector3D, target: Vector3D = null): Vector3D {
             var x1: number, y1: number, z1: number, w1: number;
             var x2: number = vector.x, y2: number = vector.y, z2: number = vector.z;
 

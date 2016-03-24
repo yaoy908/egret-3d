@@ -328,7 +328,7 @@
                     this._lookAtObject.position = this._tempVec;
                 }
                 this._quaRot.fromEulerAngles(this._rotaAngle.x, this._rotaAngle.y, 0);
-                this._rotaEyesLine.copyFrom(this._quaRot.rotatePoint(Vector3D.Z_AXIS));
+                this._rotaEyesLine.copyFrom(this._quaRot.transformVector(Vector3D.Z_AXIS));
                 this._rotaEyesLine.normalize();
 
                 this._tempVec.copyFrom(this._rotaEyesLine);
@@ -341,7 +341,7 @@
 
                 this._quaRot.fromEulerAngles(this._rotaAngle.x, this._rotaAngle.y, this._rotaAngle.z);
                 this._tempVec.copyFrom(this._up);
-                this._tempVec.copyFrom(this._quaRot.rotatePoint(this._tempVec));
+                this._tempVec.copyFrom(this._quaRot.transformVector(this._tempVec));
                 this._tempVec.normalize();
 
                 if (this.firstCamera) {

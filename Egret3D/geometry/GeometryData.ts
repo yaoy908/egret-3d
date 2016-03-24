@@ -184,11 +184,8 @@
         */
         public vertexDatas: Array<number>;
 
-        public textureNormal: string;
-
-        public textureDiffuse: string;
-
-        public textureSpecular: string;
+        public matCount: number = 0;
+        public material: any = {};
 
         /**
         * @language zh_CN
@@ -311,12 +308,17 @@
             GeometryData.updateFaceTangents(target);
             target.calculateVertexFormat();
             
-
-            var subGeometry: SubGeometry = new SubGeometry();
-            subGeometry.geometry = target;
-            subGeometry.start = 0;
-            subGeometry.count = target.indexData.length;
-            target.subGeometrys.push(subGeometry);
+            for (var i: number = 0; i < source.matCount; ++i) {
+                var subGeometry: SubGeometry = new SubGeometry();
+                subGeometry.matID = i;
+                subGeometry.geometry = target;
+                subGeometry.start = source.material[i].start * 3;
+                subGeometry.count = source.material[i].count * 3;
+                subGeometry.textureDiffuse = source.material[i].textureDiffuse;
+                subGeometry.textureNormal = source.material[i].textureNormal;
+                subGeometry.textureSpecular = source.material[i].textureSpecular;
+                target.subGeometrys.push(subGeometry);
+            }
 
             return target;
         }

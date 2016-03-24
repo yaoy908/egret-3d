@@ -59,6 +59,7 @@ void main() {
 
 	diffuseTex = vec4(1.0,1.0,1.0,1.0);
 	ambient = vec4(1.0,1.0,1.0,1.0);
+	specular = vec4(0.0,0.0,0.0,0.0);
 }
 
 

@@ -36,7 +36,11 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public material: MaterialBase;
+        public material: MaterialBase ;
+
+        private muiltMaterial: { [matID: number]: MaterialBase } = {};
+
+        private _materialCount: number = 0;
 
         /**
         * @language zh_CN
@@ -81,8 +85,8 @@
             super();
 
             this.geometry = geometry;
+            this.muiltMaterial[0] = material;
             this.material = material;
-
             this.bound = this.buildBoundBox();
         }
 
@@ -96,6 +100,54 @@
             if (this.geometry)
                 this.geometry.init();
         }
+        
+        /**
+        * @language zh_CN
+        * 增加一个材质
+        * @param id 材质id
+        * @param material 模型材质
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public addSubMaterial(id: number, material: MaterialBase) {
+            if (!this.muiltMaterial[id]) {
+                this._materialCount++;
+            }
+            this.muiltMaterial[id] = material;
+        }
+                
+        /**
+        * @language zh_CN
+        * 删除一个材质
+        * @param id 材质id
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public removeSubMaterial(id: number) {
+            delete this.muiltMaterial[id];
+        }
+                        
+        /**
+        * @language zh_CN
+        * 用ID得到一个材质
+        * @param id 材质id
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public getMaterial(id: number): MaterialBase {
+            return this.muiltMaterial[id];
+        }
+                        
+        /**
+        * @language zh_CN
+        * 得到所有材质的个数
+        * @returns number
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public materialCount(): number {
+            return this._materialCount;
+        }
 
         /**
         * @language zh_CN
@@ -105,7 +157,9 @@
         * @platform Web,Native
         */
         public clone(): Mesh {
-            return new Mesh(this.geometry, this.material );
+            var cloneMesh: Mesh = new Mesh(this.geometry, this.material );
+            cloneMesh.muiltMaterial = this.muiltMaterial;
+            return cloneMesh;
         }
                                 
         /**
@@ -189,7 +243,12 @@
             for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
                 this._subGeometry = this.geometry.subGeometrys[this._i];
                 this._matID = this._subGeometry.matID;
-                this.material.renderDiffusePass(time, delay, this._matID , context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+                if (this.muiltMaterial[this._matID]) {
+                    this.muiltMaterial[this._matID].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+                }
+                else {
+                    this.muiltMaterial[0].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+                }
             }
         }
     }

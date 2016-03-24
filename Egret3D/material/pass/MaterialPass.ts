@@ -291,7 +291,5 @@
 
            context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count);
         }
-
-
     }
 } 
