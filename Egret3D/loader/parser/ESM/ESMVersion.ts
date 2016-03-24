@@ -14,9 +14,17 @@
 
         public static parserVersion_1(bytes: ByteArray, geomtry: GeometryData) {
             var description: number = bytes.readInt();
-            geomtry.textureDiffuse = bytes.readUTF();
-            geomtry.textureSpecular = bytes.readUTF();
-            geomtry.textureNormal = bytes.readUTF();
+
+            geomtry.matCount = bytes.readInt();
+            for (var i: number = 0; i < geomtry.matCount; ++i) {
+                geomtry.material[i] = {};
+                geomtry.material[i].matID = bytes.readInt();
+                geomtry.material[i].start = bytes.readInt();
+                geomtry.material[i].count = bytes.readInt();
+                geomtry.material[i].textureDiffuse = bytes.readUTF();
+                geomtry.material[i].textureNormal = bytes.readUTF();
+                geomtry.material[i].textureSpecular = bytes.readUTF();
+            }
 
             if (description & VertexFormat.VF_POSITION) {
                 var vertexCount: number = bytes.readInt();

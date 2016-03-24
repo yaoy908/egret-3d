@@ -33,9 +33,9 @@
                 vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 | VertexFormat.VF_UV1;
                 geomtry = GeometryData.buildGeomtry(geomtryData, vertexFormat);
             }
-            geomtry.textureDiffuse = geomtryData.textureDiffuse;
-            geomtry.textureNormal = geomtryData.textureNormal;
-            geomtry.textureSpecular = geomtryData.textureSpecular;
+            //geomtry.textureDiffuse = geomtryData.textureDiffuse;
+            //geomtry.textureNormal = geomtryData.textureNormal;
+            //geomtry.textureSpecular = geomtryData.textureSpecular;
             return geomtry;
         }
     }
