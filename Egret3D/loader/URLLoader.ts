@@ -341,13 +341,8 @@
                     } else if (window['webkitURL'] != undefined) { // webkit or chrome
                         img.src = window['webkitURL'].createObjectURL(this._xhr.response);
                     }
-                    var that = this;
-                    img.onload = () => {
-                        that._data = new ImageTexture(img);
-                        if (that.onLoadComplete) {
-                            that.onLoadComplete(that);
-                        }
-                    };
+                    
+                    img.onload = () => this.onLoadImg(img);
                     return;
                 case URLLoader.DATAFORMAT_DDS:
                     this._data = DDSParser.parse(this._xhr.response);
@@ -386,6 +381,13 @@
 
         private onProgress(event:ProgressEvent):void {
             //console.log("progress event```");
+        }
+
+        private onLoadImg(img: any) {
+            this._data = new ImageTexture(img);
+            if (this.onLoadComplete) {
+                this.onLoadComplete(this);
+            }
         }
 
         private onError(event:ErrorEvent):void {
