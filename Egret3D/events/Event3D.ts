@@ -131,7 +131,7 @@
             this._eventType = value;
         }
       
-        private _data: string;
+        private _data: any;
        /**
         * @language zh_CN
         * 获取附加数据。
@@ -139,7 +139,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public get data(): string {
+        public get data(): any {
             return this._data;
         }
        /**
@@ -149,13 +149,13 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public set data(value: string) {
+        public set data(value: any) {
             this._data = value;
         }
 
         private _time: number = 0;
 
-       /**
+        /**
         * @language zh_CN
         * 获取时间。
         * @returns {number}

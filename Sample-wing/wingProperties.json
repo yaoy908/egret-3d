@@ -1,5 +1,5 @@
 {
-	"close":true,
+	"close":false,
 	"resourcePlugin":{
 		"configs":[],
 		"id":"org.egret-labs.resource",
@@ -564,6 +564,11 @@
 					"isFolder":false,
 					"key":"resource/logo.png",
 					"name":"logo.png"
+				},
+				{
+					"isFolder":false,
+					"key":"resource/laohu/Mon_04.png",
+					"name":"Mon_04.png"
 				}
 			]
 		}
