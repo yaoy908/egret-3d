@@ -36,7 +36,10 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public material: MaterialBase;
+        public material: MaterialBase ;
+        //public material: { [matID: number]: MaterialBase };
+
+        private muiltMaterial: { [matID: number]: MaterialBase } = {} ;
 
         /**
         * @language zh_CN
@@ -81,8 +84,8 @@
             super();
 
             this.geometry = geometry;
+            this.muiltMaterial[0] = material;
             this.material = material;
-
             this.bound = this.buildBoundBox();
         }
 
@@ -97,6 +100,13 @@
                 this.geometry.init();
         }
 
+        public addSubMaterial(id: number, material: MaterialBase) {
+            this.muiltMaterial[id] = material;
+        }
+
+        public removeSubMaterial(id: number) {
+        }
+
         /**
         * @language zh_CN
         * 克隆一个模型
@@ -105,7 +115,9 @@
         * @platform Web,Native
         */
         public clone(): Mesh {
-            return new Mesh(this.geometry, this.material );
+            var cloneMesh: Mesh = new Mesh(this.geometry, this.material );
+            cloneMesh.muiltMaterial = this.muiltMaterial;
+            return cloneMesh;
         }
                                 
         /**
@@ -189,7 +201,7 @@
             for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
                 this._subGeometry = this.geometry.subGeometrys[this._i];
                 this._matID = this._subGeometry.matID;
-                this.material.renderDiffusePass(time, delay, this._matID , context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+                this.muiltMaterial[this._matID].renderDiffusePass(time, delay, this._matID , context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
             }
         }
     }
