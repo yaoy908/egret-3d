@@ -50,9 +50,9 @@
                 var tex: ImageTexture = new ImageTexture(img);
 
                 var mat: TextureMaterial = new TextureMaterial();
-                mat.shininess = 20.0;
+                mat.shininess = 10.0;
                 mat.ambientColor = 0xffffff;
-                mat.ambientPower = 0.5;
+                mat.ambientPower = 0.8;
                 this.mat = mat;
                 var ge: Geometry = e.data;
                 var mesh: Mesh = new Mesh(e.data, mat);

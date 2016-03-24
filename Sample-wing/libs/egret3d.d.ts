@@ -168,15 +168,15 @@ declare module egret3d {
          * @version Egret 3.0
          * @platform Web,Native
          */
-        data: string;
+        data: any;
         private _time;
         /**
-         * @language zh_CN
-         * 获取时间。
-         * @returns {number}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
+        * @language zh_CN
+        * 获取时间。
+        * @returns {number}
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         /**
          * @language zh_CN
          * 设置时间。

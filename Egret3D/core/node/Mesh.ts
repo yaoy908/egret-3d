@@ -204,7 +204,7 @@
                 if (bound.min.x > this.geometry.verticesData[i]) {
                     bound.min.x = this.geometry.verticesData[i];
                 }
-                if (bound.min.y > this.geometry.verticesData[i + 1]) {
+                if (bound.min.y > this.geometry.verticesData[i + 1]) {   
                     bound.min.y = this.geometry.verticesData[i + 1];
                 }
                 if (bound.min.z > this.geometry.verticesData[i + 2]) {

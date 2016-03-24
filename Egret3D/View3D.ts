@@ -28,6 +28,7 @@
         protected _entityCollect: EntityCollect;
         protected _backColor: Vector3D = new Vector3D(0.3, 0.3, 0.6, 1.0);
 
+        protected _cleanParmerts: number = Context3DProxy.gl.COLOR_BUFFER_BIT | Context3DProxy.gl.DEPTH_BUFFER_BIT; 
         private _sizeDiry: boolean = false;
         constructor(x: number, y: number, width: number, height: number) {
             this._entityCollect = new EntityCollect();
@@ -38,6 +39,10 @@
             this.y = y;
             this.width = width;
             this.height = height;
+        }
+
+        public blender(cleanColor:boolean,cleanDepth:boolean) {
+            this._cleanParmerts = this._cleanParmerts | (cleanColor ? Context3DProxy.gl.COLOR_BUFFER_BIT : 0) | (cleanDepth ? Context3DProxy.gl.DEPTH_BUFFER_BIT : 0);
         }
 
         public set backColor(value: number) {

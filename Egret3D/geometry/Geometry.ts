@@ -263,6 +263,10 @@
             this.calculateVertexFormat();
         }
 
+        public calculTangentNormal() {
+
+        }
+
         /**
         * @language zh_CN
         * 使用和定义顶点的数据结构

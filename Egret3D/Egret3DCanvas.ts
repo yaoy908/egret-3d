@@ -256,7 +256,6 @@
                 this.view3DS[i].update(this._time, this._delay);
             }
 
-            View3D._contex3DProxy.flush();
             requestAnimationFrame((delay) => this.update(delay));
         }
 
