@@ -312,7 +312,7 @@
                 var subGeometry: SubGeometry = new SubGeometry();
                 subGeometry.matID = i;
                 subGeometry.geometry = target;
-                subGeometry.start = source.material[i].start * 3;
+                subGeometry.start = source.material[i].start * 3 * Uint16Array.BYTES_PER_ELEMENT;
                 subGeometry.count = source.material[i].count * 3;
                 subGeometry.textureDiffuse = source.material[i].textureDiffuse;
                 subGeometry.textureNormal = source.material[i].textureNormal;

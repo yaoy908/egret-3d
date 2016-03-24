@@ -85,7 +85,7 @@
             super();
 
             this.geometry = geometry;
-            this.muiltMaterial[0] = material;
+            this.addSubMaterial(0, material);
             this.material = material;
             this.bound = this.buildBoundBox();
         }
@@ -124,7 +124,10 @@
         * @platform Web,Native
         */
         public removeSubMaterial(id: number) {
-            delete this.muiltMaterial[id];
+            if (this.muiltMaterial[id]) {
+                delete this.muiltMaterial[id];
+                this._materialCount--;
+            }
         }
                         
         /**

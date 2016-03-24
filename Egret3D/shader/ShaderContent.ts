@@ -314,7 +314,6 @@
                     if (otherContent.sampler2DList[i].name == this.sampler2DList[j].name) {
                         if (otherContent.sampler2DList[i].valueType != this.sampler2DList[j].valueType ||
                             otherContent.sampler2DList[i].key != this.sampler2DList[j].key) {
-                            console.log("Error :addContent");
                         }
 
                         isAdd = false;
@@ -332,7 +331,6 @@
                     if (otherContent.sampler3DList[i].name == this.sampler3DList[j].name) {
                         if (otherContent.sampler2DList[i].valueType != this.sampler3DList[j].valueType ||
                             otherContent.sampler3DList[i].key != this.sampler3DList[j].key) {
-                            console.log("Error :addContent");
                         }
 
                         isAdd = false;
