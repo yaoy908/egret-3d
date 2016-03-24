@@ -904,7 +904,7 @@
         * 绘制模型元素
         * @param type 图元类型
         * @param indexBuffer 索引数据
-        * @param offset 顶点偏移
+        * @param offset 顶点索引偏移 (字节数)
         * @param length 顶点个数
         */
         public drawElement(type: number, offset: number, length: number) {
