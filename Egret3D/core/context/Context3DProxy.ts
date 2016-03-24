@@ -47,6 +47,7 @@
             var OES_texture_half_float = Context3DProxy.gl.getExtension("OES_texture_half_float");
             var OES_texture_half_float_linear = Context3DProxy.gl.getExtension("OES_texture_half_float_linear");
             var OES_standard_derivatives = Context3DProxy.gl.getExtension("OES_standard_derivatives");
+            var GL_OES_standard_derivatives = Context3DProxy.gl.getExtension("GL_OES_standard_derivatives");
             var WEBGL_draw_buffers = Context3DProxy.gl.getExtension("WEBGL_draw_buffers");
             var WEBGL_depth_texture = Context3DProxy.gl.getExtension("WEBGL_depth_texture");
 

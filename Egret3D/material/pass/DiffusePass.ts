@@ -50,6 +50,8 @@
                 this._passUsage.maxDirectLight = this.lightGroup.directLightList.length;
                 this._passUsage.maxSpotLight = this.lightGroup.spotLightList.length;
                 this._passUsage.maxPointLight = this.lightGroup.pointLightList.length;
+                
+                this._passUsage.fragmentShader.addUseShaderName("lightingBase_fs");
 
                 if (this.lightGroup.directLightList.length) {
                     this._passUsage.directLightData = new Float32Array(DirectLight.stride * this.lightGroup.directLightList.length);

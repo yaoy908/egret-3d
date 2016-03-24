@@ -264,8 +264,9 @@
 
         private synthesisShader(content: GLSL.ShaderContent, shaderBase:ShaderBase) {
 
-             var source: string = "precision highp float;            \t\n";
-
+            var source: string;//= "#extension GL_OES_standard_derivatives : enable \t\n";
+            source = "precision highp float;            \t\n";
+         
             var i: number; 
             ///var attribute
             for (var key in content.attributeList) {
@@ -306,6 +307,8 @@
             for (i = 0; i < content.funcList.length; i++) {
                 source += content.funcList[i].func;
             }
+
+           
             content.source = source;
         }
 
