@@ -241,27 +241,7 @@
         * @language zh_CN
         * geometry子集
         */
-        public subGeometrys: Array<SubGeometry> = new Array<SubGeometry>();
-
-        
-        /**
-        * @language zh_CN
-        * 材质球的凹凸法线贴图。
-        */
-        public textureNormal: string;
-                
-        /**
-        * @language zh_CN
-        * 材质球的漫反射贴图。
-        */
-        
-        public textureDiffuse: string;
-        
-        /**
-        * @language zh_CN
-        * 材质球的高光贴图。
-        */
-        public textureSpecular: string;
+        public subGeometrys: Array<SubGeometry> = new Array<SubGeometry>();       
 
 
         /**

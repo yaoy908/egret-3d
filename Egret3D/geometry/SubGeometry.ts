@@ -1,7 +1,6 @@
 ﻿module egret3d {
 
     /**
-     * @private
      * @language zh_CN
      * @class egret3d.SubGeometry
      * @classdesc
@@ -42,6 +41,25 @@
          * @platform Web,Native
          */
         public geometry: Geometry;
+                
+        /**
+        * @language zh_CN
+        * 材质球的漫反射贴图。
+        */
+
+        public textureDiffuse: string;
+
+        /**
+         * @language zh_CN
+         * 材质球的凹凸法线贴图。
+         */
+        public textureNormal: string;
+
+        /**
+        * @language zh_CN
+        * 材质球的高光贴图。
+        */
+        public textureSpecular: string;
 
         private attList: Array<GLSL.Attribute> = new Array<GLSL.Attribute>();
         private _attributeDiry: boolean = true; 
