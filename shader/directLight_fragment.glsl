@@ -32,13 +32,15 @@ void calculateDirectLight( MaterialSource materialSource ){
       
 		  float halfLambertTerm = clamp(dot(N,-ldir),0.0,1.0); 
 		  light.xyz += ( halfLambertTerm * L.halfColor * 0.25 + L.halfColor * 0.25 ) * L.halfIntensity; 
-		  if( lambertTerm > 0.0 ){
-				vReflect = normalize(2.0*NdotL*N - ndir); 
-				specular.xyz += L.diffuse * pow( clamp( dot(vReflect,normalize(eyedir)) ,0.0,1.0), materialSource.shininess ) ;	
-		  }
+		  specular.xyz += L.diffuse * phongSpecular(ndir,normalize(varying_eyedir),N,materialSource.shininess) ;	
     }; 
 }
 
+float phongSpecular(vec3 lightDirection,vec3 viewDirection,vec3 surfaceNormal,float shininess) {
+  vec3 R = -reflect(lightDirection, surfaceNormal);
+  return pow(max(0.0, dot(viewDirection, R)), shininess);
+}
+ 
 void main() {
 	calculateDirectLight( materialSource );
 }
