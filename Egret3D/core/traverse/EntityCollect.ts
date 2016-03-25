@@ -248,6 +248,9 @@
         //}
 
         private applyRender(child: any, camera: Camera3D) {
+            if (!child.visible) {
+                return;
+            }
 
             if ( child["material"] )
                 this.addRenderList(<IRender>child, camera);
@@ -258,7 +261,6 @@
         }
 
         private addRenderList(renderItem: IRender, camera: Camera3D) {
-            //if (!renderItem.material) return;
 
             if (renderItem.enableCulling) {
                 if (!camera.isVisibleToCamera(renderItem)) {

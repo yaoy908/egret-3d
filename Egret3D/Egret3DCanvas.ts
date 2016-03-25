@@ -78,7 +78,7 @@
             console.log("this.context3D ==>", Context3DProxy.gl);
 
             this.clientRect = this.canvas.getBoundingClientRect();
-            Input.instance.canvas = this;
+            Input.canvas = this;
             this.initEvent();
         }
 

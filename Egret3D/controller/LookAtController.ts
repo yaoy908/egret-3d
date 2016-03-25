@@ -87,25 +87,25 @@
 
             this._target.lookAt(this._eyesPos, this._lookAtPosition);
 
-            Input.instance.addListenerMouseWheel(() => this.mouseWheel());
+            Input.addListenerMouseWheel(() => this.mouseWheel(), this);
 
-            Input.instance.addListenerMouseMove(() => this.mouseMove());
+            Input.addListenerMouseMove(() => this.mouseMove(), this);
 
-            Input.instance.addListenerKeyUp((e:number) => this.keyUp(e));
-            Input.instance.addListenerKeyDown((e: number) => this.keyDown(e));
+            Input.addListenerKeyUp((e: number) => this.keyUp(e), this);
+            Input.addListenerKeyDown((e: number) => this.keyDown(e), this);
 
-            Input.instance.addListenerSwipe(() => this.mouseMove());
+            Input.addListenerSwipe(() => this.mouseMove(), this);
         }
 
 
         private mouseWheel() {
-            this.distance = this._eyesLength - Input.instance.wheelDelta * 0.1;
+            this.distance = this._eyesLength - Input.wheelDelta * 0.1;
         }
 
         private mouseMove() {
             if (this._mouseDown) {
-                this._rotaAngle.y += Input.instance.mouseOffsetX;
-                this._rotaAngle.x += Input.instance.mouseOffsetY;
+                this._rotaAngle.y += Input.mouseOffsetX;
+                this._rotaAngle.x += Input.mouseOffsetY;
 
                 this._rotaAngle.y %= 360;
                 this._rotaAngle.x %= 360;

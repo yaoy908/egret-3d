@@ -35,14 +35,14 @@
             this._mouseEvent3D = new MouseEvent3D();
             this._touchEvent3D = new TouchEvent3D();
 
-            Input.instance.addListenerKeyClick((code: number) => this.onMouseClick(code));
-            Input.instance.addListenerKeyDown((code: number) => this.onMouseDown(code));
-            Input.instance.addListenerKeyUp((code: number) => this.onMouseUp(code));
-            Input.instance.addListenerMouseMove((e: MouseEvent) => this.onMouseMove(e));
-            Input.instance.addListenerMouseOver((e: MouseEvent) => this.onMouseOver(e));
-            Input.instance.addTouchDownCallback((e: TouchEvent) => this.onTouchDown(e));
-            Input.instance.addTouchUpCallback((e: TouchEvent) => this.onTouchUp(e));
-            Input.instance.addTouchMoveCallback((e: TouchEvent) => this.onTouchMove(e));
+            Input.addListenerKeyClick((code: number) => this.onMouseClick(code), this);
+            Input.addListenerKeyDown((code: number) => this.onMouseDown(code), this);
+            Input.addListenerKeyUp((code: number) => this.onMouseUp(code), this);
+            Input.addListenerMouseMove((e: MouseEvent) => this.onMouseMove(e), this);
+            Input.addListenerMouseOver((e: MouseEvent) => this.onMouseOver(e), this);
+            Input.addTouchDownCallback((e: TouchEvent) => this.onTouchDown(e), this);
+            Input.addTouchUpCallback((e: TouchEvent) => this.onTouchUp(e), this);
+            Input.addTouchMoveCallback((e: TouchEvent) => this.onTouchMove(e), this);
         }
       
         /**
@@ -171,12 +171,13 @@
         private isMouseTrigger(e: any): boolean {
             var code: number;
             if (typeof e == "MouseEvent") {
-                Input.instance.GetKeyCodeByMouseEventNumber(e.button);
+                Input.GetKeyCodeByMouseEventNumber(e.button);
             } else {
                 code = e;
             }
             return code === KeyCode.Key_Mouse_Right || code == KeyCode.Key_Mouse_Left;
         }
+
         private onTouchMove(e: TouchEvent) {
             this.sendEvent(e, TouchEvent3D.TOUCH_MOVE, this.initTouchEvent3D);
         }

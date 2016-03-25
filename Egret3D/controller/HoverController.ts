@@ -73,17 +73,17 @@
             this._currentPanAngle = this._panAngle;
             this._currentTiltAngle = this._tiltAngle;
 
-            Input.instance.addListenerMouseMove(() => this.mouseMove());
-            Input.instance.addListenerKeyUp((e: number) => this.keyUp(e));
-            Input.instance.addListenerKeyDown((e: number) => this.keyDown(e));
-            Input.instance.addListenerMouseWheel(() => this.mouseWheel());
+            Input.addListenerMouseMove(() => this.mouseMove(), this);
+            Input.addListenerKeyUp((e: number) => this.keyUp(e), this);
+            Input.addListenerKeyDown((e: number) => this.keyDown(e), this);
+            Input.addListenerMouseWheel(() => this.mouseWheel(), this);
 
-            Input.instance.addListenerSwipe(() => this.mouseMove());
+            Input.addListenerSwipe(() => this.mouseMove(), this);
         }
 
 
         private mouseWheel() {
-            this._distance -= Input.instance.wheelDelta * 0.1;
+            this._distance -= Input.wheelDelta * 0.1;
             this._distance = Math.max(this._minDistance, Math.min(this._maxDistance, this._distance));
         }
 
@@ -134,10 +134,10 @@
         }
         private mouseMove() {
             if ( this._mouseDown ){
-                this._tiltAngle += Input.instance.mouseOffsetY * 0.1;
+                this._tiltAngle += Input.mouseOffsetY * 0.1;
                 this._tiltAngle = Math.max(this._minTiltAngle, Math.min(this._maxTiltAngle, this._tiltAngle))
 
-                this._panAngle += Input.instance.mouseOffsetX * 0.1;
+                this._panAngle += Input.mouseOffsetX * 0.1;
                 this._panAngle = Math.max(this._minPanAngle, Math.min(this._maxPanAngle, this._panAngle))
             }
         }
