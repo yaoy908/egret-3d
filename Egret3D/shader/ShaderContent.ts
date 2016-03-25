@@ -2,33 +2,6 @@
         
     /**
     * @private
-    * @class egret3d.FuncData
-    * @classdesc
-    * shader函数内容的数据
-    * @version Egret 3.0
-    * @platform Web,Native
-    */
-    export class FuncData {
-
-        /**
-        * @private
-        * 函数名
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public name: string = "";
-        
-        /**
-        * @private
-        * 函数内容
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public func: string = "";
-    }
-        
-    /**
-    * @private
     * @class egret3d.ShaderContent
     * @classdesc
     * shader文件解析后的数据内容
