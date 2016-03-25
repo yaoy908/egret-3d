@@ -233,8 +233,8 @@
                     if (otherContent.attributeList[i].name == this.attributeList[j].name) {
                         if (otherContent.attributeList[i].valueType != this.attributeList[j].valueType ||
                             otherContent.attributeList[i].key != this.attributeList[j].key) {
-                            console.log(otherContent.constList[i].name + "=> type:" + otherContent.constList[i].valueType + " " + this.constList[j].valueType
-                                + " => key:" + otherContent.constList[i].key + " " + this.constList[j].key);
+                            console.log(otherContent.attributeList[i].name + "=> type:" + otherContent.attributeList[i].valueType + " " + this.attributeList[j].valueType
+                                + " => key:" + otherContent.attributeList[i].key + " " + this.attributeList[j].key);
                         }
 
                         isAdd = false;
