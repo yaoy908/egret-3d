@@ -148,6 +148,11 @@
                             if (ConstVar)
                                 content.addVar(ConstVar);
                         }
+                        else if (key == "#extension"){
+                            var extension: GLSL.Extension = StringUtil.getExtension(line);
+                            if (extension)
+                                content.addVar(extension);
+                        }
                         else {
                             content.addVar(StringUtil.getTemper(line));
                         }
@@ -263,11 +268,13 @@
         }
 
         private synthesisShader(content: GLSL.ShaderContent, shaderBase:ShaderBase) {
-
-            var source: string;//= "#extension GL_OES_standard_derivatives : enable \t\n";
-            source = "precision highp float;            \t\n";
-         
             var i: number; 
+            var source: string = "precision highp float;            \t\n";
+
+            for (i = 0; i < content.extensionList.length; i++) {
+                source += ShaderUtil.connectExtension(content.extensionList[i]);
+            }
+
             ///var attribute
             for (var key in content.attributeList) {
                 source += ShaderUtil.connectAtt(content.attributeList[key]);
@@ -307,8 +314,6 @@
             for (i = 0; i < content.funcList.length; i++) {
                 source += content.funcList[i].func;
             }
-
-           
             content.source = source;
         }
 
@@ -384,6 +389,10 @@
 
         private static connectSampler3D(sampler: GLSL.Sampler3D): string {
             return "uniform samplerCube " + sampler.name + "; \r\n";
+        }
+
+        private static connectExtension(extension: GLSL.Extension): string {
+            return "#extension " + extension.name + ":" +  extension.value + "\r\n";
         }
 
         private static getTexture2DIndex(i: number): number {

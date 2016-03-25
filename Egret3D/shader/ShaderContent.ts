@@ -49,6 +49,8 @@
 
         public source: string = "";
 
+        private funcNames: Array<string> = new Array<string>();
+
         private funcDict: any = {};
         
         /**
@@ -58,7 +60,7 @@
         * @platform Web,Native
         */
         public structDict: any = {};
-                
+
         /**
         * @private
         * attribute列表
@@ -122,7 +124,8 @@
         * @platform Web,Native
         */
         public funcList: Array<FuncData> = new Array<FuncData>();
-                                                                        
+                        
+        public extensionList: Array<Extension> = new Array<Extension>();                                                
         /**
         * @private
         * 增加一个变量对象
@@ -149,6 +152,9 @@
             else if (sVar.key == "samplerCube") {
                 this.sampler3DList.push(sVar);
             }
+            else if (sVar.key == "#extension") {
+                this.extensionList.push(sVar);
+            }
             else {
                 this.tempList.push(sVar);
             }
@@ -161,17 +167,13 @@
         * @platform Web,Native
         */
         public addFunc(name: string, func: string) {
-            if (this.funcDict[name] == undefined) {
+
+            if (!this.funcDict[name]) {
                 this.funcDict[name] = func;
                 var funcData: FuncData = new FuncData();
                 funcData.name = name;
                 funcData.func = func;
-                if (name == "main") {
-                    this.funcList.push(funcData);
-                }
-                else {
-                    this.funcList.unshift(funcData);
-                }
+                this.funcList.push(funcData);
             }
             else {
                 if (name == "main") {
@@ -181,11 +183,17 @@
                     if (funcData) {
                         funcData.func = newfunc;
                     }
-
                 }
                 else {
                     console.log("<" + name + ">" + "函数重复");
                 }
+            }
+
+            if (this.funcDict["main"]) {
+                var funcData: FuncData = this.findFunc(name);
+                var index: number = this.funcList.indexOf(funcData);
+                this.funcList.splice(index, 1);
+                this.funcList.push(funcData);
             }
         }
                                                                         
@@ -225,6 +233,8 @@
                     if (otherContent.attributeList[i].name == this.attributeList[j].name) {
                         if (otherContent.attributeList[i].valueType != this.attributeList[j].valueType ||
                             otherContent.attributeList[i].key != this.attributeList[j].key) {
+                            console.log(otherContent.constList[i].name + "=> type:" + otherContent.constList[i].valueType + " " + this.constList[j].valueType
+                                + " => key:" + otherContent.constList[i].key + " " + this.constList[j].key);
                         }
 
                         isAdd = false;
@@ -243,6 +253,8 @@
                     if (otherContent.varyingList[i].name == this.varyingList[j].name) {
                         if (otherContent.varyingList[i].valueType != this.varyingList[j].valueType ||
                             otherContent.varyingList[i].key != this.varyingList[j].key) {
+                            console.log(otherContent.varyingList[i].name + "=> type:" + otherContent.varyingList[i].valueType + " " + this.varyingList[j].valueType
+                                + " => key:" + otherContent.varyingList[i].key + " " + this.varyingList[j].key);
                         }
 
                         isAdd = false;
@@ -261,6 +273,8 @@
                     if (otherContent.uniformList[i].name == this.uniformList[j].name) {
                         if (otherContent.uniformList[i].valueType != this.uniformList[j].valueType ||
                             otherContent.uniformList[i].key != this.uniformList[j].key) {
+                            console.log(otherContent.uniformList[i].name + "=> type:" + otherContent.uniformList[i].valueType + " " + this.uniformList[j].valueType
+                                + " => key:" + otherContent.uniformList[i].key + " " + this.uniformList[j].key);
                         }
 
                         isAdd = false;
@@ -279,6 +293,8 @@
                     if (otherContent.constList[i].name == this.constList[j].name) {
                         if (otherContent.constList[i].valueType != this.constList[j].valueType ||
                             otherContent.constList[i].key != this.constList[j].key) {
+                            console.log(otherContent.constList[i].name + "=> type:" + otherContent.constList[i].valueType + " " + this.constList[j].valueType
+                                + " => key:" + otherContent.constList[i].key + " " + this.constList[j].key);
                         }
 
                         isAdd = false;
@@ -296,6 +312,8 @@
                     if (otherContent.tempList[i].name == this.tempList[j].name) {
                         if (otherContent.tempList[i].valueType != this.tempList[j].valueType ||
                             otherContent.tempList[i].key != this.tempList[j].key) {
+                            console.log(otherContent.tempList[i].name + "=> type:" + otherContent.tempList[i].valueType + " " + this.tempList[j].valueType
+                                + " => key:" + otherContent.tempList[i].key + " " + this.tempList[j].key);
                         }
 
                         isAdd = false;
@@ -314,6 +332,8 @@
                     if (otherContent.sampler2DList[i].name == this.sampler2DList[j].name) {
                         if (otherContent.sampler2DList[i].valueType != this.sampler2DList[j].valueType ||
                             otherContent.sampler2DList[i].key != this.sampler2DList[j].key) {
+                            console.log(otherContent.sampler2DList[i].name + "=> type:" + otherContent.sampler2DList[i].valueType + " " + this.sampler2DList[j].valueType
+                                + " => key:" + otherContent.sampler2DList[i].key + " " + this.sampler2DList[j].key);
                         }
 
                         isAdd = false;
@@ -331,6 +351,8 @@
                     if (otherContent.sampler3DList[i].name == this.sampler3DList[j].name) {
                         if (otherContent.sampler2DList[i].valueType != this.sampler3DList[j].valueType ||
                             otherContent.sampler3DList[i].key != this.sampler3DList[j].key) {
+                            console.log(otherContent.sampler3DList[i].name + "=> type:" + otherContent.sampler3DList[i].valueType + " " + this.sampler3DList[j].valueType
+                                + " => key:" + otherContent.sampler3DList[i].key + " " + this.sampler3DList[j].key);
                         }
 
                         isAdd = false;
@@ -339,6 +361,19 @@
                 }
                 if (isAdd) {
                     this.sampler3DList.push(otherContent.sampler3DList[i].clone());
+                }
+            }
+
+            for (var i: number = 0; i < otherContent.extensionList.length; ++i) {
+                var isAdd: boolean = true;
+                for (var j: number = 0; j < this.extensionList.length; ++j) {
+                    if (otherContent.extensionList[i].name == this.extensionList[j].name) {
+                        isAdd = false;
+                        break;
+                    }
+                }
+                if (isAdd) {
+                    this.extensionList.push(otherContent.extensionList[i].clone());
                 }
             }
         }
@@ -361,27 +396,7 @@
             var temp: string = "";
             var line: string = "";
             var old: string = ret;
-            ///while (true) {
-            ///    s_pos = ret.indexOf("gl_FragColor");
-            ///    if (s_pos >= 0) {
-            ///        e_pos = ret.indexOf(";", s_pos);
-            ///        temp = ret.substring(s_pos, e_pos + 1);
-            ///        ret = ret.replace(temp, "");
-            ///        line += temp;
-            ///    }
 
-            ///    s_pos = ret.indexOf("gl_Position");
-            ///    if (s_pos >= 0) {
-            ///        e_pos = ret.indexOf(";", s_pos);
-            ///        temp = ret.substring(s_pos, e_pos + 1);
-            ///        ret = ret.replace(temp, "");
-            ///        line += temp;
-            ///    }
-            ///    if (old == ret) {
-            ///        break;
-            ///    }
-            ///    old = ret;
-            ///}
             ret += line;
             ret += s_func;
             return ret;
