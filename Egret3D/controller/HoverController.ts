@@ -73,22 +73,75 @@
             this._currentPanAngle = this._panAngle;
             this._currentTiltAngle = this._tiltAngle;
 
-            Input.addListenerMouseMove(() => this.mouseMove(), this);
-            Input.addListenerKeyUp((e: number) => this.keyUp(e), this);
-            Input.addListenerKeyDown((e: number) => this.keyDown(e), this);
-            Input.addListenerMouseWheel(() => this.mouseWheel(), this);
+            Input.addEventListener(MouseEvent3D.MOUSE_MOVE, this.mouseMove, this);
+            Input.addEventListener(MouseEvent3D.MOUSE_WHEEL, this.mouseWheel, this);
+            Input.addEventListener(MouseEvent3D.MOUSE_UP, this.mouseUp, this);
+            Input.addEventListener(MouseEvent3D.MOUSE_DOWN, this.mouseDown, this);
 
-            Input.addListenerSwipe(() => this.mouseMove(), this);
+            Input.addEventListener(KeyEvent3D.KEY_UP, this.keyUp, this);
+            Input.addEventListener(KeyEvent3D.KEY_DOWN, this.keyDown, this);
+
+            Input.addEventListener(TouchEvent3D.TOUCH_START, this.touchDown, this);
+            Input.addEventListener(TouchEvent3D.TOUCH_END, this.touchDown, this);
+            Input.addEventListener(TouchEvent3D.TOUCH_MOVE, this.touchDown, this);
         }
 
+        private mouseMove(m: MouseEvent3D) {
+            if (this._mouseDown) {
+                this._tiltAngle += Input.mouseOffsetY * 0.1;
+                this._tiltAngle = Math.max(this._minTiltAngle, Math.min(this._maxTiltAngle, this._tiltAngle))
 
-        private mouseWheel() {
+                this._panAngle += Input.mouseOffsetX * 0.1;
+                this._panAngle = Math.max(this._minPanAngle, Math.min(this._maxPanAngle, this._panAngle))
+            }
+        }
+
+        private mouseWheel(m: MouseEvent3D) {
             this._distance -= Input.wheelDelta * 0.1;
             this._distance = Math.max(this._minDistance, Math.min(this._maxDistance, this._distance));
         }
 
-        private keyDown(key: number) {
-            switch (key) {
+        private mouseUp(m: MouseEvent3D) {
+            switch (m.mouseCode) {
+                case MouseCode.Mouse_Left:
+                    this._mouseDown = false;
+                    break;
+                case MouseCode.Mouse_Right:
+                    this._mouseRightDown = false;
+                    break;
+            }
+        }
+
+        private mouseDown(m: MouseEvent3D) {
+            switch (m.mouseCode) {
+                case MouseCode.Mouse_Left:
+                    this._mouseDown = true;
+                    break;
+                case MouseCode.Mouse_Right:
+                    this._mouseRightDown = true;
+                    break;
+            }
+        }
+
+        private touchMove(t: TouchEvent3D) {
+            if (t.targetTouches.length == 1) {
+                this.mouseMove(null);
+            }
+            else {
+                this.mouseWheel(null);
+            }
+        }
+
+        private touchUp(m: TouchEvent3D) {
+            this._mouseDown = false;
+        }
+
+        private touchDown(m: MouseEvent3D) {
+            this._mouseDown = true;
+        }
+
+        private keyDown(key: KeyEvent3D) {
+            switch (key.keyCode) {
                 case KeyCode.Key_W:///w
                     this._keyArray[0] = true;
                     break;
@@ -101,17 +154,11 @@
                 case KeyCode.Key_D:///d
                     this._keyArray[3] = true;
                     break;
-                case KeyCode.Key_Mouse_Left:
-                    this._mouseDown = true;
-                    break;
-                case KeyCode.Key_Mouse_Right:
-                    this._mouseRightDown = true;
-                    break;
             }
         }
 
-        private keyUp(key: number) {
-            switch (key) {
+        private keyUp(key: KeyEvent3D) {
+            switch (key.keyCode) {
                 case KeyCode.Key_W:///w
                     this._keyArray[0] = false;
                     break;
@@ -124,21 +171,6 @@
                 case KeyCode.Key_D:///d   
                     this._keyArray[3] = false;
                     break;
-                case KeyCode.Key_Mouse_Left:
-                    this._mouseDown = false;
-                    break;
-                case KeyCode.Key_Mouse_Right:
-                    this._mouseRightDown = false;
-                    break;
-            }
-        }
-        private mouseMove() {
-            if ( this._mouseDown ){
-                this._tiltAngle += Input.mouseOffsetY * 0.1;
-                this._tiltAngle = Math.max(this._minTiltAngle, Math.min(this._maxTiltAngle, this._tiltAngle))
-
-                this._panAngle += Input.mouseOffsetX * 0.1;
-                this._panAngle = Math.max(this._minPanAngle, Math.min(this._maxPanAngle, this._panAngle))
             }
         }
         

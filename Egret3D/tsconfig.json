@@ -14,6 +14,8 @@
         "events/Event3D.ts",
         "events/MouseEvent3D.ts",
         "events/TouchEvent3D.ts",
+        "events/PickEvent3D.ts",
+        "events/KeyEvent3D.ts",
         "events/EventDispatcher.ts",
         "events/EventManager.ts",
 
