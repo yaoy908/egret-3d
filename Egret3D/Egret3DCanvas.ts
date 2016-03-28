@@ -78,7 +78,7 @@
             console.log("this.context3D ==>", Context3DProxy.gl);
 
             this.clientRect = this.canvas.getBoundingClientRect();
-            Input.instance.canvas = this;
+            Input.canvas = this;
             this.initEvent();
         }
 
@@ -256,7 +256,6 @@
                 this.view3DS[i].update(this._time, this._delay);
             }
 
-            View3D._contex3DProxy.flush();
             requestAnimationFrame((delay) => this.update(delay));
         }
 

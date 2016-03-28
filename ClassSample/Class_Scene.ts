@@ -25,16 +25,6 @@
             dirLight.diffuse = 0xffffff;
             this.lights.addLight(dirLight);
 
-            var po: PointLight = new PointLight(0xffffff);
-            po.y = 200;
-            po.z = 200;
-            this.lights.addLight(po);
-
-            var spo: SpotLight = new SpotLight(0xffffff);
-            spo.rotationX = 90;
-            spo.y = 200;
-            //this.lights.addLight(spo);
-
             this.cameraCtl = new LookAtController(view1.camera3D, new Object3D());
             this.cameraCtl.distance = 1000;
             this.cameraCtl.rotationX = 60;
@@ -48,9 +38,10 @@
             if (name == "FOL_Foliage_01") {
 
                 var mat: TextureMaterial = new TextureMaterial();
-                mat.shininess = 20.0;
+                mat.shininess = 0.1;
+                mat.specularColor = 0; 
                 mat.ambientColor = 0xffffff;
-                mat.ambientPower = 0.5;
+                mat.ambientPower = 0.8;
                 this.mat = mat;
                 var ge: Geometry = e.data;
                 var mesh: Mesh = new Mesh(e.data, mat);

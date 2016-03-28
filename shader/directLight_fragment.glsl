@@ -10,10 +10,23 @@ struct DirectLight{
 };
 
 vec4 light ;
+
+float phongSpecular(vec3 lightDirection,vec3 viewDirection,vec3 surfaceNormal,float shininess) {
+  vec3 R = -reflect(lightDirection, surfaceNormal);
+  return pow(max(0.0, dot(viewDirection, R)), shininess);
+}
+
+vec3 flatNormal(vec3 pos){
+    vec3 fdx = -dFdx(pos);
+    vec3 fdy = dFdy(pos);
+    return normalize(cross(fdx, fdy));
+}
+
 void calculateDirectLight( MaterialSource materialSource ){
 	float specularfract,NdotL ; 
     vec3 vReflect,ldir,ndir,N;
-    N = normalize(normal);
+    //N = flatNormal(varying_pos.xyz);
+    N = normalize(normal.xyz);
     for(int i = 0 ; i < max_directLight ; i++){ 
 		  DirectLight L ; 
 		  L.direction = vec3(uniform_directLightSource[i*10+0],uniform_directLightSource[i*10+1],uniform_directLightSource[i*10+2]); 
@@ -32,13 +45,12 @@ void calculateDirectLight( MaterialSource materialSource ){
       
 		  float halfLambertTerm = clamp(dot(N,-ldir),0.0,1.0); 
 		  light.xyz += ( halfLambertTerm * L.halfColor * 0.25 + L.halfColor * 0.25 ) * L.halfIntensity; 
-		  if( lambertTerm > 0.0 ){
-				vReflect = normalize(2.0*NdotL*N - ndir); 
-				specular.xyz += L.diffuse * pow( clamp( dot(vReflect,normalize(eyedir)) ,0.0,1.0), materialSource.shininess ) ;	
-		  }
+		  specular.xyz += L.diffuse * phongSpecular(ndir,normalize(varying_eyedir),N,materialSource.shininess) ;	
     }; 
 }
 
+
+ 
 void main() {
 	calculateDirectLight( materialSource );
 }

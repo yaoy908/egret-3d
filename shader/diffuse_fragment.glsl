@@ -1,4 +1,5 @@
-﻿uniform float uniform_materialSource[16] ;
+﻿#extension GL_OES_standard_derivatives : enable
+uniform float uniform_materialSource[16] ;
 uniform sampler2D diffuseTexture;
 struct MaterialSource{
     vec3 diffuse;

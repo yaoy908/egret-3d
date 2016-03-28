@@ -148,6 +148,7 @@
         "shader/register/UniformType.ts",
         "shader/register/VarConfig.ts",
         "shader/register/Varying.ts",
+        "shader/register/Extension.ts",
         "shader/register/VaryingType.ts",
 
         "shader/FragmentShader.ts",

@@ -25,12 +25,13 @@ void calculatePointLight(MaterialSource materialSource){
 
 		lambertTerm = ( L.intensity  ) / ( dist * dist ) *NdotL ;
 		light.xyz = lambertTerm *  L.color.xyz  ;
-
-		if(lambertTerm>0.0){
-		  vReflect = normalize(2.0*NdotL*N - ndir); 
-		  specular.xyz += L.color * pow( clamp( dot(vReflect,normalize(eyedir)) ,0.0,1.0), materialSource.shininess ) ;	
-		}
+		specular.xyz += L.color * phongSpecular(ndir,normalize(varying_eyedir),N,materialSource.shininess) ;	
 	};
+}
+
+float phongSpecular(vec3 lightDirection,vec3 viewDirection,vec3 surfaceNormal,float shininess) {
+  vec3 R = -reflect(lightDirection, surfaceNormal);
+  return pow(max(0.0, dot(viewDirection, R)), shininess);
 }
 
 void main() {

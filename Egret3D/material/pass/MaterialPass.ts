@@ -15,7 +15,6 @@
         public fsShaderNames: Array<string> = new Array<string>();
 
         public lightGroup: LightGroup;
-        private normalMatrix: Matrix4_4 = new Matrix4_4();
         constructor(materialData: MaterialData) {
             this._materialData = materialData;
         }
@@ -273,14 +272,6 @@
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ModelMatrix.uniformIndex, false, modeltransform.rawData);
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.viewProjectionMatrix.rawData);
 
-            this.normalMatrix.append(modeltransform);
-            this.normalMatrix.invert();
-            this.normalMatrix.transpose();
-            //this.normalMatrix.appendScale(1,1,1);
-
-            if (this._passUsage.uniform_normalMatrix) {
-                context3DProxy.uniformMatrix4fv(this._passUsage.uniform_normalMatrix.uniformIndex, false, this.normalMatrix.rawData);
-            }
             if (this._passUsage.uniform_eyepos) {
                 context3DProxy.uniform3f(this._passUsage.uniform_eyepos.uniformIndex, camera3D.x, camera3D.y, camera3D.z);
             }

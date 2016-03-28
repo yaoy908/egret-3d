@@ -43,7 +43,12 @@
                     }
                 }
                 node += file.charAt(i);
-
+                if (endChar != "\n") {
+                    if (node.indexOf("#extension") >= 0) {
+                        endChar = "\n";
+                    }
+                }
+               
                 if (endChar == file.charAt(i)) {
                     if (endChar == "}") {
                         var s_num: number = 0;
@@ -435,6 +440,21 @@
 
             return constVar;
         }
+
+        public static getExtension(shaderLine: string): GLSL.Extension {
+            var start: number = shaderLine.indexOf("#");
+            var end: number = shaderLine.indexOf(" ");
+            var type: string = shaderLine.substr(start, end);
+            var namePosEnd: number = shaderLine.indexOf(":");
+            var name: string = shaderLine.substr(end, namePosEnd - end);
+            name = StringUtil.replaceCharacter(name, [" "], "");
+            namePosEnd += 1;
+            var value: string = shaderLine.substr(namePosEnd, shaderLine.length - namePosEnd);
+            value = StringUtil.replaceCharacter(value, [" ", ":", "\n", "\r"], "");
+            var extension: GLSL.Extension = new GLSL.Extension(name);
+            extension.value = value;
+            return extension;
+        }
         
         /**
         * @language zh_CN
@@ -487,6 +507,25 @@
                 }
             }
             return dest;
+        }
+
+        public static replaceCharacter(src: string, searchValue: Array<string>, replaceValue: string) :string {
+            var ret: string = src;
+            var isBreak: boolean = false;
+            while (!isBreak) {
+                isBreak = true;
+                for (var i: number = 0; i < searchValue.length; ++i) {
+                    if (ret.indexOf(searchValue[i]) >= 0) {
+                        isBreak = false;
+                        break;
+                    }
+                }
+                for (var i: number = 0; i < searchValue.length; ++i) {
+                    ret = ret.replace(searchValue[i], replaceValue);
+                }
+            }
+
+            return ret;
         }
     }
 }

@@ -36,8 +36,8 @@
             var ret: Array<IRender> = new Array<IRender>();
             var ray: Ray = this.ray;
 
-            var x: number = Input.instance.mouseX - view.x;
-            var y: number = Input.instance.mouseY - view.y;
+            var x: number = Input.mouseX - view.x;
+            var y: number = Input.mouseY - view.y;
             
             ray.CalculateAndTransformRay(view.width, view.height, camera.modelMatrix, camera.projectMatrix, x, y);
             for (var i: number = 0; i < objects.length; ++i) {

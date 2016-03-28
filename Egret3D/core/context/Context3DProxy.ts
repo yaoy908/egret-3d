@@ -47,6 +47,7 @@
             var OES_texture_half_float = Context3DProxy.gl.getExtension("OES_texture_half_float");
             var OES_texture_half_float_linear = Context3DProxy.gl.getExtension("OES_texture_half_float_linear");
             var OES_standard_derivatives = Context3DProxy.gl.getExtension("OES_standard_derivatives");
+            var GL_OES_standard_derivatives = Context3DProxy.gl.getExtension("GL_OES_standard_derivatives");
             var WEBGL_draw_buffers = Context3DProxy.gl.getExtension("WEBGL_draw_buffers");
             var WEBGL_depth_texture = Context3DProxy.gl.getExtension("WEBGL_depth_texture");
 
@@ -903,7 +904,7 @@
         * 绘制模型元素
         * @param type 图元类型
         * @param indexBuffer 索引数据
-        * @param offset 顶点偏移
+        * @param offset 顶点索引偏移 (字节数)
         * @param length 顶点个数
         */
         public drawElement(type: number, offset: number, length: number) {

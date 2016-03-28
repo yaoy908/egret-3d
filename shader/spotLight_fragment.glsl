@@ -42,16 +42,19 @@ void calculateSpotLight( MaterialSource materialSource ){
 
 			vec3 color = lambertTerm * L.spotColor.xyz ; 
 
-			if(lambertTerm>0.0){
-				vReflect = normalize(2.0*NdotL*N - ndir); 
-				specular.xyz += pow( clamp( dot(vReflect,eyedir) ,0.0,1.0),materialSource.shininess )* L.spotColor ;	
-			}
+			specular.xyz += L.spotColor * phongSpecular(ndir,normalize(varying_eyedir),N,materialSource.shininess) ;	
 
 			lambertTerm = (1.0 - (1.0 - SpotFactor) * 1.0/(1.0 - L.spotCosCutoff)); 
 			light.xyz = color * lambertTerm ; 
 		}
   } 
 }
+
+float phongSpecular(vec3 lightDirection,vec3 viewDirection,vec3 surfaceNormal,float shininess) {
+  vec3 R = -reflect(lightDirection, surfaceNormal);
+  return pow(max(0.0, dot(viewDirection, R)), shininess);
+}
+
 
 void main() {
 	calculateSpotLight( materialSource );

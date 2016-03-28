@@ -1,5 +1,5 @@
 ﻿module egret3d {
-    export class Class_SkinAnimation extends Class_View3D {
+    export class Class_MuiltMaterial extends Class_View3D {
 
         private laohu: Mesh;
         private view1: View3D;
@@ -17,23 +17,13 @@
             this._egret3DCanvas.addView3D(view1);
             this.view1 = view1;
 
-            var load: URLLoader = new URLLoader("resource/laohu/Mon_04.esm");
-            load.onLoadComplete = (e: URLLoader) => this.onLoad(e, "Mon_04");
+            var load: URLLoader = new URLLoader("resource/test/FOL_Foliage_04.esm");
+            load.onLoadComplete = (e: URLLoader) => this.onLoad(e, "FOL_Foliage_04");
 
 
             var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));
             dirLight.diffuse = 0xffffff;
             this.lights.addLight(dirLight);
-
-            var po: PointLight = new PointLight(0xffffff);
-            po.y = 200;
-            po.z = 200;
-            this.lights.addLight(po);
-
-            var spo: SpotLight = new SpotLight(0xffffff);
-            spo.rotationX = 90;
-            spo.y = 200;
-            //this.lights.addLight(spo);
 
             this.cameraCtl = new LookAtController(view1.camera3D, new Object3D());
             this.cameraCtl.distance = 1000;
@@ -45,12 +35,11 @@
 
         protected mat: TextureMaterial;
         protected onLoad(e: URLLoader, name: string) {
-            if (name == "Mon_04") {
-                var img: HTMLImageElement = <HTMLImageElement>document.getElementById("mon");
-                var tex: ImageTexture = new ImageTexture(img);
+            if (name == "FOL_Foliage_04") {
 
                 var mat: TextureMaterial = new TextureMaterial();
-                mat.shininess = 10.0;
+                mat.shininess = 0.1;
+                mat.specularColor = 0;
                 mat.ambientColor = 0xffffff;
                 mat.ambientPower = 0.8;
                 this.mat = mat;
@@ -65,23 +54,20 @@
                 mesh.material.lightGroup = this.lights;
                 this.laohu = mesh;
 
-                var loadtex: URLLoader = new URLLoader("resource/laohu/Mon_04.png");
-                loadtex.onLoadComplete = (e: URLLoader) => this.onLoadTexture(e, mat, "Mon_04");
-                var load: URLLoader = new URLLoader("resource/laohu/Bonezero.eam");
-                load.onLoadComplete = (e: URLLoader) => this.onAnimation(e, "Bonezero", mesh);
+                for (var i: number = 0; i < mesh.geometry.subGeometrys.length; ++i) {
+                    if (!mesh.getMaterial(i)) {
+                        mesh.addSubMaterial(i, new TextureMaterial());
+                    }
+                    var loadtex: URLLoader = new URLLoader("resource/test/" + mesh.geometry.subGeometrys[i].textureDiffuse);
+                    loadtex.onLoadComplete = (e: URLLoader) => this.onLoadTexture(e);
+                    loadtex["mat"] = mesh.getMaterial(i);
+                    loadtex["mesh"] = mesh; 
+                }
             }
-
         }
 
-        protected onLoadTexture(e: URLLoader, mat: TextureMaterial, name: string) {
-            mat.diffuseTexture = e.data;
-        }
-
-        protected onAnimation(e: URLLoader, name: string, mesh: Mesh) {
-            var clip: SkeletonAnimationClip = e.data;
-            clip.animationName = name;
-            mesh.animation.skeletonAnimationController.addSkeletonAnimationClip(clip);
-            mesh.animation.skeletonAnimationController.play(name);
+        protected onLoadTexture(e: URLLoader) {
+            e["mat"].diffuseTexture = e.data;
         }
 
         public update(e: Event3D) {

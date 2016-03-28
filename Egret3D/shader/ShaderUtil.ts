@@ -148,6 +148,11 @@
                             if (ConstVar)
                                 content.addVar(ConstVar);
                         }
+                        else if (key == "#extension"){
+                            var extension: GLSL.Extension = StringUtil.getExtension(line);
+                            if (extension)
+                                content.addVar(extension);
+                        }
                         else {
                             content.addVar(StringUtil.getTemper(line));
                         }
@@ -181,21 +186,17 @@
             varName += "/p" + usage.maxPointLight;
             varName += "/b" + usage.maxBone;
 
-            if (this._shaderContentDict[varName] == undefined) {
+            if (!this._shaderContentDict[varName]) {
                 shaderContent = new GLSL.ShaderContent();
                 shaderContent.name = varName;
+                for (i = 0; i < shaderNameList.length; ++i) {
+                    var tempContent: GLSL.ShaderContent = this._shaderContentDict[shaderNameList[i]];
+                    shaderContent.addContent(tempContent);
+                }
             }
             else {
-                shaderContent = this._shaderContentDict[varName];
+                shaderContent = this._shaderContentDict[varName].clone();
             }
-
-            for (i = 0; i < shaderNameList.length; ++i) {
-                var tempContent: GLSL.ShaderContent = this._shaderContentDict[shaderNameList[i]];
-                shaderContent.addContent(tempContent);
-            }
-
-            this._shaderContentDict[varName] = shaderContent;
-            shaderContent.name = varName;
 
             for (i = 0; i < shaderContent.attributeList.length; i++) {
                 varName = shaderContent.attributeList[i].varName;
@@ -263,17 +264,20 @@
         }
 
         private synthesisShader(content: GLSL.ShaderContent, shaderBase:ShaderBase) {
-
-             var source: string = "precision highp float;            \t\n";
-
             var i: number; 
+            var source: string = "precision highp float;            \t\n";
+
+            for (i = 0; i < content.extensionList.length; i++) {
+                source += ShaderUtil.connectExtension(content.extensionList[i]);
+            }
+
             ///var attribute
-            for (var key in content.attributeList) {
-                source += ShaderUtil.connectAtt(content.attributeList[key]);
+            for (i = 0; i < content.attributeList.length; i++) {
+                source += ShaderUtil.connectAtt(content.attributeList[i]);
             }
             ///var struct
-            for (var key in content.structDict) {
-                source += ShaderUtil.connectStruct(content.structDict[key]);
+            for (i = 0; i < content.structNames.length; i++) {
+                source += ShaderUtil.connectStruct(content.structDict[content.structNames[i]]);
             }
             ///var varying
             for (i = 0; i < content.varyingList.length; i++) {
@@ -303,8 +307,8 @@
             }
             ///---------------------------------------------------------------------------------
             ///---------------------------------------------------------------------------------
-            for (i = 0; i < content.funcList.length; i++) {
-                source += content.funcList[i].func;
+            for (i = 0; i < content.funcNames.length; i++) {
+                source += content.funcDict[content.funcNames[i]];
             }
             content.source = source;
         }
@@ -381,6 +385,10 @@
 
         private static connectSampler3D(sampler: GLSL.Sampler3D): string {
             return "uniform samplerCube " + sampler.name + "; \r\n";
+        }
+
+        private static connectExtension(extension: GLSL.Extension): string {
+            return "#extension " + extension.name + ":" +  extension.value + "\r\n";
         }
 
         private static getTexture2DIndex(i: number): number {
