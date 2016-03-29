@@ -143,9 +143,9 @@
             }
 
             this._camera.fieldOfView = this._cameraAnimationFrame.fov;
-            this._camera.rotationX = this._cameraAnimationFrame.rotation.x * Matrix3DUtils.RADIANS_TO_DEGREES + 90;
-            this._camera.rotationY = this._cameraAnimationFrame.rotation.y * Matrix3DUtils.RADIANS_TO_DEGREES;
-            this._camera.rotationZ = this._cameraAnimationFrame.rotation.z * Matrix3DUtils.RADIANS_TO_DEGREES;
+            this._camera.rotationX = this._cameraAnimationFrame.rotation.x * MathUtil.RADIANS_TO_DEGREES + 90;
+            this._camera.rotationY = this._cameraAnimationFrame.rotation.y * MathUtil.RADIANS_TO_DEGREES;
+            this._camera.rotationZ = this._cameraAnimationFrame.rotation.z * MathUtil.RADIANS_TO_DEGREES;
             this._camera.position = this._cameraAnimationFrame.translation;
         }
     }

@@ -303,9 +303,9 @@
         * @param az z轴旋转角度
         */
         public fromEulerAngles(ax: number, ay: number, az: number):Quaternion {
-            ax *= Matrix3DUtils.DEGREES_TO_RADIANS;
-            ay *= Matrix3DUtils.DEGREES_TO_RADIANS;
-            az *= Matrix3DUtils.DEGREES_TO_RADIANS;
+            ax *= MathUtil.DEGREES_TO_RADIANS;
+            ay *= MathUtil.DEGREES_TO_RADIANS;
+            az *= MathUtil.DEGREES_TO_RADIANS;
 
             var halfX: number = ax * 0.5, halfY: number = ay * 0.5, halfZ: number = az * 0.5;
             var cosX: number = Math.cos(halfX), sinX: number = Math.sin(halfX);
@@ -341,13 +341,13 @@
             target.x = Math.atan2(2.0 * (this.w * this.x + this.y * this.z), 1.0 - 2.0 * (this.x * this.x + this.y * this.y));
 
             var temp: number = 2.0 * (this.w * this.y - this.z * this.x);
-            temp = Matrix3DUtils.clampf(temp, -1.0, 1.0);
+            temp = MathUtil.clampf(temp, -1.0, 1.0);
             target.y = Math.asin(temp);
             target.z = Math.atan2(2.0 * (this.w * this.z + this.x * this.y), 1.0 - 2.0 * (this.y * this.y + this.z * this.z));
 
-            target.x /= Matrix3DUtils.DEGREES_TO_RADIANS;
-            target.y /= Matrix3DUtils.DEGREES_TO_RADIANS;
-            target.z /= Matrix3DUtils.DEGREES_TO_RADIANS;
+            target.x /= MathUtil.DEGREES_TO_RADIANS;
+            target.y /= MathUtil.DEGREES_TO_RADIANS;
+            target.z /= MathUtil.DEGREES_TO_RADIANS;
             return target;
         }
 
@@ -397,7 +397,7 @@
         * @returns 返回转换后的矩阵
         */
         public toMatrix3D(target: Matrix4_4 = null): Matrix4_4 {
-            var rawData: Float32Array = Matrix3DUtils.RAW_DATA_CONTAINER;
+            var rawData: Float32Array = MathUtil.RAW_DATA_CONTAINER;
             var xy2: number = 2.0 * this.x * this.y, xz2: number = 2.0 * this.x * this.z, xw2: number = 2.0 * this.x * this.w;
             var yz2: number = 2.0 * this.y * this.z, yw2: number = 2.0 * this.y * this.w, zw2: number = 2.0 * this.z * this.w;
             var xx: number = this.x * this.x, yy: number = this.y * this.y, zz: number = this.z * this.z, ww: number = this.w * this.w;

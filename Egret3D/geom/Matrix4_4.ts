@@ -364,7 +364,7 @@
             var tmp: Matrix4_4 = new Matrix4_4();
             var s: number, c: number;
 
-            var angle: number = degrees * Matrix3DUtils.DEGREES_TO_RADIANS;
+            var angle: number = degrees * MathUtil.DEGREES_TO_RADIANS;
             s = Math.sin(angle);
             c = Math.cos(angle);
 
@@ -902,21 +902,21 @@
         */
         public makeTransform(pos: Vector3D, scale: Vector3D, rot: Quaternion) {
             
-            rot.toMatrix3D(Matrix3DUtils.CALCULATION_MATRIX);
+            rot.toMatrix3D(MathUtil.CALCULATION_MATRIX);
 
-            this.rawData[0] = Matrix3DUtils.CALCULATION_MATRIX.rawData[0] * scale.x;
-            this.rawData[1] = Matrix3DUtils.CALCULATION_MATRIX.rawData[1] * scale.y;
-            this.rawData[2] = Matrix3DUtils.CALCULATION_MATRIX.rawData[2] * scale.z;
+            this.rawData[0] = MathUtil.CALCULATION_MATRIX.rawData[0] * scale.x;
+            this.rawData[1] = MathUtil.CALCULATION_MATRIX.rawData[1] * scale.y;
+            this.rawData[2] = MathUtil.CALCULATION_MATRIX.rawData[2] * scale.z;
             this.rawData[3] = 0;
 
-            this.rawData[4] = Matrix3DUtils.CALCULATION_MATRIX.rawData[4] * scale.x;
-            this.rawData[5] = Matrix3DUtils.CALCULATION_MATRIX.rawData[5] * scale.y;
-            this.rawData[6] = Matrix3DUtils.CALCULATION_MATRIX.rawData[6] * scale.z;
+            this.rawData[4] = MathUtil.CALCULATION_MATRIX.rawData[4] * scale.x;
+            this.rawData[5] = MathUtil.CALCULATION_MATRIX.rawData[5] * scale.y;
+            this.rawData[6] = MathUtil.CALCULATION_MATRIX.rawData[6] * scale.z;
             this.rawData[7] = 0;
 
-            this.rawData[8] = Matrix3DUtils.CALCULATION_MATRIX.rawData[8] * scale.x;
-            this.rawData[9] = Matrix3DUtils.CALCULATION_MATRIX.rawData[9] * scale.y;
-            this.rawData[10] = Matrix3DUtils.CALCULATION_MATRIX.rawData[10] * scale.z;
+            this.rawData[8] = MathUtil.CALCULATION_MATRIX.rawData[8] * scale.x;
+            this.rawData[9] = MathUtil.CALCULATION_MATRIX.rawData[9] * scale.y;
+            this.rawData[10] = MathUtil.CALCULATION_MATRIX.rawData[10] * scale.z;
             this.rawData[11] = 0;
 
             this.rawData[12] = pos.x;
@@ -938,18 +938,18 @@
             this.appendScale(components[2].x, components[2].y, components[2].z);
 
             var angle: number;
-            angle = -components[1].x * Matrix3DUtils.DEGREES_TO_RADIANS;
+            angle = -components[1].x * MathUtil.DEGREES_TO_RADIANS;
 
-            Matrix3DUtils.CALCULATION_MATRIX.copyRawDataFrom(new Float32Array([1, 0, 0, 0, 0, Math.cos(angle), -Math.sin(angle), 0, 0, Math.sin(angle), Math.cos(angle), 0, 0, 0, 0, 0]));
-            this.append(Matrix3DUtils.CALCULATION_MATRIX);
-            angle = -components[1].y * Matrix3DUtils.DEGREES_TO_RADIANS;
+            MathUtil.CALCULATION_MATRIX.copyRawDataFrom(new Float32Array([1, 0, 0, 0, 0, Math.cos(angle), -Math.sin(angle), 0, 0, Math.sin(angle), Math.cos(angle), 0, 0, 0, 0, 0]));
+            this.append(MathUtil.CALCULATION_MATRIX);
+            angle = -components[1].y * MathUtil.DEGREES_TO_RADIANS;
 
-            Matrix3DUtils.CALCULATION_MATRIX.copyRawDataFrom(new Float32Array([Math.cos(angle), 0, Math.sin(angle), 0, 0, 1, 0, 0, -Math.sin(angle), 0, Math.cos(angle), 0, 0, 0, 0, 0]));
-            this.append(Matrix3DUtils.CALCULATION_MATRIX);
-            angle = -components[1].z * Matrix3DUtils.DEGREES_TO_RADIANS;
+            MathUtil.CALCULATION_MATRIX.copyRawDataFrom(new Float32Array([Math.cos(angle), 0, Math.sin(angle), 0, 0, 1, 0, 0, -Math.sin(angle), 0, Math.cos(angle), 0, 0, 0, 0, 0]));
+            this.append(MathUtil.CALCULATION_MATRIX);
+            angle = -components[1].z * MathUtil.DEGREES_TO_RADIANS;
 
-            Matrix3DUtils.CALCULATION_MATRIX.copyRawDataFrom(new Float32Array([Math.cos(angle), -Math.sin(angle), 0, 0, Math.sin(angle), Math.cos(angle), 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]));
-            this.append(Matrix3DUtils.CALCULATION_MATRIX);
+            MathUtil.CALCULATION_MATRIX.copyRawDataFrom(new Float32Array([Math.cos(angle), -Math.sin(angle), 0, 0, Math.sin(angle), Math.cos(angle), 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]));
+            this.append(MathUtil.CALCULATION_MATRIX);
 
             this.rawData[12] = components[0].x;
             this.rawData[13] = components[0].y;
