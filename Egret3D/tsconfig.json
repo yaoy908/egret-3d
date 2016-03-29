@@ -43,6 +43,7 @@
         "geom/EyesMatrix.ts",
         "geom/PlaneClassification.ts",
         "geom/MathUtil.ts",
+        "geom/Matrix44Utils.ts",
         "geom/Ray.ts",
         "geom/Color.ts",
         "geom/Bound.ts",
