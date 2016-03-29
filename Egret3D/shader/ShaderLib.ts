@@ -239,7 +239,7 @@ module egret3d {
 			"attribute vec3 attribute_normal ; \n" +
 			"attribute vec3 attribute_tangent ; \n" +
 			"attribute vec4 attribute_color ; \n" +
-			"attribute vec2 attribute_uv0 ; \n" +
+			"attribute vec2 attribute_uv0; \n" +
 			"uniform mat4 uniform_ModelMatrix ; \n" +
 			"uniform mat4 uniform_ProjectionMatrix ; \n" +
 			"uniform mat4 uniform_normalMatrix ; \n" +

@@ -259,6 +259,16 @@
         public removeChild3D(child3d: Object3D) {
             this._scene.removeChild3D(child3d);
         }
+        
+        /**
+        * @language zh_CN
+        * 检测x y 是否在当前视口内
+        * @param x  x 坐标。 
+        * @param y  y 坐标。 
+        */
+        public inView3D(x: number, y: number) {
+            return this._viewPort.inner(x, y);
+        }
 
         /**
         * @private
@@ -277,23 +287,6 @@
 
             this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         /**

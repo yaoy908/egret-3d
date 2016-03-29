@@ -74,8 +74,7 @@
             if (!canvas) {
                 return ;
             }
-            var len: number = this._view3ds.length;
-            for (var i = 0; i < len; i++) {
+            for (var i = 0; i < this._view3ds.length; i++) {
                 var view = this._view3ds[i];
                 if (!view.entityCollect || !view.entityCollect.mousePickList) {
                     continue;
@@ -83,17 +82,20 @@
                 var collect = view.entityCollect.mousePickList;
                 var ret: Array<IRender> = Picker.pickObject3DList(canvas, view, view.camera3D, collect);
                 var len = ret.length;
+                if (len <= 0) {
+                    continue;
+                }
                 var render: IRender = null;
                 var dis: number = Number.MAX_VALUE;
                 var temp_dis: number = 0;
                 var object3d: Mesh = null;
                 var mouseChilder: boolean = false;
-                for (var i: number = 0; i < len; i++) {
-                    object3d = <Mesh>ret[i];
+                for (var j: number = 0; j < len; j++) {
+                    object3d = <Mesh>ret[j];
                     temp_dis = Vector3D.distance(object3d.globalPosition, view.camera3D.globalPosition);
                     if (temp_dis < dis) {
                         dis = temp_dis;
-                        render = ret[i];
+                        render = ret[j];
                     }
 
                     if (object3d.mouseChilder) {
@@ -118,12 +120,12 @@
                             }
                             else {
                                 render = null;
-                                for (var i: number = 0; i < len; i++) {
-                                    object3d = <Mesh>ret[i];
+                                for (var j: number = 0; j < len; j++) {
+                                    object3d = <Mesh>ret[j];
                                     temp_dis = Vector3D.distance(object3d.globalPosition, view.camera3D.globalPosition);
                                     if (temp_dis < dis) {
                                         dis = temp_dis;
-                                        render = ret[i];
+                                        render = ret[j];
                                     }
                                 }
                                 if (render) {

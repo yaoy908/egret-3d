@@ -23,12 +23,11 @@
         /**
         * @private
         */
-        public clientRect: ClientRect;
         private canvas3DRectangle: Rectangle = new Rectangle();
 
         private canvas: HTMLCanvasElement;
 
-        private view3DS: Array<View3D> = new Array<View3D>();
+        private _view3DS: Array<View3D> = new Array<View3D>();
         private sizeDiry: boolean = true;
 
 
@@ -78,7 +77,6 @@
             Egret3DCanvas.context3DProxy.register();
             console.log("this.context3D ==>", Context3DProxy.gl);
 
-            this.clientRect = this.canvas.getBoundingClientRect();
             Input.canvas = this;
             this.initEvent();
         }
@@ -188,7 +186,7 @@
         * @platform Web,Native
         */
         public get view3Ds(): Array<View3D> {
-            return this.view3DS;
+            return this._view3DS;
         }
                                                                                     
         /**
@@ -199,9 +197,9 @@
         * @platform Web,Native
         */
         public addView3D(view3D: View3D) {
-            var index: number = this.view3DS.indexOf(view3D);
+            var index: number = this._view3DS.indexOf(view3D);
             if (index == -1)
-                this.view3DS.push(view3D);
+                this._view3DS.push(view3D);
         }
                                                                                             
         /**
@@ -212,9 +210,9 @@
         * @platform Web,Native
         */
         public removeView3D(view3D: View3D) {
-            var index: number = this.view3DS.indexOf(view3D);
+            var index: number = this._view3DS.indexOf(view3D);
             if (index != -1)
-                this.view3DS.splice(index);
+                this._view3DS.splice(index);
         }
 
         /**
@@ -253,8 +251,8 @@
             View3D._contex3DProxy.setScissorRectangle(this.canvas3DRectangle.x, this.canvas3DRectangle.y, this.canvas3DRectangle.width, this.canvas3DRectangle.height);
 
             CameraManager.instance.update(this._time, this._delay);
-            for (var i: number = 0; i < this.view3DS.length; i++) {
-                this.view3DS[i].update(this._time, this._delay);
+            for (var i: number = 0; i < this._view3DS.length; i++) {
+                this._view3DS[i].update(this._time, this._delay);
             }
 
             requestAnimationFrame((delay) => this.update(delay));
