@@ -31,7 +31,7 @@
          * @version Egret 3.0
          *@platform Web,Native
          */
-        private _data:any = null;
+        private _datas: any = null;
         private _xhr:XMLHttpRequest;
 
         /**
@@ -53,6 +53,14 @@
          */
         public onLoadComplete:Function = null;
 
+        
+        /**
+         * @language zh_CN
+         * 加载完成的回调函数的this对象
+         * @version Egret 3.0
+         *@platform Web,Native
+         */
+        public thisObject: any = null;
         
         /**
          * @language zh_CN
@@ -193,7 +201,7 @@
          * @platform Web,Native
          */
         public load(url:string) {
-            this._data = null;
+            this._datas = null;
             this._url = url;
 
             if (null == this._dataformat) {
@@ -296,7 +304,7 @@
          * @platform Web,Native
          */
         public get data():any {
-            return this._data;
+            return this._datas;
         }
 
         /**
@@ -324,13 +332,13 @@
         private loadComplete(): void {
             switch (this.dataformat) {
                 case URLLoader.DATAFORMAT_BINARY:
-                    this._data = new ByteArray(this._xhr.response);
+                    this._datas = new ByteArray(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_SOUND:
-                    this._data = this._xhr.responseBody;
+                    this._datas = this._xhr.responseBody;
                     break;
                 case URLLoader.DATAFORMAT_TEXT:
-                    this._data = this._xhr.responseText;
+                    this._datas = this._xhr.responseText;
                     break;
                 case URLLoader.DATAFORMAT_BITMAP:
                     var img = document.createElement("img");
@@ -341,34 +349,28 @@
                     } else if (window['webkitURL'] != undefined) { // webkit or chrome
                         img.src = window['webkitURL'].createObjectURL(this._xhr.response);
                     }
-                    var that = this;
-                    img.onload = () => {
-                        that._data = new ImageTexture(img);
-                        if (that.onLoadComplete) {
-                            that.onLoadComplete(that);
-                        }
-                    };
+                    img.onload = () => this.onLoad(img);
                     return;
                 case URLLoader.DATAFORMAT_DDS:
-                    this._data = DDSParser.parse(this._xhr.response);
+                    this._datas = DDSParser.parse(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_TGA:
-                    this._data = TGAParser.parse(this._xhr.response);
+                    this._datas = TGAParser.parse(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_ESM:
                     var geomtry:Geometry = ESMParser.parse(this._xhr.response);
 
-                    this._data = geomtry;
+                    this._datas = geomtry;
                     break;
                 case URLLoader.DATAFORMAT_EAM:
                     var skeletonAnimationClip:SkeletonAnimationClip = EAMParser.parse(this._xhr.response);
 
-                    this._data = skeletonAnimationClip;
+                    this._datas = skeletonAnimationClip;
                     break;
                 case URLLoader.DATAFORMAT_ECA:
                     var cameraAnimationController:CameraAnimationController = ECAParser.parse(this._xhr.response);
 
-                    this._data = cameraAnimationController;
+                    this._datas = cameraAnimationController;
                     break;
                 case URLLoader.DATAFORMAT_PVR:
                     //var pvr:PVR = PVRParser.parse(this._xhr.response);
@@ -376,12 +378,10 @@
                     break;
 
                 default:
-                    this._data = this._xhr.responseText;
+                    this._datas = this._xhr.responseText;
             }
 
-            if (this.onLoadComplete) {
-                this.onLoadComplete(this);
-            }
+            this.doLoadComplete();
         }
 
         private onProgress(event:ProgressEvent):void {
@@ -404,6 +404,22 @@
                 xhr = new ActiveXObject("MSXML2.XMLHTTP");
             }
             return xhr;
+        }
+
+        protected onLoad(img: HTMLImageElement) {
+            this._datas = new ImageTexture(img);
+            this.doLoadComplete();
+        }
+
+        protected doLoadComplete() {
+            if (this.onLoadComplete) {
+                if (this.thisObject) {
+                    this.onLoadComplete.call(this.thisObject, this);
+                }
+                else {
+                    this.onLoadComplete(this);
+                }
+            }
         }
     }
 }

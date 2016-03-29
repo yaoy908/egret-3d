@@ -4,8 +4,9 @@
     * @language zh_CN
     * @class egret3d.PickEvent3D
     * @classdesc
-    * MouseEvent3D 是所有引擎中可操作鼠标事件节点 的事件类型标记。
-    * @includeExample events/Event3D.ts
+    * PickEvent3D 是所有引擎中可操作物体拣选事件的事件类型标记。
+    * 当IRender对象开启了 mouseEnable ，并且监听了PickEvent3D事件后，
+    * 鼠标或触摸对IRender对象进行操作后会产生一些对应的事件进行影响。
     * @see egret3d.Event3D
     * @see egret3d.EventDispatcher
     * @version Egret 3.0
@@ -31,7 +32,7 @@
 
         /**
          * @language zh_CN
-         * MOUSE_UP 常量定义 onMouseUp 事件对象的 type 属性的值。
+         * PICK_UP 弹起拣选事件
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -39,7 +40,7 @@
 
         /**
          * @language zh_CN
-         * MOUSE_MOVE 常量定义 onMouseMove 事件对象的 type 属性的值。
+         * PICK_MOVE 光标移动拣选
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -47,33 +48,19 @@
 
         /**
          * @language zh_CN
-         * MOUSE_OVER 常量定义 onMouseWheel 事件对象的 type 属性的值。
+         * PICK_WHEEL 滚轮滚动拣选事件
          * @version Egret 3.0
          * @platform Web,Native
          */
         public static PICK_WHEEL: string = "onPickWheel";
 
-        private _pickResult: PickResult;
+        /**
+         * @language zh_CN
+         * 拣选结果数据。
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public pickResult: PickResult;
 
-        /**
-         * @language zh_CN
-         * 获取射线拣选见过。
-         * @returns {PickResult}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public get pickResult(): PickResult {
-            return this._pickResult;
-        }
-        /**
-         * @language zh_CN
-         * 设置射线拣选见过。
-         * @param value {PickResult}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public set pickResult(value: PickResult) {
-            this._pickResult = value;
-        }
     }
 }
