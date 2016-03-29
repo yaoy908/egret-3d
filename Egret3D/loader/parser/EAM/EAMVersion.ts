@@ -47,7 +47,7 @@
                     jointPose.parent = parentBoneNameArray[j];
 
                     jointPose.setLocalTransform(
-                        new Quaternion().fromEulerAngles(bytes.readFloat() * Matrix3DUtils.RADIANS_TO_DEGREES, bytes.readFloat() * Matrix3DUtils.RADIANS_TO_DEGREES, bytes.readFloat() * Matrix3DUtils.RADIANS_TO_DEGREES),
+                        new Quaternion().fromEulerAngles(bytes.readFloat() * MathUtil.RADIANS_TO_DEGREES, bytes.readFloat() * MathUtil.RADIANS_TO_DEGREES, bytes.readFloat() * MathUtil.RADIANS_TO_DEGREES),
                         new Vector3D(bytes.readFloat(), bytes.readFloat(), bytes.readFloat()),
                         new Vector3D(bytes.readFloat(), bytes.readFloat(), bytes.readFloat())
                     );

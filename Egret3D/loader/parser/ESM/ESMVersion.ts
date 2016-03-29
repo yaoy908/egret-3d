@@ -122,9 +122,9 @@
 
                 joint.name = bytes.readUTF();
 
-                rotation.x = bytes.readFloat() * Matrix3DUtils.RADIANS_TO_DEGREES;
-                rotation.y = bytes.readFloat() * Matrix3DUtils.RADIANS_TO_DEGREES;
-                rotation.z = bytes.readFloat() * Matrix3DUtils.RADIANS_TO_DEGREES;
+                rotation.x = bytes.readFloat() * MathUtil.RADIANS_TO_DEGREES;
+                rotation.y = bytes.readFloat() * MathUtil.RADIANS_TO_DEGREES;
+                rotation.z = bytes.readFloat() * MathUtil.RADIANS_TO_DEGREES;
 
                 scaling.x = bytes.readFloat();
                 scaling.y = bytes.readFloat();

@@ -22,7 +22,7 @@
          * @version Egret 3.0
          *@platform Web,Native
          */
-        private _url:string = "";
+        private _url: string = "";
 
         /**
          * @private
@@ -31,8 +31,8 @@
          * @version Egret 3.0
          *@platform Web,Native
          */
-        private _data:any = null;
-        private _xhr:XMLHttpRequest;
+        private _datas: any = null;
+        private _xhr: XMLHttpRequest;
 
         /**
          * @language zh_CN
@@ -42,7 +42,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        private _dataformat:string = null;
+        private _dataformat: string = null;
 
         /**
          * @language zh_CN
@@ -51,9 +51,17 @@
          * @version Egret 3.0
          *@platform Web,Native
          */
-        public onLoadComplete:Function = null;
+        public onLoadComplete: Function = null;
 
-        
+
+        /**
+         * @language zh_CN
+         * 加载完成的回调函数的this对象
+         * @version Egret 3.0
+         *@platform Web,Native
+         */
+        public thisObject: any = null;
+
         /**
          * @language zh_CN
          * 文件名字
@@ -68,7 +76,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public onLoadError:Function = null;
+        public onLoadError: Function = null;
 
         /**
          * @language zh_CN
@@ -76,7 +84,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public onLoadProgress:Function = null;
+        public onLoadProgress: Function = null;
 
         /**
          * @language zh_CN
@@ -84,7 +92,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public static DATAFORMAT_BINARY:string = "binary";
+        public static DATAFORMAT_BINARY: string = "binary";
 
         /**
          * @language zh_CN
@@ -93,7 +101,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public static DATAFORMAT_TEXT:string = "text";
+        public static DATAFORMAT_TEXT: string = "text";
 
         /**
          * @language zh_CN
@@ -101,7 +109,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public static DATAFORMAT_SOUND:string = "sound";
+        public static DATAFORMAT_SOUND: string = "sound";
 
         /**
          * @language zh_CN
@@ -110,7 +118,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public static DATAFORMAT_BITMAP:string = "bitmap";
+        public static DATAFORMAT_BITMAP: string = "bitmap";
 
         /**
          * @language zh_CN
@@ -118,7 +126,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public static DATAFORMAT_DDS:string = "dds";
+        public static DATAFORMAT_DDS: string = "dds";
 
         /**
          * @language zh_CN
@@ -126,7 +134,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public static DATAFORMAT_TGA:string = "tga";
+        public static DATAFORMAT_TGA: string = "tga";
 
         /**
          * @language zh_CN
@@ -135,7 +143,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public static DATAFORMAT_ESM:string = "esm";
+        public static DATAFORMAT_ESM: string = "esm";
 
         /**
          * @language zh_CN
@@ -144,7 +152,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public static DATAFORMAT_EAM:string = "eam";
+        public static DATAFORMAT_EAM: string = "eam";
 
         /**
          * @language zh_CN
@@ -153,7 +161,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public static DATAFORMAT_ECA:string = "eca";
+        public static DATAFORMAT_ECA: string = "eca";
 
         /**
          * @private
@@ -162,8 +170,8 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public static DATAFORMAT_PVR:string = "pvr";
-     
+        public static DATAFORMAT_PVR: string = "pvr";
+
         /**
          * @language zh_CN
          * 构造函数
@@ -173,7 +181,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        constructor(url:string = null, dataformat:string = null) {
+        constructor(url: string = null, dataformat: string = null) {
             if (url) {
                 if (dataformat) {
                     this.dataformat = dataformat;
@@ -192,8 +200,8 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public load(url:string) {
-            this._data = null;
+        public load(url: string) {
+            this._datas = null;
             this._url = url;
 
             if (null == this._dataformat) {
@@ -270,7 +278,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public get dataformat():string {
+        public get dataformat(): string {
             return this._dataformat;
         }
 
@@ -283,7 +291,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public set dataformat(value:string) {
+        public set dataformat(value: string) {
             this._dataformat = value;
 
         }
@@ -295,8 +303,8 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public get data():any {
-            return this._data;
+        public get data(): any {
+            return this._datas;
         }
 
         /**
@@ -307,11 +315,11 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public get url():string {
+        public get url(): string {
             return this._url;
         }
 
-        private onReadyStateChange(event:Event):void {
+        private onReadyStateChange(event: Event): void {
             if (this._xhr.readyState == 4) {
                 if (this._xhr.status >= 400 /*|| this._xhr.status == 0*/) {
                     console.log(this._url, "load fail");
@@ -324,13 +332,13 @@
         private loadComplete(): void {
             switch (this.dataformat) {
                 case URLLoader.DATAFORMAT_BINARY:
-                    this._data = new ByteArray(this._xhr.response);
+                    this._datas = new ByteArray(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_SOUND:
-                    this._data = this._xhr.responseBody;
+                    this._datas = this._xhr.responseBody;
                     break;
                 case URLLoader.DATAFORMAT_TEXT:
-                    this._data = this._xhr.responseText;
+                    this._datas = this._xhr.responseText;
                     break;
                 case URLLoader.DATAFORMAT_BITMAP:
                     var img = document.createElement("img");
@@ -341,34 +349,28 @@
                     } else if (window['webkitURL'] != undefined) { // webkit or chrome
                         img.src = window['webkitURL'].createObjectURL(this._xhr.response);
                     }
-                    var that = this;
-                    img.onload = () => {
-                        that._data = new ImageTexture(img);
-                        if (that.onLoadComplete) {
-                            that.onLoadComplete(that);
-                        }
-                    };
+                    img.onload = () => this.onLoad(img);
                     return;
                 case URLLoader.DATAFORMAT_DDS:
-                    this._data = DDSParser.parse(this._xhr.response);
+                    this._datas = DDSParser.parse(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_TGA:
-                    this._data = TGAParser.parse(this._xhr.response);
+                    this._datas = TGAParser.parse(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_ESM:
-                    var geomtry:Geometry = ESMParser.parse(this._xhr.response);
+                    var geomtry: Geometry = ESMParser.parse(this._xhr.response);
 
-                    this._data = geomtry;
+                    this._datas = geomtry;
                     break;
                 case URLLoader.DATAFORMAT_EAM:
-                    var skeletonAnimationClip:SkeletonAnimationClip = EAMParser.parse(this._xhr.response);
+                    var skeletonAnimationClip: SkeletonAnimationClip = EAMParser.parse(this._xhr.response);
 
-                    this._data = skeletonAnimationClip;
+                    this._datas = skeletonAnimationClip;
                     break;
                 case URLLoader.DATAFORMAT_ECA:
-                    var cameraAnimationController:CameraAnimationController = ECAParser.parse(this._xhr.response);
+                    var cameraAnimationController: CameraAnimationController = ECAParser.parse(this._xhr.response);
 
-                    this._data = cameraAnimationController;
+                    this._datas = cameraAnimationController;
                     break;
                 case URLLoader.DATAFORMAT_PVR:
                     //var pvr:PVR = PVRParser.parse(this._xhr.response);
@@ -376,19 +378,17 @@
                     break;
 
                 default:
-                    this._data = this._xhr.responseText;
+                    this._datas = this._xhr.responseText;
             }
 
-            if (this.onLoadComplete) {
-                this.onLoadComplete(this);
-            }
+            this.doLoadComplete();
         }
 
-        private onProgress(event:ProgressEvent):void {
+        private onProgress(event: ProgressEvent): void {
             //console.log("progress event```");
         }
 
-        private onError(event:ErrorEvent):void {
+        private onError(event: ErrorEvent): void {
             if (this.onLoadError) {
                 this.onLoadError();
             }
@@ -396,14 +396,30 @@
             console.log("load error", event);
         }
 
-        private getXHR():any {
-            var xhr:any = null;
+        private getXHR(): any {
+            var xhr: any = null;
             if (window["XMLHttpRequest"]) {
                 xhr = new window["XMLHttpRequest"]();
             } else {
                 xhr = new ActiveXObject("MSXML2.XMLHTTP");
             }
             return xhr;
+        }
+
+        protected onLoad(img: HTMLImageElement) {
+            this._datas = new ImageTexture(img);
+            this.doLoadComplete();
+        }
+
+        protected doLoadComplete() {
+            if (this.onLoadComplete) {
+                if (this.thisObject) {
+                    this.onLoadComplete.call(this.thisObject, this);
+                }
+                else {
+                    this.onLoadComplete(this);
+                }
+            }
         }
     }
 }
