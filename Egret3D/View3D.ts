@@ -8,6 +8,7 @@
      * 交换不同的场景元素 scene3D 。</p>
      * skyBox需要在这里直接设置，有cube sky 和 sphere sky。</p>
      * 整个渲染的主循环通过 render  。</p>
+     * @includeExample View3D.ts
      * @see egret3d.camera3d
      * @see egret3d.scene3D
      * @version Egret 3.0

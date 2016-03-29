@@ -5,7 +5,7 @@
     * @class egret3d.PickEvent3D
     * @classdesc
     * MouseEvent3D 是所有引擎中可操作鼠标事件节点 的事件类型标记。
-    * @includeExample events/Event3D.ts
+    * @includeExample events/PickEvent3D.ts
     * @see egret3d.Event3D
     * @see egret3d.EventDispatcher
     * @version Egret 3.0
@@ -57,7 +57,7 @@
 
         /**
          * @language zh_CN
-         * 获取射线拣选见过。
+         * 获取射线拣选结果。
          * @returns {PickResult}
          * @version Egret 3.0
          * @platform Web,Native
@@ -67,7 +67,7 @@
         }
         /**
          * @language zh_CN
-         * 设置射线拣选见过。
+         * 设置射线拣选结果。
          * @param value {PickResult}
          * @version Egret 3.0
          * @platform Web,Native

@@ -7,7 +7,7 @@
      * SkeletonAnimation 类表示骨骼动画控制类
      * 
      * 骨骼动画控制类中管理若干个 SkeletonAnimationClip（骨骼动画） 对象，每个SkeletonAnimationClip对象，都是对*.eam 文件的实例。
-     * 
+     * @includeExample anim/skeletonAnimation/SkeletonAnimation.ts
      * @see egret3d.SkeletonAnimationClip
      * @version Egret 3.0
      * @platform Web,Native

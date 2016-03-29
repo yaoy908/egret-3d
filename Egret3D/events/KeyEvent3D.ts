@@ -1,4 +1,7 @@
-﻿module egret3d {
+﻿
+
+
+module egret3d {
 
     /**
      * @language zh_CN
@@ -119,7 +122,7 @@
     * @class egret3d.MouseEvent3D
     * @classdesc
     * KeyEvent3D 按键事件
-    * @includeExample events/Event3D.ts
+    * @includeExample events/KeyEvent3D.ts
     * @see egret3d.Event3D
     * @see egret3d.EventDispatcher
     * @version Egret 3.0

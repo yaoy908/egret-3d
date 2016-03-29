@@ -7,6 +7,7 @@
     * 如：Event3D.ENTER_FRAME 每帧响应回调事件
     * 一个3d渲染画布里面有多个view3d ，
     * 多个view3d进行渲染
+    * @includeExample Egret3DCanvas.ts
     * @see egret3d.EventDispatcher
     * @see egret3d.View3D
     * @version Egret 3.0
