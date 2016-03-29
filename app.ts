@@ -1,6 +1,6 @@
 ﻿
 function jsOnload() {
-    var sample: egret3d.Class_Geometry = new egret3d.Class_Geometry();
+    var sample: egret3d.Class_Wireframe = new egret3d.Class_Wireframe();
 }
 
 window.onload = () => {

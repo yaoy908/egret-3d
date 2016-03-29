@@ -113,7 +113,7 @@
        * @language zh_CN
        * 顶点格式
        */
-        public vertexFormat: number = 0 ;
+        private _vertexFormat: number = 0 ;
 
         /**
         * @language zh_CN
@@ -131,7 +131,7 @@
         * @language zh_CN
         * 索引数据
         */
-        public indexData: Array<number>; 
+        public indexData: Array<number>;
                 
         /**
         * @language zh_CN
@@ -147,48 +147,59 @@
  
 
         /**
+        * @private
         * @language zh_CN
         * 顶点坐标数据
         */
         public source_positionData: Array<number> = new Array<number>();
                         
         /**
+        * @private
         * @language zh_CN
         * 顶点法线数据
         */
         public source_normalData: Array<number> = new Array<number>();
                                 
         /**
+        * @private
         * @language zh_CN
         * 顶点切线数据
         */
         public source_tangentData: Array<number> = new Array<number>();
                                 
         /**
+        * @private
         * @language zh_CN
         * 顶点颜色数据
         */
         public source_colorData: Array<number> = new Array<number>();
                                 
         /**
+        * @private
         * @language zh_CN
         * 顶点uv数据
         */
         public source_uvData: Array<number> = new Array<number>();
                                 
         /**
+        * @private
         * @language zh_CN
         * 顶点第二uv数据
         */
         public source_uv2Data: Array<number> = new Array<number>();
 
         /**
+        * @private
         * @language zh_CN
         * 顶点第二uv数据
         */
         public source_SkinData: Array<number> = new Array<number>();
 
+        /**
+        * @private
+        */
         public skeleton: Skeleton;
+
         /**
         * @language zh_CN
         * 顶点字节数
@@ -251,26 +262,23 @@
         */
         private _bufferDiry: boolean = true;
 
-        constructor() {
-        }
-
         /**
         * @language zh_CN
         * @private
         */
-        public init() {
-            this.useVertexFormat( VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 );
-            this.calculateVertexFormat();
-        }
-
-        public calculTangentNormal() {
-
+        public buildDefaultSubGeometry() {
+            var subGeometry: SubGeometry = new SubGeometry();
+            subGeometry.matID = 0;
+            subGeometry.geometry = this;
+            subGeometry.start = 0;
+            subGeometry.count = this.indexData.length;
+            this.subGeometrys.push(subGeometry);
         }
 
         /**
         * @language zh_CN
         * 使用和定义顶点的数据结构
-        *<p>例如 useVertexFormat( VertexFormat.VF_POSITION )
+        *<p>例如 vertexFormat( VertexFormat.VF_POSITION )
         *设置这样的定义后,就会增加这样的数据顶点数据结构，
         *如果源文件中没有这样的数据结构，
         *就会通过计算的方式计算补全，
@@ -278,8 +286,8 @@
         *@param vertexFormat 需要定义的顶点格式类型 VertexFormat.VF_COLOR | VertexFormat.VF_UV1
         * this.useVertexFormat( VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_COLOR |  VertexFormat.VF_UV0 | VertexFormat.VF_UV1 );//定义了一个完整的数据结构
         */
-        public useVertexFormat(vertexFormat: number) {
-            this.vertexFormat = vertexFormat;
+        public set vertexFormat(vertexFormat: number) {
+            this._vertexFormat = vertexFormat;
 
             if (this.vertexFormat & VertexFormat.VF_POSITION) {
                 this.vertexAttLength += Geometry.positionSize;
@@ -311,10 +319,23 @@
 
             this.vertexSizeInBytes = this.vertexAttLength * 4;
         }
-                
+                        
         /**
         * @language zh_CN
-        * @根据顶点格式生成顶点buffer
+        * 获取顶点格式
+        * @returns number 顶点格式
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+
+        public get vertexFormat(): number {
+            return this._vertexFormat;
+        }
+                
+        /**
+        * @private
+        * @language zh_CN
+        * 根据顶点格式生成顶点buffer
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -363,7 +384,13 @@
                 }
             }
         }
-
+                        
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public update(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
             if (this._bufferDiry) {
                 this._bufferDiry = false; 
@@ -372,7 +399,13 @@
             context3DProxy.bindVertexBuffer(this.sharedVertexBuffer);
             context3DProxy.bindIndexBuffer(this.sharedIndexBuffer);
         }
-
+                                
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public upload(context3DProxy: Context3DProxy) {
             this.sharedIndexBuffer = context3DProxy.creatIndexBuffer(this.indexData);
             this.sharedVertexBuffer = context3DProxy.creatVertexBuffer(this.verticesData);

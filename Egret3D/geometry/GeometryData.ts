@@ -200,7 +200,7 @@
             var target: Geometry = new Geometry();
             target.indexData = [];
             target.verticesData = [];
-            target.useVertexFormat(vertexFormat);
+            target.vertexFormat = vertexFormat;
 
             target.skeleton = source.skeleton;
 

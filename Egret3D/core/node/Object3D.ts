@@ -162,12 +162,12 @@
 
         /**
         * @language zh_CN
-        * 是否开启鼠标事件。</p>
+        * 是否开启拣选检测。</p>
         * 设定这个物件是否具有 鼠标交互能力的开关。</p>
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public mouseEnable: boolean = false;
+        public enablePick: boolean = false;
 
         /**
         * @language zh_CN

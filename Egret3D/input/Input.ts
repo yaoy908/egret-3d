@@ -549,8 +549,8 @@
 
             if (!this._keyStatus[e.keyCode] ) {
                 this._keyStatus[e.keyCode] = true;
-                this._mouseEvent3d.eventType = MouseEvent3D.MOUSE_DOWN;
-                this.dispatchEvent(this._mouseEvent3d);
+                this._keyEvent3d.eventType = KeyEvent3D.KEY_CLICK;
+                this.dispatchEvent(this._keyEvent3d);
                 this._keyEvent3d.eventType = KeyEvent3D.KEY_DOWN;
                 this.dispatchEvent(this._keyEvent3d);
             }

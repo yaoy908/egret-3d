@@ -269,7 +269,7 @@
                 this.renderList.push(renderItem);
             }
 
-            if (renderItem.mouseEnable) {
+            if (renderItem.enablePick) {
                 this.mousePickList.push(renderItem);
             }
 
