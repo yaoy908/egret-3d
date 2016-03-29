@@ -37,7 +37,7 @@
         }
 
         private buildSphere(front: boolean = true) {
-            this.useVertexFormat(VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 | VertexFormat.VF_UV1);
+            this.vertexFormat  = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 | VertexFormat.VF_UV1;
 
             var i: number = 0, j: number = 0, triIndex: number = 0;
             var numVerts: number = (this._segmentsH + 1) * (this._segmentsW + 1);
