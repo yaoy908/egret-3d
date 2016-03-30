@@ -12,8 +12,7 @@
             //var geometery: CubeGeometry = new CubeGeometry();
             var geometery: SphereGeometry = new SphereGeometry(10,12,25);
             this.cube = new Mesh(geometery, mat);
-            mat.ambientPower = 0.8;
-            mat.gloss = 1.0
+            mat.roughness = 1.0
 
             var view1: View3D = new View3D(0, 0, window.innerWidth, window.innerHeight);
             view1.camera3D.lookAt(new Vector3D(0, 0, -1000), new Vector3D(0, 0, 0));

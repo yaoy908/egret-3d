@@ -42,12 +42,12 @@
          */
         protected _diffuse: Vector3D = new Vector3D(1.0, 1.0, 1.0);
 
-         /**
-         * @language zh_CN  
-         *@private
-         * 背光颜色
-         */
-        protected _halfColor: Vector3D = new Vector3D(1.0, 1.0, 1.0);
+        // /**
+        // * @language zh_CN  
+        // *@private
+        // * 背光颜色
+        // */
+        //protected _halfColor: Vector3D = new Vector3D(1.0, 1.0, 1.0);
         /**
          * @language zh_CN
          *@private
@@ -67,6 +67,9 @@
          * @param value 强度
          */
         protected _intensity: number = 1;
+
+        protected _radius = 100 ;
+        protected _falloff = 100 ;
 
          /**
          *@language zh_CN

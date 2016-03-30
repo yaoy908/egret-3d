@@ -32,6 +32,12 @@
         public texture2D: Texture2D;
         public texture3D: Texture3D;
 
+         /**
+        需要缓存这个值，看看是否优化
+         */
+        private _useMipmap: boolean = true;
+        private _smooth: boolean = true;
+
         /**
          * @language zh_CN
          * 构造函数
@@ -47,7 +53,7 @@
          * @param img HTMLImageElement（网页图像元素）
          */
         public set useMipmap( flag:boolean ) {
-            this.texture2D.useMipmap = flag;
+            this._useMipmap = flag;
         }
 
 
@@ -57,7 +63,26 @@
          * @param img HTMLImageElement（网页图像元素）
          */
         public get useMipmap():boolean {
-            return this.texture2D.useMipmap ;
+            return this._useMipmap;
+        }
+
+        /**
+         * @language zh_CN
+         * 设置贴图是否使用 smooth 
+         * @param img HTMLImageElement（网页图像元素）
+         */
+        public set smooth(flag: boolean) {
+            this._smooth = flag;
+        }
+
+
+        /**
+         * @language zh_CN
+         * 获取贴图是否使用 smooth
+         * @param img HTMLImageElement（网页图像元素）
+         */
+        public get smooth(): boolean {
+            return this._smooth;
         }
 
         /**
@@ -70,6 +95,8 @@
                 this.texture2D = context3D.creatTexture2D();
                 this.texture2D.internalFormat = InternalFormat.ImageData;
                 this.texture2D.imageData = this.imageData;
+                this.texture2D.useMipmap = this._useMipmap;
+                this.texture2D.smooth = this._smooth;
                 this.texture2D.colorFormat = ContextConfig.ColorFormat_RGBA8888;
                 context3D.upLoadTextureData(0, this.texture2D);
             }

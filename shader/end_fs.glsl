@@ -1,17 +1,11 @@
-vec4 endColor ;
-vec4 specular ;
-vec4 diffuse ;
+vec4 diffuseColor ;
+vec4 specularColor ;
+vec4 ambientColor;
 vec4 light ;
-vec3 ambient;
-vec4 diffuseTex;
-vec4 specularTexColor;
 
 void main() {	
-    diffuseTex.xyz = materialSource.diffuse.xyz * diffuseTex.xyz * materialSource.diffusePower ;
-	ambient.xyz = ambient.xyz * materialSource.ambientPower * materialSource.ambient.xyz ;
-
-	endColor.xyz = (ambient.xyz + light.xyz) * diffuseTex.xyz ;
-	endColor.xyz += specular.xyz * materialSource.specular.xyz * specularTexColor.xyz ;
-	endColor.w = materialSource.alpha * diffuseTex.w ;
-    gl_FragColor = endColor ;
+    diffuseColor.xyz = materialSource.diffuse.xyz * diffuseColor.xyz ;
+	outColor.xyz = (ambientColor.xyz + light.xyz) * diffuseColor.xyz + specularColor.xyz * materialSource.specularScale;
+	outColor.w = materialSource.alpha * diffuseColor.w ;
+    gl_FragColor = outColor * varying_color ;
 }

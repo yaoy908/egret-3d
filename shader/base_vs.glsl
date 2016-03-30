@@ -1,3 +1,19 @@
+attribute vec3 attribute_position ;
+attribute vec3 attribute_normal ;
+attribute vec2 attribute_uv0 ;
+attribute vec4 attribute_color ;
+
+uniform mat4 uniform_ModelMatrix ;
+uniform mat4 uniform_ModelViewMatrix ;
+uniform mat4 uniform_ProjectionMatrix ;
+
+varying vec3 varying_ViewPose;
+varying vec3 varying_eyeNormal  ;
+varying vec2 varying_uv0;
+varying vec4 varying_color;
+
+vec4 outPosition ;
+
 mat3 transpose(mat3 m) {
   return mat3(m[0][0], m[1][0], m[2][0],
               m[0][1], m[1][1], m[2][1],
@@ -18,4 +34,9 @@ mat3 inverse(mat3 m) {
   return mat3(b01, (-a22 * a01 + a02 * a21), (a12 * a01 - a02 * a11),
               b11, (a22 * a00 - a02 * a20), (-a12 * a00 + a02 * a10),
               b21, (-a21 * a00 + a01 * a20), (a11 * a00 - a01 * a10)) / det;
+}
+
+void main(void){
+   varying_color = attribute_color;
+   varying_uv0 = attribute_uv0;
 }

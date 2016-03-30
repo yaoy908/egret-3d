@@ -57,7 +57,14 @@
          * @language zh_CN
          * 是否使用mipmap
          */
-        public useMipmap: boolean = true ;
+        public useMipmap: boolean = true;
+
+         /**
+         * @language zh_CN
+         * 是否自动模糊
+         */
+        public smooth: boolean = true;
+
 
         /**
          * @language zh_CN

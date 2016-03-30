@@ -74,7 +74,7 @@ class SampleEvent {
         this._cube = new egret3d.Mesh(geometery_Cube, mat_Cube);
         ///注册事件
         this._cube.addEventListener(egret3d.MouseEvent3D.MOUSE_DOWN, this.onMouseDown, this);
-        this._cube.addEventListener(egret3d.TouchEvent3D.TOUCH_START, this.onTouchDown, this);
+        this._cube.addEventListener(egret3d.TouchEvent3D.TOUCH_DOWN, this.onTouchDown, this);
         ///将mesh插入view3D
         this._view3D.addChild3D(this._cube);
 

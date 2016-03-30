@@ -1,25 +1,9 @@
-﻿attribute vec3 attribute_position ;
-attribute vec3 attribute_normal ;
-attribute vec3 attribute_tangent ;
-attribute vec4 attribute_color ;
-attribute vec2 attribute_uv0 ;
-attribute vec4 attribute_boneIndex ;
+﻿attribute vec4 attribute_boneIndex ;
 attribute vec4 attribute_boneWeight ;
 
 const int bonesNumber = 0;
 uniform vec4 uniform_PoseMatrix[bonesNumber];
 uniform mat4 uniform_ModelMatrix ;
-uniform mat4 uniform_ProjectionMatrix ;
-uniform mat4 uniform_normalMatrix ;
-uniform vec3 uniform_eyepos ;
-
-varying vec4 varying_pos        ;
-varying vec3 varying_eyeNormal  ;
-varying vec4 varying_color  ;
-varying vec3 varying_eyedir  ;
-varying vec2 varying_uv0;
-
-vec4 endPosition ;
 
 mat4 buildMat4(int index){
 
@@ -48,10 +32,6 @@ mat4 buildMat4(int index){
 }
 
 void main(void){
-
-	endPosition = vec4(0.0, 0.0, 0.0, 0.0) ;
-	vec4 temp_n = vec4(0.0, 0.0, 0.0, 0.0);
-	
 	vec4 temp_position = vec4(attribute_position, 1.0) ;
 	vec4 temp_normal = vec4(attribute_normal, 0.0) ;
 
@@ -60,26 +40,20 @@ void main(void){
 	mat4 m2 = buildMat4(int(attribute_boneIndex.z));
 	mat4 m3 = buildMat4(int(attribute_boneIndex.w));
 
-	endPosition += m0 * temp_position * attribute_boneWeight.x;
-	endPosition += m1 * temp_position * attribute_boneWeight.y;
-	endPosition += m2 * temp_position * attribute_boneWeight.z;
-	endPosition += m3 * temp_position * attribute_boneWeight.w;
+	outPosition = m0 * temp_position * attribute_boneWeight.x;
+	outPosition += m1 * temp_position * attribute_boneWeight.y;
+	outPosition += m2 * temp_position * attribute_boneWeight.z;
+	outPosition += m3 * temp_position * attribute_boneWeight.w;
 
-	
-	temp_n += m0 * temp_normal * attribute_boneWeight.x;
+	vec4 temp_n ;
+	temp_n = m0 * temp_normal * attribute_boneWeight.x;
 	temp_n += m1 * temp_normal * attribute_boneWeight.y;
 	temp_n += m2 * temp_normal * attribute_boneWeight.z;
 	temp_n += m3 * temp_normal * attribute_boneWeight.w;
 
-	endPosition =  uniform_ModelMatrix * endPosition ;
-
-	varying_eyedir = uniform_eyepos ;
-	varying_pos =  endPosition ;
-
-	endPosition = uniform_ProjectionMatrix * endPosition ;
+    mat3 normalMatrix = transpose( inverse(mat3(uniform_ModelViewMatrix )) ); 
+    varying_eyeNormal = normalize(normalMatrix * -temp_n.xyz);
    
-	varying_eyeNormal =  (uniform_normalMatrix * vec4(normalize(temp_n.xyz),0.0)).xyz ;
-
-	varying_uv0 = attribute_uv0;
-	varying_color = attribute_color ;
+	outPosition =  uniform_ModelViewMatrix * outPosition ;
+    varying_ViewPose = outPosition.xyz / outPosition.w;
 }

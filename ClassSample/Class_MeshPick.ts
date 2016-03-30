@@ -32,8 +32,8 @@
 
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
 
-            this.cube.mouseEnable = true;
-            this.cube1.mouseEnable = true;
+            this.cube.enablePick = true;
+            this.cube1.enablePick = true;
 
             this.cube.addEventListener(MouseEvent3D.MOUSE_CLICK, (e) => this.onClick(e, this.cube), this);
             this.cube1.addEventListener(MouseEvent3D.MOUSE_CLICK, (e) => this.onClick(e, this.cube1), this);

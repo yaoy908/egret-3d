@@ -387,16 +387,19 @@
         }
 
         private touchStart(e: TouchEvent) {
+            if (!this.deliverMessage()) {
+                return;
+            }
 
             e.preventDefault();
 
-            var x1: number = e.targetTouches[0].clientX - Input.canvas.clientRect.left;
-            var y1: number = e.targetTouches[0].clientY - Input.canvas.clientRect.top;
+            var x1: number = e.targetTouches[0].clientX - Input.canvas.x;
+            var y1: number = e.targetTouches[0].clientY - Input.canvas.y;
 
             if (e.targetTouches.length == 2) {
 
-                var x2: number = e.targetTouches[1].clientX - Input.canvas.clientRect.left;
-                var y2: number = e.targetTouches[1].clientY - Input.canvas.clientRect.top;
+                var x2: number = e.targetTouches[1].clientX - Input.canvas.x;
+                var y2: number = e.targetTouches[1].clientY - Input.canvas.y;
 
                 this.onPinch(x1, y1, x2, y2);
             }
@@ -420,16 +423,16 @@
 
             if (e.targetTouches.length > 1) {
 
-                var x: number = e.targetTouches[0].clientX - Input.canvas.clientRect.left;
-                var y: number = e.targetTouches[0].clientY - Input.canvas.clientRect.top;
-                var x1: number = e.targetTouches[1].clientX - Input.canvas.clientRect.left;
-                var y1: number = e.targetTouches[1].clientY - Input.canvas.clientRect.top;
+                var x: number = e.targetTouches[0].clientX - Input.canvas.x;
+                var y: number = e.targetTouches[0].clientY - Input.canvas.y;
+                var x1: number = e.targetTouches[1].clientX - Input.canvas.x;
+                var y1: number = e.targetTouches[1].clientY - Input.canvas.y;
 
                 this.onPinch(x, y, x1, y1);
             }
             else if (e.targetTouches.length == 1) {
 
-                this.onSwipe(e.targetTouches[0].clientX - Input.canvas.clientRect.left, e.targetTouches[0].clientY - Input.canvas.clientRect.top);
+                this.onSwipe(e.targetTouches[0].clientX - Input.canvas.x, e.targetTouches[0].clientY - Input.canvas.y);
             }
             else {
 
@@ -450,8 +453,8 @@
             Input.mouseLastX = Input.mouseX;
             Input.mouseLastY = Input.mouseY;
 
-            Input.mouseX = e.targetTouches[0].clientX - Input.canvas.clientRect.left;
-            Input.mouseY = e.targetTouches[0].clientY - Input.canvas.clientRect.top;
+            Input.mouseX = e.targetTouches[0].clientX - Input.canvas.x;
+            Input.mouseY = e.targetTouches[0].clientY - Input.canvas.y;
 
             Input.mouseOffsetX = Input.mouseX - Input.mouseLastX;
             Input.mouseOffsetY = Input.mouseY - Input.mouseLastY;
@@ -462,7 +465,7 @@
             if (e.targetTouches.length > 1) {
 
                 var newPosition1: Point = new Point(Input.mouseX, Input.mouseY);
-                var newPosition2: Point = new Point(e.targetTouches[1].clientX - Input.canvas.clientRect.left, e.targetTouches[1].clientY - Input.canvas.clientRect.top);
+                var newPosition2: Point = new Point(e.targetTouches[1].clientX - Input.canvas.x, e.targetTouches[1].clientY - Input.canvas.y);
 
                 if (this._oldPosition1 == null)
                     this._oldPosition1 = newPosition1;
@@ -489,15 +492,16 @@
 
 
         private mouseClick(e: MouseEvent) {
+            if (!this.deliverMessage()) {
+                return;
+            }
+
             this._mouseEvent3d.mouseCode = e.button;
             this._mouseEvent3d.eventType = MouseEvent3D.MOUSE_CLICK;
             this.dispatchEvent(this._mouseEvent3d);
         }
 
         private mouseEnd(e: MouseEvent) {
-            Input.mouseX = e.clientX - Input.canvas.clientRect.left;
-            Input.mouseY = e.clientY - Input.canvas.clientRect.top;
-
             this._mouseEvent3d.mouseCode = e.button;
 
             this._mouseStatus[this._mouseEvent3d.mouseCode] = false;
@@ -505,10 +509,20 @@
             this.dispatchEvent(this._mouseEvent3d);
         }
 
-        private mouseStart(e: MouseEvent) {
+        protected deliverMessage(): boolean {
+            var view3ds: Array<View3D> = Input.canvas.view3Ds;
+            for (var i: number = 0; i < view3ds.length; ++i) {
+                if (view3ds[i].inView3D(Input.mouseX, Input.mouseY)) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
-            Input.mouseX = e.clientX - Input.canvas.clientRect.left;
-            Input.mouseY = e.clientY - Input.canvas.clientRect.top;
+        private mouseStart(e: MouseEvent) {
+            if (!this.deliverMessage()) {
+                return;
+            }
 
             this._mouseEvent3d.mouseCode = e.button;
             if (!this._mouseStatus[this._mouseEvent3d.mouseCode]) {
@@ -522,8 +536,8 @@
             Input.mouseLastX = Input.mouseX;
             Input.mouseLastY = Input.mouseY;
 
-            Input.mouseX = e.clientX - Input.canvas.clientRect.left;
-            Input.mouseY = e.clientY - Input.canvas.clientRect.top;
+            Input.mouseX = e.clientX - Input.canvas.x;
+            Input.mouseY = e.clientY - Input.canvas.y;
 
             Input.mouseOffsetX = Input.mouseX - Input.mouseLastX;
             Input.mouseOffsetY = Input.mouseY - Input.mouseLastY;

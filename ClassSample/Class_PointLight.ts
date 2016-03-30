@@ -40,7 +40,6 @@
         protected ontextload(e: URLLoader) {
 
             var mat: TextureMaterial = new TextureMaterial();
-            mat.ambientPower = 0.2;
             mat.lightGroup = this.lights; 
             //mat.drawMode = DrawMode.POINTS; 
             var mesh: Mesh = new Mesh(e.data, mat);

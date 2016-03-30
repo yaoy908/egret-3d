@@ -28,7 +28,6 @@
 
             this.matPlane = new TextureMaterial();
             this.matPlane.lightGroup = this.lights;
-            this.matPlane.ambientPower = 0.3;
             this.matPlane.repeat = true;
             this.plane = new Mesh(new PlaneGeometry(1000,1000,10,10,2,2), this.matPlane);
             this.view1.addChild3D(this.plane);

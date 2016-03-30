@@ -25,7 +25,7 @@
          * @private
          * 点光源的数据长度 
          */
-        public static stride: number = 7;
+        public static stride: number = 12;
    
 
         /**
@@ -38,6 +38,22 @@
             super();
             this.lightType = LightType.pointlight ; 
             this.diffuse = color;
+        }
+
+        public set radius( value:number ) {
+            this._radius = value; 
+        }
+
+        public get radius(): number {
+            return this._radius ;
+        }
+
+        public set falloff(value: number) {
+            this._falloff = value;
+        }
+
+        public get falloff(): number {
+            return this._falloff;
         }
 
         /**
@@ -56,7 +72,13 @@
             lightData[index * PointLight.stride + 4] = this._diffuse.y;
             lightData[index * PointLight.stride + 5] = this._diffuse.z;
 
-            lightData[index * PointLight.stride + 6] = this._intensity;
+            lightData[index * PointLight.stride + 6] = this._ambient.x;
+            lightData[index * PointLight.stride + 7] = this._ambient.y;
+            lightData[index * PointLight.stride + 8] = this._ambient.z;
+
+            lightData[index * PointLight.stride + 9] = this._intensity;
+            lightData[index * PointLight.stride + 10] = this._radius;
+            lightData[index * PointLight.stride + 11] = this._falloff;
         }
     }
 } 

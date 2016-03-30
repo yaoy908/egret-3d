@@ -15,6 +15,7 @@
         public fsShaderNames: Array<string> = new Array<string>();
 
         public lightGroup: LightGroup;
+        public modelViewMatrix: Matrix4_4 = new Matrix4_4();
         constructor(materialData: MaterialData) {
             this._materialData = materialData;
         }
@@ -208,11 +209,15 @@
                 this._materialData.materialSourceData[9] = this._materialData.alpha;
                 this._materialData.materialSourceData[10] = this._materialData.cutAlpha;
                 this._materialData.materialSourceData[11] = this._materialData.shininess;
+                this._materialData.materialSourceData[12] = this._materialData.roughness;
+                this._materialData.materialSourceData[13] = this._materialData.albedo;
 
-                this._materialData.materialSourceData[12] = this._materialData.diffusePower;
-                this._materialData.materialSourceData[13] = this._materialData.gloss;
-                this._materialData.materialSourceData[14] = this._materialData.ambientPower;
-                this._materialData.materialSourceData[15] = this._materialData.normalPower; //保留
+                this._materialData.materialSourceData[14] = this._materialData.uvRectangle.x ;
+                this._materialData.materialSourceData[15] = this._materialData.uvRectangle.y ; //保留
+                this._materialData.materialSourceData[16] = this._materialData.uvRectangle.width ; //保留
+                this._materialData.materialSourceData[17] = this._materialData.uvRectangle.height ; //保留
+                this._materialData.materialSourceData[18] = this._materialData.specularScale; //保留
+                this._materialData.materialSourceData[19] = this._materialData.normalScale ; //保留
             }
 
             if (this._passUsage.uniform_materialSource) {
@@ -222,6 +227,7 @@
             if (this._materialData.textureChange) {
                 this.resetTexture(context3DProxy);
             }
+
             //texture 2D
             var sampler2D: GLSL.Sampler2D;
             for (var index in this._passUsage.sampler2DList) {
@@ -270,7 +276,15 @@
                 Context3DProxy.gl.depthMask(true);
 
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ModelMatrix.uniformIndex, false, modeltransform.rawData);
-            context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.viewProjectionMatrix.rawData);
+
+            //context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ViewProjectionMatrix.uniformIndex, false, camera3D.viewProjectionMatrix.rawData);//uniform_ModelViewMatrix
+
+            this.modelViewMatrix.copyFrom(camera3D.viewProjectionMatrix);
+            this.modelViewMatrix.multiply(modeltransform);
+
+            context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ModelViewMatrix.uniformIndex, false, this.modelViewMatrix.rawData);
+
+            context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.projectMatrix.rawData);
 
             if (this._passUsage.uniform_eyepos) {
                 context3DProxy.uniform3f(this._passUsage.uniform_eyepos.uniformIndex, camera3D.x, camera3D.y, camera3D.z);

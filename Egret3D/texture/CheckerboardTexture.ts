@@ -33,6 +33,9 @@
         public texture2D: Texture2D;
         public texture3D: Texture3D;
 
+        private _smooth: boolean = true;
+        private _useMipmap: boolean = true;
+
         /**
          * @language zh_CN
          * 构造函数
@@ -48,7 +51,7 @@
         * @param img HTMLImageElement（网页图像元素）
         */
         public set useMipmap(flag: boolean) {
-            this.texture2D.useMipmap = flag;
+            this._useMipmap = flag;
         }
 
         /**
@@ -57,9 +60,26 @@
          * @param img HTMLImageElement（网页图像元素）
          */
         public get useMipmap(): boolean {
-            return this.texture2D.useMipmap;
+            return this._useMipmap;
+        }
+        /**
+  * @language zh_CN
+  * 设置贴图是否使用 smooth 
+  * @param img HTMLImageElement（网页图像元素）
+  */
+        public set smooth(flag: boolean) {
+            this._smooth = flag;
         }
 
+
+        /**
+         * @language zh_CN
+         * 获取贴图是否使用 smooth
+         * @param img HTMLImageElement（网页图像元素）
+         */
+        public get smooth(): boolean {
+            return this._smooth;
+        }
         /**
          * @language zh_CN
          * 上传贴图数据给GPU
@@ -71,7 +91,8 @@
                 this.texture2D.border = 0; 
                 this.texture2D.internalFormat = InternalFormat.PixelArray;
                 this.texture2D.colorFormat = ContextConfig.ColorFormat_RGBA8888;
-
+                this.texture2D.smooth = this._smooth; 
+                this.texture2D.useMipmap = this._useMipmap; 
                 this.texture2D.mimapData = new Array<MipmapData>();
                 this.texture2D.mimapData.push(new MipmapData(this._pixelArray, this._width, this._height));
                 this.texture2D.useMipmap = false;

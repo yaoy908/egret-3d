@@ -35,7 +35,6 @@
             var lights: LightGroup = new LightGroup();
             var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));
             dirLight.diffuse = 0xffffffff;
-            dirLight.halfColor = 0;
             lights.addLight(dirLight);
             mesh.material.lightGroup = lights;
 

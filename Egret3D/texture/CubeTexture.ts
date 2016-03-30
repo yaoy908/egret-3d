@@ -48,6 +48,8 @@
         public width: number;
         public height: number;
 
+        private _smooth: boolean = true;
+
         /**
          * @language zh_CN
          * 构造函数
@@ -129,6 +131,25 @@
          */
         public get useMipmap(): boolean {
             return this.texture2D.useMipmap;
+        }
+
+        /**
+  * @language zh_CN
+  * 设置贴图是否使用 smooth 
+  * @param img HTMLImageElement（网页图像元素）
+  */
+        public set smooth(flag: boolean) {
+            this._smooth = flag;
+        }
+
+
+        /**
+         * @language zh_CN
+         * 获取贴图是否使用 smooth
+         * @param img HTMLImageElement（网页图像元素）
+         */
+        public get smooth(): boolean {
+            return this._smooth;
         }
 
         /**

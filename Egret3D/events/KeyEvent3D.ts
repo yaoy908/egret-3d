@@ -20,21 +20,21 @@ module egret3d {
         Key_Pause,
         Key_CapsLock = 20,
         Key_Escape,
-        Key_Space,
-        Key_Prior,
-        Key_Next,
+        Key_Space = 32,
+        Key_Prior = 33,
+        Key_Next = 34,
         Key_End = 35,
         Key_Home = 36,
         Key_Left = 37,
         Key_Up = 38,
         Key_Right = 39,
         Key_Down = 40,
-        Key_Select,
-        Key_Print,
-        Key_Execute,
+        Key_Select = 41,
+        Key_Print = 42,
+        Key_Execute = 43,
         Key_Insert = 45,
         Key_Delete = 46,
-        Key_Help,
+        Key_Help = 47,
         Key_0 = 48,
         Key_1,
         Key_2,
@@ -113,15 +113,15 @@ module egret3d {
         Key_F23,
         Key_F24,
 
-        Key_Num_Lock,
-        Key_Scroll_Lock,
+        Key_Num_Lock = 136,
+        Key_Scroll_Lock = 137,
     }
 
     /**
     * @language zh_CN
     * @class egret3d.MouseEvent3D
     * @classdesc
-    * KeyEvent3D 按键事件
+    * KeyEvent3D 按键事件，
     * @includeExample events/KeyEvent3D.ts
     * @see egret3d.Event3D
     * @see egret3d.EventDispatcher

@@ -20,7 +20,8 @@
         * 一个由 16 个数字组成的矢量，其中，每四个元素可以是 4x4 矩阵的一行或一列
         */
         public rawData: Float32Array;
-
+        private result: Float32Array = new Float32Array(16);
+        private m: Float32Array = new Float32Array(16);
         /**
         * @language zh_CN
         * 构造
@@ -76,6 +77,89 @@
             this.rawData[14] = -zaxis.dotProduct(eye);
 
             this.rawData[15] = 1;
+        }
+
+        public multiply(mat4: Matrix4_4) {
+            var a = this.rawData, b = mat4.rawData, r = this.result;
+
+            r[0] = a[0] * b[0] + a[1] * b[4] + a[2] * b[8] + a[3] * b[12];
+            r[1] = a[0] * b[1] + a[1] * b[5] + a[2] * b[9] + a[3] * b[13];
+            r[2] = a[0] * b[2] + a[1] * b[6] + a[2] * b[10] + a[3] * b[14];
+            r[3] = a[0] * b[3] + a[1] * b[7] + a[2] * b[11] + a[3] * b[15];
+
+            r[4] = a[4] * b[0] + a[5] * b[4] + a[6] * b[8] + a[7] * b[12];
+            r[5] = a[4] * b[1] + a[5] * b[5] + a[6] * b[9] + a[7] * b[13];
+            r[6] = a[4] * b[2] + a[5] * b[6] + a[6] * b[10] + a[7] * b[14];
+            r[7] = a[4] * b[3] + a[5] * b[7] + a[6] * b[11] + a[7] * b[15];
+
+            r[8] = a[8] * b[0] + a[9] * b[4] + a[10] * b[8] + a[11] * b[12];
+            r[9] = a[8] * b[1] + a[9] * b[5] + a[10] * b[9] + a[11] * b[13];
+            r[10] = a[8] * b[2] + a[9] * b[6] + a[10] * b[10] + a[11] * b[14];
+            r[11] = a[8] * b[3] + a[9] * b[7] + a[10] * b[11] + a[11] * b[15];
+
+            r[12] = a[12] * b[0] + a[13] * b[4] + a[14] * b[8] + a[15] * b[12];
+            r[13] = a[12] * b[1] + a[13] * b[5] + a[14] * b[9] + a[15] * b[13];
+            r[14] = a[12] * b[2] + a[13] * b[6] + a[14] * b[10] + a[15] * b[14];
+            r[15] = a[12] * b[3] + a[13] * b[7] + a[14] * b[11] + a[15] * b[15];
+            for (var i = 0; i < 16; i++) this.rawData[i] = r[i];
+        }
+
+        public perspectiveB(fov: number, aspect: number, near: number, far: number) {
+            var y = Math.tan(fov * Math.PI / 360) * near;
+            var x = y * aspect;
+            return this.frustum(-x, x, -y, y, near, far);
+        }
+
+        public frustum(l: number, r: number, b: number, t: number, n: number, f: number) {
+            var m = this.rawData;
+
+            m[0] = 2 * n / (r - l);
+            m[1] = 0;
+            m[2] = (r + l) / (r - l);
+            m[3] = 0;
+
+            m[4] = 0;
+            m[5] = 2 * n / (t - b);
+            m[6] = (t + b) / (t - b);
+            m[7] = 0;
+
+            m[8] = 0;
+            m[9] = 0;
+            m[10] = -(f + n) / (f - n);
+            m[11] = -2 * f * n / (f - n);
+
+            m[12] = 0;
+            m[13] = 0;
+            m[14] = -1;
+            m[15] = 0;
+
+            return this;
+        }
+
+        public ortho(l: number, r: number, b: number, t: number, n: number, f: number) {
+            var m = this.rawData;
+
+            m[0] = 2 / (r - l);
+            m[1] = 0;
+            m[2] = 0;
+            m[3] = -(r + l) / (r - l);
+
+            m[4] = 0;
+            m[5] = 2 / (t - b);
+            m[6] = 0;
+            m[7] = -(t + b) / (t - b);
+
+            m[8] = 0;
+            m[9] = 0;
+            m[10] = -2 / (f - n);
+            m[11] = -(f + n) / (f - n);
+
+            m[12] = 0;
+            m[13] = 0;
+            m[14] = 0;
+            m[15] = 1;
+
+            return this;
         }
 
         /**
@@ -136,27 +220,27 @@
         * @param zn 近裁剪面位置Z值.
         * @param zf 远裁剪面位置Z值.
         */
-        public ortho(w: number, h: number, zn: number, zf: number) {
-            this.rawData[0] = 2 / w;
-            this.rawData[1] = 0;
-            this.rawData[2] = 0;
-            this.rawData[3] = 0;
+        //public ortho(w: number, h: number, zn: number, zf: number) {
+        //    this.rawData[0] = 2 / w;
+        //    this.rawData[1] = 0;
+        //    this.rawData[2] = 0;
+        //    this.rawData[3] = 0;
 
-            this.rawData[4] = 0;
-            this.rawData[5] = 2 / h;
-            this.rawData[6] = 0;
-            this.rawData[7] = 0;
+        //    this.rawData[4] = 0;
+        //    this.rawData[5] = 2 / h;
+        //    this.rawData[6] = 0;
+        //    this.rawData[7] = 0;
 
-            this.rawData[8] = 0;
-            this.rawData[9] = 0;
-            this.rawData[10] = 1 / (zf - zn);
-            this.rawData[11] = 0;
+        //    this.rawData[8] = 0;
+        //    this.rawData[9] = 0;
+        //    this.rawData[10] = 1 / (zf - zn);
+        //    this.rawData[11] = 0;
 
-            this.rawData[12] = 0;
-            this.rawData[13] = 0;
-            this.rawData[14] = zn / (zn - zf);
-            this.rawData[15] = 1;
-        }
+        //    this.rawData[12] = 0;
+        //    this.rawData[13] = 0;
+        //    this.rawData[14] = zn / (zn - zf);
+        //    this.rawData[15] = 1;
+        //}
 
         /**
         * @language en_US
@@ -748,14 +832,22 @@
         * @language zh_CN
         * 当前矩阵变换一个向量
         * @param v 要变换的向量
+        * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
         * @returns 变换后的向量
         */
-        public deltaTransformVector(v: Vector3D): Vector3D {
+        public deltaTransformVector(v: Vector3D, target: Vector3D = null): Vector3D {
+            if (!target) {
+                target = new Vector3D();
+            }
             var x: number = v.x;
             var y: number = v.y;
             var z: number = v.z;
 
-            return new Vector3D((x * this.rawData[0] + y * this.rawData[4] + z * this.rawData[8]), (x * this.rawData[1] + y * this.rawData[5] + z * this.rawData[9]), (x * this.rawData[2] + y * this.rawData[6] + z * this.rawData[10]), (x * this.rawData[3] + y * this.rawData[7] + z * this.rawData[11]));
+            target.x = x * this.rawData[0] + y * this.rawData[4] + z * this.rawData[8];
+            target.y = x * this.rawData[1] + y * this.rawData[5] + z * this.rawData[9];
+            target.z = x * this.rawData[2] + y * this.rawData[6] + z * this.rawData[10];
+            target.w = x * this.rawData[3] + y * this.rawData[7] + z * this.rawData[11];
+            return target;
         }
 
         /**
@@ -963,23 +1055,24 @@
         * @language zh_CN
         * 用当前矩阵变换一个3D向量
         * @param v 变换的向量
+        * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
         * @returns 变换后的向量
         */
-        public transformVector(v: Vector3D): Vector3D {
-            if (v == null)
-                return new Vector3D();
+        public transformVector(v: Vector3D, target: Vector3D = null): Vector3D {
+            if (!target) {
+                target = new Vector3D();
+            }
 
             var x: number = v.x;
             var y: number = v.y;
             var z: number = v.z;
 
-            var out: Vector3D = new Vector3D();
-            out.x = x * this.rawData[0] + y * this.rawData[4] + z * this.rawData[8] + this.rawData[12];
-            out.y = x * this.rawData[1] + y * this.rawData[5] + z * this.rawData[9] + this.rawData[13];
-            out.z = x * this.rawData[2] + y * this.rawData[6] + z * this.rawData[10] + this.rawData[14];
-            out.w = x * this.rawData[3] + y * this.rawData[7] + z * this.rawData[11] + this.rawData[15];
+            target.x = x * this.rawData[0] + y * this.rawData[4] + z * this.rawData[8] + this.rawData[12];
+            target.y = x * this.rawData[1] + y * this.rawData[5] + z * this.rawData[9] + this.rawData[13];
+            target.z = x * this.rawData[2] + y * this.rawData[6] + z * this.rawData[10] + this.rawData[14];
+            target.w = x * this.rawData[3] + y * this.rawData[7] + z * this.rawData[11] + this.rawData[15];
 
-            return out;
+            return target;
         }
         
         /**
