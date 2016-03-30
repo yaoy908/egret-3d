@@ -18,15 +18,9 @@
         */
         public initUseMethod(animation: IAnimation) {
             this._passChange = false;
-            //this._materialData.passChange = false;
-            this._materialData.textureMethodTypes.push(TextureMethodType.color);
-            if (animation) {
-                this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
-            }
-
             var i: number = 0;
-
             this._passUsage = new PassUsage();
+            this._materialData.textureMethodTypes.push(TextureMethodType.color);
 
             this._passUsage.vertexShader.shaderType = Shader.vertex;
             this._passUsage.fragmentShader.shaderType = Shader.fragment;
@@ -35,13 +29,15 @@
             this._passUsage.fragmentShader.addUseShaderName("base_fs");
             this._passUsage.fragmentShader.addUseShaderName("materialSource_fs");
 
+            if (animation) {
+                this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
+                this._passUsage.vertexShader.addUseShaderName("skeleton_vertex");
+            }
+            else {
+                this._passUsage.vertexShader.addUseShaderName("diffuse_vertex");
+            }
+
             if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.color) != -1) {
-                if (animation) {
-                    this._passUsage.vertexShader.addUseShaderName("skeleton_vertex");
-                }
-                else {
-                    this._passUsage.vertexShader.addUseShaderName("diffuse_vertex");
-                }
                 this._passUsage.fragmentShader.addUseShaderName("gamma_fs");
                 this._passUsage.fragmentShader.addUseShaderName("diffuse_fragment");
             }
