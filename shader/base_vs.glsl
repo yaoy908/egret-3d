@@ -1,6 +1,7 @@
 attribute vec3 attribute_position ;
 attribute vec3 attribute_normal ;
 attribute vec2 attribute_uv0 ;
+attribute vec4 attribute_color ;
 
 uniform mat4 uniform_ModelMatrix ;
 uniform mat4 uniform_ModelViewMatrix ;
@@ -9,6 +10,7 @@ uniform mat4 uniform_ProjectionMatrix ;
 varying vec3 varying_ViewPose;
 varying vec3 varying_eyeNormal  ;
 varying vec2 varying_uv0;
+varying vec4 varying_color;
 
 vec4 outPosition ;
 
@@ -35,6 +37,6 @@ mat3 inverse(mat3 m) {
 }
 
 void main(void){
-  
+   varying_color = attribute_color;
    varying_uv0 = attribute_uv0;
 }

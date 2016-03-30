@@ -7,5 +7,5 @@ void main() {
     diffuseColor.xyz = materialSource.diffuse.xyz * diffuseColor.xyz ;
 	outColor.xyz = (ambientColor.xyz + light.xyz) * diffuseColor.xyz + specularColor.xyz * materialSource.specularScale;
 	outColor.w = materialSource.alpha * diffuseColor.w ;
-    gl_FragColor = outColor ;
+    gl_FragColor = outColor * varying_color ;
 }

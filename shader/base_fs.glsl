@@ -3,6 +3,7 @@
 varying vec3 varying_eyeNormal  ;
 varying vec2 varying_uv0;
 varying vec3 varying_ViewPose;
+varying vec4 varying_color;
 
 uniform vec3 uniform_eyepos ;
 uniform mat4 uniform_ModelViewMatrix ;
