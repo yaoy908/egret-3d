@@ -417,6 +417,51 @@
             this.z += a.z;
         }
 
+        //public static unit(a, b) {
+        //    var length = a.length();
+        //    b.x = a.x / length;
+        //    b.y = a.y / length;
+        //    b.z = a.z / length;
+        //    return b;
+        //}
+
+        //public static cross(a, b, c) {
+        //    c.x = a.y * b.z - a.z * b.y;
+        //    c.y = a.z * b.x - a.x * b.z;
+        //    c.z = a.x * b.y - a.y * b.x;
+        //    return c;
+        //}
+        public cross(v): Vector3D {
+            var vx: number = this.y * v.z - this.z * v.y;
+            var vy: number = this.z * v.x - this.x * v.z;
+            var vz: number = this.x * v.y - this.y * v.x;
+            this.x = vx;
+            this.y = vy;
+            this.z = vz; 
+            return this ;
+        }
+
+        public divide(v): Vector3D {
+            if (v instanceof Vector3D) return new Vector3D(this.x / v.x, this.y / v.y, this.z / v.z);
+            else {
+                this.x = this.x / v;
+                this.y = this.y / v;
+                this.z = this.z / v;
+            }
+            return this; 
+        }
+
+        public unit(): Vector3D {
+            return this.divide(this.length);
+        }
+
+        public dot(v): Vector3D {
+            this.x = this.x * v.x;
+            this.y = this.y * v.y;
+            this.z = this.z * v.z;
+            return this ;
+        }
+
         /**
         * @language en_US
         * Sets the current Vector3D object to its inverse. The inverse object

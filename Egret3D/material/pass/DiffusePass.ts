@@ -1,5 +1,5 @@
 ﻿module egret3d {
-    
+
     /**
     * @private
     */
@@ -20,6 +20,9 @@
             this._passChange = false;
             //this._materialData.passChange = false;
             this._materialData.textureMethodTypes.push(TextureMethodType.color);
+            if (animation) {
+                this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
+            }
 
             var i: number = 0;
 
@@ -28,6 +31,10 @@
             this._passUsage.vertexShader.shaderType = Shader.vertex;
             this._passUsage.fragmentShader.shaderType = Shader.fragment;
 
+            this._passUsage.vertexShader.addUseShaderName("base_vs");
+            this._passUsage.fragmentShader.addUseShaderName("base_fs");
+            this._passUsage.fragmentShader.addUseShaderName("materialSource_fs");
+
             if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.color) != -1) {
                 if (animation) {
                     this._passUsage.vertexShader.addUseShaderName("skeleton_vertex");
@@ -35,22 +42,18 @@
                 else {
                     this._passUsage.vertexShader.addUseShaderName("diffuse_vertex");
                 }
+                this._passUsage.fragmentShader.addUseShaderName("gamma_fs");
                 this._passUsage.fragmentShader.addUseShaderName("diffuse_fragment");
             }
             if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.normal) != -1) {
-                //this._passUsage.vertexShader.addUseShaderName("");
                 this._passUsage.fragmentShader.addUseShaderName("normalMap_fragment");
-            }
-            if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.specular) != -1) {
-                //this._passUsage.vertexShader.addUseShaderName("");
-                this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
             }
 
             if (this.lightGroup) {
                 this._passUsage.maxDirectLight = this.lightGroup.directLightList.length;
                 this._passUsage.maxSpotLight = this.lightGroup.spotLightList.length;
                 this._passUsage.maxPointLight = this.lightGroup.pointLightList.length;
-                
+
                 this._passUsage.fragmentShader.addUseShaderName("lightingBase_fs");
 
                 if (this.lightGroup.directLightList.length) {
@@ -67,9 +70,10 @@
                 }
             }
 
-            if (animation) {
-                this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
+            if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.specular) != -1) {
+                this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
             }
+
 
             this._passUsage.vertexShader.addEndShaderName("end_vs");
             this._passUsage.fragmentShader.addEndShaderName("end_fs");

@@ -2,6 +2,7 @@
     export interface ITexture {
 
         useMipmap: boolean; 
+        smooth: boolean; 
        
         upload(context3D: Context3DProxy)
         uploadForcing(context3D: Context3DProxy)

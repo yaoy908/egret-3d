@@ -311,7 +311,7 @@
             this.cameraMatrix = this.modelMatrix
             this.temp.copyFrom(this.cameraMatrix);
             this.temp.invert();
-            this.temp.append(this.projectMatrix);
+            //this.temp.multiply(this.projectMatrix);
             return this.temp;
         }
         

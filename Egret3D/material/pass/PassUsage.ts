@@ -171,7 +171,15 @@
         /**
          * @language zh_CN
          */
-        public uniform_normalMatrix: GLSL.Uniform;
+        public uniform_ViewProjectionMatrix: GLSL.Uniform;
+        /**
+         * @language zh_CN
+         */
+        public uniform_ViewMatrix: GLSL.Uniform;
+        /**
+        * @language zh_CN
+        */
+        public uniform_ModelViewMatrix: GLSL.Uniform;
         /**
          * @language zh_CN
          */

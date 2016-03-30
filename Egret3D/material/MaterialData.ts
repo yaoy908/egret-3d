@@ -313,7 +313,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public shininess: number = 8.0;
+        public shininess: number = 20.0;
 
         /**
         * @language zh_CN
@@ -359,7 +359,30 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public gloss: number = 1.0; 
+        public roughness: number = 1.0; 
+
+        
+
+        public albedo: number = 0.95; 
+
+        /**
+        * @language zh_CN
+        * 高光亮度的强度值,设置较大的值会让高光部分极亮。
+        * @default 1.0
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public specularScale: number = 1.0; 
+        public normalScale: number = 1.0; 
+
+        /**
+        * @language zh_CN
+        * uv 在贴图上的映射区域，值的范围限制在0.0~1.0之间。
+        * @default 1.0
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public uvRectangle: Rectangle = new Rectangle(0, 0, 1, 1);
 
         /**
         * @language zh_CN
@@ -368,7 +391,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public ambientPower: number = 1.0; 
+        //public ambientPower: number = 1.0; 
 
         /**
         * @language zh_CN
@@ -377,7 +400,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public diffusePower: number = 1.0; 
+        //public diffusePower: number = 1.0; 
 
         /**
         * @language zh_CN
@@ -386,7 +409,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public normalPower: number = 1.0; 
+        //public normalPower: number = 1.0; 
 
         /**
         * @language zh_CN
@@ -420,7 +443,7 @@
         /**
          * @language zh_CN
          */
-        public materialSourceData: Float32Array = new Float32Array(16);//12
+        public materialSourceData: Float32Array = new Float32Array(20);//12
 
         /**
          * @language zh_CN
@@ -479,14 +502,12 @@
             data.diffuseColor = this.diffuseColor;
             data.specularColor = this.specularColor;
             data.shininess = this.shininess;
-
-            data.shininess = this.shininess;
             data.cutAlpha = this.cutAlpha;
             data.alpha = this.alpha;
-            data.gloss = this.gloss;
-            data.ambientPower = this.ambientPower;
-            data.diffusePower = this.diffusePower;
-            data.normalPower = this.normalPower;
+            data.roughness = this.roughness;
+            data.roughness = this.roughness;
+            data.albedo = this.albedo;
+            data.specularScale = this.specularScale;
 
             data.materialDataNeedChange = this.materialDataNeedChange;
             data.textureChange = true;

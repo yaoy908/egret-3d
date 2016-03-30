@@ -127,7 +127,7 @@
             View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, ContextConfig.canvasRectangle.height - this._viewPort.height - this._viewPort.y, this._viewPort.width, this._viewPort.height);
 
             View3D._contex3DProxy.clearColor(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w);
-            View3D._contex3DProxy.clear(Context3DProxy.gl.COLOR_BUFFER_BIT | Context3DProxy.gl.DEPTH_BUFFER_BIT);
+            View3D._contex3DProxy.clear(this._cleanParmerts);
 
             this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera);
 

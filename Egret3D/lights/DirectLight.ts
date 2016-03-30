@@ -45,11 +45,11 @@
         * 模拟间接光照而开发的背光，而不用去同时打两盏不同方向的组合灯光，可以优化显示效果
         * @param color 背光颜色色值
         */
-        public set halfColor(color: number) {
-            this._halfColor.w = (color >> 24 & 0xff) / 255;
-            this._halfColor.x = (color >> 16 & 0xff) / 255;
-            this._halfColor.y = (color >> 8 & 0xff) / 255;
-            this._halfColor.z = (color & 0xff) / 255;
+        public set ambient(color: number) {
+            this._ambient.w = (color >> 24 & 0xff) / 255;
+            this._ambient.x = (color >> 16 & 0xff) / 255;
+            this._ambient.y = (color >> 8 & 0xff) / 255;
+            this._ambient.z = (color & 0xff) / 255;
             this._change = false;
         }
 
@@ -85,9 +85,9 @@
             lightData[index * DirectLight.stride + 4] = this._diffuse.y;
             lightData[index * DirectLight.stride + 5] = this._diffuse.z;
 
-            lightData[index * DirectLight.stride + 6] = this._halfColor.x;
-            lightData[index * DirectLight.stride + 7] = this._halfColor.y;
-            lightData[index * DirectLight.stride + 8] = this._halfColor.z;
+            lightData[index * DirectLight.stride + 6] = this._ambient.x;
+            lightData[index * DirectLight.stride + 7] = this._ambient.y;
+            lightData[index * DirectLight.stride + 8] = this._ambient.z;
 
             lightData[index * DirectLight.stride + 9] = this._intensity;
             lightData[index * DirectLight.stride + 10] = this._halfIntensity;

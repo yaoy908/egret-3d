@@ -269,29 +269,46 @@
 
         /**
          * @language zh_CN
-         * 设置材质 gloss 值。
+         * 设置材质 roughness 值。
          * 设置材质 镜面平滑程度 值。
          * @param value {Number}
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public set gloss(value: number) {
-            if (this.materialData.gloss != value) {
-                this.materialData.gloss = value;
+        public set roughness(value: number) {
+            if (this.materialData.roughness != value) {
+                this.materialData.roughness = value;
                 this.materialData.materialDataNeedChange = true;
             }
         }
 
         /**
          * @language zh_CN
-         * 返回材质 specularPower 值。
-         * 设置材质 镜面平滑程度 值。
+         * 返回材质 roughness 值。
          * @returns {Number}
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public get gloss(): number {
-            return this.materialData.gloss;
+        public get roughness(): number {
+            return this.materialData.roughness;
+        }
+
+         /**
+         * @language zh_CN
+         * 映射贴图UV坐标，设置此材质要显示使用贴图的区域，用uvRectangl 的方式映射
+         * @param x {Number}
+         * @param y {Number}
+         * @param width {Number}
+         * @param height {Number}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public uvRectangle(x: number, y: number, width: number, height: number) {
+            this.materialData.uvRectangle.x = x; 
+            this.materialData.uvRectangle.y = y; 
+            this.materialData.uvRectangle.width = width; 
+            this.materialData.uvRectangle.height = height; 
+            this.materialData.materialDataNeedChange = true;
         }
 
 
@@ -303,12 +320,12 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public set ambientPower(value: number) {
-            if (this.materialData.ambientPower != value) {
-                this.materialData.ambientPower = value;
-                this.materialData.materialDataNeedChange = true;
-            }
-        }
+        //public set ambientPower(value: number) {
+        //    if (this.materialData.ambientPower != value) {
+        //        this.materialData.ambientPower = value;
+        //        this.materialData.materialDataNeedChange = true;
+        //    }
+        //}
 
         /**
          * @language zh_CN
@@ -318,9 +335,9 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public get ambientPower(): number {
-            return this.materialData.ambientPower;
-        }
+        //public get ambientPower(): number {
+        //    return this.materialData.ambientPower;
+        //}
         
 
         /**
@@ -331,12 +348,12 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public set diffusePower(value: number) {
-            if (this.materialData.diffusePower != value) {
-                this.materialData.diffusePower = value;
-                this.materialData.materialDataNeedChange = true;
-            }
-        }
+        //public set diffusePower(value: number) {
+        //    if (this.materialData.diffusePower != value) {
+        //        this.materialData.diffusePower = value;
+        //        this.materialData.materialDataNeedChange = true;
+        //    }
+        //}
 
         /**
          * @language zh_CN
@@ -346,9 +363,9 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public get diffusePower(): number {
-            return this.materialData.diffusePower;
-        }
+        //public get diffusePower(): number {
+        //    return this.materialData.diffusePower;
+        //}
 
         /**
          * @language zh_CN
@@ -359,13 +376,12 @@
          * @platform Web,Native
          */
 
-        public set normalPower(value: number) {
-            if (this.materialData.normalPower != value) {
-                this.materialData.normalPower = value;
-                this.materialData.materialDataNeedChange = true;
-            }
-        }
-
+        //public set normalPower(value: number) {
+        //    if (this.materialData.normalPower != value) {
+        //        this.materialData.normalPower = value;
+        //        this.materialData.materialDataNeedChange = true;
+        //    }
+        //}
         /**
          * @language zh_CN
          * 返回材质 normalPower 值。
@@ -374,9 +390,9 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public get normalPower(): number {
-            return this.materialData.normalPower;
-        }
+        //public get normalPower(): number {
+        //    return this.materialData.normalPower;
+        //}
 
         /**
          * @language zh_CN
@@ -386,17 +402,17 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public set castShadow(value: boolean) {
-            this.materialData.castShadow = value;
-            if (value) {
-                //if (!ShadowRender.frameBuffer) {
-                //    alert("要使用shadow view3D.useShadow = true ");
-                //} else {
-                //    if (!this.shadowPass)
-                //        this.shadowPass = new ShadowMapPass(this.materialData);
-                //}
-            }
-        }
+        //public set castShadow(value: boolean) {
+        //    this.materialData.castShadow = value;
+        //    if (value) {
+        //        //if (!ShadowRender.frameBuffer) {
+        //        //    alert("要使用shadow view3D.useShadow = true ");
+        //        //} else {
+        //        //    if (!this.shadowPass)
+        //        //        this.shadowPass = new ShadowMapPass(this.materialData);
+        //        //}
+        //    }
+        //}
 
         /**
          * @language zh_CN
