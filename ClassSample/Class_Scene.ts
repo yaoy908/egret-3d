@@ -41,7 +41,6 @@
                 mat.shininess = 0.1;
                 mat.specularColor = 0; 
                 mat.ambientColor = 0xffffff;
-                mat.ambientPower = 0.8;
                 this.mat = mat;
                 var ge: Geometry = e.data;
                 var mesh: Mesh = new Mesh(e.data, mat);
