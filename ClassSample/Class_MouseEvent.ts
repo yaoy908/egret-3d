@@ -18,7 +18,6 @@
             this.cube = new Mesh(geometery, mat);
 
 
-            this.cube.mouseEnable = true;
             this.cube.addEventListener(PickEvent3D.PICK_DOWN, this.onMouseDown, this);
             this.cube.addEventListener(PickEvent3D.PICK_UP, this.onMouseUp, this);
             this.cube.addEventListener(PickEvent3D.PICK_CLICK, this.onClick, this);

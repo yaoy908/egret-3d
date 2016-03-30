@@ -72,8 +72,6 @@ class SampleEvent {
         var geometery_Cube: egret3d.CubeGeometry = new egret3d.CubeGeometry();
         ///通过材质和立方体对象生成Mesh
         this._cube = new egret3d.Mesh(geometery_Cube, mat_Cube);
-        ///开启鼠标事件响应
-        this._cube.mouseEnable = true;
         ///注册事件
         this._cube.addEventListener(egret3d.MouseEvent3D.MOUSE_DOWN, this.onMouseDown, this);
         this._cube.addEventListener(egret3d.TouchEvent3D.TOUCH_START, this.onTouchDown, this);
