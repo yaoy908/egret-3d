@@ -40,7 +40,7 @@ void main(void){
    temp_p += buildMat4(int(attribute_boneIndex.z)) * temp_position * attribute_boneWeight.z;
    temp_p += buildMat4(int(attribute_boneIndex.w)) * temp_position * attribute_boneWeight.w;
 
-   varying_ViewPose =  modelViewMatrix * vec4(temp_p, 1.0) ; 
+   varying_ViewPose =  uniform_ModelViewMatrix * vec4(temp_p, 1.0) ; 
    varying_ViewPose = varying_ViewPose.xyz / varying_ViewPose.w ;
    outPosition = varying_ViewPose ; 
    
