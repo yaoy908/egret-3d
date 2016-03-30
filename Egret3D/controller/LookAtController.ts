@@ -87,30 +87,108 @@
 
             this._target.lookAt(this._eyesPos, this._lookAtPosition);
 
-            Input.instance.addListenerMouseWheel(() => this.mouseWheel());
 
-            Input.instance.addListenerMouseMove(() => this.mouseMove());
+            Input.addEventListener(MouseEvent3D.MOUSE_MOVE, this.mouseMove, this);
+            Input.addEventListener(MouseEvent3D.MOUSE_WHEEL, this.mouseWheel, this);
 
-            Input.instance.addListenerKeyUp((e:number) => this.keyUp(e));
-            Input.instance.addListenerKeyDown((e: number) => this.keyDown(e));
+            Input.addEventListener(MouseEvent3D.MOUSE_UP, this.mouseUp, this);
+            Input.addEventListener(MouseEvent3D.MOUSE_DOWN, this.mouseDown, this);
 
-            Input.instance.addListenerSwipe(() => this.mouseMove());
+            Input.addEventListener(KeyEvent3D.KEY_UP, this.keyUp, this);
+            Input.addEventListener(KeyEvent3D.KEY_DOWN, this.keyDown, this);
+
+            Input.addEventListener(TouchEvent3D.TOUCH_END, this.touchUp, this);
+            Input.addEventListener(TouchEvent3D.TOUCH_START, this.touchDown, this);
+            Input.addEventListener(TouchEvent3D.TOUCH_MOVE, this.touchMove, this);
         }
 
-
-        private mouseWheel() {
-            this.distance = this._eyesLength - Input.instance.wheelDelta * 0.1;
-        }
-
-        private mouseMove() {
+        private mouseMove(m: MouseEvent3D) {
             if (this._mouseDown) {
-                this._rotaAngle.y += Input.instance.mouseOffsetX;
-                this._rotaAngle.x += Input.instance.mouseOffsetY;
+                this._rotaAngle.y += Input.mouseOffsetX;
+                this._rotaAngle.x += Input.mouseOffsetY;
 
                 this._rotaAngle.y %= 360;
                 this._rotaAngle.x %= 360;
             }
         }
+
+        private mouseWheel(m: MouseEvent3D) {
+            this.distance = this._eyesLength - Input.wheelDelta * 0.1;
+        }
+
+        private mouseUp(m: MouseEvent3D) {
+            switch (m.mouseCode) {
+                case MouseCode.Mouse_Left:
+                    this._mouseDown = false;
+                    break;
+                case MouseCode.Mouse_Right:
+                    this._mouseRightDown = false;
+                    break;
+            }
+        }
+
+        private mouseDown(m: MouseEvent3D) {
+            switch (m.mouseCode) {
+                case MouseCode.Mouse_Left:
+                    this._mouseDown = true;
+                    break;
+                case MouseCode.Mouse_Right:
+                    this._mouseRightDown = true;
+                    break;
+            }
+        }
+
+        private touchMove(t: TouchEvent3D) {
+            if (t.targetTouches.length == 1) {
+                this.mouseMove(null);
+            }
+            else {
+                this.mouseWheel(null);
+            }
+        }
+
+        private touchUp(m: TouchEvent3D) {
+            this._mouseDown = false;
+        }
+
+        private touchDown(m: MouseEvent3D) {
+            this._mouseDown = true;
+        }
+
+        private keyDown(key: KeyEvent3D) {
+            switch (key.keyCode) {
+                case KeyCode.Key_W:///w
+                    this._keyArray[0] = true;
+                    break;
+                case KeyCode.Key_A:///a
+                    this._keyArray[1] = true;
+                    break;
+                case KeyCode.Key_S:///s
+                    this._keyArray[2] = true;
+                    break;
+                case KeyCode.Key_D:///d
+                    this._keyArray[3] = true;
+                    break;
+            }
+        }
+
+        private keyUp(key: KeyEvent3D) {
+            switch (key.keyCode) {
+                case KeyCode.Key_W:///w
+                    this._keyArray[0] = false;
+                    break;
+                case KeyCode.Key_A:///a    
+                    this._keyArray[1] = false;
+                    break;
+                case KeyCode.Key_S:///s        
+                    this._keyArray[2] = false;
+                    break;
+                case KeyCode.Key_D:///d   
+                    this._keyArray[3] = false;
+                    break;
+            }
+        }
+
 
         /**
         * @language zh_CN
@@ -350,52 +428,6 @@
                 }
 
                 this._target.lookAt(this._eyesPos, this._lookAtPosition, this._tempVec);
-            }
-        }
-
-        private keyDown(key:number) {
-            switch (key) {
-                case KeyCode.Key_W:///w
-                    this._keyArray[0] = true;
-                    break;
-                case KeyCode.Key_A:///a
-                    this._keyArray[1] = true;
-                    break;
-                case KeyCode.Key_S:///s
-                    this._keyArray[2] = true;
-                    break;
-                case KeyCode.Key_D:///d
-                    this._keyArray[3] = true;
-                    break;
-                case KeyCode.Key_Mouse_Left:
-                    this._mouseDown = true;
-                    break;
-                case KeyCode.Key_Mouse_Right:
-                    this._mouseRightDown = true;
-                    break;
-            }
-        }
-
-        private keyUp(key: number) {
-            switch (key) {
-                case KeyCode.Key_W:///w
-                    this._keyArray[0] = false;
-                    break;
-                case KeyCode.Key_A:///a    
-                    this._keyArray[1] = false;           
-                    break;
-                case KeyCode.Key_S:///s        
-                    this._keyArray[2] = false;      
-                    break;
-                case KeyCode.Key_D:///d   
-                    this._keyArray[3] = false;           
-                    break;
-                case KeyCode.Key_Mouse_Left:
-                    this._mouseDown = false;
-                    break;
-                case KeyCode.Key_Mouse_Right:
-                    this._mouseRightDown = false;
-                    break;
             }
         }
     }

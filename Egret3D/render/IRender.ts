@@ -87,11 +87,11 @@
 
         /**
         * @language zh_CN
-        * 是否鼠标检测列表
+        * 是否开启拣选检测
         * @version Egret 3.0
         * @platform Web,Native
         */
-        mouseEnable: boolean;
+        enablePick: boolean;
 
         /**
         * @language zh_CN

@@ -2,33 +2,6 @@
         
     /**
     * @private
-    * @class egret3d.FuncData
-    * @classdesc
-    * shader函数内容的数据
-    * @version Egret 3.0
-    * @platform Web,Native
-    */
-    export class FuncData {
-
-        /**
-        * @private
-        * 函数名
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public name: string = "";
-        
-        /**
-        * @private
-        * 函数内容
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public func: string = "";
-    }
-        
-    /**
-    * @private
     * @class egret3d.ShaderContent
     * @classdesc
     * shader文件解析后的数据内容
@@ -49,9 +22,9 @@
 
         public source: string = "";
 
-        private funcNames: Array<string> = new Array<string>();
+        public funcNames: Array<string> = new Array<string>();
 
-        private funcDict: any = {};
+        public funcDict: any = {};
         
         /**
         * @private
@@ -60,6 +33,8 @@
         * @platform Web,Native
         */
         public structDict: any = {};
+
+        public structNames: Array<string> = new Array<string>();
 
         /**
         * @private
@@ -117,14 +92,6 @@
         */
         public sampler3DList: Array<Sampler3D> = new Array<Sampler3D>();
                                                                 
-        /**
-        * @private
-        * 函数列表
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public funcList: Array<FuncData> = new Array<FuncData>();
-                        
         public extensionList: Array<Extension> = new Array<Extension>();                                                
         /**
         * @private
@@ -170,19 +137,12 @@
 
             if (!this.funcDict[name]) {
                 this.funcDict[name] = func;
-                var funcData: FuncData = new FuncData();
-                funcData.name = name;
-                funcData.func = func;
-                this.funcList.push(funcData);
+                this.funcNames.push(name);
             }
             else {
                 if (name == "main") {
                     var newfunc: string = this.mergeMainFunc(this.funcDict[name], func);
                     this.funcDict[name] = newfunc;
-                    var funcData: FuncData = this.findFunc(name);
-                    if (funcData) {
-                        funcData.func = newfunc;
-                    }
                 }
                 else {
                     console.log("<" + name + ">" + "函数重复");
@@ -190,10 +150,9 @@
             }
 
             if (this.funcDict["main"]) {
-                var funcData: FuncData = this.findFunc(name);
-                var index: number = this.funcList.indexOf(funcData);
-                this.funcList.splice(index, 1);
-                this.funcList.push(funcData);
+                var index: number = this.funcNames.indexOf("main");
+                this.funcNames.splice(index, 1);
+                this.funcNames.push("main");
             }
         }
                                                                         
@@ -204,8 +163,9 @@
         * @platform Web,Native
         */
         public addStruct(name: string, structStr: string) {
-            if (this.structDict[name] == undefined) {
+            if (!this.structDict[name]) {
                 this.structDict[name] = structStr;
+                this.structNames.push(name);
             }
             else {
                 console.log("<" + name + ">" + "struct重复");
@@ -219,12 +179,12 @@
         * @platform Web,Native
         */
         public addContent(otherContent: ShaderContent) {
-            for (var key in otherContent.structDict) {
-                this.structDict[key] = otherContent.structDict[key];
+            for (var i: number = 0; i < otherContent.structNames.length; ++i) {
+                this.addStruct(otherContent.structNames[i], otherContent.structDict[otherContent.structNames[i]]);
             }
 
-            for (var key in otherContent.funcDict) {
-                this.addFunc(key, otherContent.funcDict[key]);
+            for (var i: number = 0; i < otherContent.funcNames.length; ++i) {
+                this.addFunc(otherContent.funcNames[i], otherContent.funcDict[otherContent.funcNames[i]]);
             }
 
             for (var i: number = 0; i < otherContent.attributeList.length; ++i) {
@@ -402,16 +362,65 @@
             return ret;
         }
 
-        private findFunc(name: string): FuncData {
-            var funcData: FuncData = null;
-            for (var i: number = 0; i < this.funcList.length; ++i) {
-                if (this.funcList[i].name == name) {
-                    funcData = this.funcList[i];
-                    break;
-                }
+        public clone(): ShaderContent {
+            var content: ShaderContent = new ShaderContent();
+            content.name = this.name;
+            content.source = this.source;
+
+            for (var i: number = 0; i < this.funcNames.length; ++i) {
+                content.funcNames.push(this.funcNames[i]);
             }
 
-            return funcData;
+            for (var key in this.funcDict) {
+                content.funcDict[key] = this.funcDict[key];
+            }
+
+            for (var i: number = 0; i < this.structNames.length; ++i) {
+                content.structNames.push(this.structNames[i]);
+            }
+
+            for (var key in this.structDict) {
+                content.structDict[key] = this.structDict[key];
+            }
+
+            for (var i: number = 0; i < this.attributeList.length; ++i) {
+                content.attributeList.push(this.attributeList[i].clone());
+            }
+
+            for (var i: number = 0; i < this.varyingList.length; ++i) {
+                content.varyingList.push(this.varyingList[i].clone());
+            }
+
+            for (var i: number = 0; i < this.uniformList.length; ++i) {
+                content.uniformList.push(this.uniformList[i].clone());
+            }
+
+            for (var i: number = 0; i < this.constList.length; ++i) {
+                content.constList.push(this.constList[i].clone());
+            }
+
+
+            for (var i: number = 0; i < this.tempList.length; ++i) {
+                content.tempList.push(this.tempList[i].clone());
+            }
+
+            for (var i: number = 0; i < this.sampler2DList.length; ++i) {
+                content.sampler2DList.push(this.sampler2DList[i].clone());
+            }
+
+            for (var i: number = 0; i < this.sampler3DList.length; ++i) {
+                content.sampler3DList.push(this.sampler3DList[i].clone());
+            }
+
+            for (var i: number = 0; i < this.attributeList.length; ++i) {
+                content.attributeList.push(this.attributeList[i].clone());
+            }
+
+            for (var i: number = 0; i < this.extensionList.length; ++i) {
+                content.extensionList.push(this.extensionList[i].clone());
+            }
+
+            return content;
         }
     }
 }

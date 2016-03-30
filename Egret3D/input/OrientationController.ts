@@ -124,10 +124,10 @@
         private state: number = -1;
         private debug() {
             //this.accDiv.innerHTML = "<br><br><br> acc-x:" + this.acc.x + "<br>acc-y:" + this.acc.y + "<br>acc-z:" + this.acc.z ;
-            this.accGravityDiv.innerHTML = "<br><br> Gravity-x:" + this.orientation.x * Matrix3DUtils.RADIANS_TO_DEGREES + "<br>Gravity-y:" + this.orientation.y + "<br>Gravity-z:" + this.orientation.z;
+            this.accGravityDiv.innerHTML = "<br><br> Gravity-x:" + this.orientation.x * MathUtil.RADIANS_TO_DEGREES + "<br>Gravity-y:" + this.orientation.y + "<br>Gravity-z:" + this.orientation.z;
             //this.rotationRateDiv.innerHTML = "<br> Rate-x:" + this.rotationRate.alpha + "<br>Rate-y:" + this.rotationRate.gamma + "<br>Rate-z:" + this.rotationRate.beta;
             this.orientationRateDiv.innerHTML = "<br> orientation-x:" + this.fixOritation.x + "<br>orientation-y:" + this.fixOritation.y + "<br>orientation-z:" + this.fixOritation.z;
-            //this.orientationRateDiv.innerHTML = "<br> orientation-x:" + this.fixOritation.x * Matrix3DUtils.RADIANS_TO_DEGREES + "<br>orientation-y:" + this.fixOritation.y * Matrix3DUtils.RADIANS_TO_DEGREES + "<br>orientation-z:" + this.fixOritation.z * Matrix3DUtils.RADIANS_TO_DEGREES;
+            //this.orientationRateDiv.innerHTML = "<br> orientation-x:" + this.fixOritation.x * MathUtil.RADIANS_TO_DEGREES + "<br>orientation-y:" + this.fixOritation.y * MathUtil.RADIANS_TO_DEGREES + "<br>orientation-z:" + this.fixOritation.z * MathUtil.RADIANS_TO_DEGREES;
             this.stateDiv.innerHTML = "<br> state: " + this.state;
         } 
 

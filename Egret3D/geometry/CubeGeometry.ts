@@ -58,7 +58,7 @@
         * 生成网格
         */
         public buildGeomtry(front: boolean) {
-            this.useVertexFormat(VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 | VertexFormat.VF_UV1);
+            this.vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 | VertexFormat.VF_UV1;
 
             this.verticesData = new Array<number>();
             this.indexData = new Array<number>();
@@ -132,11 +132,7 @@
                     30, 31, 32, 33, 34, 35);
             }
 
-            var subGeometry: SubGeometry = new SubGeometry();
-            subGeometry.geometry = this;
-            subGeometry.start = 0;
-            subGeometry.count = this.indexData.length;
-            this.subGeometrys.push(subGeometry);
+            this.buildDefaultSubGeometry();
         }
     }
 }

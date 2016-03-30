@@ -162,12 +162,12 @@
 
         /**
         * @language zh_CN
-        * 是否开启鼠标事件。</p>
+        * 是否开启拣选检测。</p>
         * 设定这个物件是否具有 鼠标交互能力的开关。</p>
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public mouseEnable: boolean = false;
+        public enablePick: boolean = false;
 
         /**
         * @language zh_CN
@@ -202,15 +202,6 @@
         * @platform Web,Native
         */
         public isController: boolean = true;
-
-        /**
-        * @language zh_CN
-        * 是否可见。</p>
-        * 设置渲染是否显示的快速通道，在渲染列表中，但是不进行渲染，但是进行逻辑运算。</p>
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public isVisible: boolean = true;
 
         /**
         * @language zh_CN

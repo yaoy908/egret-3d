@@ -56,5 +56,20 @@
             this.height = height;
         }
 
+        /**
+         * @language zh_CN
+         * 检测x y 是否在当前矩形内
+         * @param x  x 坐标。 
+         * @param y  y 坐标。 
+         */
+        public inner(x: number, y: number): boolean {
+            if (x < this.x || x > this.x + this.width ||
+                y < this.y || y > this.y + this.height) {
+                return false;
+            } 
+
+            return true;
+        }
+
     }
 } 

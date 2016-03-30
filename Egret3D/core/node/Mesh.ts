@@ -94,14 +94,6 @@
         }
                         
         /**
-        * @private
-        */
-        public init() {
-            if (this.geometry)
-                this.geometry.init();
-        }
-        
-        /**
         * @language zh_CN
         * 增加一个材质
         * @param id 材质id
@@ -242,7 +234,10 @@
         */
         public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
             this._i = 0;
-            this.geometry.update(time, delay,context3DProxy, camera3D);
+            this.geometry.update(time, delay, context3DProxy, camera3D);
+            if (this.geometry.subGeometrys.length <= 0) {
+                this.geometry.buildDefaultSubGeometry();
+            }
             for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
                 this._subGeometry = this.geometry.subGeometrys[this._i];
                 this._matID = this._subGeometry.matID;

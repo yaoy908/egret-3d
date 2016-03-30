@@ -16,20 +16,20 @@
         * @language zh_CN
         * 值名字
         */
-        public varName: string;/// a
+        public varName: string = "";/// a
 
         
         /**
         * @language zh_CN
         * 变量名
         */
-        public name: string; /// a[0]
+        public name: string = ""; /// a[0]
         
         /**
         * @language zh_CN
         * 变量属性类型
         */
-        public key: string; /// att varying uniform
+        public key: string = ""; /// att varying uniform
 
         /**
         * @language zh_CN
@@ -77,13 +77,13 @@
         * @language zh_CN
         * level
         */
-        public level: string;
+        public level: string = "";
 
-        public size: number;
-        public dataType: number;
+        public size: number = 0;
+        public dataType: number = 0;
         public normalized: boolean = false ;
-        public stride: number;
-        public offset: number;
+        public stride: number = 0;
+        public offset: number = 0;
                                                 
         /**
         * @language zh_CN

@@ -188,6 +188,17 @@
 
         /**
         * @language zh_CN
+        * 获取材质 diffuseColor
+        * @returns number 材质 diffuseColor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get diffuseColor(): number {
+            return this.materialData.diffuseColor;
+        }
+
+        /**
+        * @language zh_CN
         * 设置材质 ambientColor。
         * 设置 16 进制的环境光颜色
         * @param color {Number}
@@ -197,6 +208,17 @@
         public set ambientColor(color: number) {
             this.materialData.materialDataNeedChange = true;
             this.materialData.ambientColor = color;
+        }
+
+        /**
+        * @language zh_CN
+        * 获取材质 ambientColor
+        * @returns number 材质 ambientColor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get ambientColor(): number {
+            return this.materialData.ambientColor;
         }
 
         /**
@@ -212,6 +234,16 @@
             this.materialData.specularColor = color;
         }
 
+        /**
+        * @language zh_CN
+        * 获取材质 specularColor
+        * @returns number 材质 specularColor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get specularColor(): number {
+            return this.materialData.specularColor;
+        }
 
         /**
          * @language zh_CN

@@ -14,6 +14,8 @@
         "events/Event3D.ts",
         "events/MouseEvent3D.ts",
         "events/TouchEvent3D.ts",
+        "events/PickEvent3D.ts",
+        "events/KeyEvent3D.ts",
         "events/EventDispatcher.ts",
         "events/EventManager.ts",
 
@@ -41,7 +43,6 @@
         "geom/EyesMatrix.ts",
         "geom/PlaneClassification.ts",
         "geom/MathUtil.ts",
-        "geom/Matrix44Utils.ts",
         "geom/Ray.ts",
         "geom/Color.ts",
         "geom/Bound.ts",
@@ -70,6 +71,7 @@
         "core/node/Billboard.ts",
         "core/node/Sky.ts",
         "core/node/SphereSky.ts",
+        "core/node/Wireframe.ts",
 
         "lights/LightBase.ts",
         "lights/PointLight.ts",

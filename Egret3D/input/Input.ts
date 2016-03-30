@@ -1,124 +1,6 @@
 ﻿module egret3d {
 
     /**
-     * @private
-     * @language zh_CN
-     * @version Egret 3.0
-     * @platform Web,Native
-     */
-    export enum KeyCode {
-        Key_BackSpace = 8,
-        Key_Tab = 9,
-        Key_Clear = 12,
-        Key_Enter = 13,
-        Key_Shift_L = 16,
-        Key_Control_L = 17,
-        Key_Alt_L = 18,
-        Key_Pause,
-        Key_CapsLock = 20,
-        Key_Escape,
-        Key_Space,
-        Key_Prior,
-        Key_Next,
-        Key_End = 35,
-        Key_Home = 36,
-        Key_Left = 37,
-        Key_Up = 38,
-        Key_Right = 39,
-        Key_Down = 40,
-        Key_Select,
-        Key_Print,
-        Key_Execute,
-        Key_Insert = 45,
-        Key_Delete = 46,
-        Key_Help,
-        Key_0 = 48,
-        Key_1,
-        Key_2,
-        Key_3,
-        Key_4,
-        Key_5,
-        Key_6,
-        Key_7,
-        Key_8,
-        Key_9,
-
-        Key_A = 65,
-        Key_B,
-        Key_C,
-        Key_D,
-        Key_E,
-        Key_F,
-        Key_G,
-        Key_H,
-        Key_I,
-        Key_J,
-        Key_K,
-        Key_L,
-        Key_M,
-        Key_N,
-        Key_O,
-        Key_P,
-        Key_Q,
-        Key_R,
-        Key_S,
-        Key_T,
-        Key_U,
-        Key_V,
-        Key_W,
-        Key_X,
-        Key_Y,
-        Key_Z,
-        Key_KP_0 = 96,
-        Key_KP_1,
-        Key_KP_2,
-        Key_KP_3,
-        Key_KP_4,
-        Key_KP_5,
-        Key_KP_6,
-        Key_KP_7,
-        Key_KP_8,
-        Key_KP_9 = 105,
-        Key_Multiply = 106,
-        Key_Add = 107,
-        Key_Separator = 108,
-        Key_Subtract = 109,
-        Key_Decimal = 110,
-        Key_Divide = 111,
-        Key_F1 = 112,
-        Key_F2 = 113,
-        Key_F3 = 114,
-        Key_F4,
-        Key_F5,
-        Key_F6,
-        Key_F7,
-        Key_F8,
-        Key_F9,
-        Key_F10,
-        Key_F11,
-        Key_F12 = 123,
-        Key_F13,
-        Key_F14,
-        Key_F15,
-        Key_F16,
-        Key_F17,
-        Key_F18,
-        Key_F19,
-        Key_F20,
-        Key_F21,
-        Key_F22,
-        Key_F23,
-        Key_F24,
-
-        Key_Num_Lock,
-        Key_Scroll_Lock,
-
-        Key_Mouse_Left = 256,
-        Key_Mouse_Right,
-        Key_Mouse_Mid,
-    }
-
-    /**
      * @language zh_CN
      * @class egret3d.Input
      * @classdesc
@@ -127,8 +9,7 @@
      * @version Egret 3.0
      * @platform Web,Native
      */
-    export class Input {
-
+    export class Input extends EventDispatcher {
 
         /**
         * @language zh_CN
@@ -136,7 +17,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public canvas: Egret3DCanvas;
+        public static canvas: Egret3DCanvas;
 
         /**
         * @language zh_CN
@@ -144,15 +25,15 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public mouseX: number = 0;
+        public static mouseX: number = 0;
+
         /**
         * @language zh_CN
         * 当前鼠标Y坐标。
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public mouseY: number = 0;
-
+        public static mouseY: number = 0;
 
         /**
         * @language zh_CN
@@ -160,7 +41,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public wheelDelta: number = 0;
+        public static wheelDelta: number = 0;
 
         /**
         * @language zh_CN
@@ -168,15 +49,15 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public mouseOffsetX: number = 0;
+        public static mouseOffsetX: number = 0;
+
         /**
         * @language zh_CN
         * 鼠标Y坐标的偏移值。
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public mouseOffsetY: number = 0;
-
+        public static mouseOffsetY: number = 0;
 
         /**
         * @language zh_CN
@@ -184,37 +65,24 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public mouseLastX: number = 0;
+        public static mouseLastX: number = 0;
+        
         /**
         * @language zh_CN
         * 上一次鼠标Y坐标。
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public mouseLastY: number = 0;
+        public static mouseLastY: number = 0;
 
         private _time: number = 0;
 
         private _keyStatus: { [key: number]: boolean; } = {};
-
-        private _listenerKeyClick: Array<Function> = new Array<Function>();
-        private _listenerKeyUp: Array<Function> = new Array<Function>();
-        private _listenerKeyDown: Array<Function> = new Array<Function>();
-
-        private _listenerSwipe: Function = null;
-
-        private _mouseMoveFunc: Array<Function> = new Array<Function>();
-        private _mouseOverFunc: Array<Function> = new Array<Function>();
-        private _mouseWheelFunc: Array<Function> = new Array<Function>();
-
-        private _ondeviceorientation: Array<Function> = new Array<Function>();
-        private _ondevicemotion: Array<Function> = new Array<Function>();
-
-        private _listenerGamepadButtons: Array<Function> = new Array<Function>();
-
-        private _touchStartCallback: Array<Function> = new Array<Function>();
-        private _touchEndCallback: Array<Function> = new Array<Function>();
-        private _touchMoveCallback: Array<Function> = new Array<Function>();
+        private _mouseStatus: { [key: number]: boolean; } = {};
+        private _isTouchStart: boolean = false;
+        protected _mouseEvent3d: MouseEvent3D = new MouseEvent3D();
+        protected _keyEvent3d: KeyEvent3D = new KeyEvent3D();
+        protected _touchEvent3d: TouchEvent3D = new TouchEvent3D();
 
         /**
         * @language zh_CN
@@ -222,44 +90,15 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public onGamepadStick1: Function = null;
+        private onGamepadStick1: Function = null;
+        
         /**
         * @language zh_CN
         * 游戏手柄Stick2事件侦听函数。
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public onGamepadStick2: Function = null;
-
-
-        /**
-        * @language zh_CN
-        * 旋转。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public rotation: Vector3D = new Vector3D();
-        /**
-        * @language zh_CN
-        * 加速度。
-        * @version Egret 3.0
-        * @platform Web,Native  
-        */
-        public _acceleration: Vector3D = new Vector3D();
-        /**
-        * @language zh_CN
-        * 重力。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public gravity: Vector3D = new Vector3D();
-        /**
-        * @language zh_CN
-        * 象限。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public quadrant: number = 0;
+        private onGamepadStick2: Function = null;
 
         private static _instance: Input = null;
 
@@ -270,12 +109,13 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public static get instance(): Input {
+        private static get instance(): Input {
             if (this._instance == null) {
                 this._instance = new Input();
             }
             return this._instance;
         }
+
         /**
         * @language zh_CN
         * 创建一个新的 Input 对象。
@@ -283,61 +123,84 @@
         * @platform Web,Native
         */
         constructor() {
-            window.addEventListener("mousewheel", (e: MouseWheelEvent) => this.mouseWheel(e));
+            super();
+
+            window.addEventListener("click", (e: MouseEvent) => this.mouseClick(e));
+            
             window.addEventListener("mousedown", (e: MouseEvent) => this.mouseStart(e));
+
             window.addEventListener("mouseup", (e: MouseEvent) => this.mouseEnd(e));
+
+            window.addEventListener("mousewheel", (e: MouseWheelEvent) => this.mouseWheel(e));
+
+
+
             window.addEventListener("mousemove", (e: MouseEvent) => this.mouseMove(e));
+
             window.addEventListener("mouseover", (e: MouseEvent) => this.mouseOver(e));
+
             window.addEventListener("keydown", (e: KeyboardEvent) => this.keyDown(e));
+
             window.addEventListener("keyup", (e: KeyboardEvent) => this.keyUp(e));
 
             if (this.canGame()) {
                 window.addEventListener("gamepadconnected", (e: GamepadEvent) => this.ongamepadconnected(e));
+
                 window.addEventListener("gamepaddisconnected", (e: GamepadEvent) => this.ongamepaddisconnected(e));
             }
 
             window.addEventListener("touchstart", (e: TouchEvent) => this.touchStart(e));
+
             window.addEventListener("touchend", (e: TouchEvent) => this.touchEnd(e));
+
             window.addEventListener("touchmove", (e: TouchEvent) => this.touchMove(e));
+
             window.addEventListener("touchcancel", (e: TouchEvent) => this.touchEnd(e));
 
             window.addEventListener("deviceorientation", (e: DeviceOrientationEvent) => this.ondeviceorientation(e));
+
             window.addEventListener("devicemotion", (e: DeviceMotionEvent) => this.detectShake(e));
         }
-
+        
         /**
         * @language zh_CN
-        * 添加手指按下事件。
-        * @version Egret 3.0
-        * @platform Web,Native
-        * @param callback {Function} 手指按下事件的侦听函数
+        * 对象注册事件侦听器对象，以使侦听器能够接收事件通知。可以为特定类型的事件和优先级注册事件侦听器。
+        * 成功注册一个事件侦听器后，不使用后 需要removeEventListenerAt(). 
+        * @param type {string} 事件的类型。
+        * @param callback {Function} 处理事件的侦听器函数。此函数必须接受 Event3D 对象作为其唯一的参数，并且不能返回任何结果，
+        * 如下面的示例所示： function(evt:Event3D):void 函数可以有任何名称。
+        * @returns 事件ID 返回值 removeEventListenerAt 时会用到
+         * @version Egret 3.0
+         * @platform Web,Native
         */
-        public addTouchDownCallback(callback: Function): void {
-            this._touchStartCallback.push(callback);
+        public static addEventListener(type: string, callback: Function, thisObject: any): number {
+            return Input.instance.addEventListener(type, callback, thisObject);
         }
 
         /**
-        * @language zh_CN
-        * 添加手指弹起事件。
-        * @version Egret 3.0
-        * @platform Web,Native
-        * @param callback {Function} 手指弹起事件的侦听函数
-        */
-        public addTouchUpCallback(callback: Function): void {
-            this._touchEndCallback.push(callback);
+         * @language zh_CN
+         * 移除事件侦听器。
+         * @param type {string} 事件名。
+         * @param callback {Function} 侦听函数。
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public static removeEventListener(type: string, callback: Function, thisObject: any): void {
+            Input.instance.removeEventListener(type, callback, thisObject);
         }
 
         /**
-        * @language zh_CN
-        * 添加手指移动事件。
-        * @version Egret 3.0
-        * @platform Web,Native
-        * @param callback {Function} 手指移动事件的侦听函数
-        */
-        public addTouchMoveCallback(callback: Function): void {
-            this._touchMoveCallback.push(callback);
+         * @language zh_CN
+         * 移除事件侦听器。
+         * @param id  事件id, addEventListener 的返回值.
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public static removeEventListenerAt(id: number): void {
+            Input.instance.removeEventListenerAt(id);
         }
 
+      
         private _gp: boolean = false;
         private ongamepaddisconnected(e: GamepadEvent) {
             //Debug.instance.trace("Gamepad disconnected!");
@@ -356,7 +219,7 @@
         * @param index {number}
         * @returns {boolean}
         */
-        public getGamepadButtonState(index: number): boolean {
+        private getGamepadButtonState(index: number): boolean {
             return navigator.getGamepads()[0].buttons[index].pressed;
         }
 
@@ -367,7 +230,7 @@
         * @platform Web,Native
         * @returns {Vector3D}
         */
-        public getGamepadStick1(): Vector3D {
+        private getGamepadStick1(): Vector3D {
             return new Vector3D(navigator.getGamepads()[0].axes[0], navigator.getGamepads()[0].axes[1], 0);
         }
 
@@ -378,7 +241,7 @@
         * @platform Web,Native
         * @returns {Vector3D}
         */
-        public getGamepadStick2(): Vector3D {
+        private getGamepadStick2(): Vector3D {
             return new Vector3D(navigator.getGamepads()[0].axes[2], navigator.getGamepads()[0].axes[3], 0);
         }
 
@@ -395,22 +258,20 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public reportOnGamepad() {
-            if (this.canGame() && this._gp) {
+        public static reportOnGamepad() {
+            if (Input.instance.canGame() && Input.instance._gp) {
 
-                if (this.onGamepadStick1 != null) {
-                    this.onGamepadStick1(this.getGamepadStick1());
+                if (Input.instance.onGamepadStick1 != null) {
+                    Input.instance.onGamepadStick1(Input.instance.getGamepadStick1());
                 }
 
-                if (this.onGamepadStick2 != null) {
-                    this.onGamepadStick2(this.getGamepadStick2());
+                if (Input.instance.onGamepadStick2 != null) {
+                    Input.instance.onGamepadStick2(Input.instance.getGamepadStick2());
                 }
 
-
-                for (var i: number = 0; i < this._listenerGamepadButtons.length; ++i) {
-                    this._listenerGamepadButtons[i](this.getGamepadButtonState(i));
-                }
-
+                //for (var i: number = 0; i < Input.instance._listenerGamepadButtons.length; ++i) {
+                //    Input.instance._listenerGamepadButtons[i].callback.call(Input.instance._listenerGamepadButtons[i].thisObject, Input.instance.getGamepadButtonState(i));
+                //}
             }
         }
 
@@ -445,14 +306,14 @@
 
             }
 
-            if (this._ondevicemotion && this._ondevicemotion.length > 0) {
+            //if (this._ondevicemotion && this._ondevicemotion.length > 0) {
 
-                var x: number = Math.ceil(accl.x * 1000) / 1000;
-                var y: number = Math.ceil(accl.y * 1000) / 1000;
-                var z: number = Math.ceil(accl.z * 1000) / 1000;
+            //    var x: number = Math.ceil(accl.x * 1000) / 1000;
+            //    var y: number = Math.ceil(accl.y * 1000) / 1000;
+            //    var z: number = Math.ceil(accl.z * 1000) / 1000;
 
-                this._ondevicemotion[0](x, y, z);
-            }
+            //    this._ondevicemotion[0](x, y, z);
+            //}
         }
 
         private _caheX: number;
@@ -473,32 +334,34 @@
             //在围绕 y 轴旋转时（即扭转设备时），z 轴的度数差 -90到90度。  
 
 
-            if (this._ondeviceorientation && this._ondeviceorientation.length > 0) {
+            //if (this._ondeviceorientation && this._ondeviceorientation.length > 0) {
 
-                var alpha: number = Math.round(e.alpha * 100) * 0.01;
-                var beta: number = Math.round(e.beta * 100) * 0.01;
-                var gamma: number = Math.round(e.gamma * 100) * 0.01;
+            //    var alpha: number = Math.round(e.alpha * 100) * 0.01;
+            //    var beta: number = Math.round(e.beta * 100) * 0.01;
+            //    var gamma: number = Math.round(e.gamma * 100) * 0.01;
 
-                if (this._first) {
-                    this._initAngle["x"] = alpha;
-                    this._initAngle["y"] = beta;
-                    this._initAngle["z"] = gamma;
-                }
+            //    if (this._first) {
+            //        this._initAngle["x"] = alpha;
+            //        this._initAngle["y"] = beta;
+            //        this._initAngle["z"] = gamma;
+            //    }
 
-                this._delayX = alpha - this._caheX;
-                this._delayY = beta - this._caheY;
-                this._delayZ = gamma - this._caheZ;
+            //    this._delayX = alpha - this._caheX;
+            //    this._delayY = beta - this._caheY;
+            //    this._delayZ = gamma - this._caheZ;
 
-                this._caheX = alpha;
-                this._caheY = beta;
-                this._caheZ = gamma;
+            //    this._caheX = alpha;
+            //    this._caheY = beta;
+            //    this._caheZ = gamma;
 
-                this._initAngle.x += this._delayX;
-                this._initAngle.y += this._delayY;
-                this._initAngle.z += this._delayZ;
+            //    this._initAngle.x += this._delayX;
+            //    this._initAngle.y += this._delayY;
+            //    this._initAngle.z += this._delayZ;
 
-                this._ondeviceorientation[0](this._initAngle);
-            }
+            //    for (var i: number = 0; i < this._ondeviceorientation.length; i++) {
+            //        this._ondeviceorientation[i].callback.call(this._ondeviceorientation[i].thisObject, this._initAngle);
+            //    }
+            //}
         }
 
         //屏幕翻转
@@ -514,30 +377,29 @@
 
         private onSwipe(x: number, y: number) {
 
-            this.mouseX = x;
-            this.mouseY = y;
+            Input.mouseX = x;
+            Input.mouseY = y;
 
             this._oldPosition1 = null;
             this._oldPosition2 = null;
 
             this._time = new Date().getTime();
-
-            for (var i: number = 0; i < this._listenerKeyDown.length; ++i) {
-                this._listenerKeyDown[i](KeyCode.Key_Mouse_Left);
-            }
         }
 
         private touchStart(e: TouchEvent) {
+            if (!this.deliverMessage()) {
+                return;
+            }
 
             e.preventDefault();
 
-            var x1: number = e.targetTouches[0].clientX - this.canvas.clientRect.left;
-            var y1: number = e.targetTouches[0].clientY - this.canvas.clientRect.top;
+            var x1: number = e.targetTouches[0].clientX - Input.canvas.x;
+            var y1: number = e.targetTouches[0].clientY - Input.canvas.y;
 
             if (e.targetTouches.length == 2) {
 
-                var x2: number = e.targetTouches[1].clientX - this.canvas.clientRect.left;
-                var y2: number = e.targetTouches[1].clientY - this.canvas.clientRect.top;
+                var x2: number = e.targetTouches[1].clientX - Input.canvas.x;
+                var y2: number = e.targetTouches[1].clientY - Input.canvas.y;
 
                 this.onPinch(x1, y1, x2, y2);
             }
@@ -545,8 +407,12 @@
                 this.onSwipe(x1, y1);
             }
 
-            for (var i: number = 0; i < this._touchStartCallback.length; i++) {
-                this._touchStartCallback[i](e);
+            this._touchEvent3d.targetTouches = e.targetTouches;
+
+            if (!this._isTouchStart) {
+                this._isTouchStart = true;
+                this._touchEvent3d.eventType = TouchEvent3D.TOUCH_START;
+                this.dispatchEvent(this._touchEvent3d);
             }
         }
 
@@ -557,53 +423,49 @@
 
             if (e.targetTouches.length > 1) {
 
-                var x: number = e.targetTouches[0].clientX - this.canvas.clientRect.left;
-                var y: number = e.targetTouches[0].clientY - this.canvas.clientRect.top;
-                var x1: number = e.targetTouches[1].clientX - this.canvas.clientRect.left;
-                var y1: number = e.targetTouches[1].clientY - this.canvas.clientRect.top;
+                var x: number = e.targetTouches[0].clientX - Input.canvas.x;
+                var y: number = e.targetTouches[0].clientY - Input.canvas.y;
+                var x1: number = e.targetTouches[1].clientX - Input.canvas.x;
+                var y1: number = e.targetTouches[1].clientY - Input.canvas.y;
 
                 this.onPinch(x, y, x1, y1);
             }
             else if (e.targetTouches.length == 1) {
 
-                this.onSwipe(e.targetTouches[0].clientX - this.canvas.clientRect.left, e.targetTouches[0].clientY - this.canvas.clientRect.top);
+                this.onSwipe(e.targetTouches[0].clientX - Input.canvas.x, e.targetTouches[0].clientY - Input.canvas.y);
             }
             else {
 
                 this._oldPosition1 = null;
                 this._oldPosition2 = null;
                 this._time = 0;
-
-                for (var i: number = 0; i < this._listenerKeyUp.length; ++i) {
-                    this._listenerKeyUp[i](KeyCode.Key_Mouse_Left);
-                }
             }
 
-            for (var i: number = 0; i < this._touchEndCallback.length; i++) {
-                this._touchEndCallback[i](e);
-            }
+
+            this._isTouchStart = false;
+            this._touchEvent3d.targetTouches = e.targetTouches;
+            this._touchEvent3d.eventType = TouchEvent3D.TOUCH_END;
+            this.dispatchEvent(this._touchEvent3d);
         }
-
 
         private touchMove(e: TouchEvent) {
 
+            Input.mouseLastX = Input.mouseX;
+            Input.mouseLastY = Input.mouseY;
 
-            this.mouseLastX = this.mouseX;
-            this.mouseLastY = this.mouseY;
+            Input.mouseX = e.targetTouches[0].clientX - Input.canvas.x;
+            Input.mouseY = e.targetTouches[0].clientY - Input.canvas.y;
 
-            this.mouseX = e.targetTouches[0].clientX - this.canvas.clientRect.left;
-            this.mouseY = e.targetTouches[0].clientY - this.canvas.clientRect.top;
-
-            this.mouseOffsetX = this.mouseX - this.mouseLastX;
-            this.mouseOffsetY = this.mouseY - this.mouseLastY;
+            Input.mouseOffsetX = Input.mouseX - Input.mouseLastX;
+            Input.mouseOffsetY = Input.mouseY - Input.mouseLastY;
 
             e.preventDefault();
 
 
             if (e.targetTouches.length > 1) {
 
-                var newPosition1: Point = new Point(this.mouseX, this.mouseY);
-                var newPosition2: Point = new Point(e.targetTouches[1].clientX - this.canvas.clientRect.left, e.targetTouches[1].clientY - this.canvas.clientRect.top);
+                var newPosition1: Point = new Point(Input.mouseX, Input.mouseY);
+                var newPosition2: Point = new Point(e.targetTouches[1].clientX - Input.canvas.x, e.targetTouches[1].clientY - Input.canvas.y);
 
                 if (this._oldPosition1 == null)
                     this._oldPosition1 = newPosition1;
@@ -611,232 +473,115 @@
                     this._oldPosition2 = newPosition2;
 
                 if (this.isEnlarge(this._oldPosition1, this._oldPosition2, newPosition1, newPosition2))
-                    this.wheelDelta = 120;
+                    Input.wheelDelta = 120;
                 else
-                    this.wheelDelta = -120;
+                    Input.wheelDelta = -120;
 
 
                 this._oldPosition1 = newPosition1;
                 this._oldPosition2 = newPosition2;
-
-
-
-                for (var i: number = 0; i < this._mouseWheelFunc.length; ++i) {
-                    this._mouseWheelFunc[i]();
-                }
-
             }
             else {
-                if (this._listenerSwipe != null) {
-                    this._listenerSwipe();
-                }
+
             }
 
-            for (var i: number = 0; i < this._touchMoveCallback.length; i++) {
-                this._touchMoveCallback[i](e);
+            this._touchEvent3d.targetTouches = e.targetTouches;
+            this._touchEvent3d.eventType = TouchEvent3D.TOUCH_MOVE;
+            this.dispatchEvent(this._touchEvent3d);
+        }      
+
+
+        private mouseClick(e: MouseEvent) {
+            if (!this.deliverMessage()) {
+                return;
             }
-        }
 
-
-        /**
-        * @language zh_CN
-        * 添加鼠标移动事件的侦听器函数。
-        * @version Egret 3.0
-        * @platform Web,Native
-        * @param func {Function} 处理鼠标移事件的侦听器函数
-        */
-        public addListenerMouseMove(func: Function) {
-            this._mouseMoveFunc.push(func);
-        }
-
-        /**
-       * @language zh_CN
-       * 添加鼠标脱离事件的侦听器函数。
-       * @version Egret 3.0
-       * @platform Web,Native
-       * @param func {Function} 处理鼠标移事件的侦听器函数
-       */
-        public addListenerMouseOver(func: Function) {
-            this._mouseOverFunc.push(func);
-        }
-
-        /**
-        * @language zh_CN
-        * 添加鼠标滚轮事件的侦听器函数。
-        * @version Egret 3.0
-        * @platform Web,Native
-        * @param func {Function} 处理鼠标滚轮事件的侦听器函数
-        */
-        public addListenerMouseWheel(func: Function) {
-            this._mouseWheelFunc.push(func);
-        }
-
-        /**
-        * @language zh_CN
-        * 添加键盘鼠标点击事件的侦听器函数。
-        * @version Egret 3.0
-        * @platform Web,Native
-        * @param func {Function} 处理键盘鼠标点击事件的侦听器函数
-        */
-        public addListenerKeyClick(func: Function) {
-            this._listenerKeyClick.push(func);
-        }
-
-
-        /**
-        * @language zh_CN
-        * 添加键盘鼠标弹起事件的侦听器函数。
-        * @version Egret 3.0
-        * @platform Web,Native
-        * @param func {Function} 处理键盘鼠标弹起事件的侦听器函数
-        */
-        public addListenerKeyUp(func: Function) {
-            this._listenerKeyUp.push(func);
-        }
-
-        /**
-        * @language zh_CN
-        * 添加键盘鼠标按下事件的侦听器函数。
-        * @version Egret 3.0
-        * @platform Web,Native
-        * @param func {Function} 处理键盘鼠标按下事件的侦听器函数
-        */
-        public addListenerKeyDown(func: Function) {
-            this._listenerKeyDown.push(func);
-        }
-
-
-        /**
-        * @language zh_CN
-        * 移动端手指划动的手势事件。
-        * @version Egret 3.0
-        * @platform Web,Native
-        * @param func {Function} 手指划动划动的手势事件的侦听器函数
-        */
-        public addListenerSwipe(func: Function) {
-            this._listenerSwipe = func;
-        }
-
-
-        /**
-        * @language zh_CN
-        * 添加设备旋转事件。
-        * @version Egret 3.0
-        * @platform Web,Native
-        * @param func {Function} 设备旋转事件的侦听器函数
-        */
-        public addListenerDeviceorientation(func: Function) {
-            this._ondeviceorientation.push(func);
-        }
-
-        /**
-        * @language zh_CN
-        * 添加设备移动事件。
-        * @version Egret 3.0
-        * @platform Web,Native
-        * @param func {Function} 设备移动事件的侦听器函数
-        */
-        public addListenerDevicemotion(func: Function) {
-            this._ondevicemotion.push(func);
-        }
-
-        /**
-        * @language zh_CN
-        * 添加游戏手柄按钮点击事件。
-        * @version Egret 3.0
-        * @platform Web,Native
-        * @param func {Function} 游戏手柄点击事件的侦听器函数
-        */
-        public addListenerGamePadButtons(func: Function) {
-            this._listenerGamepadButtons.push(func);
+            this._mouseEvent3d.mouseCode = e.button;
+            this._mouseEvent3d.eventType = MouseEvent3D.MOUSE_CLICK;
+            this.dispatchEvent(this._mouseEvent3d);
         }
 
         private mouseEnd(e: MouseEvent) {
-            this.mouseX = e.clientX - this.canvas.clientRect.left;
-            this.mouseY = e.clientY - this.canvas.clientRect.top;
+            this._mouseEvent3d.mouseCode = e.button;
 
-            var k: number = this.GetKeyCodeByMouseEventNumber(e.button);
+            this._mouseStatus[this._mouseEvent3d.mouseCode] = false;
+            this._mouseEvent3d.eventType = MouseEvent3D.MOUSE_UP;
+            this.dispatchEvent(this._mouseEvent3d);
+        }
 
-            if (k != 0) {
-                if (this._keyStatus[k]) {
-                    for (var i: number = 0; i < this._listenerKeyClick.length; ++i) {
-                        this._listenerKeyClick[i](k);
-                    }
-                }
-
-                this._keyStatus[k] = false;
-
-                for (var i: number = 0; i < this._listenerKeyUp.length; ++i) {
-                    this._listenerKeyUp[i](k);
+        protected deliverMessage(): boolean {
+            var view3ds: Array<View3D> = Input.canvas.view3Ds;
+            for (var i: number = 0; i < view3ds.length; ++i) {
+                if (view3ds[i].inView3D(Input.mouseX, Input.mouseY)) {
+                    return true;
                 }
             }
+            return false;
         }
 
         private mouseStart(e: MouseEvent) {
+            if (!this.deliverMessage()) {
+                return;
+            }
 
-            this.mouseX = e.clientX - this.canvas.clientRect.left;
-            this.mouseY = e.clientY - this.canvas.clientRect.top;
-
-            var k: number = this.GetKeyCodeByMouseEventNumber(e.button);
-
-            if (k != 0) {
-                this._keyStatus[k] = true;
-
-                for (var i: number = 0; i < this._listenerKeyDown.length; ++i) {
-                    this._listenerKeyDown[i](k);
-                }
+            this._mouseEvent3d.mouseCode = e.button;
+            if (!this._mouseStatus[this._mouseEvent3d.mouseCode]) {
+                this._mouseStatus[this._mouseEvent3d.mouseCode] = true;
+                this._mouseEvent3d.eventType = MouseEvent3D.MOUSE_DOWN;
+                this.dispatchEvent(this._mouseEvent3d);
             }
         }
 
         private mouseMove(e: MouseEvent) {
-            this.mouseLastX = this.mouseX;
-            this.mouseLastY = this.mouseY;
+            Input.mouseLastX = Input.mouseX;
+            Input.mouseLastY = Input.mouseY;
 
-            this.mouseX = e.clientX - this.canvas.clientRect.left;
-            this.mouseY = e.clientY - this.canvas.clientRect.top;
+            Input.mouseX = e.clientX - Input.canvas.x;
+            Input.mouseY = e.clientY - Input.canvas.y;
 
-            this.mouseOffsetX = this.mouseX - this.mouseLastX;
-            this.mouseOffsetY = this.mouseY - this.mouseLastY;
+            Input.mouseOffsetX = Input.mouseX - Input.mouseLastX;
+            Input.mouseOffsetY = Input.mouseY - Input.mouseLastY;
 
-            for (var i: number = 0; i < this._mouseMoveFunc.length; ++i) {
-                this._mouseMoveFunc[i](e);
-            }
+            this._mouseEvent3d.eventType = MouseEvent3D.MOUSE_MOVE;
+            this.dispatchEvent(this._mouseEvent3d);
         }
 
         private mouseOver(e: MouseEvent) {
-            for (var i: number = 0; i < this._mouseOverFunc.length; ++i) {
-                this._mouseOverFunc[i](e);
-            }
+            this._mouseEvent3d.eventType = MouseEvent3D.MOUSE_OVER;
+            this.dispatchEvent(this._mouseEvent3d);
         }
 
         private mouseWheel(e: MouseWheelEvent) {
-            this.wheelDelta = e.wheelDelta;
+            Input.wheelDelta = e.wheelDelta;
 
-            for (var i: number = 0; i < this._mouseWheelFunc.length; ++i) {
-                this._mouseWheelFunc[i]();
-            }
+            this._mouseEvent3d.eventType = MouseEvent3D.MOUSE_WHEEL;
+            this.dispatchEvent(this._mouseEvent3d);
         }
 
         private keyDown(e: KeyboardEvent) {
-            this._keyStatus[e.keyCode] = true;
+            this._keyEvent3d.keyCode = e.keyCode;
 
-            for (var i: number = 0; i < this._listenerKeyDown.length; ++i) {
-                this._listenerKeyDown[i](e.keyCode);
+            if (!this._keyStatus[e.keyCode] ) {
+                this._keyStatus[e.keyCode] = true;
+                this._keyEvent3d.eventType = KeyEvent3D.KEY_CLICK;
+                this.dispatchEvent(this._keyEvent3d);
+                this._keyEvent3d.eventType = KeyEvent3D.KEY_DOWN;
+                this.dispatchEvent(this._keyEvent3d);
             }
         }
 
         private keyUp(e: KeyboardEvent) {
+            this._keyEvent3d.keyCode = e.keyCode;
+
             if (this._keyStatus[e.keyCode]) {
-                for (var i: number = 0; i < this._listenerKeyClick.length; ++i) {
-                    this._listenerKeyClick[i](e.keyCode);
-                }
+                this._keyEvent3d.eventType = KeyEvent3D.KEY_CLICK;
+                this.dispatchEvent(this._keyEvent3d);
             }
 
             this._keyStatus[e.keyCode] = false;
 
-            for (var i: number = 0; i < this._listenerKeyUp.length; ++i) {
-                this._listenerKeyUp[i](e.keyCode);
-            }
+            this._keyEvent3d.eventType = KeyEvent3D.KEY_UP;
+            this.dispatchEvent(this._keyEvent3d);
         }
 
         //返回角度
@@ -890,28 +635,6 @@
                 //缩小手势
                 return false;
             }
-        }
-
-        /**
-         * @language zh_CN
-         * 获取鼠标事件枚举
-         * @param  value {MouseEvent.number} 鼠标点击值
-         * @returns result {KeyCode} 鼠标行为枚举
-         */
-        public GetKeyCodeByMouseEventNumber(value: number): KeyCode {
-            var k: KeyCode = 0;
-            switch (value) {
-                case 0:
-                    k = KeyCode.Key_Mouse_Left;
-                    break;
-                case 2:
-                    k = KeyCode.Key_Mouse_Right;
-                    break;
-                case 1:
-                    k = KeyCode.Key_Mouse_Mid;
-                    break;
-            }
-            return k;
         }
     }
 }
