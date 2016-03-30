@@ -748,14 +748,22 @@
         * @language zh_CN
         * 当前矩阵变换一个向量
         * @param v 要变换的向量
+        * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
         * @returns 变换后的向量
         */
-        public deltaTransformVector(v: Vector3D): Vector3D {
+        public deltaTransformVector(v: Vector3D, target: Vector3D = null): Vector3D {
+            if (!target) {
+                target = new Vector3D();
+            }
             var x: number = v.x;
             var y: number = v.y;
             var z: number = v.z;
 
-            return new Vector3D((x * this.rawData[0] + y * this.rawData[4] + z * this.rawData[8]), (x * this.rawData[1] + y * this.rawData[5] + z * this.rawData[9]), (x * this.rawData[2] + y * this.rawData[6] + z * this.rawData[10]), (x * this.rawData[3] + y * this.rawData[7] + z * this.rawData[11]));
+            target.x = x * this.rawData[0] + y * this.rawData[4] + z * this.rawData[8];
+            target.y = x * this.rawData[1] + y * this.rawData[5] + z * this.rawData[9];
+            target.z = x * this.rawData[2] + y * this.rawData[6] + z * this.rawData[10];
+            target.w = x * this.rawData[3] + y * this.rawData[7] + z * this.rawData[11];
+            return target;
         }
 
         /**
@@ -963,23 +971,24 @@
         * @language zh_CN
         * 用当前矩阵变换一个3D向量
         * @param v 变换的向量
+        * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
         * @returns 变换后的向量
         */
-        public transformVector(v: Vector3D): Vector3D {
-            if (v == null)
-                return new Vector3D();
+        public transformVector(v: Vector3D, target: Vector3D = null): Vector3D {
+            if (!target) {
+                target = new Vector3D();
+            }
 
             var x: number = v.x;
             var y: number = v.y;
             var z: number = v.z;
 
-            var out: Vector3D = new Vector3D();
-            out.x = x * this.rawData[0] + y * this.rawData[4] + z * this.rawData[8] + this.rawData[12];
-            out.y = x * this.rawData[1] + y * this.rawData[5] + z * this.rawData[9] + this.rawData[13];
-            out.z = x * this.rawData[2] + y * this.rawData[6] + z * this.rawData[10] + this.rawData[14];
-            out.w = x * this.rawData[3] + y * this.rawData[7] + z * this.rawData[11] + this.rawData[15];
+            target.x = x * this.rawData[0] + y * this.rawData[4] + z * this.rawData[8] + this.rawData[12];
+            target.y = x * this.rawData[1] + y * this.rawData[5] + z * this.rawData[9] + this.rawData[13];
+            target.z = x * this.rawData[2] + y * this.rawData[6] + z * this.rawData[10] + this.rawData[14];
+            target.w = x * this.rawData[3] + y * this.rawData[7] + z * this.rawData[11] + this.rawData[15];
 
-            return out;
+            return target;
         }
         
         /**
