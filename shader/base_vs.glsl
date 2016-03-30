@@ -9,7 +9,6 @@ uniform mat4 uniform_ProjectionMatrix ;
 varying vec3 varying_ViewPose;
 varying vec3 varying_eyeNormal  ;
 varying vec2 varying_uv0;
-varying mat3 varying_normalMatrix;
 
 vec4 outPosition ;
 
@@ -36,7 +35,6 @@ mat3 inverse(mat3 m) {
 }
 
 void main(void){
-   varying_normalMatrix = transpose( inverse(mat3(uniform_ModelViewMatrix )) ); 
-   varying_eyeNormal = normalize(varying_normalMatrix * -attribute_normal);
+  
    varying_uv0 = attribute_uv0;
 }

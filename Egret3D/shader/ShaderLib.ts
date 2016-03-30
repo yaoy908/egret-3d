@@ -43,7 +43,6 @@ module egret3d {
 			"varying vec3 varying_ViewPose; \n" +
 			"varying vec3 varying_eyeNormal  ; \n" +
 			"varying vec2 varying_uv0; \n" +
-			"varying mat3 varying_normalMatrix; \n" +
 			"vec4 outPosition ; \n" +
 			"mat3 transpose(mat3 m) { \n" +
 			"return mat3(m[0][0], m[1][0], m[2][0], \n" +
@@ -63,8 +62,6 @@ module egret3d {
 			"b21, (-a21 * a00 + a01 * a20), (a11 * a00 - a01 * a10)) / det; \n" +
 			"} \n" +
 			"void main(void){ \n" +
-			"varying_normalMatrix = transpose( inverse(mat3(uniform_ModelViewMatrix )) ); \n" +
-			"varying_eyeNormal = normalize(varying_normalMatrix * -attribute_normal); \n" +
 			"varying_uv0 = attribute_uv0; \n" +
 			"} \n",
 
@@ -77,6 +74,8 @@ module egret3d {
 
 			"diffuse_vertex":
 			"void main(void){ \n" +
+			"mat3 normalMatrix = transpose( inverse(mat3(uniform_ModelViewMatrix )) ); \n" +
+			"varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
 			"outPosition = uniform_ModelViewMatrix * vec4(attribute_position, 1.0) ; \n" +
 			"varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
 			"} \n",
@@ -336,15 +335,25 @@ module egret3d {
 			"); \n" +
 			"} \n" +
 			"void main(void){ \n" +
-			"vec4 temp_p = vec4(0.0, 0.0, 0.0, 0.0) ; \n" +
 			"vec4 temp_position = vec4(attribute_position, 1.0) ; \n" +
-			"temp_p += buildMat4(int(attribute_boneIndex.x)) * temp_position * attribute_boneWeight.x; \n" +
-			"temp_p += buildMat4(int(attribute_boneIndex.y)) * temp_position * attribute_boneWeight.y; \n" +
-			"temp_p += buildMat4(int(attribute_boneIndex.z)) * temp_position * attribute_boneWeight.z; \n" +
-			"temp_p += buildMat4(int(attribute_boneIndex.w)) * temp_position * attribute_boneWeight.w; \n" +
-			"varying_pos =  modelViewMatrix * vec4(temp_p, 1.0) ; \n" +
-			"outPosition = varying_pos ; \n" +
-			"varying_pos.w = -temp_p.z / 128.0 + 0.5 ; \n" +
+			"vec4 temp_normal = vec4(attribute_normal, 0.0) ; \n" +
+			"mat4 m0 = buildMat4(int(attribute_boneIndex.x)); \n" +
+			"mat4 m1 = buildMat4(int(attribute_boneIndex.y)); \n" +
+			"mat4 m2 = buildMat4(int(attribute_boneIndex.z)); \n" +
+			"mat4 m3 = buildMat4(int(attribute_boneIndex.w)); \n" +
+			"outPosition = m0 * temp_position * attribute_boneWeight.x; \n" +
+			"outPosition += m1 * temp_position * attribute_boneWeight.y; \n" +
+			"outPosition += m2 * temp_position * attribute_boneWeight.z; \n" +
+			"outPosition += m3 * temp_position * attribute_boneWeight.w; \n" +
+			"vec4 temp_n ; \n" +
+			"temp_n = m0 * temp_normal * attribute_boneWeight.x; \n" +
+			"temp_n += m1 * temp_normal * attribute_boneWeight.y; \n" +
+			"temp_n += m2 * temp_normal * attribute_boneWeight.z; \n" +
+			"temp_n += m3 * temp_normal * attribute_boneWeight.w; \n" +
+			"mat3 normalMatrix = transpose( inverse(mat3(uniform_ModelViewMatrix )) ); \n" +
+			"varying_eyeNormal = normalize(normalMatrix * -temp_n.xyz); \n" +
+			"outPosition =  uniform_ModelViewMatrix * outPosition ; \n" +
+			"varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
 			"} \n",
 
 			"specularMap_fragment":
