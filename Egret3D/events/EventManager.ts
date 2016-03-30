@@ -80,7 +80,7 @@
                     continue;
                 }
                 var collect = view.entityCollect.mousePickList;
-                var ret: Array<IRender> = Picker.pickObject3DList(canvas, view, view.camera3D, collect);
+                var ret: Array<IRender> = Picker.pickObject3DList(canvas, view, collect);
                 var len = ret.length;
                 if (len <= 0) {
                     continue;
@@ -110,7 +110,7 @@
                     else {
 
                         if (mouseChilder) {
-                            ret = Picker.pickObject3DList(canvas, view, view.camera3D, ret, true);
+                            ret = Picker.pickObject3DList(canvas, view, ret, true);
                             dis = Number.MAX_VALUE;
                             len = ret.length;
                             if (len <= 0) {

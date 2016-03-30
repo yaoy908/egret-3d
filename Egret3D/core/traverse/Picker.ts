@@ -25,14 +25,14 @@
         * @language zh_CN
         * 返回鼠标拾取对象得到的所有对象,调用之前到设置被拣选对象的pickType.
         * @param canvas 当前canvas
-        * @param camera 当前相机
+        * @param view 当前检测view
         * @param objects 检测的对象列表
         * @param childBox 检测是否用子包围盒
         * @returns 拾取的object列表
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public static pickObject3DList(canvas: Egret3DCanvas, view:View3D, camera: Camera3D, objects: Array<IRender>, childBox:boolean = false): Array<IRender> {
+        public static pickObject3DList(canvas: Egret3DCanvas, view:View3D, objects: Array<IRender>, childBox:boolean = false): Array<IRender> {
             var ret: Array<IRender> = new Array<IRender>();
             var ray: Ray = this.ray;
 
@@ -44,7 +44,7 @@
             var y: number = Input.mouseY - view.y;
 
 
-            ray.CalculateAndTransformRay(view.width, view.height, camera.modelMatrix, camera.projectMatrix, x, y);
+            ray.CalculateAndTransformRay(view.width, view.height, view.camera3D.modelMatrix, view.camera3D.projectMatrix, x, y);
             for (var i: number = 0; i < objects.length; ++i) {
                 var renderItem: IRender = objects[i];
                 var inPos: Vector3D = new Vector3D();
