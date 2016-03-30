@@ -1,4 +1,3 @@
-uniform float uniform_materialSource[18] ;
 struct MaterialSource{
     vec3 diffuse;
     vec3 ambient;
@@ -10,11 +9,11 @@ struct MaterialSource{
     float albedo;
     vec4 uvRectangle;
     float specularScale;
-};
-
-MaterialSource materialSource ; 
-
-main(){
+    float normalScale;
+}; 
+uniform float uniform_materialSource[20] ;
+MaterialSource materialSource ;
+void main(){
 	materialSource.diffuse.x = uniform_materialSource[0];
 	materialSource.diffuse.y = uniform_materialSource[1];
 	materialSource.diffuse.z = uniform_materialSource[2];
@@ -37,6 +36,8 @@ main(){
 	materialSource.uvRectangle.y = uniform_materialSource[15];
 	materialSource.uvRectangle.z = uniform_materialSource[16];
 	materialSource.uvRectangle.w = uniform_materialSource[17];
-    
 	materialSource.specularScale = uniform_materialSource[18];
+	materialSource.normalScale = uniform_materialSource[19];
+
+	uv_0 = varying_uv0.xy * materialSource.uvRectangle.zw + materialSource.uvRectangle.xy ;
 }
