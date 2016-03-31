@@ -76,6 +76,7 @@
          * @platform Web,Native
          */
         public projectMatrix: Matrix4_4 = new Matrix4_4();
+        private _unprojection: Matrix4_4 = new Matrix4_4();
 
         /**
          * @language zh_CN
@@ -100,6 +101,8 @@
          * @platform Web,Native
          */
         public frustum: Frustum = new Frustum();
+
+        public viewPort: Rectangle = new Rectangle();
 
         private _viewPort: Rectangle = new Rectangle();
 
@@ -308,7 +311,7 @@
         * @platform Web,Native
         */
         public get viewProjectionMatrix(): Matrix4_4 {
-            this.cameraMatrix = this.modelMatrix
+            this.cameraMatrix = this.modelMatrix;
             this.temp.copyFrom(this.cameraMatrix);
             this.temp.invert();
             //this.temp.multiply(this.projectMatrix);
@@ -513,6 +516,67 @@
             for (var key in this._animation) {
                 this._animation[key].update(time, delay);
             }
+        }
+
+        private _p: Vector3D = new Vector3D(); 
+        private _halfw: number ; 
+        private _halfh: number ; 
+        public object3DToScreenRay(n: Vector3D): Vector3D {
+
+            this._halfw = this.viewPort.width * 0.5;
+            this._halfh = this.viewPort.height * 0.5; 
+
+            this._p = this.modelMatrix.transformVector(n, this._p);
+            this._p = this.project(this._p);
+
+            this._p.x = this._halfw + this._p.x * this._halfw ;
+            this._p.y = this._halfh - this._p.y * this._halfh;
+            return this._p ;
+        }
+
+        public ScreenRayToObject3D(n: Vector3D): Vector3D {
+
+            this._halfw = this.viewPort.width * 0.5;
+            this._halfh = this.viewPort.height * 0.5; 
+
+            this._p.x = (n.x - this._halfw) / this._halfw;
+            this._p.y = (this._halfh - n.y) / this._halfh;
+
+            this._p = this.unproject(this._p.x, this._p.y, n.z);
+            this.sceneTransform.transformVector(this._p, this._p);
+
+            return this._p; 
+        }
+
+        private v: Vector3D = new Vector3D(); 
+        private unproject(nX: number, nY: number, sZ: number): Vector3D {
+           this.v.x = nX;
+           this.v.y = -nY;
+           this.v.z = sZ;
+           this.v.w = 1.0;
+
+           this.v.x *= sZ;
+           this.v.y *= sZ;
+
+           this._unprojection.copyFrom(this.projectMatrix);
+           this._unprojection.invert();
+
+           this._unprojection.transformVector(this.v,this.v);
+
+           this.v.z = sZ;
+
+           return this.v;
+        }
+
+        private project(n:Vector3D):Vector3D
+		{
+            this._p = this.projectMatrix.transformVector(n);
+            this._p.x = this._p.x / this._p.w;
+            this._p.y = -this._p.y / this._p.w;
+
+            this._p.z = n.z;
+
+            return this._p;
         }
     }
 } 

@@ -58,6 +58,8 @@
         protected static s_id: number = 0;
 
         protected _modeMatrix3D: Matrix4_4 = new Matrix4_4();
+        protected _sceneTransform: Matrix4_4 = new Matrix4_4();
+
         protected _transformChange: boolean = true;
 
         protected _pos: Vector3D = new Vector3D();
@@ -75,8 +77,7 @@
         protected _qut: Quaternion = new Quaternion();
         protected _vec: Vector3D = new Vector3D();
         protected _active: boolean = false;
-        protected _mat: Matrix4_4 = new Matrix4_4();
-
+        protected _isRoot: boolean = true;
         /**
         * @language zh_CN
         * 对象模型包围盒。</p>
@@ -1041,7 +1042,7 @@
             Object3D.renderListChange = true;
 
             child.parent = this;
-
+            child._isRoot = false;
             child.updateTransformChange(true);
             return child;
         }
@@ -1312,6 +1313,23 @@
         */
         public update(time: number, delay: number, camera:Camera3D) {
 
+        }
+
+        public get sceneTransform(): Matrix4_4 {
+            this.updateSceneTransform();
+            return this._sceneTransform;
+        }
+
+        /**
+         * Updates the scene transformation matrix.
+         */
+        protected updateSceneTransform(): void {
+            if (this.parent && !this.parent._isRoot) {
+                this._sceneTransform.copyFrom(this.parent.sceneTransform);
+                this._sceneTransform.multiply(this.modelMatrix);
+            } else
+                this._sceneTransform.copyFrom(this.modelMatrix);
+            this._sceneTransform.invert();
         }
 
         /**

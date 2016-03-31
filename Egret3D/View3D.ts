@@ -277,6 +277,7 @@
         * @platform Web,Native
         */
         public update(time: number, delay: number) {
+            this._camera.viewPort = this._viewPort ;
             this._entityCollect.update(this._camera);
 
             View3D._contex3DProxy.viewPort(this._viewPort.x, ContextConfig.canvasRectangle.height - this._viewPort.height - this._viewPort.y, this._viewPort.width, this._viewPort.height);
