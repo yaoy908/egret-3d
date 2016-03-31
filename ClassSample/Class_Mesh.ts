@@ -2,12 +2,24 @@
     export class Class_Mesh extends Class_View3D {
 
         private cube: Mesh;
+        private cube1: Mesh;
+        private cube2: Mesh;
+        private cube3: Mesh;
         constructor() {
             super();
 
-            var mat: ColorMaterial = new ColorMaterial(0xff0000);
+            var mat: ColorMaterial = new ColorMaterial(0xfff000);
             var geometery: CubeGeometry = new CubeGeometry();
             this.cube = new Mesh(geometery, mat);
+
+            var mat: ColorMaterial = new ColorMaterial(0xffFF00);
+            this.cube1 = new Mesh(geometery, mat);
+
+            var mat: ColorMaterial = new ColorMaterial(0xff00ff);
+            this.cube2 = new Mesh(geometery, mat);
+
+            var mat: ColorMaterial = new ColorMaterial(0xffffff);
+            this.cube3 = new Mesh(geometery, mat);
 
             var view1: View3D = new View3D(0, 0, 200, 200);
             view1.camera3D.lookAt(new Vector3D(0, 0, -1000), new Vector3D(0, 0, 0));
@@ -30,13 +42,28 @@
             this._egret3DCanvas.addView3D(view4);
 
             view1.addChild3D(this.cube);
-            view2.addChild3D(this.cube);
-            view3.addChild3D(this.cube);
-            view4.addChild3D(this.cube);
+            view2.addChild3D(this.cube1);
+            view3.addChild3D(this.cube2);
+            view4.addChild3D(this.cube3);
+
+            this.cube.enablePick = true;
+            this.cube1.enablePick = true;
+            this.cube2.enablePick = true;
+            this.cube3.enablePick = true;
+
+            this.cube.addEventListener(PickEvent3D.PICK_CLICK, this.onClick, this);
+            this.cube1.addEventListener(PickEvent3D.PICK_CLICK, this.onClick, this);
+            this.cube2.addEventListener(PickEvent3D.PICK_CLICK, this.onClick, this);
+            this.cube3.addEventListener(PickEvent3D.PICK_CLICK, this.onClick, this);
 
             this._egret3DCanvas.start();
 
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
+        }
+
+        protected onClick(e: PickEvent3D) {
+            var m: Mesh = e.target;
+            m.scaleX++;
         }
 
         public update(e: Event3D) {

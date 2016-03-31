@@ -33,28 +33,28 @@
             this.view1.addChild3D(this.plane);
 
             var loadDiffuse: URLLoader = new URLLoader("resource/floor/WOOD_1.png");
-            loadDiffuse.onLoadComplete = (e: URLLoader) => this.onLoadDiffuse(e, this.matPlane);
+            loadDiffuse.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadDiffuse, this);
 
             var loadNormal: URLLoader = new URLLoader("resource/floor/wood_1N.png");
-            loadNormal.onLoadComplete = (e: URLLoader) => this.onLoadNormal(e, this.matPlane);
+            loadNormal.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadNormal, this);
 
             var loadSpeular: URLLoader = new URLLoader("resource/floor/wood_1S.png");
-            loadSpeular.onLoadComplete = (e: URLLoader) => this.onLoadSpecular(e, this.matPlane);
+            loadSpeular.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadSpecular, this);
 
             
 
         }
 
-        protected onLoadDiffuse(load: URLLoader, mat: TextureMaterial) {
-            mat.diffuseTexture = load.data;
+        protected onLoadDiffuse(e:LoaderEvent3D) {
+            this.matPlane.diffuseTexture = e.loader.data;
         }
 
-        protected onLoadNormal(load: URLLoader, mat: TextureMaterial) {
-            mat.normalTexture = load.data;
+        protected onLoadNormal(load: LoaderEvent3D) {
+            this.matPlane.normalTexture = load.loader.data;
         }
 
-        protected onLoadSpecular(load: URLLoader, mat: TextureMaterial) {
-            mat.specularTexture = load.data;
+        protected onLoadSpecular(load: LoaderEvent3D) {
+            this.matPlane.specularTexture = load.loader.data;
         }
 
         public update(e: Event3D) {

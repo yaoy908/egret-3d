@@ -18,7 +18,7 @@
             this.view1 = view1;
 
             var load: URLLoader = new URLLoader("resource/test/FOL_Foliage_04.esm");
-            load.onLoadComplete = (e: URLLoader) => this.onLoad(e, "FOL_Foliage_04");
+            load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoad, this);
 
 
             var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));
@@ -34,39 +34,36 @@
         }
 
         protected mat: TextureMaterial;
-        protected onLoad(e: URLLoader, name: string) {
-            if (name == "FOL_Foliage_04") {
+        protected onLoad(e:LoaderEvent3D) {
+            var mat: TextureMaterial = new TextureMaterial();
+            mat.shininess = 0.1;
+            mat.specularColor = 0;
+            mat.ambientColor = 0xffffff;
+            this.mat = mat;
+            var ge: Geometry = e.loader.data;
+            var mesh: Mesh = new Mesh(ge, mat);
 
-                var mat: TextureMaterial = new TextureMaterial();
-                mat.shininess = 0.1;
-                mat.specularColor = 0;
-                mat.ambientColor = 0xffffff;
-                this.mat = mat;
-                var ge: Geometry = e.data;
-                var mesh: Mesh = new Mesh(e.data, mat);
+            if (ge.vertexFormat & VertexFormat.VF_SKIN) {
+                mesh.animation = new SkeletonAnimation(ge.skeleton);
+            }
+            this.view1.addChild3D(mesh);
 
-                if (ge.vertexFormat & VertexFormat.VF_SKIN) {
-                    mesh.animation = new SkeletonAnimation(ge.skeleton);
+            mesh.material.lightGroup = this.lights;
+            this.laohu = mesh;
+
+            for (var i: number = 0; i < mesh.geometry.subGeometrys.length; ++i) {
+                if (!mesh.getMaterial(i)) {
+                    mesh.addSubMaterial(i, new TextureMaterial());
                 }
-                this.view1.addChild3D(mesh);
-
-                mesh.material.lightGroup = this.lights;
-                this.laohu = mesh;
-
-                for (var i: number = 0; i < mesh.geometry.subGeometrys.length; ++i) {
-                    if (!mesh.getMaterial(i)) {
-                        mesh.addSubMaterial(i, new TextureMaterial());
-                    }
-                    var loadtex: URLLoader = new URLLoader("resource/test/" + mesh.geometry.subGeometrys[i].textureDiffuse);
-                    loadtex.onLoadComplete = (e: URLLoader) => this.onLoadTexture(e);
-                    loadtex["mat"] = mesh.getMaterial(i);
-                    loadtex["mesh"] = mesh; 
-                }
+                var loadtex: URLLoader = new URLLoader("resource/test/" + mesh.geometry.subGeometrys[i].textureDiffuse);
+                loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
+                loadtex["mat"] = mesh.getMaterial(i);
+                loadtex["mesh"] = mesh; 
             }
         }
 
-        protected onLoadTexture(e: URLLoader) {
-            e["mat"].diffuseTexture = e.data;
+        protected onLoadTexture(e: LoaderEvent3D) {
+            e.loader["mat"].diffuseTexture = e.loader.data;
         }
 
         public update(e: Event3D) {

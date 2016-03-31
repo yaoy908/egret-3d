@@ -24,7 +24,6 @@
          */
         public dispatchEvent(event3D: Event3D) {
             if (this.listeners[event3D.eventType] != null) {
-                event3D.currentTarget = this;
                 for (var i: number = 0; i < this.listeners[event3D.eventType].length; i++) {
                     var listener: EventListener = this.listeners[event3D.eventType][i];
                     try {

@@ -9,11 +9,12 @@
      * DDS, TGA, jpg, png等格式的贴图文件.
      * ESM, EAM, ECA等egret3d独有的模型文件,动作文件,相机动画文件
      * @includeExample loader/URLLoader.ts
+     * @see egret3d.EventDispatcher
      *
      * @version Egret 3.0
      *@platform Web,Native
      */
-    export class URLLoader {
+    export class URLLoader extends EventDispatcher{
 
         /**
          * @private
@@ -33,6 +34,7 @@
          */
         private _datas: any = null;
         private _xhr: XMLHttpRequest;
+        private _event: LoaderEvent3D = new LoaderEvent3D();
 
         /**
          * @language zh_CN
@@ -46,45 +48,12 @@
 
         /**
          * @language zh_CN
-         * 加载完成的回调函数.
-         * 回调函数参数为该UrlLoader实例
-         * @version Egret 3.0
-         *@platform Web,Native
-         */
-        public onLoadComplete: Function = null;
-
-
-        /**
-         * @language zh_CN
-         * 加载完成的回调函数的this对象
-         * @version Egret 3.0
-         *@platform Web,Native
-         */
-        public thisObject: any = null;
-
-        /**
-         * @language zh_CN
          * 文件名字
          * @version Egret 3.0
          *@platform Web,Native
          */
         public fileName: string;
 
-        /**
-         * @language zh_CN
-         * 加载失败的回调函数
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public onLoadError: Function = null;
-
-        /**
-         * @language zh_CN
-         * 加载过程调用的函数
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public onLoadProgress: Function = null;
 
         /**
          * @language zh_CN
@@ -182,6 +151,7 @@
          * @platform Web,Native
          */
         constructor(url: string = null, dataformat: string = null) {
+            super();
             if (url) {
                 if (dataformat) {
                     this.dataformat = dataformat;
@@ -385,14 +355,17 @@
         }
 
         private onProgress(event: ProgressEvent): void {
-            //console.log("progress event```");
+            this._event.eventType = LoaderEvent3D.LOADER_PROGRESS;
+            this._event.target = this;
+            this._event.loader = this;
+            this.dispatchEvent(this._event);
         }
 
         private onError(event: ErrorEvent): void {
-            if (this.onLoadError) {
-                this.onLoadError();
-            }
-            Debug.instance.trace("loaderror, url: ", this._url);
+            this._event.eventType = LoaderEvent3D.LOADER_ERROR;
+            this._event.target = this;
+            this._event.loader = this;
+            this.dispatchEvent(this._event);
             console.log("load error", event);
         }
 
@@ -412,14 +385,10 @@
         }
 
         protected doLoadComplete() {
-            if (this.onLoadComplete) {
-                if (this.thisObject) {
-                    this.onLoadComplete.call(this.thisObject, this);
-                }
-                else {
-                    this.onLoadComplete(this);
-                }
-            }
+            this._event.eventType = LoaderEvent3D.LOADER_COMPLETE;
+            this._event.target = this;
+            this._event.loader = this;
+            this.dispatchEvent(this._event);
         }
     }
 }
