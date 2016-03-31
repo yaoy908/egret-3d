@@ -277,8 +277,8 @@
 
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ModelMatrix.uniformIndex, false, modeltransform.rawData);
 
-            this.modelViewMatrix.copyFrom(camera3D.viewMatrix);
-            this.modelViewMatrix.multiply(modeltransform);
+            this.modelViewMatrix.copyFrom(modeltransform);
+            this.modelViewMatrix.multiply(camera3D.viewMatrix);
 
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ModelViewMatrix.uniformIndex, false, this.modelViewMatrix.rawData);
 

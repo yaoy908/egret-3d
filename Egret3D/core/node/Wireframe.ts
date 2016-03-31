@@ -16,7 +16,7 @@
          * @platform Web,Native
          */
         constructor(geometry: Geometry) {
-            super(geometry, new ColorMaterial(0xffffffff));
+            super(geometry, new ColorMaterial(0xff0000));
             this.material.drawMode = DrawMode.LINES;
         }
     }
