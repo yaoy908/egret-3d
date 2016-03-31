@@ -17,6 +17,7 @@
         "events/PickEvent3D.ts",
         "events/KeyEvent3D.ts",
         "events/LoaderEvent3D.ts",
+        "events/ParserEvent3D.ts",
         "events/EventDispatcher.ts",
         "events/EventManager.ts",
 

@@ -37,7 +37,6 @@
         * @platform Web,Native
         */
         public static LOADER_ERROR: string = "onLoadError";
-
         
         /**
         * @language zh_CN
