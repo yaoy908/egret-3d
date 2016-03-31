@@ -10,7 +10,7 @@
      <pre>
      var box: egret3d.Mesh = new egret3d.Mesh( new egret3d.CylinderGeometry(), new egret3d.TextureMaterial() );
      </pre>
-     * 
+     * @see egret3d.Geometry
      * @version Egret 3.0
      * @platform Web,Native
      */
@@ -40,6 +40,7 @@
         }
 
         /**
+        * @private
         * @language zh_CN
         * 生成网格
         */

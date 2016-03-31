@@ -104,13 +104,21 @@
             for (var i = 0; i < 16; i++) this.rawData[i] = r[i];
         }
 
-        public perspectiveB(fov: number, aspect: number, near: number, far: number) {
+        /**
+        * @private
+        * @language zh_CN
+        */
+        public perspectiveB(fov: number, aspect: number, near: number, far: number) : Matrix4_4{
             var y = Math.tan(fov * Math.PI / 360) * near;
             var x = y * aspect;
             return this.frustum(-x, x, -y, y, near, far);
         }
 
-        public frustum(l: number, r: number, b: number, t: number, n: number, f: number) {
+        /**
+        * @private
+        * @language zh_CN
+        */
+        public frustum(l: number, r: number, b: number, t: number, n: number, f: number): Matrix4_4 {
             var m = this.rawData;
 
             m[0] = 2 * n / (r - l);
@@ -136,31 +144,31 @@
             return this;
         }
 
-        public ortho(l: number, r: number, b: number, t: number, n: number, f: number) {
-            var m = this.rawData;
+        //public ortho(l: number, r: number, b: number, t: number, n: number, f: number): Matrix4_4 {
+        //    var m = this.rawData;
 
-            m[0] = 2 / (r - l);
-            m[1] = 0;
-            m[2] = 0;
-            m[3] = -(r + l) / (r - l);
+        //    m[0] = 2 / (r - l);
+        //    m[1] = 0;
+        //    m[2] = 0;
+        //    m[3] = -(r + l) / (r - l);
 
-            m[4] = 0;
-            m[5] = 2 / (t - b);
-            m[6] = 0;
-            m[7] = -(t + b) / (t - b);
+        //    m[4] = 0;
+        //    m[5] = 2 / (t - b);
+        //    m[6] = 0;
+        //    m[7] = -(t + b) / (t - b);
 
-            m[8] = 0;
-            m[9] = 0;
-            m[10] = -2 / (f - n);
-            m[11] = -(f + n) / (f - n);
+        //    m[8] = 0;
+        //    m[9] = 0;
+        //    m[10] = -2 / (f - n);
+        //    m[11] = -(f + n) / (f - n);
 
-            m[12] = 0;
-            m[13] = 0;
-            m[14] = 0;
-            m[15] = 1;
+        //    m[12] = 0;
+        //    m[13] = 0;
+        //    m[14] = 0;
+        //    m[15] = 1;
 
-            return this;
-        }
+        //    return this;
+        //}
 
         /**
         * @language en_US
@@ -220,27 +228,27 @@
         * @param zn 近裁剪面位置Z值.
         * @param zf 远裁剪面位置Z值.
         */
-        //public ortho(w: number, h: number, zn: number, zf: number) {
-        //    this.rawData[0] = 2 / w;
-        //    this.rawData[1] = 0;
-        //    this.rawData[2] = 0;
-        //    this.rawData[3] = 0;
+        public ortho(w: number, h: number, zn: number, zf: number) {
+            this.rawData[0] = 2 / w;
+            this.rawData[1] = 0;
+            this.rawData[2] = 0;
+            this.rawData[3] = 0;
 
-        //    this.rawData[4] = 0;
-        //    this.rawData[5] = 2 / h;
-        //    this.rawData[6] = 0;
-        //    this.rawData[7] = 0;
+            this.rawData[4] = 0;
+            this.rawData[5] = 2 / h;
+            this.rawData[6] = 0;
+            this.rawData[7] = 0;
 
-        //    this.rawData[8] = 0;
-        //    this.rawData[9] = 0;
-        //    this.rawData[10] = 1 / (zf - zn);
-        //    this.rawData[11] = 0;
+            this.rawData[8] = 0;
+            this.rawData[9] = 0;
+            this.rawData[10] = 1 / (zf - zn);
+            this.rawData[11] = 0;
 
-        //    this.rawData[12] = 0;
-        //    this.rawData[13] = 0;
-        //    this.rawData[14] = zn / (zn - zf);
-        //    this.rawData[15] = 1;
-        //}
+            this.rawData[12] = 0;
+            this.rawData[13] = 0;
+            this.rawData[14] = zn / (zn - zf);
+            this.rawData[15] = 1;
+        }
 
         /**
         * @language en_US

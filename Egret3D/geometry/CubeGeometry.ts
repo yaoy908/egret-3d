@@ -11,6 +11,8 @@
       var box: egret3d.Mesh = new egret3d.Mesh( new egret3d.CubeGeometry(), new egret3d.TextureMaterial() );
      </pre>
      * 
+     * @see egret3d.Geometry
+     * @see egret3d.Mesh
      * @version Egret 3.0
      * @platform Web,Native
      * @includeExample geometry/CubeGeometry.ts

@@ -2,11 +2,13 @@
 
     /**
     * @private
-    * @class egret3d.Layer
+    * @class egret3d.Tag
     * @classdesc
-    * Object3D 渲染Layer
-    * 每个Layer分两个渲染列表，一个是有alpha的对象列表，另一个是没有alpha的对象列表
-    * 不同的Layer层级可以使用不同的渲染方式，来达到各组不同的渲染效果.
+    * Object3D 渲染tag
+    * 图形属性标签页的属性，由layer列表组成，共用深度信息
+    * 渲染每个tag他们的深度信息是不清理的
+    *
+    * @see egret3d.Layer
     * @version Egret 3.0
     * @platform Web,Native
     */

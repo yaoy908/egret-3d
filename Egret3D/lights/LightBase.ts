@@ -1,10 +1,15 @@
 ﻿module egret3d {
 
+    /**
+    *@language zh_CN 
+    *@private
+    */
     export enum LightType {
         pointlight,
         directlight,
         spotLightlight,
     }
+
     /**
     * @class egret3d.DirectLight
     * @classdesc

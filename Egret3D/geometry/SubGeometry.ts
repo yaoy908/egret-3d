@@ -4,7 +4,8 @@
      * @language zh_CN
      * @class egret3d.SubGeometry
      * @classdesc
-     * 表示几何形状 子集
+     * 表示几何形状 子集 不同的子集渲染时使用的材质会不同
+     * 
      * @see egret3d.Geometry
      * @version Egret 3.0
      * @platform Web,Native

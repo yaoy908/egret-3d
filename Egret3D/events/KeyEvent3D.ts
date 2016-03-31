@@ -4,6 +4,7 @@
 module egret3d {
 
     /**
+     * @private
      * @language zh_CN
      * 按键码
      * @version Egret 3.0

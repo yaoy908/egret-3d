@@ -13,8 +13,8 @@
          * @language zh_CN
          * 指定材质，和公告板宽、高，构建一个公告板
          * @param material 渲染材质
-         * @param width 公告板宽
-         * @param height 公告板高
+         * @param width 公告板宽度
+         * @param height 公告板高度
          * @version Egret 3.0
          * @platform Web,Native
          */

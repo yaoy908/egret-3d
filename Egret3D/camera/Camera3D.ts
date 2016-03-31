@@ -62,6 +62,7 @@
     * 相机分为透视摄像机、正交摄像机、VR摄像机。</p>
     *
     * @see egret3d.Matrix4_4
+    * @see egret3d.Object3D
     * 
     * @includeExample camera/Camera3D.ts
     * @version Egret 3.0

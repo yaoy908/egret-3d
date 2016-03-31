@@ -18,33 +18,25 @@
     * @platform Web,Native
     */
     export class LightGroup {
-        /**
-         * @language en_US 
-         */
+
         /**
          * @language zh_CN  
          * 灯光个数
          */
         public lightNum: number = 0;
-        /**
-         * @language en_US 
-         */
+
         /**
          * @language zh_CN  
          * 方向光列表
          */
         public directLightList: Array<DirectLight>;
-        /**
-         * @language en_US 
-         */
+
         /**
          * @language zh_CN  
          * 聚光灯列表
          */
         public spotLightList: Array<SpotLight>;
-        /**
-         * @language en_US 
-         */
+
         /**
          * @language zh_CN  
          * 点光源列表
@@ -53,7 +45,7 @@
 
         /**
         * @language zh_CN
-        * constructor
+        * 创建一个灯光组
         */
         constructor() {
             this.directLightList = new Array<DirectLight>();

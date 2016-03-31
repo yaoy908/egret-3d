@@ -2,6 +2,7 @@
 
     
     /**
+     * @private
      * @language zh_CN
      * 鼠标键码
      * @version Egret 3.0

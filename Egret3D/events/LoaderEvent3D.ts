@@ -8,6 +8,7 @@
     * @includeExample events/LoaderEvent3D.ts
     * @see egret3d.Event3D
     * @see egret3d.EventDispatcher
+    @ @see egret3d.URLLoader
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -32,7 +33,7 @@
 
         /**
         * @language zh_CN
-        * LOADER_PROGRESS 常量定义 onLoadProgress 事件对象的 type 属性的值。
+        * LOADER_ERROR 常量定义 onLoadError 事件对象的 type 属性的值。
         * @version Egret 3.0
         * @platform Web,Native
         */

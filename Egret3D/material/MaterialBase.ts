@@ -1,4 +1,14 @@
 ﻿module egret3d {
+    
+    /**
+    * @language zh_CN
+    * @class egret3d.MaterialBase
+    * @classdesc
+    * 材质球共有的基础类型，封装了材质球共有的基础数据设置方法。</p>
+    * 不同的渲染通道pass。</p>
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class MaterialBase {
 
         public diffusePass: MaterialPass; 
