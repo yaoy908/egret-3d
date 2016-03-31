@@ -1,12 +1,15 @@
 ﻿module egret3d {
 
     /**
-     * @language zh_CN
-     * @class egret3d.ParserUtils
-     * @classdesc
-     * 用 ParserUtils 类 解析所有egret自定义 文件
-     */
-    export class ParserUtils {
+    * @language zh_CN
+    * @class egret3d.ParserUtils
+    * @classdesc
+    * 用 ParserUtils 类 解析所有egret自定义 文件
+    * @see egret3d.EventDispatcher 
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export class ParserUtils extends EventDispatcher {
 
         /**
         * @language zh_CN
@@ -20,18 +23,7 @@
         */
         public dataFormat: string;
 
-
-        /**
-        * @language zh_CN
-        * 解析完成后响应的回调
-        */
-        public onLoadComplete: Function;
-
-        /**
-        * @language zh_CN
-        * 解析完成后响应回调的this 对象
-        */
-        public thisObject: any;
+        private _event: ParserEvent3D = new ParserEvent3D();
 
         /**
         * @language zh_CN
@@ -39,9 +31,7 @@
         * @param buffer 需要解析的数据流
         * @returns 是否解析成功
         */
-        public parser(buffer: ArrayBuffer, callback: Function = null, thisObject: any = null): boolean {
-            this.thisObject = thisObject;
-            this.onLoadComplete = callback;
+        public parser(buffer: ArrayBuffer): boolean {
             var bytes: ByteArray = new ByteArray(buffer);
             var fileFormatBytes: ByteArray = new ByteArray();
             bytes.readBytes(fileFormatBytes, 0, 3);
@@ -115,14 +105,10 @@
         }
 
         protected doLoadComplete() {
-            if (this.onLoadComplete) {
-                if (this.thisObject) {
-                    this.onLoadComplete.call(this.thisObject, this);
-                }
-                else {
-                    this.onLoadComplete(this);
-                }
-            }
+            this._event.eventType = ParserEvent3D.PARSER_COMPLETE;
+            this._event.data = this;
+            this._event.parser = this;
+            this.dispatchEvent(this._event);
         }
     }
 }

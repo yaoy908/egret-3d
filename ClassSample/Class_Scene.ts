@@ -18,8 +18,8 @@
             this.view1 = view1;
 
             var load: URLLoader = new URLLoader("resource/scene/foliage/FOL_Foliage_01.esm");
-            load.onLoadComplete = (e: URLLoader) => this.onLoad(e, "FOL_Foliage_01");
 
+            load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoad, this);
 
             var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));
             dirLight.diffuse = 0xffffff;
@@ -34,32 +34,31 @@
         }
 
         protected mat: TextureMaterial;
-        protected onLoad(e: URLLoader, name: string) {
-            if (name == "FOL_Foliage_01") {
+        protected onLoad(e: LoaderEvent3D) {
 
-                var mat: TextureMaterial = new TextureMaterial();
-                mat.shininess = 0.1;
-                mat.specularColor = 0; 
-                mat.ambientColor = 0xffffff;
-                this.mat = mat;
-                var ge: Geometry = e.data;
-                var mesh: Mesh = new Mesh(e.data, mat);
+            var mat: TextureMaterial = new TextureMaterial();
+            mat.shininess = 0.1;
+            mat.specularColor = 0; 
+            mat.ambientColor = 0xffffff;
+            this.mat = mat;
+            var ge: Geometry = e.loader.data;
+            var mesh: Mesh = new Mesh(ge, mat);
 
-                if (ge.vertexFormat & VertexFormat.VF_SKIN) {
-                    mesh.animation = new SkeletonAnimation(ge.skeleton);
-                }
-                this.view1.addChild3D(mesh);
-
-                mesh.material.lightGroup = this.lights;
-                this.laohu = mesh;
-
-                var loadtex: URLLoader = new URLLoader("resource/scene/foliage/Foliage_01.png");
-                loadtex.onLoadComplete = (e: URLLoader) => this.onLoadTexture(e, mat, "Mon_04");
+            if (ge.vertexFormat & VertexFormat.VF_SKIN) {
+                mesh.animation = new SkeletonAnimation(ge.skeleton);
             }
+            this.view1.addChild3D(mesh);
+
+            mesh.material.lightGroup = this.lights;
+            this.laohu = mesh;
+
+            var loadtex: URLLoader = new URLLoader("resource/scene/foliage/Foliage_01.png");
+            loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
+            loadtex["mat"] = mat;
         }
 
-        protected onLoadTexture(e: URLLoader, mat: TextureMaterial, name: string) {
-            mat.diffuseTexture = e.data;
+        protected onLoadTexture(e:LoaderEvent3D) {
+            e.loader["mat"].diffuseTexture = e.loader.data;
         }
 
         public update(e: Event3D) {

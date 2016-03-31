@@ -18,7 +18,7 @@
             this.view1 = view1;
 
             var load: URLLoader = new URLLoader("resource/laohu/Mon_04.esm");
-            load.onLoadComplete = (e: URLLoader) => this.onLoad(e, "Mon_04");
+            load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoad, this);
 
 
             var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));
@@ -44,43 +44,42 @@
         }
 
         protected mat: TextureMaterial;
-        protected onLoad(e: URLLoader, name: string) {
-            if (name == "Mon_04") {
-                var img: HTMLImageElement = <HTMLImageElement>document.getElementById("mon");
-                var tex: ImageTexture = new ImageTexture(img);
+        protected onLoad(e:LoaderEvent3D) {
+            var img: HTMLImageElement = <HTMLImageElement>document.getElementById("mon");
+            var tex: ImageTexture = new ImageTexture(img);
 
-                var mat: TextureMaterial = new TextureMaterial();
-                mat.shininess = 10.0;
-                mat.ambientColor = 0xffffff;
-                this.mat = mat;
-                var ge: Geometry = e.data;
-                var mesh: Mesh = new Mesh(e.data, mat);
+            var mat: TextureMaterial = new TextureMaterial();
+            mat.shininess = 10.0;
+            mat.ambientColor = 0xffffff;
+            this.mat = mat;
+            var ge: Geometry = e.loader.data;
+            var mesh: Mesh = new Mesh(ge, mat);
 
-                if (ge.vertexFormat & VertexFormat.VF_SKIN) {
-                    mesh.animation = new SkeletonAnimation(ge.skeleton);
-                }
-                this.view1.addChild3D(mesh);
-
-                mesh.material.lightGroup = this.lights;
-                this.laohu = mesh;
-
-                var loadtex: URLLoader = new URLLoader("resource/laohu/Mon_04.png");
-                loadtex.onLoadComplete = (e: URLLoader) => this.onLoadTexture(e, mat, "Mon_04");
-                var load: URLLoader = new URLLoader("resource/laohu/Bonezero.eam");
-                load.onLoadComplete = (e: URLLoader) => this.onAnimation(e, "Bonezero", mesh);
+            if (ge.vertexFormat & VertexFormat.VF_SKIN) {
+                mesh.animation = new SkeletonAnimation(ge.skeleton);
             }
+            this.view1.addChild3D(mesh);
 
+            mesh.material.lightGroup = this.lights;
+            this.laohu = mesh;
+
+            var loadtex: URLLoader = new URLLoader("resource/laohu/Mon_04.png");
+            loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
+            loadtex["mat"] = mat;
+            var load: URLLoader = new URLLoader("resource/laohu/Bonezero.eam");
+            load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onAnimation, this);
+            load["mesh"] = mesh;
         }
 
-        protected onLoadTexture(e: URLLoader, mat: TextureMaterial, name: string) {
-            mat.diffuseTexture = e.data;
+        protected onLoadTexture(e: LoaderEvent3D) {
+            e.loader["mat"].diffuseTexture = e.loader.data;
         }
 
-        protected onAnimation(e: URLLoader, name: string, mesh: Mesh) {
-            var clip: SkeletonAnimationClip = e.data;
+        protected onAnimation(e: LoaderEvent3D) {
+            var clip: SkeletonAnimationClip = e.loader.data;
             clip.animationName = name;
-            mesh.animation.skeletonAnimationController.addSkeletonAnimationClip(clip);
-            mesh.animation.skeletonAnimationController.play(name);
+            e.loader["mesh"].animation.skeletonAnimationController.addSkeletonAnimationClip(clip);
+            e.loader["mesh"].animation.skeletonAnimationController.play(name);
         }
 
         public update(e: Event3D) {

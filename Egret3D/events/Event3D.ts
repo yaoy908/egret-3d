@@ -11,22 +11,6 @@
     export class Event3D {
 
         /**
-       * @language zh_CN
-       * EVENT_LOAD_COMPLETE 常量定义 load_complete 事件对象的 type 属性的值。
-       * @version Egret 3.0
-       * @platform Web,Native
-       */
-        static LOAD_COMPLETE: string = "load_complete";
-
-        /**
-        * @language zh_CN
-        * EVENT_LOAD_PROGRESS 常量定义 onLoadProgress 事件对象的 type 属性的值。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        static LOAD_PROGRESS: string = "onLoadProgress";
-
-        /**
         * @language zh_CN
         * COMPLETE 常量定义 相关完成事件。
         * @version Egret 3.0
@@ -62,164 +46,51 @@
         //----------------------------------------------------
         //----------------------------------------------------
 
-      
-        private _currentTarget: any;
-       /**
+
+        /**
         * @language zh_CN
-        * 获取当前正在使用某个事件侦听器处理 Event 对象的对象。
-        * @returns {any}
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public get currentTarget(): any {
-            return this._currentTarget;
-        }
-          /**
-        * @language zh_CN
-        * 设置当前正在使用某个事件侦听器处理 Event 对象的对象。
+        * 事件目标。
         * @param value {any}
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public set currentTarget(value: any) {
-            this._currentTarget = value;
-        }
+        public target: any;
 
-      
-        private _target: any;
-       /**
+        /**
         * @language zh_CN
-        * 获取事件目标。
+        * 3D引擎中的事件的类型
         * @returns {any}
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public get target(): any {
-            return this._target;
-        }
-       /**
-        * @language zh_CN
-        * 设置事件目标。
-        * @param value {any}
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public set target(value: any) {
-            this._target = value;
-        }
+        public eventType: string;
 
- 
-        private _eventType: string;
-       /**
+        /**
         * @language zh_CN
-        * 获取3D引擎中的事件的类型
-        * @returns {any}
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public get eventType(): string {
-            return this._eventType;
-        }
-       /**
-        * @language zh_CN
-        * 设置3D引擎中的事件的类型
-        * @param value {string}
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public set eventType(value: string) {
-            this._eventType = value;
-        }
-      
-        private _data: any;
-       /**
-        * @language zh_CN
-        * 获取附加数据。
+        * 附加数据。
         * @returns {string}
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public get data(): any {
-            return this._data;
-        }
-       /**
-        * @language zh_CN
-        * 设置附加数据。
-        * @param value {string}
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public set data(value: any) {
-            this._data = value;
-        }
-
-        private _time: number = 0;
-
+        public data: any;
+         
         /**
         * @language zh_CN
-        * 获取时间。
+        * 当前时间。
         * @returns {number}
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public get time(): number {
-            return this._time;
-        }
-       /**
+        public time: number = 0;
+      
+        /**
         * @language zh_CN
-        * 设置时间。
-        * @param value {number}
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public set time(value: number) {
-            this._time = value;
-        }
-
-        private _delay: number = 0;
-       /**
-        * @language zh_CN
-        * 获取延时。
+        * 每帧延时。
         * @returns {number}
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public get delay(): number {
-            return this._delay;
-        }
-       /**
-        * @language zh_CN
-        * 设置延时。
-        * @param value {number}
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public set delay(value: number) {
-            this._delay = value;
-        }
-
-
-        private _handler: Function;
-       /**
-        * @language zh_CN
-        * 获取事件回调。
-        * @returns {Function}
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public get handler(): Function {
-            return this._handler;
-        }
-       /**
-        * @language zh_CN
-        * 设置事件回调。
-        * @param value {Function}
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public set handler(value: Function) {
-            this._handler = value;
-        }
+        public delay: number = 0;
 
         /**
         * @language zh_CN

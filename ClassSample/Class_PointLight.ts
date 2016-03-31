@@ -17,7 +17,7 @@
 
             this.view1 = view1;
             var texLoad: URLLoader = new URLLoader("resource/chahu/Plane001.esm");
-            texLoad.onLoadComplete = (e) => this.ontextload(e);
+            texLoad.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.ontextload, this);
 
             this.cameraCtl = new LookAtController(view1.camera3D, new Object3D());
             this.cameraCtl.distance = 1000;
@@ -37,12 +37,12 @@
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
         }
 
-        protected ontextload(e: URLLoader) {
+        protected ontextload(e: LoaderEvent3D) {
 
             var mat: TextureMaterial = new TextureMaterial();
             mat.lightGroup = this.lights; 
             //mat.drawMode = DrawMode.POINTS; 
-            var mesh: Mesh = new Mesh(e.data, mat);
+            var mesh: Mesh = new Mesh(e.loader.data, mat);
             mesh.scale = new Vector3D(5.0,5.0,5.0);
             this.plane = mesh;
             this.view1.addChild3D(mesh);

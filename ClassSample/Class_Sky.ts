@@ -19,7 +19,7 @@
             this.cameraCrl.distance = 1000;
 
             var texLoad: URLLoader = new URLLoader("resource/chahu\\Plane001.esm");
-            texLoad.onLoadComplete = (e) => this.ontextload(e);
+            texLoad.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.ontextload, this);
 
 
             var cubeTexture: CubeTexture = CubeTexture.createCubeTexture(
@@ -39,9 +39,9 @@
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
         }
 
-        protected ontextload(e: URLLoader) {
+        protected ontextload(e: LoaderEvent3D) {
 
-            var mesh: Mesh = new Mesh(e.data, new TextureMaterial());
+            var mesh: Mesh = new Mesh(e.loader.data, new TextureMaterial());
             this.plane = mesh;
             this.view1.addChild3D(mesh);
         }

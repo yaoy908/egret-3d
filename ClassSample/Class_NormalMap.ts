@@ -32,19 +32,20 @@
             this.view1.addChild3D(this.plane);
 
             var loadDiffuse: URLLoader = new URLLoader("resource/floor/WOOD_1.png");
-            loadDiffuse.onLoadComplete = (e: URLLoader) => this.onLoadDiffuse(e, this.matPlane);
+
+            loadDiffuse.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadDiffuse, this);
 
             var loadNormal: URLLoader = new URLLoader("resource/floor/wood_1N.png");
-            loadNormal.onLoadComplete = (e: URLLoader) => this.onLoadNormal(e, this.matPlane);
+            loadNormal.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadNormal, this);
 
         }
 
-        protected onLoadDiffuse(load: URLLoader, mat: TextureMaterial) {
-            mat.diffuseTexture = load.data;
+        protected onLoadDiffuse(e:LoaderEvent3D) {
+            this.matPlane.diffuseTexture = e.loader.data;
         }
 
-        protected onLoadNormal(load: URLLoader, mat: TextureMaterial) {
-            mat.normalTexture = load.data;
+        protected onLoadNormal(e: LoaderEvent3D) {
+            this.matPlane.normalTexture = e.loader.data;
         }
 
         public update(e: Event3D) {

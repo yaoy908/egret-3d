@@ -145,7 +145,7 @@
 
         private initPickEvent3D(typeStr: string, e: any, render: IRender): PickEvent3D {
             this._pickEvent3d.eventType = typeStr;
-            this._pickEvent3d.currentTarget = render;
+            this._pickEvent3d.target = render;
             this._pickEvent3d.data = e;
             this._pickEvent3d.pickResult = render.pickResult;
             return this._pickEvent3d;

@@ -10,6 +10,7 @@ module egret3d {
 			"varying vec3 varying_eyeNormal  ; \n" +
 			"varying vec2 varying_uv0; \n" +
 			"varying vec3 varying_ViewPose; \n" +
+			"varying vec4 varying_color; \n" +
 			"uniform vec3 uniform_eyepos ; \n" +
 			"uniform mat4 uniform_ModelViewMatrix ; \n" +
 			"vec4 outColor; \n" +
@@ -37,12 +38,14 @@ module egret3d {
 			"attribute vec3 attribute_position ; \n" +
 			"attribute vec3 attribute_normal ; \n" +
 			"attribute vec2 attribute_uv0 ; \n" +
+			"attribute vec4 attribute_color ; \n" +
 			"uniform mat4 uniform_ModelMatrix ; \n" +
 			"uniform mat4 uniform_ModelViewMatrix ; \n" +
 			"uniform mat4 uniform_ProjectionMatrix ; \n" +
 			"varying vec3 varying_ViewPose; \n" +
 			"varying vec3 varying_eyeNormal  ; \n" +
 			"varying vec2 varying_uv0; \n" +
+			"varying vec4 varying_color; \n" +
 			"vec4 outPosition ; \n" +
 			"mat3 transpose(mat3 m) { \n" +
 			"return mat3(m[0][0], m[1][0], m[2][0], \n" +
@@ -62,6 +65,7 @@ module egret3d {
 			"b21, (-a21 * a00 + a01 * a20), (a11 * a00 - a01 * a10)) / det; \n" +
 			"} \n" +
 			"void main(void){ \n" +
+			"varying_color = attribute_color; \n" +
 			"varying_uv0 = attribute_uv0; \n" +
 			"} \n",
 
@@ -125,7 +129,7 @@ module egret3d {
 			"diffuseColor.xyz = materialSource.diffuse.xyz * diffuseColor.xyz ; \n" +
 			"outColor.xyz = (ambientColor.xyz + light.xyz) * diffuseColor.xyz + specularColor.xyz * materialSource.specularScale; \n" +
 			"outColor.w = materialSource.alpha * diffuseColor.w ; \n" +
-			"gl_FragColor = outColor ; \n" +
+			"gl_FragColor = outColor * varying_color ; \n" +
 			"} \n",
 
 			"end_vs":

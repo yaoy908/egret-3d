@@ -9,30 +9,16 @@
      * DDS, TGA, jpg, png等格式的贴图文件.
      * ESM, EAM, ECA等egret3d独有的模型文件,动作文件,相机动画文件
      * @includeExample loader/URLLoader.ts
+     * @see egret3d.EventDispatcher
      *
      * @version Egret 3.0
-     *@platform Web,Native
+     * @platform Web,Native
      */
-    export class URLLoader {
+    export class URLLoader extends EventDispatcher{
 
-        /**
-         * @private
-         * @language zh_CN
-         * 加载的地址
-         * @version Egret 3.0
-         *@platform Web,Native
-         */
-        private _url: string = "";
 
-        /**
-         * @private
-         * @language zh_CN
-         * 加载的数据.
-         * @version Egret 3.0
-         *@platform Web,Native
-         */
-        private _datas: any = null;
         private _xhr: XMLHttpRequest;
+        private _event: LoaderEvent3D = new LoaderEvent3D();
 
         /**
          * @language zh_CN
@@ -46,45 +32,12 @@
 
         /**
          * @language zh_CN
-         * 加载完成的回调函数.
-         * 回调函数参数为该UrlLoader实例
-         * @version Egret 3.0
-         *@platform Web,Native
-         */
-        public onLoadComplete: Function = null;
-
-
-        /**
-         * @language zh_CN
-         * 加载完成的回调函数的this对象
-         * @version Egret 3.0
-         *@platform Web,Native
-         */
-        public thisObject: any = null;
-
-        /**
-         * @language zh_CN
          * 文件名字
          * @version Egret 3.0
          *@platform Web,Native
          */
         public fileName: string;
 
-        /**
-         * @language zh_CN
-         * 加载失败的回调函数
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public onLoadError: Function = null;
-
-        /**
-         * @language zh_CN
-         * 加载过程调用的函数
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public onLoadProgress: Function = null;
 
         /**
          * @language zh_CN
@@ -182,6 +135,7 @@
          * @platform Web,Native
          */
         constructor(url: string = null, dataformat: string = null) {
+            super();
             if (url) {
                 if (dataformat) {
                     this.dataformat = dataformat;
@@ -201,18 +155,18 @@
          * @platform Web,Native
          */
         public load(url: string) {
-            this._datas = null;
-            this._url = url;
+            this.data = null;
+            this.url = url;
 
             if (null == this._dataformat) {
 
                 this._dataformat = URLLoader.DATAFORMAT_TEXT;
 
-                var endPos: number = this._url.lastIndexOf(".");
-                var startPos: number = this._url.lastIndexOf("/");
+                var endPos: number = this.url.lastIndexOf(".");
+                var startPos: number = this.url.lastIndexOf("/");
 
 
-                if (this._url.length >= 4) switch (this._url.substr(this._url.length - 4, 4).toLowerCase()) {
+                if (this.url.length >= 4) switch (this.url.substr(this.url.length - 4, 4).toLowerCase()) {
                     case ".dds":
                         this._dataformat = URLLoader.DATAFORMAT_DDS;
                         break;
@@ -257,7 +211,7 @@
                 this._xhr.abort();
             }
 
-            this._xhr.open("GET", this._url, true);
+            this._xhr.open("GET", this.url, true);
             this._xhr.addEventListener("progress", (e) => this.onProgress(e), false);
             this._xhr.addEventListener("readystatechange", (e) => this.onReadyStateChange(e), false);
             this._xhr.addEventListener("error", (e) => this.onError(e), false);
@@ -297,32 +251,25 @@
         }
 
         /**
-         * @language zh_CN
-         * 加载的数据.
-         * @returns any
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public get data(): any {
-            return this._datas;
-        }
+        * @language zh_CN
+        * 加载的地址
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public url: string = "";
 
         /**
-         * @language zh_CN
-         * 加载的地址
-         * @readonly
-         * @returns string
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public get url(): string {
-            return this._url;
-        }
+        * @language zh_CN
+        * 加载的数据.
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public data: any = null;
 
         private onReadyStateChange(event: Event): void {
             if (this._xhr.readyState == 4) {
                 if (this._xhr.status >= 400 /*|| this._xhr.status == 0*/) {
-                    console.log(this._url, "load fail");
+                    console.log(this.url, "load fail");
                 } else {
                     this.loadComplete();
                 }
@@ -332,13 +279,13 @@
         private loadComplete(): void {
             switch (this.dataformat) {
                 case URLLoader.DATAFORMAT_BINARY:
-                    this._datas = new ByteArray(this._xhr.response);
+                    this.data = new ByteArray(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_SOUND:
-                    this._datas = this._xhr.responseBody;
+                    this.data = this._xhr.responseBody;
                     break;
                 case URLLoader.DATAFORMAT_TEXT:
-                    this._datas = this._xhr.responseText;
+                    this.data = this._xhr.responseText;
                     break;
                 case URLLoader.DATAFORMAT_BITMAP:
                     var img = document.createElement("img");
@@ -352,25 +299,25 @@
                     img.onload = () => this.onLoad(img);
                     return;
                 case URLLoader.DATAFORMAT_DDS:
-                    this._datas = DDSParser.parse(this._xhr.response);
+                    this.data = DDSParser.parse(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_TGA:
-                    this._datas = TGAParser.parse(this._xhr.response);
+                    this.data = TGAParser.parse(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_ESM:
                     var geomtry: Geometry = ESMParser.parse(this._xhr.response);
 
-                    this._datas = geomtry;
+                    this.data = geomtry;
                     break;
                 case URLLoader.DATAFORMAT_EAM:
                     var skeletonAnimationClip: SkeletonAnimationClip = EAMParser.parse(this._xhr.response);
 
-                    this._datas = skeletonAnimationClip;
+                    this.data = skeletonAnimationClip;
                     break;
                 case URLLoader.DATAFORMAT_ECA:
                     var cameraAnimationController: CameraAnimationController = ECAParser.parse(this._xhr.response);
 
-                    this._datas = cameraAnimationController;
+                    this.data = cameraAnimationController;
                     break;
                 case URLLoader.DATAFORMAT_PVR:
                     //var pvr:PVR = PVRParser.parse(this._xhr.response);
@@ -378,21 +325,24 @@
                     break;
 
                 default:
-                    this._datas = this._xhr.responseText;
+                    this.data = this._xhr.responseText;
             }
 
             this.doLoadComplete();
         }
 
         private onProgress(event: ProgressEvent): void {
-            //console.log("progress event```");
+            this._event.eventType = LoaderEvent3D.LOADER_PROGRESS;
+            this._event.target = this;
+            this._event.loader = this;
+            this.dispatchEvent(this._event);
         }
 
         private onError(event: ErrorEvent): void {
-            if (this.onLoadError) {
-                this.onLoadError();
-            }
-            Debug.instance.trace("loaderror, url: ", this._url);
+            this._event.eventType = LoaderEvent3D.LOADER_ERROR;
+            this._event.target = this;
+            this._event.loader = this;
+            this.dispatchEvent(this._event);
             console.log("load error", event);
         }
 
@@ -407,19 +357,15 @@
         }
 
         protected onLoad(img: HTMLImageElement) {
-            this._datas = new ImageTexture(img);
+            this.data = new ImageTexture(img);
             this.doLoadComplete();
         }
 
         protected doLoadComplete() {
-            if (this.onLoadComplete) {
-                if (this.thisObject) {
-                    this.onLoadComplete.call(this.thisObject, this);
-                }
-                else {
-                    this.onLoadComplete(this);
-                }
-            }
+            this._event.eventType = LoaderEvent3D.LOADER_COMPLETE;
+            this._event.target = this;
+            this._event.loader = this;
+            this.dispatchEvent(this._event);
         }
     }
 }

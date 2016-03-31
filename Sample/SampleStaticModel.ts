@@ -40,6 +40,7 @@ class SampleStaticModel {
     * @platform Web,Native
     */
     private model: egret3d.Mesh;
+
     public constructor() {
         ///创建Canvas对象。
         this._egret3DCanvas = new egret3d.Egret3DCanvas();
@@ -58,7 +59,7 @@ class SampleStaticModel {
         ///当前对象对视位置,其参数依次为:
         ///@param pos 对象的位置
         ///@param target 目标的位置
-        this._view3D.camera3D.lookAt(new egret3d.Vector3D(0, 0, -1000), new egret3d.Vector3D(0, 0, 0));
+        this._view3D.camera3D.lookAt(new egret3d.Vector3D(0, 0, 1000), new egret3d.Vector3D(10, 20, 30));
         ///View3D的背景色设置
         this._view3D.backColor = 0xff000000;
         ///将View3D添加进Canvas中
@@ -136,7 +137,7 @@ class SampleStaticModel {
         ///注销回调
         e.onLoadComplete = null;
     }
- 
+
 
     public update(e: egret3d.Event3D) {
         this.cameraCtl.update();
