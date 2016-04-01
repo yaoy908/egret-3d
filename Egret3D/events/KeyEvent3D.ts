@@ -123,9 +123,11 @@ module egret3d {
     * @class egret3d.MouseEvent3D
     * @classdesc
     * KeyEvent3D 按键事件，
+    * 只有Input.addEventListener 才会产生下类事件
     * @includeExample events/KeyEvent3D.ts
     * @see egret3d.Event3D
     * @see egret3d.EventDispatcher
+    * @see egret3d.Input
     * @version Egret 3.0
     * @platform Web,Native
     */

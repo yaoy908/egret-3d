@@ -19,9 +19,11 @@
     * @class egret3d.MouseEvent3D
     * @classdesc
     * MouseEvent3D 是所有引擎中可操作鼠标事件节点 的事件类型标记。
+    * 只有Input.addEventListener 才会产生下类事件
     * @includeExample events/MouseEvent3D.ts
     * @see egret3d.Event3D
     * @see egret3d.EventDispatcher
+    * @see egret3d.Input
     * @version Egret 3.0
     * @platform Web,Native
     */

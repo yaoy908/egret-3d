@@ -1,4 +1,17 @@
 ﻿module egret3d {
+                                    
+    /**
+    * @private
+    * @class egret3d.IRender
+    * @classdesc
+    * 场景中的可见物体，可渲染的对象。
+    * 在渲染之前会将渲染树中对象进行筛选.
+    * 只有IRender对象才会进入渲染管线
+    * @see egret3d.Object3D
+    * @see egret3d.Geometry
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export interface IRender extends IDispatchEvent{
 
         /**

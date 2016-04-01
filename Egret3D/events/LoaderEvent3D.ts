@@ -5,6 +5,7 @@
     * @class egret3d.LoaderEvent3D
     * @classdesc
     * LoaderEvent3D 使用URLLoader加载资源的事件返回对象
+    * 只有URLLoader对象调用addEventListener 才会产生下类事件
     * @includeExample events/LoaderEvent3D.ts
     * @see egret3d.Event3D
     * @see egret3d.EventDispatcher

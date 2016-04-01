@@ -1,4 +1,10 @@
 ﻿module egret3d {
+    
+    /**
+    * @private
+    * @class egret3d.ITexture
+    * @classdesc
+    */
     export interface ITexture {
 
         useMipmap: boolean; 

@@ -10,9 +10,21 @@
     * @platform Web,Native
     */
     export class MaterialBase {
-
+                
+        /**
+         * @language zh_CN
+         * @private
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public diffusePass: MaterialPass; 
-
+                
+        /**
+         * @language zh_CN
+         * @private
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public materialData: MaterialData;
 
         private _lightGroup: LightGroup;
@@ -33,13 +45,25 @@
             else
                 this.setData(materialData);
         }
-
+                        
+        /**
+         * @language zh_CN
+         * @private
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public setData(data: MaterialData) {
             this.materialData = data; 
             this.initPass();
             this.blendMode = BlendMode.NORMAL;
         }
-
+                        
+        /**
+         * @language zh_CN
+         * @private
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public getData(): MaterialData {
             return this.materialData; 
         }

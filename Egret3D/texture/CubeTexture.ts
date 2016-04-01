@@ -1,8 +1,8 @@
 ﻿module egret3d {
     /**
-     * @class egret3d.SkyTexture
+     * @class egret3d.CubeTexture
      * @classdesc
-     * SkyTexture 类为天空贴图
+     * CubeTexture 类为天空贴图
      *
      * 天空贴图用于Sky类使用，其内部是将6张HTMLImageElement（网页图片元素）封装到CubeTexture对象，CubeTexture为引擎内部使用对象。</p>
      *
@@ -18,7 +18,7 @@
      </pre>
      使用示例：</p>
      <pre>
-     var skyTexture: egret3d.SkyTexture = new egret3d.SkyTexture(
+     var cubeTexture: CubeTexture = CubeTexture.createCubeTexture(
      <HTMLImageElement>document.getElementById("t1"),
      <HTMLImageElement>document.getElementById("t2"),
      <HTMLImageElement>document.getElementById("t3"),
@@ -26,13 +26,10 @@
      <HTMLImageElement>document.getElementById("t5"),
      <HTMLImageElement>document.getElementById("t6")
      );
-
-     view3D.sky = new egret3d.Sky(skyTexture);
      </pre>
      * @see egret3d.Sky
      * @version Egret 3.0
      * @platform Web,Native
-     * @includeExample texture/SkyTexture.ts
      */
     export class CubeTexture implements ITexture {
 
