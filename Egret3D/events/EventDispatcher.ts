@@ -107,14 +107,6 @@
             }
         }
 
-        public cleanAllEventListener() {
-            for (var eventType in this.listeners) {
-                for (var i: number = 0; i < this.listeners[eventType].len; i++) {
-                }
-            }
-
-        }
-
         /**
          * @language zh_CN
          * 移除所有事件侦听器。
