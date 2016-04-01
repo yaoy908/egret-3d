@@ -1,4 +1,12 @@
 ﻿module egret3d {
+                                
+    /**
+    * @private
+    * @class egret3d.TreeBase
+    * @classdesc
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class TreeBase {
         private _root: Object3D;
         private _searchList: Array<Object3D> = new Array<Object3D>() ; 

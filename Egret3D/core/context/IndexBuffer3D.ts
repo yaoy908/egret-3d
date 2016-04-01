@@ -1,7 +1,7 @@
 ﻿module egret3d {
 
     /**
-    * @class egret3d.openGLES.IndexBuffer3D
+    * @class egret3d.IndexBuffer3D
     * @classdesc
     * IndexBuffer3D 用于表示顶点索引列表，由图形子系统保留的图形元素构成。</p>
     *
@@ -12,7 +12,7 @@
 
     * 无法直接实例化 IndexBuffer3D。使用 Context3D.CreateIndexBuffer() 可创建实例。</p>
     * @see egret3d.Context3D
-    * @see egret3d.openGLES.CubeTexture
+    * @see egret3d.CubeTexture
     * @version Egret 3.0
     * @platform Web,Native
     */

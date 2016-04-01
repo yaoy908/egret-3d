@@ -5,7 +5,11 @@
      * @class egret3d.Input
      * @classdesc
      * 处理输入设备,鼠标.键盘.触摸。
+     * 当点事件产生时如果没有点击到任何的View3D内，
+     * 当前事件将不用派发.
      * @includeExample input/Input.ts
+     * @see egret3d.EventDispatcher
+     *
      * @version Egret 3.0
      * @platform Web,Native
      */
@@ -408,6 +412,7 @@
             }
 
             this._touchEvent3d.targetTouches = e.targetTouches;
+            this._touchEvent3d.target = this;
 
             if (!this._isTouchStart) {
                 this._isTouchStart = true;
@@ -444,6 +449,7 @@
 
             this._isTouchStart = false;
             this._touchEvent3d.targetTouches = e.targetTouches;
+            this._touchEvent3d.target = this;
             this._touchEvent3d.eventType = TouchEvent3D.TOUCH_END;
             this.dispatchEvent(this._touchEvent3d);
         }
@@ -486,6 +492,7 @@
             }
 
             this._touchEvent3d.targetTouches = e.targetTouches;
+            this._touchEvent3d.target = this;
             this._touchEvent3d.eventType = TouchEvent3D.TOUCH_MOVE;
             this.dispatchEvent(this._touchEvent3d);
         }      
@@ -497,12 +504,14 @@
             }
 
             this._mouseEvent3d.mouseCode = e.button;
+            this._mouseEvent3d.target = this;
             this._mouseEvent3d.eventType = MouseEvent3D.MOUSE_CLICK;
             this.dispatchEvent(this._mouseEvent3d);
         }
 
         private mouseEnd(e: MouseEvent) {
             this._mouseEvent3d.mouseCode = e.button;
+            this._mouseEvent3d.target = this;
 
             this._mouseStatus[this._mouseEvent3d.mouseCode] = false;
             this._mouseEvent3d.eventType = MouseEvent3D.MOUSE_UP;
@@ -525,6 +534,8 @@
             }
 
             this._mouseEvent3d.mouseCode = e.button;
+            this._mouseEvent3d.target = this;
+
             if (!this._mouseStatus[this._mouseEvent3d.mouseCode]) {
                 this._mouseStatus[this._mouseEvent3d.mouseCode] = true;
                 this._mouseEvent3d.eventType = MouseEvent3D.MOUSE_DOWN;
@@ -542,11 +553,14 @@
             Input.mouseOffsetX = Input.mouseX - Input.mouseLastX;
             Input.mouseOffsetY = Input.mouseY - Input.mouseLastY;
 
+            this._mouseEvent3d.target = this;
             this._mouseEvent3d.eventType = MouseEvent3D.MOUSE_MOVE;
+
             this.dispatchEvent(this._mouseEvent3d);
         }
 
         private mouseOver(e: MouseEvent) {
+            this._mouseEvent3d.target = this;
             this._mouseEvent3d.eventType = MouseEvent3D.MOUSE_OVER;
             this.dispatchEvent(this._mouseEvent3d);
         }
@@ -554,12 +568,14 @@
         private mouseWheel(e: MouseWheelEvent) {
             Input.wheelDelta = e.wheelDelta;
 
+            this._mouseEvent3d.target = this;
             this._mouseEvent3d.eventType = MouseEvent3D.MOUSE_WHEEL;
             this.dispatchEvent(this._mouseEvent3d);
         }
 
         private keyDown(e: KeyboardEvent) {
             this._keyEvent3d.keyCode = e.keyCode;
+            this._keyEvent3d.target = this;
 
             if (!this._keyStatus[e.keyCode] ) {
                 this._keyStatus[e.keyCode] = true;
@@ -572,6 +588,7 @@
 
         private keyUp(e: KeyboardEvent) {
             this._keyEvent3d.keyCode = e.keyCode;
+            this._keyEvent3d.target = this;
 
             if (this._keyStatus[e.keyCode]) {
                 this._keyEvent3d.eventType = KeyEvent3D.KEY_CLICK;

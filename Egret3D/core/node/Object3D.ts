@@ -41,7 +41,7 @@
     * @see egret3d.Vector3D
     * @see egret3d.Matrix4_4
     * @see egret3d.Quaternion
-    * @see egret3d.CubeBoxBound
+    * @see egret3d.Bound
     * @version Egret 3.0
     * @platform Web,Native
     */

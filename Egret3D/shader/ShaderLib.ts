@@ -69,6 +69,26 @@ module egret3d {
 			"varying_uv0 = attribute_uv0; \n" +
 			"} \n",
 
+			"cube_fragment":
+			"uniform samplerCube diffuseTexture ; \n" +
+			"varying vec3 varying_pos; \n" +
+			"void main(void){ \n" +
+			"vec3 uvw = normalize(varying_pos.xyz); \n" +
+			"vec4 ref = vec4(textureCube(diffuseTexture, uvw.xyz)); \n" +
+			"gl_FragColor = ref ; \n" +
+			"} \n",
+
+			"cube_vertex":
+			"attribute vec3 attribute_position; \n" +
+			"uniform mat4 uniform_ModelMatrix; \n" +
+			"uniform mat4 uniform_ModelViewMatrix; \n" +
+			"uniform mat4 uniform_ProjectionMatrix; \n" +
+			"varying vec3 varying_pos; \n" +
+			"void main(void){ \n" +
+			"varying_pos =  attribute_position; \n" +
+			"gl_Position = uniform_ProjectionMatrix * uniform_ModelViewMatrix * vec4(attribute_position, 1.0) ; \n" +
+			"} \n",
+
 			"diffuse_fragment":
 			"uniform sampler2D diffuseTexture; \n" +
 			"vec4 diffuseColor ; \n" +

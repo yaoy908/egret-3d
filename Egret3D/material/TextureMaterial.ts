@@ -14,8 +14,8 @@
         /**
          * @language zh_CN
          * 创建一个新的 TextureMaterial 对象。
-         * @param texture {ITexture}
-         * @param materialData {MaterialData}
+         * @param texture 用来渲染的贴图，默认会给出一张棋盘格贴图
+         * @param materialData 材质数据信息，可以不指定
          * @version Egret 3.0
          * @platform Web,Native
          */

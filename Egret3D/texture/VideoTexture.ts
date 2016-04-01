@@ -1,6 +1,7 @@
 ﻿module egret3d {
    
     /**
+     * @private
      * @class egret3d.VideoTexture
      * @classdesc
      * VideoTexture 使用 Video 标签采集 video 视频 </p>

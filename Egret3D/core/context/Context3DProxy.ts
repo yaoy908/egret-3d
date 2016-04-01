@@ -1,5 +1,24 @@
 ﻿module egret3d {
-
+    
+    /**
+    * @class egret3d.Context3DProxy
+    * @classdesc
+    * Context3D 类提供了用于呈现几何定义图形的上下文。</p>
+    *
+    * 渲染上下文包括一个绘图表面及其关联的资源和状态。</p>
+    * Context3D 渲染上下文是一个可编程的管道，基于OpenGL ES 2.0规范。</p>
+    * 您可以通过提供适当的顶点和像素片段程序来创建 2D/3D渲染器，不同的平台有不同的硬件限制，对于移动端限制要求比较大。</p>
+    * 一个canvas 只能申请一个Context3DProxy。</p>
+    *
+    * @see egret3d.Program3D
+    * @see egret3d.IndexBuffer3D
+    * @see egret3d.VertexBuffer3D
+    * @see egret3d.Texture2D
+    * @see egret3d.Shader
+    * @see egret3d.CubeTexture
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class Context3DProxy {
        
         private _cacheProgram: Program3D;
@@ -122,12 +141,12 @@
 
         /**
         * @language zh_CN
-        * 版本号
-        * 视口设置定义
+        * 视口设置定义，用来确定我们定义的视口在canvas中的所在位置
         * @param x position X
         * @param y position Y
         * @param width  3D canvas width
         * @param height  3D canvas  height
+        * @see egret3d.Egret3DCanvas
         */
         public viewPort(x: number, y: number, width: number, height: number) {
             Context3DProxy.gl.viewport(x, y, width, height);

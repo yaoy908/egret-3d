@@ -1,7 +1,8 @@
 ﻿module egret3d {
 
     /*
-    * @class egret3d.CollectBase
+    * @private
+    * @class egret3d.HashMap
     * @classdesc
     * 用来做数据存储使用 hash map 映射表
     * <p> 通用的hash map 映射表  key为键 value为任意类型的值 

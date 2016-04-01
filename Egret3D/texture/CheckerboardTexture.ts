@@ -62,11 +62,12 @@
         public get useMipmap(): boolean {
             return this._useMipmap;
         }
+        
         /**
-  * @language zh_CN
-  * 设置贴图是否使用 smooth 
-  * @param img HTMLImageElement（网页图像元素）
-  */
+          * @language zh_CN
+          * 设置贴图是否使用 smooth 
+          * @param img HTMLImageElement（网页图像元素）
+          */
         public set smooth(flag: boolean) {
             this._smooth = flag;
         }

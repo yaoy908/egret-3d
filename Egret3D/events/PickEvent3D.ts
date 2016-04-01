@@ -5,11 +5,13 @@
     * @class egret3d.PickEvent3D
     * @classdesc
     * PickEvent3D 是所有引擎中可操作物体拣选事件的事件类型标记。
-    * 当IRender对象开启了 mouseEnable ，并且监听了PickEvent3D事件后，
+    * 当IRender对象开启了 enablePick ，并且监听了PickEvent3D事件后，
     * 鼠标或触摸对IRender对象进行操作后会产生一些对应的事件进行影响。
+    * 只有Object3D对象调用addEventListener 才会产生下类事件
     * @includeExample events/PickEvent3D.ts
     * @see egret3d.Event3D
     * @see egret3d.EventDispatcher
+    * @see egret3d.Object3D
     * @version Egret 3.0
     * @platform Web,Native
     */
