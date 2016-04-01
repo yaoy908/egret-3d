@@ -1,7 +1,7 @@
 ﻿/**
  * @language zh_CN
  * @classdesc
- * 立方体使用贴图示例
+ * 立方体变换示例
  * @version Egret 3.0
  * @platform Web,Native
  */
@@ -114,17 +114,12 @@ class SampleCubeTransform {
             this._direction = 1;
         }
         this._cube.x += 0.5 * this._direction;
-        //this._cube.y += 0.5 * this._direction;
-        //this._cube.z += 0.5 * this._direction;
         ///缩放设置
         if (this._cube.scaleY >= 3) {
             this._scaleRadio = - 1;
         } else if (this._cube.scaleY <= 1) {
             this._scaleRadio = 1;
         }
-        //this._cube.scaleX += 0.2 * this._scaleRadio;
         this._cube.scaleY += 0.01 * this._scaleRadio;
-        //this._cube.scaleZ += 0.2 * this._scaleRadio;
-
     }
 }     
