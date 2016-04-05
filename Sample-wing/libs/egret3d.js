@@ -63,7 +63,6 @@ var egret3d;
    * @class egret3d.Event3D
    * @classdesc
    * Event3D 类作为创建 Event3D 对象的基类，当发生事件时，Event3D 对象将作为参数传递给事件侦听器。Event3D 类的属性包含有关事件的基本信息，例如事件的类型。对于许多事件（如由 Event3D 类常量表示的事件），此基本信息就足够了。但其他事件可能需要更详细的信息。例如，与鼠标单击关联的事件需要包括有关单击事件的位置以及在单击事件期间是否按下了任何键的其他信息。您可以通过扩展 Event3D 类（MouseEvent 类执行的操作）将此类其他信息传递给事件侦听器。
-   * @includeExample events/Event3D.ts
    * @version Egret 3.0
    * @platform Web,Native
    */
@@ -133,6 +132,7 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
+     * @private
      * @language zh_CN
      * 鼠标键码
      * @version Egret 3.0
@@ -149,9 +149,11 @@ var egret3d;
     * @class egret3d.MouseEvent3D
     * @classdesc
     * MouseEvent3D 是所有引擎中可操作鼠标事件节点 的事件类型标记。
+    * 只有Input.addEventListener 才会产生下类事件
     * @includeExample events/MouseEvent3D.ts
     * @see egret3d.Event3D
     * @see egret3d.EventDispatcher
+    * @see egret3d.Input
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -219,9 +221,11 @@ var egret3d;
     * @language zh_CN
     * @class egret3d.TouchEvent3D
     * @classdesc
-    * MouseEvent3D 是所有引擎中可操作触摸事件节点 的事件类型标记。
+    * TouchEvent3D 是所有引擎中可操作触摸事件节点 的事件类型标记。
+    * 只有Input.addEventListener 才会产生下类事件
     * @see egret3d.Event3D
     * @see egret3d.EventDispatcher
+    * @see egret3d.Input
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -262,11 +266,13 @@ var egret3d;
     * @class egret3d.PickEvent3D
     * @classdesc
     * PickEvent3D 是所有引擎中可操作物体拣选事件的事件类型标记。
-    * 当IRender对象开启了 mouseEnable ，并且监听了PickEvent3D事件后，
+    * 当IRender对象开启了 enablePick ，并且监听了PickEvent3D事件后，
     * 鼠标或触摸对IRender对象进行操作后会产生一些对应的事件进行影响。
+    * 只有Object3D对象调用addEventListener 才会产生下类事件
     * @includeExample events/PickEvent3D.ts
     * @see egret3d.Event3D
     * @see egret3d.EventDispatcher
+    * @see egret3d.Object3D
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -317,6 +323,7 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
+     * @private
      * @language zh_CN
      * 按键码
      * @version Egret 3.0
@@ -433,9 +440,11 @@ var egret3d;
     * @class egret3d.MouseEvent3D
     * @classdesc
     * KeyEvent3D 按键事件，
+    * 只有Input.addEventListener 才会产生下类事件
     * @includeExample events/KeyEvent3D.ts
     * @see egret3d.Event3D
     * @see egret3d.EventDispatcher
+    * @see egret3d.Input
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -483,9 +492,11 @@ var egret3d;
     * @class egret3d.LoaderEvent3D
     * @classdesc
     * LoaderEvent3D 使用URLLoader加载资源的事件返回对象
+    * 只有URLLoader对象调用addEventListener 才会产生下类事件
     * @includeExample events/LoaderEvent3D.ts
     * @see egret3d.Event3D
     * @see egret3d.EventDispatcher
+    @ @see egret3d.URLLoader
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -510,7 +521,7 @@ var egret3d;
         LoaderEvent3D.LOADER_PROGRESS = "onLoadProgress";
         /**
         * @language zh_CN
-        * LOADER_PROGRESS 常量定义 onLoadProgress 事件对象的 type 属性的值。
+        * LOADER_ERROR 常量定义 onLoadError 事件对象的 type 属性的值。
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -649,12 +660,6 @@ var egret3d;
                         this.listeners[key].splice(i, 1);
                         return;
                     }
-                }
-            }
-        };
-        EventDispatcher.prototype.cleanAllEventListener = function () {
-            for (var eventType in this.listeners) {
-                for (var i = 0; i < this.listeners[eventType].len; i++) {
                 }
             }
         };
@@ -4754,11 +4759,19 @@ var egret3d;
             for (var i = 0; i < 16; i++)
                 this.rawData[i] = r[i];
         };
+        /**
+        * @private
+        * @language zh_CN
+        */
         Matrix4_4.prototype.perspectiveB = function (fov, aspect, near, far) {
             var y = Math.tan(fov * Math.PI / 360) * near;
             var x = y * aspect;
             return this.frustum(-x, x, -y, y, near, far);
         };
+        /**
+        * @private
+        * @language zh_CN
+        */
         Matrix4_4.prototype.frustum = function (l, r, b, t, n, f) {
             var m = this.rawData;
             m[0] = 2 * n / (r - l);
@@ -4779,26 +4792,26 @@ var egret3d;
             m[15] = 0;
             return this;
         };
-        Matrix4_4.prototype.ortho = function (l, r, b, t, n, f) {
-            var m = this.rawData;
-            m[0] = 2 / (r - l);
-            m[1] = 0;
-            m[2] = 0;
-            m[3] = -(r + l) / (r - l);
-            m[4] = 0;
-            m[5] = 2 / (t - b);
-            m[6] = 0;
-            m[7] = -(t + b) / (t - b);
-            m[8] = 0;
-            m[9] = 0;
-            m[10] = -2 / (f - n);
-            m[11] = -(f + n) / (f - n);
-            m[12] = 0;
-            m[13] = 0;
-            m[14] = 0;
-            m[15] = 1;
-            return this;
-        };
+        //public ortho(l: number, r: number, b: number, t: number, n: number, f: number): Matrix4_4 {
+        //    var m = this.rawData;
+        //    m[0] = 2 / (r - l);
+        //    m[1] = 0;
+        //    m[2] = 0;
+        //    m[3] = -(r + l) / (r - l);
+        //    m[4] = 0;
+        //    m[5] = 2 / (t - b);
+        //    m[6] = 0;
+        //    m[7] = -(t + b) / (t - b);
+        //    m[8] = 0;
+        //    m[9] = 0;
+        //    m[10] = -2 / (f - n);
+        //    m[11] = -(f + n) / (f - n);
+        //    m[12] = 0;
+        //    m[13] = 0;
+        //    m[14] = 0;
+        //    m[15] = 1;
+        //    return this;
+        //}
         /**
         * @language en_US
         * Build a perspective projection matrix. (left-handed)
@@ -4852,24 +4865,24 @@ var egret3d;
         * @param zn 近裁剪面位置Z值.
         * @param zf 远裁剪面位置Z值.
         */
-        //public ortho(w: number, h: number, zn: number, zf: number) {
-        //    this.rawData[0] = 2 / w;
-        //    this.rawData[1] = 0;
-        //    this.rawData[2] = 0;
-        //    this.rawData[3] = 0;
-        //    this.rawData[4] = 0;
-        //    this.rawData[5] = 2 / h;
-        //    this.rawData[6] = 0;
-        //    this.rawData[7] = 0;
-        //    this.rawData[8] = 0;
-        //    this.rawData[9] = 0;
-        //    this.rawData[10] = 1 / (zf - zn);
-        //    this.rawData[11] = 0;
-        //    this.rawData[12] = 0;
-        //    this.rawData[13] = 0;
-        //    this.rawData[14] = zn / (zn - zf);
-        //    this.rawData[15] = 1;
-        //}
+        Matrix4_4.prototype.ortho = function (w, h, zn, zf) {
+            this.rawData[0] = 2 / w;
+            this.rawData[1] = 0;
+            this.rawData[2] = 0;
+            this.rawData[3] = 0;
+            this.rawData[4] = 0;
+            this.rawData[5] = 2 / h;
+            this.rawData[6] = 0;
+            this.rawData[7] = 0;
+            this.rawData[8] = 0;
+            this.rawData[9] = 0;
+            this.rawData[10] = 1 / (zf - zn);
+            this.rawData[11] = 0;
+            this.rawData[12] = 0;
+            this.rawData[13] = 0;
+            this.rawData[14] = zn / (zn - zf);
+            this.rawData[15] = 1;
+        };
         /**
         * @language en_US
         * Build an ortho matrix. (left-handed)
@@ -7950,6 +7963,25 @@ var egret3d;
 })(egret3d || (egret3d = {}));
 var egret3d;
 (function (egret3d) {
+    /**
+    * @class egret3d.Context3DProxy
+    * @classdesc
+    * Context3D 类提供了用于呈现几何定义图形的上下文。</p>
+    *
+    * 渲染上下文包括一个绘图表面及其关联的资源和状态。</p>
+    * Context3D 渲染上下文是一个可编程的管道，基于OpenGL ES 2.0规范。</p>
+    * 您可以通过提供适当的顶点和像素片段程序来创建 2D/3D渲染器，不同的平台有不同的硬件限制，对于移动端限制要求比较大。</p>
+    * 一个canvas 只能申请一个Context3DProxy。</p>
+    *
+    * @see egret3d.Program3D
+    * @see egret3d.IndexBuffer3D
+    * @see egret3d.VertexBuffer3D
+    * @see egret3d.Texture2D
+    * @see egret3d.Shader
+    * @see egret3d.CubeTexture
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     var Context3DProxy = (function () {
         function Context3DProxy() {
         }
@@ -8029,12 +8061,12 @@ var egret3d;
         //}
         /**
         * @language zh_CN
-        * 版本号
-        * 视口设置定义
+        * 视口设置定义，用来确定我们定义的视口在canvas中的所在位置
         * @param x position X
         * @param y position Y
         * @param width  3D canvas width
         * @param height  3D canvas  height
+        * @see egret3d.Egret3DCanvas
         */
         Context3DProxy.prototype.viewPort = function (x, y, width, height) {
             Context3DProxy.gl.viewport(x, y, width, height);
@@ -8751,21 +8783,22 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
-       * @class egret3d.FrameBuffer
-       * @classdesc
-       * FrameBuffer 类提供了用于呈现几何定义图形的上下文的帧缓冲对象。</p>
-       *
-       * 渲染上下文包括一个绘图表面及其关联的资源帧缓冲对象。</p>
-       * 通过context creatFrameBuffer 来创建，不能直接使用 new 的方式实例化。</p>
-       * @see egret3d.openGLES.Program3D
-       * @see egret3d.openGLES.IndexBuffer3D
-       * @see egret3d.openGLES.VertexBuffer3D
-       * @see egret3d.openGLES.Texture2D
-       * @see egret3d.openGLES.Shader
-       * @see egret3d.openGLES.CubeTexture
-       * @version Egret 3.0
-       * @platform Web,Native
-       */
+    * @private
+    * @class egret3d.FrameBuffer
+    * @classdesc
+    * FrameBuffer 类提供了用于呈现几何定义图形的上下文的帧缓冲对象。</p>
+    *
+    * 渲染上下文包括一个绘图表面及其关联的资源帧缓冲对象。</p>
+    * 通过context creatFrameBuffer 来创建，不能直接使用 new 的方式实例化。</p>
+    * @see egret3d.Program3D
+    * @see egret3d.IndexBuffer3D
+    * @see egret3d.VertexBuffer3D
+    * @see egret3d.Texture2D
+    * @see egret3d.Shader
+    * @see egret3d.CubeTexture
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     var FrameBuffer = (function () {
         function FrameBuffer() {
         }
@@ -8776,7 +8809,7 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
-    * @class egret3d.openGLES.IndexBuffer3D
+    * @class egret3d.IndexBuffer3D
     * @classdesc
     * IndexBuffer3D 用于表示顶点索引列表，由图形子系统保留的图形元素构成。</p>
     *
@@ -8787,7 +8820,7 @@ var egret3d;
 
     * 无法直接实例化 IndexBuffer3D。使用 Context3D.CreateIndexBuffer() 可创建实例。</p>
     * @see egret3d.Context3D
-    * @see egret3d.openGLES.CubeTexture
+    * @see egret3d.CubeTexture
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -8807,7 +8840,7 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
-     * @class egret3d.openGLES.IndexBuffer3D
+     * @class egret3d.IndexBuffer3D
      * @classdesc
      * IndexBuffer3D 用于表示顶点索引列表，由图形子系统保留的图形元素构成。</p>
      * VertexBuffer3D 类表示上载到渲染上下文的一组顶点数据。</p>
@@ -8819,8 +8852,8 @@ var egret3d;
      * 每个输入可能需要 1 到 4 个 32 位值。</p>
      * 例如，一个顶点的 [x,y,z] 位置坐标可以作为包含 3 个 32 位值的矢量传递到顶点程序。</p>
      * 您最多可以为每个点提供 64 个 32 位值（256 字节）数据（但在这种情况下，单个顶点着色器无法使用所有数据）。</p>
-     * @see egret3d.Context3D
-     * @see egret3d.openGLES.CubeTexture
+     * @see egret3d.Context3DProxy
+     * @see egret3d.CubeTexture
      * @version Egret 3.0
      * @platform Web,Native
      */
@@ -8869,7 +8902,7 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
-    * @class egret3d.openGLES.Program3D
+    * @class egret3d.Program3D
     * @classdesc
     * Program3D 类表示上载到渲染上下文的一对渲染程序（也称为“编译后的着色器”）。</p>
     *
@@ -8880,12 +8913,12 @@ var egret3d;
     * 通过将相应 Program3D 实例传递到 Context3D setProgram() 方法，指定后续渲染操作要使用的程序对。</p>
     * 您无法直接创建 Program3D 对象；请改用 Context3D createProgram() 方法。</p>
     *
-    * @see egret3d.openGLES.Program3D
-    * @see egret3d.openGLES.IndexBuffer3D
-    * @see egret3d.openGLES.VertexBuffer3D
-    * @see egret3d.openGLES.Texture2D
-    * @see egret3d.openGLES.Shader
-    * @see egret3d.openGLES.CubeTexture
+    * @see egret3d.Program3D
+    * @see egret3d.IndexBuffer3D
+    * @see egret3d.VertexBuffer3D
+    * @see egret3d.Texture2D
+    * @see egret3d.Shader
+    * @see egret3d.CubeTexture
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -8904,18 +8937,18 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
-    * @class egret3d.openGLES.Texture2D
+    * @class egret3d.Texture2D
     * @classdesc
     * Texture 类表示上载到渲染上下文的二维纹理。</p>
     *
     * 定义一个 2D 纹理，以便在渲染期间使用。</p>
     * 无法直接实例化 Texture。使用 Context3D createTexture() 方法创建实例。</p>
-    * @see egret3d.openGLES.Program3D
-    * @see egret3d.openGLES.IndexBuffer3D
-    * @see egret3d.openGLES.VertexBuffer3D
-    * @see egret3d.openGLES.Texture2D
-    * @see egret3d.openGLES.Shader
-    * @see egret3d.openGLES.CubeTexture
+    * @see egret3d.Program3D
+    * @see egret3d.IndexBuffer3D
+    * @see egret3d.VertexBuffer3D
+    * @see egret3d.Texture2D
+    * @see egret3d.Shader
+    * @see egret3d.CubeTexture
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -8976,18 +9009,18 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
-    * @class egret3d.openGLES.Shader
+    * @class egret3d.Shader
     * @classdesc
     * Shader 类表示上载到渲染上下文的一对渲染程序中的 顶点找色shader，或片段着色的shader 。</p>
     *
     * shader 是基于 opengl es 2.0 标准 也就是webgl版本的shader着色器。</p>
     *
-    * @see egret3d.openGLES.Program3D
-    * @see egret3d.openGLES.IndexBuffer3D
-    * @see egret3d.openGLES.VertexBuffer3D
-    * @see egret3d.openGLES.Texture2D
-    * @see egret3d.openGLES.Shader
-    * @see egret3d.openGLES.CubeTexture
+    * @see egret3d.Program3D
+    * @see egret3d.IndexBuffer3D
+    * @see egret3d.VertexBuffer3D
+    * @see egret3d.Texture2D
+    * @see egret3d.Shader
+    * @see egret3d.CubeTexture
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -9038,18 +9071,16 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
-    * @class egret3d.openGLES.Texture2D
+    * @class egret3d.Texture3D
     * @classdesc
-    * Texture 类表示上载到渲染上下文的二维纹理。</p>
-    *
-    * 定义一个 2D 纹理，以便在渲染期间使用。</p>
-    * 无法直接实例化 Texture。使用 Context3D createTexture() 方法创建实例。</p>
-    * @see egret3d.openGLES.Program3D
-    * @see egret3d.openGLES.IndexBuffer3D
-    * @see egret3d.openGLES.VertexBuffer3D
-    * @see egret3d.openGLES.Texture2D
-    * @see egret3d.openGLES.Shader
-    * @see egret3d.openGLES.CubeTexture
+    * 由6加Texture2D 组成
+    * 可以使一个6面体上贴出不同的贴图
+    * @see egret3d.Program3D
+    * @see egret3d.IndexBuffer3D
+    * @see egret3d.VertexBuffer3D
+    * @see egret3d.Texture2D
+    * @see egret3d.Shader
+    * @see egret3d.CubeTexture
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -9111,7 +9142,7 @@ var egret3d;
     * @see egret3d.Vector3D
     * @see egret3d.Matrix4_4
     * @see egret3d.Quaternion
-    * @see egret3d.CubeBoxBound
+    * @see egret3d.Bound
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -10614,8 +10645,8 @@ var egret3d;
          * @language zh_CN
          * 指定材质，和公告板宽、高，构建一个公告板
          * @param material 渲染材质
-         * @param width 公告板宽
-         * @param height 公告板高
+         * @param width 公告板宽度
+         * @param height 公告板高度
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -10765,6 +10796,10 @@ var egret3d;
 })(egret3d || (egret3d = {}));
 var egret3d;
 (function (egret3d) {
+    /**
+    *@language zh_CN
+    *@private
+    */
     (function (LightType) {
         LightType[LightType["pointlight"] = 0] = "pointlight";
         LightType[LightType["directlight"] = 1] = "directlight";
@@ -11411,12 +11446,9 @@ var egret3d;
     var LightGroup = (function () {
         /**
         * @language zh_CN
-        * constructor
+        * 创建一个灯光组
         */
         function LightGroup() {
-            /**
-             * @language en_US
-             */
             /**
              * @language zh_CN
              * 灯光个数
@@ -12048,13 +12080,11 @@ var egret3d;
 (function (egret3d) {
     /**
     * @private
-    * @class egret3d.Tag
+    * @class egret3d.Layer
     * @classdesc
-    * Object3D 渲染tag
-    * 图形属性标签页的属性，由layer列表组成，共用深度信息
-    * 渲染每个tag他们的深度信息是不清理的
-    *
-    * @see egret3d.Layer
+    * Object3D 渲染Layer
+    * 每个Layer分两个渲染列表，一个是有alpha的对象列表，另一个是没有alpha的对象列表
+    * 不同的Layer层级可以使用不同的渲染方式，来达到各组不同的渲染效果.
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -12084,11 +12114,13 @@ var egret3d;
 (function (egret3d) {
     /**
     * @private
-    * @class egret3d.Layer
+    * @class egret3d.Tag
     * @classdesc
-    * Object3D 渲染Layer
-    * 每个Layer分两个渲染列表，一个是有alpha的对象列表，另一个是没有alpha的对象列表
-    * 不同的Layer层级可以使用不同的渲染方式，来达到各组不同的渲染效果.
+    * Object3D 渲染tag
+    * 图形属性标签页的属性，由layer列表组成，共用深度信息
+    * 渲染每个tag他们的深度信息是不清理的
+    *
+    * @see egret3d.Layer
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -12223,7 +12255,8 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /*
-    * @class egret3d.CollectBase
+    * @private
+    * @class egret3d.HashMap
     * @classdesc
     * 用来做数据存储使用 hash map 映射表
     * <p> 通用的hash map 映射表  key为键 value为任意类型的值
@@ -13238,7 +13271,8 @@ var egret3d;
      * @language zh_CN
      * @class egret3d.SubGeometry
      * @classdesc
-     * 表示几何形状 子集
+     * 表示几何形状 子集 不同的子集渲染时使用的材质会不同
+     *
      * @see egret3d.Geometry
      * @version Egret 3.0
      * @platform Web,Native
@@ -13420,6 +13454,8 @@ var egret3d;
       var box: egret3d.Mesh = new egret3d.Mesh( new egret3d.CubeGeometry(), new egret3d.TextureMaterial() );
      </pre>
      *
+     * @see egret3d.Geometry
+     * @see egret3d.Mesh
      * @version Egret 3.0
      * @platform Web,Native
      * @includeExample geometry/CubeGeometry.ts
@@ -13495,7 +13531,7 @@ var egret3d;
      <pre>
      var box: egret3d.Mesh = new egret3d.Mesh( new egret3d.CylinderGeometry(), new egret3d.TextureMaterial() );
      </pre>
-     *
+     * @see egret3d.Geometry
      * @version Egret 3.0
      * @platform Web,Native
      */
@@ -13514,6 +13550,7 @@ var egret3d;
             this.buildGeomtry();
         }
         /**
+        * @private
         * @language zh_CN
         * 生成网格
         */
@@ -13862,7 +13899,11 @@ var egret3d;
      * @class egret3d.Input
      * @classdesc
      * 处理输入设备,鼠标.键盘.触摸。
+     * 当点事件产生时如果没有点击到任何的View3D内，
+     * 当前事件将不用派发.
      * @includeExample input/Input.ts
+     * @see egret3d.EventDispatcher
+     *
      * @version Egret 3.0
      * @platform Web,Native
      */
@@ -14122,6 +14163,7 @@ var egret3d;
                 this.onSwipe(x1, y1);
             }
             this._touchEvent3d.targetTouches = e.targetTouches;
+            this._touchEvent3d.target = this;
             if (!this._isTouchStart) {
                 this._isTouchStart = true;
                 this._touchEvent3d.eventType = egret3d.TouchEvent3D.TOUCH_START;
@@ -14146,6 +14188,7 @@ var egret3d;
             }
             this._isTouchStart = false;
             this._touchEvent3d.targetTouches = e.targetTouches;
+            this._touchEvent3d.target = this;
             this._touchEvent3d.eventType = egret3d.TouchEvent3D.TOUCH_END;
             this.dispatchEvent(this._touchEvent3d);
         };
@@ -14174,6 +14217,7 @@ var egret3d;
             else {
             }
             this._touchEvent3d.targetTouches = e.targetTouches;
+            this._touchEvent3d.target = this;
             this._touchEvent3d.eventType = egret3d.TouchEvent3D.TOUCH_MOVE;
             this.dispatchEvent(this._touchEvent3d);
         };
@@ -14182,11 +14226,13 @@ var egret3d;
                 return;
             }
             this._mouseEvent3d.mouseCode = e.button;
+            this._mouseEvent3d.target = this;
             this._mouseEvent3d.eventType = egret3d.MouseEvent3D.MOUSE_CLICK;
             this.dispatchEvent(this._mouseEvent3d);
         };
         Input.prototype.mouseEnd = function (e) {
             this._mouseEvent3d.mouseCode = e.button;
+            this._mouseEvent3d.target = this;
             this._mouseStatus[this._mouseEvent3d.mouseCode] = false;
             this._mouseEvent3d.eventType = egret3d.MouseEvent3D.MOUSE_UP;
             this.dispatchEvent(this._mouseEvent3d);
@@ -14205,6 +14251,7 @@ var egret3d;
                 return;
             }
             this._mouseEvent3d.mouseCode = e.button;
+            this._mouseEvent3d.target = this;
             if (!this._mouseStatus[this._mouseEvent3d.mouseCode]) {
                 this._mouseStatus[this._mouseEvent3d.mouseCode] = true;
                 this._mouseEvent3d.eventType = egret3d.MouseEvent3D.MOUSE_DOWN;
@@ -14218,20 +14265,24 @@ var egret3d;
             Input.mouseY = e.clientY - Input.canvas.y;
             Input.mouseOffsetX = Input.mouseX - Input.mouseLastX;
             Input.mouseOffsetY = Input.mouseY - Input.mouseLastY;
+            this._mouseEvent3d.target = this;
             this._mouseEvent3d.eventType = egret3d.MouseEvent3D.MOUSE_MOVE;
             this.dispatchEvent(this._mouseEvent3d);
         };
         Input.prototype.mouseOver = function (e) {
+            this._mouseEvent3d.target = this;
             this._mouseEvent3d.eventType = egret3d.MouseEvent3D.MOUSE_OVER;
             this.dispatchEvent(this._mouseEvent3d);
         };
         Input.prototype.mouseWheel = function (e) {
             Input.wheelDelta = e.wheelDelta;
+            this._mouseEvent3d.target = this;
             this._mouseEvent3d.eventType = egret3d.MouseEvent3D.MOUSE_WHEEL;
             this.dispatchEvent(this._mouseEvent3d);
         };
         Input.prototype.keyDown = function (e) {
             this._keyEvent3d.keyCode = e.keyCode;
+            this._keyEvent3d.target = this;
             if (!this._keyStatus[e.keyCode]) {
                 this._keyStatus[e.keyCode] = true;
                 this._keyEvent3d.eventType = egret3d.KeyEvent3D.KEY_CLICK;
@@ -14242,6 +14293,7 @@ var egret3d;
         };
         Input.prototype.keyUp = function (e) {
             this._keyEvent3d.keyCode = e.keyCode;
+            this._keyEvent3d.target = this;
             if (this._keyStatus[e.keyCode]) {
                 this._keyEvent3d.eventType = egret3d.KeyEvent3D.KEY_CLICK;
                 this.dispatchEvent(this._keyEvent3d);
@@ -17364,6 +17416,15 @@ var egret3d;
 })(egret3d || (egret3d = {}));
 var egret3d;
 (function (egret3d) {
+    /**
+    * @language zh_CN
+    * @class egret3d.MaterialBase
+    * @classdesc
+    * 材质球共有的基础类型，封装了材质球共有的基础数据设置方法。</p>
+    * 不同的渲染通道pass。</p>
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     var MaterialBase = (function () {
         /**
         * @language zh_CN
@@ -17383,11 +17444,23 @@ var egret3d;
             else
                 this.setData(materialData);
         }
+        /**
+         * @language zh_CN
+         * @private
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         MaterialBase.prototype.setData = function (data) {
             this.materialData = data;
             this.initPass();
             this.blendMode = egret3d.BlendMode.NORMAL;
         };
+        /**
+         * @language zh_CN
+         * @private
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         MaterialBase.prototype.getData = function () {
             return this.materialData;
         };
@@ -18151,8 +18224,8 @@ var egret3d;
         /**
          * @language zh_CN
          * 创建一个新的 TextureMaterial 对象。
-         * @param texture {ITexture}
-         * @param materialData {MaterialData}
+         * @param texture 用来渲染的贴图，默认会给出一张棋盘格贴图
+         * @param materialData 材质数据信息，可以不指定
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -18366,6 +18439,13 @@ var egret3d;
 })(egret3d || (egret3d = {}));
 var egret3d;
 (function (egret3d) {
+    /**
+    * @private
+    * @class egret3d.TreeBase
+    * @classdesc
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     var TreeBase = (function () {
         function TreeBase(object3D) {
             this._searchList = new Array();
@@ -20777,9 +20857,9 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
-     * @class egret3d.SkyTexture
+     * @class egret3d.CubeTexture
      * @classdesc
-     * SkyTexture 类为天空贴图
+     * CubeTexture 类为天空贴图
      *
      * 天空贴图用于Sky类使用，其内部是将6张HTMLImageElement（网页图片元素）封装到CubeTexture对象，CubeTexture为引擎内部使用对象。</p>
      *
@@ -20795,7 +20875,7 @@ var egret3d;
      </pre>
      使用示例：</p>
      <pre>
-     var skyTexture: egret3d.SkyTexture = new egret3d.SkyTexture(
+     var cubeTexture: CubeTexture = CubeTexture.createCubeTexture(
      <HTMLImageElement>document.getElementById("t1"),
      <HTMLImageElement>document.getElementById("t2"),
      <HTMLImageElement>document.getElementById("t3"),
@@ -20803,13 +20883,10 @@ var egret3d;
      <HTMLImageElement>document.getElementById("t5"),
      <HTMLImageElement>document.getElementById("t6")
      );
-
-     view3D.sky = new egret3d.Sky(skyTexture);
      </pre>
      * @see egret3d.Sky
      * @version Egret 3.0
      * @platform Web,Native
-     * @includeExample texture/SkyTexture.ts
      */
     var CubeTexture = (function () {
         /**
@@ -20983,10 +21060,10 @@ var egret3d;
                 return this._smooth;
             },
             /**
-      * @language zh_CN
-      * 设置贴图是否使用 smooth
-      * @param img HTMLImageElement（网页图像元素）
-      */
+              * @language zh_CN
+              * 设置贴图是否使用 smooth
+              * @param img HTMLImageElement（网页图像元素）
+              */
             set: function (flag) {
                 this._smooth = flag;
             },
@@ -21051,6 +21128,7 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
+     * @private
      * @class egret3d.VideoTexture
      * @classdesc
      * VideoTexture 使用 Video 标签采集 video 视频 </p>
@@ -22789,6 +22867,7 @@ var egret3d;
     * 相机分为透视摄像机、正交摄像机、VR摄像机。</p>
     *
     * @see egret3d.Matrix4_4
+    * @see egret3d.Object3D
     *
     * @includeExample camera/Camera3D.ts
     * @version Egret 3.0

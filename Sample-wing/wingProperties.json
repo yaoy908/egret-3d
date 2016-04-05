@@ -569,6 +569,11 @@
 					"isFolder":false,
 					"key":"resource/laohu/Mon_04.png",
 					"name":"Mon_04.png"
+				},
+				{
+					"isFolder":false,
+					"key":"resource/LingTong/hero_12.png",
+					"name":"hero_12.png"
 				}
 			]
 		}

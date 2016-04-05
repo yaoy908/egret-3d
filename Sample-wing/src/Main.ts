@@ -3,6 +3,6 @@ class Main extends egret.DisplayObjectContainer {
    
     public constructor() {
         super();
-        var sample = new SampleTextureCube();
+        var sample = new SampleAnimation();
     }
 }
