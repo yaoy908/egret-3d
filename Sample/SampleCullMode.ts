@@ -61,17 +61,20 @@ class SampleCullMode {
         ///创建颜色材质
         var mat: egret3d.TextureMaterial = new egret3d.TextureMaterial();
         ///设置正反面
-        mat.cullMode = egret3d.ContextConfig.BACK;
+        mat.cullMode = egret3d.ContextConfig.FRONT;
+
         ///创建立方体对象
         var geometery: egret3d.CubeGeometry = new egret3d.CubeGeometry();
         ///通过材质和立方体对象生成Mesh
         this._cube = new egret3d.Mesh(geometery, mat);
+
         ///将mesh插入view3D
         this._view3D.addChild3D(this._cube);
         ///启动Canvas。
         this._egret3DCanvas.start();
         ///注册每帧更新，让cube进行旋转
         this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME, this.update, this);
+
 
         this.InitCameraCtl();
     }
@@ -91,8 +94,6 @@ class SampleCullMode {
     }
 
     public update(e: egret3d.Event3D) {
-        ///旋转
-        this._cube.rotationY += 0.5;
         this.cameraCtl.update();
     }
 }    

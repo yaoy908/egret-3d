@@ -72,6 +72,8 @@ class SampleCreateCube {
         this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME, this.update, this);
 
         this.InitCameraCtl();
+
+
     }
     /**
    * @language zh_CN        

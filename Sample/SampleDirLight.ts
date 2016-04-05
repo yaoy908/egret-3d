@@ -1,7 +1,7 @@
 ﻿/**
 * @language zh_CN
 * @classdesc
-* 创建立方体使用示例  
+* 创建平行光使用示例  
 * @version Egret 3.0
 * @platform Web,Native
 */
@@ -75,17 +75,18 @@ class SampleDirLight {
         ////创建加载类
         var load: egret3d.URLLoader = new egret3d.URLLoader();
         ///设置加载完成回调
-        load.onLoadComplete = (e: egret3d.URLLoader) => this.onLoad(e);
+        load.addEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE, this.onLoad, this);
         ///开始加载
         load.load("resource/laohu/Mon_04.esm");
 
         this.InitCameraCtl();
 
-        ///平行灯光
+        ///创建平行关，设置平行光位置
         var dirLight: egret3d.DirectLight = new egret3d.DirectLight(new egret3d.Vector3D(-0.5, 0.6, 0.2));
+        ///设置灯光漫反射颜色
         dirLight.diffuse = 0xffffff;
         this.lights.addLight(dirLight);
-     
+
 
         ///启动Canvas。
         this._egret3DCanvas.start();
@@ -115,14 +116,14 @@ class SampleDirLight {
     * @version Egret 3.0
     * @platform Web,Native
     */
-    protected onLoad(e: egret3d.URLLoader) {
+    protected onLoad(e: egret3d.LoaderEvent3D) {
         ///创建纹理材质
         this.mat = new egret3d.TextureMaterial();
         this.mat.shininess = 20.0;
         this.mat.ambientColor = 0xffffff;
-        this.mat.ambientPower = 0.5;
+        //this.mat.ambientPower = 0.5;///接口修改等待更正
         ///创建模型基类
-        var ge: egret3d.Geometry = e.data;
+        var ge: egret3d.Geometry = e.loader.data;
         ///生成mesh
         this.model = new egret3d.Mesh(ge, this.mat);
 
@@ -137,7 +138,7 @@ class SampleDirLight {
 
         var loadtex: egret3d.URLLoader = new egret3d.URLLoader();
         ///注册贴图读取完成回调
-        loadtex.onLoadComplete = (e: egret3d.URLLoader) => this.onLoadTexture(e, this.mat, "Mon_04");
+        loadtex.addEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
         ///开始读取贴图 
         loadtex.load("resource/laohu/Mon_04.png");
     }
@@ -149,13 +150,13 @@ class SampleDirLight {
     * @version Egret 3.0
     * @platform Web,Native
     */
-    protected onLoadTexture(e: egret3d.URLLoader, mat: egret3d.TextureMaterial, name: string) {
+    protected onLoadTexture(e: egret3d.LoaderEvent3D) {
         ///设置材质球的漫反射贴图。
-        mat.diffuseTexture = e.data;
+        this.mat.diffuseTexture = e.loader.data;
         ///注销回调
-        e.onLoadComplete = null;
+        e.loader.removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
     }
-    
+
     public update(e: egret3d.Event3D) {
         this.cameraCtl.update();
     }

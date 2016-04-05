@@ -1,7 +1,7 @@
 ﻿/**
 * @language zh_CN
 * @classdesc
-* 创建立方体使用示例 相机控制 做两个盒子  点击反馈
+* 创建立方体使用示例
 * @version Egret 3.0
 * @platform Web,Native
 */
@@ -72,29 +72,15 @@ class SampleEvent {
         var geometery_Cube: egret3d.CubeGeometry = new egret3d.CubeGeometry();
         ///通过材质和立方体对象生成Mesh
         this._cube = new egret3d.Mesh(geometery_Cube, mat_Cube);
-        ///注册事件
-        this._cube.addEventListener(egret3d.MouseEvent3D.MOUSE_DOWN, this.onMouseDown, this);
-        this._cube.addEventListener(egret3d.TouchEvent3D.TOUCH_DOWN, this.onTouchDown, this);
+        ///开启拣选
+        this._cube.enablePick = true;
+        ///拣选事件注册
+        this._cube.addEventListener(egret3d.PickEvent3D.PICK_DOWN, this.onPickDown, this);
+        ///鼠标事件注册
+        egret3d.Input.addEventListener(egret3d.MouseEvent3D.MOUSE_DOWN, this.onMouseDown, this);
         ///将mesh插入view3D
         this._view3D.addChild3D(this._cube);
-
-
-        // ///创建默认图片材质
-        //var mat_Cylinder: egret3d.TextureMaterial = new egret3d.TextureMaterial();
-        /////创建圆柱体对象
-        //var geometery_Cylinder: egret3d.CylinderGeometry = new egret3d.CylinderGeometry();
-        /////通过材质和圆柱体对象生成Mesh
-        //this._cylinder = new egret3d.Mesh(geometery_Cylinder, mat_Cylinder);
-        // ///开启鼠标事件响应
-        //this._cylinder.mouseEnable = true;
-        /////注册事件
-        //this._cylinder.addEventListener(egret3d.MouseEvent3D.MOUSE_DOWN, this.onMouseDown, this);
-        //this._cylinder.addEventListener(egret3d.TouchEvent3D.TOUCH_DOWN, this.onTouchDown, this);
-        /////设置x坐标
-        //this._cylinder.x = 150;
-        /////将mesh插入view3D
-        //this._view3D.addChild3D(this._cylinder)
-
+      
         this.InitCameraCtl();
 
         ///启动Canvas。
@@ -119,27 +105,29 @@ class SampleEvent {
 
     /**
     * @language zh_CN        
+    * 拣选按下响应事件
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    private onPickDown(event3D: egret3d.PickEvent3D): void {
+        egret3d.Debug.instance.trace("onPickDown");
+        this.EspondOnAClick();
+    }
+
+    /**
+    * @language zh_CN        
     * 鼠标按下响应事件
     * @version Egret 3.0
     * @platform Web,Native
     */
-    private onMouseDown(event3D: egret3d.Event3D): void {
-        egret3d.Debug.instance.trace("onMouseDown");
+    private onMouseDown(event3d: egret3d.MouseEvent3D): void {
+        egret3d.Debug.instance.trace("onPickDown");
         this.EspondOnAClick();
     }
+
     /**
     * @language zh_CN        
-    * 触摸按下响应事件
-    * @version Egret 3.0
-    * @platform Web,Native
-    */
-    private onTouchDown(event3D: egret3d.Event3D) {
-        egret3d.Debug.instance.trace("onTouchDown");
-        this.EspondOnAClick();
-    }
-    /**
-    * @language zh_CN        
-    * 触摸按下反馈
+    * 反馈
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -155,7 +143,6 @@ class SampleEvent {
             this._cube.scaleY = 1;
             this._cube.scaleZ = 1;
         }
-
     }
 
     public update(e: egret3d.Event3D) {

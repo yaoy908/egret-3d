@@ -99,6 +99,5 @@ class SampleTextureCube {
         ///旋转
         this._cube.rotationY += 0.5;
         this._cube.rotationX += 0.5;
-
     }
 }     
