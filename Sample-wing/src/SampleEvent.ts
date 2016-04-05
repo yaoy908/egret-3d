@@ -1,11 +1,11 @@
-﻿/**
+/**
 * @language zh_CN
 * @classdesc
-* 创建模型使用示例
+* 创建立方体使用示例
 * @version Egret 3.0
 * @platform Web,Native
 */
-class SampleStaticModel {
+class SampleEvent {
     /**
     * Canvas操作对象
     * @version Egret 3.0
@@ -19,11 +19,18 @@ class SampleStaticModel {
     */
     protected _view3D: egret3d.View3D;
     /**
-    * View3D操作对象
+    * 立方体对象
     * @version Egret 3.0
     * @platform Web,Native
     */
-    protected mat: egret3d.TextureMaterial;
+    protected _cube: egret3d.Mesh;
+    /**
+    * 圆柱体对象
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    protected _cylinder: egret3d.Mesh;
+
     /**
     * look at 摄像机控制器 。</p>
     * 指定摄像机看向的目标对象。</p>
@@ -33,13 +40,8 @@ class SampleStaticModel {
     * @version Egret 3.0
     * @platform Web,Native
     */
-    private cameraCtl: egret3d.LookAtController;
-    /**
-    * 模型mesh对象
-    * @version Egret 3.0
-    * @platform Web,Native
-    */
-    private model: egret3d.Mesh;
+    protected cameraCtl: egret3d.LookAtController;
+
 
     public constructor() {
         ///创建Canvas对象。
@@ -55,27 +57,35 @@ class SampleStaticModel {
         ///@param y: number 起始坐标y
         ///@param  width: number 显示区域的宽
         ///@param  height: number 显示区域的高
-        this._view3D = new egret3d.View3D(0, 0, window.innerWidth, window.innerHeight);
+        this._view3D = new egret3d.View3D(0,0,window.innerWidth,window.innerHeight);
         ///当前对象对视位置,其参数依次为:
         ///@param pos 对象的位置
         ///@param target 目标的位置
-        this._view3D.camera3D.lookAt(new egret3d.Vector3D(0, 0, 1000), new egret3d.Vector3D(10, 20, 30));
+        this._view3D.camera3D.lookAt(new egret3d.Vector3D(0,0,-1000),new egret3d.Vector3D(0,0,0));
         ///View3D的背景色设置
         this._view3D.backColor = 0xff000000;
         ///将View3D添加进Canvas中
         this._egret3DCanvas.addView3D(this._view3D);
-        ////创建加载类
-        var load: egret3d.URLLoader = new egret3d.URLLoader();
-        ///设置加载完成回调
-        load.addEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE, this.onLoad, this);
-        ///开始加载
-        load.load("resource/laohu/Mon_04.esm");
+        ///创建默认图片材质
+        var mat_Cube: egret3d.TextureMaterial = new egret3d.TextureMaterial();
+        ///创建立方体对象
+        var geometery_Cube: egret3d.CubeGeometry = new egret3d.CubeGeometry();
+        ///通过材质和立方体对象生成Mesh
+        this._cube = new egret3d.Mesh(geometery_Cube,mat_Cube);
+        ///开启拣选
+        this._cube.enablePick = true;
+        ///拣选事件注册
+        this._cube.addEventListener(egret3d.PickEvent3D.PICK_DOWN,this.onPickDown,this);
+        ///鼠标事件注册
+        egret3d.Input.addEventListener(egret3d.MouseEvent3D.MOUSE_DOWN,this.onMouseDown,this);
+        ///将mesh插入view3D
+        this._view3D.addChild3D(this._cube);
 
         this.InitCameraCtl();
 
         ///启动Canvas。
         this._egret3DCanvas.start();
-        this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME, this.update, this);
+        this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME,this.update,this);
     }
 
     /**
@@ -86,7 +96,7 @@ class SampleStaticModel {
     */
     private InitCameraCtl() {
         ///摄像机控制类
-        this.cameraCtl = new egret3d.LookAtController(this._view3D.camera3D, new egret3d.Object3D());
+        this.cameraCtl = new egret3d.LookAtController(this._view3D.camera3D,new egret3d.Object3D());
         ///设置目标和相机的距离
         this.cameraCtl.distance = 1000;
         ///设置相机x轴旋转
@@ -95,49 +105,49 @@ class SampleStaticModel {
 
     /**
     * @language zh_CN        
-    * 模型加载回调
-    * @param e: egret3d.URLLoader 加载器对象
+    * 拣选按下响应事件
     * @version Egret 3.0
     * @platform Web,Native
     */
-    protected onLoad(e: egret3d.LoaderEvent3D) {
-        ///创建纹理材质
-        this.mat = new egret3d.TextureMaterial();
-        ///创建模型基类
-        var ge: egret3d.Geometry = e.loader.data;
-        ///生成mesh
-        this.model = new egret3d.Mesh(ge, this.mat);
-
-        if (ge.vertexFormat & egret3d.VertexFormat.VF_SKIN) {
-            ///设置骨骼动画
-            this.model.animation = new egret3d.SkeletonAnimation(ge.skeleton);
-        }
-        ///插入model
-        this._view3D.addChild3D(this.model);
-
-        var loadtex: egret3d.URLLoader = new egret3d.URLLoader();
-        ///注册贴图读取完成回调
-        loadtex.addEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
-        ///开始读取贴图 
-        loadtex.load("resource/laohu/Mon_04.png");
+    private onPickDown(event3D: egret3d.PickEvent3D): void {
+        egret3d.Debug.instance.trace("onPickDown");
+        this.EspondOnAClick();
     }
 
     /**
     * @language zh_CN        
-    * 漫反射贴图加载回调
-    * @param e: egret3d.URLLoader 加载器对象
+    * 鼠标按下响应事件
     * @version Egret 3.0
     * @platform Web,Native
     */
-    protected onLoadTexture(e: egret3d.LoaderEvent3D) {
-        ///设置材质球的漫反射贴图。
-        this.mat.diffuseTexture = e.loader.data;
-        ///注销回调
-        e.loader.removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
+    private onMouseDown(event3d: egret3d.MouseEvent3D): void {
+        egret3d.Debug.instance.trace("onPickDown");
+        this.EspondOnAClick();
     }
 
+    /**
+    * @language zh_CN        
+    * 反馈
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    private EspondOnAClick(): void {
+
+        if(this._cube.scaleX <= 2) {
+            this._cube.scaleX += 0.5;
+            this._cube.scaleY += 0.5;
+            this._cube.scaleZ += 0.5;
+        }
+        else {
+            this._cube.scaleX = 1;
+            this._cube.scaleY = 1;
+            this._cube.scaleZ = 1;
+        }
+    }
 
     public update(e: egret3d.Event3D) {
         this.cameraCtl.update();
     }
+
+
 }    

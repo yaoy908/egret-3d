@@ -1,11 +1,11 @@
-﻿/**
+/**
 * @language zh_CN
 * @classdesc
-* 创建汇聚光源使用示例  
+* 创建点光源使用示例  
 * @version Egret 3.0
 * @platform Web,Native
 */
-class SampleSpotLight {
+class SamplePointLight {
     /**
     * Canvas操作对象
     * @version Egret 3.0
@@ -61,11 +61,11 @@ class SampleSpotLight {
         ///@param y: number 起始坐标y
         ///@param  width: number 显示区域的宽
         ///@param  height: number 显示区域的高
-        this._view3D = new egret3d.View3D(0, 0, window.innerWidth, window.innerHeight);
+        this._view3D = new egret3d.View3D(0,0,window.innerWidth,window.innerHeight);
         ///当前对象对视位置,其参数依次为:
         ///@param pos 对象的位置
         ///@param target 目标的位置
-        this._view3D.camera3D.lookAt(new egret3d.Vector3D(0, 0, -1000), new egret3d.Vector3D(0, 0, 0));
+        this._view3D.camera3D.lookAt(new egret3d.Vector3D(0,0,-1000),new egret3d.Vector3D(0,0,0));
         ///View3D的背景色设置
         this._view3D.backColor = 0xff000000;
         ///将View3D添加进Canvas中
@@ -75,39 +75,25 @@ class SampleSpotLight {
         ////创建加载类
         var load: egret3d.URLLoader = new egret3d.URLLoader();
         ///设置加载完成回调
-        //load.onLoadComplete = (e: egret3d.URLLoader) => this.onLoad(e);
-        load.addEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE, this.onLoad, this);
+        load.addEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onLoad,this);
         ///开始加载
         load.load("resource/laohu/Mon_04.esm");
 
+
+
         this.InitCameraCtl();
 
-        ///初始化汇聚光源，设置灯光漫反射颜色
-        var spo: egret3d.SpotLight = new egret3d.SpotLight(0xffffff);
+        ///创建点光源,设置灯光漫反射颜色
+        var po: egret3d.PointLight = new egret3d.PointLight(0xffffff);
         ///设置光源位置
-        spo.y = 200;
-        spo.rotationX = 90;
-        this.lights.addLight(spo);
+        po.y = 200;
+        po.z = 200;
+        this.lights.addLight(po);
 
 
         ///启动Canvas。
         this._egret3DCanvas.start();
-        this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME, this.update, this);
-    }
-
-    /**
-    * @language zh_CN        
-    * 初始化相机控制
-    * @version Egret 3.0
-    * @platform Web,Native
-    */
-    private InitCameraCtl() {
-        ///摄像机控制类
-        this.cameraCtl = new egret3d.LookAtController(this._view3D.camera3D, new egret3d.Object3D());
-        ///设置目标和相机的距离
-        this.cameraCtl.distance = 1000;
-        ///设置相机x轴旋转
-        this.cameraCtl.rotationX = 60;
+        this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME,this.update,this);
     }
 
     /**
@@ -122,13 +108,13 @@ class SampleSpotLight {
         this.mat = new egret3d.TextureMaterial();
         this.mat.shininess = 20.0;
         this.mat.ambientColor = 0xffffff;
-        //this.mat.ambientPower = 0.5;接口修改 等待修复
+        //this.mat.ambientPower = 0.5;///接口修改  等待修复
         ///创建模型基类
         var ge: egret3d.Geometry = e.loader.data;
         ///生成mesh
-        this.model = new egret3d.Mesh(ge, this.mat);
+        this.model = new egret3d.Mesh(ge,this.mat);
 
-        if (ge.vertexFormat & egret3d.VertexFormat.VF_SKIN) {
+        if(ge.vertexFormat & egret3d.VertexFormat.VF_SKIN) {
             ///设置骨骼动画
             this.model.animation = new egret3d.SkeletonAnimation(ge.skeleton);
         }
@@ -139,10 +125,25 @@ class SampleSpotLight {
 
         var loadtex: egret3d.URLLoader = new egret3d.URLLoader();
         ///注册贴图读取完成回调
-        //loadtex.onLoadComplete = (e: egret3d.URLLoader) => this.onLoadTexture(e, this.mat, "Mon_04");
-        loadtex.addEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
+        loadtex.addEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onLoadTexture,this);
+
         ///开始读取贴图 
         loadtex.load("resource/laohu/Mon_04.png");
+    }
+
+    /**
+   * @language zh_CN        
+   * 初始化相机控制
+   * @version Egret 3.0
+   * @platform Web,Native
+   */
+    private InitCameraCtl() {
+        ///摄像机控制类
+        this.cameraCtl = new egret3d.LookAtController(this._view3D.camera3D,new egret3d.Object3D());
+        ///设置目标和相机的距离
+        this.cameraCtl.distance = 1000;
+        ///设置相机x轴旋转
+        this.cameraCtl.rotationX = 60;
     }
 
     /**
@@ -156,11 +157,10 @@ class SampleSpotLight {
         ///设置材质球的漫反射贴图。
         this.mat.diffuseTexture = e.loader.data;
         ///注销回调
-        //e.onLoadComplete = null;
-        e.loader. removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
+        e.loader.removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onLoadTexture,this);
     }
 
     public update(e: egret3d.Event3D) {
         this.cameraCtl.update();
     }
-}       
+}      

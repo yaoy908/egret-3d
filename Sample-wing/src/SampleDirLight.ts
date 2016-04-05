@@ -1,4 +1,4 @@
-﻿/**
+/**
 * @language zh_CN
 * @classdesc
 * 创建平行光使用示例  
@@ -61,11 +61,11 @@ class SampleDirLight {
         ///@param y: number 起始坐标y
         ///@param  width: number 显示区域的宽
         ///@param  height: number 显示区域的高
-        this._view3D = new egret3d.View3D(0, 0, window.innerWidth, window.innerHeight);
+        this._view3D = new egret3d.View3D(0,0,window.innerWidth,window.innerHeight);
         ///当前对象对视位置,其参数依次为:
         ///@param pos 对象的位置
         ///@param target 目标的位置
-        this._view3D.camera3D.lookAt(new egret3d.Vector3D(0, 0, -1000), new egret3d.Vector3D(0, 0, 0));
+        this._view3D.camera3D.lookAt(new egret3d.Vector3D(0,0,-1000),new egret3d.Vector3D(0,0,0));
         ///View3D的背景色设置
         this._view3D.backColor = 0xff000000;
         ///将View3D添加进Canvas中
@@ -75,14 +75,14 @@ class SampleDirLight {
         ////创建加载类
         var load: egret3d.URLLoader = new egret3d.URLLoader();
         ///设置加载完成回调
-        load.addEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE, this.onLoad, this);
+        load.addEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onLoad,this);
         ///开始加载
         load.load("resource/laohu/Mon_04.esm");
 
         this.InitCameraCtl();
 
         ///创建平行关，设置平行光位置
-        var dirLight: egret3d.DirectLight = new egret3d.DirectLight(new egret3d.Vector3D(-0.5, 0.6, 0.2));
+        var dirLight: egret3d.DirectLight = new egret3d.DirectLight(new egret3d.Vector3D(-0.5,0.6,0.2));
         ///设置灯光漫反射颜色
         dirLight.diffuse = 0xffffff;
         this.lights.addLight(dirLight);
@@ -90,7 +90,7 @@ class SampleDirLight {
 
         ///启动Canvas。
         this._egret3DCanvas.start();
-        this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME, this.update, this);
+        this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME,this.update,this);
     }
 
     /**
@@ -101,7 +101,7 @@ class SampleDirLight {
     */
     private InitCameraCtl() {
         ///摄像机控制类
-        this.cameraCtl = new egret3d.LookAtController(this._view3D.camera3D, new egret3d.Object3D());
+        this.cameraCtl = new egret3d.LookAtController(this._view3D.camera3D,new egret3d.Object3D());
         ///设置目标和相机的距离
         this.cameraCtl.distance = 1000;
         ///设置相机x轴旋转
@@ -125,9 +125,9 @@ class SampleDirLight {
         ///创建模型基类
         var ge: egret3d.Geometry = e.loader.data;
         ///生成mesh
-        this.model = new egret3d.Mesh(ge, this.mat);
+        this.model = new egret3d.Mesh(ge,this.mat);
 
-        if (ge.vertexFormat & egret3d.VertexFormat.VF_SKIN) {
+        if(ge.vertexFormat & egret3d.VertexFormat.VF_SKIN) {
             ///设置骨骼动画
             this.model.animation = new egret3d.SkeletonAnimation(ge.skeleton);
         }
@@ -138,7 +138,7 @@ class SampleDirLight {
 
         var loadtex: egret3d.URLLoader = new egret3d.URLLoader();
         ///注册贴图读取完成回调
-        loadtex.addEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
+        loadtex.addEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onLoadTexture,this);
         ///开始读取贴图 
         loadtex.load("resource/laohu/Mon_04.png");
     }
@@ -154,7 +154,7 @@ class SampleDirLight {
         ///设置材质球的漫反射贴图。
         this.mat.diffuseTexture = e.loader.data;
         ///注销回调
-        e.loader.removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
+        e.loader.removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onLoadTexture,this);
     }
 
     public update(e: egret3d.Event3D) {

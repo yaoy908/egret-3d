@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @language zh_CN
  * @classdesc
  * 立方体使用贴图示例
@@ -50,11 +50,11 @@ class SampleTextureCube {
         ///@param y: number 起始坐标y
         ///@param  width: number 显示区域的宽
         ///@param  height: number 显示区域的高
-        this._view3D = new egret3d.View3D(0, 0, window.innerWidth, window.innerHeight);
+        this._view3D = new egret3d.View3D(0,0,window.innerWidth,window.innerHeight);
         ///当前对象对视位置,其参数依次为:
         ///@param pos 对象的位置
         ///@param target 目标的位置
-        this._view3D.camera3D.lookAt(new egret3d.Vector3D(0, 0, -1000), new egret3d.Vector3D(0, 0, 0));
+        this._view3D.camera3D.lookAt(new egret3d.Vector3D(0,0,-1000),new egret3d.Vector3D(0,0,0));
         ///View3D的背景色设置
         this._view3D.backColor = 0xff000000;
         ///将View3D添加进Canvas中
@@ -68,13 +68,13 @@ class SampleTextureCube {
         ///创建立方体对象
         var geometery: egret3d.CubeGeometry = new egret3d.CubeGeometry();
         ///通过材质和立方体对象生成Mesh
-        this._cube = new egret3d.Mesh(geometery, mat);
+        this._cube = new egret3d.Mesh(geometery,mat);
         ///将mesh插入view3D
         this._view3D.addChild3D(this._cube);
         ///启动Canvas。
         this._egret3DCanvas.start();
         ///注册每帧更新，让cube进行旋转
-        this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME, this.update, this);
+        this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME,this.update,this);
 
         this.InitCameraCtl();
     }
@@ -87,7 +87,7 @@ class SampleTextureCube {
     */
     private InitCameraCtl() {
         ///摄像机控制类
-        this.cameraCtl = new egret3d.LookAtController(this._view3D.camera3D, new egret3d.Object3D());
+        this.cameraCtl = new egret3d.LookAtController(this._view3D.camera3D,new egret3d.Object3D());
         ///设置目标和相机的距离
         this.cameraCtl.distance = 1000;
         ///设置相机x轴旋转

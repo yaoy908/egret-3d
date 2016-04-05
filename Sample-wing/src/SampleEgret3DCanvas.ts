@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @language zh_CN
  * @classdesc
  * Canvas使用示例

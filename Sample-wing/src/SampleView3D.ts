@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @language zh_CN
  * @classdesc
  * 创建单个View3D使用示例
@@ -36,11 +36,11 @@ class SampleView3D {
         ///@param y: number 起始坐标y
         ///@param  width: number 显示区域的宽
         ///@param  height: number 显示区域的高
-        this._view3D = new egret3d.View3D(0, 0, window.innerWidth, window.innerHeight);
+        this._view3D = new egret3d.View3D(0,0,window.innerWidth,window.innerHeight);
         ///当前对象对视位置,其参数依次为:
         ///@param pos 对象的位置
         ///@param target 目标的位置
-        this._view3D.camera3D.lookAt(new egret3d.Vector3D(0, 0, -1000), new egret3d.Vector3D(0, 0, 0));
+        this._view3D.camera3D.lookAt(new egret3d.Vector3D(0,0,-1000),new egret3d.Vector3D(0,0,0));
         ///View3D的背景色设置
         this._view3D.backColor = 0xff000000;
         ///将View3D添加进Canvas中

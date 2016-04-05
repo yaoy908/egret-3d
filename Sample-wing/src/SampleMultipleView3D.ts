@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @language zh_CN
  * @classdesc
  * 创建多个个View3D使用示例
@@ -37,8 +37,8 @@ class SampleMultipleView3D {
         colors.push(0xffffffff);
         colors.push(0xff000000);
         ///生成四个view3d填充Canvas
-        for (var i: number = 0; i < 2; i++) {
-            for (var j: number = 0; j < 2; j++) {
+        for(var i: number = 0;i < 2;i++) {
+            for(var j: number = 0;j < 2;j++) {
 
                 ///起始坐标计算
                 var index = i * 2 + j;
@@ -49,11 +49,11 @@ class SampleMultipleView3D {
                 ///@param y: number 起始坐标y
                 ///@param  width: number 显示区域的宽
                 ///@param  height: number 显示区域的高
-                var view3D = new egret3d.View3D(startPosX, startPosY, viewWidth, viewHeight);
+                var view3D = new egret3d.View3D(startPosX,startPosY,viewWidth,viewHeight);
                 ///当前对象对视位置,其参数依次为:
                 ///@param pos 对象的位置
                 ///@param target 目标的位置
-                view3D.camera3D.lookAt(new egret3d.Vector3D(0, 0, -1000), new egret3d.Vector3D(0, 0, 0));
+                view3D.camera3D.lookAt(new egret3d.Vector3D(0,0,-1000),new egret3d.Vector3D(0,0,0));
                 ///View3D的背景色设置
                 view3D.backColor = colors[index];
                 ///将View3D添加进Canvas中
@@ -64,7 +64,7 @@ class SampleMultipleView3D {
                 ///创建立方体对象
                 var geometery: egret3d.CubeGeometry = new egret3d.CubeGeometry();
                 ///通过材质和立方体对象生成Mesh
-                var cube = new egret3d.Mesh(geometery, mat);
+                var cube = new egret3d.Mesh(geometery,mat);
                 ///将mesh插入view3D
                 view3D.addChild3D(cube);
 
@@ -74,13 +74,13 @@ class SampleMultipleView3D {
         }
         ///启动Canvas。
         this._egret3DCanvas.start();
-        this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME, this.update, this);
+        this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME,this.update,this);
     }
 
     public update(e: egret3d.Event3D) {
         ///旋转
         var len = this._cubeArray.length;
-        for (var i = 0; i < len; i++) {
+        for(var i = 0;i < len;i++) {
             this._cubeArray[i].rotationY += 0.5;
         }
     }
