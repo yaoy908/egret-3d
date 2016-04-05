@@ -1,4 +1,10 @@
 ﻿module egret3d {
+    /**
+    * @private
+    * @language zh_CN
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class ColorPass extends MaterialPass {
         /**
        * @language zh_CN
