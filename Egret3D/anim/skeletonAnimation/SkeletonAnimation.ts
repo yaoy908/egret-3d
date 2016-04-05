@@ -77,6 +77,7 @@
         private _temp_smooth: Skeleton = new Skeleton();
         private _temp_quat: Quaternion = new Quaternion();
         private _temp_vec3: Vector3D = new Vector3D();
+        private _event3D: Event3D = new Event3D();
 
         constructor(initialSkeleton: Skeleton) {
             super();
@@ -260,18 +261,17 @@
 
             if (currentFrameIndex < this._currentFrame) {
 
-                var e: Event3D = new Event3D(SkeletonAnimation.EVENT_PLAY_COMPLETE, this);
+                this._event3D.eventType = SkeletonAnimation.EVENT_PLAY_COMPLETE;
+                this._event3D.target = this;
 
-                this.dispatchEvent(e);
+                this.dispatchEvent(this._event3D);
             }
 
             if (this._currentFrame != currentFrameIndex) {
+                this._event3D.eventType = SkeletonAnimation.EVENT_FRAME_CHANGE;
+                this._event3D.target = this;
 
-                var e: Event3D = new Event3D(SkeletonAnimation.EVENT_FRAME_CHANGE, this);
-
-                //e.currentTarget = this;
-
-                this.dispatchEvent(e);
+                this.dispatchEvent(this._event3D);
 
                 this._currentFrame = currentFrameIndex;
             }
