@@ -205,7 +205,7 @@ declare module egret3d {
         static MOUSE_OVER: string;
         /**
          * @language zh_CN
-         * MOUSE_OVER 常量定义 onMouseWheel 事件对象的 type 属性的值。
+         * MOUSE_WHEEL 常量定义 onMouseWheel 事件对象的 type 属性的值。
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -780,6 +780,7 @@ declare module egret3d {
 }
 declare module egret3d {
     /**
+     * @private
      * @language zh_CN
      * @class egret3d.AnimNodeBase
      * @classdesc
@@ -845,6 +846,7 @@ declare module egret3d {
 }
 declare module egret3d {
     /**
+     * @private
      * @language zh_CN
      * @class egret3d.AnimaNodeCollection
      * @classdesc
@@ -1221,6 +1223,7 @@ declare module egret3d {
         private _temp_smooth;
         private _temp_quat;
         private _temp_vec3;
+        private _event3D;
         constructor(initialSkeleton: Skeleton);
         /**
         * @language zh_CN
@@ -1625,14 +1628,14 @@ declare module egret3d {
         /**
         * @language zh_CN
         * 返回监听者位置。
-        * @returns {Vector3D}
+        * @returns Vector3D 监听者位置。
         * @version Egret 3.0
         * @platform Web,Native
         */
         /**
         * @language zh_CN
         * 设置监听者位置。
-        * @param value {Vector3D}
+        * @param value Vector3D监听者位置。
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -7338,7 +7341,6 @@ declare module egret3d {
    * 每个材质球所能最大使用的灯光建议别太多，能省则省，尤其是移动端，能用灯光缓存图 lightmap 最好。</p>
    * 点光源是游戏中常常用到的动态光源，实时渲染中，灯光的数量会直接影响渲染性能。</p>
    * @see egret3d.Object3D
-   * @see egret3d.LightGroup
    * @see egret3d.LightBase
    * @see egret3d.PointLight
    * @see egret3d.SpotLight
@@ -8205,7 +8207,8 @@ declare module egret3d {
      * @language zh_CN
      * @class egret3d.SubGeometry
      * @classdesc
-     * 表示几何形状 子集 不同的子集渲染时使用的材质会不同
+     * 表示几何形状 子集 不同的子集渲染时使用的材质会不同。
+     * 这样就可以用不同的材质来共用相同的geometry buffer
      *
      * @see egret3d.Geometry
      * @version Egret 3.0
@@ -8556,7 +8559,7 @@ declare module egret3d {
         static addEventListener(type: string, callback: Function, thisObject: any): number;
         /**
          * @language zh_CN
-         * 移除事件侦听器。
+         * 根据addEventListener传入的事件数据信息,移除事件侦听器。
          * @param type {string} 事件名。
          * @param callback {Function} 侦听函数。
          * @version Egret 3.0
@@ -8565,7 +8568,7 @@ declare module egret3d {
         static removeEventListener(type: string, callback: Function, thisObject: any): void;
         /**
          * @language zh_CN
-         * 移除事件侦听器。
+         * 根据addEventListener 的返回值,移除事件侦听器。
          * @param id  事件id, addEventListener 的返回值.
          * @version Egret 3.0
          * @platform Web,Native
@@ -8601,6 +8604,7 @@ declare module egret3d {
         private getGamepadStick2();
         private canGame();
         /**
+        * @private
         * @language zh_CN
         * 更新游戏手柄信息。
         * @version Egret 3.0

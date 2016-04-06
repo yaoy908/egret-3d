@@ -1,8 +1,3 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 var egret3d;
 (function (egret3d) {
     /**
@@ -53,7 +48,7 @@ var egret3d;
             this.uv = new egret3d.Vector3D();
         }
         return PickResult;
-    }());
+    })();
     egret3d.PickResult = PickResult;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -126,9 +121,14 @@ var egret3d;
         */
         Event3D.RESIZE = "resize";
         return Event3D;
-    }());
+    })();
     egret3d.Event3D = Event3D;
 })(egret3d || (egret3d = {}));
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var egret3d;
 (function (egret3d) {
     /**
@@ -206,13 +206,13 @@ var egret3d;
         MouseEvent3D.MOUSE_OVER = "onMouseOver";
         /**
          * @language zh_CN
-         * MOUSE_OVER 常量定义 onMouseWheel 事件对象的 type 属性的值。
+         * MOUSE_WHEEL 常量定义 onMouseWheel 事件对象的 type 属性的值。
          * @version Egret 3.0
          * @platform Web,Native
          */
         MouseEvent3D.MOUSE_WHEEL = "onMouseWheel";
         return MouseEvent3D;
-    }(egret3d.Event3D));
+    })(egret3d.Event3D);
     egret3d.MouseEvent3D = MouseEvent3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -256,7 +256,7 @@ var egret3d;
         */
         TouchEvent3D.TOUCH_END = "onTouchEnd";
         return TouchEvent3D;
-    }(egret3d.Event3D));
+    })(egret3d.Event3D);
     egret3d.TouchEvent3D = TouchEvent3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -317,7 +317,7 @@ var egret3d;
          */
         PickEvent3D.PICK_WHEEL = "onPickWheel";
         return PickEvent3D;
-    }(egret3d.Event3D));
+    })(egret3d.Event3D);
     egret3d.PickEvent3D = PickEvent3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -482,7 +482,7 @@ var egret3d;
          */
         KeyEvent3D.KEY_UP = "onKeyUp";
         return KeyEvent3D;
-    }(egret3d.Event3D));
+    })(egret3d.Event3D);
     egret3d.KeyEvent3D = KeyEvent3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -527,7 +527,7 @@ var egret3d;
         */
         LoaderEvent3D.LOADER_ERROR = "onLoadError";
         return LoaderEvent3D;
-    }(egret3d.Event3D));
+    })(egret3d.Event3D);
     egret3d.LoaderEvent3D = LoaderEvent3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -555,7 +555,7 @@ var egret3d;
          */
         ParserEvent3D.PARSER_COMPLETE = "onParserComplete";
         return ParserEvent3D;
-    }(egret3d.Event3D));
+    })(egret3d.Event3D);
     egret3d.ParserEvent3D = ParserEvent3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -706,7 +706,7 @@ var egret3d;
             return false;
         };
         return EventDispatcher;
-    }());
+    })();
     egret3d.EventDispatcher = EventDispatcher;
     /**
     *
@@ -756,7 +756,7 @@ var egret3d;
         */
         EventListener.event_id_count = 0;
         return EventListener;
-    }());
+    })();
 })(egret3d || (egret3d = {}));
 var egret3d;
 (function (egret3d) {
@@ -920,12 +920,13 @@ var egret3d;
             this.sendEvent(e, egret3d.PickEvent3D.PICK_MOVE, this.initPickEvent3D);
         };
         return EventManager;
-    }());
+    })();
     egret3d.EventManager = EventManager;
 })(egret3d || (egret3d = {}));
 var egret3d;
 (function (egret3d) {
     /**
+     * @private
      * @language zh_CN
      * @class egret3d.AnimNodeBase
      * @classdesc
@@ -949,12 +950,13 @@ var egret3d;
         AnimNodeBase.prototype.fillGeomtryData = function (geometry) {
         };
         return AnimNodeBase;
-    }());
+    })();
     egret3d.AnimNodeBase = AnimNodeBase;
 })(egret3d || (egret3d = {}));
 var egret3d;
 (function (egret3d) {
     /**
+     * @private
      * @language zh_CN
      * @class egret3d.AnimaNodeCollection
      * @classdesc
@@ -1062,7 +1064,7 @@ var egret3d;
             this.vertexSizeInBytes = offset * Float32Array.BYTES_PER_ELEMENT;
         };
         return AnimaNodeCollection;
-    }());
+    })();
     egret3d.AnimaNodeCollection = AnimaNodeCollection;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -1207,7 +1209,7 @@ var egret3d;
             this.localMatrix.makeTransform(this.translation, this.scale, this.orientation);
         };
         return Joint;
-    }());
+    })();
     egret3d.Joint = Joint;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -1481,7 +1483,7 @@ var egret3d;
             }
         };
         return Skeleton;
-    }());
+    })();
     egret3d.Skeleton = Skeleton;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -1523,6 +1525,7 @@ var egret3d;
             this._temp_smooth = new egret3d.Skeleton();
             this._temp_quat = new egret3d.Quaternion();
             this._temp_vec3 = new egret3d.Vector3D();
+            this._event3D = new egret3d.Event3D();
             this._initialSkeleton = initialSkeleton;
             this._skeletonMatrix = new Float32Array(this._initialSkeleton.numJoint * 8);
         }
@@ -1659,13 +1662,14 @@ var egret3d;
             }
             var currentFrameIndex = this._enabledSkeletonAnimationClips[this._enabledSkeletonAnimationClips.length - 1].currentFrameIndex;
             if (currentFrameIndex < this._currentFrame) {
-                var e = new egret3d.Event3D(SkeletonAnimation.EVENT_PLAY_COMPLETE, this);
-                this.dispatchEvent(e);
+                this._event3D.eventType = SkeletonAnimation.EVENT_PLAY_COMPLETE;
+                this._event3D.target = this;
+                this.dispatchEvent(this._event3D);
             }
             if (this._currentFrame != currentFrameIndex) {
-                var e = new egret3d.Event3D(SkeletonAnimation.EVENT_FRAME_CHANGE, this);
-                //e.currentTarget = this;
-                this.dispatchEvent(e);
+                this._event3D.eventType = SkeletonAnimation.EVENT_FRAME_CHANGE;
+                this._event3D.target = this;
+                this.dispatchEvent(this._event3D);
                 this._currentFrame = currentFrameIndex;
             }
             if (this._enabledSkeletonAnimationClips.length > 1) {
@@ -1938,7 +1942,7 @@ var egret3d;
         */
         SkeletonAnimation.EVENT_FRAME_CHANGE = "event_frame_change";
         return SkeletonAnimation;
-    }(egret3d.EventDispatcher));
+    })(egret3d.EventDispatcher);
     egret3d.SkeletonAnimation = SkeletonAnimation;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -2248,7 +2252,7 @@ var egret3d;
             this.poseArray = skeletonPose;
         };
         return SkeletonAnimationClip;
-    }());
+    })();
     egret3d.SkeletonAnimationClip = SkeletonAnimationClip;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -2486,7 +2490,7 @@ var egret3d;
             }
         };
         return Channel;
-    }());
+    })();
     egret3d.Channel = Channel;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -2524,7 +2528,7 @@ var egret3d;
             /**
             * @language zh_CN
             * 返回监听者位置。
-            * @returns {Vector3D}
+            * @returns Vector3D 监听者位置。
             * @version Egret 3.0
             * @platform Web,Native
             */
@@ -2534,7 +2538,7 @@ var egret3d;
             /**
             * @language zh_CN
             * 设置监听者位置。
-            * @param value {Vector3D}
+            * @param value Vector3D监听者位置。
             * @version Egret 3.0
             * @platform Web,Native
             */
@@ -2710,7 +2714,7 @@ var egret3d;
             }
         };
         return Channel3d;
-    }(egret3d.Channel));
+    })(egret3d.Channel);
     egret3d.Channel3d = Channel3d;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -2825,7 +2829,7 @@ var egret3d;
             }
         };
         return Sound;
-    }());
+    })();
     egret3d.Sound = Sound;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -2994,7 +2998,7 @@ var egret3d;
             configurable: true
         });
         return AudioManager;
-    }());
+    })();
     egret3d.AudioManager = AudioManager;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -3033,7 +3037,7 @@ var egret3d;
             this.v = v;
         }
         return UV;
-    }());
+    })();
     egret3d.UV = UV;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -3238,7 +3242,7 @@ var egret3d;
             return Math.sqrt(dx * dx + dy * dy);
         };
         return Point;
-    }());
+    })();
     egret3d.Point = Point;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -3853,7 +3857,7 @@ var egret3d;
         */
         Vector3D.Z_AXIS = new Vector3D(0, 0, 1);
         return Vector3D;
-    }());
+    })();
     egret3d.Vector3D = Vector3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -3926,7 +3930,7 @@ var egret3d;
             return true;
         };
         return Rectangle;
-    }());
+    })();
     egret3d.Rectangle = Rectangle;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -4430,7 +4434,7 @@ var egret3d;
             this.w = q.w;
         };
         return Quaternion;
-    }());
+    })();
     egret3d.Quaternion = Quaternion;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -4477,7 +4481,7 @@ var egret3d;
         */
         Orientation3D.QUATERNION = "quaternion";
         return Orientation3D;
-    }());
+    })();
     egret3d.Orientation3D = Orientation3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -4665,7 +4669,7 @@ var egret3d;
          */
         Plane3D.ALIGN_XZ_AXIS = 3;
         return Plane3D;
-    }());
+    })();
     egret3d.Plane3D = Plane3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -5804,7 +5808,7 @@ var egret3d;
             this.copyFrom(m1).sub(m0).mult(t).add(m0);
         };
         return Matrix4_4;
-    }());
+    })();
     egret3d.Matrix4_4 = Matrix4_4;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -5861,7 +5865,7 @@ var egret3d;
             /// this.rightEyeMatrix.lookAt(this.rightEyeMatrix.position, this.lookAtPos, this.eyeRotation);
         };
         return EyesMatrix;
-    }());
+    })();
     egret3d.EyesMatrix = EyesMatrix;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -5884,7 +5888,7 @@ var egret3d;
         PlaneClassification.OUT = 1;
         PlaneClassification.INTERSECT = 2;
         return PlaneClassification;
-    }());
+    })();
     egret3d.PlaneClassification = PlaneClassification;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -6094,7 +6098,7 @@ var egret3d;
         */
         MathUtil.CALCULATION_MATRIX = new egret3d.Matrix4_4();
         return MathUtil;
-    }());
+    })();
     egret3d.MathUtil = MathUtil;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -6339,7 +6343,7 @@ var egret3d;
             this.dir.setTo(0, 0, 0);
         };
         return Ray;
-    }());
+    })();
     egret3d.Ray = Ray;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -6463,7 +6467,7 @@ var egret3d;
             this.b = t * (c1.b - c0.b) + c0.b;
         };
         return Color;
-    }());
+    })();
     egret3d.Color = Color;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -6499,7 +6503,7 @@ var egret3d;
             return true;
         };
         return Bound;
-    }());
+    })();
     egret3d.Bound = Bound;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -6740,7 +6744,7 @@ var egret3d;
             return frustum.inBox(this);
         };
         return BoundBox;
-    }(egret3d.Bound));
+    })(egret3d.Bound);
     egret3d.BoundBox = BoundBox;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -6828,7 +6832,7 @@ var egret3d;
             ///throw null ;
         };
         return ControllerBase;
-    }());
+    })();
     egret3d.ControllerBase = ControllerBase;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -7218,7 +7222,7 @@ var egret3d;
             }
         };
         return LookAtController;
-    }(egret3d.ControllerBase));
+    })(egret3d.ControllerBase);
     egret3d.LookAtController = LookAtController;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -7764,7 +7768,7 @@ var egret3d;
             }
         };
         return HoverController;
-    }(egret3d.ControllerBase));
+    })(egret3d.ControllerBase);
     egret3d.HoverController = HoverController;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -7887,7 +7891,7 @@ var egret3d;
         function ContextSamplerType() {
         }
         return ContextSamplerType;
-    }());
+    })();
     egret3d.ContextSamplerType = ContextSamplerType;
     /**
     * @class egret3d.DrawMode
@@ -7902,7 +7906,7 @@ var egret3d;
         function DrawMode() {
         }
         return DrawMode;
-    }());
+    })();
     egret3d.DrawMode = DrawMode;
     /**
     * @private
@@ -7958,7 +7962,7 @@ var egret3d;
         */
         ContextConfig.ColorFormat_DXT5_RGBA = 0;
         return ContextConfig;
-    }());
+    })();
     egret3d.ContextConfig = ContextConfig;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -8777,7 +8781,7 @@ var egret3d;
             Context3DProxy.gl.flush();
         };
         return Context3DProxy;
-    }());
+    })();
     egret3d.Context3DProxy = Context3DProxy;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -8803,7 +8807,7 @@ var egret3d;
         function FrameBuffer() {
         }
         return FrameBuffer;
-    }());
+    })();
     egret3d.FrameBuffer = FrameBuffer;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -8834,7 +8838,7 @@ var egret3d;
             this.buffer = buffer;
         }
         return IndexBuffer3D;
-    }());
+    })();
     egret3d.IndexBuffer3D = IndexBuffer3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -8867,7 +8871,7 @@ var egret3d;
             this.buffer = buffer;
         }
         return VertexBuffer3D;
-    }());
+    })();
     egret3d.VertexBuffer3D = VertexBuffer3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -8896,7 +8900,7 @@ var egret3d;
             this.height = height;
         }
         return MipmapData;
-    }());
+    })();
     egret3d.MipmapData = MipmapData;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -8931,7 +8935,7 @@ var egret3d;
             this.program = pg3D;
         }
         return Program3D;
-    }());
+    })();
     egret3d.Program3D = Program3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -8976,7 +8980,7 @@ var egret3d;
             this.mimapData = new Array();
         }
         return Texture2D;
-    }());
+    })();
     egret3d.Texture2D = Texture2D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -9003,7 +9007,7 @@ var egret3d;
             this.useMipmap = false;
         }
         return RenderTexture;
-    }(egret3d.Texture2D));
+    })(egret3d.Texture2D);
     egret3d.RenderTexture = RenderTexture;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -9065,7 +9069,7 @@ var egret3d;
        */
         Shader.ID_COUNT = 0;
         return Shader;
-    }());
+    })();
     egret3d.Shader = Shader;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -9097,7 +9101,7 @@ var egret3d;
             this.mimapData = new Array();
         }
         return Texture3D;
-    }());
+    })();
     egret3d.Texture3D = Texture3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -10392,7 +10396,7 @@ var egret3d;
         Object3D.renderListChange = true;
         Object3D.s_id = 0;
         return Object3D;
-    }(egret3d.EventDispatcher));
+    })(egret3d.EventDispatcher);
     egret3d.Object3D = Object3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -10415,7 +10419,7 @@ var egret3d;
             _super.call(this);
         }
         return Entity;
-    }(egret3d.Object3D));
+    })(egret3d.Object3D);
     egret3d.Entity = Entity;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -10481,6 +10485,9 @@ var egret3d;
             */
             this.pickResult = new egret3d.PickResult();
             this.geometry = geometry;
+            if (this.geometry.vertexFormat & egret3d.VertexFormat.VF_SKIN) {
+                this.animation = new egret3d.SkeletonAnimation(this.geometry.skeleton);
+            }
             this.addSubMaterial(0, material);
             this.material = material;
             this.bound = this.buildBoundBox();
@@ -10626,7 +10633,7 @@ var egret3d;
             }
         };
         return Mesh;
-    }(egret3d.Object3D));
+    })(egret3d.Object3D);
     egret3d.Mesh = Mesh;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -10671,7 +10678,7 @@ var egret3d;
             this.orientation = this._qut;
         };
         return Billboard;
-    }(egret3d.Mesh));
+    })(egret3d.Mesh);
     egret3d.Billboard = Billboard;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -10721,7 +10728,7 @@ var egret3d;
             }
         };
         return Sky;
-    }(egret3d.Mesh));
+    })(egret3d.Mesh);
     egret3d.Sky = Sky;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -10765,7 +10772,7 @@ var egret3d;
             }
         };
         return SphereSky;
-    }(egret3d.Mesh));
+    })(egret3d.Mesh);
     egret3d.SphereSky = SphereSky;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -10791,7 +10798,7 @@ var egret3d;
             this.material.drawMode = egret3d.DrawMode.LINES;
         }
         return Wireframe;
-    }(egret3d.Mesh));
+    })(egret3d.Mesh);
     egret3d.Wireframe = Wireframe;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -11058,7 +11065,7 @@ var egret3d;
         LightBase.prototype.updateLightData = function (index, lightData) {
         };
         return LightBase;
-    }(egret3d.Object3D));
+    })(egret3d.Object3D);
     egret3d.LightBase = LightBase;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -11142,7 +11149,7 @@ var egret3d;
          */
         PointLight.stride = 12;
         return PointLight;
-    }(egret3d.LightBase));
+    })(egret3d.LightBase);
     egret3d.PointLight = PointLight;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -11325,7 +11332,7 @@ var egret3d;
          */
         SpotLight.stride = 14;
         return SpotLight;
-    }(egret3d.LightBase));
+    })(egret3d.LightBase);
     egret3d.SpotLight = SpotLight;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -11421,7 +11428,7 @@ var egret3d;
         */
         DirectLight.stride = 11;
         return DirectLight;
-    }(egret3d.LightBase));
+    })(egret3d.LightBase);
     egret3d.DirectLight = DirectLight;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -11436,7 +11443,6 @@ var egret3d;
    * 每个材质球所能最大使用的灯光建议别太多，能省则省，尤其是移动端，能用灯光缓存图 lightmap 最好。</p>
    * 点光源是游戏中常常用到的动态光源，实时渲染中，灯光的数量会直接影响渲染性能。</p>
    * @see egret3d.Object3D
-   * @see egret3d.LightGroup
    * @see egret3d.LightBase
    * @see egret3d.PointLight
    * @see egret3d.SpotLight
@@ -11480,7 +11486,7 @@ var egret3d;
             }
         };
         return LightGroup;
-    }());
+    })();
     egret3d.LightGroup = LightGroup;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -11541,7 +11547,7 @@ var egret3d;
             return -1;
         };
         return CollectBase;
-    }());
+    })();
     egret3d.CollectBase = CollectBase;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -11859,7 +11865,7 @@ var egret3d;
             return 0;
         };
         return EntityCollect;
-    }(egret3d.CollectBase));
+    })(egret3d.CollectBase);
     egret3d.EntityCollect = EntityCollect;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -12073,7 +12079,7 @@ var egret3d;
             return true;
         };
         return Frustum;
-    }());
+    })();
     egret3d.Frustum = Frustum;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -12107,7 +12113,7 @@ var egret3d;
             this.cleanState = true;
         }
         return Layer;
-    }());
+    })();
     egret3d.Layer = Layer;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -12138,7 +12144,7 @@ var egret3d;
             this.alphaObjects = new Array();
         }
         return Tag;
-    }());
+    })();
     egret3d.Tag = Tag;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -12249,7 +12255,7 @@ var egret3d;
         };
         Picker.ray = new egret3d.Ray();
         return Picker;
-    }());
+    })();
     egret3d.Picker = Picker;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -12303,7 +12309,7 @@ var egret3d;
             delete this.list;
         };
         return HashMap;
-    }());
+    })();
     egret3d.HashMap = HashMap;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -12640,7 +12646,7 @@ var egret3d;
         */
         Geometry.skinSize = 8;
         return Geometry;
-    }());
+    })();
     egret3d.Geometry = Geometry;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -13262,7 +13268,7 @@ var egret3d;
             }
         };
         return GeometryData;
-    }());
+    })();
     egret3d.GeometryData = GeometryData;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -13271,7 +13277,8 @@ var egret3d;
      * @language zh_CN
      * @class egret3d.SubGeometry
      * @classdesc
-     * 表示几何形状 子集 不同的子集渲染时使用的材质会不同
+     * 表示几何形状 子集 不同的子集渲染时使用的材质会不同。
+     * 这样就可以用不同的材质来共用相同的geometry buffer
      *
      * @see egret3d.Geometry
      * @version Egret 3.0
@@ -13437,7 +13444,7 @@ var egret3d;
             }
         };
         return SubGeometry;
-    }());
+    })();
     egret3d.SubGeometry = SubGeometry;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -13515,7 +13522,7 @@ var egret3d;
             this.buildDefaultSubGeometry();
         };
         return CubeGeometry;
-    }(egret3d.Geometry));
+    })(egret3d.Geometry);
     egret3d.CubeGeometry = CubeGeometry;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -13607,7 +13614,7 @@ var egret3d;
             this.subGeometrys.push(subGeometry);
         };
         return CylinderGeometry;
-    }(egret3d.Geometry));
+    })(egret3d.Geometry);
     egret3d.CylinderGeometry = CylinderGeometry;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -13714,7 +13721,7 @@ var egret3d;
             this.subGeometrys.push(subGeometry);
         };
         return PlaneGeometry;
-    }(egret3d.Geometry));
+    })(egret3d.Geometry);
     egret3d.PlaneGeometry = PlaneGeometry;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -13889,7 +13896,7 @@ var egret3d;
             this.subGeometrys.push(subGeometry);
         };
         return SphereGeometry;
-    }(egret3d.Geometry));
+    })(egret3d.Geometry);
     egret3d.SphereGeometry = SphereGeometry;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -13996,7 +14003,7 @@ var egret3d;
         };
         /**
          * @language zh_CN
-         * 移除事件侦听器。
+         * 根据addEventListener传入的事件数据信息,移除事件侦听器。
          * @param type {string} 事件名。
          * @param callback {Function} 侦听函数。
          * @version Egret 3.0
@@ -14007,7 +14014,7 @@ var egret3d;
         };
         /**
          * @language zh_CN
-         * 移除事件侦听器。
+         * 根据addEventListener 的返回值,移除事件侦听器。
          * @param id  事件id, addEventListener 的返回值.
          * @version Egret 3.0
          * @platform Web,Native
@@ -14058,6 +14065,7 @@ var egret3d;
             return "getGamepads" in navigator;
         };
         /**
+        * @private
         * @language zh_CN
         * 更新游戏手柄信息。
         * @version Egret 3.0
@@ -14402,7 +14410,7 @@ var egret3d;
         Input.mouseLastY = 0;
         Input._instance = null;
         return Input;
-    }(egret3d.EventDispatcher));
+    })(egret3d.EventDispatcher);
     egret3d.Input = Input;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -14646,7 +14654,7 @@ var egret3d;
             return this.q;
         };
         return OrientationController;
-    }());
+    })();
     egret3d.OrientationController = OrientationController;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -14663,7 +14671,7 @@ var egret3d;
             this.mipmapCount = 1;
         }
         return DDS;
-    }());
+    })();
     egret3d.DDS = DDS;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -15177,7 +15185,7 @@ var egret3d;
             return colorArray;
         };
         return DDSParser;
-    }());
+    })();
     egret3d.DDSParser = DDSParser;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -15193,7 +15201,7 @@ var egret3d;
         function PVR() {
         }
         return PVR;
-    }());
+    })();
     egret3d.PVR = PVR;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -15350,7 +15358,7 @@ var egret3d;
             return pvr;
         };
         return PVRParser;
-    }());
+    })();
     egret3d.PVRParser = PVRParser;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -15365,7 +15373,7 @@ var egret3d;
             this.height = height;
         }
         return TGA;
-    }());
+    })();
     egret3d.TGA = TGA;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -15692,7 +15700,7 @@ var egret3d;
             return texture;
         };
         return TGAParser;
-    }());
+    })();
     egret3d.TGAParser = TGAParser;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -15720,7 +15728,7 @@ var egret3d;
             return egret3d.EAMVersion.versionDictionary[version](bytes);
         };
         return EAMParser;
-    }());
+    })();
     egret3d.EAMParser = EAMParser;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -15788,7 +15796,7 @@ var egret3d;
             1: function (bytes) { return EAMVersion.parserVersion_1(bytes); },
         };
         return EAMVersion;
-    }());
+    })();
     egret3d.EAMVersion = EAMVersion;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -15816,7 +15824,7 @@ var egret3d;
             return egret3d.ECAVersion.versionDictionary[version](bytes);
         };
         return ECAParser;
-    }());
+    })();
     egret3d.ECAParser = ECAParser;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -15851,7 +15859,7 @@ var egret3d;
             1: function (bytes) { return ECAVersion.parserVersion_1(bytes); },
         };
         return ECAVersion;
-    }());
+    })();
     egret3d.ECAVersion = ECAVersion;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -15892,7 +15900,7 @@ var egret3d;
             return geomtry;
         };
         return ESMParser;
-    }());
+    })();
     egret3d.ESMParser = ESMParser;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -16026,7 +16034,7 @@ var egret3d;
             1: function (bytes, geomtry) { return ESMVersion.parserVersion_1(bytes, geomtry); },
         };
         return ESMVersion;
-    }());
+    })();
     egret3d.ESMVersion = ESMVersion;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -16135,7 +16143,7 @@ var egret3d;
             this.dispatchEvent(this._event);
         };
         return ParserUtils;
-    }(egret3d.EventDispatcher));
+    })(egret3d.EventDispatcher);
     egret3d.ParserUtils = ParserUtils;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -16474,7 +16482,7 @@ var egret3d;
          */
         URLLoader.DATAFORMAT_PVR = "pvr";
         return URLLoader;
-    }(egret3d.EventDispatcher));
+    })(egret3d.EventDispatcher);
     egret3d.URLLoader = URLLoader;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -16493,7 +16501,7 @@ var egret3d;
         MethodBase.prototype.active = function (time, delay, context3DProxy, modeltransform, camera3D) {
         };
         return MethodBase;
-    }());
+    })();
     egret3d.MethodBase = MethodBase;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -16531,7 +16539,7 @@ var egret3d;
         PassUsage.prototype.dispose = function () {
         };
         return PassUsage;
-    }());
+    })();
     egret3d.PassUsage = PassUsage;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -16986,7 +16994,7 @@ var egret3d;
             //}
         };
         return MaterialData;
-    }());
+    })();
     egret3d.MaterialData = MaterialData;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -17235,7 +17243,7 @@ var egret3d;
             context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count);
         };
         return MaterialPass;
-    }());
+    })();
     egret3d.MaterialPass = MaterialPass;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -17303,7 +17311,7 @@ var egret3d;
             }
         };
         return ColorPass;
-    }(egret3d.MaterialPass));
+    })(egret3d.MaterialPass);
     egret3d.ColorPass = ColorPass;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -17378,7 +17386,7 @@ var egret3d;
             }
         };
         return DiffusePass;
-    }(egret3d.MaterialPass));
+    })(egret3d.MaterialPass);
     egret3d.DiffusePass = DiffusePass;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -17411,7 +17419,7 @@ var egret3d;
             }
         };
         return CubePass;
-    }(egret3d.MaterialPass));
+    })(egret3d.MaterialPass);
     egret3d.CubePass = CubePass;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -18165,7 +18173,7 @@ var egret3d;
         MaterialBase.prototype.renderLightingPass = function () {
         };
         return MaterialBase;
-    }());
+    })();
     egret3d.MaterialBase = MaterialBase;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -18204,7 +18212,7 @@ var egret3d;
             configurable: true
         });
         return ColorMaterial;
-    }(egret3d.MaterialBase));
+    })(egret3d.MaterialBase);
     egret3d.ColorMaterial = ColorMaterial;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -18257,7 +18265,7 @@ var egret3d;
             return mat;
         };
         return TextureMaterial;
-    }(egret3d.MaterialBase));
+    })(egret3d.MaterialBase);
     egret3d.TextureMaterial = TextureMaterial;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -18305,7 +18313,7 @@ var egret3d;
             return mat;
         };
         return CubeTextureMaterial;
-    }(egret3d.MaterialBase));
+    })(egret3d.MaterialBase);
     egret3d.CubeTextureMaterial = CubeTextureMaterial;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -18339,7 +18347,7 @@ var egret3d;
         RenderBase.prototype.draw = function (time, delay, context3D, collect, camera) {
         };
         return RenderBase;
-    }());
+    })();
     egret3d.RenderBase = RenderBase;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -18384,7 +18392,7 @@ var egret3d;
             }
         };
         return DefaultRender;
-    }(egret3d.RenderBase));
+    })(egret3d.RenderBase);
     egret3d.DefaultRender = DefaultRender;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -18434,7 +18442,7 @@ var egret3d;
             return this._tree.infrustumList(camera);
         };
         return Scene3D;
-    }());
+    })();
     egret3d.Scene3D = Scene3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -18456,7 +18464,7 @@ var egret3d;
             return this._searchList;
         };
         return TreeBase;
-    }());
+    })();
     egret3d.TreeBase = TreeBase;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -18518,7 +18526,7 @@ var egret3d;
             return egret3d.ShaderUtil.instance.fillShaderContent(this, this.shadersName, passUsage);
         };
         return ShaderBase;
-    }());
+    })();
     egret3d.ShaderBase = ShaderBase;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -18625,7 +18633,7 @@ var egret3d;
                 }
             };
             return VarRegister;
-        }());
+        })();
         GLSL.VarRegister = VarRegister;
     })(GLSL = egret3d.GLSL || (egret3d.GLSL = {}));
 })(egret3d || (egret3d = {}));
@@ -18657,7 +18665,7 @@ var egret3d;
                 this.valueType = valueType;
             }
             return Attribute;
-        }(GLSL.VarRegister));
+        })(GLSL.VarRegister);
         GLSL.Attribute = Attribute;
     })(GLSL = egret3d.GLSL || (egret3d.GLSL = {}));
 })(egret3d || (egret3d = {}));
@@ -18726,7 +18734,7 @@ var egret3d;
             */
             AttributeType.mat4 = "mat4";
             return AttributeType;
-        }());
+        })();
         GLSL.AttributeType = AttributeType;
     })(GLSL = egret3d.GLSL || (egret3d.GLSL = {}));
 })(egret3d || (egret3d = {}));
@@ -18764,7 +18772,7 @@ var egret3d;
                 this.value = value;
             }
             return ConstVar;
-        }(GLSL.VarRegister));
+        })(GLSL.VarRegister);
         GLSL.ConstVar = ConstVar;
     })(GLSL = egret3d.GLSL || (egret3d.GLSL = {}));
 })(egret3d || (egret3d = {}));
@@ -18800,7 +18808,7 @@ var egret3d;
                 ///this.valueType = valueType;
             }
             return Sampler2D;
-        }(GLSL.VarRegister));
+        })(GLSL.VarRegister);
         GLSL.Sampler2D = Sampler2D;
     })(GLSL = egret3d.GLSL || (egret3d.GLSL = {}));
 })(egret3d || (egret3d = {}));
@@ -18836,7 +18844,7 @@ var egret3d;
                 this.key = "samplerCube";
             }
             return Sampler3D;
-        }(GLSL.VarRegister));
+        })(GLSL.VarRegister);
         GLSL.Sampler3D = Sampler3D;
     })(GLSL = egret3d.GLSL || (egret3d.GLSL = {}));
 })(egret3d || (egret3d = {}));
@@ -18873,7 +18881,7 @@ var egret3d;
                 this.valueType = valueType;
             }
             return TmpVar;
-        }(GLSL.VarRegister));
+        })(GLSL.VarRegister);
         GLSL.TmpVar = TmpVar;
     })(GLSL = egret3d.GLSL || (egret3d.GLSL = {}));
 })(egret3d || (egret3d = {}));
@@ -18910,7 +18918,7 @@ var egret3d;
                 this.valueType = valueType;
             }
             return Uniform;
-        }(GLSL.VarRegister));
+        })(GLSL.VarRegister);
         GLSL.Uniform = Uniform;
     })(GLSL = egret3d.GLSL || (egret3d.GLSL = {}));
 })(egret3d || (egret3d = {}));
@@ -19030,7 +19038,7 @@ var egret3d;
             */
             UniformType.sampleCube = "sampleCube";
             return UniformType;
-        }());
+        })();
         GLSL.UniformType = UniformType;
     })(GLSL = egret3d.GLSL || (egret3d.GLSL = {}));
 })(egret3d || (egret3d = {}));
@@ -19110,7 +19118,7 @@ var egret3d;
             VarConstName.texture2D_3 = "texture2D_3";
             VarConstName.texture2D_4 = "texture2D_4";
             return VarConstName;
-        }());
+        })();
         GLSL.VarConstName = VarConstName;
     })(GLSL = egret3d.GLSL || (egret3d.GLSL = {}));
 })(egret3d || (egret3d = {}));
@@ -19147,7 +19155,7 @@ var egret3d;
                 this.valueType = valueType;
             }
             return Varying;
-        }(GLSL.VarRegister));
+        })(GLSL.VarRegister);
         GLSL.Varying = Varying;
     })(GLSL = egret3d.GLSL || (egret3d.GLSL = {}));
 })(egret3d || (egret3d = {}));
@@ -19178,7 +19186,7 @@ var egret3d;
                 this.key = "#extension";
             }
             return Extension;
-        }(GLSL.VarRegister));
+        })(GLSL.VarRegister);
         GLSL.Extension = Extension;
     })(GLSL = egret3d.GLSL || (egret3d.GLSL = {}));
 })(egret3d || (egret3d = {}));
@@ -19300,7 +19308,7 @@ var egret3d;
             */
             VaryingType.sampleCube = "sampleCube";
             return VaryingType;
-        }());
+        })();
         GLSL.VaryingType = VaryingType;
     })(GLSL = egret3d.GLSL || (egret3d.GLSL = {}));
 })(egret3d || (egret3d = {}));
@@ -19371,7 +19379,7 @@ var egret3d;
         FragmentShader.prototype.addMethod = function (method) {
         };
         return FragmentShader;
-    }(egret3d.ShaderBase));
+    })(egret3d.ShaderBase);
     egret3d.FragmentShader = FragmentShader;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -19732,7 +19740,7 @@ var egret3d;
                 "} \n",
         };
         return ShaderLib;
-    }());
+    })();
     egret3d.ShaderLib = ShaderLib;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -19793,7 +19801,7 @@ var egret3d;
         ShaderPool.vsShaderHashMap = new egret3d.HashMap();
         ShaderPool.fsShaderHashMap = new egret3d.HashMap();
         return ShaderPool;
-    }());
+    })();
     egret3d.ShaderPool = ShaderPool;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -20164,7 +20172,7 @@ var egret3d;
                 return content;
             };
             return ShaderContent;
-        }());
+        })();
         GLSL.ShaderContent = ShaderContent;
     })(GLSL = egret3d.GLSL || (egret3d.GLSL = {}));
 })(egret3d || (egret3d = {}));
@@ -20544,7 +20552,7 @@ var egret3d;
         ShaderUtil._shaderLibs = {};
         ShaderUtil._methodLibs = {};
         return ShaderUtil;
-    }());
+    })();
     egret3d.ShaderUtil = ShaderUtil;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -20647,7 +20655,7 @@ var egret3d;
             context3D.upLoadTextureData(0, this.texture2D);
         };
         return ImageTexture;
-    }());
+    })();
     egret3d.ImageTexture = ImageTexture;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -20720,7 +20728,7 @@ var egret3d;
             context3D.upLoadTextureData(0, this.texture2D);
         };
         return DDSTexture;
-    }());
+    })();
     egret3d.DDSTexture = DDSTexture;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -20794,7 +20802,7 @@ var egret3d;
             context3D.upLoadTextureData(0, this.texture2D);
         };
         return TGATexture;
-    }());
+    })();
     egret3d.TGATexture = TGATexture;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -20851,7 +20859,7 @@ var egret3d;
         PVRTexture.prototype.uploadForcing = function (context3D) {
         };
         return PVRTexture;
-    }());
+    })();
     egret3d.PVRTexture = PVRTexture;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -20996,7 +21004,7 @@ var egret3d;
         CubeTexture.prototype.uploadForcing = function (context3D) {
         };
         return CubeTexture;
-    }());
+    })();
     egret3d.CubeTexture = CubeTexture;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -21122,7 +21130,7 @@ var egret3d;
          */
         CheckerboardTexture.texture = new CheckerboardTexture();
         return CheckerboardTexture;
-    }());
+    })();
     egret3d.CheckerboardTexture = CheckerboardTexture;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -21266,7 +21274,7 @@ var egret3d;
         VideoTexture.prototype.uploadForcing = function (context3D) {
         };
         return VideoTexture;
-    }());
+    })();
     egret3d.VideoTexture = VideoTexture;
 })(egret3d || (egret3d = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -21321,7 +21329,7 @@ var egret3d;
          */
         Endian.BIG_ENDIAN = "bigEndian";
         return Endian;
-    }());
+    })();
     egret3d.Endian = Endian;
     /**
      * @class egret.ByteArray
@@ -22077,7 +22085,7 @@ var egret3d;
         ByteArray.SIZE_OF_FLOAT32 = 4;
         ByteArray.SIZE_OF_FLOAT64 = 8;
         return ByteArray;
-    }());
+    })();
     egret3d.ByteArray = ByteArray;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -22144,7 +22152,7 @@ var egret3d;
         });
         Debug._instance = null;
         return Debug;
-    }());
+    })();
     egret3d.Debug = Debug;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -22626,7 +22634,7 @@ var egret3d;
          */
         StringUtil._filterChar = [" ", "  ", ";", "\n", "\r", "\t", "\n", "\r", "\t"];
         return StringUtil;
-    }());
+    })();
     egret3d.StringUtil = StringUtil;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -22745,7 +22753,7 @@ var egret3d;
             this._camera.position = this._cameraAnimationFrame.translation;
         };
         return CameraAnimationController;
-    }());
+    })();
     egret3d.CameraAnimationController = CameraAnimationController;
     /**
     * @private
@@ -22759,7 +22767,7 @@ var egret3d;
         function CameraAnimationFrame() {
         }
         return CameraAnimationFrame;
-    }());
+    })();
     egret3d.CameraAnimationFrame = CameraAnimationFrame;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -22802,7 +22810,7 @@ var egret3d;
         };
         CameraManager.instance = new CameraManager();
         return CameraManager;
-    }());
+    })();
     egret3d.CameraManager = CameraManager;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -23337,7 +23345,7 @@ var egret3d;
             return this._p;
         };
         return Camera3D;
-    }(egret3d.Object3D));
+    })(egret3d.Object3D);
     egret3d.Camera3D = Camera3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -23655,7 +23663,7 @@ var egret3d;
         };
         View3D._contex3DProxy = new egret3d.Context3DProxy();
         return View3D;
-    }());
+    })();
     egret3d.View3D = View3D;
 })(egret3d || (egret3d = {}));
 var egret3d;
@@ -23914,6 +23922,6 @@ var egret3d;
             this.canvas.height = this.canvas3DRectangle.height;
         };
         return Egret3DCanvas;
-    }(egret3d.EventDispatcher));
+    })(egret3d.EventDispatcher);
     egret3d.Egret3DCanvas = Egret3DCanvas;
 })(egret3d || (egret3d = {}));
