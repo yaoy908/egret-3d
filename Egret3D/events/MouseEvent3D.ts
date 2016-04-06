@@ -71,7 +71,7 @@
         
         /**
          * @language zh_CN
-         * MOUSE_OVER 常量定义 onMouseWheel 事件对象的 type 属性的值。
+         * MOUSE_WHEEL 常量定义 onMouseWheel 事件对象的 type 属性的值。
          * @version Egret 3.0
          * @platform Web,Native
          */

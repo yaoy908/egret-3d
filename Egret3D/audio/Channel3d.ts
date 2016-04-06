@@ -13,20 +13,22 @@
         private _panner: PannerNode;
 
         private _listener: Vector3D;
+
         /**
         * @language zh_CN
         * 返回监听者位置。
-        * @returns {Vector3D}
+        * @returns Vector3D 监听者位置。
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public get listener() {
+        public get listener(): Vector3D {
             return this._listener;
         }
+
         /**
         * @language zh_CN
         * 设置监听者位置。
-        * @param value {Vector3D}
+        * @param value Vector3D监听者位置。
         * @version Egret 3.0
         * @platform Web,Native
         */
