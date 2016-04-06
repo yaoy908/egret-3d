@@ -18,7 +18,7 @@
     * @platform Web,Native
     */
     export class MipmapData {
-        
+
         /**
         *  
         * @language zh_CN

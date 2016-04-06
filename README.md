@@ -1,4 +1,4 @@
-# Egret Engine 3D API(CodeName:HummingBird)
+﻿# Egret Engine 3D API(CodeName:HummingBird)
 
 ## 概述
 
@@ -10,7 +10,7 @@ Egret Engine 3.0 包含了白鹭时代研发的遵循HTML5标准的2D引擎及�
 ## Egret  新功能 
 ### 为了让egret3D更加强大，故收集大多数意见，在稳定版来临之时，我们将修改更高级层次的引擎，性能更高，api更简易，功能更强大
 ----
-#### 优化渲染框架，提升至少30%性能。
+
 #### 优化渲染框架，提升至少30%性能。
 #### 优化shader使用方式。
 #### 增加Egret3DCnavas 支持多View3D显示方式，意味着你可以多窗口显示模型。
