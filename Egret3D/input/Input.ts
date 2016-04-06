@@ -183,7 +183,7 @@
 
         /**
          * @language zh_CN
-         * 移除事件侦听器。
+         * 根据addEventListener传入的事件数据信息,移除事件侦听器。
          * @param type {string} 事件名。
          * @param callback {Function} 侦听函数。
          * @version Egret 3.0
@@ -195,7 +195,7 @@
 
         /**
          * @language zh_CN
-         * 移除事件侦听器。
+         * 根据addEventListener 的返回值,移除事件侦听器。
          * @param id  事件id, addEventListener 的返回值.
          * @version Egret 3.0
          * @platform Web,Native
@@ -257,6 +257,7 @@
 
 
         /**
+        * @private
         * @language zh_CN
         * 更新游戏手柄信息。
         * @version Egret 3.0

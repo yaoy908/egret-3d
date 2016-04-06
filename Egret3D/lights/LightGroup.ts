@@ -10,7 +10,6 @@
     * 每个材质球所能最大使用的灯光建议别太多，能省则省，尤其是移动端，能用灯光缓存图 lightmap 最好。</p>
     * 点光源是游戏中常常用到的动态光源，实时渲染中，灯光的数量会直接影响渲染性能。</p>
     * @see egret3d.Object3D
-    * @see egret3d.LightGroup
     * @see egret3d.LightBase
     * @see egret3d.PointLight
     * @see egret3d.SpotLight

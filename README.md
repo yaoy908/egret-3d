@@ -1,4 +1,4 @@
-# Egret Engine 3D API(CodeName:HummingBird)
+﻿# Egret Engine 3D API(CodeName:HummingBird)
 
 ## 概述
 
@@ -10,26 +10,19 @@ Egret Engine 3.0 包含了白鹭时代研发的遵循HTML5标准的2D引擎及�
 ## Egret  新功能 
 ### 为了让egret3D更加强大，故收集大多数意见，在稳定版来临之时，我们将修改更高级层次的引擎，性能更高，api更简易，功能更强大
 ----
-#### 优化渲染框架，提升至少30%性能
-#### 优化shader使用方式
-#### 增加EgrertCnavas 支持多View3D显示方式，意味着你可以多窗口显示模型
-#### geometry 支持多子模型，多材质ID
-#### material 支持多维材质，并支持多pass渲染（比如 normal，depth 渲染）
-#### skeleton animation 支持46+骨骼动画
-#### texture max packer 的集装箱方式，可以使用 UVRectangl 映射pack 好的贴图
-#### shader 内加载方式，减少HTTP请求数量
-#### 增加 billboard 公告板 , 永远面对摄像机的显示面片
-#### 增加优化 材质特效使用方式
-#### 增加 uv roll 动画特效
-#### 增加 uv spriteSheet 帧动画
-#### 增加 lightMap 材质特效
-#### 增加 AOMap材质特效
-#### 增加 colorMap材质特效
-#### 增加 材质 Blender 
-#### 增加 材质 透明剔除阈值
-#### 增加 blinn phone 灯光
-#### 增加 flat normal 渲染方式
-#### 与egret2D较好支持混合
+
+#### 优化渲染框架，提升至少30%性能。
+#### 优化shader使用方式。
+#### 增加Egret3DCnavas 支持多View3D显示方式，意味着你可以多窗口显示模型。
+#### geometry 支持多子模型，多材质ID。
+#### material 支持多维材质，并支持多pass渲染（比如 normal，depth 渲染）。
+#### skeleton animation 支持46+骨骼动画。
+#### shader 内加载方式，减少HTTP请求数量。
+#### 增加 billboard 公告板 , 永远面对摄像机的显示面片。
+#### 增加优化 材质特效使用方式。
+#### 增加 材质 Blender。
+#### 增加 材质 透明剔除阈值。
+#### 与egret2D较好支持混合。
 
 ----
 ## 下个版本计划增加
@@ -39,3 +32,5 @@ Egret Engine 3.0 包含了白鹭时代研发的遵循HTML5标准的2D引擎及�
 #### 增加轻便粒子系统
 #### 
 
+## 教程 ##
+http://edn.egret.com/cn/docs/page/902

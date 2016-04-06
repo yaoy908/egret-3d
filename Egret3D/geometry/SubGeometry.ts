@@ -4,7 +4,8 @@
      * @language zh_CN
      * @class egret3d.SubGeometry
      * @classdesc
-     * 表示几何形状 子集 不同的子集渲染时使用的材质会不同
+     * 表示几何形状 子集 不同的子集渲染时使用的材质会不同。
+     * 这样就可以用不同的材质来共用相同的geometry buffer 
      * 
      * @see egret3d.Geometry
      * @version Egret 3.0
