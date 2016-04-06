@@ -83,8 +83,11 @@
         */
         constructor(geometry: Geometry, material: MaterialBase) {
             super();
-
             this.geometry = geometry;
+            if (this.geometry.vertexFormat & VertexFormat.VF_SKIN) {
+                this.animation = new SkeletonAnimation(this.geometry.skeleton);
+            }
+
             this.addSubMaterial(0, material);
             this.material = material;
             this.bound = this.buildBoundBox();
