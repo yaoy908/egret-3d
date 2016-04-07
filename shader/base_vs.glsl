@@ -4,7 +4,7 @@ attribute vec2 attribute_uv0 ;
 attribute vec4 attribute_color ;
 
 uniform mat4 uniform_ModelMatrix ;
-uniform mat4 uniform_ModelViewMatrix ;
+uniform mat4 uniform_ViewMatrix ;
 uniform mat4 uniform_ProjectionMatrix ;
 
 varying vec3 varying_ViewPose;

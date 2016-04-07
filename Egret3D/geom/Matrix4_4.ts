@@ -1082,6 +1082,54 @@
 
             return target;
         }
+
+        /**
+  * @language zh_CN
+  * 用当前矩阵变换一个3D向量
+  * @param v 变换的向量
+  * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
+  * @returns 变换后的向量
+  */
+        public transformVector4(v: Vector3D, target: Vector3D = null): Vector3D {
+            if (!target) {
+                target = new Vector3D();
+            }
+
+            var x: number = v.x;
+            var y: number = v.y;
+            var z: number = v.z;
+            var w: number = v.w;
+
+            target.x = x * this.rawData[0] + y * this.rawData[4] + z * this.rawData[8] + w * this.rawData[12];
+            target.y = x * this.rawData[1] + y * this.rawData[5] + z * this.rawData[9] + w * this.rawData[13];
+            target.z = x * this.rawData[2] + y * this.rawData[6] + z * this.rawData[10] + w * this.rawData[14];
+            target.w = x * this.rawData[3] + y * this.rawData[7] + z * this.rawData[11] + w * this.rawData[15];
+
+            return target;
+        }
+
+        /**
+         * @language zh_CN
+         * 用当前矩阵变换一个3D向量
+         * @param v 变换的向量
+         * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
+         * @returns 变换后的向量
+         */
+        public mat3TransformVector(v: Vector3D, target: Vector3D = null): Vector3D {
+            if (!target) {
+                target = new Vector3D();
+            }
+
+            var x: number = v.x;
+            var y: number = v.y;
+            var z: number = v.z;
+
+            target.x = x * this.rawData[0] + y * this.rawData[4] + z * this.rawData[8] ;
+            target.y = x * this.rawData[1] + y * this.rawData[5] + z * this.rawData[9] ;
+            target.z = x * this.rawData[2] + y * this.rawData[6] + z * this.rawData[10];
+
+            return target;
+        }
         
         /**
         * @language zh_CN

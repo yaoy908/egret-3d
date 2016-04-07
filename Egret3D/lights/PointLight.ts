@@ -1,5 +1,5 @@
 ﻿module egret3d {
-                    
+
     /**
     * @class egret3d.DirectLight
     * @classdesc
@@ -26,7 +26,7 @@
          * 点光源的数据长度 
          */
         public static stride: number = 12;
-   
+
 
         /**
          * @language zh_CN
@@ -34,18 +34,18 @@
          * constructor 
          * @param color {Number}
          */
-        constructor( color:number ) {
+        constructor(color: number) {
             super();
-            this.lightType = LightType.pointlight ; 
+            this.lightType = LightType.pointlight;
             this.diffuse = color;
         }
 
-        public set radius( value:number ) {
-            this._radius = value; 
+        public set radius(value: number) {
+            this._radius = value;
         }
 
         public get radius(): number {
-            return this._radius ;
+            return this._radius;
         }
 
         public set falloff(value: number) {
@@ -63,10 +63,12 @@
          * @param index 灯光ID
          * @param lightData 灯光数据
          */
-        public updateLightData(index: number, lightData: Float32Array) {
-            lightData[index * PointLight.stride] = this.x;
-            lightData[index * PointLight.stride + 1] = this.y;
-            lightData[index * PointLight.stride + 2] = this.z;
+      
+        public updateLightData(camera: Camera3D, index: number, lightData: Float32Array) {
+
+            lightData[index * PointLight.stride] = this.position.x;
+            lightData[index * PointLight.stride + 1] = this.position.y;
+            lightData[index * PointLight.stride + 2] = this.position.z;
 
             lightData[index * PointLight.stride + 3] = this._diffuse.x;
             lightData[index * PointLight.stride + 4] = this._diffuse.y;

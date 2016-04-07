@@ -153,7 +153,7 @@
          * @param index 灯光ID
          * @param lightData 灯光数据
          */
-        public updateLightData(index: number, lightData: Float32Array) {
+        public updateLightData(camera:Camera3D ,index: number, lightData: Float32Array) {
             lightData[index * SpotLight.stride] = this.x;
             lightData[index * SpotLight.stride + 1] = this.y;
             lightData[index * SpotLight.stride + 2] = this.z;
