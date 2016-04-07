@@ -81,11 +81,16 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(geometry: Geometry, material: MaterialBase) {
+        constructor(geometry: Geometry, material: MaterialBase, animation: IAnimation = null) {
             super();
             this.geometry = geometry;
-            if (this.geometry.vertexFormat & VertexFormat.VF_SKIN) {
-                this.animation = new SkeletonAnimation(this.geometry.skeleton);
+            if (animation) {
+                this.animation = animation;
+            }
+            else {
+                if (this.geometry.vertexFormat & VertexFormat.VF_SKIN) {
+                    this.animation = new SkeletonAnimation(this.geometry.skeleton);
+                }
             }
 
             this.addSubMaterial(0, material);
@@ -155,7 +160,11 @@
         * @platform Web,Native
         */
         public clone(): Mesh {
-            var cloneMesh: Mesh = new Mesh(this.geometry, this.material );
+            var ani: IAnimation = null;
+            if (this.animation) {
+                ani = this.animation.clone();
+            }
+            var cloneMesh: Mesh = new Mesh(this.geometry, this.material, ani);
             cloneMesh.muiltMaterial = this.muiltMaterial;
             return cloneMesh;
         }
