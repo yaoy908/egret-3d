@@ -15,7 +15,6 @@
         public fsShaderNames: Array<string> = new Array<string>();
 
         public lightGroup: LightGroup;
-        public modelViewMatrix: Matrix4_4 = new Matrix4_4();
         constructor(materialData: MaterialData) {
             this._materialData = materialData;
         }
@@ -255,13 +254,13 @@
             var i: number = 0;
             if (this.lightGroup) {
                 for (i = 0; i < this._passUsage.maxDirectLight; i++) {
-                    this.lightGroup.directLightList[i].updateLightData(i, this._passUsage.directLightData);
+                    this.lightGroup.directLightList[i].updateLightData(camera3D,i, this._passUsage.directLightData);
                 }
                 for (i = 0; i < this._passUsage.maxSpotLight; i++) {
-                    this.lightGroup.spotLightList[i].updateLightData(i, this._passUsage.spotLightData);
+                    this.lightGroup.spotLightList[i].updateLightData(camera3D,i, this._passUsage.spotLightData);
                 }
                 for (i = 0; i < this._passUsage.maxPointLight; i++) {
-                    this.lightGroup.pointLightList[i].updateLightData(i, this._passUsage.pointLightData);
+                    this.lightGroup.pointLightList[i].updateLightData(camera3D,i, this._passUsage.pointLightData);
                 }
 
                 if (this._passUsage.uniform_directLightSource)
@@ -277,10 +276,7 @@
 
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ModelMatrix.uniformIndex, false, modeltransform.rawData);
 
-            this.modelViewMatrix.copyFrom(modeltransform);
-            this.modelViewMatrix.multiply(camera3D.viewMatrix);
-
-            context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ModelViewMatrix.uniformIndex, false, this.modelViewMatrix.rawData);
+            context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ViewMatrix.uniformIndex, false, camera3D.viewMatrix.rawData);
 
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.projectMatrix.rawData);
 

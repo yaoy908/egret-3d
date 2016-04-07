@@ -31,6 +31,7 @@
             var pointMesh: Mesh = new Mesh(new SphereGeometry(15, 25, 25), new ColorMaterial());
             pointMesh.y = 200;
             pointMesh.z = 200;
+            pointMesh.material.ambientColor = 0xcccccc ;
             this.view1.addChild3D(pointMesh);
 
             this._egret3DCanvas.start();
@@ -41,7 +42,7 @@
 
             var mat: TextureMaterial = new TextureMaterial();
             mat.lightGroup = this.lights; 
-            //mat.drawMode = DrawMode.POINTS; 
+            mat.ambientColor = 0;
             var mesh: Mesh = new Mesh(e.loader.data, mat);
             mesh.scale = new Vector3D(5.0,5.0,5.0);
             this.plane = mesh;

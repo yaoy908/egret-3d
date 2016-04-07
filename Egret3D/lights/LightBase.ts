@@ -38,7 +38,7 @@
          *@private
          * 环境颜色
          */
-        protected _ambient: Vector3D = new Vector3D(1.0,1.0,1.0 );
+        protected _ambient: Vector3D = new Vector3D(0.0, 0.0, 0.0);
  
         /**
          * @language zh_CN  
@@ -136,6 +136,12 @@
          *@private
          */
         protected _change: boolean = true;
+
+        /**
+         * @language zh_CN  
+         *@private
+         */
+        protected lightViewPos: Vector3D = new Vector3D();
         constructor() {
             super();
         }
@@ -267,7 +273,7 @@
          * @param index 灯光ID
          * @param lightData 灯光数据
          */
-        public updateLightData(index:number, lightData: Float32Array) {
+        public updateLightData(camera:Camera3D,index:number, lightData: Float32Array) {
           
         }
     }
