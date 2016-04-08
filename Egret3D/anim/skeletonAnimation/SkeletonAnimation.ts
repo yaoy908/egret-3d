@@ -336,6 +336,7 @@
             if (!this._skeletonAnimationClips[animName])
                 return false;
 
+            this.currentAnim = animName;
             this._enabledSkeletonAnimationClips.push(this._skeletonAnimationClips[animName]);
 
             this._enabledSkeletonAnimationClips[this._enabledSkeletonAnimationClips.length - 1].weight = this._enabledSkeletonAnimationClips.length > 1 ? 0 : 1;
