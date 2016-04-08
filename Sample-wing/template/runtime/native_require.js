@@ -4,7 +4,6 @@ var game_file_list = [
     //----auto game_file_list start----
 	"libs/modules/egret/egret.js",
 	"libs/modules/egret/egret.native.js",
-	"libs/egret3d.js",
 	"bin-debug/Main.js",
 	"bin-debug/SampleAnimation.js",
 	"bin-debug/SampleCreateCube.js",
@@ -23,7 +22,7 @@ var game_file_list = [
 	//----auto game_file_list end----
 ];
 
-var window = {};
+var window = this;
 
 egret_native.setSearchPaths([""]);
 
