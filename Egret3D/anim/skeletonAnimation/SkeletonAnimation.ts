@@ -72,6 +72,7 @@
         private _playSpeed: number = 1.0;
         private _playing: boolean = false;
         private _currentFrame: number = 0;
+        private _currentTime: number = 0;
         
 
         private _temp_smooth: Skeleton = new Skeleton();
@@ -221,6 +222,8 @@
             if (this._enabledSkeletonAnimationClips.length <= 0)
                 return;
 
+            this._currentTime += delay * this._playSpeed * 5;
+
             var currentFrameIndex: number = 0;
 
             var currentSkeleton: Skeleton = null;
@@ -259,24 +262,27 @@
 
             var currentFrameIndex:number = this._enabledSkeletonAnimationClips[this._enabledSkeletonAnimationClips.length - 1].currentFrameIndex;
 
-            if (currentFrameIndex < this._currentFrame) {
+            var farams: number = Math.floor(this._currentTime / 80);
+            for (var i: number = 0; i < farams; ++i) {
+                if (this._currentFrame + 1 < this._enabledSkeletonAnimationClips[this._enabledSkeletonAnimationClips.length - 1].frameCount) {
+                    this._currentFrame ++;
+                }
+                else {
 
-                this._event3D.eventType = SkeletonAnimation.EVENT_PLAY_COMPLETE;
-                this._event3D.target = this;
+                    this._event3D.eventType = SkeletonAnimation.EVENT_PLAY_COMPLETE;
+                    this._event3D.target = this;
 
-                this.dispatchEvent(this._event3D);
-            }
+                    this.dispatchEvent(this._event3D);
 
-            if (this._currentFrame != currentFrameIndex) {
+                    this._currentFrame = 0;
+                }
                 this._event3D.eventType = SkeletonAnimation.EVENT_FRAME_CHANGE;
                 this._event3D.target = this;
 
                 this.dispatchEvent(this._event3D);
-
-                this._currentFrame = currentFrameIndex;
+                this._currentTime -= 80;
             }
-
-            
+            this._currentFrame = currentFrameIndex;
                   
             if (this._enabledSkeletonAnimationClips.length > 1) {
 
@@ -345,30 +351,13 @@
 
             this._enabledSkeletonAnimationClips[this._enabledSkeletonAnimationClips.length - 1].timePosition = 0;
 
-            /*if (this._playing && this.currentAnim == animName)
-                return true;
-
-            if (this.currentAnim != animName) {
-
-                if (!this._skeletonAnimationClips[animName])
-                    return false;
-
-                this.currentAnim = animName;
-
-                this._enabledSkeletonAnimationClips = [];
-
-                this._enabledSkeletonAnimationClips.push(this._skeletonAnimationClips[animName]);
-            }
-
-            this._enabledSkeletonAnimationClips[0].play = true;
-
-            this._enabledSkeletonAnimationClips[0].timePosition = 0;*/
-
             this._currentFrame = 0;
 
             this._playSpeed = speed;
 
             this._playing = true;
+
+            this._currentTime = 0;
 
             return true;
         }
@@ -408,6 +397,8 @@
             this._playSpeed = speed;
 
             this._playing = true;
+
+            this._currentTime = 0;
 
             return true;
         }

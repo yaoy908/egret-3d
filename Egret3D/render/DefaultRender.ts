@@ -21,6 +21,13 @@
             super();
         }
 
+        public update(time: number, delay: number, collect: CollectBase, camera: Camera3D) {
+            this._numEntity = collect.renderList.length;
+            for (this._renderIndex = 0; this._renderIndex < this._numEntity; this._renderIndex++) {
+                this._renderItem = collect.renderList[this._renderIndex];
+                this._renderItem.update(time, delay, camera);
+            }
+        }
 
         /**
         * @language zh_CN
@@ -36,8 +43,6 @@
 
             for (this._renderIndex = 0; this._renderIndex < this._numEntity; this._renderIndex++) {
                 this._renderItem = collect.renderList[this._renderIndex] ;
-
-                this._renderItem.update(time, delay, camera);
                 //if (collect.renderList[this._renderIndex].tag && collect.renderList[this._renderIndex].tag.clearDepth && collect.renderList[this._renderIndex].tag.cleanState) {
                 //    collect.renderList[this._renderIndex].tag.cleanState = false;
                 //    context3D.clearDepth(1);
