@@ -13,7 +13,7 @@ Egret Engine 3.0 包含了白鹭时代研发的遵循HTML5标准的2D引擎及�
 
 #### 优化渲染框架，提升至少30%性能。
 #### 优化shader使用方式。
-#### 增加Egret3DCnavas 支持多View3D显示方式，意味着你可以多窗口显示模型。
+#### 增加Egret3DCanvas 支持多View3D显示方式，意味着你可以多窗口显示模型。
 #### geometry 支持多子模型，多材质ID。
 #### material 支持多维材质，并支持多pass渲染（比如 normal，depth 渲染）。
 #### skeleton animation 支持46+骨骼动画。
