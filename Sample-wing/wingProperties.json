@@ -7,51 +7,6 @@
 			"children":[
 				{
 					"isFolder":false,
-					"key":"resource/white.jpg",
-					"name":"white.jpg"
-				},
-				{
-					"isFolder":false,
-					"key":"resource/SkyBox/cloudy_noon_BK.png",
-					"name":"cloudy_noon_BK.png"
-				},
-				{
-					"isFolder":false,
-					"key":"resource/SkyBox/cloudy_noon_DN.png",
-					"name":"cloudy_noon_DN.png"
-				},
-				{
-					"isFolder":false,
-					"key":"resource/SkyBox/cloudy_noon_FR.png",
-					"name":"cloudy_noon_FR.png"
-				},
-				{
-					"isFolder":false,
-					"key":"resource/SkyBox/cloudy_noon_LF.png",
-					"name":"cloudy_noon_LF.png"
-				},
-				{
-					"isFolder":false,
-					"key":"resource/SkyBox/cloudy_noon_RT.png",
-					"name":"cloudy_noon_RT.png"
-				},
-				{
-					"isFolder":false,
-					"key":"resource/SkyBox/cloudy_noon_UP.png",
-					"name":"cloudy_noon_UP.png"
-				},
-				{
-					"isFolder":false,
-					"key":"resource/Egret-3D_power.png",
-					"name":"Egret-3D_power.png"
-				},
-				{
-					"isFolder":false,
-					"key":"resource/logo.png",
-					"name":"logo.png"
-				},
-				{
-					"isFolder":false,
 					"key":"resource/laohu/Mon_04.png",
 					"name":"Mon_04.png"
 				},

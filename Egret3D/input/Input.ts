@@ -70,7 +70,7 @@
         * @platform Web,Native
         */
         public static mouseLastX: number = 0;
-        
+
         /**
         * @language zh_CN
         * 上一次鼠标Y坐标。
@@ -87,7 +87,7 @@
         protected _mouseEvent3d: MouseEvent3D = new MouseEvent3D();
         protected _keyEvent3d: KeyEvent3D = new KeyEvent3D();
         protected _touchEvent3d: TouchEvent3D = new TouchEvent3D();
-
+        protected _windowsEvent3d: Event3D = new Event3D();
         /**
         * @language zh_CN
         * 游戏手柄Stick1事件侦听函数。
@@ -95,7 +95,7 @@
         * @platform Web,Native
         */
         private onGamepadStick1: Function = null;
-        
+
         /**
         * @language zh_CN
         * 游戏手柄Stick2事件侦听函数。
@@ -130,7 +130,7 @@
             super();
 
             window.addEventListener("click", (e: MouseEvent) => this.mouseClick(e));
-            
+
             window.addEventListener("mousedown", (e: MouseEvent) => this.mouseStart(e));
 
             window.addEventListener("mouseup", (e: MouseEvent) => this.mouseEnd(e));
@@ -164,8 +164,11 @@
             window.addEventListener("deviceorientation", (e: DeviceOrientationEvent) => this.ondeviceorientation(e));
 
             window.addEventListener("devicemotion", (e: DeviceMotionEvent) => this.detectShake(e));
+
+            window.addEventListener("resize", (e: UIEvent) => this.onWindowsResize(e));
+
         }
-        
+
         /**
         * @language zh_CN
         * 对象注册事件侦听器对象，以使侦听器能够接收事件通知。可以为特定类型的事件和优先级注册事件侦听器。
@@ -204,7 +207,7 @@
             Input.instance.removeEventListenerAt(id);
         }
 
-      
+
         private _gp: boolean = false;
         private ongamepaddisconnected(e: GamepadEvent) {
             //Debug.instance.trace("Gamepad disconnected!");
@@ -496,7 +499,7 @@
             this._touchEvent3d.target = this;
             this._touchEvent3d.eventType = TouchEvent3D.TOUCH_MOVE;
             this.dispatchEvent(this._touchEvent3d);
-        }      
+        }
 
 
         private mouseClick(e: MouseEvent) {
@@ -578,7 +581,7 @@
             this._keyEvent3d.keyCode = e.keyCode;
             this._keyEvent3d.target = this;
 
-            if (!this._keyStatus[e.keyCode] ) {
+            if (!this._keyStatus[e.keyCode]) {
                 this._keyStatus[e.keyCode] = true;
                 this._keyEvent3d.eventType = KeyEvent3D.KEY_CLICK;
                 this.dispatchEvent(this._keyEvent3d);
@@ -600,6 +603,13 @@
 
             this._keyEvent3d.eventType = KeyEvent3D.KEY_UP;
             this.dispatchEvent(this._keyEvent3d);
+        }
+
+
+        private onWindowsResize(e: UIEvent) {
+            this._windowsEvent3d.target = this;
+            this._windowsEvent3d.eventType = Event3D.RESIZE;
+            this.dispatchEvent(this._windowsEvent3d);
         }
 
         //返回角度
