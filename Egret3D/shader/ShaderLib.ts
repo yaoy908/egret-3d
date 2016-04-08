@@ -12,7 +12,7 @@ module egret3d {
 			"varying vec3 varying_ViewPose; \n" +
 			"varying vec4 varying_color; \n" +
 			"uniform vec3 uniform_eyepos ; \n" +
-			"uniform mat4 uniform_ViewMatrix ; \n" +
+			"uniform mat4 uniform_ModelViewMatrix ; \n" +
 			"vec4 outColor; \n" +
 			"vec4 diffuseColor ; \n" +
 			"vec4 specularColor ; \n" +
@@ -28,7 +28,7 @@ module egret3d {
 			"void main() { \n" +
 			"diffuseColor  = vec4(1.0,1.0,1.0,1.0); \n" +
 			"specularColor = vec4(0.0,0.0,0.0,0.0); \n" +
-			"ambientColor  = vec4(0.0,0.0,0.0,0.0); \n" +
+			"ambientColor  = vec4(1.0,1.0,1.0,1.0); \n" +
 			"light         = vec4(0.0,0.0,0.0,0.0); \n" +
 			"normal = normalize(varying_eyeNormal) ; \n" +
 			"uv_0 = varying_uv0; \n" +
@@ -40,7 +40,7 @@ module egret3d {
 			"attribute vec2 attribute_uv0 ; \n" +
 			"attribute vec4 attribute_color ; \n" +
 			"uniform mat4 uniform_ModelMatrix ; \n" +
-			"uniform mat4 uniform_ViewMatrix ; \n" +
+			"uniform mat4 uniform_ModelViewMatrix ; \n" +
 			"uniform mat4 uniform_ProjectionMatrix ; \n" +
 			"varying vec3 varying_ViewPose; \n" +
 			"varying vec3 varying_eyeNormal  ; \n" +
@@ -81,12 +81,12 @@ module egret3d {
 			"cube_vertex":
 			"attribute vec3 attribute_position; \n" +
 			"uniform mat4 uniform_ModelMatrix; \n" +
-			"uniform mat4 uniform_ViewMatrix; \n" +
+			"uniform mat4 uniform_ModelViewMatrix; \n" +
 			"uniform mat4 uniform_ProjectionMatrix; \n" +
 			"varying vec3 varying_pos; \n" +
 			"void main(void){ \n" +
 			"varying_pos =  attribute_position; \n" +
-			"gl_Position = uniform_ProjectionMatrix * uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
+			"gl_Position = uniform_ProjectionMatrix * uniform_ModelViewMatrix * vec4(attribute_position, 1.0) ; \n" +
 			"} \n",
 
 			"diffuse_fragment":
@@ -98,9 +98,9 @@ module egret3d {
 
 			"diffuse_vertex":
 			"void main(void){ \n" +
-			"mat3 normalMatrix = transpose( inverse(mat3( uniform_ProjectionMatrix * uniform_ViewMatrix )) ); \n" +
+			"mat3 normalMatrix = transpose( inverse(mat3(uniform_ModelViewMatrix )) ); \n" +
 			"varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
-			"outPosition = uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
+			"outPosition = uniform_ModelViewMatrix * vec4(attribute_position, 1.0) ; \n" +
 			"varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
 			"} \n",
 
@@ -115,27 +115,25 @@ module egret3d {
 			"float halfIntensity; \n" +
 			"}; \n" +
 			"void calculateDirectLight( MaterialSource materialSource ){ \n" +
-			"float lambertTerm , specular ; \n" +
+			"float lambertian , specular ; \n" +
 			"vec3 N = normal; \n" +
 			"for(int i = 0 ; i < max_directLight ; i++){ \n" +
 			"DirectLight directLight ; \n" +
-			"directLight.direction = vec3(uniform_directLightSource[i*11+0],uniform_directLightSource[i*11+1],uniform_directLightSource[i*11+2]); \n" +
-			"directLight.diffuse = vec3(uniform_directLightSource[i*11+3],uniform_directLightSource[i*11+4],uniform_directLightSource[i*11+5]); \n" +
-			"directLight.ambient = vec3(uniform_directLightSource[i*11+6],uniform_directLightSource[i*11+7],uniform_directLightSource[i*11+8]); \n" +
-			"directLight.intensity = uniform_directLightSource[i*11+9]; \n" +
-			"directLight.halfIntensity = uniform_directLightSource[i*11+10]; \n" +
-			"ambientColor.xyz += directLight.ambient.xyz * directLight.diffuse ; \n" +
-			"vec3 lightDir = normalize(directLight.direction); \n" +
-			"lambertTerm = max(dot(lightDir,N), 0.0); \n" +
-			"light.xyz += directLight.diffuse * lambertTerm * directLight.intensity ; \n" +
+			"directLight.direction = vec3(uniform_directLightSource[i*10+0],uniform_directLightSource[i*10+1],uniform_directLightSource[i*10+2]); \n" +
+			"directLight.diffuse = vec3(uniform_directLightSource[i*10+3],uniform_directLightSource[i*10+4],uniform_directLightSource[i*10+5]); \n" +
+			"directLight.ambient = vec3(uniform_directLightSource[i*10+6],uniform_directLightSource[i*10+7],uniform_directLightSource[i*10+8]); \n" +
+			"directLight.intensity = uniform_directLightSource[i*10+9]; \n" +
+			"directLight.halfIntensity = uniform_directLightSource[i*10+10]; \n" +
+			"ambientColor.xyz *= directLight.ambient.xyz ; \n" +
+			"vec3 lightDir = mat3(uniform_ModelViewMatrix)*normalize(-directLight.direction); \n" +
+			"lambertian = max(dot(lightDir,N), 0.0); \n" +
 			"specular = 0.0; \n" +
 			"vec3 viewDir = normalize(varying_ViewPose); \n" +
 			"vec3 halfDir = normalize(lightDir + viewDir); \n" +
 			"float specAngle = max(dot(halfDir, N), 0.0); \n" +
-			"if( lambertTerm> 0.0){ \n" +
 			"specular = pow(specAngle, materialSource.shininess ); \n" +
+			"light.xyz += directLight.diffuse * lambertian * directLight.intensity ; \n" +
 			"specularColor.xyz += materialSource.specular * specular ; \n" +
-			"} \n" +
 			"} \n" +
 			"} \n" +
 			"void main() { \n" +
@@ -149,7 +147,7 @@ module egret3d {
 			"vec4 light ; \n" +
 			"void main() { \n" +
 			"diffuseColor.xyz = materialSource.diffuse.xyz * diffuseColor.xyz ; \n" +
-			"outColor.xyz = (ambientColor.xyz + materialSource.ambient.xyz + light.xyz) * diffuseColor.xyz + specularColor.xyz * materialSource.specularScale; \n" +
+			"outColor.xyz = (ambientColor.xyz + light.xyz) * diffuseColor.xyz + specularColor.xyz * materialSource.specularScale; \n" +
 			"outColor.w = materialSource.alpha * diffuseColor.w ; \n" +
 			"gl_FragColor = outColor * varying_color ; \n" +
 			"} \n",
@@ -315,22 +313,20 @@ module egret3d {
 			"pointLight.intensity = uniform_pointLightSource[i*12+9]; \n" +
 			"pointLight.radius = uniform_pointLightSource[i*12+10]; \n" +
 			"pointLight.falloff = uniform_pointLightSource[i*12+11]; \n" +
-			"ambientColor.xyz += pointLight.diffuse.xyz * pointLight.ambient ; \n" +
-			"vec4 lightVirePos = uniform_ViewMatrix * vec4(pointLight.position.xyz,1.0) ; \n" +
+			"ambientColor.xyz *= pointLight.diffuse.xyz * pointLight.ambient ; \n" +
+			"vec4 lightVirePos = uniform_ModelViewMatrix * vec4(pointLight.position.xyz,1.0) ; \n" +
 			"vec3 lightDir = varying_ViewPose.xyz - (lightVirePos.xyz/lightVirePos.w) ; \n" +
 			"lightDir = normalize(lightDir); \n" +
 			"float distance = length( lightDir ); \n" +
 			"float lambertTerm = pointLight.intensity / ( distance * distance )  ; \n" +
 			"float NdotL = dot( N, lightDir ); \n" +
 			"NdotL = clamp( NdotL ,0.0,1.0 ); \n" +
-			"light.xyz += pointLight.diffuse * NdotL * lambertTerm ; \n" +
-			"if( lambertTerm> 0.0){ \n" +
-			"vec3 viewDir = normalize(varying_ViewPose); \n" +
+			"light.xyz = pointLight.diffuse * NdotL * lambertTerm ; \n" +
+			"vec3 viewDir = normalize(-varying_ViewPose); \n" +
 			"vec3 H = normalize( lightDir + viewDir ); \n" +
 			"float NdotH = dot( normal, H ); \n" +
-			"lambertTerm = pow( clamp( NdotH ,0.0,1.0),materialSource.shininess ); \n" +
+			"lambertTerm = pow( clamp( NdotH ,0.0,materialSource.shininess), 1.0 ); \n" +
 			"specularColor.xyz += lambertTerm * materialSource.specular * materialSource.specularScale ; \n" +
-			"} \n" +
 			"}; \n" +
 			"} \n" +
 			"void main() { \n" +
@@ -378,9 +374,9 @@ module egret3d {
 			"temp_n += m1 * temp_normal * attribute_boneWeight.y; \n" +
 			"temp_n += m2 * temp_normal * attribute_boneWeight.z; \n" +
 			"temp_n += m3 * temp_normal * attribute_boneWeight.w; \n" +
-			"mat3 normalMatrix = transpose( inverse(mat3(uniform_ProjectionMatrix * uniform_ViewMatrix))); \n" +
+			"mat3 normalMatrix = transpose( inverse(mat3(uniform_ModelViewMatrix )) ); \n" +
 			"varying_eyeNormal = normalize(normalMatrix * -temp_n.xyz); \n" +
-			"outPosition = uniform_ViewMatrix * uniform_ModelMatrix * outPosition; \n" +
+			"outPosition =  uniform_ModelViewMatrix * outPosition ; \n" +
 			"varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
 			"} \n",
 
