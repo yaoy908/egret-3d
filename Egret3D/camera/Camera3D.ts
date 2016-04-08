@@ -80,20 +80,13 @@
         private _unprojection: Matrix4_4 = new Matrix4_4();
 
         /**
-         * @language zh_CN
-         * 眼睛矩阵(左，右眼) 实现VR时会用到
+        * @private
+        * @language zh_CN
+        * 眼睛矩阵(左，右眼) 实现VR时会用到
         * @version Egret 3.0
-         * @platform Web,Native
-         */
+        * @platform Web,Native
+        */
         public eyeMatrix: EyesMatrix;
-
-        /**
-         * @language zh_CN
-         * 当前相机使用的世界变换矩阵
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public cameraMatrix: Matrix4_4;
 
         /**
          * @language zh_CN        
@@ -157,16 +150,13 @@
             this._cameraType = cameraType;
             switch (cameraType) {
                 case CameraType.orthogonal:
-                    this.cameraMatrix = this.modelMatrix;
                     ///this.projectMatrix.ortho(this._viewPort.width, this._viewPort.height, this._near, this._far);
                     this.updataOrth();
                     break;
                 case CameraType.perspective:
-                    this.cameraMatrix = this.modelMatrix;
                     this.projectMatrix.perspective(this._fovY, this._aspectRatio, this._near, this._far);
                     break;
                 case CameraType.VR:
-                    this.cameraMatrix = this.modelMatrix;
                     this.projectMatrix.perspective(this._fovY, 1.0 , this._near, this._far);
                     this.eyeMatrix = this.eyeMatrix || new EyesMatrix();
                     break;
@@ -183,15 +173,13 @@
          */
         public tap(cameraType: CameraType, vrType: VRType = null ) {
             if (cameraType == CameraType.VR) {
-                this.eyeMatrix.updte( this.modelMatrix );
+                this.eyeMatrix.update( this );
                 if (vrType == VRType.left) {
-                    this.cameraMatrix = this.eyeMatrix.leftEyeMatrix;
+                    this.viewMatrix.copyFrom(this.eyeMatrix.leftEyeMatrix);
                 } else if (vrType == VRType.right) {
-                    this.cameraMatrix = this.eyeMatrix.rightEyeMatrix;
+                    this.viewMatrix.copyFrom(this.eyeMatrix.rightEyeMatrix);
                 }
-            }
-            else {
-                this.cameraMatrix = this.modelMatrix ;
+                this.viewMatrix.invert();
             }
         }
                                               
@@ -312,9 +300,7 @@
         * @platform Web,Native
         */
         public get viewProjectionMatrix(): Matrix4_4 {
-            this.cameraMatrix = this.modelMatrix;
-            this.temp.copyFrom(this.cameraMatrix);
-            this.temp.invert();
+            this.temp.copyFrom(this.viewMatrix);
             this.temp.multiply(this.projectMatrix);
             return this.temp;
         }

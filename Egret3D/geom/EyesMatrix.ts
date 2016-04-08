@@ -26,7 +26,7 @@
         private eyeRotation: Vector3D = new Vector3D(0,1,0);
 
         private eyeLookTarget: Vector3D;
-        private eyeSpace: number = 1.0 ;
+        private eyeSpace: number = 1;
         private eyeFocalLength: number = 180;
 
         private leftPos: Vector3D = new Vector3D();
@@ -34,6 +34,7 @@
         private targetPos: Vector3D = new Vector3D(0.0, 0.0, this.eyeFocalLength);
         private lookAtPos: Vector3D = new Vector3D();
         private quaternion: Quaternion = new Quaternion();
+        private dir: Vector3D = new Vector3D();
                                                        
         /**
         * @language zh_CN
@@ -49,35 +50,26 @@
         * 数据更新
         * @param matrix 当前相机矩阵
         */
-        public updte(matrix: Matrix4_4) {
+        public update(camera: Camera3D) {
+            camera.globalOrientation.transformVector(Vector3D.X_AXIS, this.dir);
+            this.dir.normalize();
+            this.leftEyeMatrix.copyFrom(camera.modelMatrix);
+            this.rightEyeMatrix.copyFrom(camera.modelMatrix);
 
-           /// this.leftEyeMatrix = matrix;
-           /// this.rightEyeMatrix = matrix;
+            this.leftEyeMatrix.appendTranslation(-this.dir.x * this.eyeSpace, -this.dir.y * this.eyeSpace, -this.dir.z * this.eyeSpace);
+            this.rightEyeMatrix.appendTranslation(this.dir.x * this.eyeSpace, this.dir.y * this.eyeSpace, this.dir.z * this.eyeSpace);
 
-           //////this.leftEyeMatrix.copyFrom(matrix);
-           //////this.rightEyeMatrix.copyFrom(matrix);
-           /// return;
 
-            this.targetPos.z = this.eyeFocalLength;
+            //this.targetPos.z = this.eyeFocalLength;
 
-            this.eyePosition = matrix.position;
-            this.quaternion.fromMatrix(matrix);
-            ///this.quaternion.toEulerAngles(this.eyeRotation);
-            ///this.eyeRotation.normalize();
+            //this.eyePosition = matrix.position;
+            //this.quaternion.fromMatrix(matrix);
 
-            this.leftEyeMatrix.copyRawDataFrom(matrix.rawData);
-            this.rightEyeMatrix.copyRawDataFrom(matrix.rawData);
+            //this.leftEyeMatrix.copyRawDataFrom(matrix.rawData);
+            //this.rightEyeMatrix.copyRawDataFrom(matrix.rawData);
             
-            this.leftEyeMatrix.appendTranslation(-this.eyeSpace * 0.5, 0.0, 0.0);
-            this.rightEyeMatrix.appendTranslation(this.eyeSpace * 0.5, 0.0, 0.0);
-          
-           /// this.quaternion.rotatePoint(this.targetPos, this.lookAtPos);
-           ///this.leftEyeMatrix.lookAt(this.leftEyeMatrix.position, this.lookAtPos, this.eyeRotation);
-           /// this.rightEyeMatrix.lookAt(this.rightEyeMatrix.position, this.lookAtPos, this.eyeRotation);
-
-
+            //this.leftEyeMatrix.appendTranslation(-this.eyeSpace * 0.5, 0.0, 0.0);
+            //this.rightEyeMatrix.appendTranslation(this.eyeSpace * 0.5, 0.0, 0.0);
         }
-
-
     }
 } 
