@@ -1713,6 +1713,7 @@ var egret3d;
             if (speed === void 0) { speed = 1.0; }
             if (!this._skeletonAnimationClips[animName])
                 return false;
+            this.currentAnim = animName;
             this._enabledSkeletonAnimationClips.push(this._skeletonAnimationClips[animName]);
             this._enabledSkeletonAnimationClips[this._enabledSkeletonAnimationClips.length - 1].weight = this._enabledSkeletonAnimationClips.length > 1 ? 0 : 1;
             this._enabledSkeletonAnimationClips[this._enabledSkeletonAnimationClips.length - 1].play = true;
@@ -5665,6 +5666,48 @@ var egret3d;
             return target;
         };
         /**
+  * @language zh_CN
+  * 用当前矩阵变换一个3D向量
+  * @param v 变换的向量
+  * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
+  * @returns 变换后的向量
+  */
+        Matrix4_4.prototype.transformVector4 = function (v, target) {
+            if (target === void 0) { target = null; }
+            if (!target) {
+                target = new egret3d.Vector3D();
+            }
+            var x = v.x;
+            var y = v.y;
+            var z = v.z;
+            var w = v.w;
+            target.x = x * this.rawData[0] + y * this.rawData[4] + z * this.rawData[8] + w * this.rawData[12];
+            target.y = x * this.rawData[1] + y * this.rawData[5] + z * this.rawData[9] + w * this.rawData[13];
+            target.z = x * this.rawData[2] + y * this.rawData[6] + z * this.rawData[10] + w * this.rawData[14];
+            target.w = x * this.rawData[3] + y * this.rawData[7] + z * this.rawData[11] + w * this.rawData[15];
+            return target;
+        };
+        /**
+         * @language zh_CN
+         * 用当前矩阵变换一个3D向量
+         * @param v 变换的向量
+         * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
+         * @returns 变换后的向量
+         */
+        Matrix4_4.prototype.mat3TransformVector = function (v, target) {
+            if (target === void 0) { target = null; }
+            if (!target) {
+                target = new egret3d.Vector3D();
+            }
+            var x = v.x;
+            var y = v.y;
+            var z = v.z;
+            target.x = x * this.rawData[0] + y * this.rawData[4] + z * this.rawData[8];
+            target.y = x * this.rawData[1] + y * this.rawData[5] + z * this.rawData[9];
+            target.z = x * this.rawData[2] + y * this.rawData[6] + z * this.rawData[10];
+            return target;
+        };
+        /**
         * @language zh_CN
         * 用当前矩阵变换一个3D平面
         * @param plane 变换的平面
@@ -6498,7 +6541,31 @@ var egret3d;
             * 顶点长度
             */
             this.vexLength = 3;
+            this.matTransform = new egret3d.Matrix4_4();
         }
+        Object.defineProperty(Bound.prototype, "Transform", {
+            /**
+            * @language zh_CN
+            * 得到变换矩阵
+            * @returns 变换矩阵
+            */
+            get: function () {
+                return this.matTransform;
+            },
+            /**
+            * @language zh_CN
+            * 设置变换矩阵
+            * @param mat 变换矩阵
+            */
+            set: function (mat) {
+                this.matTransform.copyFrom(mat);
+                if (this.childBound) {
+                    this.childBound.Transform = mat;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
         Bound.prototype.inBound = function (frustum) {
             return true;
         };
@@ -6585,7 +6652,6 @@ var egret3d;
             * 盒子包围球半径
             */
             this.radius = 0;
-            this.matTransform = new egret3d.Matrix4_4();
             this.min.copyFrom(min);
             this.max.copyFrom(max);
             this.calculateBox();
@@ -6660,26 +6726,6 @@ var egret3d;
             }
             return true;
         };
-        Object.defineProperty(BoundBox.prototype, "Transform", {
-            /**
-            * @language zh_CN
-            * 得到变换矩阵
-            * @returns 变换矩阵
-            */
-            get: function () {
-                return this.matTransform;
-            },
-            /**
-            * @language zh_CN
-            * 设置变换矩阵
-            * @param mat 变换矩阵
-            */
-            set: function (mat) {
-                this.matTransform.copyFrom(mat);
-            },
-            enumerable: true,
-            configurable: true
-        });
         /**
         * @language zh_CN
         * 以字符串形式返回box的值
@@ -9737,6 +9783,9 @@ var egret3d;
             }
             this._modeMatrix3D.makeTransform(this._globalPos, this._globalSca, this._globalOrientation);
             this._transformChange = false;
+            if (this.bound) {
+                this.bound.Transform = this._modeMatrix3D;
+            }
             this.onUpdateTransform();
         };
         Object3D.prototype.onUpdateTransform = function () {
@@ -10453,7 +10502,8 @@ var egret3d;
         * @version Egret 3.0
         * @platform Web,Native
         */
-        function Mesh(geometry, material) {
+        function Mesh(geometry, material, animation) {
+            if (animation === void 0) { animation = null; }
             _super.call(this);
             this.muiltMaterial = {};
             this._materialCount = 0;
@@ -10485,8 +10535,13 @@ var egret3d;
             */
             this.pickResult = new egret3d.PickResult();
             this.geometry = geometry;
-            if (this.geometry.vertexFormat & egret3d.VertexFormat.VF_SKIN) {
-                this.animation = new egret3d.SkeletonAnimation(this.geometry.skeleton);
+            if (animation) {
+                this.animation = animation;
+            }
+            else {
+                if (this.geometry.vertexFormat & egret3d.VertexFormat.VF_SKIN) {
+                    this.animation = new egret3d.SkeletonAnimation(this.geometry.skeleton);
+                }
             }
             this.addSubMaterial(0, material);
             this.material = material;
@@ -10549,7 +10604,11 @@ var egret3d;
         * @platform Web,Native
         */
         Mesh.prototype.clone = function () {
-            var cloneMesh = new Mesh(this.geometry, this.material);
+            var ani = null;
+            if (this.animation) {
+                ani = this.animation.clone();
+            }
+            var cloneMesh = new Mesh(this.geometry, this.material, ani);
             cloneMesh.muiltMaterial = this.muiltMaterial;
             return cloneMesh;
         };
@@ -10843,7 +10902,7 @@ var egret3d;
              *@private
              * 环境颜色
              */
-            this._ambient = new egret3d.Vector3D(1.0, 1.0, 1.0);
+            this._ambient = new egret3d.Vector3D(0.0, 0.0, 0.0);
             /**
              * @language zh_CN
              *@private
@@ -10926,6 +10985,11 @@ var egret3d;
              *@private
              */
             this._change = true;
+            /**
+             * @language zh_CN
+             *@private
+             */
+            this.lightViewPos = new egret3d.Vector3D();
         }
         Object.defineProperty(LightBase.prototype, "intensity", {
             /**
@@ -11062,7 +11126,7 @@ var egret3d;
          * @param index 灯光ID
          * @param lightData 灯光数据
          */
-        LightBase.prototype.updateLightData = function (index, lightData) {
+        LightBase.prototype.updateLightData = function (camera, index, lightData) {
         };
         return LightBase;
     })(egret3d.Object3D);
@@ -11128,10 +11192,10 @@ var egret3d;
          * @param index 灯光ID
          * @param lightData 灯光数据
          */
-        PointLight.prototype.updateLightData = function (index, lightData) {
-            lightData[index * PointLight.stride] = this.x;
-            lightData[index * PointLight.stride + 1] = this.y;
-            lightData[index * PointLight.stride + 2] = this.z;
+        PointLight.prototype.updateLightData = function (camera, index, lightData) {
+            lightData[index * PointLight.stride] = this.position.x;
+            lightData[index * PointLight.stride + 1] = this.position.y;
+            lightData[index * PointLight.stride + 2] = this.position.z;
             lightData[index * PointLight.stride + 3] = this._diffuse.x;
             lightData[index * PointLight.stride + 4] = this._diffuse.y;
             lightData[index * PointLight.stride + 5] = this._diffuse.z;
@@ -11310,7 +11374,7 @@ var egret3d;
          * @param index 灯光ID
          * @param lightData 灯光数据
          */
-        SpotLight.prototype.updateLightData = function (index, lightData) {
+        SpotLight.prototype.updateLightData = function (camera, index, lightData) {
             lightData[index * SpotLight.stride] = this.x;
             lightData[index * SpotLight.stride + 1] = this.y;
             lightData[index * SpotLight.stride + 2] = this.z;
@@ -11408,10 +11472,11 @@ var egret3d;
          * @param index 灯光ID
          * @param lightData 灯光数据
          */
-        DirectLight.prototype.updateLightData = function (index, lightData) {
-            lightData[index * DirectLight.stride + 0] = this._rot.x;
-            lightData[index * DirectLight.stride + 1] = this._rot.y;
-            lightData[index * DirectLight.stride + 2] = this._rot.z;
+        DirectLight.prototype.updateLightData = function (camera, index, lightData) {
+            camera.viewMatrix.mat3TransformVector(this._rot, this.lightViewPos);
+            lightData[index * DirectLight.stride + 0] = this.lightViewPos.x;
+            lightData[index * DirectLight.stride + 1] = this.lightViewPos.y;
+            lightData[index * DirectLight.stride + 2] = this.lightViewPos.z;
             lightData[index * DirectLight.stride + 3] = this._diffuse.x;
             lightData[index * DirectLight.stride + 4] = this._diffuse.y;
             lightData[index * DirectLight.stride + 5] = this._diffuse.z;
@@ -13951,24 +14016,24 @@ var egret3d;
             this._initAngle = new egret3d.Vector3D();
             this._oldPosition1 = null;
             this._oldPosition2 = null;
-            window.addEventListener("click", function (e) { return _this.mouseClick(e); });
-            window.addEventListener("mousedown", function (e) { return _this.mouseStart(e); });
-            window.addEventListener("mouseup", function (e) { return _this.mouseEnd(e); });
-            window.addEventListener("mousewheel", function (e) { return _this.mouseWheel(e); });
-            window.addEventListener("mousemove", function (e) { return _this.mouseMove(e); });
-            window.addEventListener("mouseover", function (e) { return _this.mouseOver(e); });
-            window.addEventListener("keydown", function (e) { return _this.keyDown(e); });
-            window.addEventListener("keyup", function (e) { return _this.keyUp(e); });
+            window.addEventListener("click", function (e) { return _this.mouseClick(e); }, true);
+            window.addEventListener("mousedown", function (e) { return _this.mouseStart(e); }, true);
+            window.addEventListener("mouseup", function (e) { return _this.mouseEnd(e); }, true);
+            window.addEventListener("mousewheel", function (e) { return _this.mouseWheel(e); }, true);
+            window.addEventListener("mousemove", function (e) { return _this.mouseMove(e); }, true);
+            window.addEventListener("mouseover", function (e) { return _this.mouseOver(e); }, true);
+            window.addEventListener("keydown", function (e) { return _this.keyDown(e); }, true);
+            window.addEventListener("keyup", function (e) { return _this.keyUp(e); }, true);
             if (this.canGame()) {
-                window.addEventListener("gamepadconnected", function (e) { return _this.ongamepadconnected(e); });
-                window.addEventListener("gamepaddisconnected", function (e) { return _this.ongamepaddisconnected(e); });
+                window.addEventListener("gamepadconnected", function (e) { return _this.ongamepadconnected(e); }, true);
+                window.addEventListener("gamepaddisconnected", function (e) { return _this.ongamepaddisconnected(e); }, true);
             }
-            window.addEventListener("touchstart", function (e) { return _this.touchStart(e); });
-            window.addEventListener("touchend", function (e) { return _this.touchEnd(e); });
-            window.addEventListener("touchmove", function (e) { return _this.touchMove(e); });
-            window.addEventListener("touchcancel", function (e) { return _this.touchEnd(e); });
-            window.addEventListener("deviceorientation", function (e) { return _this.ondeviceorientation(e); });
-            window.addEventListener("devicemotion", function (e) { return _this.detectShake(e); });
+            window.addEventListener("touchstart", function (e) { return _this.touchStart(e); }, true);
+            window.addEventListener("touchend", function (e) { return _this.touchEnd(e); }, true);
+            window.addEventListener("touchmove", function (e) { return _this.touchMove(e); }, true);
+            window.addEventListener("touchcancel", function (e) { return _this.touchEnd(e); }, true);
+            window.addEventListener("deviceorientation", function (e) { return _this.ondeviceorientation(e); }, true);
+            window.addEventListener("devicemotion", function (e) { return _this.detectShake(e); }, true);
         }
         Object.defineProperty(Input, "instance", {
             /**
@@ -17009,7 +17074,6 @@ var egret3d;
             this.methodDatas = new Array();
             this.vsShaderNames = new Array();
             this.fsShaderNames = new Array();
-            this.modelViewMatrix = new egret3d.Matrix4_4();
             this._materialData = materialData;
         }
         MaterialPass.prototype.addMethod = function (method) {
@@ -17212,13 +17276,13 @@ var egret3d;
             var i = 0;
             if (this.lightGroup) {
                 for (i = 0; i < this._passUsage.maxDirectLight; i++) {
-                    this.lightGroup.directLightList[i].updateLightData(i, this._passUsage.directLightData);
+                    this.lightGroup.directLightList[i].updateLightData(camera3D, i, this._passUsage.directLightData);
                 }
                 for (i = 0; i < this._passUsage.maxSpotLight; i++) {
-                    this.lightGroup.spotLightList[i].updateLightData(i, this._passUsage.spotLightData);
+                    this.lightGroup.spotLightList[i].updateLightData(camera3D, i, this._passUsage.spotLightData);
                 }
                 for (i = 0; i < this._passUsage.maxPointLight; i++) {
-                    this.lightGroup.pointLightList[i].updateLightData(i, this._passUsage.pointLightData);
+                    this.lightGroup.pointLightList[i].updateLightData(camera3D, i, this._passUsage.pointLightData);
                 }
                 if (this._passUsage.uniform_directLightSource)
                     context3DProxy.uniform1fv(this._passUsage.uniform_directLightSource.uniformIndex, this._passUsage.directLightData);
@@ -17230,9 +17294,7 @@ var egret3d;
             if (this._materialData.alphaBlending)
                 egret3d.Context3DProxy.gl.depthMask(true);
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ModelMatrix.uniformIndex, false, modeltransform.rawData);
-            this.modelViewMatrix.copyFrom(modeltransform);
-            this.modelViewMatrix.multiply(camera3D.viewMatrix);
-            context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ModelViewMatrix.uniformIndex, false, this.modelViewMatrix.rawData);
+            context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ViewMatrix.uniformIndex, false, camera3D.viewMatrix.rawData);
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.projectMatrix.rawData);
             if (this._passUsage.uniform_eyepos) {
                 context3DProxy.uniform3f(this._passUsage.uniform_eyepos.uniformIndex, camera3D.x, camera3D.y, camera3D.z);
@@ -19397,7 +19459,7 @@ var egret3d;
                 "varying vec3 varying_ViewPose; \n" +
                 "varying vec4 varying_color; \n" +
                 "uniform vec3 uniform_eyepos ; \n" +
-                "uniform mat4 uniform_ModelViewMatrix ; \n" +
+                "uniform mat4 uniform_ViewMatrix ; \n" +
                 "vec4 outColor; \n" +
                 "vec4 diffuseColor ; \n" +
                 "vec4 specularColor ; \n" +
@@ -19413,7 +19475,7 @@ var egret3d;
                 "void main() { \n" +
                 "diffuseColor  = vec4(1.0,1.0,1.0,1.0); \n" +
                 "specularColor = vec4(0.0,0.0,0.0,0.0); \n" +
-                "ambientColor  = vec4(1.0,1.0,1.0,1.0); \n" +
+                "ambientColor  = vec4(0.0,0.0,0.0,0.0); \n" +
                 "light         = vec4(0.0,0.0,0.0,0.0); \n" +
                 "normal = normalize(varying_eyeNormal) ; \n" +
                 "uv_0 = varying_uv0; \n" +
@@ -19423,7 +19485,7 @@ var egret3d;
                 "attribute vec2 attribute_uv0 ; \n" +
                 "attribute vec4 attribute_color ; \n" +
                 "uniform mat4 uniform_ModelMatrix ; \n" +
-                "uniform mat4 uniform_ModelViewMatrix ; \n" +
+                "uniform mat4 uniform_ViewMatrix ; \n" +
                 "uniform mat4 uniform_ProjectionMatrix ; \n" +
                 "varying vec3 varying_ViewPose; \n" +
                 "varying vec3 varying_eyeNormal  ; \n" +
@@ -19460,12 +19522,12 @@ var egret3d;
                 "} \n",
             "cube_vertex": "attribute vec3 attribute_position; \n" +
                 "uniform mat4 uniform_ModelMatrix; \n" +
-                "uniform mat4 uniform_ModelViewMatrix; \n" +
+                "uniform mat4 uniform_ViewMatrix; \n" +
                 "uniform mat4 uniform_ProjectionMatrix; \n" +
                 "varying vec3 varying_pos; \n" +
                 "void main(void){ \n" +
                 "varying_pos =  attribute_position; \n" +
-                "gl_Position = uniform_ProjectionMatrix * uniform_ModelViewMatrix * vec4(attribute_position, 1.0) ; \n" +
+                "gl_Position = uniform_ProjectionMatrix * uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
                 "} \n",
             "diffuse_fragment": "uniform sampler2D diffuseTexture; \n" +
                 "vec4 diffuseColor ; \n" +
@@ -19473,9 +19535,9 @@ var egret3d;
                 "diffuseColor = textureLinear(diffuseTexture , uv_0 ); \n" +
                 "} \n",
             "diffuse_vertex": "void main(void){ \n" +
-                "mat3 normalMatrix = transpose( inverse(mat3(uniform_ModelViewMatrix )) ); \n" +
+                "mat3 normalMatrix = transpose( inverse(mat3( uniform_ProjectionMatrix * uniform_ViewMatrix )) ); \n" +
                 "varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
-                "outPosition = uniform_ModelViewMatrix * vec4(attribute_position, 1.0) ; \n" +
+                "outPosition = uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
                 "varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
                 "} \n",
             "directLight_fragment": "const int max_directLight = 0 ; \n" +
@@ -19488,25 +19550,27 @@ var egret3d;
                 "float halfIntensity; \n" +
                 "}; \n" +
                 "void calculateDirectLight( MaterialSource materialSource ){ \n" +
-                "float lambertian , specular ; \n" +
+                "float lambertTerm , specular ; \n" +
                 "vec3 N = normal; \n" +
                 "for(int i = 0 ; i < max_directLight ; i++){ \n" +
                 "DirectLight directLight ; \n" +
-                "directLight.direction = vec3(uniform_directLightSource[i*10+0],uniform_directLightSource[i*10+1],uniform_directLightSource[i*10+2]); \n" +
-                "directLight.diffuse = vec3(uniform_directLightSource[i*10+3],uniform_directLightSource[i*10+4],uniform_directLightSource[i*10+5]); \n" +
-                "directLight.ambient = vec3(uniform_directLightSource[i*10+6],uniform_directLightSource[i*10+7],uniform_directLightSource[i*10+8]); \n" +
-                "directLight.intensity = uniform_directLightSource[i*10+9]; \n" +
-                "directLight.halfIntensity = uniform_directLightSource[i*10+10]; \n" +
-                "ambientColor.xyz *= directLight.ambient.xyz ; \n" +
-                "vec3 lightDir = mat3(uniform_ModelViewMatrix)*normalize(-directLight.direction); \n" +
-                "lambertian = max(dot(lightDir,N), 0.0); \n" +
+                "directLight.direction = vec3(uniform_directLightSource[i*11+0],uniform_directLightSource[i*11+1],uniform_directLightSource[i*11+2]); \n" +
+                "directLight.diffuse = vec3(uniform_directLightSource[i*11+3],uniform_directLightSource[i*11+4],uniform_directLightSource[i*11+5]); \n" +
+                "directLight.ambient = vec3(uniform_directLightSource[i*11+6],uniform_directLightSource[i*11+7],uniform_directLightSource[i*11+8]); \n" +
+                "directLight.intensity = uniform_directLightSource[i*11+9]; \n" +
+                "directLight.halfIntensity = uniform_directLightSource[i*11+10]; \n" +
+                "ambientColor.xyz += directLight.ambient.xyz * directLight.diffuse ; \n" +
+                "vec3 lightDir = normalize(directLight.direction); \n" +
+                "lambertTerm = max(dot(lightDir,N), 0.0); \n" +
+                "light.xyz += directLight.diffuse * lambertTerm * directLight.intensity ; \n" +
                 "specular = 0.0; \n" +
                 "vec3 viewDir = normalize(varying_ViewPose); \n" +
                 "vec3 halfDir = normalize(lightDir + viewDir); \n" +
                 "float specAngle = max(dot(halfDir, N), 0.0); \n" +
+                "if( lambertTerm> 0.0){ \n" +
                 "specular = pow(specAngle, materialSource.shininess ); \n" +
-                "light.xyz += directLight.diffuse * lambertian * directLight.intensity ; \n" +
                 "specularColor.xyz += materialSource.specular * specular ; \n" +
+                "} \n" +
                 "} \n" +
                 "} \n" +
                 "void main() { \n" +
@@ -19518,7 +19582,7 @@ var egret3d;
                 "vec4 light ; \n" +
                 "void main() { \n" +
                 "diffuseColor.xyz = materialSource.diffuse.xyz * diffuseColor.xyz ; \n" +
-                "outColor.xyz = (ambientColor.xyz + light.xyz) * diffuseColor.xyz + specularColor.xyz * materialSource.specularScale; \n" +
+                "outColor.xyz = (ambientColor.xyz + materialSource.ambient.xyz + light.xyz) * diffuseColor.xyz + specularColor.xyz * materialSource.specularScale; \n" +
                 "outColor.w = materialSource.alpha * diffuseColor.w ; \n" +
                 "gl_FragColor = outColor * varying_color ; \n" +
                 "} \n",
@@ -19670,20 +19734,22 @@ var egret3d;
                 "pointLight.intensity = uniform_pointLightSource[i*12+9]; \n" +
                 "pointLight.radius = uniform_pointLightSource[i*12+10]; \n" +
                 "pointLight.falloff = uniform_pointLightSource[i*12+11]; \n" +
-                "ambientColor.xyz *= pointLight.diffuse.xyz * pointLight.ambient ; \n" +
-                "vec4 lightVirePos = uniform_ModelViewMatrix * vec4(pointLight.position.xyz,1.0) ; \n" +
+                "ambientColor.xyz += pointLight.diffuse.xyz * pointLight.ambient ; \n" +
+                "vec4 lightVirePos = uniform_ViewMatrix * vec4(pointLight.position.xyz,1.0) ; \n" +
                 "vec3 lightDir = varying_ViewPose.xyz - (lightVirePos.xyz/lightVirePos.w) ; \n" +
                 "lightDir = normalize(lightDir); \n" +
                 "float distance = length( lightDir ); \n" +
                 "float lambertTerm = pointLight.intensity / ( distance * distance )  ; \n" +
                 "float NdotL = dot( N, lightDir ); \n" +
                 "NdotL = clamp( NdotL ,0.0,1.0 ); \n" +
-                "light.xyz = pointLight.diffuse * NdotL * lambertTerm ; \n" +
-                "vec3 viewDir = normalize(-varying_ViewPose); \n" +
+                "light.xyz += pointLight.diffuse * NdotL * lambertTerm ; \n" +
+                "if( lambertTerm> 0.0){ \n" +
+                "vec3 viewDir = normalize(varying_ViewPose); \n" +
                 "vec3 H = normalize( lightDir + viewDir ); \n" +
                 "float NdotH = dot( normal, H ); \n" +
-                "lambertTerm = pow( clamp( NdotH ,0.0,materialSource.shininess), 1.0 ); \n" +
+                "lambertTerm = pow( clamp( NdotH ,0.0,1.0),materialSource.shininess ); \n" +
                 "specularColor.xyz += lambertTerm * materialSource.specular * materialSource.specularScale ; \n" +
+                "} \n" +
                 "}; \n" +
                 "} \n" +
                 "void main() { \n" +
@@ -19729,9 +19795,9 @@ var egret3d;
                 "temp_n += m1 * temp_normal * attribute_boneWeight.y; \n" +
                 "temp_n += m2 * temp_normal * attribute_boneWeight.z; \n" +
                 "temp_n += m3 * temp_normal * attribute_boneWeight.w; \n" +
-                "mat3 normalMatrix = transpose( inverse(mat3(uniform_ModelViewMatrix )) ); \n" +
+                "mat3 normalMatrix = transpose( inverse(mat3(uniform_ProjectionMatrix * uniform_ViewMatrix))); \n" +
                 "varying_eyeNormal = normalize(normalMatrix * -temp_n.xyz); \n" +
-                "outPosition =  uniform_ModelViewMatrix * outPosition ; \n" +
+                "outPosition = uniform_ViewMatrix * uniform_ModelMatrix * outPosition; \n" +
                 "varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
                 "} \n",
             "specularMap_fragment": "uniform sampler2D specularTexture; \n" +
@@ -23705,7 +23771,7 @@ var egret3d;
             this._envetManager = new egret3d.EventManager(this);
             this.canvas = document.createElement("canvas");
             this.canvas.style.position = "absolute";
-            this.canvas.style.zIndex = "0";
+            this.canvas.style.zIndex = "-1";
             if (document.getElementsByClassName("egret-player").length > 0) {
                 document.getElementsByClassName("egret-player")[0].appendChild(this.canvas);
             }

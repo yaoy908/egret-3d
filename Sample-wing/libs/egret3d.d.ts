@@ -3397,6 +3397,22 @@ declare module egret3d {
         */
         transformVector(v: Vector3D, target?: Vector3D): Vector3D;
         /**
+  * @language zh_CN
+  * 用当前矩阵变换一个3D向量
+  * @param v 变换的向量
+  * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
+  * @returns 变换后的向量
+  */
+        transformVector4(v: Vector3D, target?: Vector3D): Vector3D;
+        /**
+         * @language zh_CN
+         * 用当前矩阵变换一个3D向量
+         * @param v 变换的向量
+         * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
+         * @returns 变换后的向量
+         */
+        mat3TransformVector(v: Vector3D, target?: Vector3D): Vector3D;
+        /**
         * @language zh_CN
         * 用当前矩阵变换一个3D平面
         * @param plane 变换的平面
@@ -3831,6 +3847,18 @@ declare module egret3d {
         * 子包围盒
         */
         childBound: Bound;
+        protected matTransform: Matrix4_4;
+        /**
+        * @language zh_CN
+        * 得到变换矩阵
+        * @returns 变换矩阵
+        */
+        /**
+        * @language zh_CN
+        * 设置变换矩阵
+        * @param mat 变换矩阵
+        */
+        Transform: Matrix4_4;
         inBound(frustum: Frustum): boolean;
     }
 }
@@ -3901,7 +3929,6 @@ declare module egret3d {
         * 盒子包围球半径
         */
         radius: number;
-        private matTransform;
         /**
         * @language zh_CN
         * constructor
@@ -3936,17 +3963,6 @@ declare module egret3d {
         * @returns 成功返回true
         */
         intersectAABBs(box2: BoundBox, boxIntersect: BoundBox): boolean;
-        /**
-        * @language zh_CN
-        * 得到变换矩阵
-        * @returns 变换矩阵
-        */
-        /**
-        * @language zh_CN
-        * 设置变换矩阵
-        * @param mat 变换矩阵
-        */
-        Transform: Matrix4_4;
         /**
         * @language zh_CN
         * 以字符串形式返回box的值
@@ -6735,7 +6751,7 @@ declare module egret3d {
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(geometry: Geometry, material: MaterialBase);
+        constructor(geometry: Geometry, material: MaterialBase, animation?: IAnimation);
         setMaterialByID(): void;
         /**
         * @language zh_CN
@@ -7036,6 +7052,11 @@ declare module egret3d {
          *@private
          */
         protected _change: boolean;
+        /**
+         * @language zh_CN
+         *@private
+         */
+        protected lightViewPos: Vector3D;
         constructor();
         /**
          * @language zh_CN
@@ -7108,7 +7129,7 @@ declare module egret3d {
          * @param index 灯光ID
          * @param lightData 灯光数据
          */
-        updateLightData(index: number, lightData: Float32Array): void;
+        updateLightData(camera: Camera3D, index: number, lightData: Float32Array): void;
     }
 }
 declare module egret3d {
@@ -7153,7 +7174,7 @@ declare module egret3d {
          * @param index 灯光ID
          * @param lightData 灯光数据
          */
-        updateLightData(index: number, lightData: Float32Array): void;
+        updateLightData(camera: Camera3D, index: number, lightData: Float32Array): void;
     }
 }
 declare module egret3d {
@@ -7268,7 +7289,7 @@ declare module egret3d {
          * @param index 灯光ID
          * @param lightData 灯光数据
          */
-        updateLightData(index: number, lightData: Float32Array): void;
+        updateLightData(camera: Camera3D, index: number, lightData: Float32Array): void;
     }
 }
 declare module egret3d {
@@ -7327,7 +7348,7 @@ declare module egret3d {
          * @param index 灯光ID
          * @param lightData 灯光数据
          */
-        updateLightData(index: number, lightData: Float32Array): void;
+        updateLightData(camera: Camera3D, index: number, lightData: Float32Array): void;
     }
 }
 declare module egret3d {
@@ -9862,7 +9883,6 @@ declare module egret3d {
         vsShaderNames: Array<string>;
         fsShaderNames: Array<string>;
         lightGroup: LightGroup;
-        modelViewMatrix: Matrix4_4;
         constructor(materialData: MaterialData);
         addMethod(method: MethodBase): void;
         removeMethod(method: MethodBase): void;
