@@ -123,24 +123,73 @@ class Main extends eui.UILayer {
             this.loadingView.setProgress(event.itemsLoaded, event.itemsTotal);
         }
     }
+    
+    private view: View3DTest;
+    
     /**
      * 创建场景界面
      * Create scene interface
      */
     protected startCreateScene(): void {
-        var button = new eui.Button();
-        button.label = "Click!";
-        button.horizontalCenter = 0;
-        button.verticalCenter = 0;
-        this.addChild(button);
-        button.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onButtonClick, this);
-    }
+        
+        this.view = new View3DTest();
 
-    private onButtonClick(e: egret.TouchEvent) {
-        var panel = new eui.Panel();
-        panel.title = "Title";
-        panel.horizontalCenter = 0;
-        panel.verticalCenter = 0;
-        this.addChild(panel);
+        
+        
+        //注册x轴旋转checkbox
+        var rotationXCheckBox = new eui.CheckBox();
+        rotationXCheckBox.label="x轴旋转";
+        rotationXCheckBox.x=0;
+        rotationXCheckBox.y=10;
+        this.addChild(rotationXCheckBox);
+        rotationXCheckBox.addEventListener(egret.Event.CHANGE,e=> this.view.isRotationX = rotationXCheckBox.selected ,this);
+        //注册y轴旋转checkbox
+        var rotationYCheckBox = new eui.CheckBox();
+        rotationYCheckBox.label = "y轴旋转";
+        rotationYCheckBox.x = 0;
+        rotationYCheckBox.y = 40;
+        this.addChild(rotationYCheckBox);
+        rotationYCheckBox.addEventListener(egret.Event.CHANGE,e=> this.view.isRotationY = rotationYCheckBox.selected,this);
+        //注册z轴旋转checkbox
+        var rotationZCheckBox = new eui.CheckBox();
+        rotationZCheckBox.label = "z轴旋转";
+        rotationZCheckBox.x = 0;
+        rotationZCheckBox.y = 70;
+        this.addChild(rotationZCheckBox);
+        rotationZCheckBox.addEventListener(egret.Event.CHANGE,e=> this.view.isRotationZ = rotationZCheckBox.selected,this);
+        //注册x轴旋转速度调节条
+        var speedXslider = new eui.HSlider();
+        speedXslider.x=120;
+        speedXslider.y=12;
+        speedXslider.width=300;
+        speedXslider.height=20;
+        speedXslider.minimum=0;
+        speedXslider.maximum=100;
+        this.addChild(speedXslider);
+        speedXslider.addEventListener(egret.Event.CHANGE,e=> this.view.rotationXSpeed = 0.05 * speedXslider.value + 0.5,this);
+        //注册y轴旋转速度调节条
+        var speedYslider = new eui.HSlider();
+        speedYslider.x = 120;
+        speedYslider.y = 42;
+        speedYslider.width = 300;
+        speedYslider.height = 20;
+        speedYslider.minimum = 0;
+        speedYslider.maximum = 100;
+        this.addChild(speedYslider);
+        speedYslider.addEventListener(egret.Event.CHANGE,e=> this.view.rotationYSpeed = 0.05 * speedYslider.value + 0.5,this);
+        
+        //注册z轴旋转速度调节条
+        var speedZslider = new eui.HSlider();
+        speedZslider.x = 120;
+        speedZslider.y = 72;
+        speedZslider.width = 300;
+        speedZslider.height = 20;
+        speedZslider.minimum = 0;
+        speedZslider.maximum = 100;
+        this.addChild(speedZslider);
+        speedZslider.addEventListener(egret.Event.CHANGE,e=> this.view.rotationZSpeed = 0.05 * speedZslider.value + 0.5,this);
     }
+    
+
+   
 }

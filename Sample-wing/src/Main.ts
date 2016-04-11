@@ -5,4 +5,6 @@ class Main extends egret.DisplayObjectContainer {
         super();
         var sample = new SampleView3D ();
     }
+    
+    
 } 

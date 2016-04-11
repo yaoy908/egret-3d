@@ -1,5 +1,5 @@
 {
-	"close":false,
+	"close":true,
 	"natures":["egretProject"],
 	"resourcePlugin":{
 		"configs":[],
@@ -45,6 +45,16 @@
 					"isFolder":false,
 					"key":"resource/SkyBox/cloudy_noon_UP.png",
 					"name":"cloudy_noon_UP.png"
+				},
+				{
+					"isFolder":false,
+					"key":"resource/logo.png",
+					"name":"logo.png"
+				},
+				{
+					"isFolder":false,
+					"key":"resource/white.jpg",
+					"name":"white.jpg"
 				}
 			]
 		}

@@ -6,10 +6,12 @@ var game_file_list = [
 	"libs/modules/egret/egret.native.js",
 	"libs/modules/eui/eui.js",
 	"libs/modules/res/res.js",
+	"libs/egret3d.js",
 	"bin-debug/AssetAdapter.js",
 	"bin-debug/LoadingUI.js",
 	"bin-debug/Main.js",
 	"bin-debug/ThemeAdapter.js",
+	"bin-debug/View3DTest.js",
 	//----auto game_file_list end----
 ];
 

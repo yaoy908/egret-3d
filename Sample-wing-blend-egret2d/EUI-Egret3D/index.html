@@ -27,6 +27,11 @@
 	<script egret="lib" src="libs/modules/eui/eui.js" src-release="libs/modules/eui/eui.min.js"></script>
 	<script egret="lib" src="libs/modules/res/res.js" src-release="libs/modules/res/res.min.js"></script>
 	<!--modules_files_end-->
+	
+	<!--这个标签为不通过egret提供的第三方库的方式使用的 javascript 文件，请将这些文件放在libs下，但不要放在modules下面。-->
+	<!--other_libs_files_start-->
+	<script egret="lib" src="libs/egret3d.js" src-release="libs/egret3d.js"></script>
+	<!--other_libs_files_end-->
 
     <!--这个标签为不通过egret提供的第三方库的方式使用的 javascript 文件，请将这些文件放在libs下，但不要放在modules下面。-->
     <!--other_libs_files_start-->
@@ -38,6 +43,7 @@
 	<script egret="game" src="bin-debug/LoadingUI.js"></script>
 	<script egret="game" src="bin-debug/Main.js"></script>
 	<script egret="game" src="bin-debug/ThemeAdapter.js"></script>
+	<script egret="game" src="bin-debug/View3DTest.js"></script>
 	<!--game_files_end-->
 </head>
 <body>
@@ -57,5 +63,11 @@
     <script>
         egret.runEgret({renderMode:"canvas"});
     </script>
+    <img id="f" src="resource/SkyBox/cloudy_noon_FR.png" hidden="true" />
+    <img id="b" src="resource/SkyBox/cloudy_noon_BK.png" hidden="true" />
+    <img id="l" src="resource/SkyBox/cloudy_noon_LF.png" hidden="true" />
+    <img id="r" src="resource/SkyBox/cloudy_noon_RT.png" hidden="true" />
+    <img id="u" src="resource/SkyBox/cloudy_noon_UP.png" hidden="true" />
+    <img id="d" src="resource/SkyBox/cloudy_noon_DN.png" hidden="true" />
 </body>
 </html>
