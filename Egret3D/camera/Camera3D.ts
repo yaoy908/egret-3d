@@ -77,8 +77,7 @@
          * @platform Web,Native
          */
         public projectMatrix: Matrix4_4 = new Matrix4_4();
-        private _unprojection: Matrix4_4 = new Matrix4_4();
-
+        
         /**
          * @language zh_CN
          * 眼睛矩阵(左，右眼) 实现VR时会用到
@@ -130,6 +129,10 @@
         private _viewMatrix: Matrix4_4 = new Matrix4_4();
 
         private _tempQuat: Quaternion = new Quaternion();
+
+        private _normalMatrix: Matrix4_4 = new Matrix4_4();
+
+        private _unprojection: Matrix4_4 = new Matrix4_4();
 
         protected _animation: any = [];
 
@@ -317,6 +320,20 @@
             this.temp.invert();
             this.temp.multiply(this.projectMatrix);
             return this.temp;
+        }
+
+
+        /**
+        * @language zh_CN
+        * 视图noormal矩阵
+        * normal 矩阵用来纠正透视相机影响视图变形，所影响的法线轴变形，一般用 modeviewMatrix 的逆举证的转置矩阵。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get normalMatrix(): Matrix4_4 {
+            this._normalMatrix.copyFrom(this.viewMatrix);
+            this._normalMatrix.multiply(this.projectMatrix);
+            return this._normalMatrix; 
         }
         
         /**

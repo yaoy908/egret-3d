@@ -24,12 +24,13 @@
             this.cameraCtl.rotationX = 60;
 
             var po: PointLight = new PointLight(0xffffff);
-            po.y = 200;
+            po.y = 50;
             po.z = 200;
+            po.intensity = 2.0;
             this.lights.addLight(po);
 
             var pointMesh: Mesh = new Mesh(new SphereGeometry(15, 25, 25), new ColorMaterial());
-            pointMesh.y = 200;
+            pointMesh.y = 50;
             pointMesh.z = 200;
             pointMesh.material.ambientColor = 0xcccccc ;
             this.view1.addChild3D(pointMesh);

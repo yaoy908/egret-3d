@@ -183,6 +183,10 @@
         /**
          * @language zh_CN
          */
+        public uniform_NormalMatrix: GLSL.Uniform;
+        /**
+         * @language zh_CN
+         */
         public uniform_shadowMatrix: GLSL.Uniform;
         /**
          * @language zh_CN
