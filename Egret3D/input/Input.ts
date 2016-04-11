@@ -166,6 +166,7 @@
             window.addEventListener("devicemotion", (e: DeviceMotionEvent) => this.detectShake(e), true);
 
             window.addEventListener("resize", (e: UIEvent) => this.onWindowsResize(e));
+           
         }
         
         /**

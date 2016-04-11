@@ -180,7 +180,10 @@
 
         "View3D.ts",
         "VRView3D.ts",
-        "Egret3DCanvas.ts"
-            
+        "Egret3DCanvas.ts",
+
+
+        //lib
+        "axi/LocalAxis.ts"
     ]
 }	

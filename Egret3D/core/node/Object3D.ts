@@ -1333,7 +1333,7 @@
                 this._sceneTransform.multiply(this.modelMatrix);
             } else
                 this._sceneTransform.copyFrom(this.modelMatrix);
-            this._sceneTransform.invert();
+            //this._sceneTransform.invert();
         }
 
         /**

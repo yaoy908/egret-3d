@@ -26,9 +26,9 @@
         * @platform Web,Native
         */
         constructor(x: number, y: number, width: number, height: number) {
+            super(x, y, width, height, new Camera3D(CameraType.VR));
             this.leftViewPort = new Rectangle();
             this.rightViewPort = new Rectangle();
-            super(x, y, width, height, new Camera3D(CameraType.VR));
             this.updateViewport();
         }
 
