@@ -1220,6 +1220,7 @@ declare module egret3d {
         private _playSpeed;
         private _playing;
         private _currentFrame;
+        private _currentTime;
         private _temp_smooth;
         private _temp_quat;
         private _temp_vec3;
@@ -3509,6 +3510,7 @@ declare module egret3d {
         private targetPos;
         private lookAtPos;
         private quaternion;
+        private dir;
         /**
         * @language zh_CN
         * constructor
@@ -3519,7 +3521,7 @@ declare module egret3d {
         * 数据更新
         * @param matrix 当前相机矩阵
         */
-        updte(matrix: Matrix4_4): void;
+        update(camera: Camera3D): void;
     }
 }
 declare module egret3d {
@@ -3661,6 +3663,8 @@ declare module egret3d {
         * 射线方向
         */
         dir: Vector3D;
+        static sdir: Vector3D;
+        static sdir1: Matrix4_4;
         /**
         * @language zh_CN
         * constructor
@@ -8536,6 +8540,7 @@ declare module egret3d {
         protected _mouseEvent3d: MouseEvent3D;
         protected _keyEvent3d: KeyEvent3D;
         protected _touchEvent3d: TouchEvent3D;
+        protected _windowsEvent3d: Event3D;
         /**
         * @language zh_CN
         * 游戏手柄Stick1事件侦听函数。
@@ -8660,6 +8665,7 @@ declare module egret3d {
         private mouseWheel(e);
         private keyDown(e);
         private keyUp(e);
+        private onWindowsResize(e);
         private GetSlideAngle(dx, dy);
         /**
         * @language zh_CN
@@ -10522,6 +10528,7 @@ declare module egret3d {
         * constructor
         */
         constructor();
+        update(time: number, delay: number, collect: CollectBase, camera: Camera3D): void;
         /**
         * @language zh_CN
         * 每帧渲染
@@ -10551,6 +10558,7 @@ declare module egret3d {
         * constructor
         */
         constructor();
+        update(time: number, delay: number, collect: CollectBase, camera: Camera3D): void;
         /**
         * @language zh_CN
         * 把所有需要渲染的对象，依次进行渲染
@@ -12702,19 +12710,13 @@ declare module egret3d {
         projectMatrix: Matrix4_4;
         private _unprojection;
         /**
-         * @language zh_CN
-         * 眼睛矩阵(左，右眼) 实现VR时会用到
+        * @private
+        * @language zh_CN
+        * 眼睛矩阵(左，右眼) 实现VR时会用到
         * @version Egret 3.0
-         * @platform Web,Native
-         */
+        * @platform Web,Native
+        */
         eyeMatrix: EyesMatrix;
-        /**
-         * @language zh_CN
-         * 当前相机使用的世界变换矩阵
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        cameraMatrix: Matrix4_4;
         /**
          * @language zh_CN
          * 相机的视椎体，用来检测是否在当前相机可视范围内
@@ -12951,14 +12953,14 @@ declare module egret3d {
      * @classdesc
      * 渲染视图。</p>
      * view3D 是整个3D引擎的渲染视口，可以控制渲染窗口的大小，渲染的方式。</p>
-     * 可以设置不同的相机 camera3D。</p>
-     * 交换不同的场景元素 scene3D 。</p>
+     * 可以设置不同的相机 Camera3D。</p>
+     * 交换不同的场景元素 Scene3D 。</p>
      * 当前的View3D中会有一个Scene3D的节点和一个Camera3D来进行场景中的渲染。
      * 整个渲染的主循环通过 update  。</p>
      * Engre3DCanvas 中的View3D列表会主动调用View3D的update,加入了Engre3DCanvas中的View3D列表后不需要使用者update
      * @includeExample View3D.ts
-     * @see egret3d.camera3d
-     * @see egret3d.scene3D
+     * @see egret3d.Camera3D
+     * @see egret3d.Scene3D
      * @see egret3d.Egret3DCanvas
      * @version Egret 3.0
      * @platform Web,Native
@@ -12983,10 +12985,11 @@ declare module egret3d {
         * @param y 视口的屏幕y坐标
         * @param width 视口的屏幕宽度
         * @param height 视口的屏幕高度
+        * @param camera 摄像机
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(x: number, y: number, width: number, height: number);
+        constructor(x: number, y: number, width: number, height: number, camera?: Camera3D);
         blender(cleanColor: boolean, cleanDepth: boolean): void;
         /**
         * @language zh_CN
@@ -13146,18 +13149,73 @@ declare module egret3d {
 }
 declare module egret3d {
     /**
-    * @class egret3d.Egret3DCanvas
-    * @classdesc
-    * 3dCanvas 是一个3d渲染画布 它继承EventDispatcher 可以监听部分事件。
-    * 如：Event3D.ENTER_FRAME 每帧响应回调事件
-    * 一个3d渲染画布里面有多个view3d ，
-    * 多个view3d进行渲染
-    * @includeExample Egret3DCanvas.ts
-    * @see egret3d.EventDispatcher
-    * @see egret3d.View3D
-    * @version Egret 3.0
-    * @platform Web,Native
-    */
+     * @class egret3d.View3D
+     * @classdesc
+     * VRView3D 会把场景渲染成两个视口。
+     * 两个视口是由不同的摄像机渲染出来的结果，也相当由左右眼。
+     * @see egret3d.Camera3D
+     * @see egret3d.Scene3D
+     * @see egret3d.Egret3DCanvas
+     * @version Egret 3.0
+     * @platform Web,Native
+     */
+    class VRView3D extends View3D {
+        protected leftViewPort: Rectangle;
+        protected rightViewPort: Rectangle;
+        /**
+        * @language zh_CN
+        * 构建一个view3d对象
+        * @param x 视口的屏幕x坐标
+        * @param y 视口的屏幕y坐标
+        * @param width 视口的屏幕宽度
+        * @param height 视口的屏幕高度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor(x: number, y: number, width: number, height: number);
+        protected updateViewport(): void;
+        /**
+        * @language zh_CN
+        * 设置当前视口的屏幕x坐标
+        * @param x 视口的屏幕x坐标
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        x: number;
+        /**
+        * @language zh_CN
+        * 设置当前视口的屏幕y坐标
+        * @param y 视口的屏幕y坐标
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        y: number;
+        /**
+        * @language zh_CN
+        * 设置视口的屏幕宽度
+        * @param width 视口的屏幕宽度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        width: number;
+        /**
+        * @language zh_CN
+        * 设置视口的屏幕高度
+        * @param width 视口的屏幕高度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        height: number;
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        update(time: number, delay: number): void;
+    }
+}
+declare module egret3d {
     class Egret3DCanvas extends EventDispatcher {
         /**
         * @private

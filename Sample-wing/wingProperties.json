@@ -15,6 +15,36 @@
 					"isFolder":false,
 					"key":"resource/LingTong/hero_12.png",
 					"name":"hero_12.png"
+				},
+				{
+					"isFolder":false,
+					"key":"resource/SkyBox/cloudy_noon_BK.png",
+					"name":"cloudy_noon_BK.png"
+				},
+				{
+					"isFolder":false,
+					"key":"resource/SkyBox/cloudy_noon_DN.png",
+					"name":"cloudy_noon_DN.png"
+				},
+				{
+					"isFolder":false,
+					"key":"resource/SkyBox/cloudy_noon_FR.png",
+					"name":"cloudy_noon_FR.png"
+				},
+				{
+					"isFolder":false,
+					"key":"resource/SkyBox/cloudy_noon_LF.png",
+					"name":"cloudy_noon_LF.png"
+				},
+				{
+					"isFolder":false,
+					"key":"resource/SkyBox/cloudy_noon_RT.png",
+					"name":"cloudy_noon_RT.png"
+				},
+				{
+					"isFolder":false,
+					"key":"resource/SkyBox/cloudy_noon_UP.png",
+					"name":"cloudy_noon_UP.png"
 				}
 			]
 		}

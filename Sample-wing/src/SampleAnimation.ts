@@ -5,7 +5,7 @@
  * @version Egret 3.0
  * @platform Web,Native
  */
-class SampleAnimation {
+class SampleAnimation extends SampleBase {
     /**
      * Canvas操作对象
      * @version Egret 3.0
@@ -65,8 +65,10 @@ class SampleAnimation {
     public currentAnim: string;
 
 
-
     public constructor() {
+
+        super();
+
         ///创建Canvas对象。
         this._egret3DCanvas = new egret3d.Egret3DCanvas();
         ///Canvas的起始坐标，页面左上角为起始坐标(0,0)。
@@ -108,6 +110,26 @@ class SampleAnimation {
         ///启动Canvas。
         this._egret3DCanvas.start();
         this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME,this.update,this);
+
+        this.OnInitLoadingView(5);
+
+
+        ///设置window resize事件
+        egret3d.Input.addEventListener(egret3d.Event3D.RESIZE,this.OnWindowResize,this);
+    }
+
+    /**
+    * @language zh_CN        
+    * 窗口尺寸变化事件
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    private OnWindowResize(e: egret3d.Event3D): void {
+        ///重置ui大小
+        this._egret3DCanvas.width = window.innerWidth;
+        this._egret3DCanvas.height = window.innerHeight;
+        this._view3D.width = window.innerWidth;
+        this._view3D.height = window.innerHeight;
     }
 
     /**
@@ -133,12 +155,20 @@ class SampleAnimation {
     * @platform Web,Native
     */
     protected onLoad(e: egret3d.LoaderEvent3D) {
+        this.OnLoadFinished();
+
+
         ///创建纹理材质
         var mat = new egret3d.TextureMaterial();
         ///创建模型基类
         var ge: egret3d.Geometry = e.loader.data;
         ///生成mesh
         this.model = new egret3d.Mesh(ge,mat);
+
+        if(ge.vertexFormat & egret3d.VertexFormat.VF_SKIN) {
+            ///设置骨骼动画
+            this.model.animation = new egret3d.SkeletonAnimation(ge.skeleton);
+        }
 
         this.model.material.lightGroup = this.lights;
 
@@ -176,6 +206,8 @@ class SampleAnimation {
         this.model.enablePick = true;
         ///拣选事件注册
         this.model.addEventListener(egret3d.PickEvent3D.PICK_DOWN,this.onPickDown,this);
+
+
     }
 
     /**
@@ -208,10 +240,13 @@ class SampleAnimation {
     * @platform Web,Native
     */
     protected onLoadTexture(e: egret3d.LoaderEvent3D) {
+        this.OnLoadFinished();
+
         ///设置材质球的漫反射贴图。
         e.loader["mat"].diffuseTexture = e.loader.data;
         ///注销回调
         e.loader.removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onLoadTexture,this);
+
     }
     /**
     * @language zh_CN        
@@ -221,6 +256,8 @@ class SampleAnimation {
     * @platform Web,Native
     */
     protected onAnimationIdle(e: egret3d.LoaderEvent3D) {
+        this.OnLoadFinished();
+
         ///骨骼动画
         this.idle = e.loader.data;
         ///动画名称
@@ -231,6 +268,8 @@ class SampleAnimation {
         this.PlayAni(this.idle);
         ///注销回调
         this.model.removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onAnimationIdle,this);
+
+
     }
 
     /**
@@ -241,6 +280,8 @@ class SampleAnimation {
     * @platform Web,Native
     */
     protected onAnimationRun(e: egret3d.LoaderEvent3D) {
+        this.OnLoadFinished();
+
         ///骨骼动画
         this.run = e.loader.data;
         ///动画名称
@@ -249,6 +290,7 @@ class SampleAnimation {
         this.model.animation.skeletonAnimationController.addSkeletonAnimationClip(this.run);
         ///注销回调
         this.model.removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onAnimationRun,this);
+
     }
 
     /**
@@ -259,6 +301,8 @@ class SampleAnimation {
     * @platform Web,Native
     */
     protected onAnimationattack(e: egret3d.LoaderEvent3D) {
+        this.OnLoadFinished();
+
         ///骨骼动画
         this.attack = e.loader.data;
         ///动画名称
@@ -267,9 +311,8 @@ class SampleAnimation {
         this.model.animation.skeletonAnimationController.addSkeletonAnimationClip(this.attack);
         ///注销回调
         this.model.removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onAnimationattack,this);
+
     }
-
-
 
 
     /**

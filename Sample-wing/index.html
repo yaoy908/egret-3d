@@ -31,6 +31,7 @@
     <!--这个标签会被替换为项目中所有的 javascript 文件。删除 game_files 标签后，项目文件加载列表将不会变化，请谨慎操作！-->
     <!--game_files_start-->
 	<script egret="game" src="bin-debug/Main.js"></script>
+	<script egret="game" src="bin-debug/SampleBase.js"></script>
 	<script egret="game" src="bin-debug/SampleAnimation.js"></script>
 	<script egret="game" src="bin-debug/SampleCreateCube.js"></script>
 	<script egret="game" src="bin-debug/SampleCubeTransform.js"></script>
@@ -67,6 +68,11 @@
 //         data-multi-fingered="2"
 //         data-show-fps="false" data-show-log="false"
 //         data-log-filter="" data-show-fps-style="x:0,y:0,size:30,textColor:0x00c200,bgAlpha:0.9">
+    	
+    	<div id="loadingMap" style="position:absolute;width:100%;height:100%;background:#ffffff">
+    		<img id="loadingIcon" width="72" height="72" src="resource/logo.png" style="position:absolute;top:50%;left:50%;margin-top:-116px;margin-left:-36px" />
+    	<div id='div1'  width="100" height="50" style="position:absolute;top:50%;left:50%;margin-top:-36px;margin-left:-36px"></div>
+    	</div>
     </div>
     <script>
         setTimeout( function () {
@@ -82,5 +88,6 @@
     <img id="r" src="resource/SkyBox/cloudy_noon_RT.png" hidden="false"/>
     <img id="u" src="resource/SkyBox/cloudy_noon_UP.png" hidden="false"/>
     <img id="d" src="resource/SkyBox/cloudy_noon_DN.png" hidden="false"/>
+
 </body>
 </html>

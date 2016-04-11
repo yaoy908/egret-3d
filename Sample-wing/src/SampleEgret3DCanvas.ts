@@ -5,7 +5,7 @@
  * @version Egret 3.0
  * @platform Web,Native
  */
-class SampleEgret3DCanvas {
+class SampleEgret3DCanvas extends SampleBase {
 
     /**
     * 3d画布对象
@@ -16,7 +16,7 @@ class SampleEgret3DCanvas {
 
     public constructor() {
 
-        
+        super();
         ///创建Canvas对象。
         this._egret3DCanvas = new egret3d.Egret3DCanvas();
         ///Canvas的起始坐标，页面左上角为起始坐标(0,0)。
@@ -27,5 +27,8 @@ class SampleEgret3DCanvas {
         this._egret3DCanvas.height = window.innerHeight;
         ///启动Canvas。
         this._egret3DCanvas.start();
+
+        this.CloseLoadingView();
+
     }
 }   

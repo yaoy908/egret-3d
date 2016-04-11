@@ -5,7 +5,7 @@
  * @version Egret 3.0
  * @platform Web,Native
  */
-class SampleView3D {
+class SampleView3D extends SampleBase {
 
     /**
     * Canvas操作对象
@@ -20,9 +20,10 @@ class SampleView3D {
     */
     protected _view3D: egret3d.View3D;
 
-
-
     public constructor() {
+
+        super();
+
         ///创建Canvas对象。
         this._egret3DCanvas = new egret3d.Egret3DCanvas();
         ///Canvas的起始坐标，页面左上角为起始坐标(0,0)。
@@ -47,5 +48,17 @@ class SampleView3D {
         this._egret3DCanvas.addView3D(this._view3D);
         ///启动Canvas。
         this._egret3DCanvas.start();
+        ///设置window resize事件
+        egret3d.Input.addEventListener(egret3d.Event3D.RESIZE,this.OnWindowResize,this);
+
+        this.CloseLoadingView();
+    }
+
+    private OnWindowResize(e: egret3d.Event3D): void {
+        ///重置ui大小
+        this._egret3DCanvas.width = window.innerWidth;
+        this._egret3DCanvas.height = window.innerHeight;
+        this._view3D.width = window.innerWidth;
+        this._view3D.height = window.innerHeight;
     }
 }   

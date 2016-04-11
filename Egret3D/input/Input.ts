@@ -87,7 +87,7 @@
         protected _mouseEvent3d: MouseEvent3D = new MouseEvent3D();
         protected _keyEvent3d: KeyEvent3D = new KeyEvent3D();
         protected _touchEvent3d: TouchEvent3D = new TouchEvent3D();
-
+        protected _windowsEvent3d: Event3D = new Event3D();
         /**
         * @language zh_CN
         * 游戏手柄Stick1事件侦听函数。
@@ -164,6 +164,8 @@
             window.addEventListener("deviceorientation", (e: DeviceOrientationEvent) => this.ondeviceorientation(e), true);
 
             window.addEventListener("devicemotion", (e: DeviceMotionEvent) => this.detectShake(e), true);
+
+            window.addEventListener("resize", (e: UIEvent) => this.onWindowsResize(e));
         }
         
         /**
@@ -600,6 +602,13 @@
 
             this._keyEvent3d.eventType = KeyEvent3D.KEY_UP;
             this.dispatchEvent(this._keyEvent3d);
+        }
+
+
+        private onWindowsResize(e: UIEvent) {
+            this._windowsEvent3d.target = this;
+            this._windowsEvent3d.eventType = Event3D.RESIZE;
+            this.dispatchEvent(this._windowsEvent3d);
         }
 
         //返回角度
