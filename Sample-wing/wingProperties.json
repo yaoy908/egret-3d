@@ -1,5 +1,6 @@
 {
 	"close":false,
+	"natures":["egretProject"],
 	"resourcePlugin":{
 		"configs":[],
 		"id":"org.egret-labs.resource",
@@ -7,8 +8,13 @@
 			"children":[
 				{
 					"isFolder":false,
-					"key":"resource/white.jpg",
-					"name":"white.jpg"
+					"key":"resource/laohu/Mon_04.png",
+					"name":"Mon_04.png"
+				},
+				{
+					"isFolder":false,
+					"key":"resource/LingTong/hero_12.png",
+					"name":"hero_12.png"
 				},
 				{
 					"isFolder":false,
@@ -39,26 +45,6 @@
 					"isFolder":false,
 					"key":"resource/SkyBox/cloudy_noon_UP.png",
 					"name":"cloudy_noon_UP.png"
-				},
-				{
-					"isFolder":false,
-					"key":"resource/Egret-3D_power.png",
-					"name":"Egret-3D_power.png"
-				},
-				{
-					"isFolder":false,
-					"key":"resource/logo.png",
-					"name":"logo.png"
-				},
-				{
-					"isFolder":false,
-					"key":"resource/laohu/Mon_04.png",
-					"name":"Mon_04.png"
-				},
-				{
-					"isFolder":false,
-					"key":"resource/LingTong/hero_12.png",
-					"name":"hero_12.png"
 				}
 			]
 		}

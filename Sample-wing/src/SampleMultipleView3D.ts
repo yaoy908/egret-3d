@@ -5,7 +5,7 @@
  * @version Egret 3.0
  * @platform Web,Native
  */
-class SampleMultipleView3D {
+class SampleMultipleView3D extends SampleBase {
     /**
     * Canvas操作对象
     * @version Egret 3.0
@@ -15,7 +15,10 @@ class SampleMultipleView3D {
 
     protected _cubeArray: Array<egret3d.Mesh>;
 
+
     public constructor() {
+
+        super();
 
         this._cubeArray = new Array<egret3d.Mesh>();
 
@@ -75,9 +78,15 @@ class SampleMultipleView3D {
         ///启动Canvas。
         this._egret3DCanvas.start();
         this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME,this.update,this);
+
+
+
+        this.CloseLoadingView();
     }
 
+
     public update(e: egret3d.Event3D) {
+      
         ///旋转
         var len = this._cubeArray.length;
         for(var i = 0;i < len;i++) {

@@ -51,9 +51,10 @@ void main(void){
 	temp_n += m2 * temp_normal * attribute_boneWeight.z;
 	temp_n += m3 * temp_normal * attribute_boneWeight.w;
 
-    mat3 normalMatrix = transpose( inverse(mat3(uniform_ModelViewMatrix )) ); 
+    mat3 normalMatrix = transpose( inverse(mat3(uniform_ProjectionMatrix * uniform_ViewMatrix))); 
     varying_eyeNormal = normalize(normalMatrix * -temp_n.xyz);
    
-	outPosition =  uniform_ModelViewMatrix * outPosition ;
+	outPosition = uniform_ViewMatrix * uniform_ModelMatrix * outPosition; 
+  
     varying_ViewPose = outPosition.xyz / outPosition.w;
 }

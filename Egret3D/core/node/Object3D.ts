@@ -686,6 +686,10 @@
             }
             this._modeMatrix3D.makeTransform(this._globalPos, this._globalSca, this._globalOrientation);
             this._transformChange = false;
+            if (this.bound) {
+                this.bound.Transform = this._modeMatrix3D;
+            }
+
             this.onUpdateTransform();
         }
 

@@ -5,7 +5,7 @@
  * @version Egret 3.0
  * @platform Web,Native
  */
-class SampleSky {
+class SampleSky extends SampleBase {
     /**
     * Canvas操作对象
     * @version Egret 3.0
@@ -30,6 +30,7 @@ class SampleSky {
     protected cameraCtl: egret3d.LookAtController;
 
     public constructor() {
+        super();
         ///创建Canvas对象。
         this._egret3DCanvas = new egret3d.Egret3DCanvas();
         ///Canvas的起始坐标，页面左上角为起始坐标(0,0)。
@@ -82,8 +83,26 @@ class SampleSky {
         this._egret3DCanvas.start();
         ///注册每帧更新，用于更新用户操作
         this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME,this.update,this);
+
+        this.CloseLoadingView();
+
+        ///设置window resize事件
+        egret3d.Input.addEventListener(egret3d.Event3D.RESIZE,this.OnWindowResize,this);
     }
 
+    /**
+    * @language zh_CN        
+    * 窗口尺寸变化事件
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    private OnWindowResize(e: egret3d.Event3D): void {
+        ///重置ui大小
+        this._egret3DCanvas.width = window.innerWidth;
+        this._egret3DCanvas.height = window.innerHeight;
+        this._view3D.width = window.innerWidth;
+        this._view3D.height = window.innerHeight;
+    }
 
     /**
    * @language zh_CN        
