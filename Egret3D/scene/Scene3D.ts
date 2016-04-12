@@ -6,9 +6,10 @@
     export class Scene3D {
         private _tree: TreeBase; 
         private _root: Object3D = new Object3D();
-
+        private _quad: QuadRoot;
         constructor() {
             this._tree = new TreeBase(this._root);
+            this._quad = new QuadRoot(this, 8, 128);
         }
         
         /**
@@ -21,6 +22,10 @@
         */
         public get root(): Object3D {
             return this._root;
+        }
+
+        public get quad(): QuadRoot {
+            return this._quad;
         }
 
         /**

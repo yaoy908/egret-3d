@@ -128,6 +128,8 @@
             for (var i: number = 0; i < this._vtxNum; ++i) {
                 vtx.push(mat.transformVector(this._vertex[i]));
             }
+            this.box.max.x = this.box.max.y = this.box.max.z = -Number.MAX_VALUE;
+            this.box.min.x = this.box.min.y = this.box.min.z = Number.MAX_VALUE;
 
             for (var i: number = 0; i < vtx.length; ++i) {
                 if (this.box.max.x < vtx[i].x) {

@@ -297,7 +297,13 @@
             this.mousePickList.length = 0;
 
             this.clearLayerList();
-            this.applyRender(this.rootScene.root, camera);
+            var box: BoundBox = camera.frustum.box;
+
+            var quadList:Array<IQuadNode> = this.rootScene.quad.getNodesByAABB(box.min.x, box.min.z, box.max.x, box.max.z);
+           
+            this.appendQuadList(quadList, camera);
+
+           // console.log("total 500:", quadList.length, this.renderList.length);
 
             //for (var i: number = 0; i < this._tags.length; ++i) {
             //    this._tags[i].clearDepth = true;
@@ -312,6 +318,16 @@
             //        }
             //    }
             //}
+        }
+
+        private appendQuadList(quadList: Array<IQuadNode>, camera: Camera3D) {
+            var mesh: Mesh;
+            var node: IQuadNode;
+            for (node of quadList) {
+                mesh = <Mesh>node;
+                if (mesh && mesh.visible && mesh["material"])
+                    this.addRenderList(mesh, camera);
+            }
         }
 
         //protected findLayer(object3d: Object3D): Layer {

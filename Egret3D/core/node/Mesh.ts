@@ -18,7 +18,7 @@
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class Mesh extends Object3D implements IRender{
+    export class Mesh extends Object3D implements IRender,IQuadNode{
 
         /**
         * @language zh_CN
@@ -28,6 +28,7 @@
         * @platform Web,Native
         */
         public geometry: Geometry;
+        private _aabbBox: QuadAABB;
                         
         /**
         * @language zh_CN
@@ -88,11 +89,34 @@
             this.addSubMaterial(0, material);
             this.material = material;
             this.bound = this.buildBoundBox();
+            this.initAABB();
         }
 
         public setMaterialByID() {
         }
-                        
+
+        public get aabb(): QuadAABB {
+            return this._aabbBox;
+        }
+
+        public initAABB():void
+		{
+            this._aabbBox = new QuadAABB();
+            var box: BoundBox = <BoundBox>this.bound;
+
+            this._aabbBox.maxPosX = box.max.x;
+            this._aabbBox.maxPosY = box.max.z;
+
+            this._aabbBox.minPosX = box.min.x;
+            this._aabbBox.minPosY = box.min.z;
+        }
+
+        public get isTriangle():boolean
+        {
+            return false;
+        }
+
+
         /**
         * @language zh_CN
         * 增加一个材质
@@ -184,7 +208,7 @@
         protected buildBoundBox(): Bound {
             var bound: BoundBox = new BoundBox();
             bound.min.copyFrom(new Vector3D(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE));
-            bound.max.copyFrom(new Vector3D(Number.MIN_VALUE, Number.MIN_VALUE, Number.MIN_VALUE));
+            bound.max.copyFrom(new Vector3D(-Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE));
             for (var i: number = 0; i < this.geometry.verticesData.length; i += this.geometry.vertexAttLength) {
                 if (bound.max.x < this.geometry.verticesData[i]) {
                     bound.max.x = this.geometry.verticesData[i];
@@ -248,6 +272,16 @@
                     this.muiltMaterial[0].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
                 }
             }
+
         }
+
+
+        public set position(vec: Vector3D) {
+            this._aabbBox.setOffset(vec);
+            this.updateTransformChange(true);
+            this._pos.copyFrom(vec);
+        }
+
+       
     }
 } 

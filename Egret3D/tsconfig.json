@@ -179,7 +179,12 @@
         "camera/Camera3D.ts",
 
         "View3D.ts",
-        "Egret3DCanvas.ts"
-            
+        "Egret3DCanvas.ts",
+
+        "core/partition/quad/IQuadNode.ts",
+        "core/partition/quad/QuadAABB.ts",
+        "core/partition/quad/QuadTree.ts",
+        "core/partition/quad/QuadRoot.ts",
+        "core/partition/quad/QuadTreeCell.ts"
     ]
 }	

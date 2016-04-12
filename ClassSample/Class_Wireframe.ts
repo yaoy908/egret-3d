@@ -22,19 +22,18 @@
             this.cameraCtl.distance = 1000;
             this.cameraCtl.rotationX = 60;
 
-            this._egret3DCanvas.start();
-            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
+           
 
             var cubeVer = [
-                -100, 100, -100, 1.0, 0.0, 0.0, 1.0,       // 0
-                100, 100, -100, 0.0, 1.0, 0.0, 1.0,     // 1
-                -100, -100, -100, 0.0, 0.0, 1.0, 1.0,     // 2
-                100, -100, -100, 1.0, 0.0, 0.0, 1.0,     // 3
+                -20, 20, -20, 1.0, 0.0, 0.0, 1.0,       // 0
+                20, 20, -20, 0.0, 1.0, 0.0, 1.0,     // 1
+                -20, -20, -20, 0.0, 0.0, 1.0, 1.0,     // 2
+                20, -20, -20, 1.0, 0.0, 0.0, 1.0,     // 3
 
-                -100, 100, 100, 0.0, 1.0, 0.0, 1.0,     // 4
-                100, 100, 100, 0.0, 0.0, 1.0, 1.0,         // 5
-                -100, -100, 100, 1.0, 0.0, 0.0, 1.0,   // 6
-                100, -100, 100, 0.0, 1.0, 0.0, 1.0,     // 7
+                -20, 20, 20, 0.0, 1.0, 0.0, 1.0,     // 4
+                20, 20, 20, 0.0, 0.0, 1.0, 1.0,         // 5
+                -20, -20, 20, 1.0, 0.0, 0.0, 1.0,   // 6
+                20, -20, 20, 0.0, 1.0, 0.0, 1.0,     // 7
             ];
 
             var cubeLineInx = [
@@ -62,8 +61,21 @@
             geom.verticesData = cubeVer;
             geom.indexData = cubeLineInx;
 
-            var wireframe: Wireframe = new Wireframe(geom);
-            this.view1.addChild3D(wireframe);
+            var position: Vector3D = new Vector3D();
+
+            var wireframe: Wireframe;
+
+            for (var i: number = 0; i < 400; i++) {
+                wireframe = new Wireframe(geom);
+                position.setTo((Math.random() - 0.5) * 1000, 0, (Math.random() - 0.5) * 1000);
+                wireframe.position = position;
+                this.view1.addChild3D(wireframe);
+            }
+            this.view1.scene.quad.createQuadTree();
+
+            this._egret3DCanvas.start();
+            this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
+           
         }
 
         public update(e: Event3D) {
