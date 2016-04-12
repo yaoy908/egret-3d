@@ -115,7 +115,7 @@
         }
 
         private mouseMove(m: MouseEvent3D) {
-            if (this._mouseDown && ( this._needctl && this._ctl ) ) {
+            if (this._mouseDown && (this._needctl ? this._ctl : true)) {
                 this._rotaAngle.y += Input.mouseOffsetX;
                 this._rotaAngle.x += Input.mouseOffsetY;
 
