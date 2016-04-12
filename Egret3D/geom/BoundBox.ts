@@ -117,7 +117,7 @@
         * @param pos 检测的点
         * @returns 成功返回true
         */
-        public inBox(pos: Vector3D): boolean {
+        public pointIntersect(pos: Vector3D): boolean {
             if (pos.x <= this.max.x && pos.x >= this.min.x &&
                 pos.y <= this.max.y && pos.y >= this.min.y &&
                 pos.z <= this.max.z && pos.z >= this.min.z) {
@@ -130,10 +130,10 @@
         * @language zh_CN
         * 检测两个包围盒是否相交
         * @param box2 其中一个包围盒 
-        * @param boxIntersect 相交的包围盒
+        * @param boxIntersect 相交的包围盒 默认为空
         * @returns 成功返回true
         */
-        public intersectAABBs(box2: BoundBox, boxIntersect: BoundBox): boolean {
+        public intersectAABBs(box2: BoundBox, boxIntersect: BoundBox = null): boolean {
             if (this.min.x > box2.max.x) {
                 return false;
             }
@@ -165,17 +165,30 @@
                 boxIntersect.max.y = Math.min(this.max.y, box2.max.y);
                 boxIntersect.min.z = Math.max(this.min.z, box2.min.z);
                 boxIntersect.max.z = Math.min(this.max.z, box2.max.z);
+                boxIntersect.calculateBox();
             }
             return true;
         }
-                                                                       
+               
+
+        /**
+        * @language zh_CN
+        * 检测两个包围对象是否相交
+        * @param 检测的目标
+        * @param 相交的结果 可以为null
+        * @returns  成功返回true
+        */
+        public intersect(target: Bound, intersect: Bound = null): boolean {
+            return this.intersectAABBs(<BoundBox>target, <BoundBox>intersect);
+        }
+                                                                
         /**
         * @language zh_CN
         * 以字符串形式返回box的值
         * @returns 字符串
         */
         public toString(): string {
-            return "CubeBoxBound [min:(" + this.min.x + ", " + this.min.y + ", " + this.min.z + ") max:(" + this.max.x + ", " + this.max.y + ", " + this.max.z + ")]";
+            return "BoundBox [min:(" + this.min.x + ", " + this.min.y + ", " + this.min.z + ") max:(" + this.max.x + ", " + this.max.y + ", " + this.max.z + ")]";
         }
                                         
         /**
@@ -254,6 +267,32 @@
         */
         public inBound(frustum: Frustum): boolean {
             return frustum.inBox(this);
+        }
+
+        protected updateAABB() {
+            this.min.copyFrom(new Vector3D(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE));
+            this.max.copyFrom(new Vector3D(Number.MIN_VALUE, Number.MIN_VALUE, Number.MIN_VALUE));
+            for (var i: number = 0; i < this.vexData.length; i += this.vexLength) {
+                if (this.max.x < this.vexData[i]) {
+                    this.max.x = this.vexData[i];
+                }
+                if (this.max.y < this.vexData[i + 1]) {
+                    this.max.y = this.vexData[i + 1];
+                }
+                if (this.max.z < this.vexData[i + 2]) {
+                    this.max.z = this.vexData[i + 2];
+                }
+               
+                if (this.min.x > this.vexData[i]) {
+                    this.min.x = this.vexData[i];
+                }
+                if (this.min.y > this.vexData[i + 1]) {
+                    this.min.y = this.vexData[i + 1];
+                }
+                if (this.min.z > this.vexData[i + 2]) {
+                    this.min.z = this.vexData[i + 2];
+                }
+            }
         }
     }
 }
