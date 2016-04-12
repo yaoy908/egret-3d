@@ -4,3 +4,13 @@ output
 Sample/js
 script/debug.sh
 Thumbs.db
+*.js
+*.map
+*.dll
+*.csproj.user
+*.cs
+/web.Release.config
+/web.Debug.config
+*.csproj
+*.cache
+app.css
