@@ -50,7 +50,7 @@
             this._envetManager = new EventManager(this);
             this.canvas = document.createElement("canvas");
             this.canvas.style.position = "absolute";
-            this.canvas.style.zIndex = "0";
+            this.canvas.style.zIndex = "-1";
 
             if (document.getElementsByClassName("egret-player").length > 0) {
                 document.getElementsByClassName("egret-player")[0].appendChild(this.canvas);

@@ -149,7 +149,7 @@
         * @see egret3d.Egret3DCanvas
         */
         public viewPort(x: number, y: number, width: number, height: number) {
-            Context3DProxy.gl.viewport(x, y, width, height);
+            Context3DProxy.gl.viewport(x, ContextConfig.canvasRectangle.height - height - y, width, height);
         }
 
         /**
@@ -875,7 +875,7 @@
         * @param rectangle 
         */
         public setScissorRectangle(x: number, y: number, width: number, height: number) {
-            Context3DProxy.gl.scissor(x, y, width, height);
+            Context3DProxy.gl.scissor(x, ContextConfig.canvasRectangle.height - height - y, width, height);
         }
 
         /**

@@ -44,9 +44,6 @@
             var ge: Geometry = e.loader.data;
             var mesh: Mesh = new Mesh(ge, mat);
 
-            if (ge.vertexFormat & VertexFormat.VF_SKIN) {
-                mesh.animation = new SkeletonAnimation(ge.skeleton);
-            }
             this.view1.addChild3D(mesh);
 
             mesh.material.lightGroup = this.lights;

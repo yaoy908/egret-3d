@@ -6,7 +6,8 @@ varying vec3 varying_ViewPose;
 varying vec4 varying_color;
 
 uniform vec3 uniform_eyepos ;
-uniform mat4 uniform_ModelViewMatrix ;
+uniform mat4 uniform_ViewMatrix ;
+uniform mat4 uniform_ProjectionMatrix; 
 vec4 outColor;
 vec4 diffuseColor ;
 vec4 specularColor ;
@@ -27,9 +28,10 @@ void main() {
     
 	diffuseColor  = vec4(1.0,1.0,1.0,1.0);
 	specularColor = vec4(0.0,0.0,0.0,0.0);
-	ambientColor  = vec4(1.0,1.0,1.0,1.0);
+	ambientColor  = vec4(0.0,0.0,0.0,0.0);
 	light         = vec4(0.0,0.0,0.0,0.0);
     
     normal = normalize(varying_eyeNormal) ;
 	uv_0 = varying_uv0;
+    
 }

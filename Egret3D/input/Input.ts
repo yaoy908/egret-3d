@@ -87,7 +87,7 @@
         protected _mouseEvent3d: MouseEvent3D = new MouseEvent3D();
         protected _keyEvent3d: KeyEvent3D = new KeyEvent3D();
         protected _touchEvent3d: TouchEvent3D = new TouchEvent3D();
-
+        protected _windowsEvent3d: Event3D = new Event3D();
         /**
         * @language zh_CN
         * 游戏手柄Stick1事件侦听函数。
@@ -129,41 +129,44 @@
         constructor() {
             super();
 
-            window.addEventListener("click", (e: MouseEvent) => this.mouseClick(e));
+            window.addEventListener("click", (e: MouseEvent) => this.mouseClick(e), true);
             
-            window.addEventListener("mousedown", (e: MouseEvent) => this.mouseStart(e));
+            window.addEventListener("mousedown", (e: MouseEvent) => this.mouseStart(e), true);
 
-            window.addEventListener("mouseup", (e: MouseEvent) => this.mouseEnd(e));
+            window.addEventListener("mouseup", (e: MouseEvent) => this.mouseEnd(e), true);
 
-            window.addEventListener("mousewheel", (e: MouseWheelEvent) => this.mouseWheel(e));
+            window.addEventListener("mousewheel", (e: MouseWheelEvent) => this.mouseWheel(e), true);
 
 
 
-            window.addEventListener("mousemove", (e: MouseEvent) => this.mouseMove(e));
+            window.addEventListener("mousemove", (e: MouseEvent) => this.mouseMove(e), true);
 
-            window.addEventListener("mouseover", (e: MouseEvent) => this.mouseOver(e));
+            window.addEventListener("mouseover", (e: MouseEvent) => this.mouseOver(e), true);
 
-            window.addEventListener("keydown", (e: KeyboardEvent) => this.keyDown(e));
+            window.addEventListener("keydown", (e: KeyboardEvent) => this.keyDown(e), true);
 
-            window.addEventListener("keyup", (e: KeyboardEvent) => this.keyUp(e));
+            window.addEventListener("keyup", (e: KeyboardEvent) => this.keyUp(e), true);
 
             if (this.canGame()) {
-                window.addEventListener("gamepadconnected", (e: GamepadEvent) => this.ongamepadconnected(e));
+                window.addEventListener("gamepadconnected", (e: GamepadEvent) => this.ongamepadconnected(e), true);
 
-                window.addEventListener("gamepaddisconnected", (e: GamepadEvent) => this.ongamepaddisconnected(e));
+                window.addEventListener("gamepaddisconnected", (e: GamepadEvent) => this.ongamepaddisconnected(e), true);
             }
 
-            window.addEventListener("touchstart", (e: TouchEvent) => this.touchStart(e));
+            window.addEventListener("touchstart", (e: TouchEvent) => this.touchStart(e), true);
 
-            window.addEventListener("touchend", (e: TouchEvent) => this.touchEnd(e));
+            window.addEventListener("touchend", (e: TouchEvent) => this.touchEnd(e), true);
 
-            window.addEventListener("touchmove", (e: TouchEvent) => this.touchMove(e));
+            window.addEventListener("touchmove", (e: TouchEvent) => this.touchMove(e), true);
 
-            window.addEventListener("touchcancel", (e: TouchEvent) => this.touchEnd(e));
+            window.addEventListener("touchcancel", (e: TouchEvent) => this.touchEnd(e), true);
 
-            window.addEventListener("deviceorientation", (e: DeviceOrientationEvent) => this.ondeviceorientation(e));
+            window.addEventListener("deviceorientation", (e: DeviceOrientationEvent) => this.ondeviceorientation(e), true);
 
-            window.addEventListener("devicemotion", (e: DeviceMotionEvent) => this.detectShake(e));
+            window.addEventListener("devicemotion", (e: DeviceMotionEvent) => this.detectShake(e), true);
+
+            window.addEventListener("resize", (e: UIEvent) => this.onWindowsResize(e));
+           
         }
         
         /**
@@ -600,6 +603,13 @@
 
             this._keyEvent3d.eventType = KeyEvent3D.KEY_UP;
             this.dispatchEvent(this._keyEvent3d);
+        }
+
+
+        private onWindowsResize(e: UIEvent) {
+            this._windowsEvent3d.target = this;
+            this._windowsEvent3d.eventType = Event3D.RESIZE;
+            this.dispatchEvent(this._windowsEvent3d);
         }
 
         //返回角度

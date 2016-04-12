@@ -47,13 +47,13 @@
             this.view1.addChild3D(this.plane);
 
             var loadDiffuse: URLLoader = new URLLoader("resource/floor/brick-diffuse.jpg");
-            loadDiffuse.onLoadComplete = (e: URLLoader) => this.onLoadDiffuse(e, this.matPlane);
+            //loadDiffuse.addEventListener = (e: URLLoader) => this.onLoadDiffuse(e, this.matPlane);
 
             var loadNormal: URLLoader = new URLLoader("resource/floor/brick-normal.jpg");
-            loadNormal.onLoadComplete = (e: URLLoader) => this.onLoadNormal(e, this.matPlane);
+            //loadNormal.onLoadComplete = (e: URLLoader) => this.onLoadNormal(e, this.matPlane);
 
             var loadSpeular: URLLoader = new URLLoader("resource/floor/brick-specular.jpg");
-            loadSpeular.onLoadComplete = (e: URLLoader) => this.onLoadSpecular(e, this.matPlane);
+            //loadSpeular.onLoadComplete = (e: URLLoader) => this.onLoadSpecular(e, this.matPlane);
 
 
 

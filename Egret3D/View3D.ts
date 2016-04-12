@@ -1,17 +1,18 @@
 ﻿module egret3d {
+
     /**
      * @class egret3d.View3D
      * @classdesc
      * 渲染视图。</p>
      * view3D 是整个3D引擎的渲染视口，可以控制渲染窗口的大小，渲染的方式。</p>
-     * 可以设置不同的相机 camera3D。</p>
-     * 交换不同的场景元素 scene3D 。</p>
+     * 可以设置不同的相机 Camera3D。</p>
+     * 交换不同的场景元素 Scene3D 。</p>
      * 当前的View3D中会有一个Scene3D的节点和一个Camera3D来进行场景中的渲染。
      * 整个渲染的主循环通过 update  。</p>
      * Engre3DCanvas 中的View3D列表会主动调用View3D的update,加入了Engre3DCanvas中的View3D列表后不需要使用者update
      * @includeExample View3D.ts
-     * @see egret3d.camera3d
-     * @see egret3d.scene3D
+     * @see egret3d.Camera3D
+     * @see egret3d.Scene3D
      * @see egret3d.Egret3DCanvas
      * @version Egret 3.0
      * @platform Web,Native
@@ -20,7 +21,7 @@
         static _contex3DProxy: Context3DProxy = new Context3DProxy();
 
         protected _viewPort: Rectangle = new Rectangle();
-        protected _camera: Camera3D = new Camera3D();
+        protected _camera: Camera3D;
         protected _scene: Scene3D = new Scene3D();
         protected _render: RenderBase;
 
@@ -42,13 +43,15 @@
         * @param y 视口的屏幕y坐标
         * @param width 视口的屏幕宽度
         * @param height 视口的屏幕高度
+        * @param camera 摄像机
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(x: number, y: number, width: number, height: number) {
+        constructor(x: number, y: number, width: number, height: number, camera: Camera3D = null) {
             this._entityCollect = new EntityCollect();
             this._entityCollect.root = this._scene;
             this._render = new DefaultRender();
+            this._camera = camera || new Camera3D(CameraType.perspective);
 
             this.x = x;
             this.y = y;
@@ -280,8 +283,11 @@
             this._camera.viewPort = this._viewPort ;
             this._entityCollect.update(this._camera);
 
-            View3D._contex3DProxy.viewPort(this._viewPort.x, ContextConfig.canvasRectangle.height - this._viewPort.height - this._viewPort.y, this._viewPort.width, this._viewPort.height);
-            View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, ContextConfig.canvasRectangle.height - this._viewPort.height - this._viewPort.y, this._viewPort.width, this._viewPort.height);
+            this._render.update(time, delay, this._entityCollect, this._camera);
+    
+
+            View3D._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+            View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
 
             if (this._cleanParmerts & Context3DProxy.gl.COLOR_BUFFER_BIT) {
                 View3D._contex3DProxy.clearColor(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w);

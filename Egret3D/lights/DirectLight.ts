@@ -76,12 +76,15 @@
          * @param index 灯光ID
          * @param lightData 灯光数据
          */
-        public updateLightData(index: number, lightData: Float32Array) {
-            lightData[index * DirectLight.stride + 0] = this._rot.x;
-            lightData[index * DirectLight.stride + 1] = this._rot.y;
-            lightData[index * DirectLight.stride + 2] = this._rot.z;
+        public updateLightData(camera: Camera3D, index: number, lightData: Float32Array) {
+          
+            camera.viewMatrix.mat3TransformVector(this._rot, this.lightViewPos);
+
+            lightData[index * DirectLight.stride + 0] = this.lightViewPos.x;
+            lightData[index * DirectLight.stride + 1] = this.lightViewPos.y;
+            lightData[index * DirectLight.stride + 2] = this.lightViewPos.z;
             
-            lightData[index * DirectLight.stride + 3] = this._diffuse.x;
+            lightData[index * DirectLight.stride + 3] = this._diffuse.x; 
             lightData[index * DirectLight.stride + 4] = this._diffuse.y;
             lightData[index * DirectLight.stride + 5] = this._diffuse.z;
 

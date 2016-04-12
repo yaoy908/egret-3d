@@ -77,23 +77,15 @@
          * @platform Web,Native
          */
         public projectMatrix: Matrix4_4 = new Matrix4_4();
-        private _unprojection: Matrix4_4 = new Matrix4_4();
-
+        
         /**
-         * @language zh_CN
-         * 眼睛矩阵(左，右眼) 实现VR时会用到
+        * @private
+        * @language zh_CN
+        * 眼睛矩阵(左，右眼) 实现VR时会用到
         * @version Egret 3.0
-         * @platform Web,Native
-         */
+        * @platform Web,Native
+        */
         public eyeMatrix: EyesMatrix;
-
-        /**
-         * @language zh_CN
-         * 当前相机使用的世界变换矩阵
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public cameraMatrix: Matrix4_4;
 
         /**
          * @language zh_CN        
@@ -131,6 +123,10 @@
 
         private _tempQuat: Quaternion = new Quaternion();
 
+        private _normalMatrix: Matrix4_4 = new Matrix4_4();
+
+        private _unprojection: Matrix4_4 = new Matrix4_4();
+
         protected _animation: any = [];
 
         /**
@@ -157,16 +153,13 @@
             this._cameraType = cameraType;
             switch (cameraType) {
                 case CameraType.orthogonal:
-                    this.cameraMatrix = this.modelMatrix;
                     ///this.projectMatrix.ortho(this._viewPort.width, this._viewPort.height, this._near, this._far);
                     this.updataOrth();
                     break;
                 case CameraType.perspective:
-                    this.cameraMatrix = this.modelMatrix;
                     this.projectMatrix.perspective(this._fovY, this._aspectRatio, this._near, this._far);
                     break;
                 case CameraType.VR:
-                    this.cameraMatrix = this.modelMatrix;
                     this.projectMatrix.perspective(this._fovY, 1.0 , this._near, this._far);
                     this.eyeMatrix = this.eyeMatrix || new EyesMatrix();
                     break;
@@ -183,15 +176,13 @@
          */
         public tap(cameraType: CameraType, vrType: VRType = null ) {
             if (cameraType == CameraType.VR) {
-                this.eyeMatrix.updte( this.modelMatrix );
+                this.eyeMatrix.update( this );
                 if (vrType == VRType.left) {
-                    this.cameraMatrix = this.eyeMatrix.leftEyeMatrix;
+                    this.viewMatrix.copyFrom(this.eyeMatrix.leftEyeMatrix);
                 } else if (vrType == VRType.right) {
-                    this.cameraMatrix = this.eyeMatrix.rightEyeMatrix;
+                    this.viewMatrix.copyFrom(this.eyeMatrix.rightEyeMatrix);
                 }
-            }
-            else {
-                this.cameraMatrix = this.modelMatrix ;
+                this.viewMatrix.invert();
             }
         }
                                               
@@ -312,11 +303,23 @@
         * @platform Web,Native
         */
         public get viewProjectionMatrix(): Matrix4_4 {
-            this.cameraMatrix = this.modelMatrix;
-            this.temp.copyFrom(this.cameraMatrix);
-            this.temp.invert();
+            this.temp.copyFrom(this.viewMatrix);
             this.temp.multiply(this.projectMatrix);
             return this.temp;
+        }
+
+
+        /**
+        * @language zh_CN
+        * 视图noormal矩阵
+        * normal 矩阵用来纠正透视相机影响视图变形，所影响的法线轴变形，一般用 modeviewMatrix 的逆举证的转置矩阵。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get normalMatrix(): Matrix4_4 {
+            this._normalMatrix.copyFrom(this.viewMatrix);
+            this._normalMatrix.multiply(this.projectMatrix);
+            return this._normalMatrix; 
         }
         
         /**
@@ -519,65 +522,65 @@
             }
         }
 
-        private _p: Vector3D = new Vector3D(); 
         private _halfw: number ; 
         private _halfh: number ; 
-        public object3DToScreenRay(n: Vector3D): Vector3D {
+        public object3DToScreenRay(n: Vector3D,target:Vector3D): Vector3D {
 
             this._halfw = this.viewPort.width * 0.5;
             this._halfh = this.viewPort.height * 0.5; 
 
-            this._p = this.modelMatrix.transformVector(n, this._p);
-            this._p = this.project(this._p);
+            target = this.viewMatrix.transformVector(n, target);
+            this.project(target, target);
 
-            this._p.x = this._halfw + this._p.x * this._halfw ;
-            this._p.y = this._halfh - this._p.y * this._halfh;
-            return this._p ;
+            target.x = this._halfw + target.x * this._halfw ;
+            target.y = this.viewPort.height - (this._halfh - target.y * this._halfh);
+            return target ;
         }
 
-        public ScreenRayToObject3D(n: Vector3D): Vector3D {
+        public ScreenRayToObject3D(n: Vector3D, target: Vector3D): Vector3D {
 
             this._halfw = this.viewPort.width * 0.5;
             this._halfh = this.viewPort.height * 0.5; 
 
-            this._p.x = (n.x - this._halfw) / this._halfw;
-            this._p.y = (this._halfh - n.y) / this._halfh;
+            target.x = (n.x - this._halfw) / this._halfw;
+            target.y = (this._halfh - (this.viewPort.height - n.y)) / this._halfh;
 
-            this._p = this.unproject(this._p.x, this._p.y, n.z);
-            this.sceneTransform.transformVector(this._p, this._p);
+            this.unproject(target.x, target.y, n.z, target);
+            this.sceneTransform.transformVector(target, target);
 
-            return this._p; 
+            return target; 
         }
 
         private v: Vector3D = new Vector3D(); 
-        private unproject(nX: number, nY: number, sZ: number): Vector3D {
-           this.v.x = nX;
-           this.v.y = -nY;
-           this.v.z = sZ;
-           this.v.w = 1.0;
+        private p: Vector3D = new Vector3D(); 
+        private unproject(nX: number, nY: number, sZ: number,target:Vector3D): Vector3D {
+            target.x = nX;
+            target.y = -nY;
+            target.z = sZ;
+            target.w = 1.0;
 
-           this.v.x *= sZ;
-           this.v.y *= sZ;
+            target.x *= sZ;
+            target.y *= sZ;
 
-           this._unprojection.copyFrom(this.projectMatrix);
-           this._unprojection.invert();
+            this._unprojection.copyFrom(this.projectMatrix);
+            this._unprojection.invert();
 
-           this._unprojection.transformVector(this.v,this.v);
+            this._unprojection.transformVector(target, target);
 
-           this.v.z = sZ;
+            target.z = sZ;
 
-           return this.v;
+            return target;
         }
 
-        private project(n:Vector3D):Vector3D
+        private project(n:Vector3D,target:Vector3D):Vector3D
 		{
-            this._p = this.projectMatrix.transformVector(n);
-            this._p.x = this._p.x / this._p.w;
-            this._p.y = -this._p.y / this._p.w;
+            target = this.projectMatrix.transformVector(n);
+            target.x = target.x / target.w;
+            target.y = -target.y / target.w;
 
-            this._p.z = n.z;
+            target.z = n.z;
 
-            return this._p;
+            return target;
         }
     }
 } 

@@ -19,7 +19,11 @@
         constructor() {
             ///this.camera3D = camera3D;
         }
-                                        
+               
+        public update(time: number, delay: number, collect: CollectBase, camera: Camera3D) {
+
+        }
+                                 
         /**
         * @language zh_CN
         * 每帧渲染

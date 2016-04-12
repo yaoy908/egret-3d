@@ -5,7 +5,7 @@
 * @version Egret 3.0
 * @platform Web,Native
 */
-class SampleStaticModel {
+class SampleStaticModel extends SampleBase {
     /**
     * Canvas操作对象
     * @version Egret 3.0
@@ -19,7 +19,7 @@ class SampleStaticModel {
     */
     protected _view3D: egret3d.View3D;
     /**
-    * View3D操作对象
+    * 纹理材质
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -42,6 +42,7 @@ class SampleStaticModel {
     private model: egret3d.Mesh;
 
     public constructor() {
+        super();
         ///创建Canvas对象。
         this._egret3DCanvas = new egret3d.Egret3DCanvas();
         ///Canvas的起始坐标，页面左上角为起始坐标(0,0)。
@@ -76,6 +77,25 @@ class SampleStaticModel {
         ///启动Canvas。
         this._egret3DCanvas.start();
         this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME,this.update,this);
+
+        this.OnInitLoadingView(2);
+
+        ///设置window resize事件
+        egret3d.Input.addEventListener(egret3d.Event3D.RESIZE,this.OnWindowResize,this);
+    }
+
+    /**
+    * @language zh_CN        
+    * 窗口尺寸变化事件
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    private OnWindowResize(e: egret3d.Event3D): void {
+        ///重置ui大小
+        this._egret3DCanvas.width = window.innerWidth;
+        this._egret3DCanvas.height = window.innerHeight;
+        this._view3D.width = window.innerWidth;
+        this._view3D.height = window.innerHeight;
     }
 
     /**
@@ -101,6 +121,8 @@ class SampleStaticModel {
     * @platform Web,Native
     */
     protected onLoad(e: egret3d.LoaderEvent3D) {
+        this.OnLoadFinished();
+
         ///创建纹理材质
         this.mat = new egret3d.TextureMaterial();
         ///创建模型基类
@@ -130,6 +152,7 @@ class SampleStaticModel {
     * @platform Web,Native
     */
     protected onLoadTexture(e: egret3d.LoaderEvent3D) {
+        this.OnLoadFinished();
         ///设置材质球的漫反射贴图。
         this.mat.diffuseTexture = e.loader.data;
         ///注销回调

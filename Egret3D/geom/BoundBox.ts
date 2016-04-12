@@ -76,8 +76,6 @@
         */
         public radius: number = 0;
 
-        private matTransform: Matrix4_4 = new Matrix4_4();
-
         /**
         * @language zh_CN
         * constructor
@@ -170,25 +168,7 @@
             }
             return true;
         }
-                                
-        /**
-        * @language zh_CN
-        * 设置变换矩阵
-        * @param mat 变换矩阵 
-        */
-        public set Transform(mat: Matrix4_4) {
-            this.matTransform.copyFrom(mat);
-        }
-                                        
-        /**
-        * @language zh_CN
-        * 得到变换矩阵
-        * @returns 变换矩阵 
-        */
-        public get Transform(): Matrix4_4 {
-            return this.matTransform;
-        }
-                                        
+                                                                       
         /**
         * @language zh_CN
         * 以字符串形式返回box的值
