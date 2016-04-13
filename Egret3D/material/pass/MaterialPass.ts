@@ -177,6 +177,33 @@
         }
 
         public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation) {
+            if (this._materialData.materialDataNeedChange) {
+                //this._materialData.materialDataNeedChange = false;
+                this._materialData.materialSourceData[0] = (this._materialData.diffuseColor >> 16 & 0xff) / 255.0;
+                this._materialData.materialSourceData[1] = (this._materialData.diffuseColor >> 8 & 0xff) / 255.0;
+                this._materialData.materialSourceData[2] = (this._materialData.diffuseColor & 0xff) / 255.0;
+
+                this._materialData.materialSourceData[3] = (this._materialData.ambientColor >> 16 & 0xff) / 255.0;
+                this._materialData.materialSourceData[4] = (this._materialData.ambientColor >> 8 & 0xff) / 255.0;
+                this._materialData.materialSourceData[5] = (this._materialData.ambientColor & 0xff) / 255.0;
+
+                this._materialData.materialSourceData[6] = (this._materialData.specularColor >> 16 & 0xff) / 255.0;
+                this._materialData.materialSourceData[7] = (this._materialData.specularColor >> 8 & 0xff) / 255.0;
+                this._materialData.materialSourceData[8] = (this._materialData.specularColor & 0xff) / 255.0;
+
+                this._materialData.materialSourceData[9] = this._materialData.alpha;
+                this._materialData.materialSourceData[10] = this._materialData.cutAlpha;
+                this._materialData.materialSourceData[11] = this._materialData.shininess;
+                this._materialData.materialSourceData[12] = this._materialData.roughness;
+                this._materialData.materialSourceData[13] = this._materialData.albedo;
+
+                this._materialData.materialSourceData[14] = this._materialData.uvRectangle.x;
+                this._materialData.materialSourceData[15] = this._materialData.uvRectangle.y; //保留
+                this._materialData.materialSourceData[16] = this._materialData.uvRectangle.width; //保留
+                this._materialData.materialSourceData[17] = this._materialData.uvRectangle.height; //保留
+                this._materialData.materialSourceData[18] = this._materialData.specularScale; //保留
+                this._materialData.materialSourceData[19] = this._materialData.normalScale; //保留
+            }
 
             if (this._passChange) {
                 this.upload(time, delay, context3DProxy, modeltransform, camera3D, animtion);
@@ -201,39 +228,11 @@
             } else
                 context3DProxy.enable(ContextConfig.CULL_FACE);
 
-            Context3DProxy.gl.enable(ContextConfig.BLEND);
-            context3DProxy.setBlendFactors(this._materialData.blend_src, this._materialData.blend_dest);
-
             if (this._materialData.alphaBlending)
                 Context3DProxy.gl.depthMask(false);
 
-            if (this._materialData.materialDataNeedChange) {
-                //this._materialData.materialDataNeedChange = false;
-                this._materialData.materialSourceData[0] = (this._materialData.diffuseColor >> 16 & 0xff) / 255.0;
-                this._materialData.materialSourceData[1] = (this._materialData.diffuseColor >> 8 & 0xff) / 255.0;
-                this._materialData.materialSourceData[2] = (this._materialData.diffuseColor & 0xff) / 255.0;
-
-                this._materialData.materialSourceData[3] = (this._materialData.ambientColor >> 16 & 0xff) / 255.0;
-                this._materialData.materialSourceData[4] = (this._materialData.ambientColor >> 8 & 0xff) / 255.0;
-                this._materialData.materialSourceData[5] = (this._materialData.ambientColor & 0xff) / 255.0;
-
-                this._materialData.materialSourceData[6] = (this._materialData.specularColor >> 16 & 0xff) / 255.0;
-                this._materialData.materialSourceData[7] = (this._materialData.specularColor >> 8 & 0xff) / 255.0;
-                this._materialData.materialSourceData[8] = (this._materialData.specularColor & 0xff) / 255.0;
-
-                this._materialData.materialSourceData[9] = this._materialData.alpha;
-                this._materialData.materialSourceData[10] = this._materialData.cutAlpha;
-                this._materialData.materialSourceData[11] = this._materialData.shininess;
-                this._materialData.materialSourceData[12] = this._materialData.roughness;
-                this._materialData.materialSourceData[13] = this._materialData.albedo;
-
-                this._materialData.materialSourceData[14] = this._materialData.uvRectangle.x ;
-                this._materialData.materialSourceData[15] = this._materialData.uvRectangle.y ; //保留
-                this._materialData.materialSourceData[16] = this._materialData.uvRectangle.width ; //保留
-                this._materialData.materialSourceData[17] = this._materialData.uvRectangle.height ; //保留
-                this._materialData.materialSourceData[18] = this._materialData.specularScale; //保留
-                this._materialData.materialSourceData[19] = this._materialData.normalScale ; //保留
-            }
+            Context3DProxy.gl.enable(ContextConfig.BLEND);
+            context3DProxy.setBlendFactors(this._materialData.blend_src, this._materialData.blend_dest);
 
             if (this._passUsage.uniform_materialSource) {
                 context3DProxy.uniform1fv(this._passUsage.uniform_materialSource.uniformIndex, this._materialData.materialSourceData);
@@ -287,9 +286,6 @@
                     context3DProxy.uniform1fv(this._passUsage.uniform_pointLightSource.uniformIndex, this._passUsage.pointLightData);
             }
 
-            if (this._materialData.alphaBlending)
-                Context3DProxy.gl.depthMask(true);
-
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ModelMatrix.uniformIndex, false, modeltransform.rawData);
 
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ViewMatrix.uniformIndex, false, camera3D.viewMatrix.rawData);
@@ -317,7 +313,11 @@
                 context3DProxy.uniform1f(this._passUsage.uniform_time.uniformIndex, animtion.time); 
             }
 
-           context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count);
+            context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count);
+
+            if (this._materialData.alphaBlending)
+                Context3DProxy.gl.depthMask(true);
+      
         }
     }
 } 

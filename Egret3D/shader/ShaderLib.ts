@@ -158,10 +158,13 @@ module egret3d {
 			"vec4 ambientColor; \n" +
 			"vec4 light ; \n" +
 			"void main() { \n" +
+			"if( varying_color.w == 0.0){ \n" +
+			"discard; \n" +
+			"} \n" +
 			"diffuseColor.xyz = materialSource.diffuse.xyz * diffuseColor.xyz ; \n" +
 			"outColor.xyz = (ambientColor.xyz + materialSource.ambient.xyz + light.xyz) * diffuseColor.xyz + specularColor.xyz * materialSource.specularScale; \n" +
 			"outColor.w = materialSource.alpha * diffuseColor.w ; \n" +
-			"gl_FragColor = outColor * varying_color ; \n" +
+			"gl_FragColor = outColor * varying_color; \n" +
 			"} \n",
 
 			"end_vs":
@@ -308,6 +311,98 @@ module egret3d {
 			"vec3 normalTex = texture2D(normalTexture,uv_0).xyz *2.0 - 1.0; \n" +
 			"normalTex.y *= -1.0; \n" +
 			"normal.xyz = tbn( normalTex.xyz , normal.xyz , normalize(varying_ViewPose.xyz) , uv_0 ) ; \n" +
+			"} \n",
+
+			"particle_vs":
+			"attribute vec3 attribute_offset; \n" +
+			"attribute float attribute_billboardXYZ; \n" +
+			"attribute vec3 attribute_lifecycle; \n" +
+			"attribute vec3 attribute_speed; \n" +
+			"attribute vec3 attribute_accele; \n" +
+			"uniform mat4 uniform_cameraMatrix; \n" +
+			"uniform float uniform_time; \n" +
+			"vec3 position; \n" +
+			"float currentTime = 0.0; \n" +
+			"float totalTime = 0.0; \n" +
+			"void main(void) { \n" +
+			"varying_color = vec4(1.0, 1.0, 1.0, 1.0); \n" +
+			"mat4 billboardMatrix = mat4( \n" +
+			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
+			"vec4(0.0, 1.0, 0.0, 0.0), \n" +
+			"vec4(0.0, 0.0, 1.0, 0.0), \n" +
+			"vec4(0.0, 0.0, 0.0, 1.0)); \n" +
+			"if (attribute_billboardXYZ == 111.0) \n" +
+			"{ \n" +
+			"billboardMatrix = mat4( \n" +
+			"uniform_cameraMatrix[0], \n" +
+			"uniform_cameraMatrix[1], \n" +
+			"uniform_cameraMatrix[2], \n" +
+			"vec4(0.0, 0.0,1.0, 1.0)); \n" +
+			"} \n" +
+			"else \n" +
+			"{ \n" +
+			"if (mod(attribute_billboardXYZ, 10.0) == 1.0) \n" +
+			"{ \n" +
+			"billboardMatrix *= mat4( \n" +
+			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
+			"vec4(0.0, uniform_cameraMatrix[1].y, uniform_cameraMatrix[1].z, 0.0), \n" +
+			"vec4(0.0, uniform_cameraMatrix[2].y, uniform_cameraMatrix[2].z, 0.0), \n" +
+			"vec4(0.0, 0.0, 0.0, 1.0)); \n" +
+			"} \n" +
+			"if (mod(attribute_billboardXYZ, 100.0) / 10.0 > 1.0) \n" +
+			"{ \n" +
+			"billboardMatrix *= mat4( \n" +
+			"vec4(uniform_cameraMatrix[0].x, 0.0, uniform_cameraMatrix[0].z, 0.0), \n" +
+			"vec4(0.0, 1.0, 0.0, 0.0), \n" +
+			"vec4(uniform_cameraMatrix[2].x, 0.0, uniform_cameraMatrix[2].z, 0.0), \n" +
+			"vec4(0.0, 0.0, 0.0, 1.0)); \n" +
+			"} \n" +
+			"if (attribute_billboardXYZ / 100.0 > 1.0) \n" +
+			"{ \n" +
+			"billboardMatrix *= mat4( \n" +
+			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
+			"vec4(0.0, uniform_cameraMatrix[1].y, uniform_cameraMatrix[1].z, 0.0), \n" +
+			"vec4(0.0, uniform_cameraMatrix[2].y, uniform_cameraMatrix[2].z, 0.0), \n" +
+			"vec4(0.0, 0.0, 0.0, 1.0)); \n" +
+			"} \n" +
+			"} \n" +
+			"mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
+			"mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); \n" +
+			"varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
+			"position = attribute_offset; \n" +
+			"outPosition = vec4(attribute_position, 1.0); \n" +
+			"outPosition = billboardMatrix * outPosition; \n" +
+			"totalTime = attribute_lifecycle.x + attribute_lifecycle.y; \n" +
+			"if (attribute_lifecycle.z == 1.0) \n" +
+			"{ \n" +
+			"currentTime = mod(uniform_time, totalTime); \n" +
+			"if (currentTime >= attribute_lifecycle.x && currentTime <= totalTime) \n" +
+			"{ \n" +
+			"currentTime = currentTime - attribute_lifecycle.x; \n" +
+			"} \n" +
+			"else \n" +
+			"{ \n" +
+			"varying_color.w = 0.0; \n" +
+			"} \n" +
+			"} \n" +
+			"else \n" +
+			"{ \n" +
+			"if (uniform_time < attribute_lifecycle.x || uniform_time > totalTime) \n" +
+			"{ \n" +
+			"varying_color.w = 0.0; \n" +
+			"} \n" +
+			"else \n" +
+			"{ \n" +
+			"currentTime = uniform_time - attribute_lifecycle.x; \n" +
+			"} \n" +
+			"} \n" +
+			"if (currentTime > 0.0) \n" +
+			"{ \n" +
+			"position.xyz += currentTime * 0.001 * (attribute_speed + attribute_accele * currentTime * 0.001); \n" +
+			"} \n" +
+			"outPosition.xyz += position; \n" +
+			"outPosition = uniform_ViewMatrix * uniform_ModelMatrix * outPosition; \n" +
+			"varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
 			"} \n",
 
 			"pointLight_fragment":

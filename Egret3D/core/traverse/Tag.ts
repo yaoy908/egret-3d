@@ -20,9 +20,16 @@
         public objects: Array<Object3D> = new Array<Object3D>();
 
         /**
+         * @language zh_CN
+         * layer 列表
+         */
+        public layers: Array<Layer> = new Array<Layer>();
+        /**
         * @language zh_CN
         * 有alpha的对象列表
         */
         public alphaObjects: Array<Object3D> = new Array<Object3D>();
+
+        public clearDepth: boolean = false; 
     }
 } 
