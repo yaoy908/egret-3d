@@ -280,12 +280,19 @@
 
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.projectMatrix.rawData);
 
+            if (this._passUsage.uniform_cameraMatrix) {
+                context3DProxy.uniformMatrix4fv(this._passUsage.uniform_cameraMatrix.uniformIndex, false, camera3D.modelMatrix.rawData);
+            }
+
             if (this._passUsage.uniform_eyepos) {
                 context3DProxy.uniform3f(this._passUsage.uniform_eyepos.uniformIndex, camera3D.x, camera3D.y, camera3D.z);
             }
 
-            if (animtion) {
+            if (animtion && !animtion.animaNodeCollection) {
                 context3DProxy.uniform4fv(this._passUsage.uniform_PoseMatrix.uniformIndex, animtion.skeletonAnimationController.currentSkeletonMatrixData);
+            }
+            if (animtion) {
+                context3DProxy.uniform1f(this._passUsage.uniform_time.uniformIndex, animtion.time); 
             }
 
            context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count);

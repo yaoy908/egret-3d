@@ -30,7 +30,6 @@
         */
         constructor(canvas: Egret3DCanvas) {
             this._canvas = canvas;
-            this._canvas.view3Ds
             this._pickEvent3d = new PickEvent3D();
 
             Input.addEventListener(MouseEvent3D.MOUSE_CLICK, this.onMouseClick, this);

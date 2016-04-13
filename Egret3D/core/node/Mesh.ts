@@ -88,14 +88,16 @@
                 this.animation = animation;
             }
             else {
-                if (this.geometry.vertexFormat & VertexFormat.VF_SKIN) {
-                    this.animation = new SkeletonAnimation(this.geometry.skeleton);
+                if (geometry) {
+                    if (this.geometry.vertexFormat & VertexFormat.VF_SKIN) {
+                        this.animation = new SkeletonAnimation(this.geometry.skeleton);
+                    }
                 }
             }
 
             this.addSubMaterial(0, material);
             this.material = material;
-            this.bound = this.buildBoundBox();
+            this.buildBoundBox();
         }
 
         public setMaterialByID() {
@@ -194,6 +196,9 @@
         * 生成包围盒
         */
         protected buildBoundBox(): Bound {
+            if (!this.geometry) {
+                return null;
+            }
             var bound: BoundBox = new BoundBox();
             bound.min.copyFrom(new Vector3D(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE));
             bound.max.copyFrom(new Vector3D(Number.MIN_VALUE, Number.MIN_VALUE, Number.MIN_VALUE));
@@ -234,6 +239,7 @@
 
             (<BoundBox>bound.childBound).fillBox(min, max);
 
+            this.bound = bound;
             return bound;
         }
 

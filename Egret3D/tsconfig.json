@@ -22,12 +22,13 @@
         "events/EventManager.ts",
 
         "anim/IAnimation.ts",
-        "anim/AnimNodeBase.ts",
+        "anim/AnimationNode.ts",
         "anim/AnimaNodeCollection.ts",
         "anim/skeletonAnimation/Joint.ts",
         "anim/skeletonAnimation/Skeleton.ts",
         "anim/skeletonAnimation/SkeletonAnimation.ts",
         "anim/skeletonAnimation/SkeletonAnimationClip.ts",
+        "anim/particle/ParticleAnimation.ts",
 
         "audio/Channel.ts",
         "audio/Channel3d.ts",
@@ -74,6 +75,7 @@
         "core/node/Sky.ts",
         "core/node/SphereSky.ts",
         "core/node/Wireframe.ts",
+        "core/node/ParticleSystem.ts",
 
         "lights/LightBase.ts",
         "lights/PointLight.ts",
@@ -137,6 +139,13 @@
         "render/RenderBase.ts",
         "render/DefaultRender.ts",
 
+        "particle/Value.ts",
+        "particle/particleNode/ParticleBillboardNode.ts",
+        "particle/particleNode/ParticlePositionNode.ts",
+        "particle/particleNode/ParticleLifecycleNode.ts",
+        "particle/particleNode/ParticleSpeedNode.ts",
+        "particle/particleNode/ParticleAccelerateNode.ts",
+
         "scene/Scene3D.ts",
         "scene/TreeBase.ts",
 
@@ -180,10 +189,6 @@
 
         "View3D.ts",
         "VRView3D.ts",
-        "Egret3DCanvas.ts",
-
-
-        //lib
-        "axi/LocalAxis.ts"
+        "Egret3DCanvas.ts"
     ]
 }	
