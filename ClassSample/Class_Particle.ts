@@ -27,12 +27,11 @@
             this.view1.addChild3D(particle);
 
 
-            this.view1.addChild3D(new Mesh(new PlaneGeometry(1000, 1000), new TextureMaterial()));
+           this.view1.addChild3D(new Mesh(new PlaneGeometry(1000, 1000), new TextureMaterial()));
 
             var loadtex: URLLoader = new URLLoader("resource/effect/star_0004.png");
             loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
             loadtex["mat"] = mat;
-            mat.blendMode = BlendMode.ADD;
         }
 
         protected onLoadTexture(e: LoaderEvent3D) {

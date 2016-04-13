@@ -8,7 +8,6 @@
         public count: number = 0;
         public geomNode: Geometry;
         public nodeCollection: AnimaNodeCollection = new AnimaNodeCollection();
-        public time: number = 0;
 
         constructor(geometry: Geometry, material: MaterialBase, count: number) {
             super(null, material);
@@ -48,8 +47,7 @@
         }
 
         protected build() {
-            this.time = 0;
-            this.nodeCollection.calculate();
+            this.nodeCollection.calculate(Geometry.positionSize + Geometry.normalSize + Geometry.uvSize);
             this.geometry.vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL  | VertexFormat.VF_UV0;
             this.geometry.vertexAttLength = this.nodeCollection.numberOfVertices;
             this.geometry.vertexSizeInBytes = this.nodeCollection.vertexSizeInBytes;
@@ -63,7 +61,7 @@
                     }
                     vertexIndex = i * this.geomNode.vertexCount + j;
                     vertexArray.length = 0;
-                    this.geomNode.getVertexForIndex(j, VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_UV0, vertexArray);
+                    this.geomNode.getVertexForIndex(j, VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_UV0 | VertexFormat.VF_COLOR, vertexArray);
                     for (var k: number = 0; k < vertexArray.length; ++k) {
                         this.geometry.verticesData[vertexIndex * this.geometry.vertexAttLength + k] = vertexArray[k];
                     }
@@ -84,14 +82,6 @@
             if (!this.bound) {
                 this.buildBoundBox();
             }
-        }
-
-        /**
-        * @private
-        */
-        public update(time: number, delay: number, camera: Camera3D) {
-            super.update(time, delay, camera);
-            this.time += delay;
         }
     }
 }

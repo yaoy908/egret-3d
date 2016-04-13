@@ -30,8 +30,13 @@
             this._passUsage.fragmentShader.addUseShaderName("materialSource_fs");
 
             if (animation) {
-                this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
-                this._passUsage.vertexShader.addUseShaderName("skeleton_vertex");
+                if (animation.skeletonAnimationController) {
+                    this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
+                    this._passUsage.vertexShader.addUseShaderName("skeleton_vertex");
+                }
+                else if (animation.particleAnimationController) {
+                    this._passUsage.vertexShader.addUseShaderName("particle_vs");
+                }
             }
             else {
                 this._passUsage.vertexShader.addUseShaderName("diffuse_vertex");

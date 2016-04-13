@@ -98,8 +98,8 @@
         * 计算节点
         * @private 
         */
-        public calculate() {
-            var offset: number = Geometry.positionSize + Geometry.normalSize + Geometry.uvSize;
+        public calculate(start: number) {
+            var offset: number = start;
             for (var i: number = 0; i < this.nodes.length; i++) {
                 if (this.nodes[i].attributeLenght > 0) {
                     this.nodes[i].offset = offset;
