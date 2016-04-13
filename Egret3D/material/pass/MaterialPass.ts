@@ -306,6 +306,10 @@
                 context3DProxy.uniform3f(this._passUsage.uniform_eyepos.uniformIndex, camera3D.x, camera3D.y, camera3D.z);
             }
 
+            if (this._passUsage.uniform_cameraMatrix) {
+                context3DProxy.uniformMatrix4fv(this._passUsage.uniform_cameraMatrix.uniformIndex, false, camera3D.modelMatrix.rawData);
+            }
+
             if (animtion) {
                 if (animtion.skeletonAnimationController) {
                     context3DProxy.uniform4fv(this._passUsage.uniform_PoseMatrix.uniformIndex, animtion.skeletonAnimationController.currentSkeletonMatrixData);
