@@ -24,7 +24,13 @@
         * WebGLBuffer 的引用
         */
         public buffer: WebGLBuffer;
-                                
+
+        /**
+         * @language zh_CN
+         * @private
+         */
+        public arrayBuffer: ArrayBuffer;
+               
         /**
         * @language zh_CN
         * 构造

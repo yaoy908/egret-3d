@@ -93,7 +93,7 @@
                     this.attList.push(passUsage.attribute_position);
                 }
 
-                offset += Geometry.positionSize * 4;
+                offset += Geometry.positionSize * Float32Array.BYTES_PER_ELEMENT;
             }
 
             if (this.geometry.vertexFormat & VertexFormat.VF_NORMAL) {
@@ -111,7 +111,7 @@
                     this.attList.push(passUsage.attribute_normal);
                 }
 
-                offset += Geometry.normalSize * 4;
+                offset += Geometry.normalSize * Float32Array.BYTES_PER_ELEMENT;
             }
 
             if (this.geometry.vertexFormat & VertexFormat.VF_TANGENT) {
@@ -129,7 +129,7 @@
                     this.attList.push(passUsage.attribute_tangent);
                 }
 
-                offset += Geometry.tangentSize * 4;
+                offset += Geometry.tangentSize * Float32Array.BYTES_PER_ELEMENT;
             }
 
             if (this.geometry.vertexFormat & VertexFormat.VF_COLOR) {
@@ -147,7 +147,7 @@
                     this.attList.push(passUsage.attribute_color);
                 }
 
-                offset += Geometry.colorSize * 4;
+                offset += Geometry.colorSize * Float32Array.BYTES_PER_ELEMENT;
             }
 
             if (this.geometry.vertexFormat & VertexFormat.VF_UV0) {
@@ -165,7 +165,7 @@
                     this.attList.push(passUsage.attribute_uv0);
                 }
 
-                offset += Geometry.uvSize * 4;
+                offset += Geometry.uvSize * Float32Array.BYTES_PER_ELEMENT;
             }
 
             if (this.geometry.vertexFormat & VertexFormat.VF_UV1) {
@@ -183,7 +183,7 @@
                     this.attList.push(passUsage.attribute_uv1);
                 }
 
-                offset += Geometry.uv2Size * 4;
+                offset += Geometry.uv2Size * Float32Array.BYTES_PER_ELEMENT;
             }
 
             if (this.geometry.vertexFormat & VertexFormat.VF_SKIN) {
@@ -201,7 +201,7 @@
                     this.attList.push(passUsage.attribute_boneIndex);
                 }
 
-                offset += Geometry.skinSize / 2 * 4;
+                offset += Geometry.skinSize / 2 * Float32Array.BYTES_PER_ELEMENT;
 
                 if (passUsage.attribute_boneWeight) {
                     if (!passUsage.attribute_boneWeight.uniformIndex) {
@@ -215,7 +215,26 @@
                     this.attList.push(passUsage.attribute_boneWeight);
                 }
 
-                offset += Geometry.skinSize / 2 * 4;
+                offset += Geometry.skinSize / 2 * Float32Array.BYTES_PER_ELEMENT;
+            }
+
+            if (this.geometry.nodeCollection) {
+                for (var i: number = 0; i < this.geometry.nodeCollection.nodes.length; ++i) {
+                    var node: AnimationNode = this.geometry.nodeCollection.nodes[i];
+                    var attribute: GLSL.Attribute = passUsage[node.attributeName];
+                    if (attribute) {
+                        if (!attribute.uniformIndex) {
+                            attribute.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, attribute.varName);
+                            attribute.size = node.attributeLenght;
+                            attribute.dataType = ContextConfig.FLOAT;
+                            attribute.normalized = false;
+                            attribute.stride = this.geometry.vertexSizeInBytes;
+                            attribute.offset = offset;
+                            this.attList.push(attribute);
+                        }
+                    }
+                    offset += node.attributeLenght * Float32Array.BYTES_PER_ELEMENT;
+                }
             }
         }
 

@@ -16,8 +16,20 @@
         /**
         * @language zh_CN
         * 骨骼动画控制器对象
+        * 只有骨骼动画对象才有此接口
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         skeletonAnimationController?: SkeletonAnimation;
+
+        /**
+        * @language zh_CN
+        * 粒子动画控制器对象。
+        * 只有粒子动画对象才有此接口
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        particleAnimationController?: ParticleAnimation;
 
         /**
         * @language zh_CN
@@ -42,14 +54,6 @@
         * 动画节点容器
         */
         animaNodeCollection?: AnimaNodeCollection;
-
-        /**
-        * @language zh_CN
-        * 初始化Shader
-        * @param vertexShader 顶点Shader
-        * @param pixelShader 片元Shader
-        */
-        initShader(vertexShader: Shader, pixelShader: Shader);
 
         /**
         * @language zh_CN
@@ -91,7 +95,7 @@
         * 获取动画节点
         * @return 动画节点数组
         */
-        getAnimNode(): Array<AnimNodeBase>;
+        getAnimNode(): Array<AnimationNode>;
 
         /**
         * @language zh_CN

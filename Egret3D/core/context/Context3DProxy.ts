@@ -184,7 +184,10 @@
             Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
             Context3DProxy.gl.bufferData(Context3DProxy.gl.ELEMENT_ARRAY_BUFFER, indexDataArray, Context3DProxy.gl.STATIC_DRAW);
 
-            return new IndexBuffer3D(indexBuffer);
+            var ib: IndexBuffer3D = new IndexBuffer3D(indexBuffer);
+            ib.arrayBuffer = indexDataArray;
+
+            return ib;
         }
 
         /**
@@ -199,7 +202,10 @@
             Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ARRAY_BUFFER, vertexBuffer);
             Context3DProxy.gl.bufferData(Context3DProxy.gl.ARRAY_BUFFER, vertexDataArray, Context3DProxy.gl.STATIC_DRAW);
 
-            return new VertexBuffer3D(vertexBuffer);
+            var vb: VertexBuffer3D = new VertexBuffer3D(vertexBuffer);
+            vb.arrayBuffer = vertexDataArray;
+
+            return vb;
         }
 
         /// public upLoadTextureData(mipLevel: number, texture: Texture2D , data:any ) {
@@ -910,7 +916,6 @@
         */
         public bindIndexBuffer(indexBuffer: IndexBuffer3D) {
             Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
-
         }
 
         /**

@@ -119,7 +119,7 @@
         * @language zh_CN
         * 顶点属性长度
         */
-        public vertexAttLength: number = 0 ;
+        public vertexAttLength: number = 0;
 
         /**
         * @language zh_CN
@@ -254,6 +254,7 @@
         */
         public subGeometrys: Array<SubGeometry> = new Array<SubGeometry>();       
 
+        public nodeCollection: AnimaNodeCollection;
 
         /**
         * @language zh_CN
@@ -261,6 +262,31 @@
         * buffer 需要重新提交的时候
         */
         private _bufferDiry: boolean = true;
+
+
+        public _vertexCount: number = -1;
+    
+        /**
+        * @language zh_CN
+        * 得到顶点的数量
+        * @returns number 顶点的数量
+        */
+        public get vertexCount(): number {
+            if (this._vertexCount < 0) {
+                this._vertexCount = this.verticesData.length / this.vertexAttLength;
+            }
+
+            return this._vertexCount;
+        }
+            
+        /**
+        * @language zh_CN
+        * 设置顶点的数量
+        * @param value 顶点的数量
+        */
+        public set vertexCount(value:number) {
+            this._vertexCount = value;
+        }
 
         /**
         * @language zh_CN
@@ -340,8 +366,8 @@
         * @platform Web,Native
         */
         public calculateVertexFormat() {
-
-            for (var i: number = 0; i < this.source_positionData.length / Geometry.positionSize; ++i) {
+            this.vertexCount = this.source_positionData.length / Geometry.positionSize;
+            for (var i: number = 0; i < this.vertexCount; ++i) {
                 if (this.vertexFormat & VertexFormat.VF_POSITION) {
                     this.verticesData.push(this.source_positionData[i * Geometry.positionSize]);
                     this.verticesData.push(this.source_positionData[i * Geometry.positionSize + 1]);
@@ -409,6 +435,89 @@
         public upload(context3DProxy: Context3DProxy) {
             this.sharedIndexBuffer = context3DProxy.creatIndexBuffer(this.indexData);
             this.sharedVertexBuffer = context3DProxy.creatVertexBuffer(this.verticesData);
+        }
+
+        /**
+        * @language zh_CN
+        * 由顶点索引根据格式拿到顶点数据
+        * @param index 顶点索引
+        * @param vf 得到顶点的需要的数据格式
+        * @param target 得到数据返回目标可以为null
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public getVertexForIndex(index: number, vf: VertexFormat, target: Array<number> = null): Array<number> {
+            if (!target) {
+                target = new Array<number>();
+            }
+
+            if (index < 0 || index >= this.verticesData.length) {
+                return target;
+            }
+            var offset: number = 0;
+            if (this.vertexFormat & VertexFormat.VF_POSITION) {
+                if (vf & VertexFormat.VF_POSITION) {
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 0]);
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 1]);
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 2]);
+                }
+                offset += Geometry.positionSize;
+            }
+
+            if (this.vertexFormat & VertexFormat.VF_NORMAL) {
+                if (vf & VertexFormat.VF_NORMAL) {
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 0]);
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 1]);
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 2]);
+                }
+                offset += Geometry.normalSize;
+            }
+
+            if (this.vertexFormat & VertexFormat.VF_TANGENT) {
+                if (vf & VertexFormat.VF_TANGENT) {
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 0]);
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 1]);
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 2]);
+                }
+                offset += Geometry.tangentSize;
+            }
+
+            if (this.vertexFormat & VertexFormat.VF_COLOR) {
+                if (vf & VertexFormat.VF_COLOR) {
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 0]);
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 1]);
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 2]);
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 3]);
+                }
+                offset += Geometry.colorSize;
+            }
+
+            if (this.vertexFormat & VertexFormat.VF_UV0) {
+                if (vf & VertexFormat.VF_UV0) {
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 0]);
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 1]);
+                }
+                offset += Geometry.uvSize;
+            }
+
+            if (this.vertexFormat & VertexFormat.VF_UV1) {
+                if (vf & VertexFormat.VF_UV1) {
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 0]);
+                    target.push(this.verticesData[index * this.vertexAttLength + offset + 1]);
+                }
+                offset += Geometry.uv2Size;
+            }
+
+            if (this.vertexFormat & VertexFormat.VF_SKIN) {
+                if (vf & VertexFormat.VF_SKIN) {
+                    for (var j = 0; j < Geometry.skinSize; ++j) {
+                        target.push(this.verticesData[index * this.vertexAttLength + offset + j]);
+                    }
+                }
+                offset += Geometry.skinSize;
+            }
+        
+            return target;
         }
     }
 } 

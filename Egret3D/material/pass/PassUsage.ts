@@ -51,10 +51,7 @@
          * @language zh_CN
          */
         public attribute_position: GLSL.Attribute;
-        /**
-         * @language zh_CN
-         */
-        public attribute_offset: GLSL.Attribute;
+
         /**
          * @language zh_CN
          */
@@ -86,6 +83,19 @@
 
         //---------------------------------------------
         //---------------[particle]--------------------
+        /**
+         * @language zh_CN
+         */
+        public attribute_offset: GLSL.Attribute;
+
+        public attribute_billboardXYZ: GLSL.Attribute;
+
+        public attribute_lifecycle: GLSL.Attribute;
+
+        public attribute_speed: GLSL.Attribute;
+
+        public attribute_accele: GLSL.Attribute;
+
         public attribute_rotate: GLSL.Attribute;
         /**
          * @language zh_CN
@@ -99,14 +109,10 @@
          * @language zh_CN
          */
         public attribute_acceleScale: GLSL.Attribute;
+
         /**
          * @language zh_CN
          */
-        public attribute_speed: GLSL.Attribute;
-        /**
-         * @language zh_CN
-         */
-        public attribute_acceleSpeed: GLSL.Attribute;
         /**
          * @language zh_CN
          */
