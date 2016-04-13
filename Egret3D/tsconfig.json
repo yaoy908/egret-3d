@@ -119,7 +119,8 @@
 
         "material/pass/MethodData.ts",
         "material/method/MethodBase.ts",
-
+        "material/method/TerrainARGBMethod.ts",
+        
         "material/pass/PassUsage.ts",
         "material/MaterialData.ts",
 

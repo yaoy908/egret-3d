@@ -1,0 +1,57 @@
+﻿module egret3d {
+    /**
+     * @class egret3d.AOMapMethod
+     * @classdesc
+     * AO贴图方法
+     */
+    export class AOMapMethod extends MethodBase {
+
+        private aoPower: number = 1.0; 
+        private texture: ITexture;
+        /**
+         * @language zh_CN
+         * @param texture 
+         */
+        constructor(texture: ITexture) {
+            super();
+            this.fsShaderList.push("AOMap_fs");
+            this.lightTexture = texture;
+        }
+
+        /**
+         * @language zh_CN
+         * @param texture 
+         */
+        public set lightTexture(texture: ITexture) {
+            this.texture = texture;
+            this.materialData.aoTexture = this.texture;
+            this.materialData.textureChange = true; 
+        }
+
+        /**
+               * @language zh_CN
+               * @param time
+               * @param delay
+               * @param usage
+               * @param materialData
+               * @param geometry
+               * @param context3DProxy
+               * @param modeltransform 
+               * @param modeltransform
+               * @param camera3D
+               */
+        public upload(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+            usage["aoPower"] = context3DProxy.getUniformLocation(usage.program3D, "aoPower"); 
+        }
+
+        public active(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+            context3DProxy.uniform1f(usage["aoPower"], this.aoPower);
+        }
+
+        /**
+         * @language zh_CN
+         */
+        public dispose() {
+        }
+    }
+} 

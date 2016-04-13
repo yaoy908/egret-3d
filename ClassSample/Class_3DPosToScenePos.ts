@@ -29,6 +29,7 @@
 
             this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
+
         }
 
         private angle: number = 0;

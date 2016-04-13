@@ -8,7 +8,9 @@ varying vec4 varying_color;
 uniform vec3 uniform_eyepos ;
 uniform mat4 uniform_ViewMatrix ;
 uniform mat4 uniform_ProjectionMatrix; 
-vec4 outColor;
+
+vec4 outColor ;
+
 vec4 diffuseColor ;
 vec4 specularColor ;
 vec4 ambientColor;

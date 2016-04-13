@@ -6,15 +6,22 @@
     export class MethodBase {
 
         public methodType: number = -1 ;
-        public vsShaderName: string = "" ;
-        public fsShaderName: string = "" ;
+        public vsShaderList: Array<string> = [] ;
+        public fsShaderList: Array<string> = [];
 
-        public upload(time: number, delay: number, usage: PassUsage, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+        public materialData: MaterialData;
+
+        public upload(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
 
         }
 
-        public active(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+        public update(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
         }
 
+        /**
+        * @language zh_CN
+        */
+        public dispose() {
+        }
     }
 }

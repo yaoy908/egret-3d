@@ -22,7 +22,8 @@
         public addMethod(method: MethodBase) {
             if (method.methodType != -1) {
                 this.methodList.push(method);
-                this._materialData.textureMethodTypes.push(method.methodType);
+                method.materialData = this._materialData; 
+                //this._materialData.textureMethodTypes.push(method.methodType);
                 this._passChange = true;
             }
             else {
@@ -126,10 +127,18 @@
 
             if (this.methodList) {
                 for (var i: number = 0; i < this.methodList.length; i++) {
-                    this._passUsage.vertexShader.addUseShaderName(this.methodList[i].vsShaderName);
-                    this._passUsage.fragmentShader.addUseShaderName(this.methodList[i].fsShaderName);
+                    this.methodList[i].materialData = this._materialData; 
+                    for (var j: number = 0; j < this.methodList[i].vsShaderList.length; i++) {
+                        this._passUsage.vertexShader.addUseShaderName(this.methodList[i].vsShaderList[j]);
+                    }
+                    for (var j: number = 0; j < this.methodList[i].fsShaderList.length; i++) {
+                        this._passUsage.vertexShader.addUseShaderName(this.methodList[i].fsShaderList[j]);
+                    }
                 }
             }
+
+            this._passUsage.vertexShader.addEndShaderName("end_vs");
+            this._passUsage.fragmentShader.addEndShaderName("end_fs");
 
         }
 
@@ -159,6 +168,12 @@
                 sampler3D = this._passUsage.sampler3DList[index];
                 sampler3D.uniformIndex = context3DProxy.getUniformLocation(this._passUsage.program3D, sampler3D.varName);
             }
+
+            if (this.methodList) {
+                for (var i: number = 0; i < this.methodList.length; i++) {
+                    this.methodList[i].upload(time, delay, this._passUsage, null, context3DProxy, modeltransform, camera3D);
+                }
+            }
         }
 
         public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation) {
@@ -166,6 +181,7 @@
             if (this._passChange) {
                 this.upload(time, delay, context3DProxy, modeltransform, camera3D, animtion);
             }
+
             context3DProxy.setProgram(this._passUsage.program3D);
             subGeometry.update(time, delay, this._passUsage, context3DProxy);
 
@@ -279,6 +295,12 @@
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ViewMatrix.uniformIndex, false, camera3D.viewMatrix.rawData);
 
             context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.projectMatrix.rawData);
+
+            if (this.methodList) {
+                for (var i: number = 0; i < this.methodList.length; i++) {
+                    this.methodList[i].update(time, delay, this._passUsage, null, context3DProxy, modeltransform, camera3D);
+                }
+            }
 
             if (this._passUsage.uniform_eyepos) {
                 context3DProxy.uniform3f(this._passUsage.uniform_eyepos.uniformIndex, camera3D.x, camera3D.y, camera3D.z);

@@ -5,7 +5,15 @@ module egret3d {
 	export class ShaderLib {
 		static lib: { [key:string]: string } = 
 		{
- 			"base_fs":
+ 			"AOMap_fs":
+			"uniform sampler2D aoTexture ; \n" +
+			"uniform float aoPower ; \n" +
+			"void main(void){ \n" +
+			"float ao = texture2D( aoTexture , varying_uv1 ).x ; \n" +
+			"diffuseColor.xyz *= (ao * aoPower) ; \n" +
+			"} \n",
+
+			"base_fs":
 			"#extension GL_OES_standard_derivatives : enable \n" +
 			"varying vec3 varying_eyeNormal  ; \n" +
 			"varying vec2 varying_uv0; \n" +
@@ -14,7 +22,7 @@ module egret3d {
 			"uniform vec3 uniform_eyepos ; \n" +
 			"uniform mat4 uniform_ViewMatrix ; \n" +
 			"uniform mat4 uniform_ProjectionMatrix; \n" +
-			"vec4 outColor; \n" +
+			"vec4 outColor ; \n" +
 			"vec4 diffuseColor ; \n" +
 			"vec4 specularColor ; \n" +
 			"vec4 ambientColor; \n" +
@@ -230,6 +238,12 @@ module egret3d {
 			"return max(t, 0.0); \n" +
 			"} \n",
 
+			"lightMap_fs":
+			"uniform sampler2D lightTexture ; \n" +
+			"void main(void){ \n" +
+			"diffuseColor.xyz *= texture2D( lightTexture , varying_uv1 ).xyz * 2.0 ; \n" +
+			"} \n",
+
 			"materialSource_fs":
 			"struct MaterialSource{ \n" +
 			"vec3 diffuse; \n" +
@@ -390,6 +404,24 @@ module egret3d {
 			"uniform sampler2D specularTexture; \n" +
 			"void main(void){ \n" +
 			"specularColor.xyz *= texture2D( specularTexture , uv_0 ).xyz ; \n" +
+			"} \n",
+
+			"terrainRGBA_fragment":
+			"uniform sampler2D blendMaskTexture ; \n" +
+			"uniform sampler2D splat_0Tex ; \n" +
+			"uniform sampler2D splat_1Tex ; \n" +
+			"uniform sampler2D splat_2Tex ; \n" +
+			"uniform sampler2D splat_3Tex ; \n" +
+			"uniform float uvs[8]; \n" +
+			"void main() { \n" +
+			"vec4 splat_control = texture2D ( blendMaskTexture , varying_uv0 ); \n" +
+			"vec4 cc = vec4(0.0,0.0,0.0,1.0); \n" +
+			"vec2 uv = varying_uv0 ; \n" +
+			"cc.xyz = splat_control.x * texture2D (splat_0Tex, uv * vec2(uvs[0],uvs[1])).xyz ; \n" +
+			"cc.xyz += splat_control.y * texture2D (splat_1Tex, uv * vec2(uvs[2],uvs[3]) ).xyz; \n" +
+			"cc.xyz += splat_control.z * vec4(texture2D (splat_2Tex, uv* vec2(uvs[4],uvs[5]))).xyz; \n" +
+			"cc.xyz += (1.0-length(splat_control.xyz)) * vec4(texture2D (splat_3Tex, uv* vec2(uvs[6],uvs[7]))).xyz; \n" +
+			"diffuseColor.xyz = cc.xyz ; \n" +
 			"} \n",
 
 
