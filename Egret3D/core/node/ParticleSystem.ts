@@ -61,7 +61,7 @@
                     }
                     vertexIndex = i * this.geomNode.vertexCount + j;
                     vertexArray.length = 0;
-                    this.geomNode.getVertexForIndex(j, VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_UV0 | VertexFormat.VF_COLOR, vertexArray);
+                    this.geomNode.getVertexForIndex(j, VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_UV0, vertexArray);
                     for (var k: number = 0; k < vertexArray.length; ++k) {
                         this.geometry.verticesData[vertexIndex * this.geometry.vertexAttLength + k] = vertexArray[k];
                     }
