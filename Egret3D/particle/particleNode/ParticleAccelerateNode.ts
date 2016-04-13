@@ -1,7 +1,7 @@
 ﻿module egret3d {
     export class ParticleAccelerateNode extends AnimationNode {
 
-        public accelerate: Vector3D = new Vector3D(0, 800, 0);
+        public accelerate: Vector3D = new Vector3D(0, 0, 0);
 
         constructor() {
             super();

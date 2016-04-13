@@ -94,7 +94,7 @@
 
         public attribute_speed: GLSL.Attribute;
 
-        public attribute_accele: GLSL.Attribute;
+        public  : GLSL.Attribute;
 
         public attribute_rotate: GLSL.Attribute;
         /**
@@ -120,14 +120,6 @@
         //---------------------------------------------
         //---------------------------------------------
 
-        /**
-         * @language zh_CN
-         */
-        public uniform_time: GLSL.Uniform;
-        /**
-         * @language zh_CN
-         */
-        public uniform_cameraMatrix: GLSL.Uniform;
 
         /**
          * @language zh_CN
@@ -212,6 +204,18 @@
          * @language zh_CN
          */
         public uniform_sceneHeight: GLSL.Uniform;
+
+        /**
+         * @language zh_CN
+         */
+        public uniform_time: GLSL.Uniform;
+
+        /**
+         * @language zh_CN
+         */
+        public uniform_cameraMatrix: GLSL.Uniform;
+
+        public uniform_enableBillboardXYZ: GLSL.Uniform;
 
         /**
          * @language zh_CN

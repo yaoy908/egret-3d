@@ -1,4 +1,8 @@
 ﻿module egret3d {
+
+    /**
+    * @private
+    */
     export class AnimationNode {
         public uniformIndex: any;
         public attributeName: string;

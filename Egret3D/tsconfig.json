@@ -75,7 +75,6 @@
         "core/node/Sky.ts",
         "core/node/SphereSky.ts",
         "core/node/Wireframe.ts",
-        "core/node/ParticleSystem.ts",
 
         "lights/LightBase.ts",
         "lights/PointLight.ts",
@@ -141,7 +140,7 @@
         "render/DefaultRender.ts",
 
         "particle/Value.ts",
-        "particle/particleNode/ParticleBillboardNode.ts",
+        "particle/ParticleEmitter.ts",
         "particle/particleNode/ParticlePositionNode.ts",
         "particle/particleNode/ParticleLifecycleNode.ts",
         "particle/particleNode/ParticleSpeedNode.ts",
