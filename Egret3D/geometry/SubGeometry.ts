@@ -221,19 +221,24 @@
             if (this.geometry.nodeCollection) {
                 for (var i: number = 0; i < this.geometry.nodeCollection.nodes.length; ++i) {
                     var node: AnimationNode = this.geometry.nodeCollection.nodes[i];
-                    var attribute: GLSL.Attribute = passUsage[node.attributeName];
-                    if (attribute) {
-                        if (!attribute.uniformIndex) {
-                            attribute.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, attribute.varName);
-                            attribute.size = node.attributeLenght;
-                            attribute.dataType = ContextConfig.FLOAT;
-                            attribute.normalized = false;
-                            attribute.stride = this.geometry.vertexSizeInBytes;
-                            attribute.offset = offset;
-                            this.attList.push(attribute);
+
+                    for (var j: number = 0; j < node.attributes.length; ++j) {
+                        var var0: GLSL.VarRegister = node.attributes[j];
+
+                        var attribute: GLSL.Attribute = passUsage[var0.name];
+                        if (attribute) {
+                            if (!attribute.uniformIndex) {
+                                attribute.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, attribute.varName);
+                                attribute.size = var0.size;
+                                attribute.dataType = ContextConfig.FLOAT;
+                                attribute.normalized = false;
+                                attribute.stride = this.geometry.vertexSizeInBytes;
+                                attribute.offset = offset;
+                                this.attList.push(attribute);
+                            }
                         }
+                        offset += var0.size * Float32Array.BYTES_PER_ELEMENT;
                     }
-                    offset += node.attributeLenght * Float32Array.BYTES_PER_ELEMENT;
                 }
             }
         }

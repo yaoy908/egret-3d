@@ -316,11 +316,15 @@ module egret3d {
 			"particle_vs":
 			"attribute vec3 attribute_offset; \n" +
 			"attribute vec3 attribute_lifecycle; \n" +
-			"attribute vec3 attribute_speed; \n" +
-			"attribute vec3 attribute_accele; \n" +
+			"attribute vec3 attribute_direction; \n" +
+			"attribute vec2 attribute_speed; \n" +
 			"uniform mat4 uniform_cameraMatrix; \n" +
 			"uniform float uniform_time; \n" +
 			"uniform float uniform_enableBillboardXYZ; \n" +
+			"uniform vec3 uniform_startColor; \n" +
+			"uniform vec3 uniform_endColor; \n" +
+			"uniform vec3 uniform_startScale; \n" +
+			"uniform vec3 uniform_endScale; \n" +
 			"vec4 position; \n" +
 			"float currentTime = 0.0; \n" +
 			"float totalTime = 0.0; \n" +
@@ -398,7 +402,9 @@ module egret3d {
 			"} \n" +
 			"if (currentTime > 0.0) \n" +
 			"{ \n" +
-			"position.xyz += currentTime * 0.001 * (attribute_speed + attribute_accele * currentTime * 0.001); \n" +
+			"float t = currentTime * 0.001; \n" +
+			"position.xyz += attribute_direction * (t * (attribute_speed.x + attribute_speed.y * t)); \n" +
+			"varying_color.xyz += (uniform_endColor - uniform_startColor) *  (currentTime / attribute_lifecycle.y); \n" +
 			"} \n" +
 			"position = uniform_ModelMatrix * position; \n" +
 			"outPosition.xyz += position.xyz; \n" +

@@ -92,9 +92,18 @@
 
         public attribute_lifecycle: GLSL.Attribute;
 
+        public attribute_direction: GLSL.Attribute;
+
         public attribute_speed: GLSL.Attribute;
 
-        public  : GLSL.Attribute;
+        public attribute_startScale: GLSL.Attribute;
+
+        public attribute_endScale: GLSL.Attribute;
+
+        public attribute_startColor: GLSL.Attribute;
+
+        public attribute_endColor: GLSL.Attribute;
+
 
         public attribute_rotate: GLSL.Attribute;
         /**
@@ -216,6 +225,10 @@
         public uniform_cameraMatrix: GLSL.Uniform;
 
         public uniform_enableBillboardXYZ: GLSL.Uniform;
+
+        public uniform_startColor: GLSL.Uniform;
+
+        public uniform_endColor: GLSL.Uniform;
 
         /**
          * @language zh_CN

@@ -3,14 +3,11 @@
     /**
     * @private
     */
-    export class AnimationNode {
-        public uniformIndex: any;
-        public attributeName: string;
-        public attributeLenght: number;
-        public offset: number;
-        public attributeOffsetBytes: number;
 
-        public buildGeomtry(geometry: Geometry, count:number) {
+    export class AnimationNode {
+        public attributes: Array<GLSL.VarRegister> = new Array<GLSL.VarRegister>();
+
+        public buildGeomtry(geometry: Geometry, count: number) {
 
         }
     }

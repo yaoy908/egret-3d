@@ -83,6 +83,7 @@
 
             ContextConfig.FRONT = Context3DProxy.gl.FRONT;
             ContextConfig.BACK = Context3DProxy.gl.BACK;
+            ContextConfig.FRONT_AND_BACK = Context3DProxy.gl.FRONT_AND_BACK;
 
             ContextConfig.DEPTH_BUFFER_BIT = Context3DProxy.gl.DEPTH_BUFFER_BIT;
             ContextConfig.ELEMENT_ARRAY_BUFFER = Context3DProxy.gl.ELEMENT_ARRAY_BUFFER;

@@ -26,6 +26,10 @@
 
         public enableBillboardZ: boolean = true;
 
+        public startColor: Vector3D = new Vector3D(1, 1, 1);
+
+        public endColor: Vector3D = new Vector3D(1, 1, 1);
+
         /**
         * @language zh_CN
         * 顶点数
@@ -101,11 +105,15 @@
         public calculate(start: number) {
             var offset: number = start;
             for (var i: number = 0; i < this.nodes.length; i++) {
-                if (this.nodes[i].attributeLenght > 0) {
-                    this.nodes[i].offset = offset;
-                    this.nodes[i].attributeOffsetBytes = offset * Float32Array.BYTES_PER_ELEMENT;
-                    offset += this.nodes[i].attributeLenght;
+
+                for (var j: number = 0; j < this.nodes[i].attributes.length; ++j) {
+                    if (this.nodes[i].attributes[j].size > 0) {
+                        this.nodes[i].attributes[j].offset = offset;
+                        this.nodes[i].attributes[j].stride = offset * Float32Array.BYTES_PER_ELEMENT;
+                        offset += this.nodes[i].attributes[j].size;
+                    }
                 }
+              
             }
 
             this.numberOfVertices = offset;

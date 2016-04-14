@@ -1,4 +1,8 @@
 ﻿module egret3d {
+        
+    /**
+    * @private
+    */
     export class ParticleLifecycleNode extends AnimationNode {
 
         /**
@@ -18,8 +22,11 @@
 
         constructor() {
             super();
-            this.attributeName = "attribute_lifecycle";
-            this.attributeLenght = 3;
+
+            var var0: GLSL.VarRegister = new GLSL.VarRegister();
+            var0.name = "attribute_lifecycle";
+            var0.size = 3;
+            this.attributes.push(var0);
         }
 
         public buildGeomtry(geometry: Geometry, count: number) {
@@ -29,10 +36,13 @@
 
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
+
+            var var0: GLSL.VarRegister = this.attributes[0];
+
             for (var i: number = 0; i < count; ++i) {
                 for (var j: number = 0; j < vertices; ++j) {
                     index = i * vertices + j;
-                    index = index * geometry.vertexAttLength + this.offset;
+                    index = index * geometry.vertexAttLength + var0.offset;
                     geometry.verticesData[index + 0] = startArray[i];
                     geometry.verticesData[index + 1] = lifeArray[i];
                     geometry.verticesData[index + 2] = compressValue;

@@ -143,8 +143,8 @@
         "particle/ParticleEmitter.ts",
         "particle/particleNode/ParticlePositionNode.ts",
         "particle/particleNode/ParticleLifecycleNode.ts",
+        "particle/particleNode/ParticleDirectionNode.ts",
         "particle/particleNode/ParticleSpeedNode.ts",
-        "particle/particleNode/ParticleAccelerateNode.ts",
 
         "scene/Scene3D.ts",
         "scene/TreeBase.ts",

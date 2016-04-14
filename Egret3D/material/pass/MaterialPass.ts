@@ -318,6 +318,14 @@
                         var f: number = (animtion.animaNodeCollection.enableBillboardX ? 1 : 0) + (animtion.animaNodeCollection.enableBillboardY ? 10 : 0) + (animtion.animaNodeCollection.enableBillboardZ ? 100 : 0);
                         context3DProxy.uniform1f(this._passUsage.uniform_enableBillboardXYZ.uniformIndex, f);
                     }
+
+                    if (this._passUsage.uniform_startColor) {
+                        context3DProxy.uniform3f(this._passUsage.uniform_startColor.uniformIndex, animtion.animaNodeCollection.startColor.x, animtion.animaNodeCollection.startColor.y, animtion.animaNodeCollection.startColor.z);
+        
+                    }
+                    if (this._passUsage.uniform_endColor) {
+                        context3DProxy.uniform3f(this._passUsage.uniform_endColor.uniformIndex, animtion.animaNodeCollection.startColor.x, animtion.animaNodeCollection.endColor.y, animtion.animaNodeCollection.endColor.z);
+                    }
                 }
             }
 

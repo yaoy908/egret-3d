@@ -21,12 +21,17 @@
         * 右眼睛矩阵
         */
         public rightEyeMatrix: Matrix4_4;
+                                                               
+        /**
+        * @language zh_CN
+        * @private
+        */
+        public eyeSpace: number = 1;
 
         private eyePosition: Vector3D = new Vector3D();
         private eyeRotation: Vector3D = new Vector3D(0,1,0);
 
         private eyeLookTarget: Vector3D;
-        private eyeSpace: number = 1;
         private eyeFocalLength: number = 180;
 
         private leftPos: Vector3D = new Vector3D();

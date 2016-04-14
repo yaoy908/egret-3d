@@ -1,31 +1,43 @@
 ﻿module egret3d {
+        
+    /**
+    * @private
+    */
     export class ParticleSpeedNode extends AnimationNode {
 
-        public speed: Vector3D = new Vector3D(0, 20, 0);
-        public type: number = ValueType.cube3D;
-        public parameters: any = [500, 500, 500];
+        public minSpeed: number = 200;
+        public maxSpeed: number = 500;
+
+        public minAccelerSpeed: number = 0;
+        public maxAccelerSpeed: number = 0;
 
         constructor() {
             super();
-            this.attributeName = "attribute_speed";
-            this.attributeLenght = 3;
+
+            var var0: GLSL.VarRegister = new GLSL.VarRegister();
+            var0.name = "attribute_speed";
+            var0.size = 2;
+            this.attributes.push(var0);
         }
 
         public buildGeomtry(geometry: Geometry, count: number) {
-            var positionArray: Vector3D[] = Value.calculate(count, this.type, this.parameters);
-            var position: Vector3D;
 
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
-            for (var i: number = 0; i < count; ++i) {
-                position = positionArray[i];
 
+
+            var var0: GLSL.VarRegister = this.attributes[0];
+
+            for (var i: number = 0; i < count; ++i) {
+
+                var speed: number = Math.random() * (this.maxSpeed - this.minSpeed) + this.minSpeed;
+                var acceler: number = Math.random() * (this.maxAccelerSpeed - this.minAccelerSpeed) + this.minAccelerSpeed;
                 for (var j: number = 0; j < vertices; ++j) {
                     index = i * vertices + j;
-                    index = index * geometry.vertexAttLength + this.offset;
-                    geometry.verticesData[index + 0] = position.x - 250;
-                    geometry.verticesData[index + 1] = position.y - 250;
-                    geometry.verticesData[index + 2] = position.z - 250;
+                    index = index * geometry.vertexAttLength + var0.offset;
+
+                    geometry.verticesData[index + 0] = speed;
+                    geometry.verticesData[index + 1] = acceler;
                 }
             }
         }
