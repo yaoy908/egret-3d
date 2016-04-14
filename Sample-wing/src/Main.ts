@@ -3,7 +3,7 @@ class Main extends egret.DisplayObjectContainer {
    
     public constructor() {
         super();
-        var sample = new SampleView3D ();
+        var sample = new SampleOrientationChange ();
     }
     
     
