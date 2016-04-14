@@ -1,25 +1,35 @@
 attribute vec3 attribute_offset;
-attribute float attribute_billboardXYZ;
 attribute vec3 attribute_lifecycle;
-attribute vec3 attribute_speed;
-attribute vec3 attribute_accele;
+attribute vec3 attribute_direction;
+attribute vec2 attribute_speed;
+
 
 uniform mat4 uniform_cameraMatrix;
 uniform float uniform_time;
+uniform float uniform_enableBillboardXYZ;
 
-vec3 position;
+uniform vec3 uniform_startColor;
+uniform vec3 uniform_endColor;
+
+uniform vec3 uniform_startScale;
+uniform vec3 uniform_endScale;
+
+vec4 position;
 float currentTime = 0.0;
 float totalTime = 0.0;
 
 void main(void) {
-	varying_color = vec4(1.0, 1.0, 1.0, 1.0); 
+	varying_color = vec4(1.0, 1.0, 1.0, 1.0);
+
+
+
 	mat4 billboardMatrix = mat4(
 						vec4(1.0, 0.0, 0.0, 0.0),
 						vec4(0.0, 1.0, 0.0, 0.0),
 						vec4(0.0, 0.0, 1.0, 0.0),
 						vec4(0.0, 0.0, 0.0, 1.0));
 
-	if (attribute_billboardXYZ == 111.0)
+	if (uniform_enableBillboardXYZ == 111.0)
 	{
 		billboardMatrix = mat4(
 				uniform_cameraMatrix[0],
@@ -29,7 +39,7 @@ void main(void) {
 	}
 	else
 	{
-		if (mod(attribute_billboardXYZ, 10.0) == 1.0)
+		if (mod(uniform_enableBillboardXYZ, 10.0) == 1.0)
 		{
 			billboardMatrix *= mat4(
 			vec4(1.0, 0.0, 0.0, 0.0),
@@ -38,7 +48,7 @@ void main(void) {
 			vec4(0.0, 0.0, 0.0, 1.0));
 		}
 	
-		if (mod(attribute_billboardXYZ, 100.0) / 10.0 > 1.0)
+		if (mod(uniform_enableBillboardXYZ, 100.0) / 10.0 > 1.0)
 		{
 			billboardMatrix *= mat4(
 				vec4(uniform_cameraMatrix[0].x, 0.0, uniform_cameraMatrix[0].z, 0.0),
@@ -47,7 +57,7 @@ void main(void) {
 				vec4(0.0, 0.0, 0.0, 1.0));
 		}
 		
-		if (attribute_billboardXYZ / 100.0 > 1.0)
+		if (uniform_enableBillboardXYZ / 100.0 > 1.0)
 		{
 			billboardMatrix *= mat4(
 				vec4(1.0, 0.0, 0.0, 0.0),
@@ -60,7 +70,7 @@ void main(void) {
 	mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; 
 	mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); 
 	varying_eyeNormal = normalize(normalMatrix * -attribute_normal); 
-	position = attribute_offset;
+	position = vec4(attribute_offset, 1.0);
 	outPosition = vec4(attribute_position, 1.0);
 	outPosition = billboardMatrix * outPosition;
 
@@ -92,11 +102,15 @@ void main(void) {
 
 	if (currentTime > 0.0)
 	{
-		position.xyz += currentTime * 0.001 * (attribute_speed + attribute_accele * currentTime * 0.001);
+		float t = currentTime * 0.001;
+		position.xyz += attribute_direction * (t * (attribute_speed.x + attribute_speed.y * t));
+		varying_color.xyz += (uniform_endColor - uniform_startColor) *  (currentTime / attribute_lifecycle.y);
 	}
-	outPosition.xyz += position;
 
-	outPosition = uniform_ViewMatrix * uniform_ModelMatrix * outPosition;
+
+	position = uniform_ModelMatrix * position;
+	outPosition.xyz += position.xyz;
+	outPosition = uniform_ViewMatrix * outPosition;
 
 	varying_ViewPose = outPosition.xyz / outPosition.w;
 }
