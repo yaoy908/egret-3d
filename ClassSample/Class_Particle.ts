@@ -21,19 +21,21 @@
             this.cameraCrl.distance = 1000;
 
             var mat: TextureMaterial = new TextureMaterial();
+            this.view1.addChild3D(new Mesh(new PlaneGeometry(1000, 1000), new TextureMaterial()));
 
-            var particle: ParticleSystem = new ParticleSystem(new CubeGeometry(100, 100, 0), mat, 100);
+            
+            var particle: ParticleEmitter = new ParticleEmitter(mat, 1000, 100, 100);
 
             this.view1.addChild3D(particle);
+            this.obj = particle;
 
-
-           this.view1.addChild3D(new Mesh(new PlaneGeometry(1000, 1000), new TextureMaterial()));
 
             var loadtex: URLLoader = new URLLoader("resource/effect/star_0004.png");
             loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
             loadtex["mat"] = mat;
         }
 
+        protected obj: Object3D;
         protected onLoadTexture(e: LoaderEvent3D) {
             e.loader["mat"].diffuseTexture = e.loader.data;
 
@@ -41,6 +43,7 @@
 
         public update(e: Event3D) {
             this.cameraCrl.update();
+            //this.obj.rotationY++;
         }
 
     }
