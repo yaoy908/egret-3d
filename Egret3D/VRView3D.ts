@@ -12,6 +12,7 @@
      */
     export class VRView3D extends View3D {
 
+
         protected leftViewPort: Rectangle;
         protected rightViewPort: Rectangle;
                 
@@ -26,9 +27,9 @@
         * @platform Web,Native
         */
         constructor(x: number, y: number, width: number, height: number) {
+            super(x, y, width, height, new Camera3D(CameraType.VR));
             this.leftViewPort = new Rectangle();
             this.rightViewPort = new Rectangle();
-            super(x, y, width, height, new Camera3D(CameraType.VR));
             this.updateViewport();
         }
 
@@ -133,6 +134,28 @@
             }
             View3D._contex3DProxy.clear(this._cleanParmerts);
             this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera);
+        }
+                
+        /**
+        * @language zh_CN
+        * 获取两只眼睛之间的距离
+        * @returns number 眼睛之间的距离
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get eyeDistance(): number {
+            return this._camera.eyeMatrix.eyeSpace;
+        }
+                
+        /**
+        * @language zh_CN
+        * 设置两只眼睛之间的距离
+        * @param eyeDis  两只眼睛之间的距离
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set eyeDistance(eyeDis: number) {
+            this._camera.eyeMatrix.eyeSpace = eyeDis;
         }
     }
 } 

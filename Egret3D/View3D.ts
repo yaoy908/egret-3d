@@ -53,10 +53,12 @@
             this._render = new DefaultRender();
             this._camera = camera || new Camera3D(CameraType.perspective);
 
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
+            this._viewPort.x = x;
+            this._viewPort.y = y;
+            this._viewPort.width = width;
+            this._viewPort.height = height;
+            this._aspectRatio = this._viewPort.width / this._viewPort.height;
+            this._camera.aspectRatio = this._aspectRatio;
         }
 
         public blender(cleanColor:boolean, cleanDepth:boolean) {

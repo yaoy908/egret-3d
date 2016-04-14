@@ -153,8 +153,8 @@
             this._cameraType = cameraType;
             switch (cameraType) {
                 case CameraType.orthogonal:
-                    ///this.projectMatrix.ortho(this._viewPort.width, this._viewPort.height, this._near, this._far);
-                    this.updataOrth();
+                    this.projectMatrix.ortho(this._viewPort.width, this._viewPort.height, this._near, this._far);
+                    //this.updataOrth();
                     break;
                 case CameraType.perspective:
                     this.projectMatrix.perspective(this._fovY, this._aspectRatio, this._near, this._far);
@@ -522,65 +522,65 @@
             }
         }
 
-        private _p: Vector3D = new Vector3D(); 
         private _halfw: number ; 
         private _halfh: number ; 
-        public object3DToScreenRay(n: Vector3D): Vector3D {
+        public object3DToScreenRay(n: Vector3D,target:Vector3D): Vector3D {
 
             this._halfw = this.viewPort.width * 0.5;
             this._halfh = this.viewPort.height * 0.5; 
 
-            this._p = this.modelMatrix.transformVector(n, this._p);
-            this._p = this.project(this._p);
+            target = this.viewMatrix.transformVector(n, target);
+            this.project(target, target);
 
-            this._p.x = this._halfw + this._p.x * this._halfw ;
-            this._p.y = this._halfh - this._p.y * this._halfh;
-            return this._p ;
+            target.x = this._halfw + target.x * this._halfw ;
+            target.y = this.viewPort.height - (this._halfh - target.y * this._halfh);
+            return target ;
         }
 
-        public ScreenRayToObject3D(n: Vector3D): Vector3D {
+        public ScreenRayToObject3D(n: Vector3D, target: Vector3D): Vector3D {
 
             this._halfw = this.viewPort.width * 0.5;
             this._halfh = this.viewPort.height * 0.5; 
 
-            this._p.x = (n.x - this._halfw) / this._halfw;
-            this._p.y = (this._halfh - n.y) / this._halfh;
+            target.x = (n.x - this._halfw) / this._halfw;
+            target.y = (this._halfh - (this.viewPort.height - n.y)) / this._halfh;
 
-            this._p = this.unproject(this._p.x, this._p.y, n.z);
-            this.sceneTransform.transformVector(this._p, this._p);
+            this.unproject(target.x, target.y, n.z, target);
+            this.sceneTransform.transformVector(target, target);
 
-            return this._p; 
+            return target; 
         }
 
         private v: Vector3D = new Vector3D(); 
-        private unproject(nX: number, nY: number, sZ: number): Vector3D {
-           this.v.x = nX;
-           this.v.y = -nY;
-           this.v.z = sZ;
-           this.v.w = 1.0;
+        private p: Vector3D = new Vector3D(); 
+        private unproject(nX: number, nY: number, sZ: number,target:Vector3D): Vector3D {
+            target.x = nX;
+            target.y = -nY;
+            target.z = sZ;
+            target.w = 1.0;
 
-           this.v.x *= sZ;
-           this.v.y *= sZ;
+            target.x *= sZ;
+            target.y *= sZ;
 
-           this._unprojection.copyFrom(this.projectMatrix);
-           this._unprojection.invert();
+            this._unprojection.copyFrom(this.projectMatrix);
+            this._unprojection.invert();
 
-           this._unprojection.transformVector(this.v,this.v);
+            this._unprojection.transformVector(target, target);
 
-           this.v.z = sZ;
+            target.z = sZ;
 
-           return this.v;
+            return target;
         }
 
-        private project(n:Vector3D):Vector3D
+        private project(n:Vector3D,target:Vector3D):Vector3D
 		{
-            this._p = this.projectMatrix.transformVector(n);
-            this._p.x = this._p.x / this._p.w;
-            this._p.y = -this._p.y / this._p.w;
+            target = this.projectMatrix.transformVector(n);
+            target.x = target.x / target.w;
+            target.y = -target.y / target.w;
 
-            this._p.z = n.z;
+            target.z = n.z;
 
-            return this._p;
+            return target;
         }
     }
 } 

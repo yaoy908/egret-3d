@@ -30,6 +30,12 @@
 
         /**
          * @language zh_CN
+         * @private
+         */
+        public arrayBuffer: ArrayBuffer;
+
+        /**
+         * @language zh_CN
          * 构造
          * @param buffer webglbuffer
          */

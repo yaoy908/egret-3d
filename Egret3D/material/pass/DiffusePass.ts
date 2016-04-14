@@ -30,8 +30,13 @@
             this._passUsage.fragmentShader.addUseShaderName("materialSource_fs");
 
             if (animation) {
-                this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
-                this._passUsage.vertexShader.addUseShaderName("skeleton_vertex");
+                if (animation.skeletonAnimationController) {
+                    this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
+                    this._passUsage.vertexShader.addUseShaderName("skeleton_vertex");
+                }
+                else if (animation.particleAnimationController) {
+                    this._passUsage.vertexShader.addUseShaderName("particle_vs");
+                }
             }
             else {
                 this._passUsage.vertexShader.addUseShaderName("diffuse_vertex");
@@ -70,16 +75,22 @@
                 this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
             }
 
+            if (this.methodList) {
+                for (var i: number = 0; i < this.methodList.length; i++) {
+                    this.methodList[i].materialData = this._materialData; 
+                    for (var j: number = 0; j < this.methodList[i].vsShaderList.length; j++) {
+                        this._passUsage.vertexShader.addUseShaderName(this.methodList[i].vsShaderList[j]);
+                    }
+                    for (var j: number = 0; j < this.methodList[i].fsShaderList.length; j++) {
+                        this._passUsage.fragmentShader.addUseShaderName(this.methodList[i].fsShaderList[j]);
+                    }
+                }
+            }
 
             this._passUsage.vertexShader.addEndShaderName("end_vs");
             this._passUsage.fragmentShader.addEndShaderName("end_fs");
 
-            if (this.methodList) {
-                for (var i: number = 0; i < this.methodList.length; i++) {
-                    this._passUsage.vertexShader.addUseShaderName(this.methodList[i].vsShaderName);
-                    this._passUsage.fragmentShader.addUseShaderName(this.methodList[i].fsShaderName);
-                }
-            }
+  
         }
     }
 } 

@@ -44,6 +44,14 @@
         private _speed: number = 3;
         private _xAngle: number = 0;
 
+        private _ctl: boolean = false; 
+        private _alt: boolean = false; 
+        private _shift: boolean = false; 
+
+        private _needctl: boolean = false;
+        private _needalt: boolean = false;
+        private _needshift: boolean = false; 
+
         private _keyArray: Array<boolean> = new Array<boolean>();
 
         /**
@@ -68,9 +76,12 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(targetObject: Object3D = null, lookAtObject: Object3D = null)
+        constructor(targetObject: Object3D = null, lookAtObject: Object3D = null, needCtl: boolean = false,needAlt:boolean=false)
         {
             super(targetObject);
+
+            this._needctl = needCtl;
+            this._needalt = needAlt;
 
             this._keyArray.push(false);
             this._keyArray.push(false);
@@ -100,10 +111,11 @@
             Input.addEventListener(TouchEvent3D.TOUCH_END, this.touchUp, this);
             Input.addEventListener(TouchEvent3D.TOUCH_START, this.touchDown, this);
             Input.addEventListener(TouchEvent3D.TOUCH_MOVE, this.touchMove, this);
+
         }
 
         private mouseMove(m: MouseEvent3D) {
-            if (this._mouseDown) {
+            if (this._mouseDown && (this._needctl ? this._ctl : true)) {
                 this._rotaAngle.y += Input.mouseOffsetX;
                 this._rotaAngle.x += Input.mouseOffsetY;
 
@@ -169,6 +181,12 @@
                 case KeyCode.Key_D:///d
                     this._keyArray[3] = true;
                     break;
+                case KeyCode.Key_Control_L:///d
+                    this._ctl = true;
+                    break;
+                case KeyCode.Key_Alt_L:///d
+                    this._alt = true;
+                    break;
             }
         }
 
@@ -185,6 +203,12 @@
                     break;
                 case KeyCode.Key_D:///d   
                     this._keyArray[3] = false;
+                    break;
+                case KeyCode.Key_Control_L:///d
+                    this._ctl = false;
+                    break;
+                case KeyCode.Key_Alt_L:///d
+                    this._alt = false;
                     break;
             }
         }

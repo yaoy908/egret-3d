@@ -164,9 +164,12 @@
             window.addEventListener("touchcancel", (e: TouchEvent) => this.touchEnd(e), true);
 
             //window.addEventListener("deviceorientation", (e: DeviceOrientationEvent) => this.ondeviceorientation(e), true);
+            //window.addEventListener("deviceorientation", (e: DeviceOrientationEvent) => this.ondeviceorientation(e), true);
 
             //window.addEventListener("devicemotion", (e: DeviceMotionEvent) => this.detectShake(e), true);
+            //window.addEventListener("devicemotion", (e: DeviceMotionEvent) => this.detectShake(e), true);
 
+            //window.addEventListener("resize", (e: UIEvent) => this.onWindowsResize(e));
             window.addEventListener("resize", (e: UIEvent) => this.onWindowsResize(e), true);
 
             window.addEventListener("orientationchange", (e: Event) => this.onOrientationChange(e), true);
@@ -175,6 +178,7 @@
 
             window.addEventListener("deviceorientation", (e: DeviceOrientationEvent) => this.onDeviceOrientation(e), true);
 
+           
         }
 
 

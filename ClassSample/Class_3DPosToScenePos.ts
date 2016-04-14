@@ -1,6 +1,6 @@
 ﻿module egret3d {
     export class Class_3DPosToScenePos extends Class_View3D {
-
+        private cameraCtl: LookAtController;
         private cube: Mesh;
         private cube2: Mesh;
         private view: View3D;
@@ -23,14 +23,19 @@
             this.view.addChild3D(this.cube);
             this.view.addChild3D(this.cube2);
 
+            this.cameraCtl = new LookAtController(this.view.camera3D, new Object3D());
+            this.cameraCtl.distance = 1000;
+            this.cameraCtl.rotationX = 60;
 
             this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
+
         }
 
         private angle: number = 0;
         private tmpPos: Vector3D = new Vector3D();
         public update(e: Event3D) {
+            this.cameraCtl.update();
             this.angle+=0.01;
             this.cube.x = Math.sin(this.angle % 360) * 100;
             this.cube.y = Math.cos(this.angle % 360) * 100;
@@ -39,9 +44,9 @@
             this.tmpPos.x = this.cube.x;
             this.tmpPos.y = this.cube.y;
             this.tmpPos.z = this.cube.z;
-            var scenePos: Vector3D = this.view.camera3D.object3DToScreenRay(this.tmpPos);
+            //var scenePos: Vector3D = this.view.camera3D.object3DToScreenRay(this.tmpPos);
 
-            this.tmpPos = this.view.camera3D.ScreenRayToObject3D( scenePos );
+            //this.tmpPos = this.view.camera3D.ScreenRayToObject3D( scenePos );
 
             console.log(this.cube.x, this.cube.y, this.cube.z, " -- ", this.tmpPos.x, this.tmpPos.y, this.tmpPos.z);
 

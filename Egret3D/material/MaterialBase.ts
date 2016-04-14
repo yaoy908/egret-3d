@@ -561,13 +561,13 @@
             return this.materialData.repeat;
         }
         /**
-         * @language zh_CN
-         * 设置材质 bothside 值。
-        * 设置材质是否显示双面的开关，一般情况不需要。
-         * @param value {boolean}
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
+        * @language zh_CN
+        * 设置材质 bothside 值。
+        * 设置材质是否显示双面的开关。
+        * @param value {boolean}
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set bothside(val: boolean) {
             this.materialData.bothside = val;
         }

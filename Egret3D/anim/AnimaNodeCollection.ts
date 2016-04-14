@@ -18,7 +18,17 @@
         * 动画节点容器
         * @priavte 
         */
-        public nodes: Array<AnimNodeBase> = new Array<AnimNodeBase>();
+        public nodes: Array<AnimationNode> = new Array<AnimationNode>();
+
+        public enableBillboardX: boolean = true;
+
+        public enableBillboardY: boolean = true;
+
+        public enableBillboardZ: boolean = true;
+
+        public startColor: Vector3D = new Vector3D(1, 1, 1);
+
+        public endColor: Vector3D = new Vector3D(1, 1, 1);
 
         /**
         * @language zh_CN
@@ -52,7 +62,7 @@
         * @priavte 
         */
         constructor() {
-            this.nodes = new Array<AnimNodeBase>();
+            this.nodes = new Array<AnimationNode>();
         }
 
         /**
@@ -61,7 +71,7 @@
         * 添加继承 animNodeBase 功能节点 例如粒子的 加速度功能节点，匀速功能节点
         * @param node 节点对象
         */
-        public addNode(node: AnimNodeBase) {
+        public addNode(node: AnimationNode) {
             this.nodes.push(node);
         }
 
@@ -71,7 +81,7 @@
         * 删除指定的动画功能节点，但是不能动态删除，需要进行 功能重置
         * @param node 节点对象
         */
-        public removeNode(node: AnimNodeBase) {
+        public removeNode(node: AnimationNode) {
             var index: number = this.nodes.indexOf(node);
             if (index != -1)
                 this.nodes.splice(index, 1);
@@ -83,38 +93,8 @@
         * 获取整体的功能节点列表
         * @return 节点容器
         */
-        public getNodes(): Array<AnimNodeBase> {
+        public getNodes(): Array<AnimationNode> {
             return this.nodes;
-        }
-
-        /**
-        * @language zh_CN
-        * 获取节点顶点Shader
-        * @return 顶点Shader容器
-        * @private 
-        */
-        public getNodesVertexShaders(): Array<string> {
-            var shaderNames: string[] = [];
-            for (var i: number = 0; i < this.nodes.length; i++) {
-                if (this.nodes[i].vertexShader != "" && this.nodes[i].vertexShader != undefined && this.nodes[i].vertexShader != null)
-                    shaderNames.push(this.nodes[i].vertexShader);
-            }
-            return shaderNames;
-        }
-
-        /**
-        * @language zh_CN
-        * 获取节点片元Shader
-        * @return 片元Shader容器
-        * @private 
-        */
-        public getNodesFragmentShaders(): Array<string> {
-            var shaderNames: string[] = [];
-            for (var i: number = 0; i < this.nodes.length; i++) {
-                if (this.nodes[i].fragmentShader != "" && this.nodes[i].fragmentShader != undefined && this.nodes[i].fragmentShader != null)
-                    shaderNames.push(this.nodes[i].fragmentShader);
-            }
-            return shaderNames;
         }
 
         /**
@@ -122,17 +102,18 @@
         * 计算节点
         * @private 
         */
-        public calculateNode() {
-            ///init data to updata gpu
-            ///this.vertexInfos = this.vertexInfos || new Array<VertexInfo>();
-            ///this.vertexInfos.length = 0; 
-            var offset: number = 4 + 3 + 2;
+        public calculate(start: number) {
+            var offset: number = start;
             for (var i: number = 0; i < this.nodes.length; i++) {
-                if (this.nodes[i].usageAttributeLen > 0) {
-                    this.nodes[i].offset = offset;
-                    this.nodes[i].offsetBytes = offset * Float32Array.BYTES_PER_ELEMENT;
-                    offset += this.nodes[i].usageAttributeLen;
+
+                for (var j: number = 0; j < this.nodes[i].attributes.length; ++j) {
+                    if (this.nodes[i].attributes[j].size > 0) {
+                        this.nodes[i].attributes[j].offset = offset;
+                        this.nodes[i].attributes[j].stride = offset * Float32Array.BYTES_PER_ELEMENT;
+                        offset += this.nodes[i].attributes[j].size;
+                    }
                 }
+              
             }
 
             this.numberOfVertices = offset;

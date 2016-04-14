@@ -23,12 +23,13 @@
         "events/EventManager.ts",
 
         "anim/IAnimation.ts",
-        "anim/AnimNodeBase.ts",
+        "anim/AnimationNode.ts",
         "anim/AnimaNodeCollection.ts",
         "anim/skeletonAnimation/Joint.ts",
         "anim/skeletonAnimation/Skeleton.ts",
         "anim/skeletonAnimation/SkeletonAnimation.ts",
         "anim/skeletonAnimation/SkeletonAnimationClip.ts",
+        "anim/particle/ParticleAnimation.ts",
 
         "audio/Channel.ts",
         "audio/Channel3d.ts",
@@ -120,7 +121,8 @@
 
         "material/pass/MethodData.ts",
         "material/method/MethodBase.ts",
-
+        "material/method/TerrainARGBMethod.ts",
+        
         "material/pass/PassUsage.ts",
         "material/MaterialData.ts",
 
@@ -137,6 +139,13 @@
 
         "render/RenderBase.ts",
         "render/DefaultRender.ts",
+
+        "particle/Value.ts",
+        "particle/ParticleEmitter.ts",
+        "particle/particleNode/ParticlePositionNode.ts",
+        "particle/particleNode/ParticleLifecycleNode.ts",
+        "particle/particleNode/ParticleDirectionNode.ts",
+        "particle/particleNode/ParticleSpeedNode.ts",
 
         "scene/Scene3D.ts",
         "scene/TreeBase.ts",
@@ -181,6 +190,5 @@
 
         "View3D.ts",
         "Egret3DCanvas.ts"
-            
     ]
 }	
