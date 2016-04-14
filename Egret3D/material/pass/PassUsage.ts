@@ -230,6 +230,14 @@
 
         public uniform_endColor: GLSL.Uniform;
 
+        public uniform_startScale: GLSL.Uniform;
+
+        public uniform_endScale: GLSL.Uniform;
+
+        public uniform_startRot: GLSL.Uniform;
+
+        public uniform_endRot: GLSL.Uniform;
+
         /**
          * @language zh_CN
          */

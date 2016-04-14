@@ -128,12 +128,12 @@
         * @version Egret 3.0
         * @platform Web,Native 
         */
-        constructor(geometry: Geometry, material: MaterialBase, count: number) {
+        constructor(material: MaterialBase, count: number = 100, width: number = 100, height: number = 100) {
             super(null, material);
             this.animation = new ParticleAnimation(this.nodeCollection);
 
-            this.geomNode = geometry;
             this.count = count;
+            this.geomNode = new PlaneGeometry(width, height, 1, 1, 1, 1, 1);
             this.geometry = new Geometry();
             this.createNode();
             this.geometry.nodeCollection = this.nodeCollection;
@@ -402,8 +402,81 @@
                 return [this._speed_node.minAccelerSpeed, this._speed_node.maxAccelerSpeed];
             }
         }
+                                                
+        /**
+        * @language zh_CN
+        * 设置粒子初始旋转
+        * @param rot 旋转角度值
+        * @version Egret 3.0
+        * @platform Web,Native 
+        */
+        public setStartRot(rot: Vector3D) {
+            this.nodeCollection.startRot.copyFrom(rot);
+        }
+
+        /**
+        * @language zh_CN
+        * 设置粒子初始旋转
+        * @param x X旋转角度值
+        * @param y Y旋转角度值
+        * @param z Z旋转角度值
+        * @version Egret 3.0
+        * @platform Web,Native 
+        */
+        public setStartRotXYZ(x:number , y:number, z:number) {
+            this.nodeCollection.startRot.setTo(x, y, z);
+        }
+
+                                                        
+        /**
+        * @language zh_CN
+        * 获取粒子初始旋转
+        * @returns Vector3D 旋转角度值
+        * @version Egret 3.0
+        * @platform Web,Native 
+        */
+        public getStartRot():Vector3D {
+            return this.nodeCollection.startRot;
+        }
+
+                                                        
+        /**
+        * @language zh_CN
+        * 设置粒子死亡时旋转
+        * @param rot 旋转角度值
+        * @version Egret 3.0
+        * @platform Web,Native 
+        */
+        public setEndRot(rot: Vector3D) {
+            this.nodeCollection.endRot.copyFrom(rot);
+        }
+
+        /**
+        * @language zh_CN
+        * 设置粒子死亡时旋转
+        * @param x X旋转角度值
+        * @param y Y旋转角度值
+        * @param z Z旋转角度值
+        * @version Egret 3.0
+        * @platform Web,Native 
+        */
+        public setEndRotXYZ(x: number, y: number, z: number) {
+            this.nodeCollection.endRot.setTo(x, y, z);
+        }
+                                                                
+        /**
+        * @language zh_CN
+        * 获取粒子死亡时旋转
+        * @returns Vector3D 旋转角度值
+        * @version Egret 3.0
+        * @platform Web,Native 
+        */
+        public getEndRot(): Vector3D {
+            return this.nodeCollection.endRot;
+        }
 
         protected createNode() {
+
 
             this._position_node.parameters = [500, 500, 500];
             this._lifecycle_node.startRange = [0, 1000];

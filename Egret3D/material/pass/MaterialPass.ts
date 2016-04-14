@@ -326,6 +326,22 @@
                     if (this._passUsage.uniform_endColor) {
                         context3DProxy.uniform3f(this._passUsage.uniform_endColor.uniformIndex, animtion.animaNodeCollection.startColor.x, animtion.animaNodeCollection.endColor.y, animtion.animaNodeCollection.endColor.z);
                     }
+
+                    //if (this._passUsage.uniform_startScale) {
+                    //    context3DProxy.uniform3f(this._passUsage.uniform_startScale.uniformIndex, animtion.animaNodeCollection.startScale.x, animtion.animaNodeCollection.startScale.y, animtion.animaNodeCollection.startScale.z);
+
+                    //}
+                    //if (this._passUsage.uniform_endScale) {
+                    //    context3DProxy.uniform3f(this._passUsage.uniform_endScale.uniformIndex, animtion.animaNodeCollection.endScale.x, animtion.animaNodeCollection.endScale.y, animtion.animaNodeCollection.endScale.z);
+                    //}
+
+                    if (this._passUsage.uniform_startRot) {
+                        context3DProxy.uniform3f(this._passUsage.uniform_startRot.uniformIndex, animtion.animaNodeCollection.startRot.x, animtion.animaNodeCollection.startRot.y, animtion.animaNodeCollection.startRot.z);
+
+                    }
+                    if (this._passUsage.uniform_endRot) {
+                        context3DProxy.uniform3f(this._passUsage.uniform_endRot.uniformIndex, animtion.animaNodeCollection.endRot.x, animtion.animaNodeCollection.endRot.y, animtion.animaNodeCollection.endRot.z);
+                    }
                 }
             }
 

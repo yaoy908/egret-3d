@@ -30,6 +30,14 @@
 
         public endColor: Vector3D = new Vector3D(1, 1, 1);
 
+        public startScale: Vector3D = new Vector3D(1, 1, 1);
+
+        public endScale: Vector3D = new Vector3D(1, 1, 1);
+
+        public startRot: Vector3D = new Vector3D();
+
+        public endRot: Vector3D = new Vector3D(0, 360, 0);
+
         /**
         * @language zh_CN
         * 顶点数
