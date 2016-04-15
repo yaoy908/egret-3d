@@ -1,4 +1,8 @@
 ﻿module egret3d {
+    
+    /**
+    * @private
+    */
     export class MeshData {
         public mesh: Mesh;
 
@@ -22,6 +26,9 @@
         }
     }
 
+    /**
+    * @private
+    */
     export class LocalAxis extends Object3D {
 
         private _xyz: MeshData[] = [];
