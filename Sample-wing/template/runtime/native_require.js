@@ -11,6 +11,7 @@ var game_file_list = [
 	"bin-debug/SampleCreateCube.js",
 	"bin-debug/SampleCubeTransform.js",
 	"bin-debug/SampleCullMode.js",
+	"bin-debug/SampleDeviceMotion.js",
 	"bin-debug/SampleDirLight.js",
 	"bin-debug/SampleEgret3DCanvas.js",
 	"bin-debug/SampleEvent.js",
@@ -21,6 +22,8 @@ var game_file_list = [
 	"bin-debug/SampleStaticModel.js",
 	"bin-debug/SampleTextureCube.js",
 	"bin-debug/SampleView3D.js",
+	"bin-debug/SampleDeviceOrientation.js",
+	"bin-debug/SampleOrientationChange.js",
 	//----auto game_file_list end----
 ];
 
