@@ -82,8 +82,8 @@
         * @param min
         * @param max
         */
-        constructor(min: Vector3D = new Vector3D(), max: Vector3D = new Vector3D()) {
-            super();
+        constructor(owner:Object3D = null, min: Vector3D = new Vector3D(), max: Vector3D = new Vector3D()) {
+            super(owner);
             this.min.copyFrom(min);
             this.max.copyFrom(max);
             this.calculateBox();

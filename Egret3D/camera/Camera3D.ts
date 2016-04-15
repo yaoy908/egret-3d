@@ -474,6 +474,8 @@
          * @platform Web,Native
          */
         public isVisibleToCamera(renderItem: IRender): boolean {
+            //尝试刷新modelMatrix的值，有可能changed为true
+            renderItem.modelMatrix;
             return renderItem.bound.inBound(this.frustum);
         }
         

@@ -124,6 +124,10 @@
             return false;
         }
 
+        protected onUpdateTransform() {
+            this._aabbBox.setOffset(this._pos);
+        }
+       
 
         /**
         * @language zh_CN
@@ -218,7 +222,7 @@
         * 生成包围盒
         */
         protected buildBoundBox(): Bound {
-            var bound: BoundBox = new BoundBox();
+            var bound: BoundBox = new BoundBox(this);
             bound.min.copyFrom(new Vector3D(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE));
             bound.max.copyFrom(new Vector3D(-Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE));
             for (var i: number = 0; i < this.geometry.verticesData.length; i += this.geometry.vertexAttLength) {
@@ -244,7 +248,7 @@
             }
 
             bound.fillBox(bound.min, bound.max);
-            bound.childBound = new BoundBox();
+            bound.childBound = new BoundBox(this);
             var max: Vector3D = new Vector3D();
             var min: Vector3D = new Vector3D();
 
@@ -287,12 +291,6 @@
 
         }
 
-
-        public set position(vec: Vector3D) {
-            this._aabbBox.setOffset(vec);
-            this.updateTransformChange(true);
-            this._pos.copyFrom(vec);
-        }
 
        
     }

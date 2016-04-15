@@ -48,7 +48,7 @@
             for (var i: number = 0; i < 6; ++i) {
                 this._plane.push(new Plane3D());
             }
-            this.box = new BoundBox(new Vector3D(), new Vector3D());
+            this.box = new BoundBox(null, new Vector3D(), new Vector3D());
             ///this.box = new CubeBoxBound(new Vector3D(99999.0, 99999.0, 99999.0), new Vector3D(-99999.0, -99999.0, -99999.0));
             this.center = new Vector3D();
         }
@@ -237,7 +237,7 @@
                 var incount: number = box.vexData.length / 3;
                 for (var j: number = 0; j < box.vexData.length; j += 3) {
                     temp.setTo(box.vexData[j], box.vexData[j + 1], box.vexData[j + 2]);
-                    temp.copyFrom(box.Transform.transformVector(temp));
+                    temp.copyFrom(box.transform.transformVector(temp));
                     dis = this._plane[i].distance(temp);
                     if (dis > 0) {
                         incount--;
