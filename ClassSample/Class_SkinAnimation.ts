@@ -21,9 +21,9 @@
             load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoad, this);
 
 
-            var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));
-            dirLight.diffuse = 0xffffff;
-            this.lights.addLight(dirLight);
+            //var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));
+            //dirLight.diffuse = 0xffffff;
+            //this.lights.addLight(dirLight);
 
             //var po: PointLight = new PointLight(0xffffff);
             //po.y = 200;
@@ -39,7 +39,6 @@
             this.cameraCtl.distance = 1000;
             this.cameraCtl.rotationX = 60;
 
-            this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
         }
 

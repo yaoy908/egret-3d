@@ -307,7 +307,9 @@
             }
 
             if (animtion) {
-                context3DProxy.uniform1f(this._passUsage.uniform_time.uniformIndex, animtion.time);
+                if (this._passUsage.uniform_time) {
+                    context3DProxy.uniform1f(this._passUsage.uniform_time.uniformIndex, animtion.time);
+                }
 
                 if (animtion.skeletonAnimationController) {
                     context3DProxy.uniform4fv(this._passUsage.uniform_PoseMatrix.uniformIndex, animtion.skeletonAnimationController.currentSkeletonMatrixData);

@@ -4,7 +4,7 @@
     */
     export class ParticlePositionNode extends AnimationNode {
 
-        public type: number = EmitterType.ET_CUBE;
+        public type: number = EmitterType.ET_CYLINDER;
         public parameters: any = [500, 500, 500];
 
         constructor() {
@@ -18,8 +18,22 @@
 
         protected getType(): number {
             switch (this.type) {
+                case EmitterType.ET_LINE:
+                    return ValueType.line;
+                case EmitterType.ET_PLANE:
+                    return ValueType.plane;
+                case EmitterType.ET_CUBE_PLANE:
+                    return ValueType.cube3D;
                 case EmitterType.ET_CUBE:
                     return ValueType.cube3D;
+                case EmitterType.ET_SPHERE_PLANE:
+                    return ValueType.sphere_plane;
+                case EmitterType.ET_SPHERE:
+                    return ValueType.sphere;
+                case EmitterType.ET_CYLINDER_PLANE:
+                    return ValueType.cylinder;
+                case EmitterType.ET_CYLINDER:
+                    return ValueType.cylinder;
             }
             return ValueType.cube3D;
         }

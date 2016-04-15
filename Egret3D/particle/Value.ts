@@ -5,6 +5,7 @@
         cube3D,
         plane,
         sphere,
+        sphere_plane,
         cone,
         triangle,
         cylinder,
@@ -85,27 +86,6 @@
                 pos.z = 0;
                 values.push(pos);
             }
-            return values;
-        }
-    }
-
-    class SphereValueShape extends ValueShape {
-        public calculate(num: number, ...parameters): any {
-            var values: Vector3D[] = [];
-            return values;
-        }
-    }
-
-    class ConeValueShape extends ValueShape {
-        public calculate(num: number, ...parameters): any {
-            var values: Vector3D[] = [];
-            return values;
-        }
-    }
-
-    class TriangleValueShape extends ValueShape {
-        public calculate(num: number, ...parameters): any {
-            var values: Vector3D[] = [];
             return values;
         }
     }
@@ -308,18 +288,17 @@
         }
     }
 
-    class CurveVauleShape extends ValueShape {
-    }
-
-    class BezierValueShape extends ValueShape {
-    }
-
     export class Value {
         private emitter: any = {};
         private static _instance: Value = new Value();
         constructor() {
             this.emitter[ValueType.constValue] = new ConstValueShape();
+            this.emitter[ValueType.line] = new LineValueShape();
+            this.emitter[ValueType.plane] = new PlaneValueShape();
             this.emitter[ValueType.cube3D] = new CubeVector3DValueShape();
+            this.emitter[ValueType.sphere] = new BallValueShape();
+            this.emitter[ValueType.sphere_plane] = new BallSurfaceValueShape();
+            this.emitter[ValueType.cylinder] = new CylinderValueShape();
         }
 
         public static calculate(count: number, type: ValueType, parameters: any):Array<any> {
