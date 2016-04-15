@@ -1,8 +1,3 @@
-attribute vec3 attribute_position ;
-attribute vec3 attribute_normal ;
-attribute vec2 attribute_uv0 ;
-attribute vec4 attribute_color ;
-
 uniform mat4 uniform_ModelMatrix ;
 uniform mat4 uniform_ViewMatrix ;
 uniform mat4 uniform_ProjectionMatrix ;
@@ -13,6 +8,7 @@ varying vec2 varying_uv0;
 varying vec4 varying_color;
 
 vec4 outPosition ;
+vec3 outNormal;
 
 mat3 transpose(mat3 m) {
   return mat3(m[0][0], m[1][0], m[2][0],
@@ -37,6 +33,7 @@ mat3 inverse(mat3 m) {
 }
 
 void main(void){
-   varying_color = attribute_color;
-   varying_uv0 = attribute_uv0;
+   varying_color = vec4(1.0, 1.0, 1.0, 1.0);
+   varying_uv0 = vec2(0.0, 0.0);
+   outNormal = vec3(0.0, 0.0, 0.0);
 }

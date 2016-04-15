@@ -16,7 +16,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public initUseMethod(animation: IAnimation) {
+        public initUseMethod(animation: IAnimation, geom: Geometry) {
             this._passChange = false;
 
             this._materialData.textureMethodTypes.push(TextureMethodType.color);
