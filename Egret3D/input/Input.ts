@@ -629,7 +629,7 @@
             this._orientationEvent3d.eventType = OrientationEvent3D.ORIENTATION_CHANGE;
             this.dispatchEvent(this._orientationEvent3d);
         }
-        public onDeviceMotion(e: DeviceMotionEvent): void {
+        private onDeviceMotion(e: DeviceMotionEvent): void {
             this._orientationEvent3d.target = this;
             this._orientationEvent3d.eventType = OrientationEvent3D.DEVICE_MOTION;
             this._orientationEvent3d.acceleration = e.acceleration;
@@ -637,7 +637,7 @@
             this._orientationEvent3d.rotationRate = e.rotationRate;
             this.dispatchEvent(this._orientationEvent3d);
         }
-        public onDeviceOrientation(e: DeviceOrientationEvent): void {
+        private onDeviceOrientation(e: DeviceOrientationEvent): void {
             this._orientationEvent3d.target = this;
             this._orientationEvent3d.eventType = OrientationEvent3D.DEVICE_ORIENTATION;
             this._orientationEvent3d.absolute = e.absolute;
@@ -646,7 +646,6 @@
             this._orientationEvent3d.gamma = e.gamma;
             this.dispatchEvent(this._orientationEvent3d);
         }
-
 
         //返回角度
         private GetSlideAngle(dx, dy) {

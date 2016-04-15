@@ -13,6 +13,7 @@
         constructor(texture: ITexture) {
             super();
             this.fsShaderList.push("lightMap_fs");
+            this.methodType = TextureMethodType.diffuse; 
             this.lightTexture = texture;
         }
 
