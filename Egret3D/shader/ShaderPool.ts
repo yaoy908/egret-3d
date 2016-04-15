@@ -19,20 +19,23 @@
         }
 
         public static getGPUShader( shaderType:number , shaderID:string , source:string ):Shader {
-            var shader: Shader;
-            if (this.vsShaderHashMap.isHas(shaderID))
-                shader = this.vsShaderHashMap.getValue(shaderID);
-            else {
+            var shader: Shader = this.vsShaderHashMap.getValue(shaderID);
+            if (!shader) {
+                shader = this.fsShaderHashMap.getValue(shaderID);
+            }
+
+            if (!shader) {
                 if (shaderType == Shader.vertex) {
                     shader = this.context.creatVertexShader(source);
                     shader.id = shaderID;
                     this.vsShaderHashMap.add(shaderID, shader);
                 } else if (shaderType == Shader.fragment) {
                     shader = this.context.creatFragmentShader(source);
-                    shader.id = shaderID; 
+                    shader.id = shaderID;
                     this.fsShaderHashMap.add(shaderID, shader);
                 }
             }
+
             return shader;
         }
 

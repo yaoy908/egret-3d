@@ -36,7 +36,7 @@
 
         public startRot: Vector3D = new Vector3D();
 
-        public endRot: Vector3D = new Vector3D(0, 360, 0);
+        public endRot: Vector3D = new Vector3D();
 
         /**
         * @language zh_CN
