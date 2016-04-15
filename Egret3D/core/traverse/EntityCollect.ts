@@ -1,5 +1,5 @@
 ﻿module egret3d {
-            
+
     /**
     * @private
     * @class egret3d.EntityCollect
@@ -251,7 +251,6 @@
             if (!child.visible) {
                 return;
             }
-
             if ( child["material"] )
                 this.addRenderList(<IRender>child, camera);
 
@@ -260,6 +259,13 @@
             }
         }
 
+        /**
+        * @language zh_CN
+        * 尝试将一个渲染对象，进行视锥体裁剪，放入到渲染队列中
+        * @param root 渲染根节点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         private addRenderList(renderItem: IRender, camera: Camera3D) {
 
             if (renderItem.enableCulling) {
@@ -293,17 +299,28 @@
         */
         public update(camera: Camera3D) {
             super.update(camera);
-            this.renderList.length = 0;
             this.mousePickList.length = 0;
-
             this.clearLayerList();
-            var box: BoundBox = camera.frustum.box;
 
-            var quadList:Array<IQuadNode> = this.rootScene.quad.getNodesByAABB(box.min.x, box.min.z, box.max.x, box.max.z);
-           
-            this.appendQuadList(quadList, camera);
+            if (this.rootScene.quad) {
+                var box: BoundBox = camera.frustum.box;
+                var quadList: Array<IQuadNode> = this.rootScene.quad.getNodesByAABB(box.min.x, box.min.z, box.max.x, box.max.z);
+                //var time3: number = new Date().getTime();
+                this.appendQuadList(quadList, camera);
+                //var time4: number = new Date().getTime();
+                //console.log("200/" + quadList.length + "/" + this.renderList.length, "time:" + (time2 - time1) + "/" + (time4 - time2) + "(" + (time3 - time2) + "," + (time4 - time3) + ")");
+            }
+            else {
+                this.applyRender(this.rootScene.root, camera);
+            }
 
-           // console.log("total 500:", quadList.length, this.renderList.length);
+
+
+
+
+
+
+
 
             //for (var i: number = 0; i < this._tags.length; ++i) {
             //    this._tags[i].clearDepth = true;
@@ -320,10 +337,20 @@
             //}
         }
 
+        /**
+        * @language zh_CN
+        * 根据当前场景的节点分布情况，生成四叉树
+        * @version Egret 3.0
+        * @param quadList   需要被判定是否在视锥体里的节点列表
+        * @param camera     相机
+        * @platform Web,Native
+        */
         private appendQuadList(quadList: Array<IQuadNode>, camera: Camera3D) {
             var mesh: Mesh;
             var node: IQuadNode;
             for (node of quadList) {
+                if (!(node instanceof Mesh))
+                    continue;
                 mesh = <Mesh>node;
                 if (mesh && mesh.visible && mesh["material"])
                     this.addRenderList(mesh, camera);

@@ -15,6 +15,11 @@
         * 可渲染对象列表
         */
         public renderList: Array<IRender>;
+
+        /**
+        * @language zh_CN
+        * 拾取列表
+        */
         public mousePickList: Array<IRender>;
         public rootScene: Scene3D;
         protected _nodes: Array<IRender>;
