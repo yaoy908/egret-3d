@@ -212,32 +212,12 @@
         static LINE_STRIP: number;
 
     }
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          
 
     /**
-    * @private
     * @class egret3d.Egret3DDrive
     * @classdesc
-    * 3d 驱动 
+    * 3d 驱动 一些配置类型
     */
     export class ContextConfig {
                     
@@ -311,23 +291,44 @@
         */
         static CULL_FACE: number;
                             
+                
         /**
-        * @private
-        */
+         * @language zh_CN
+         * 裁剪正面进行反面渲染
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         static FRONT: number;
-                            
+                
         /**
-        * @private
+        * @language zh_CN
+        * 裁剪反面进行正面渲染
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         static BACK: number;
-                            
+        
         /**
+        * @language zh_CN
+        * 裁剪正面和反面
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static FRONT_AND_BACK: number;   
+     
+        /**
+        * @language zh_CN
         * 深度测试
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         static DEPTH_TEST: number;
-                            
+ 
         /**
+        * @language zh_CN
         * 深度缓冲值
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         static DEPTH_BUFFER_BIT: number;
                                     

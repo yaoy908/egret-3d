@@ -1,7 +1,7 @@
 ﻿uniform sampler2D diffuseTexture;
 vec4 diffuseColor ;
 void main() {
-	diffuseColor = textureLinear(diffuseTexture , uv_0 );
+	diffuseColor = texture2D(diffuseTexture , uv_0 );
 }
 
 

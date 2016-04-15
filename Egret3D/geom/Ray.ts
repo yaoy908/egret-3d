@@ -25,9 +25,6 @@
         * 射线方向
         */
         public dir: Vector3D = new Vector3D();
-        
-        public static sdir: Vector3D = new Vector3D();
-        public static sdir1: Matrix4_4 = new Matrix4_4();
 
         /**
         * @language zh_CN

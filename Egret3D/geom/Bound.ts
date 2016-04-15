@@ -49,8 +49,38 @@
             return this.owner.sceneTransform;
         }
 
+
+        /**
+        * @language zh_CN
+        * 检测一个点是否包围盒内
+        * @param pos 检测的点
+        * @returns 成功返回true
+        */
+        public pointIntersect(pos: Vector3D): boolean {
+            return false;
+        }
+
+        /**
+        * @language zh_CN
+        * 检测两个包围对象是否相交
+        * @param 检测的目标
+        * @param 相交的结果 可以为null
+        * @returns  成功返回true
+        */
+        public intersect(target: Bound, intersect: Bound = null): boolean {
+            return true;
+        }
+                                                
+        /**
+        * @private
+        * @language zh_CN
+        */
         public inBound(frustum: Frustum): boolean{
             return true;
+        }
+
+        protected updateAABB() {
+
         }
     }
 }

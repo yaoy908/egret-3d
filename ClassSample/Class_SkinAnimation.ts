@@ -12,34 +12,33 @@
 
             var view1: View3D = new View3D(0, 0, window.innerWidth, window.innerHeight);
             view1.camera3D.lookAt(new Vector3D(0, 1000, -1000), new Vector3D(0, 0, 0));
-            view1.backColor = 0xff000000;
+            view1.backColor = 0xffffffff;
 
             this._egret3DCanvas.addView3D(view1);
             this.view1 = view1;
 
-            var load: URLLoader = new URLLoader("resource/laohu/Mon_04.esm");
+            var load: URLLoader = new URLLoader("resource/lt11/body_12.esm");
             load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoad, this);
 
 
-            var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));
-            dirLight.diffuse = 0xffffff;
-            this.lights.addLight(dirLight);
+            //var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));
+            //dirLight.diffuse = 0xffffff;
+            //this.lights.addLight(dirLight);
 
-            var po: PointLight = new PointLight(0xffffff);
-            po.y = 200;
-            po.z = 200;
-            this.lights.addLight(po);
+            //var po: PointLight = new PointLight(0xffffff);
+            //po.y = 200;
+            //po.z = 200;
+            //this.lights.addLight(po);
 
-            var spo: SpotLight = new SpotLight(0xffffff);
-            spo.rotationX = 90;
-            spo.y = 200;
+            //var spo: SpotLight = new SpotLight(0xffffff);
+            //spo.rotationX = 90;
+            //spo.y = 200;
             //this.lights.addLight(spo);
 
             this.cameraCtl = new LookAtController(view1.camera3D, new Object3D());
             this.cameraCtl.distance = 1000;
             this.cameraCtl.rotationX = 60;
 
-            this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
         }
 
@@ -49,8 +48,8 @@
             var tex: ImageTexture = new ImageTexture(img);
 
             var mat: TextureMaterial = new TextureMaterial();
-            mat.shininess = 10.0;
-            mat.ambientColor = 0xffffff;
+            //mat.shininess = 10.0;
+            //mat.ambientColor = 0xffffff;
             this.mat = mat;
             var ge: Geometry = e.loader.data;
             var mesh: Mesh = new Mesh(ge, mat);
@@ -60,12 +59,14 @@
             mesh.material.lightGroup = this.lights;
             this.laohu = mesh;
 
-            var loadtex: URLLoader = new URLLoader("resource/laohu/Mon_04.png");
+            var loadtex: URLLoader = new URLLoader("resource/lt11/hero_12.png");
             loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
             loadtex["mat"] = mat;
-            var load: URLLoader = new URLLoader("resource/laohu/Bonezero.eam");
+            var load: URLLoader = new URLLoader("resource/lt11/body_12.eam");
             load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onAnimation, this);
             load["mesh"] = mesh;
+            mesh.y = 1000;
+            this.cameraCtl.lookAtObject = mesh;
         }
 
         protected onLoadTexture(e: LoaderEvent3D) {
@@ -75,8 +76,8 @@
         protected onAnimation(e: LoaderEvent3D) {
             var clip: SkeletonAnimationClip = e.loader.data;
             clip.animationName = name;
-            e.loader["mesh"].animation.skeletonAnimationController.addSkeletonAnimationClip(clip);
-            e.loader["mesh"].animation.skeletonAnimationController.play(name);
+            e.loader["mesh"].animation.addSkeletonAnimationClip(clip);
+            e.loader["mesh"].animation.play(name);
         }
 
         public update(e: Event3D) {

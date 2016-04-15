@@ -123,7 +123,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        //public lightMapTex: TextureBase = CheckerboardTexture.texture;
+        public lightTexture: ITexture = CheckerboardTexture.texture ;
 
         /**
         * @language zh_CN
@@ -132,7 +132,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        //public aoMapTex: TextureBase = CheckerboardTexture.texture;
+        public aoTexture: ITexture = CheckerboardTexture.texture;
 
         /**
         * @language zh_CN
@@ -141,7 +141,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        //public environmentMapTex: TextureBase = CheckerboardTexture.texture;
+        public environmentTexture: ITexture = CheckerboardTexture.texture;
 
 
         /**
@@ -151,7 +151,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        //public maskTex: TextureBase = CheckerboardTexture.texture;
+        public blendMaskTexture: ITexture = CheckerboardTexture.texture;
 
         /**
         * @language zh_CN
@@ -160,7 +160,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        //public splat_0Tex: TextureBase = CheckerboardTexture.texture;
+        public splat_0Tex: ITexture = CheckerboardTexture.texture;
 
         /**
         * @language zh_CN
@@ -169,7 +169,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        //public splat_1Tex: TextureBase = CheckerboardTexture.texture;
+        public splat_1Tex: ITexture = CheckerboardTexture.texture;
 
         /**
         * @language zh_CN
@@ -178,7 +178,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        //public splat_2Tex: TextureBase = CheckerboardTexture.texture;
+        public splat_2Tex: ITexture = CheckerboardTexture.texture;
 
         /**
         * @language zh_CN
@@ -187,17 +187,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        //public splat_3Tex: TextureBase = CheckerboardTexture.texture;
-
-
-        /**
-        * @language zh_CN
-        * 灯光存贮列表
-        * 聚光灯列表
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        //public lightList: Array<LightBase> = new Array<LightBase>();
+        public splat_3Tex: ITexture = CheckerboardTexture.texture;
 
         /**
         * @language zh_CN

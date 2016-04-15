@@ -56,16 +56,22 @@
                 this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
             }
 
+            if (this.methodList) {
+                for (var i: number = 0; i < this.methodList.length; i++) {
+                    this.methodList[i].materialData = this._materialData; 
+                    for (var j: number = 0; j < this.methodList[i].vsShaderList.length; j++) {
+                        this._passUsage.vertexShader.addUseShaderName(this.methodList[i].vsShaderList[j]);
+                    }
+                    for (var j: number = 0; j < this.methodList[i].fsShaderList.length; j++) {
+                        this._passUsage.fragmentShader.addUseShaderName(this.methodList[i].fsShaderList[j]);
+                    }
+                }
+            }
 
             this._passUsage.vertexShader.addEndShaderName("end_vs");
             this._passUsage.fragmentShader.addEndShaderName("end_fs");
 
-            if (this.methodList) {
-                for (var i: number = 0; i < this.methodList.length; i++) {
-                    this._passUsage.vertexShader.addUseShaderName(this.methodList[i].vsShaderName);
-                    this._passUsage.fragmentShader.addUseShaderName(this.methodList[i].fsShaderName);
-                }
-            }
+           
         }
     }
 } 

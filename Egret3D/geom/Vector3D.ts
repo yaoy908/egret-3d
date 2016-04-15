@@ -536,12 +536,16 @@
         /**
         * @language zh_CN
         * 填充当前Vector3D的x, y, z
-        * @param s 扩大的倍数
+        * @param xa 
+        * @param yz 
+        * @param za 
+        * @param wz 
         */
-        public setTo(xa: number, ya: number, za: number): void {
+        public setTo(xa: number, ya: number, za: number, wa:number = 1): void {
             this.x = xa;
             this.y = ya;
             this.z = za;
+            this.w = wa;
         }
 
         /**

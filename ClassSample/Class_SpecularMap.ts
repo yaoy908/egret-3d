@@ -6,7 +6,10 @@
         protected plane: Mesh;
         protected matPlane: TextureMaterial;
         protected lights: LightGroup = new LightGroup();
+
         constructor() {
+            super();
+
             super();
 
             var view1: View3D = new View3D(0, 0, window.innerWidth, window.innerHeight);
@@ -21,15 +24,15 @@
             this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
 
-            var po: DirectLight = new DirectLight(new Vector3D(-0.8,1.0,0.0));
+            var po: DirectLight = new DirectLight(new Vector3D(-0.8, 1.0, 0.0));
             po.y = 50;
-            po.intensity = 0.7 ; 
+            po.intensity = 0.7;
             this.lights.addLight(po);
 
             this.matPlane = new TextureMaterial();
             this.matPlane.lightGroup = this.lights;
             this.matPlane.repeat = true;
-            this.plane = new Mesh(new PlaneGeometry(1000,1000,10,10,2,2), this.matPlane);
+            this.plane = new Mesh(new PlaneGeometry(1000, 1000, 10, 10, 2, 2), this.matPlane);
             this.view1.addChild3D(this.plane);
 
             var loadDiffuse: URLLoader = new URLLoader("resource/floor/WOOD_1.png");
@@ -41,11 +44,11 @@
             var loadSpeular: URLLoader = new URLLoader("resource/floor/wood_1S.png");
             loadSpeular.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadSpecular, this);
 
-            
+
 
         }
 
-        protected onLoadDiffuse(e:LoaderEvent3D) {
+        protected onLoadDiffuse(e: LoaderEvent3D) {
             this.matPlane.diffuseTexture = e.loader.data;
         }
 

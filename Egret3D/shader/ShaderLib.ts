@@ -13,7 +13,6 @@ module egret3d {
 			"varying vec4 varying_color; \n" +
 			"uniform vec3 uniform_eyepos ; \n" +
 			"uniform mat4 uniform_ViewMatrix ; \n" +
-			"uniform mat4 uniform_ProjectionMatrix; \n" +
 			"vec4 outColor; \n" +
 			"vec4 diffuseColor ; \n" +
 			"vec4 specularColor ; \n" +
@@ -81,13 +80,13 @@ module egret3d {
 
 			"cube_vertex":
 			"attribute vec3 attribute_position; \n" +
-			"uniform mat4 uniform_ModelMatrix ; \n" +
-			"uniform mat4 uniform_ViewProjectionMatrix ; \n" +
-			"uniform mat4 uniform_NormalMatrix ; \n" +
+			"uniform mat4 uniform_ModelMatrix; \n" +
+			"uniform mat4 uniform_ViewMatrix; \n" +
+			"uniform mat4 uniform_ProjectionMatrix; \n" +
 			"varying vec3 varying_pos; \n" +
 			"void main(void){ \n" +
 			"varying_pos =  attribute_position; \n" +
-			"gl_Position = uniform_ViewProjectionMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
+			"gl_Position = uniform_ProjectionMatrix * uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
 			"} \n",
 
 			"diffuse_fragment":
@@ -99,8 +98,7 @@ module egret3d {
 
 			"diffuse_vertex":
 			"void main(void){ \n" +
-			"mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
-			"mat3 normalMatrix = transpose( inverse(mat3( modeViewMatrix )) ); \n" +
+			"mat3 normalMatrix = transpose( inverse(mat3( uniform_ProjectionMatrix * uniform_ViewMatrix )) ); \n" +
 			"varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
 			"outPosition = uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
 			"varying_ViewPose = outPosition.xyz / outPosition.w; \n" +

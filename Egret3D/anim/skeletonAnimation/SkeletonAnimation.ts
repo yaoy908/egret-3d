@@ -97,17 +97,6 @@
 
         /**
         * @language zh_CN
-        * 初始化Shader
-        * @param vertexShader 顶点Shader
-        * @param pixelShader 片元Shader
-        * @return xxx
-        */
-        public initShader(vertexShader: Shader, pixelShader: Shader) {
-            //vertexShader.maxBone = this.jointNumber * 2;
-        }
-
-        /**
-        * @language zh_CN
         * 克隆新的SkeletonAnimation对象
         * @return 新的SkeletonAnimation对象
         */
@@ -558,8 +547,8 @@
         * @language zh_CN
         * 获取动画节点
         */
-        public getAnimNode(): AnimNodeBase[] {
-            return null;
+        public getAnimNode(): AnimationNode[] {
+            return [];
         }
 
         /**

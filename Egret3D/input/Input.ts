@@ -70,7 +70,7 @@
         * @platform Web,Native
         */
         public static mouseLastX: number = 0;
-        
+
         /**
         * @language zh_CN
         * 上一次鼠标Y坐标。
@@ -88,6 +88,8 @@
         protected _keyEvent3d: KeyEvent3D = new KeyEvent3D();
         protected _touchEvent3d: TouchEvent3D = new TouchEvent3D();
         protected _windowsEvent3d: Event3D = new Event3D();
+        protected _orientationEvent3d: OrientationEvent3D = new OrientationEvent3D();
+
         /**
         * @language zh_CN
         * 游戏手柄Stick1事件侦听函数。
@@ -95,7 +97,7 @@
         * @platform Web,Native
         */
         private onGamepadStick1: Function = null;
-        
+
         /**
         * @language zh_CN
         * 游戏手柄Stick2事件侦听函数。
@@ -130,7 +132,7 @@
             super();
 
             window.addEventListener("click", (e: MouseEvent) => this.mouseClick(e), true);
-            
+
             window.addEventListener("mousedown", (e: MouseEvent) => this.mouseStart(e), true);
 
             window.addEventListener("mouseup", (e: MouseEvent) => this.mouseEnd(e), true);
@@ -161,14 +163,26 @@
 
             window.addEventListener("touchcancel", (e: TouchEvent) => this.touchEnd(e), true);
 
-            window.addEventListener("deviceorientation", (e: DeviceOrientationEvent) => this.ondeviceorientation(e), true);
+            //window.addEventListener("deviceorientation", (e: DeviceOrientationEvent) => this.ondeviceorientation(e), true);
+            //window.addEventListener("deviceorientation", (e: DeviceOrientationEvent) => this.ondeviceorientation(e), true);
 
-            window.addEventListener("devicemotion", (e: DeviceMotionEvent) => this.detectShake(e), true);
+            //window.addEventListener("devicemotion", (e: DeviceMotionEvent) => this.detectShake(e), true);
+            //window.addEventListener("devicemotion", (e: DeviceMotionEvent) => this.detectShake(e), true);
 
-            window.addEventListener("resize", (e: UIEvent) => this.onWindowsResize(e));
+            //window.addEventListener("resize", (e: UIEvent) => this.onWindowsResize(e));
+            window.addEventListener("resize", (e: UIEvent) => this.onWindowsResize(e), true);
+
+            window.addEventListener("orientationchange", (e: Event) => this.onOrientationChange(e), true);
+
+            window.addEventListener("devicemotion", (e: DeviceMotionEvent) => this.onDeviceMotion(e), true);
+
+            window.addEventListener("deviceorientation", (e: DeviceOrientationEvent) => this.onDeviceOrientation(e), true);
+
            
         }
-        
+
+
+
         /**
         * @language zh_CN
         * 对象注册事件侦听器对象，以使侦听器能够接收事件通知。可以为特定类型的事件和优先级注册事件侦听器。
@@ -207,7 +221,7 @@
             Input.instance.removeEventListenerAt(id);
         }
 
-      
+
         private _gp: boolean = false;
         private ongamepaddisconnected(e: GamepadEvent) {
             //Debug.instance.trace("Gamepad disconnected!");
@@ -304,78 +318,75 @@
             //Debug.instance.trace(html);
         }
 
-        private detectShake(evt: DeviceMotionEvent) {
+        //private detectShake(evt: DeviceMotionEvent) {
 
-            var accl = evt.acceleration; //acceleration 排除重力影响的加速度  accelerationIncludingGravity(含重力的加速度)
-            //x、y 和 z 轴方向加速
-            if (accl.x > 1.5 || accl.y > 1.5 || accl.z > 1.5) {
+        //    var accl = evt.acceleration; //acceleration 排除重力影响的加速度  accelerationIncludingGravity(含重力的加速度)
+        //    //x、y 和 z 轴方向加速
+        //    if (accl.x > 1.5 || accl.y > 1.5 || accl.z > 1.5) {
 
-            } else {
+        //    } else {
 
-            }
+        //    }
 
-            //if (this._ondevicemotion && this._ondevicemotion.length > 0) {
+        //    //if (this._ondevicemotion && this._ondevicemotion.length > 0) {
 
-            //    var x: number = Math.ceil(accl.x * 1000) / 1000;
-            //    var y: number = Math.ceil(accl.y * 1000) / 1000;
-            //    var z: number = Math.ceil(accl.z * 1000) / 1000;
+        //    //    var x: number = Math.ceil(accl.x * 1000) / 1000;
+        //    //    var y: number = Math.ceil(accl.y * 1000) / 1000;
+        //    //    var z: number = Math.ceil(accl.z * 1000) / 1000;
 
-            //    this._ondevicemotion[0](x, y, z);
-            //}
-        }
+        //    //    this._ondevicemotion[0](x, y, z);
+        //    //}
+        //}
 
-        private _caheX: number;
-        private _caheY: number;
-        private _caheZ: number;
+        //private _caheX: number;
+        //private _caheY: number;
+        //private _caheZ: number;
 
-        private _delayX: number;
-        private _delayY: number;
-        private _delayZ: number;
-        private _first: boolean = true;
-        private _initAngle: Vector3D = new Vector3D();
-        private ondeviceorientation(e: DeviceOrientationEvent) {
-            //alpha rotation around the z-axis  between 0 and 360 degrees 
-            //在围绕 z 轴旋转时（即左右旋转时），y 轴的度数差 0 到 360度 。
-            //beta Rotation around the x-axis cause the beta angle to change. The range of beta is between -180 and 180 degrees 
-            //在围绕 x 轴旋转时（即前后旋转时），z 轴的度数差 -180到180度。  
-            //gamma The gamma angle is associated with the y-axis between -90 and 90 degrees 
-            //在围绕 y 轴旋转时（即扭转设备时），z 轴的度数差 -90到90度。  
+        //private _delayX: number;
+        //private _delayY: number;
+        //private _delayZ: number;
+        //private _first: boolean = true;
+        //private _initAngle: Vector3D = new Vector3D();
+        //private ondeviceorientation(e: DeviceOrientationEvent) {
+        //    //alpha rotation around the z-axis  between 0 and 360 degrees 
+        //    //在围绕 z 轴旋转时（即左右旋转时），y 轴的度数差 0 到 360度 。
+        //    //beta Rotation around the x-axis cause the beta angle to change. The range of beta is between -180 and 180 degrees 
+        //    //在围绕 x 轴旋转时（即前后旋转时），z 轴的度数差 -180到180度。  
+        //    //gamma The gamma angle is associated with the y-axis between -90 and 90 degrees 
+        //    //在围绕 y 轴旋转时（即扭转设备时），z 轴的度数差 -90到90度。  
 
 
-            //if (this._ondeviceorientation && this._ondeviceorientation.length > 0) {
+        //    //if (this._ondeviceorientation && this._ondeviceorientation.length > 0) {
 
-            //    var alpha: number = Math.round(e.alpha * 100) * 0.01;
-            //    var beta: number = Math.round(e.beta * 100) * 0.01;
-            //    var gamma: number = Math.round(e.gamma * 100) * 0.01;
+        //    //    var alpha: number = Math.round(e.alpha * 100) * 0.01;
+        //    //    var beta: number = Math.round(e.beta * 100) * 0.01;
+        //    //    var gamma: number = Math.round(e.gamma * 100) * 0.01;
 
-            //    if (this._first) {
-            //        this._initAngle["x"] = alpha;
-            //        this._initAngle["y"] = beta;
-            //        this._initAngle["z"] = gamma;
-            //    }
+        //    //    if (this._first) {
+        //    //        this._initAngle["x"] = alpha;
+        //    //        this._initAngle["y"] = beta;
+        //    //        this._initAngle["z"] = gamma;
+        //    //    }
 
-            //    this._delayX = alpha - this._caheX;
-            //    this._delayY = beta - this._caheY;
-            //    this._delayZ = gamma - this._caheZ;
+        //    //    this._delayX = alpha - this._caheX;
+        //    //    this._delayY = beta - this._caheY;
+        //    //    this._delayZ = gamma - this._caheZ;
 
-            //    this._caheX = alpha;
-            //    this._caheY = beta;
-            //    this._caheZ = gamma;
+        //    //    this._caheX = alpha;
+        //    //    this._caheY = beta;
+        //    //    this._caheZ = gamma;
 
-            //    this._initAngle.x += this._delayX;
-            //    this._initAngle.y += this._delayY;
-            //    this._initAngle.z += this._delayZ;
+        //    //    this._initAngle.x += this._delayX;
+        //    //    this._initAngle.y += this._delayY;
+        //    //    this._initAngle.z += this._delayZ;
 
-            //    for (var i: number = 0; i < this._ondeviceorientation.length; i++) {
-            //        this._ondeviceorientation[i].callback.call(this._ondeviceorientation[i].thisObject, this._initAngle);
-            //    }
-            //}
-        }
+        //    //    for (var i: number = 0; i < this._ondeviceorientation.length; i++) {
+        //    //        this._ondeviceorientation[i].callback.call(this._ondeviceorientation[i].thisObject, this._initAngle);
+        //    //    }
+        //    //}
+        //}
 
-        //屏幕翻转
-        private onorientationchange(e) {
 
-        }
 
         private onPinch(x: number, y: number, x1: number, y1: number) {
             this._oldPosition1 = new Point(x, y);
@@ -499,7 +510,7 @@
             this._touchEvent3d.target = this;
             this._touchEvent3d.eventType = TouchEvent3D.TOUCH_MOVE;
             this.dispatchEvent(this._touchEvent3d);
-        }      
+        }
 
 
         private mouseClick(e: MouseEvent) {
@@ -581,7 +592,7 @@
             this._keyEvent3d.keyCode = e.keyCode;
             this._keyEvent3d.target = this;
 
-            if (!this._keyStatus[e.keyCode] ) {
+            if (!this._keyStatus[e.keyCode]) {
                 this._keyStatus[e.keyCode] = true;
                 this._keyEvent3d.eventType = KeyEvent3D.KEY_CLICK;
                 this.dispatchEvent(this._keyEvent3d);
@@ -610,6 +621,30 @@
             this._windowsEvent3d.target = this;
             this._windowsEvent3d.eventType = Event3D.RESIZE;
             this.dispatchEvent(this._windowsEvent3d);
+        }
+
+
+        private onOrientationChange(e: Event): void {
+            this._orientationEvent3d.target = this;
+            this._orientationEvent3d.eventType = OrientationEvent3D.ORIENTATION_CHANGE;
+            this.dispatchEvent(this._orientationEvent3d);
+        }
+        private onDeviceMotion(e: DeviceMotionEvent): void {
+            this._orientationEvent3d.target = this;
+            this._orientationEvent3d.eventType = OrientationEvent3D.DEVICE_MOTION;
+            this._orientationEvent3d.acceleration = e.acceleration;
+            this._orientationEvent3d.accelerationIncludingGravity = e.accelerationIncludingGravity;
+            this._orientationEvent3d.rotationRate = e.rotationRate;
+            this.dispatchEvent(this._orientationEvent3d);
+        }
+        private onDeviceOrientation(e: DeviceOrientationEvent): void {
+            this._orientationEvent3d.target = this;
+            this._orientationEvent3d.eventType = OrientationEvent3D.DEVICE_ORIENTATION;
+            this._orientationEvent3d.absolute = e.absolute;
+            this._orientationEvent3d.alpha = e.alpha;
+            this._orientationEvent3d.beta = e.beta;
+            this._orientationEvent3d.gamma = e.gamma;
+            this.dispatchEvent(this._orientationEvent3d);
         }
 
         //返回角度

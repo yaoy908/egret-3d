@@ -33,8 +33,9 @@
         * @param segmentsH 高度分段数
         * @param uScale U缩放
         * @param vScale V缩放
+        * @param aixs 0:Y轴为0 1:Z轴为0 2:X轴为0
         */
-        constructor(width: number = 500, height: number = 500, segmentsW: number = 1, segmentsH: number = 1, uScale: number = 1, vScale: number = 1) {
+        constructor(width: number = 500, height: number = 500, segmentsW: number = 1, segmentsH: number = 1, uScale: number = 1, vScale: number = 1,aixs:number = 0) {
             super();
             this._width = width;
             this._height = height;
@@ -43,10 +44,10 @@
             this._scaleU = uScale;
             this._scaleV = vScale;
 
-            this.buildGeometry();
-        }
+            this.buildGeometry(aixs);
+        }     
 
-        private buildGeometry(): void {
+        private buildGeometry(aixs: number): void {
 
             this.vertexFormat  = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0;
 
@@ -71,13 +72,45 @@
                     x = (xi / this._segmentsW - .5) * this._width;
                     y = (yi / this._segmentsH - .5) * this._height;
 
-                    this.verticesData[index++] = x;
-                    this.verticesData[index++] = 0;
-                    this.verticesData[index++] = y;
+                    switch (aixs) {
+                        case 0:
+                            this.verticesData[index++] = x;
+                            this.verticesData[index++] = 0;
+                            this.verticesData[index++] = y;
 
-                    this.verticesData[index++] = 0;
-                    this.verticesData[index++] = 1;
-                    this.verticesData[index++] = 0;
+                            this.verticesData[index++] = 0;
+                            this.verticesData[index++] = 1;
+                            this.verticesData[index++] = 0;
+                            break;
+                        case 1:
+                            this.verticesData[index++] = x;
+                            this.verticesData[index++] = y;
+                            this.verticesData[index++] = 0;
+
+                            this.verticesData[index++] = 0;
+                            this.verticesData[index++] = 0;
+                            this.verticesData[index++] = -1;
+                            break;
+                        case 2:
+                            this.verticesData[index++] = 0;
+                            this.verticesData[index++] = x;
+                            this.verticesData[index++] = y;
+
+                            this.verticesData[index++] = 1;
+                            this.verticesData[index++] = 0;
+                            this.verticesData[index++] = 0;
+                            break;
+                        default:
+                            this.verticesData[index++] = x;
+                            this.verticesData[index++] = 0;
+                            this.verticesData[index++] = y;
+
+                            this.verticesData[index++] = 0;
+                            this.verticesData[index++] = 1;
+                            this.verticesData[index++] = 0;
+                            break;
+                    }
+                   
 
                     this.verticesData[index++] = 1;
                     this.verticesData[index++] = 0;

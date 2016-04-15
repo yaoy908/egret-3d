@@ -12,11 +12,7 @@
     * @platform Web,Native
     */
     export class Layer {
-        /**
-       * @language zh_CN
-       * layer 列表
-       */
-        public layers: Array<Layer> = new Array<Layer>();
+  
 
         /**
         * @language zh_CN
