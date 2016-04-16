@@ -25,7 +25,7 @@
             var loadtex1: URLLoader = new URLLoader("resource/floor/brick-diffuse.jpg");
             loadtex1.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
             loadtex1["mat"] = planemat;
-            //this.view1.addChild3D(new Mesh(new PlaneGeometry(1000, 1000), planemat));
+            this.view1.addChild3D(new Mesh(new PlaneGeometry(1000, 1000), planemat));
 
 
             var mat: TextureMaterial = new TextureMaterial();
