@@ -1,7 +1,4 @@
-﻿attribute vec4 attribute_boneIndex ;
-attribute vec4 attribute_boneWeight ;
-
-const int bonesNumber = 0;
+﻿const int bonesNumber = 0;
 uniform vec4 uniform_PoseMatrix[bonesNumber];
 uniform mat4 uniform_ModelMatrix ;
 
