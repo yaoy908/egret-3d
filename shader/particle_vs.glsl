@@ -68,9 +68,6 @@ mat4 buildRotMat4(vec3 rot)
 }
 
 void main(void) {
-	varying_color = vec4(1.0, 1.0, 1.0, 1.0);
-
-
 
 	mat4 billboardMatrix = mat4(
 						vec4(1.0, 0.0, 0.0, 0.0),
