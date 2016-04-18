@@ -4,7 +4,7 @@ module egret3d {
     * @language zh_CN
     * @class egret3d.QuadRoot
     * @classdesc
-    * 用于四叉树的根对象
+    * 创建四叉树的根对象。当前只能用于管理场景中静态的Object，
     * @version Egret 3.0
     * @platform Web,Native
     */
