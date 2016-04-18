@@ -4071,18 +4071,14 @@ declare module egret3d {
         * 子包围盒
         */
         childBound: Bound;
-        protected matTransform: Matrix4_4;
+        protected owner: Object3D;
+        constructor(owner: Object3D);
         /**
         * @language zh_CN
         * 得到变换矩阵
         * @returns 变换矩阵
         */
-        /**
-        * @language zh_CN
-        * 设置变换矩阵
-        * @param mat 变换矩阵
-        */
-        Transform: Matrix4_4;
+        transform: Matrix4_4;
         /**
         * @language zh_CN
         * 检测一个点是否包围盒内
@@ -4179,7 +4175,7 @@ declare module egret3d {
         * @param min
         * @param max
         */
-        constructor(min?: Vector3D, max?: Vector3D);
+        constructor(owner?: Object3D, min?: Vector3D, max?: Vector3D);
         /**
         * @language zh_CN
         * 拷贝一个包围盒
@@ -6983,7 +6979,7 @@ declare module egret3d {
     * @version Egret 3.0
     * @platform Web,Native
     */
-    class Mesh extends Object3D implements IRender {
+    class Mesh extends Object3D implements IRender, IQuadNode {
         /**
         * @language zh_CN
         * 网格信息。</p>
@@ -6992,6 +6988,7 @@ declare module egret3d {
         * @platform Web,Native
         */
         geometry: Geometry;
+        private _aabbBox;
         /**
         * @language zh_CN
         * 材质信息。</p>
@@ -7040,6 +7037,10 @@ declare module egret3d {
         */
         constructor(geometry: Geometry, material: MaterialBase, animation?: IAnimation);
         setMaterialByID(): void;
+        aabb: QuadAABB;
+        initAABB(): void;
+        isTriangle: boolean;
+        protected onUpdateTransform(): void;
         /**
         * @language zh_CN
         * 增加一个材质
@@ -7704,6 +7705,10 @@ declare module egret3d {
         * 可渲染对象列表
         */
         renderList: Array<IRender>;
+        /**
+        * @language zh_CN
+        * 拾取列表
+        */
         mousePickList: Array<IRender>;
         rootScene: Scene3D;
         protected _nodes: Array<IRender>;
@@ -7757,6 +7762,13 @@ declare module egret3d {
         */
         constructor();
         private applyRender(child, camera);
+        /**
+        * @language zh_CN
+        * 尝试将一个渲染对象，进行视锥体裁剪，放入到渲染队列中
+        * @param root 渲染根节点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         private addRenderList(renderItem, camera);
         /**
         * @language zh_CN
@@ -7766,6 +7778,15 @@ declare module egret3d {
         * @platform Web,Native
         */
         update(camera: Camera3D): void;
+        /**
+        * @language zh_CN
+        * 根据当前场景的节点分布情况，生成四叉树
+        * @version Egret 3.0
+        * @param quadList   需要被判定是否在视锥体里的节点列表
+        * @param camera     相机
+        * @platform Web,Native
+        */
+        private appendQuadList(quadList, camera);
         protected clearLayerList(): void;
         protected sort(a: Object3D, b: Object3D, camera: Camera3D): number;
     }
@@ -9653,6 +9674,7 @@ declare module egret3d {
         */
         fogAlpha: number;
         /**
+        * @private
         * @language zh_CN
         * @param time
         * @param delay
@@ -9665,9 +9687,14 @@ declare module egret3d {
         * @param camera3D
         */
         upload(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D): void;
+        /**
+         * @language zh_CN
+         * @private
+         */
         update(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D): void;
         /**
          * @language zh_CN
+         * @private
          */
         dispose(): void;
     }
@@ -11736,6 +11763,13 @@ declare module egret3d {
     class Scene3D {
         private _tree;
         private _root;
+        /**
+        * @language zh_CN
+        * 四叉树根对象
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _quad;
         constructor();
         /**
         * @language zh_CN
@@ -11748,6 +11782,14 @@ declare module egret3d {
         root: Object3D;
         /**
         * @language zh_CN
+        * 返回剖分场景四叉树根信息
+        * @returns QuadRoot
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        quad: QuadRoot;
+        /**
+        * @language zh_CN
         * 将一个 Object3D 实例添加到 Scene3D 实例中。
         * 将一个 Object3D 实例添加到 Scene3D 实例中。参与scene3D中的显示树优化，并且即时渲染出来
         * @param  child3D {Object3D}
@@ -11758,6 +11800,23 @@ declare module egret3d {
         removeChild3D(child3D: Object3D): void;
         update(): void;
         infrustumList(camera: Camera3D): Object3D[];
+        /**
+        * @language zh_CN
+        * 根据当前场景的节点分布情况，生成四叉树
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        createQuadTree(): void;
+        /**
+        * @language zh_CN
+        * 遍历一个Object3D及其child节点，如果能够进入视锥体，则放入返回的列表中
+        * @param  nodes 用于返回Quad元素结果
+        * @param  obj   待遍历的对象
+        * @returns Array<IQuadNode>
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private collectQuadList(nodes, obj);
     }
 }
 declare module egret3d {
@@ -14116,6 +14175,1934 @@ declare module egret3d {
 }
 declare module egret3d {
     /**
+    * @language zh_CN
+    * @class egret3d.IQuadNode
+    * @classdesc
+    * �Ĳ�����һ���ڵ��Ľӿ�
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    interface IQuadNode {
+        /**
+        * @language zh_CN
+        * ��ʼ����Χ��
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        initAABB(): void;
+        /**
+        * @language zh_CN
+        * �Ƿ��ýڵ���������
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        isTriangle: boolean;
+        /**
+        * @language zh_CN
+        * ��Χ������
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        aabb: QuadAABB;
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.QuadAABB
+    * @classdesc
+    * 用于四叉树的包围盒抽象
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class QuadAABB {
+        /**
+        * @language zh_CN
+        * 最小x位置
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        minPosX: number;
+        /**
+        * @language zh_CN
+        * 最小y位置
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        minPosY: number;
+        /**
+        * @language zh_CN
+        * 最大x位置
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        maxPosX: number;
+        /**
+        * @language zh_CN
+        * 最大y位置
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        maxPosY: number;
+        /**
+        * @language zh_CN
+        * 用于记录quad框选批次
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        testID: number;
+        /**
+        * @language zh_CN
+        * 所有内部点列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        points: Array<Vector3D>;
+        /**
+        * @language zh_CN
+        * @private
+        * 记录该包围盒的全局位移偏移量
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private offsetPosition;
+        /**
+        * @language zh_CN
+        * @private
+        * 设定一个微小的值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private static TINY;
+        /**
+        * @language zh_CN
+        * constructor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor();
+        /**
+        * @language zh_CN
+        * 将该包围盒设定到以中心点(cx,cy)，纵横距离(sideY,sidex)的范围内
+        * @param cx         中心x
+        * @param cy         中心y
+        * @param sidex      横向范围
+        * @param sidey      纵向范围
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        setAABox(cx: number, cy: number, sideX: number, sideY: number): void;
+        /**
+        * @language zh_CN
+        * 设置偏移量
+        * @param vec        偏移坐标
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        setOffset(vec: Vector3D): void;
+        /**
+        * @language zh_CN
+        * 设定包含某个范围
+        * @param minX         中心x
+        * @param minY         中心y
+        * @param maxX      横向范围
+        * @param maxY      纵向范围
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        setContainRect(minX: number, minY: number, maxX: number, maxY: number): void;
+        /**
+        * @language zh_CN
+        * 重置包围盒
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        clear(): void;
+        /**
+        * @language zh_CN
+        * 添加一个点
+        * @param pos         点坐标
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        addPoint(pos: Vector3D): void;
+        /**
+        * @language zh_CN
+        * 获得该对象克隆
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        clone(): QuadAABB;
+        /**
+        * @language zh_CN
+        * 获得对角线长
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        radius: number;
+        /**
+        * @language zh_CN
+        * 获得宽
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        sideX: number;
+        /**
+        * @language zh_CN
+        * 获得高
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        sideY: number;
+        /**
+        * @language zh_CN
+        * 获得中心点x
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        centreX: number;
+        /**
+        * @language zh_CN
+        * 获得中心点y
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        centreY: number;
+        /**
+        * @language zh_CN
+        * 与另外一个包围盒碰撞测试
+        * @param box        测试的碰撞对象
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        overlapTest(box: QuadAABB): boolean;
+        /**
+        * @language zh_CN
+        * 判定某个点在包围盒内
+        * @param box        测试的点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        isPointInside(pos: Vector3D): boolean;
+        /**
+        * @language zh_CN
+        * 与一条线段碰撞测试
+        * @param p1x        线段起点x
+        * @param p1y        线段起点y
+        * @param p2x        线段终点x
+        * @param p2y        线段终点y
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        isIntersectLineSegment(p1x: number, p1y: number, p2x: number, p2y: number): boolean;
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.QuadTree
+    * @classdesc
+    * 四叉树
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class QuadTree {
+        /**
+        * @language zh_CN
+        * 所有节点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _cells;
+        /**
+        * @language zh_CN
+        * 根节点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _rootCell;
+        /**
+        * @language zh_CN
+        * 节点列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _quadNodes;
+        /**
+        * @language zh_CN
+        * 当前tree的包围盒
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _aabb;
+        /**
+        * @language zh_CN
+        * 碰撞检测用数组
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _cellsToTest;
+        /**
+        * @language zh_CN
+        * 碰撞检测用批次
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _testID;
+        /**
+        * @language zh_CN
+        * constructor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor();
+        /**
+        * @language zh_CN
+        * 根据下标获取node对象
+        * @param    idx     下标
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getQuadNode(idx: number): IQuadNode;
+        /**
+        * @language zh_CN
+        * 清理
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        clear(): void;
+        /**
+        * @language zh_CN
+        * 插入一系列node到树中,不build
+        * @param    nodes     待初始化的节点列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        initNodes(nodes: Array<IQuadNode>): void;
+        /**
+        * @language zh_CN
+        * 构建四叉树
+        * @param    maxNodesPerCell     一个Cell中最多几个三角
+        * @param    minCellSize         一个cell单元最小划分到多小
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        buildQuadTree(maxNodesPerCell: number, minCellSize: number): void;
+        /**
+        * @language zh_CN
+        * 创建子节点的AABox
+        * @param    aabb     包围盒
+        * @param    id      象限
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private createAABox(aabb, id);
+        /**
+        * @language zh_CN
+        * 如果三角型和Cell相交,返回True
+        * @param    node     节点
+        * @param    cell     四叉树叶子
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private doesNodeIntersectCell(node, cell);
+        /**
+        * @language zh_CN
+        * 寻找在某位置上的三角面
+        * @param    result     存储节点的数组
+        * @param    aabb       包围盒
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getNodesIntersectingtAABox(result: Array<number>, aabb: QuadAABB): number;
+        /**
+        * @language zh_CN
+        * 判断点在三角型中
+        * @param    x           指定点坐标x
+        * @param    y           指定点坐标y
+        * @param    triPi1      三角形顶点1
+        * @param    triPi2      三角形顶点2
+        * @param    triPi3      三角形顶点3
+        * @return   是否包含
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private pointInTriangle(x, y, triP1, triP2, triP3);
+        /**
+        * @language zh_CN
+        * 递增批次
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private incrementTestCounter();
+        /**
+        * @language zh_CN
+        * 显示quadtree结构
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private logDeep;
+        private logTree(cellIndex);
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.QuadRoot
+    * @classdesc
+    * 创建四叉树的根对象。当前只能用于管理场景中静态的Object，
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class QuadRoot {
+        /**
+        * @language zh_CN
+        * 一个Cell中最多几个三角
+        */
+        private _maxNodesPerCell;
+        /**
+         * @language zh_CN
+         * 一个cell单元最小划分到多小
+         */
+        private _minCellSize;
+        /**
+         * @language zh_CN
+         * 四叉树
+         */
+        private _quadTree;
+        /**
+         * @language zh_CN
+         * 碰撞到的三角
+         */
+        private _collisionNodesIdx;
+        /**
+         * @language zh_CN
+         * 碰撞检测用aabb
+         */
+        private _segBox;
+        /**
+         * @language zh_CN
+         * 存放检测的nodes结果
+         */
+        private _collisionNodes;
+        /**
+        * @language zh_CN
+        * constructor
+        * @param maxNodesPerCell 一个Cell中最多几个节点
+        * @param minCellSize 一个cell单元最小划分到多小
+        */
+        constructor(maxNodesPerCell?: number, minCellSize?: number);
+        /**
+        * @language zh_CN
+        * 创建并构造四叉树
+        * @param nodes 需要插入到四叉树中的节点列表
+        */
+        createQuadTree(nodes: Array<IQuadNode>): void;
+        /**
+        * @language zh_CN
+        * 在设定范围内，框选出一批节点
+        * @param minX 框选范围最小x值
+        * @param minY 框选范围最小y值
+        * @param maxX 框选范围最大x值
+        * @param maxY 框选范围最大y值
+        * @return Array<IQuadNode>
+        */
+        getNodesByAABB(minX: number, minY: number, maxX: number, maxY: number): Array<IQuadNode>;
+        /**
+        * @language zh_CN
+        * 给定一个三维坐标点，获取节点中最为接近的一个三角形
+        * @param point 给定的点
+        * @param threshold 设定的阈值，超出这个距离则视为放弃
+        * @return Navi3DTriangle
+        */
+        getTriangleAtPoint(point: Vector3D, threshold?: number): Navi3DTriangle;
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.QuadTreeCell
+    * @classdesc
+    * 四叉树叶子节点
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class QuadTreeCell {
+        /**
+        * @language zh_CN
+        * 一个叶子单元最多包含子叶子树4个
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static NUM_CHILDREN: number;
+        /**
+        * @language zh_CN
+        * (如果不是leaf)子节点的index, -1表示无子节点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        childCellIndices: Array<number>;
+        /**
+        * @language zh_CN
+        * (如果是leaf) 三角面的index
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        nodeIndices: Array<number>;
+        /**
+        * @language zh_CN
+        * 该节点的包围框
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        aabb: QuadAABB;
+        /**
+         * @language zh_CN
+         * 该叶子里面含有的顶点信息
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        points: Array<Vector3D>;
+        /**
+        * @language zh_CN
+        * constructor
+        * @param aabox 该叶子的包围盒
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor(aabox: QuadAABB);
+        /**
+        * @language zh_CN
+        * Indicates if we contain triangles (if not then we should/might have children)
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        isLeaf(): boolean;
+        /**
+        * @language zh_CN
+        * 重置该叶子
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        clear(): void;
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.HashTable
+    * @classdesc
+    * 纯2d的点
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class HashTable {
+        /**
+        * @language zh_CN
+        * 键队列
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _keys;
+        /**
+        * @language zh_CN
+        * 值队列
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _values;
+        /**
+        * @language zh_CN
+        * constructor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor();
+        /**
+        * @language zh_CN
+        * 根据键获得下标
+        * @param    key     键
+        * @return           下标
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getIndexByKey(key: any): number;
+        /**
+        * @language zh_CN
+        * 根据键获得值
+        * @param    key     键
+        * @return           值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getValueByKey(key: any): any;
+        /**
+        * @language zh_CN
+        * 放入一个键值对
+        * @param    key     键
+        * @param    value   值
+        * @return           原来的值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        put(key: any, value: any): any;
+        /**
+        * @language zh_CN
+        * 移除一个键值对
+        * @param    key     键
+        * @return           移除的值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        remove(key: any): any;
+        /**
+        * @language zh_CN
+        * 获取值的队列
+        * @return          值的队列
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getValues(): Array<any>;
+        /**
+        * @language zh_CN
+        * 获取键的队列
+        * @return          键的队列
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getKeys(): Array<any>;
+        /**
+        * @language zh_CN
+        * 重置该哈希表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        clear(): void;
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DAstar
+    * @classdesc
+    * 用于Navigation Mesh中寻路的A星算法
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class Navi3DAstar {
+        private _openedList;
+        private _closedList;
+        private _endNode;
+        private _startNode;
+        private _triangleChannel;
+        private _navMesh;
+        private _findIndex;
+        /**
+        * @language zh_CN
+        * constructor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor();
+        /**
+        * @language zh_CN
+        * 开始找寻路径，输入起点终点
+        * param navMesh 搜索的mesh对象
+        * param startTriangle 开始三角形
+        * param endTriangle 结束三角形
+        * @return 是否搜索成功
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        findPath(navMesh: Navi3DMesh, startTriangle: Navi3DTriangle, endTriangle: Navi3DTriangle): boolean;
+        /**
+        * @language zh_CN
+        * 搜寻
+        * @return 是否搜索成功
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private search();
+        /**
+        * @language zh_CN
+        * 排序开区间(从小到大)
+        * @param a 用于比较的a对象
+        * @param b 用于比较的b对象
+        * @return 0,1,-1
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private sortFun(a, b);
+        /**
+        * @language zh_CN
+        * 回溯路径列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private buildPath();
+        /**
+        * @language zh_CN
+        * 获取结果数据（三角带）
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        channel: Array<Navi3DTriangle>;
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DEdge
+    * @classdesc
+    * 用于Navigation Mesh中寻路的三角形边的对象
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class Navi3DEdge {
+        private _edgeMask;
+        private _edgeSize;
+        private _pointA;
+        private _pointB;
+        private _triangleOwners;
+        private _centerPoint;
+        /**
+        * @language zh_CN
+        * 端点A至B的朝向矢量
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _edgeDirA2B;
+        /**
+        * @language zh_CN
+        * 记录穿越的点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        crossPoint: Vector3D;
+        /**
+        * @language zh_CN
+        * 靠近A的肥胖检测点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        fatPointA: Navi3DPointFat;
+        /**
+        * @language zh_CN
+        * 靠近B的肥胖检测点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        fatPointB: Navi3DPointFat;
+        /**
+        * @language zh_CN
+        * 计算用的Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private static CALC_FAT_VECTOR;
+        /**
+        * @language zh_CN
+        * constructor
+        * @param  point0 顶点0
+        * @param  point1 顶点1
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor(point0: Navi3DPoint, point1: Navi3DPoint);
+        /**
+        * @language zh_CN
+        * 获得边长
+        * @return 长度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        size: Number;
+        /**
+        * @language zh_CN
+        * 获得所属三角形列表
+        * @return 三角形列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        triangleOwners: Array<Navi3DTriangle>;
+        /**
+        * @language zh_CN
+        * 获得线段的中间点坐标
+        * @return 中间点坐标
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        centerPoint: Vector3D;
+        /**
+        * @language zh_CN
+        * 初始化肥胖监测点
+        * @param  radius    输入的肥胖检测半径
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        initFatPoints(radius: number): void;
+        /**
+        * @language zh_CN
+        * 根据端点获取对应的肥胖检测点
+        * @param  pt  端点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getFatPoint(pt: Navi3DPoint): Navi3DPointFat;
+        /**
+        * @language zh_CN
+        * 输入一个端点获取另外一个端点的肥胖检测点
+        * @param  pt  端点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getAnotherFatPoint(pt: Navi3DPoint): Navi3DPointFat;
+        /**
+        * @language zh_CN
+        * 输入一个端点获取另外一个端点
+        * @param  pt  端点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getAnotherPoint(pt: Navi3DPoint): Navi3DPoint;
+        /**
+        * @language zh_CN
+        * 判定一个点是否等价于某个端点
+        * @param  pt 被判定的点
+        * @return 判定结果端点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        containsPoint(pt: Vector3D): Navi3DPoint;
+        /**
+        * @language zh_CN
+        * 添加所属三角形
+        * @param  triangle 所属三角形
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        addTriangleOwners(triangle: Navi3DTriangle): void;
+        /**
+        * @language zh_CN
+        * 获取和另外一条边的公共端点
+        * @param  edge 另外一条边
+        * @return Navi3DPoint 公共边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getPublicPoint(edge: Navi3DEdge): Navi3DPoint;
+        /**
+        * @language zh_CN
+        * 输入一个点获，获取与之等价的一个端点对象
+        * @param  p 输入的点
+        * @return Navi3DPoint 等价的端点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getEqualPoint(p: Vector3D): Navi3DPoint;
+        /**
+        * @language zh_CN
+        * 端点A
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        pointA: Navi3DPoint;
+        /**
+        * @language zh_CN
+        * 端点B
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        pointB: Navi3DPoint;
+        /**
+        * @language zh_CN
+        * 记录该边的通过属性
+        * @return 是否可通过
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        walkAble: Boolean;
+        /**
+        * @language zh_CN
+        * 测试是否通过
+        * @param  value 被测试的值
+        * @return 是否通过
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        testMask(value: number): Boolean;
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DMaskType
+    * @classdesc
+    * 枚举出的可通过类型
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class Navi3DMaskType {
+        /**
+       * @language zh_CN
+       * 可通过
+       * @version Egret 3.0
+       * @platform Web,Native
+       */
+        static WalkAble: number;
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DPoint2D
+    * @classdesc
+    * ��2d�ĵ�
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class Navi3DPoint2D {
+        /**
+        * @language zh_CN
+        * ����x
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        x: number;
+        /**
+        * @language zh_CN
+        * ����y
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        y: number;
+        /**
+        * @language zh_CN
+        * constructor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor();
+        /**
+        * @language zh_CN
+        * ���õ����õ�ָ��λ��
+        * @param X   x����
+        * @param Y   y����
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        setTo(X: number, Y: number): void;
+        /**
+        * @language zh_CN
+        * �Ƿ���ĳ��λ�õȼ�
+        * @param X   x����
+        * @param Y   y����
+        * @return �Ƿ��ȼ�
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        equals(X: number, Y: number): boolean;
+        /**
+        * @language zh_CN
+        * �Ƿ���ĳ��λ�õȼ�
+        * @param pt   ��
+        * @return �Ƿ��ȼ�
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        equalPoint(pt: Navi3DPoint2D): boolean;
+        /**
+        * @language zh_CN
+        * ��ȡ����
+        * @return ����
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        length: number;
+        /**
+        * @language zh_CN
+        * ��¡һ����λ�õ�
+        * @return ��¡�ĵ�
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        clone(): Navi3DPoint2D;
+        /**
+        * @language zh_CN
+        * ��׼����������Ϊ1
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        normalize(): void;
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DPoint
+    * @classdesc
+    * �����ĵ�
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class Navi3DPoint extends Vector3D {
+        /**
+        * @language zh_CN
+        * �����õ�Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static CALC_VECTOR3D1: Vector3D;
+        /**
+        * @language zh_CN
+        * �����õ�Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static CALC_VECTOR3D2: Vector3D;
+        /**
+        * @language zh_CN
+        * �����õ�Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static CALC_VECTOR3D3: Vector3D;
+        /**
+        * @language zh_CN
+        * �����õ�Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static CALC_VECTOR3D4: Vector3D;
+        /**
+        * @language zh_CN
+        * �����õ�Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static CALC_VECTOR3D5: Vector3D;
+        private _pointId;
+        /**
+        * @language zh_CN
+        * constructor
+        * @param    id   ����id
+        * @param    X   ����x
+        * @param    Y   ����y
+        * @param    Z   ����z
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor(id: number, X: number, Y: number, Z: number);
+        /**
+        * @language zh_CN
+        * @return ��Navi3DMesh�е�Ψһid
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        id: number;
+        /**
+        * @language zh_CN
+        * �ж���������λ���Ƿ��ȼ�
+        * @param    p1   ����1
+        * @param    p2   ����2
+        * @return   �Ƿ��ȼ�
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static equalPoint(p1: Vector3D, p2: Vector3D): boolean;
+        /**
+        * @language zh_CN
+        * ��������������֮���ľ���
+        * @param    p1   ����1
+        * @param    p2   ����2
+        * @return   ����
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static calcDistance(pt1: Vector3D, pt2: Vector3D): number;
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DPointFat
+    * @classdesc
+    * 用于网格中的边上，碰撞检测的点
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class Navi3DPointFat extends Navi3DPoint {
+        private _ownerPoint;
+        private _ownerEdge;
+        /**
+        * @language zh_CN
+        * 与端点的距离
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        radius: number;
+        /**
+        * @language zh_CN
+        * constructor
+        * @param    _point   端点
+        * @param    _edge   边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor(_point: Navi3DPoint, _edge: Navi3DEdge);
+        /**
+        * @language zh_CN
+        * @return 隶属于哪个端点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        ownerPoint: Navi3DPoint;
+        /**
+        * @language zh_CN
+        * @ return 隶属于那条边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        ownerEdge: Navi3DEdge;
+        /**
+        * @language zh_CN
+        * 获得一个当前对象的复制，并且使用value进行位置修正
+        * @param    value   缩放系数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        scalePoint(value?: number): Navi3DPointFat;
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DTriangle
+    * @classdesc
+    * 纯2d的点
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class Navi3DTriangle extends Vector3D implements IQuadNode {
+        private _id;
+        private _plane;
+        private _points;
+        private _edges;
+        /**
+        * @language zh_CN
+        * 相邻三角形
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _neibourTriangles;
+        /**
+        * @language zh_CN
+        * 点正对的边的关系表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _pointAgainstEdge;
+        /**
+        * @language zh_CN
+        * 边正对着点的关系表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _edgeAgainstPoint;
+        /**
+        * @language zh_CN
+        * 通过属性
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _mask;
+        /**
+        * @language zh_CN
+        * 该三角形在四叉树里的包围盒
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _aabbBox;
+        /**
+        * @language zh_CN
+        * f -- astar
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        f: number;
+        /**
+        * @language zh_CN
+        * g -- astar
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        g: number;
+        /**
+        * @language zh_CN
+        * h -- astar
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        h: number;
+        /**
+        * @language zh_CN
+        * 上一个节点 -- astar
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        parent: Navi3DTriangle;
+        /**
+        * @language zh_CN
+        * costMultiplier
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        costMultiplier: number;
+        /**
+        * @language zh_CN
+        * 开区间ID，标记寻路批次用
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        openId: number;
+        /**
+        * @language zh_CN
+        * 闭区间ID，标记寻路批次用
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        closeId: number;
+        /**
+        * @language zh_CN
+        * 静态变量2d点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private static p1;
+        /**
+        * @language zh_CN
+        * 静态变量2d点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private static p2;
+        /**
+        * @language zh_CN
+        * 静态变量2d点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private static p3;
+        /**
+        * @language zh_CN
+        * 静态变量2d点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private static pp;
+        aabb: QuadAABB;
+        /**
+        * @language zh_CN
+        * 初始化包围盒（实现IQuadNode的接口）
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        initAABB(): void;
+        /**
+        * @language zh_CN
+        * 该quad是否是三角形（实现IQuadNode的接口）
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        isTriangle: boolean;
+        /**
+        * @language zh_CN
+        * constructor
+        * @param    Id   ID
+        * @param    edgeA   三角形边A
+        * @param    edgeB   三角形边B
+        * @param    edgeC   三角形边C
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor(Id: number, edgeA: Navi3DEdge, edgeB: Navi3DEdge, edgeC: Navi3DEdge);
+        /**
+        * @language zh_CN
+        * @private
+        * 构建点正对着的边，以及边正对着的点的哈希表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private genarateAgainstData();
+        /**
+        * @language zh_CN
+        * @return 三角形的ID，在Navi3DMesh中的唯一ID
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        id: number;
+        /**
+        * @language zh_CN
+        * @return 该三角形所在平面
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        plane: Plane3D;
+        /**
+        * @language zh_CN
+        * @return 该三角形的三个顶点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        points: Array<Navi3DPoint>;
+        /**
+        * @language zh_CN
+        * 加入相邻三角形
+        * param edge     公共边
+        * param triangle 相邻三角形
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        addNeibour(edge: Navi3DEdge, triangle: Navi3DTriangle): void;
+        /**
+        * @language zh_CN
+        * 获取相邻三角形列表
+        * @param list            用于存储结果
+        * @param edgeMask        边的通过属性过滤
+        * @param triangleMask    三角形通过属性过滤
+        * @return                获得到的相邻三角形的队列
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getNeibourTriangles(list?: Array<Navi3DTriangle>, edgeMask?: number, triangleMask?: number): Array<Navi3DTriangle>;
+        /**
+        * @language zh_CN
+        * 使用mask对所有的边进行过滤，获得结果
+        * @param list            用于存储结果
+        * @param edgeMask        边的通过属性过滤
+        * @return                获得到的边的队列
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getEdges(list?: Array<Navi3DEdge>, edgeMask?: number): Array<Navi3DEdge>;
+        /**
+        * @language zh_CN
+        * 获得通过属性
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        walkAble: boolean;
+        /**
+        * @language zh_CN
+        * @return 该三角形的三条边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        edges: Array<Navi3DEdge>;
+        /**
+        * @language zh_CN
+        * 获得通过属性
+        * @param value      用于过滤的值
+        * @return           是否通过
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        testMask(value: number): boolean;
+        /**
+        * @language zh_CN
+        * 根据三角形的一边获取另外一个点
+        * @param edge      输入边
+        * @return          端点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getEdgeAgainstPoint(edge: Navi3DEdge): Navi3DPoint;
+        /**
+        * @language zh_CN
+        * 根据一个顶点，获取对面的边
+        * @param point     输入点
+        * @return          边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getPointAgainstEdge(point: Navi3DPoint): Navi3DEdge;
+        /**
+        * @language zh_CN
+        * 稍微快一些的共边检测，需要等到mesh初始化完毕才可以
+        * @param triangle  三角形
+        * @return          公共边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getPublicEdge(triangle: Navi3DTriangle): Navi3DEdge;
+        /**
+        * @language zh_CN
+        * 费时间一些的检测共边
+        * @param triangle  三角形
+        * @return          公共边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        loopPublicEdge(triangle: Navi3DTriangle): Navi3DEdge;
+        /**
+        * @language zh_CN
+        * 在三角形内随机一个位置
+        * @return          点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        randomPoint(): Vector3D;
+        /**
+        * @language zh_CN
+        * 判定2d点是否在一个2d的三角形内
+        * @param pt0        被判定的点
+        * @param pt1        三角形的顶点1
+        * @param pt2        三角形的顶点2
+        * @param pt3        三角形的顶点3
+        * @return           是否处于三角形内
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static pointInsideTriangle(pt: Vector3D, pt0: Vector3D, pt1: Vector3D, pt2: Vector3D): boolean;
+        /**
+        * @language zh_CN
+        * @private
+        * @return 判定2d点是否在一个2d的三角形内
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private static pointInsideTriangle2d();
+        /**
+        * @language zh_CN
+        * 叉乘计算
+        * @param pt1        点1
+        * @param pt2        点2
+        * @param pt3        点3
+        * @return           结果值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private static product2d(p1, p2, p3);
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DMesh
+    * @classdesc
+    * 解析寻路网格生成的对象
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class Navi3DMesh {
+        private _nav3dPoints;
+        private _nav3dEdges;
+        private _nav3dTriangles;
+        private _path;
+        /**
+        * @language zh_CN
+        * aId_bId的形式创建map表 a小于b
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _edgesDict;
+        /**
+        * @language zh_CN
+        * AStar
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _nav3dAstar;
+        /**
+        * @language zh_CN
+        * 路径分析对象
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _nav3dFunnel;
+        /**
+        * @language zh_CN
+        * 四叉树
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _terrainQuad;
+        /**
+        * @language zh_CN
+        * 寻路结果
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _triangleList;
+        /**
+        * @language zh_CN
+        * 网格中的边列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        edges: Array<Navi3DEdge>;
+        /**
+        * @language zh_CN
+        * 寻路结果的三角带
+        * @return 三角形列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        triangleList: Array<Navi3DTriangle>;
+        /**
+        * @language zh_CN
+        * 网格中的点列表
+        * @return 点列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        points: Array<Navi3DPoint>;
+        /**
+        * @language zh_CN
+        * 寻路结果中，3d点位置列表
+        * @return 3d点位置列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        path: Array<Vector3D>;
+        /**
+        * @language zh_CN
+        * 网格中的三角形列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        channel: Array<Navi3DTriangle>;
+        /**
+        * @language zh_CN
+        * constructor
+        * @param    pointList   顶点数据列表
+        * @param    triangleIndexList   顶点顺序列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor(pointList: Array<Vector3D>, triangleIndexList: Array<Array<number>>);
+        /**
+        * @language zh_CN
+        * 输入一个点，获取一个能匹配的三角形
+        * @param    point   输入的点
+        * @param    threshold   结果三角形最大距离阈值
+        * @return   返回三角形
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getTriangleAtPoint(point: Vector3D, threshold?: number): Navi3DTriangle;
+        /**
+        * @language zh_CN
+        * 输入起点终点，搜寻路径
+        * @param    startPt   起点
+        * @param    endPt   终点
+        * @param    aiRadius   寻路肥胖半径
+        * @return   是否成功
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        findPath(startPt: Vector3D, endPt: Vector3D, aiRadius?: number): boolean;
+        /**
+        * @language zh_CN
+        * 初始化顶点列表
+        * @param    pointList   顶点坐标列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private initPoints(pointList);
+        /**
+        * @language zh_CN
+        * 初始化三角形和边列表
+        * @param    triangleIndexList   三角形顶点顺序列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private initEdgesAndTriangles(triangleIndexList);
+        /**
+        * @language zh_CN
+        * 根据两个点的ID，创建一条边
+        * @param    pointAId   点A
+        * @param    pointBId   点B
+        * @return    创建的边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private tryCreateEdge(pointAId, pointBId);
+        /**
+        * @language zh_CN
+        * 创建关系表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private createConnections();
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DFunnel
+    * @classdesc
+    * 寻找路径的方法
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class Navi3DFunnel {
+        /**
+        * @language zh_CN
+        * 寻路的mesh
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _navMesh;
+        /**
+        * @language zh_CN
+        * 寻路对象的半径
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _aiRadius;
+        /**
+        * @language zh_CN
+        * Navi3DRouter
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _router;
+        /**
+        * @language zh_CN
+        * 结果
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _result;
+        /**
+        * @language zh_CN
+        * 公共边数据列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _tempPublicEdgeList;
+        /**
+        * @language zh_CN
+        * 共面信息
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private _tempSamePlaneList;
+        /**
+        * @language zh_CN
+        * 误差值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static EPSILON: number;
+        /**
+        * @language zh_CN
+        * 误差值的平方
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static POWER_EPSILON: number;
+        /**
+        * @language zh_CN
+        * 计算用的Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private static CROSS_TEST_DIRECTION;
+        /**
+        * @language zh_CN
+        * constructor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor();
+        /**
+        * @language zh_CN
+        * 搜索路径
+        * @param mesh   搜索的范围
+        * @param startPt   起点
+        * @param endPt   终点
+        * @param triangleList   三角带
+        * @param radius   半径
+        * @return 是否寻路成功
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        searchPath(mesh: Navi3DMesh, startPt: Vector3D, endPt: Vector3D, triangleList: Array<Navi3DTriangle>, radius?: number): boolean;
+        path: Array<Vector3D>;
+        /**
+        * @language zh_CN
+        * 检测是否满足搜索条件
+        * @param startPt   起点
+        * @param endPt   终点
+        * @param triangleList   三角带
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private searchEnable(startPt, endPt, triangleList);
+        /**
+        * @language zh_CN
+        * 执行搜索
+        * @param startPt   起点坐标
+        * @param endPt   终点坐标
+        * @param triangleList   三角带
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private search(startPt, endPt, triangleList);
+        /**
+        * @language zh_CN
+        * 将端点换成肥胖检测点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private optimusTerminusFat();
+        /**
+        * @language zh_CN
+        * 将穿越的公共边数据里的通过点加入到结果队列中
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private pushAllPathPoint2(startPt, endPt);
+        /**
+        * @language zh_CN
+        * 优化通过的点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private optimusByRadius();
+        /**
+        * @language zh_CN
+        * 对某个边获取肥胖监测点
+        * @param target 输入的坐标点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private getFatPoint(edge, target);
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DRouter
+    * @classdesc
+    * 纯2d的点
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class Navi3DRouter {
+        /**
+        * @language zh_CN
+        * 终点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        endPoint: Vector3D;
+        /**
+        * @language zh_CN
+        * 当前点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        curPoint: Vector3D;
+        /**
+        * @language zh_CN
+        * 射线A
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        rayA: Vector3D;
+        /**
+        * @language zh_CN
+        * 射线B
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        rayB: Vector3D;
+        /**
+        * @language zh_CN
+        * 射线A的对应点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        rayAPoint: Navi3DPoint;
+        /**
+        * @language zh_CN
+        * 射线B的对应点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        rayBPoint: Navi3DPoint;
+        /**
+        * @language zh_CN
+        * 静态变量射线1
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static RAY_1: Vector3D;
+        /**
+        * @language zh_CN
+        * 静态变量射线2
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static RAY_2: Vector3D;
+        /**
+        * @language zh_CN
+        * 计算用射线
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static TEST_RAY: Vector3D;
+        /**
+        * @language zh_CN
+        * 计算用射线1
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static TEST_RAY_1: Vector3D;
+        /**
+        * @language zh_CN
+        * 计算用射线2
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        static TEST_RAY_2: Vector3D;
+        /**
+        * @language zh_CN
+        * 计算用的Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private static CALC_CROSS_POINT;
+        /**
+        * @language zh_CN
+        * 计算用的Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private static CALC_CROSS_TEST;
+        /**
+        * @language zh_CN
+        * 记录下的拐点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        cornerPoint: Navi3DPoint;
+        /**
+        * @language zh_CN
+        * 记录下的拐点所在的边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        cornerEdge: Navi3DEdge;
+        /**
+        * @language zh_CN
+        * constructor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor();
+        /**
+        * @language zh_CN
+        * 设定继续通过
+        * @param fromPt     起点
+        * @param endPt      终点
+        * @param fromEdge   上一次的边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        continuePass(fromPt: Vector3D, endPt: Vector3D, fromEdge: Navi3DEdge): void;
+        /**
+        * @language zh_CN
+        * 继续通过
+        * @param commonEdge          公共边
+        * @param nextCommonEdge      下一个公共边
+        * @param targetPoint         目标点
+        * @param lastEdge            是否为最后一个边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        passEdge(commonEdge: Navi3DEdge, nextCommonEdge: Navi3DEdge, targetPoint: Vector3D, lastEdge: boolean): boolean;
+        /**
+        * @language zh_CN
+        * @private
+        * 通过边的时候，发现为抵达终点的处理函数
+        * @param targetPoint          终点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private checkEndPoint(targetPoint);
+        /**
+        * @language zh_CN
+        * 计算射线与线段的两个fatPoint之间交点
+        * @param _edge          线段
+        * @param linePoint      射线起点
+        * @param lineDirection  射线方向
+        * @return               交点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        calcCrossEdge(_edge: Navi3DEdge, linePoint: Vector3D, lineDirection: Vector3D): Vector3D;
+        /**
+        * @language zh_CN
+        * 计算射线与线段的交点
+        * @param _edge          线段
+        * @param linePoint      射线起点
+        * @param lineDirection  射线方向
+        * @return               交点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        calcCrossPoint(segmentPt1: Vector3D, segmentPt2: Vector3D, linePoint: Vector3D, lineDirection: Vector3D): Vector3D;
+        /**
+        * @language zh_CN
+        * 计算射线与线段交点，如果不在线段里面，则返回null
+        * @param segmentPt1      线段1端
+        * @param segmentPt2      线段另一端
+        * @param linePoint       射线起点
+        * @param lineDirection   射线方向
+        * @return                交点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        calcCrossPointOut(segmentPt1: Vector3D, segmentPt2: Vector3D, linePoint: Vector3D, lineDirection: Vector3D): Vector3D;
+        /**
+        * @language zh_CN
+        * 判定计算射线与线段是否有交点
+        * @param segmentPt1      线段1端
+        * @param segmentPt2      线段另一端
+        * @param linePoint       射线起点
+        * @param lineDirection   射线方向
+        * @return                是否有交点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        hasCrossPoint(segmentPt1: Vector3D, segmentPt2: Vector3D, linePoint: Vector3D, lineDirection: Vector3D): boolean;
+        /**
+        * @language zh_CN
+        * @private
+        * 判定一个点是否在两个射线的夹角内侧
+        * @param point        点
+        * @param vectorA      射线A
+        * @param vectorB      射线B
+        * @return             是在内侧
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private isPointAtCenter(point, vectorA, vectorB);
+        /**
+        * @language zh_CN
+        * 重置该router
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        resetData(): void;
+    }
+}
+declare module egret3d {
+    /**
      * @class egret3d.View3D
      * @classdesc
      * 渲染视图。</p>
@@ -14316,6 +16303,89 @@ declare module egret3d {
 }
 declare module egret3d {
     /**
+     * @class egret3d.View3D
+     * @classdesc
+     * VRView3D 会把场景渲染成两个视口。
+     * 两个视口是由不同的摄像机渲染出来的结果，也相当由左右眼。
+     * @see egret3d.Camera3D
+     * @see egret3d.Scene3D
+     * @see egret3d.Egret3DCanvas
+     * @version Egret 3.0
+     * @platform Web,Native
+     */
+    class VRView3D extends View3D {
+        protected leftViewPort: Rectangle;
+        protected rightViewPort: Rectangle;
+        /**
+        * @language zh_CN
+        * 构建一个view3d对象
+        * @param x 视口的屏幕x坐标
+        * @param y 视口的屏幕y坐标
+        * @param width 视口的屏幕宽度
+        * @param height 视口的屏幕高度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor(x: number, y: number, width: number, height: number);
+        protected updateViewport(): void;
+        /**
+        * @language zh_CN
+        * 设置当前视口的屏幕x坐标
+        * @param x 视口的屏幕x坐标
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        x: number;
+        /**
+        * @language zh_CN
+        * 设置当前视口的屏幕y坐标
+        * @param y 视口的屏幕y坐标
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        y: number;
+        /**
+        * @language zh_CN
+        * 设置视口的屏幕宽度
+        * @param width 视口的屏幕宽度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        width: number;
+        /**
+        * @language zh_CN
+        * 设置视口的屏幕高度
+        * @param width 视口的屏幕高度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        height: number;
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        update(time: number, delay: number): void;
+        /**
+        * @language zh_CN
+        * 获取两只眼睛之间的距离
+        * @returns number 眼睛之间的距离
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        /**
+        * @language zh_CN
+        * 设置两只眼睛之间的距离
+        * @param eyeDis  两只眼睛之间的距离
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        eyeDistance: number;
+    }
+}
+declare module egret3d {
+    /**
     * @class egret3d.Egret3DCanvas
     * @classdesc
     * 3dCanvas 是一个3d渲染画布 它继承EventDispatcher 可以监听部分事件。
@@ -14459,5 +16529,39 @@ declare module egret3d {
         * @event call
         */
         private resize(x, y, width, height);
+    }
+}
+declare module egret3d {
+    /**
+    * @private
+    */
+    class MeshData {
+        mesh: Mesh;
+        constructor(axis: string);
+    }
+    /**
+    * @private
+    */
+    class LocalAxis extends Object3D {
+        private _xyz;
+        private _currentDownIndex;
+        private _currentAxisIndex;
+        private _axisColor;
+        private _canvas3d;
+        private _view3d;
+        private _bindNode;
+        constructor(canvas3d: Egret3DCanvas, view3d: View3D);
+        bind(node: Mesh): void;
+        initialize(): void;
+        isPick(): boolean;
+        private getCurrentIndex(mesh);
+        private caheWorldPosition;
+        private onMouseDown(e);
+        private mousePosition;
+        private dely;
+        private sp;
+        private onMouseMove(e);
+        private onMouseUp(e);
+        private onPickDown(e);
     }
 }

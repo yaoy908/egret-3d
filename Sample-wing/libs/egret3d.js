@@ -6850,7 +6850,7 @@ var egret3d;
      * @platform Web,Native
      */
     var Bound = (function () {
-        function Bound() {
+        function Bound(owner) {
             /**
             * @language zh_CN
             * 顶点数据
@@ -6866,28 +6866,16 @@ var egret3d;
             * 顶点长度
             */
             this.vexLength = 3;
-            this.matTransform = new egret3d.Matrix4_4();
+            this.owner = owner;
         }
-        Object.defineProperty(Bound.prototype, "Transform", {
+        Object.defineProperty(Bound.prototype, "transform", {
             /**
             * @language zh_CN
             * 得到变换矩阵
             * @returns 变换矩阵
             */
             get: function () {
-                return this.matTransform;
-            },
-            /**
-            * @language zh_CN
-            * 设置变换矩阵
-            * @param mat 变换矩阵
-            */
-            set: function (mat) {
-                this.matTransform.copyFrom(mat);
-                this.updateAABB();
-                if (this.childBound) {
-                    this.childBound.Transform = mat;
-                }
+                return this.owner.sceneTransform;
             },
             enumerable: true,
             configurable: true
@@ -6945,10 +6933,11 @@ var egret3d;
         * @param min
         * @param max
         */
-        function BoundBox(min, max) {
+        function BoundBox(owner, min, max) {
+            if (owner === void 0) { owner = null; }
             if (min === void 0) { min = new egret3d.Vector3D(); }
             if (max === void 0) { max = new egret3d.Vector3D(); }
-            _super.call(this);
+            _super.call(this, owner);
             /**
             * @language zh_CN
             * 顶点数据
@@ -10198,9 +10187,6 @@ var egret3d;
             }
             this._modeMatrix3D.makeTransform(this._globalPos, this._globalSca, this._globalOrientation);
             this._transformChange = false;
-            if (this.bound) {
-                this.bound.Transform = this._modeMatrix3D;
-            }
             this.onUpdateTransform();
         };
         Object3D.prototype.onUpdateTransform = function () {
@@ -10962,9 +10948,34 @@ var egret3d;
             }
             this.addSubMaterial(0, material);
             this.material = material;
-            this.buildBoundBox();
+            this.bound = this.buildBoundBox();
         }
         Mesh.prototype.setMaterialByID = function () {
+        };
+        Object.defineProperty(Mesh.prototype, "aabb", {
+            get: function () {
+                return this._aabbBox;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Mesh.prototype.initAABB = function () {
+            this._aabbBox = new egret3d.QuadAABB();
+            var box = this.bound;
+            this._aabbBox.maxPosX = box.max.x;
+            this._aabbBox.maxPosY = box.max.z;
+            this._aabbBox.minPosX = box.min.x;
+            this._aabbBox.minPosY = box.min.z;
+        };
+        Object.defineProperty(Mesh.prototype, "isTriangle", {
+            get: function () {
+                return false;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Mesh.prototype.onUpdateTransform = function () {
+            this._aabbBox.setOffset(this._pos);
         };
         /**
         * @language zh_CN
@@ -11055,9 +11066,9 @@ var egret3d;
             if (!this.geometry) {
                 return null;
             }
-            var bound = new egret3d.BoundBox();
+            var bound = new egret3d.BoundBox(this);
             bound.min.copyFrom(new egret3d.Vector3D(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE));
-            bound.max.copyFrom(new egret3d.Vector3D(Number.MIN_VALUE, Number.MIN_VALUE, Number.MIN_VALUE));
+            bound.max.copyFrom(new egret3d.Vector3D(-Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE));
             for (var i = 0; i < this.geometry.verticesData.length; i += this.geometry.vertexAttLength) {
                 if (bound.max.x < this.geometry.verticesData[i]) {
                     bound.max.x = this.geometry.verticesData[i];
@@ -11079,7 +11090,7 @@ var egret3d;
                 }
             }
             bound.fillBox(bound.min, bound.max);
-            bound.childBound = new egret3d.BoundBox();
+            bound.childBound = new egret3d.BoundBox(this);
             var max = new egret3d.Vector3D();
             var min = new egret3d.Vector3D();
             max.x = bound.center.x + bound.width / 4;
@@ -11090,6 +11101,7 @@ var egret3d;
             min.z = bound.center.z - bound.depth / 4;
             bound.childBound.fillBox(min, max);
             this.bound = bound;
+            this.initAABB();
             return bound;
         };
         /**
@@ -12074,25 +12086,38 @@ var egret3d;
                 this.applyRender(child.childs[i], camera);
             }
         };
+        /**
+        * @language zh_CN
+        * 尝试将一个渲染对象，进行视锥体裁剪，放入到渲染队列中
+        * @param root 渲染根节点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         EntityCollect.prototype.addRenderList = function (renderItem, camera) {
             if (renderItem.enableCulling) {
                 if (!camera.isVisibleToCamera(renderItem)) {
                     return;
                 }
-                this.renderList.push(renderItem);
+                if (renderItem.material != null && renderItem.material.materialData.alphaBlending) {
+                    //layer.alphaObjects.push(renderItem);
+                    this._alphaRenderItems.push(renderItem);
+                }
+                else {
+                    this._normalRenderItems.push(renderItem);
+                }
             }
             if (renderItem.enablePick) {
                 this.mousePickList.push(renderItem);
             }
             //var layer: Layer = this.findLayer(renderItem);
             //var tag: Tag = this.findTag(renderItem);
-            if (renderItem.material != null && renderItem.material.materialData.alphaBlending) {
-                //layer.alphaObjects.push(renderItem);
-                this._alphaRenderItems.push(renderItem);
-            }
-            else {
-                this._normalRenderItems.push(renderItem);
-            }
+            //if (renderItem.material != null && renderItem.material.materialData.alphaBlending) {
+            //    //layer.alphaObjects.push(renderItem);
+            //    this._alphaRenderItems.push(renderItem);
+            //}
+            //else {
+            //    this._normalRenderItems.push(renderItem);
+            //}
         };
         /**
         * @language zh_CN
@@ -12108,7 +12133,15 @@ var egret3d;
             this.renderList.length = 0;
             this.mousePickList.length = 0;
             this.clearLayerList();
-            this.applyRender(this.rootScene.root, camera);
+            if (this.rootScene.quad) {
+                var box = camera.frustum.box;
+                var quadList = this.rootScene.quad.getNodesByAABB(box.min.x, box.min.z, box.max.x, box.max.z);
+                //var time3: number = new Date().getTime();
+                this.appendQuadList(quadList, camera);
+            }
+            else {
+                this.applyRender(this.rootScene.root, camera);
+            }
             for (var i = 0; i < this._normalRenderItems.length; ++i) {
                 this.renderList.push(this._normalRenderItems[i]);
             }
@@ -12128,28 +12161,48 @@ var egret3d;
             //    }
             //}
         };
-        // protected findLayer(renderItem: IRender): Layer {
-        //     var typeIndex: number = renderItem.layer >> 24;
-        //     var layerIndex: number = renderItem.layer & 0x00FFFFFF;
-        //     if (typeIndex < this._layerTags.length && typeIndex >= 0) {
-        //         if (layerIndex < this._layerTags[typeIndex].layers.length && layerIndex >= 0) {
-        //             return this._layerTags[typeIndex].layers[layerIndex];
-        //         }
-        //     }
-        //     return this._layerTags[0].layers[0];
-        // }
-        // protected findTag(object3d: Object3D): Tag {
-        //     var typeIndex: number = object3d.layer >> 24;
-        //     if (typeIndex < this._layerTags.length && typeIndex >= 0) {
-        //         return this._layerTags[typeIndex];
-        //     }
-        //     return this._layerTags[0];
-        // }
+        /**
+        * @language zh_CN
+        * 根据当前场景的节点分布情况，生成四叉树
+        * @version Egret 3.0
+        * @param quadList   需要被判定是否在视锥体里的节点列表
+        * @param camera     相机
+        * @platform Web,Native
+        */
+        EntityCollect.prototype.appendQuadList = function (quadList, camera) {
+            var mesh;
+            var node;
+            for (var _i = 0, quadList_1 = quadList; _i < quadList_1.length; _i++) {
+                node = quadList_1[_i];
+                if (!(node instanceof egret3d.Mesh))
+                    continue;
+                mesh = node;
+                if (mesh && mesh.visible && mesh["material"])
+                    this.addRenderList(mesh, camera);
+            }
+        };
+        //protected findLayer(object3d: Object3D): Layer {
+        //    var typeIndex: number = object3d.layer >> 24;
+        //    var layerIndex: number = object3d.layer & 0x00FFFFFF;
+        //    if (typeIndex < this._tags.length && typeIndex >= 0) {
+        //        if (layerIndex < this._tags[typeIndex].layers.length && layerIndex >= 0) {
+        //            return this._tags[typeIndex].layers[layerIndex];
+        //        }
+        //    }
+        //    return this._tags[0].layers[0];
+        //}
+        //protected findTag(object3d: Object3D): Tag {
+        //    var typeIndex: number = object3d.layer >> 24;
+        //    if (typeIndex < this._tags.length && typeIndex >= 0) {
+        //        return this._tags[typeIndex];
+        //    }
+        //    return this._tags[0];
+        //}
         EntityCollect.prototype.clearLayerList = function () {
-            //for (var i: number = 0; i < this._layerTags.length; ++i) {
-            //    for (var j: number = 0; j < this._layerTags[i].layers.length; ++j) {
-            //        this._layerTags[i].layers[j].objects.length = 0;
-            //        this._layerTags[i].layers[j].alphaObjects.length = 0;
+            //for (var i: number = 0; i < this._tags.length; ++i) {
+            //    for (var j: number = 0; j < this._tags[i].layers.length; ++j) {
+            //        this._tags[i].layers[j].objects.length = 0;
+            //        this._tags[i].layers[j].alphaObjects.length = 0;
             //    }
             //}
         };
@@ -12199,7 +12252,7 @@ var egret3d;
             for (var i = 0; i < 6; ++i) {
                 this._plane.push(new egret3d.Plane3D());
             }
-            this.box = new egret3d.BoundBox(new egret3d.Vector3D(), new egret3d.Vector3D());
+            this.box = new egret3d.BoundBox(null, new egret3d.Vector3D(), new egret3d.Vector3D());
             ///this.box = new CubeBoxBound(new Vector3D(99999.0, 99999.0, 99999.0), new Vector3D(-99999.0, -99999.0, -99999.0));
             this.center = new egret3d.Vector3D();
         }
@@ -12271,6 +12324,8 @@ var egret3d;
             for (var i = 0; i < this._vtxNum; ++i) {
                 vtx.push(mat.transformVector(this._vertex[i]));
             }
+            this.box.max.x = this.box.max.y = this.box.max.z = -Number.MAX_VALUE;
+            this.box.min.x = this.box.min.y = this.box.min.z = Number.MAX_VALUE;
             for (var i = 0; i < vtx.length; ++i) {
                 if (this.box.max.x < vtx[i].x) {
                     this.box.max.x = vtx[i].x;
@@ -12366,7 +12421,7 @@ var egret3d;
                 var incount = box.vexData.length / 3;
                 for (var j = 0; j < box.vexData.length; j += 3) {
                     temp.setTo(box.vexData[j], box.vexData[j + 1], box.vexData[j + 2]);
-                    temp.copyFrom(box.Transform.transformVector(temp));
+                    temp.copyFrom(box.transform.transformVector(temp));
                     dis = this._plane[i].distance(temp);
                     if (dis > 0) {
                         incount--;
@@ -17352,6 +17407,7 @@ var egret3d;
             configurable: true
         });
         /**
+        * @private
         * @language zh_CN
         * @param time
         * @param delay
@@ -17366,11 +17422,16 @@ var egret3d;
         FogMethod.prototype.upload = function (time, delay, usage, geometry, context3DProxy, modeltransform, camera3D) {
             usage["uniform_globalFog"] = context3DProxy.getUniformLocation(usage.program3D, "uniform_globalFog");
         };
+        /**
+         * @language zh_CN
+         * @private
+         */
         FogMethod.prototype.update = function (time, delay, usage, geometry, context3DProxy, modeltransform, camera3D) {
             context3DProxy.uniform1fv(usage["uniform_globalFog"], this.uniform_globalFog);
         };
         /**
          * @language zh_CN
+         * @private
          */
         FogMethod.prototype.dispose = function () {
         };
@@ -20927,6 +20988,20 @@ var egret3d;
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(Scene3D.prototype, "quad", {
+            /**
+            * @language zh_CN
+            * 返回剖分场景四叉树根信息
+            * @returns QuadRoot
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._quad;
+            },
+            enumerable: true,
+            configurable: true
+        });
         /**
         * @language zh_CN
         * 将一个 Object3D 实例添加到 Scene3D 实例中。
@@ -20947,6 +21022,45 @@ var egret3d;
         };
         Scene3D.prototype.infrustumList = function (camera) {
             return this._tree.infrustumList(camera);
+        };
+        /**
+        * @language zh_CN
+        * 根据当前场景的节点分布情况，生成四叉树
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Scene3D.prototype.createQuadTree = function () {
+            this._quad = new egret3d.QuadRoot(8, 128);
+            var nodes = new Array();
+            this.collectQuadList(nodes, this.root);
+            this._quad.createQuadTree(nodes);
+        };
+        /**
+        * @language zh_CN
+        * 遍历一个Object3D及其child节点，如果能够进入视锥体，则放入返回的列表中
+        * @param  nodes 用于返回Quad元素结果
+        * @param  obj   待遍历的对象
+        * @returns Array<IQuadNode>
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Scene3D.prototype.collectQuadList = function (nodes, obj) {
+            nodes = nodes || new Array();
+            var mesh;
+            if (obj instanceof egret3d.Mesh) {
+                mesh = obj;
+                if (mesh.aabb) {
+                    nodes.push(mesh);
+                }
+            }
+            var child;
+            if (obj.childs && obj.childs.length > 0) {
+                for (var _i = 0, _a = obj.childs; _i < _a.length; _i++) {
+                    child = _a[_i];
+                    this.collectQuadList(nodes, child);
+                }
+            }
+            return nodes;
         };
         return Scene3D;
     }());
@@ -21898,12 +22012,6 @@ var egret3d;
         function ShaderLib() {
         }
         ShaderLib.lib = {
-            "AOMap_fs": "uniform sampler2D aoTexture ; \n" +
-                "uniform float aoPower ; \n" +
-                "void main(void){ \n" +
-                "float ao = texture2D( aoTexture , varying_uv1 ).x ; \n" +
-                "diffuseColor.xyz *= (ao * aoPower) ; \n" +
-                "} \n",
             "base_fs": "#extension GL_OES_standard_derivatives : enable \n" +
                 "varying vec3 varying_eyeNormal  ; \n" +
                 "varying vec2 varying_uv0; \n" +
@@ -21911,8 +22019,7 @@ var egret3d;
                 "varying vec4 varying_color; \n" +
                 "uniform vec3 uniform_eyepos ; \n" +
                 "uniform mat4 uniform_ViewMatrix ; \n" +
-                "uniform mat4 uniform_ProjectionMatrix; \n" +
-                "vec4 outColor ; \n" +
+                "vec4 outColor; \n" +
                 "vec4 diffuseColor ; \n" +
                 "vec4 specularColor ; \n" +
                 "vec4 ambientColor; \n" +
@@ -21973,28 +22080,21 @@ var egret3d;
                 "gl_FragColor = ref ; \n" +
                 "} \n",
             "cube_vertex": "attribute vec3 attribute_position; \n" +
-                "uniform mat4 uniform_ModelMatrix ; \n" +
-                "uniform mat4 uniform_ViewProjectionMatrix ; \n" +
-                "uniform mat4 uniform_NormalMatrix ; \n" +
+                "uniform mat4 uniform_ModelMatrix; \n" +
+                "uniform mat4 uniform_ViewMatrix; \n" +
+                "uniform mat4 uniform_ProjectionMatrix; \n" +
                 "varying vec3 varying_pos; \n" +
                 "void main(void){ \n" +
                 "varying_pos =  attribute_position; \n" +
-                "gl_Position = uniform_ViewProjectionMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
+                "gl_Position = uniform_ProjectionMatrix * uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
                 "} \n",
             "diffuse_fragment": "uniform sampler2D diffuseTexture; \n" +
                 "vec4 diffuseColor ; \n" +
                 "void main() { \n" +
-                "if( diffuseColor.w == 0.0 ){ \n" +
-                "discard; \n" +
-                "} \n" +
-                "diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
-                "if( diffuseColor.w == materialSource.cutAlpha ){ \n" +
-                "discard; \n" +
-                "} \n" +
+                "diffuseColor = textureLinear(diffuseTexture , uv_0 ); \n" +
                 "} \n",
             "diffuse_vertex": "void main(void){ \n" +
-                "mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
-                "mat3 normalMatrix = transpose( inverse(mat3( modeViewMatrix )) ); \n" +
+                "mat3 normalMatrix = transpose( inverse(mat3( uniform_ProjectionMatrix * uniform_ViewMatrix )) ); \n" +
                 "varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
                 "outPosition = uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
                 "varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
@@ -22043,7 +22143,7 @@ var egret3d;
                 "diffuseColor.xyz = materialSource.diffuse.xyz * diffuseColor.xyz ; \n" +
                 "outColor.xyz = (ambientColor.xyz + materialSource.ambient.xyz + light.xyz) * diffuseColor.xyz + specularColor.xyz * materialSource.specularScale; \n" +
                 "outColor.w = materialSource.alpha * diffuseColor.w ; \n" +
-                "gl_FragColor = outColor * varying_color; \n" +
+                "gl_FragColor = outColor * varying_color ; \n" +
                 "} \n",
             "end_vs": "vec4 endPosition ; \n" +
                 "void main() { \n" +
@@ -22051,52 +22151,6 @@ var egret3d;
                 "gl_Position = uniform_ProjectionMatrix * outPosition ; \n" +
                 "} \n" +
                 "                       \n",
-            "expFog_fs": "struct Fog{ \n" +
-                "vec3 fogColor  ; \n" +
-                "float globalDensity ; \n" +
-                "vec3 distance ; \n" +
-                "}; \n" +
-                "varying vec4 varying_pos; \n" +
-                "uniform float uniform_globalFog[7]; \n" +
-                "void main(void){ \n" +
-                "Fog fog; \n" +
-                "fog.fogColor = vec3(uniform_globalFog[0],uniform_globalFog[1],uniform_globalFog[2]); \n" +
-                "fog.globalDensity = uniform_globalFog[3]; \n" +
-                "fog.distance = vec2(uniform_globalFog[4], uniform_globalFog[5]); \n" +
-                "float d = distance(uniform_eyepos,varying_pos.xyz); \n" +
-                "float distFog = max( 0.0 , d - fog.distance.x )* fog.distance.y; \n" +
-                "float fogFactor = (1.0-exp( -distFog * 0.000001 * fog.globalDensity )) ; \n" +
-                "diffuseColor.xyz = mix( diffuseColor.xyz  , fog.fogColor , min(fogFactor,1.0) ); \n" +
-                "} \n" +
-                "  \n",
-            "expHeightFog_fs": "struct Fog{ \n" +
-                "vec3 fogColor  ; \n" +
-                "float globalDensity ; \n" +
-                "float fogStartDistance ; \n" +
-                "float fogHeightStart ; \n" +
-                "float fogAlpha ; \n" +
-                "}; \n" +
-                "varying vec4 varying_pos; \n" +
-                "uniform float uniform_globalFog[7]; \n" +
-                "vec3 applyFog( float yDistance, vec3  vpos , Fog fog ) \n" +
-                "{ \n" +
-                "float d = distance(uniform_eyepos,varying_pos.xyz); \n" +
-                "float distFog = max( 0.0 , d - fog.fogStartDistance ) ; \n" +
-                "float yFog = max(0.0, (vpos.y - fog.fogHeightStart - yDistance) )  ; \n" +
-                "float fogAmount =  1.0-(exp(-distFog * fog.globalDensity )) + (exp(-yFog * fog.globalDensity )); \n" +
-                "return mix( diffuseColor.xyz,fog.fogColor, clamp(fogAmount,0.0,fog.fogAlpha) ); \n" +
-                "} \n" +
-                "void main(void){ \n" +
-                "Fog fog; \n" +
-                "fog.fogColor = vec3(uniform_globalFog[0],uniform_globalFog[1],uniform_globalFog[2]); \n" +
-                "fog.globalDensity = uniform_globalFog[3]; \n" +
-                "fog.fogStartDistance = uniform_globalFog[4] ; \n" +
-                "fog.fogHeightStart = uniform_globalFog[5] ; \n" +
-                "fog.fogAlpha = uniform_globalFog[6] ; \n" +
-                "float yd = uniform_eyepos.y - varying_pos.y ; \n" +
-                "diffuseColor.xyz = applyFog( yd , varying_pos.xyz , fog ); \n" +
-                "} \n" +
-                "  \n",
             "flatNormal_fs": "#extension GL_OES_standard_derivatives : enable \n" +
                 "vec3 flatNormal(vec3 pos){ \n" +
                 "vec3 fdx = dFdx(pos); \n" +
@@ -22156,27 +22210,6 @@ var egret3d;
                 "float attenuation = 1.0 / (denom*denom); \n" +
                 "float t = (attenuation - f) / (1.0 - f); \n" +
                 "return max(t, 0.0); \n" +
-                "} \n",
-            "lightMap_fs": "uniform sampler2D lightTexture ; \n" +
-                "void main(void){ \n" +
-                "diffuseColor.xyz *= texture2D( lightTexture , varying_uv1 ).xyz * 2.0 ; \n" +
-                "} \n",
-            "lineFog": "struct Fog{ \n" +
-                "vec3 fogColor  ; \n" +
-                "float globalDensity ; \n" +
-                "vec3 distance ; \n" +
-                "}; \n" +
-                "varying vec4 varying_pos; \n" +
-                "uniform float uniform_globalFog[7]; \n" +
-                "void main(void){ \n" +
-                "Fog fog; \n" +
-                "fog.fogColor = vec3(uniform_globalFog[0],uniform_globalFog[1],uniform_globalFog[2]); \n" +
-                "fog.globalDensity = uniform_globalFog[3]; \n" +
-                "fog.distance = vec2(uniform_globalFog[4], uniform_globalFog[5]); \n" +
-                "float dist = abs( varying_ViewPose.z ); \n" +
-                "float fogFactor = ( fog.distance.y - dist) / (fog.distance.y - fog.distance.x); \n" +
-                "fogFactor = clamp( fogFactor, 0.0, 1.0 ); \n" +
-                "diffuseColor.xyz = mix( fog.fogColor, diffuseColor.xyz, fogFactor ); \n" +
                 "} \n",
             "materialSource_fs": "struct MaterialSource{ \n" +
                 "vec3 diffuse; \n" +
@@ -22239,146 +22272,6 @@ var egret3d;
                 "vec3 normalTex = texture2D(normalTexture,uv_0).xyz *2.0 - 1.0; \n" +
                 "normalTex.y *= -1.0; \n" +
                 "normal.xyz = tbn( normalTex.xyz , normal.xyz , normalize(varying_ViewPose.xyz) , uv_0 ) ; \n" +
-                "} \n",
-            "particle_vs": "attribute vec3 attribute_offset; \n" +
-                "attribute vec3 attribute_lifecycle; \n" +
-                "attribute vec3 attribute_direction; \n" +
-                "attribute vec2 attribute_speed; \n" +
-                "uniform mat4 uniform_cameraMatrix; \n" +
-                "uniform float uniform_time; \n" +
-                "uniform float uniform_enableBillboardXYZ; \n" +
-                "uniform vec3 uniform_startColor; \n" +
-                "uniform vec3 uniform_endColor; \n" +
-                "uniform vec3 uniform_startScale; \n" +
-                "uniform vec3 uniform_endScale; \n" +
-                "uniform vec3 uniform_startRot; \n" +
-                "uniform vec3 uniform_endRot; \n" +
-                "const float PI = 3.1415926 ; \n" +
-                "vec4 position; \n" +
-                "float currentTime = 0.0; \n" +
-                "float totalTime = 0.0; \n" +
-                "mat4 buildRotMat4(vec3 rot) \n" +
-                "{ \n" +
-                "mat4 ret = mat4( \n" +
-                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
-                "vec4(0.0, 1.0, 0.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 1.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0) \n" +
-                "); \n" +
-                "float s; \n" +
-                "float c; \n" +
-                "s = sin(rot.x); \n" +
-                "c = cos(rot.x); \n" +
-                "ret *= mat4( \n" +
-                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
-                "vec4(0.0, c, s, 0.0), \n" +
-                "vec4(0.0, -s, c, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0) \n" +
-                "); \n" +
-                "s = sin(rot.y); \n" +
-                "c = cos(rot.y); \n" +
-                "ret *= mat4( \n" +
-                "vec4(c, 0.0, -s, 0.0), \n" +
-                "vec4(0.0, 1.0, 0.0, 0.0), \n" +
-                "vec4(s, 0.0, c, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0) \n" +
-                "); \n" +
-                "s = sin(rot.z); \n" +
-                "c = cos(rot.z); \n" +
-                "ret *= mat4( \n" +
-                "vec4(c, s, 0.0, 0.0), \n" +
-                "vec4(-s, c, 0.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 1.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0) \n" +
-                "); \n" +
-                "return ret; \n" +
-                "} \n" +
-                "void main(void) { \n" +
-                "varying_color = vec4(1.0, 1.0, 1.0, 1.0); \n" +
-                "mat4 billboardMatrix = mat4( \n" +
-                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
-                "vec4(0.0, 1.0, 0.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 1.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-                "if (uniform_enableBillboardXYZ == 111.0) \n" +
-                "{ \n" +
-                "billboardMatrix = mat4( \n" +
-                "uniform_cameraMatrix[0], \n" +
-                "uniform_cameraMatrix[1], \n" +
-                "uniform_cameraMatrix[2], \n" +
-                "vec4(0.0, 0.0,1.0, 1.0)); \n" +
-                "} \n" +
-                "else \n" +
-                "{ \n" +
-                "if (mod(uniform_enableBillboardXYZ, 10.0) == 1.0) \n" +
-                "{ \n" +
-                "billboardMatrix *= mat4( \n" +
-                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
-                "vec4(0.0, uniform_cameraMatrix[1].y, uniform_cameraMatrix[1].z, 0.0), \n" +
-                "vec4(0.0, uniform_cameraMatrix[2].y, uniform_cameraMatrix[2].z, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-                "} \n" +
-                "if (mod(uniform_enableBillboardXYZ, 100.0) / 10.0 > 1.0) \n" +
-                "{ \n" +
-                "billboardMatrix *= mat4( \n" +
-                "vec4(uniform_cameraMatrix[0].x, 0.0, uniform_cameraMatrix[0].z, 0.0), \n" +
-                "vec4(0.0, 1.0, 0.0, 0.0), \n" +
-                "vec4(uniform_cameraMatrix[2].x, 0.0, uniform_cameraMatrix[2].z, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-                "} \n" +
-                "if (uniform_enableBillboardXYZ / 100.0 > 1.0) \n" +
-                "{ \n" +
-                "billboardMatrix *= mat4( \n" +
-                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
-                "vec4(0.0, uniform_cameraMatrix[1].y, uniform_cameraMatrix[1].z, 0.0), \n" +
-                "vec4(0.0, uniform_cameraMatrix[2].y, uniform_cameraMatrix[2].z, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-                "} \n" +
-                "} \n" +
-                "mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
-                "mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); \n" +
-                "varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
-                "position = vec4(attribute_offset, 1.0); \n" +
-                "outPosition = vec4(attribute_position, 1.0); \n" +
-                "outPosition = billboardMatrix * outPosition; \n" +
-                "totalTime = attribute_lifecycle.x + attribute_lifecycle.y; \n" +
-                "if (attribute_lifecycle.z == 1.0) \n" +
-                "{ \n" +
-                "currentTime = mod(uniform_time, totalTime); \n" +
-                "if (currentTime >= attribute_lifecycle.x && currentTime <= totalTime) \n" +
-                "{ \n" +
-                "currentTime = currentTime - attribute_lifecycle.x; \n" +
-                "} \n" +
-                "else \n" +
-                "{ \n" +
-                "varying_color.w = 0.0; \n" +
-                "} \n" +
-                "} \n" +
-                "else \n" +
-                "{ \n" +
-                "if (uniform_time < attribute_lifecycle.x || uniform_time > totalTime) \n" +
-                "{ \n" +
-                "varying_color.w = 0.0; \n" +
-                "} \n" +
-                "else \n" +
-                "{ \n" +
-                "currentTime = uniform_time - attribute_lifecycle.x; \n" +
-                "} \n" +
-                "} \n" +
-                "if (currentTime > 0.0) \n" +
-                "{ \n" +
-                "float t = currentTime * 0.001; \n" +
-                "float ratio = currentTime / attribute_lifecycle.y; \n" +
-                "position.xyz += attribute_direction * (t * (attribute_speed.x + attribute_speed.y * t)); \n" +
-                "varying_color.xyz += uniform_startColor + (uniform_endColor - uniform_startColor) *  ratio; \n" +
-                "vec3 rot = uniform_startRot + (uniform_endRot - uniform_startRot) *  ratio; \n" +
-                "rot  *= (PI / 180.0); \n" +
-                "position = buildRotMat4(rot) * position; \n" +
-                "} \n" +
-                "position = uniform_ModelMatrix * position; \n" +
-                "outPosition.xyz += position.xyz; \n" +
-                "outPosition = uniform_ViewMatrix * outPosition; \n" +
-                "varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
                 "} \n",
             "pointLight_fragment": "const int max_pointLight = 0 ; \n" +
                 "uniform float uniform_pointLightSource[12*max_pointLight] ; \n" +
@@ -22470,40 +22363,6 @@ var egret3d;
                 "void main(void){ \n" +
                 "specularColor.xyz *= texture2D( specularTexture , uv_0 ).xyz ; \n" +
                 "} \n",
-            "terrainRGBA_fragment": "uniform sampler2D blendMaskTexture ; \n" +
-                "uniform sampler2D splat_0Tex ; \n" +
-                "uniform sampler2D splat_1Tex ; \n" +
-                "uniform sampler2D splat_2Tex ; \n" +
-                "uniform sampler2D splat_3Tex ; \n" +
-                "uniform float uvs[8]; \n" +
-                "void main() { \n" +
-                "vec4 splat_control = texture2D ( blendMaskTexture , varying_uv0 ); \n" +
-                "vec4 cc = vec4(0.0,0.0,0.0,1.0); \n" +
-                "vec2 uv = varying_uv0 ; \n" +
-                "cc.xyz = splat_control.x * texture2D (splat_0Tex, uv * vec2(uvs[0],uvs[1])).xyz ; \n" +
-                "cc.xyz += splat_control.y * texture2D (splat_1Tex, uv * vec2(uvs[2],uvs[3]) ).xyz; \n" +
-                "cc.xyz += splat_control.z * vec4(texture2D (splat_2Tex, uv* vec2(uvs[4],uvs[5]))).xyz; \n" +
-                "cc.xyz += (1.0-length(splat_control.xyz)) * vec4(texture2D (splat_3Tex, uv* vec2(uvs[6],uvs[7]))).xyz; \n" +
-                "diffuseColor.xyz = cc.xyz ; \n" +
-                "} \n",
-            "uvRoll_fs": "uniform float uvRoll[2] ; \n" +
-                "vec4 diffuseColor ; \n" +
-                "void main() { \n" +
-                "uv_0.xy += vec2(uvRoll[0],uvRoll[1]); \n" +
-                "diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
-                "} \n",
-            "uvSpriteSheet_fs": "uniform float uvSpriteSheet[4] ; \n" +
-                "vec4 diffuseColor ; \n" +
-                "void main() { \n" +
-                "uv_0.xy *= vec2(uvSpriteSheet[2],uvSpriteSheet[3]); \n" +
-                "uv_0.xy += vec2(uvSpriteSheet[0],uvSpriteSheet[1]); \n" +
-                "diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
-                "} \n",
-            "vertexPos_vs": "varying vec4 varying_pos; \n" +
-                "void main() { \n" +
-                "varying_pos = uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
-                "} \n" +
-                "                       \n",
         };
         return ShaderLib;
     }());
@@ -26038,6 +25897,8 @@ var egret3d;
          * @platform Web,Native
          */
         Camera3D.prototype.isVisibleToCamera = function (renderItem) {
+            //尝试刷新modelMatrix的值，有可能changed为true
+            renderItem.modelMatrix;
             return renderItem.bound.inBound(this.frustum);
         };
         /**
@@ -26124,6 +25985,3024 @@ var egret3d;
         return Camera3D;
     }(egret3d.Object3D));
     egret3d.Camera3D = Camera3D;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @language zh_CN
+    * @class egret3d.QuadAABB
+    * @classdesc
+    * 用于四叉树的包围盒抽象
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    var QuadAABB = (function () {
+        /**
+        * @language zh_CN
+        * constructor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        function QuadAABB() {
+            /**
+            * @language zh_CN
+            * 最小x位置
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this.minPosX = 0;
+            /**
+            * @language zh_CN
+            * 最小y位置
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this.minPosY = 0;
+            /**
+            * @language zh_CN
+            * 最大x位置
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this.maxPosX = 0;
+            /**
+            * @language zh_CN
+            * 最大y位置
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this.maxPosY = 0;
+            /**
+            * @language zh_CN
+            * 用于记录quad框选批次
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this.testID = 0;
+            this.points = new Array();
+            this.offsetPosition = new egret3d.Vector3D(0, 0, 0, 0);
+            this.clear();
+        }
+        /**
+        * @language zh_CN
+        * 将该包围盒设定到以中心点(cx,cy)，纵横距离(sideY,sidex)的范围内
+        * @param cx         中心x
+        * @param cy         中心y
+        * @param sidex      横向范围
+        * @param sidey      纵向范围
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadAABB.prototype.setAABox = function (cx, cy, sideX, sideY) {
+            this.minPosX = cx - sideX / 2 - QuadAABB.TINY;
+            this.maxPosX = cx + sideX / 2 + QuadAABB.TINY;
+            this.minPosY = cy - sideY / 2 - QuadAABB.TINY;
+            this.maxPosY = cy + sideY / 2 + QuadAABB.TINY;
+            this.offsetPosition.setTo(0, 0, 0);
+        };
+        /**
+        * @language zh_CN
+        * 设置偏移量
+        * @param vec        偏移坐标
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadAABB.prototype.setOffset = function (vec) {
+            this.maxPosX += vec.x - this.offsetPosition.x;
+            this.minPosX += vec.x - this.offsetPosition.x;
+            this.minPosY += vec.z - this.offsetPosition.z;
+            this.maxPosY += vec.z - this.offsetPosition.z;
+            this.offsetPosition.copyFrom(vec);
+        };
+        /**
+        * @language zh_CN
+        * 设定包含某个范围
+        * @param minX         中心x
+        * @param minY         中心y
+        * @param maxX      横向范围
+        * @param maxY      纵向范围
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadAABB.prototype.setContainRect = function (minX, minY, maxX, maxY) {
+            if (this.minPosX > minX)
+                this.minPosX = minX;
+            if (this.minPosY > minY)
+                this.minPosY = minY;
+            if (this.maxPosX < maxX)
+                this.maxPosX = maxX;
+            if (this.maxPosY < maxY)
+                this.maxPosY = maxY;
+        };
+        /**
+        * @language zh_CN
+        * 重置包围盒
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadAABB.prototype.clear = function () {
+            var huge = 1000000000;
+            this.minPosX = this.minPosY = huge;
+            this.maxPosX = this.maxPosY = -huge;
+            this.points.length = 0;
+            this.testID = 0;
+            this.offsetPosition.setTo(0, 0, 0);
+        };
+        /**
+        * @language zh_CN
+        * 添加一个点
+        * @param pos         点坐标
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadAABB.prototype.addPoint = function (pos) {
+            if (this.points.indexOf(pos) == -1) {
+                if (pos.x < this.minPosX)
+                    this.minPosX = pos.x - QuadAABB.TINY;
+                if (pos.x > this.maxPosX)
+                    this.maxPosX = pos.x + QuadAABB.TINY;
+                if (pos.z < this.minPosY)
+                    this.minPosY = pos.z - QuadAABB.TINY;
+                if (pos.z > this.maxPosY)
+                    this.maxPosY = pos.z + QuadAABB.TINY;
+                this.points.push(pos);
+            }
+        };
+        /**
+        * @language zh_CN
+        * 获得该对象克隆
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadAABB.prototype.clone = function () {
+            var aabb = new QuadAABB();
+            aabb.minPosX = this.minPosX;
+            aabb.minPosY = this.minPosY;
+            aabb.maxPosX = this.maxPosX;
+            aabb.maxPosY = this.maxPosY;
+            return aabb;
+        };
+        Object.defineProperty(QuadAABB.prototype, "radius", {
+            /**
+            * @language zh_CN
+            * 获得对角线长
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return Math.sqrt((this.maxPosY - this.minPosY) * (this.maxPosY - this.minPosY) + (this.maxPosX - this.minPosX) * (this.maxPosX - this.minPosX));
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(QuadAABB.prototype, "sideX", {
+            /**
+            * @language zh_CN
+            * 获得宽
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this.maxPosX - this.minPosX;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(QuadAABB.prototype, "sideY", {
+            /**
+            * @language zh_CN
+            * 获得高
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this.maxPosY - this.minPosY;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(QuadAABB.prototype, "centreX", {
+            /**
+            * @language zh_CN
+            * 获得中心点x
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return (this.maxPosX - this.minPosX) * 0.5 + this.minPosX;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(QuadAABB.prototype, "centreY", {
+            /**
+            * @language zh_CN
+            * 获得中心点y
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return (this.maxPosY - this.minPosY) * 0.5 + this.minPosY;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+        * @language zh_CN
+        * 与另外一个包围盒碰撞测试
+        * @param box        测试的碰撞对象
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadAABB.prototype.overlapTest = function (box) {
+            return ((this.minPosY >= box.maxPosY) ||
+                (this.maxPosY <= box.minPosY) ||
+                (this.minPosX >= box.maxPosX) ||
+                (this.maxPosX <= box.minPosX)) ? false : true;
+        };
+        /**
+        * @language zh_CN
+        * 判定某个点在包围盒内
+        * @param box        测试的点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadAABB.prototype.isPointInside = function (pos) {
+            return ((pos.x >= this.minPosX) &&
+                (pos.x <= this.maxPosX) &&
+                (pos.z >= this.minPosY) &&
+                (pos.z <= this.maxPosY));
+        };
+        /**
+        * @language zh_CN
+        * 与一条线段碰撞测试
+        * @param p1x        线段起点x
+        * @param p1y        线段起点y
+        * @param p2x        线段终点x
+        * @param p2y        线段终点y
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadAABB.prototype.isIntersectLineSegment = function (p1x, p1y, p2x, p2y) {
+            var isIntersect = false;
+            // 直线方程p1-p2
+            var A1 = p1y - p2y;
+            var B1 = p2x - p1x;
+            var C1 = p1x * p2y - p2x * p1y;
+            // 与AABox
+            var LineIntersectY = (-C1 - A1 * this.minPosX) / B1;
+            if (LineIntersectY <= this.maxPosY && LineIntersectY >= this.minPosY)
+                isIntersect = true;
+            LineIntersectY = (-C1 - A1 * this.maxPosX) / B1;
+            if (LineIntersectY <= this.maxPosY && LineIntersectY >= this.minPosY)
+                isIntersect = true;
+            var LineIntersectX = (-C1 - B1 * this.minPosY) / A1;
+            if (LineIntersectX <= this.maxPosX && LineIntersectX >= this.minPosX)
+                isIntersect = true;
+            LineIntersectX = (-C1 - B1 * this.maxPosY) / A1;
+            if (LineIntersectX <= this.maxPosX && LineIntersectX >= this.minPosX)
+                isIntersect = true;
+            return isIntersect;
+        };
+        /**
+        * @language zh_CN
+        * @private
+        * 设定一个微小的值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadAABB.TINY = 0.000001;
+        return QuadAABB;
+    }());
+    egret3d.QuadAABB = QuadAABB;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @language zh_CN
+    * @class egret3d.QuadTree
+    * @classdesc
+    * 四叉树
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    var QuadTree = (function () {
+        /**
+        * @language zh_CN
+        * constructor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        function QuadTree() {
+            /**
+            * @language zh_CN
+            * 显示quadtree结构
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this.logDeep = 0;
+            this._testID = 0;
+            this._cells = new Array();
+            this._quadNodes = new Array();
+            this._cellsToTest = new Array();
+            this._aabb = new egret3d.QuadAABB();
+        }
+        /**
+        * @language zh_CN
+        * 根据下标获取node对象
+        * @param    idx     下标
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadTree.prototype.getQuadNode = function (idx) {
+            return this._quadNodes[idx];
+        };
+        /**
+        * @language zh_CN
+        * 清理
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadTree.prototype.clear = function () {
+            this._cells.length = 0;
+            this._quadNodes.length = 0;
+        };
+        /**
+        * @language zh_CN
+        * 插入一系列node到树中,不build
+        * @param    nodes     待初始化的节点列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadTree.prototype.initNodes = function (nodes) {
+            this.clear();
+            var i = 0;
+            var count = nodes.length;
+            while (i < count) {
+                this._quadNodes.push(nodes[i]);
+                i++;
+            }
+        };
+        /**
+        * @language zh_CN
+        * 构建四叉树
+        * @param    maxNodesPerCell     一个Cell中最多几个三角
+        * @param    minCellSize         一个cell单元最小划分到多小
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadTree.prototype.buildQuadTree = function (maxNodesPerCell, minCellSize) {
+            this._aabb.clear();
+            for (var _i = 0, _a = this._quadNodes; _i < _a.length; _i++) {
+                var node = _a[_i];
+                if (node.isTriangle) {
+                    for (var _b = 0, _c = node.aabb.points; _b < _c.length; _b++) {
+                        var vt = _c[_b];
+                        this._aabb.addPoint(vt);
+                    }
+                }
+                else {
+                    this._aabb.setContainRect(node.aabb.minPosX, node.aabb.minPosY, node.aabb.maxPosX, node.aabb.maxPosY);
+                }
+            }
+            this._cells.length = 0;
+            this._rootCell = new egret3d.QuadTreeCell(this._aabb); // 创建根节点
+            this._cells.push(this._rootCell);
+            var numTriangles = this._quadNodes.length;
+            for (var i = 0; i < numTriangles; i++) {
+                this._cells[0].nodeIndices[i] = i; // 先把所有的三角面放到根节点上
+            }
+            var cellsToProcess = new Array();
+            cellsToProcess.push(0);
+            var iTri;
+            var cellIndex;
+            var childCell;
+            while (cellsToProcess.length != 0) {
+                cellIndex = cellsToProcess.pop();
+                if (this._cells[cellIndex].nodeIndices.length <= maxNodesPerCell
+                    || this._cells[cellIndex].aabb.radius < minCellSize) {
+                    continue; // 该cell中还可以放三角面
+                }
+                for (i = 0; i < egret3d.QuadTreeCell.NUM_CHILDREN; i++) {
+                    this._cells[cellIndex].childCellIndices[i] = this._cells.length;
+                    cellsToProcess.push(this._cells.length);
+                    this._cells.push(new egret3d.QuadTreeCell(this.createAABox(this._cells[cellIndex].aabb, i)));
+                    childCell = this._cells[this._cells.length - 1];
+                    // 父节点上的三角型往子节点中放
+                    numTriangles = this._cells[cellIndex].nodeIndices.length;
+                    var pushCount = 0;
+                    for (var j = 0; j < numTriangles; j++) {
+                        iTri = this._cells[cellIndex].nodeIndices[j];
+                        if (this.doesNodeIntersectCell(this._quadNodes[iTri], childCell)) {
+                            pushCount++;
+                            childCell.nodeIndices.push(iTri);
+                        }
+                    }
+                }
+                this._cells[cellIndex].nodeIndices.length = 0;
+            }
+            //logTree(0);
+        };
+        /**
+        * @language zh_CN
+        * 创建子节点的AABox
+        * @param    aabb     包围盒
+        * @param    id      象限
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadTree.prototype.createAABox = function (aabb, id) {
+            var centerX = aabb.centreX;
+            var centerY = aabb.centreY;
+            var dimX = aabb.sideX;
+            var dimY = aabb.sideY;
+            var result = new egret3d.QuadAABB();
+            switch (id) {
+                case 0:
+                    result.setAABox(centerX + dimX / 4, centerY + dimY / 4, dimX / 2, dimY / 2);
+                    break;
+                case 1:
+                    result.setAABox(centerX - dimX / 4, centerY + dimY / 4, dimX / 2, dimY / 2);
+                    break;
+                case 2:
+                    result.setAABox(centerX - dimX / 4, centerY - dimY / 4, dimX / 2, dimY / 2);
+                    break;
+                case 3:
+                    result.setAABox(centerX + dimX / 4, centerY - dimY / 4, dimX / 2, dimY / 2);
+                    break;
+                default:
+                    result.setAABox(centerX + dimX / 4, centerY - dimY / 4, dimX / 2, dimY / 2);
+                    break;
+            }
+            return result;
+        };
+        /**
+        * @language zh_CN
+        * 如果三角型和Cell相交,返回True
+        * @param    node     节点
+        * @param    cell     四叉树叶子
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadTree.prototype.doesNodeIntersectCell = function (node, cell) {
+            // boundingbox要重叠
+            var box = node.aabb;
+            if (!box.overlapTest(cell.aabb)) {
+                return false;
+            }
+            //如果不是三角形，则只需要检测aabb的相交
+            if (!node.isTriangle)
+                return true;
+            var points = box.points;
+            var p1 = points[0];
+            var p2 = points[1];
+            var p3 = points[2];
+            if (cell.aabb.isPointInside(p1) ||
+                cell.aabb.isPointInside(p2) ||
+                cell.aabb.isPointInside(p3)) {
+                return true;
+            }
+            // cell的顶点在三角型中
+            var isIntersect = this.pointInTriangle(cell.aabb.minPosX, cell.aabb.minPosY, p1, p2, p3) ||
+                this.pointInTriangle(cell.aabb.minPosX, cell.aabb.maxPosY, p1, p2, p3) ||
+                this.pointInTriangle(cell.aabb.maxPosX, cell.aabb.maxPosY, p1, p2, p3) ||
+                this.pointInTriangle(cell.aabb.maxPosX, cell.aabb.minPosY, p1, p2, p3);
+            if (isIntersect)
+                return true;
+            // 三角形的边是否与AABB的边相交
+            isIntersect = cell.aabb.isIntersectLineSegment(p1.x, p1.z, p2.x, p2.z) ||
+                cell.aabb.isIntersectLineSegment(p1.x, p1.z, p3.x, p3.z) ||
+                cell.aabb.isIntersectLineSegment(p2.x, p2.z, p3.x, p3.z);
+            return isIntersect;
+        };
+        /**
+        * @language zh_CN
+        * 寻找在某位置上的三角面
+        * @param    result     存储节点的数组
+        * @param    aabb       包围盒
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadTree.prototype.getNodesIntersectingtAABox = function (result, aabb) {
+            if (this._cells.length == 0)
+                return 0;
+            this._cellsToTest.length = 0;
+            this._cellsToTest.push(0);
+            this.incrementTestCounter();
+            var cellIndex, nTris, cell;
+            var nodeBox;
+            var i = 0;
+            while (this._cellsToTest.length != 0) {
+                cellIndex = this._cellsToTest.pop();
+                cell = this._cells[cellIndex];
+                if (!aabb.overlapTest(cell.aabb)) {
+                    continue;
+                }
+                if (cell.isLeaf()) {
+                    nTris = cell.nodeIndices.length;
+                    for (i = 0; i < nTris; i++) {
+                        nodeBox = this.getQuadNode(cell.nodeIndices[i]).aabb;
+                        if (nodeBox.testID != this._testID) {
+                            nodeBox.testID = this._testID;
+                            if (aabb.overlapTest(nodeBox)) {
+                                result.push(cell.nodeIndices[i]);
+                            }
+                        }
+                    }
+                }
+                else {
+                    for (i = 0; i < egret3d.QuadTreeCell.NUM_CHILDREN; i++) {
+                        this._cellsToTest.push(cell.childCellIndices[i]);
+                    }
+                }
+            }
+            return result.length;
+        };
+        /**
+        * @language zh_CN
+        * 判断点在三角型中
+        * @param    x           指定点坐标x
+        * @param    y           指定点坐标y
+        * @param    triPi1      三角形顶点1
+        * @param    triPi2      三角形顶点2
+        * @param    triPi3      三角形顶点3
+        * @return   是否包含
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadTree.prototype.pointInTriangle = function (x, y, triP1, triP2, triP3) {
+            var p1 = triP1;
+            var p2 = triP2;
+            var p3 = triP3;
+            // 直线方程p1-p2
+            var A1 = p1.z - p2.z;
+            var B1 = p2.x - p1.x;
+            var C1 = p1.x * p2.z - p2.x * p1.z;
+            // 直线方程p2-p3
+            var A2 = p2.z - p3.z;
+            var B2 = p3.x - p2.x;
+            var C2 = p2.x * p3.z - p3.x * p2.z;
+            // 直线方程p3-p1
+            var A3 = p3.z - p1.z;
+            var B3 = p1.x - p3.x;
+            var C3 = p3.x * p1.z - p1.x * p3.z;
+            var isInTri = false;
+            var D1 = A1 * x + B1 * y + C1;
+            var D2 = A2 * x + B2 * y + C2;
+            var D3 = A3 * x + B3 * y + C3;
+            var Tiny = 0.01;
+            if ((D1 >= -Tiny && D2 >= -Tiny && D3 >= -Tiny) || (D1 <= Tiny && D2 <= Tiny && D3 <= Tiny))
+                isInTri = true;
+            return isInTri;
+        };
+        /**
+        * @language zh_CN
+        * 递增批次
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadTree.prototype.incrementTestCounter = function () {
+            ++this._testID;
+            if (this._testID == 0) {
+                var numTriangles = this._quadNodes.length;
+                for (var i = 0; i < numTriangles; i++) {
+                    this._quadNodes[i].aabb.testID = 0;
+                }
+                this._testID = 1;
+            }
+        };
+        QuadTree.prototype.logTree = function (cellIndex) {
+            if (cellIndex < 0)
+                return;
+            this.logDeep++;
+            var cell = this._cells[cellIndex];
+            var spaces = "";
+            for (var si = 0; si < (this.logDeep - 1); si++)
+                spaces += "-|";
+            console.log(spaces + "i=" + cellIndex + " " +
+                cell.aabb.minPosX.toFixed(2) + " " + cell.aabb.maxPosX.toFixed(2) + " "
+                + cell.aabb.minPosY.toFixed(2) + " " + cell.aabb.maxPosY.toFixed(2));
+            var i;
+            for (i = 0; i < cell.nodeIndices.length; i++) {
+                if (cell.nodeIndices[i] >= 0) {
+                    var tri = this._quadNodes[cell.nodeIndices[i]];
+                    console.log(spaces + " t=" + cell.nodeIndices[i] + " " +
+                        tri.aabb.minPosX.toFixed(2) + " " + tri.aabb.maxPosX.toFixed(2) + " "
+                        + tri.aabb.minPosY.toFixed(2) + " " + tri.aabb.maxPosY.toFixed(2));
+                }
+            }
+            for (i = 0; i < cell.childCellIndices.length; i++) {
+                if (cell.childCellIndices[i] >= 0) {
+                    this.logTree(cell.childCellIndices[i]);
+                }
+            }
+            this.logDeep--;
+        };
+        return QuadTree;
+    }());
+    egret3d.QuadTree = QuadTree;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @language zh_CN
+    * @class egret3d.QuadRoot
+    * @classdesc
+    * 创建四叉树的根对象。当前只能用于管理场景中静态的Object，
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    var QuadRoot = (function () {
+        /**
+        * @language zh_CN
+        * constructor
+        * @param maxNodesPerCell 一个Cell中最多几个节点
+        * @param minCellSize 一个cell单元最小划分到多小
+        */
+        function QuadRoot(maxNodesPerCell, minCellSize) {
+            if (maxNodesPerCell === void 0) { maxNodesPerCell = 10; }
+            if (minCellSize === void 0) { minCellSize = 500; }
+            this._maxNodesPerCell = maxNodesPerCell;
+            this._minCellSize = minCellSize;
+            this._segBox = new egret3d.QuadAABB;
+            this._collisionNodesIdx = new Array();
+            this._collisionNodes = new Array();
+        }
+        /**
+        * @language zh_CN
+        * 创建并构造四叉树
+        * @param nodes 需要插入到四叉树中的节点列表
+        */
+        QuadRoot.prototype.createQuadTree = function (nodes) {
+            this._quadTree = new egret3d.QuadTree();
+            this._quadTree.initNodes(nodes);
+            this._quadTree.buildQuadTree(this._maxNodesPerCell, this._minCellSize);
+        };
+        /**
+        * @language zh_CN
+        * 在设定范围内，框选出一批节点
+        * @param minX 框选范围最小x值
+        * @param minY 框选范围最小y值
+        * @param maxX 框选范围最大x值
+        * @param maxY 框选范围最大y值
+        * @return Array<IQuadNode>
+        */
+        QuadRoot.prototype.getNodesByAABB = function (minX, minY, maxX, maxY) {
+            // 创建一个射线的boundingbox
+            this._segBox.clear();
+            this._segBox.maxPosX = maxX;
+            this._segBox.maxPosY = maxY;
+            this._segBox.minPosX = minX;
+            this._segBox.minPosY = minY;
+            // 获取Boundingbox中的nodes
+            this._collisionNodesIdx.length = 0;
+            this._collisionNodes.length = 0;
+            var numNodes = this._quadTree.getNodesIntersectingtAABox(this._collisionNodesIdx, this._segBox);
+            var quadNode;
+            for (var i = 0; i < this._collisionNodesIdx.length; i++) {
+                quadNode = this._quadTree.getQuadNode(this._collisionNodesIdx[i]);
+                this._collisionNodes.push(quadNode);
+            }
+            return this._collisionNodes;
+        };
+        /**
+        * @language zh_CN
+        * 给定一个三维坐标点，获取节点中最为接近的一个三角形
+        * @param point 给定的点
+        * @param threshold 设定的阈值，超出这个距离则视为放弃
+        * @return Navi3DTriangle
+        */
+        QuadRoot.prototype.getTriangleAtPoint = function (point, threshold) {
+            if (threshold === void 0) { threshold = 5; }
+            // 创建一个射线的boundingbox
+            this._segBox.clear();
+            this._segBox.setAABox(point.x, point.z, 1, 1);
+            this._collisionNodesIdx.length = 0;
+            this._collisionNodes.length = 0;
+            // 获取Boundingbox中的node的ID
+            var numTriangles = this._quadTree.getNodesIntersectingtAABox(this._collisionNodesIdx, this._segBox);
+            // 检查那个三角与点(x,y)相交
+            var minDistance = Number.MAX_VALUE;
+            var curDistance = 0;
+            var minTriangle;
+            var quadNode;
+            var triangle;
+            var box;
+            for (var i = 0; i < this._collisionNodesIdx.length; i++) {
+                quadNode = this._quadTree.getQuadNode(this._collisionNodesIdx[i]);
+                box = quadNode.aabb;
+                if (!egret3d.Navi3DTriangle.pointInsideTriangle(point, box.points[0], box.points[1], box.points[2])) {
+                    continue;
+                }
+                triangle = quadNode;
+                curDistance = Math.abs(triangle.plane.distance(point));
+                if (curDistance > threshold)
+                    continue;
+                if (quadNode == null || curDistance <= minDistance) {
+                    minTriangle = triangle;
+                    minDistance = curDistance;
+                }
+            }
+            return minTriangle;
+        };
+        return QuadRoot;
+    }());
+    egret3d.QuadRoot = QuadRoot;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @language zh_CN
+    * @class egret3d.QuadTreeCell
+    * @classdesc
+    * 四叉树叶子节点
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    var QuadTreeCell = (function () {
+        /**
+        * @language zh_CN
+        * constructor
+        * @param aabox 该叶子的包围盒
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        function QuadTreeCell(aabox) {
+            this.childCellIndices = new Array();
+            this.childCellIndices.length = QuadTreeCell.NUM_CHILDREN;
+            this.nodeIndices = new Array();
+            this.clear();
+            if (aabox) {
+                this.aabb = aabox.clone();
+            }
+            else {
+                this.aabb = new egret3d.QuadAABB();
+            }
+        }
+        /**
+        * @language zh_CN
+        * Indicates if we contain triangles (if not then we should/might have children)
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadTreeCell.prototype.isLeaf = function () {
+            return this.childCellIndices[0] == -1;
+        };
+        /**
+        * @language zh_CN
+        * 重置该叶子
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadTreeCell.prototype.clear = function () {
+            for (var i = 0; i < QuadTreeCell.NUM_CHILDREN; i++) {
+                this.childCellIndices[i] = -1;
+            }
+            this.nodeIndices.splice(0, this.nodeIndices.length);
+        };
+        /**
+        * @language zh_CN
+        * 一个叶子单元最多包含子叶子树4个
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        QuadTreeCell.NUM_CHILDREN = 4;
+        return QuadTreeCell;
+    }());
+    egret3d.QuadTreeCell = QuadTreeCell;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @language zh_CN
+    * @class egret3d.HashTable
+    * @classdesc
+    * 纯2d的点
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    var HashTable = (function () {
+        /**
+        * @language zh_CN
+        * constructor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        function HashTable() {
+            /**
+            * @language zh_CN
+            * 键队列
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this._keys = new Array();
+            /**
+            * @language zh_CN
+            * 值队列
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this._values = new Array();
+        }
+        /**
+        * @language zh_CN
+        * 根据键获得下标
+        * @param    key     键
+        * @return           下标
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        HashTable.prototype.getIndexByKey = function (key) {
+            return this._keys.indexOf(key);
+        };
+        /**
+        * @language zh_CN
+        * 根据键获得值
+        * @param    key     键
+        * @return           值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        HashTable.prototype.getValueByKey = function (key) {
+            var index = this.getIndexByKey(key);
+            if (index > -1) {
+                return this._values[index];
+            }
+            return null;
+        };
+        /**
+        * @language zh_CN
+        * 放入一个键值对
+        * @param    key     键
+        * @param    value   值
+        * @return           原来的值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        HashTable.prototype.put = function (key, value) {
+            if (key == null)
+                return null;
+            var old = this.remove(key);
+            this._keys.push(key);
+            this._values.push(value);
+            return old;
+        };
+        /**
+        * @language zh_CN
+        * 移除一个键值对
+        * @param    key     键
+        * @return           移除的值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        HashTable.prototype.remove = function (key) {
+            var index = this._keys.indexOf(key);
+            var item;
+            if (index > -1) {
+                item = this._values[index];
+                this._keys.splice(index, 1);
+                this._values.splice(index, 1);
+            }
+            return item;
+        };
+        /**
+        * @language zh_CN
+        * 获取值的队列
+        * @return          值的队列
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        HashTable.prototype.getValues = function () {
+            return this._values;
+        };
+        /**
+        * @language zh_CN
+        * 获取键的队列
+        * @return          键的队列
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        HashTable.prototype.getKeys = function () {
+            return this._keys;
+        };
+        /**
+        * @language zh_CN
+        * 重置该哈希表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        HashTable.prototype.clear = function () {
+            this._values.length = 0;
+            this._keys.length = 0;
+        };
+        return HashTable;
+    }());
+    egret3d.HashTable = HashTable;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DAstar
+    * @classdesc
+    * 用于Navigation Mesh中寻路的A星算法
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    var Navi3DAstar = (function () {
+        /**
+        * @language zh_CN
+        * constructor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        function Navi3DAstar() {
+            this._findIndex = 0;
+            this._openedList = new Array();
+            this._closedList = new Array();
+        }
+        /**
+        * @language zh_CN
+        * 开始找寻路径，输入起点终点
+        * param navMesh 搜索的mesh对象
+        * param startTriangle 开始三角形
+        * param endTriangle 结束三角形
+        * @return 是否搜索成功
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DAstar.prototype.findPath = function (navMesh, startTriangle, endTriangle) {
+            this._findIndex++;
+            this._navMesh = navMesh;
+            this._startNode = startTriangle;
+            this._endNode = endTriangle;
+            this._openedList.length = 0;
+            this._closedList.length = 0;
+            if (this._startNode && this._endNode) {
+                this._startNode.g = 0;
+                this._startNode.h = 0;
+                this._startNode.f = 0;
+                return this.search();
+            }
+            return false;
+        };
+        /**
+        * @language zh_CN
+        * 搜寻
+        * @return 是否搜索成功
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DAstar.prototype.search = function () {
+            var node = this._startNode;
+            var neibours = new Array();
+            var test;
+            while (node != this._endNode) {
+                neibours = node.getNeibourTriangles(neibours, egret3d.Navi3DMaskType.WalkAble, egret3d.Navi3DMaskType.WalkAble);
+                for (var _i = 0, neibours_1 = neibours; _i < neibours_1.length; _i++) {
+                    test = neibours_1[_i];
+                    if (test == node || !test.walkAble) {
+                        continue;
+                    }
+                    var g = node.g + egret3d.Navi3DPoint.calcDistance(test, node) * test.costMultiplier;
+                    var h = egret3d.Navi3DPoint.calcDistance(test, this._endNode);
+                    var f = g + h;
+                    if (test.openId == this._findIndex || test.closeId == this._findIndex) {
+                        if (test.f > f) {
+                            test.f = f;
+                            test.g = g;
+                            test.h = h;
+                            test.parent = node;
+                        }
+                    }
+                    else {
+                        test.f = f;
+                        test.g = g;
+                        test.h = h;
+                        test.parent = node;
+                        test.openId = this._findIndex;
+                        this._openedList.push(test);
+                    }
+                }
+                node.closeId = this._findIndex;
+                this._closedList.push(node);
+                if (this._openedList.length == 0) {
+                    //					log("no path found");
+                    return false;
+                }
+                this._openedList.sort(this.sortFun);
+                node = (this._openedList.shift());
+            }
+            this.buildPath();
+            return true;
+        };
+        /**
+        * @language zh_CN
+        * 排序开区间(从小到大)
+        * @param a 用于比较的a对象
+        * @param b 用于比较的b对象
+        * @return 0,1,-1
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DAstar.prototype.sortFun = function (a, b) {
+            if (a.f > b.f)
+                return 1;
+            else if (a.f < b.f)
+                return -1;
+            return 0;
+        };
+        /**
+        * @language zh_CN
+        * 回溯路径列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DAstar.prototype.buildPath = function () {
+            this._triangleChannel = [];
+            var node = this._endNode;
+            this._triangleChannel.push(node);
+            while (node != this._startNode) {
+                node = node.parent;
+                this._triangleChannel.unshift(node);
+            }
+        };
+        Object.defineProperty(Navi3DAstar.prototype, "channel", {
+            /**
+            * @language zh_CN
+            * 获取结果数据（三角带）
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._triangleChannel;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return Navi3DAstar;
+    }());
+    egret3d.Navi3DAstar = Navi3DAstar;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DEdge
+    * @classdesc
+    * 用于Navigation Mesh中寻路的三角形边的对象
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    var Navi3DEdge = (function () {
+        /**
+        * @language zh_CN
+        * constructor
+        * @param  point0 顶点0
+        * @param  point1 顶点1
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        function Navi3DEdge(point0, point1) {
+            this._edgeMask = 0;
+            this._edgeSize = 0;
+            this._pointA = point0;
+            this._pointB = point1;
+            if (point0.id >= point1.id) {
+                throw new Error("edge point order error!!!");
+            }
+            this._triangleOwners = new Array();
+            this._centerPoint = new egret3d.Vector3D();
+            this._edgeMask = egret3d.Navi3DMaskType.WalkAble;
+            egret3d.Navi3DPoint.CALC_VECTOR3D1.setTo(point0.x - point1.x, point0.y - point1.y, point0.z - point1.z);
+            this._edgeSize = egret3d.Navi3DPoint.CALC_VECTOR3D1.length;
+            this._centerPoint.setTo((point0.x + point1.x) / 2, (point0.y + point1.y) / 2, (point0.z + point1.z) / 2);
+        }
+        Object.defineProperty(Navi3DEdge.prototype, "size", {
+            /**
+            * @language zh_CN
+            * 获得边长
+            * @return 长度
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._edgeSize;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Navi3DEdge.prototype, "triangleOwners", {
+            /**
+            * @language zh_CN
+            * 获得所属三角形列表
+            * @return 三角形列表
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._triangleOwners;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Navi3DEdge.prototype, "centerPoint", {
+            /**
+            * @language zh_CN
+            * 获得线段的中间点坐标
+            * @return 中间点坐标
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._centerPoint;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+        * @language zh_CN
+        * 初始化肥胖监测点
+        * @param  radius    输入的肥胖检测半径
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DEdge.prototype.initFatPoints = function (radius) {
+            this._edgeDirA2B = this._pointB.subtract(this._pointA);
+            this._edgeDirA2B.normalize();
+            this.fatPointA = this.fatPointA || new egret3d.Navi3DPointFat(this._pointA, this);
+            this.fatPointB = this.fatPointB || new egret3d.Navi3DPointFat(this._pointB, this);
+            if (this.fatPointA.radius != radius) {
+                Navi3DEdge.CALC_FAT_VECTOR.copyFrom(this._edgeDirA2B);
+                Navi3DEdge.CALC_FAT_VECTOR.scaleBy(radius);
+                Navi3DEdge.CALC_FAT_VECTOR.incrementBy(this._pointA);
+                this.fatPointA.copyFrom(Navi3DEdge.CALC_FAT_VECTOR);
+                this.fatPointA.radius = radius;
+            }
+            if (this.fatPointB.radius != radius) {
+                Navi3DEdge.CALC_FAT_VECTOR.copyFrom(this._edgeDirA2B);
+                Navi3DEdge.CALC_FAT_VECTOR.scaleBy(-radius);
+                Navi3DEdge.CALC_FAT_VECTOR.incrementBy(this._pointB);
+                this.fatPointB.copyFrom(Navi3DEdge.CALC_FAT_VECTOR);
+                this.fatPointB.radius = radius;
+            }
+        };
+        /**
+        * @language zh_CN
+        * 根据端点获取对应的肥胖检测点
+        * @param  pt  端点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DEdge.prototype.getFatPoint = function (pt) {
+            if (pt == this._pointA)
+                return this.fatPointA;
+            return this.fatPointB;
+        };
+        /**
+        * @language zh_CN
+        * 输入一个端点获取另外一个端点的肥胖检测点
+        * @param  pt  端点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DEdge.prototype.getAnotherFatPoint = function (pt) {
+            if (pt == this._pointA)
+                return this.fatPointB;
+            return this.fatPointA;
+        };
+        /**
+        * @language zh_CN
+        * 输入一个端点获取另外一个端点
+        * @param  pt  端点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DEdge.prototype.getAnotherPoint = function (pt) {
+            if (pt == this._pointA)
+                return this._pointB;
+            return this._pointA;
+        };
+        /**
+        * @language zh_CN
+        * 判定一个点是否等价于某个端点
+        * @param  pt 被判定的点
+        * @return 判定结果端点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DEdge.prototype.containsPoint = function (pt) {
+            if (egret3d.Navi3DPoint.equalPoint(pt, this._pointA))
+                return this._pointA;
+            if (egret3d.Navi3DPoint.equalPoint(pt, this._pointB))
+                return this._pointB;
+            return null;
+        };
+        /**
+        * @language zh_CN
+        * 添加所属三角形
+        * @param  triangle 所属三角形
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DEdge.prototype.addTriangleOwners = function (triangle) {
+            if (triangle.edges.indexOf(this) == -1) {
+                throw new Error("the edge is not belong triangle!!!");
+            }
+            if (this._triangleOwners.indexOf(triangle) == -1) {
+                this._triangleOwners.push(triangle);
+            }
+        };
+        /**
+        * @language zh_CN
+        * 获取和另外一条边的公共端点
+        * @param  edge 另外一条边
+        * @return Navi3DPoint 公共边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DEdge.prototype.getPublicPoint = function (edge) {
+            if (this._pointA == edge._pointA || this._pointA == edge._pointB) {
+                return this._pointA;
+            }
+            else if (this._pointB == edge._pointA || this._pointB == edge._pointB) {
+                return this._pointB;
+            }
+            return null;
+        };
+        /**
+        * @language zh_CN
+        * 输入一个点获，获取与之等价的一个端点对象
+        * @param  p 输入的点
+        * @return Navi3DPoint 等价的端点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DEdge.prototype.getEqualPoint = function (p) {
+            if (egret3d.Navi3DPoint.equalPoint(p, this._pointA))
+                return this._pointA;
+            if (egret3d.Navi3DPoint.equalPoint(p, this._pointB))
+                return this._pointB;
+            return null;
+        };
+        Object.defineProperty(Navi3DEdge.prototype, "pointA", {
+            /**
+            * @language zh_CN
+            * 端点A
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._pointA;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Navi3DEdge.prototype, "pointB", {
+            /**
+            * @language zh_CN
+            * 端点B
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._pointB;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Navi3DEdge.prototype, "walkAble", {
+            /**
+            * @language zh_CN
+            * 记录该边的通过属性
+            * @return 是否可通过
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return (this._edgeMask & egret3d.Navi3DMaskType.WalkAble) == egret3d.Navi3DMaskType.WalkAble;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+        * @language zh_CN
+        * 测试是否通过
+        * @param  value 被测试的值
+        * @return 是否通过
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DEdge.prototype.testMask = function (value) {
+            return (this._edgeMask & value) == value;
+        };
+        /**
+        * @language zh_CN
+        * 计算用的Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DEdge.CALC_FAT_VECTOR = new egret3d.Vector3D();
+        return Navi3DEdge;
+    }());
+    egret3d.Navi3DEdge = Navi3DEdge;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DMaskType
+    * @classdesc
+    * 枚举出的可通过类型
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    var Navi3DMaskType = (function () {
+        function Navi3DMaskType() {
+        }
+        /**
+       * @language zh_CN
+       * 可通过
+       * @version Egret 3.0
+       * @platform Web,Native
+       */
+        Navi3DMaskType.WalkAble = 1;
+        return Navi3DMaskType;
+    }());
+    egret3d.Navi3DMaskType = Navi3DMaskType;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DPoint2D
+    * @classdesc
+    * ��2d�ĵ�
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    var Navi3DPoint2D = (function () {
+        /**
+        * @language zh_CN
+        * constructor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        function Navi3DPoint2D() {
+        }
+        /**
+        * @language zh_CN
+        * ���õ����õ�ָ��λ��
+        * @param X   x����
+        * @param Y   y����
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DPoint2D.prototype.setTo = function (X, Y) {
+            this.x = X;
+            this.y = Y;
+        };
+        /**
+        * @language zh_CN
+        * �Ƿ���ĳ��λ�õȼ�
+        * @param X   x����
+        * @param Y   y����
+        * @return �Ƿ��ȼ�
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DPoint2D.prototype.equals = function (X, Y) {
+            return X == this.x && Y == this.y;
+        };
+        /**
+        * @language zh_CN
+        * �Ƿ���ĳ��λ�õȼ�
+        * @param pt   ��
+        * @return �Ƿ��ȼ�
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DPoint2D.prototype.equalPoint = function (pt) {
+            return this.equals(pt.x, pt.y);
+        };
+        Object.defineProperty(Navi3DPoint2D.prototype, "length", {
+            /**
+            * @language zh_CN
+            * ��ȡ����
+            * @return ����
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return Math.sqrt(this.x * this.x + this.y * this.y);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+        * @language zh_CN
+        * ��¡һ����λ�õ�
+        * @return ��¡�ĵ�
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DPoint2D.prototype.clone = function () {
+            var point = new Navi3DPoint2D();
+            point.setTo(this.x, this.y);
+            return point;
+        };
+        /**
+        * @language zh_CN
+        * ��׼����������Ϊ1
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DPoint2D.prototype.normalize = function () {
+            var size = length;
+            if (size == 0)
+                return;
+            this.setTo(this.x / size, this.y / size);
+        };
+        return Navi3DPoint2D;
+    }());
+    egret3d.Navi3DPoint2D = Navi3DPoint2D;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DPoint
+    * @classdesc
+    * �����ĵ�
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    var Navi3DPoint = (function (_super) {
+        __extends(Navi3DPoint, _super);
+        /**
+        * @language zh_CN
+        * constructor
+        * @param    id   ����id
+        * @param    X   ����x
+        * @param    Y   ����y
+        * @param    Z   ����z
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        function Navi3DPoint(id, X, Y, Z) {
+            _super.call(this, X, Y, Z, 0);
+            this._pointId = 0;
+            this._pointId = id;
+        }
+        Object.defineProperty(Navi3DPoint.prototype, "id", {
+            /**
+            * @language zh_CN
+            * @return ��Navi3DMesh�е�Ψһid
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._pointId;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+        * @language zh_CN
+        * �ж���������λ���Ƿ��ȼ�
+        * @param    p1   ����1
+        * @param    p2   ����2
+        * @return   �Ƿ��ȼ�
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DPoint.equalPoint = function (p1, p2) {
+            return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y) + (p1.z - p2.z) * (p1.z - p2.z) < egret3d.Navi3DFunnel.POWER_EPSILON;
+        };
+        /**
+        * @language zh_CN
+        * ��������������֮���ľ���
+        * @param    p1   ����1
+        * @param    p2   ����2
+        * @return   ����
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DPoint.calcDistance = function (pt1, pt2) {
+            Navi3DPoint.CALC_VECTOR3D3.setTo(pt1.x - pt2.x, pt1.y - pt2.y, pt1.z - pt2.z);
+            return Navi3DPoint.CALC_VECTOR3D3.length;
+        };
+        /**
+        * @language zh_CN
+        * �����õ�Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DPoint.CALC_VECTOR3D1 = new egret3d.Vector3D();
+        /**
+        * @language zh_CN
+        * �����õ�Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DPoint.CALC_VECTOR3D2 = new egret3d.Vector3D();
+        /**
+        * @language zh_CN
+        * �����õ�Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DPoint.CALC_VECTOR3D3 = new egret3d.Vector3D();
+        /**
+        * @language zh_CN
+        * �����õ�Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DPoint.CALC_VECTOR3D4 = new egret3d.Vector3D();
+        /**
+        * @language zh_CN
+        * �����õ�Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DPoint.CALC_VECTOR3D5 = new egret3d.Vector3D();
+        return Navi3DPoint;
+    }(egret3d.Vector3D));
+    egret3d.Navi3DPoint = Navi3DPoint;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DPointFat
+    * @classdesc
+    * 用于网格中的边上，碰撞检测的点
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    var Navi3DPointFat = (function (_super) {
+        __extends(Navi3DPointFat, _super);
+        /**
+        * @language zh_CN
+        * constructor
+        * @param    _point   端点
+        * @param    _edge   边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        function Navi3DPointFat(_point, _edge) {
+            _super.call(this, _point.id, 0, 0, 0);
+            /**
+            * @language zh_CN
+            * 与端点的距离
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this.radius = 0;
+            this._ownerEdge = _edge;
+            this._ownerPoint = _point;
+        }
+        Object.defineProperty(Navi3DPointFat.prototype, "ownerPoint", {
+            /**
+            * @language zh_CN
+            * @return 隶属于哪个端点
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._ownerPoint;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Navi3DPointFat.prototype, "ownerEdge", {
+            /**
+            * @language zh_CN
+            * @ return 隶属于那条边
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._ownerEdge;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+        * @language zh_CN
+        * 获得一个当前对象的复制，并且使用value进行位置修正
+        * @param    value   缩放系数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DPointFat.prototype.scalePoint = function (value) {
+            if (value === void 0) { value = 0.7; }
+            var point = new Navi3DPointFat(this._ownerPoint, this._ownerEdge);
+            point.copyFrom(this);
+            point.decrementBy(this._ownerPoint);
+            point.scaleBy(value);
+            point.radius = point.length;
+            point.incrementBy(this._ownerPoint);
+            return point;
+        };
+        return Navi3DPointFat;
+    }(egret3d.Navi3DPoint));
+    egret3d.Navi3DPointFat = Navi3DPointFat;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DTriangle
+    * @classdesc
+    * 纯2d的点
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    var Navi3DTriangle = (function (_super) {
+        __extends(Navi3DTriangle, _super);
+        /**
+        * @language zh_CN
+        * constructor
+        * @param    Id   ID
+        * @param    edgeA   三角形边A
+        * @param    edgeB   三角形边B
+        * @param    edgeC   三角形边C
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        function Navi3DTriangle(Id, edgeA, edgeB, edgeC) {
+            _super.call(this, 0, 0, 0, 0);
+            this._id = 0;
+            this._points = new Array();
+            this._edges = new Array();
+            /**
+            * @language zh_CN
+            * 相邻三角形
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this._neibourTriangles = new egret3d.HashTable();
+            /**
+            * @language zh_CN
+            * 点正对的边的关系表
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this._pointAgainstEdge = new egret3d.HashTable();
+            /**
+            * @language zh_CN
+            * 边正对着点的关系表
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this._edgeAgainstPoint = new egret3d.HashTable();
+            /**
+            * @language zh_CN
+            * 通过属性
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this._mask = 0;
+            /**
+            * @language zh_CN
+            * f -- astar
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this.f = 0;
+            /**
+            * @language zh_CN
+            * g -- astar
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this.g = 0;
+            /**
+            * @language zh_CN
+            * h -- astar
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this.h = 0;
+            /**
+            * @language zh_CN
+            * costMultiplier
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this.costMultiplier = 1.0;
+            /**
+            * @language zh_CN
+            * 开区间ID，标记寻路批次用
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this.openId = 0;
+            /**
+            * @language zh_CN
+            * 闭区间ID，标记寻路批次用
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this.closeId = 0;
+            this._id = Id;
+            this._mask = egret3d.Navi3DMaskType.WalkAble;
+            this._edges.push(edgeA, edgeB, edgeC);
+            var edge;
+            for (var _i = 0, _a = this._edges; _i < _a.length; _i++) {
+                edge = _a[_i];
+                if (this._points.indexOf(edge.pointA) == -1) {
+                    this._points.push(edge.pointA);
+                }
+                if (this._points.indexOf(edge.pointB) == -1) {
+                    this._points.push(edge.pointB);
+                }
+            }
+            this.x = (this._points[0].x + this._points[1].x + this._points[2].x) / 3;
+            this.y = (this._points[0].y + this._points[1].y + this._points[2].y) / 3;
+            this.z = (this._points[0].z + this._points[1].z + this._points[2].z) / 3;
+            this._plane = new egret3d.Plane3D();
+            this._plane.fromPoints(this._points[0], this._points[1], this._points[2]);
+            this._plane.normalize();
+            this.genarateAgainstData();
+            this.initAABB();
+        }
+        Object.defineProperty(Navi3DTriangle.prototype, "aabb", {
+            get: function () {
+                return this._aabbBox;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+        * @language zh_CN
+        * 初始化包围盒（实现IQuadNode的接口）
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.prototype.initAABB = function () {
+            this._aabbBox = new egret3d.QuadAABB();
+            //添加节点
+            this._aabbBox.addPoint(this._points[0]);
+            this._aabbBox.addPoint(this._points[1]);
+            this._aabbBox.addPoint(this._points[2]);
+        };
+        Object.defineProperty(Navi3DTriangle.prototype, "isTriangle", {
+            /**
+            * @language zh_CN
+            * 该quad是否是三角形（实现IQuadNode的接口）
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return true;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+        * @language zh_CN
+        * @private
+        * 构建点正对着的边，以及边正对着的点的哈希表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.prototype.genarateAgainstData = function () {
+            var edge;
+            var point;
+            for (var _i = 0, _a = this._edges; _i < _a.length; _i++) {
+                edge = _a[_i];
+                for (var _b = 0, _c = this._points; _b < _c.length; _b++) {
+                    point = _c[_b];
+                    if (edge.pointA != point && edge.pointB != point) {
+                        this._edgeAgainstPoint.put(edge, point);
+                        this._pointAgainstEdge.put(point, edge);
+                    }
+                }
+            }
+        };
+        Object.defineProperty(Navi3DTriangle.prototype, "id", {
+            /**
+            * @language zh_CN
+            * @return 三角形的ID，在Navi3DMesh中的唯一ID
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._id;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Navi3DTriangle.prototype, "plane", {
+            /**
+            * @language zh_CN
+            * @return 该三角形所在平面
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._plane;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Navi3DTriangle.prototype, "points", {
+            /**
+            * @language zh_CN
+            * @return 该三角形的三个顶点
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._points;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+        * @language zh_CN
+        * 加入相邻三角形
+        * param edge     公共边
+        * param triangle 相邻三角形
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.prototype.addNeibour = function (edge, triangle) {
+            if (this._edges.indexOf(edge) >= 0) {
+                this._neibourTriangles.put(edge, triangle);
+            }
+            else {
+                throw new Error("the edge is not in triangle!!!");
+            }
+        };
+        /**
+        * @language zh_CN
+        * 获取相邻三角形列表
+        * @param list            用于存储结果
+        * @param edgeMask        边的通过属性过滤
+        * @param triangleMask    三角形通过属性过滤
+        * @return                获得到的相邻三角形的队列
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.prototype.getNeibourTriangles = function (list, edgeMask, triangleMask) {
+            if (list === void 0) { list = null; }
+            if (edgeMask === void 0) { edgeMask = 1; }
+            if (triangleMask === void 0) { triangleMask = 1; }
+            list = list || new Array();
+            list.length = 0;
+            var neibour;
+            var edge;
+            var keys = this._neibourTriangles.getKeys();
+            var obj;
+            for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
+                obj = keys_1[_i];
+                edge = obj;
+                if (edge.testMask(edgeMask)) {
+                    neibour = this._neibourTriangles.getValueByKey(edge);
+                    if (neibour.testMask(triangleMask)) {
+                        list.push(neibour);
+                    }
+                }
+            }
+            return list;
+        };
+        /**
+        * @language zh_CN
+        * 使用mask对所有的边进行过滤，获得结果
+        * @param list            用于存储结果
+        * @param edgeMask        边的通过属性过滤
+        * @return                获得到的边的队列
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.prototype.getEdges = function (list, edgeMask) {
+            if (list === void 0) { list = null; }
+            if (edgeMask === void 0) { edgeMask = 1; }
+            list = list || new Array();
+            list.length = 0;
+            var edge;
+            for (var _i = 0, _a = this._edges; _i < _a.length; _i++) {
+                edge = _a[_i];
+                if (edge.testMask(edgeMask)) {
+                    list.push(edge);
+                }
+            }
+            return list;
+        };
+        Object.defineProperty(Navi3DTriangle.prototype, "walkAble", {
+            /**
+            * @language zh_CN
+            * 获得通过属性
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this.testMask(egret3d.Navi3DMaskType.WalkAble);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Navi3DTriangle.prototype, "edges", {
+            /**
+            * @language zh_CN
+            * @return 该三角形的三条边
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._edges;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+        * @language zh_CN
+        * 获得通过属性
+        * @param value      用于过滤的值
+        * @return           是否通过
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.prototype.testMask = function (value) {
+            return (this._mask & value) == value;
+        };
+        /**
+        * @language zh_CN
+        * 根据三角形的一边获取另外一个点
+        * @param edge      输入边
+        * @return          端点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.prototype.getEdgeAgainstPoint = function (edge) {
+            return this._edgeAgainstPoint.getValueByKey(edge);
+        };
+        /**
+        * @language zh_CN
+        * 根据一个顶点，获取对面的边
+        * @param point     输入点
+        * @return          边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.prototype.getPointAgainstEdge = function (point) {
+            return this._pointAgainstEdge.getValueByKey(point);
+        };
+        /**
+        * @language zh_CN
+        * 稍微快一些的共边检测，需要等到mesh初始化完毕才可以
+        * @param triangle  三角形
+        * @return          公共边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.prototype.getPublicEdge = function (triangle) {
+            if (triangle && triangle != this) {
+                var keys = this._neibourTriangles.getKeys();
+                var obj;
+                for (var _i = 0, keys_2 = keys; _i < keys_2.length; _i++) {
+                    obj = keys_2[_i];
+                    if (this._neibourTriangles.getValueByKey(obj) == triangle)
+                        return obj;
+                }
+            }
+            return null;
+        };
+        /**
+        * @language zh_CN
+        * 费时间一些的检测共边
+        * @param triangle  三角形
+        * @return          公共边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.prototype.loopPublicEdge = function (triangle) {
+            var edgeA;
+            var edgeB;
+            if (triangle && triangle != this) {
+                for (var _i = 0, _a = this._edges; _i < _a.length; _i++) {
+                    edgeA = _a[_i];
+                    for (var _b = 0, _c = triangle._edges; _b < _c.length; _b++) {
+                        edgeB = _c[_b];
+                        if (edgeA == edgeB)
+                            return edgeA;
+                    }
+                }
+            }
+            return null;
+        };
+        /**
+        * @language zh_CN
+        * 在三角形内随机一个位置
+        * @return          点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.prototype.randomPoint = function () {
+            var pt0 = this._points[2].subtract(this._points[0]);
+            //			if(Math.random() > 0.5)
+            {
+                pt0.scaleBy(Math.random());
+            }
+            pt0.incrementBy(this._points[0]);
+            var pt1 = this._points[1].subtract(pt0);
+            //			if(Math.random() > 0.5)
+            {
+                pt1.scaleBy(Math.random());
+            }
+            pt1.incrementBy(pt0);
+            return pt1;
+        };
+        /**
+        * @language zh_CN
+        * 判定2d点是否在一个2d的三角形内
+        * @param pt0        被判定的点
+        * @param pt1        三角形的顶点1
+        * @param pt2        三角形的顶点2
+        * @param pt3        三角形的顶点3
+        * @return           是否处于三角形内
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.pointInsideTriangle = function (pt, pt0, pt1, pt2) {
+            Navi3DTriangle.pp.setTo(pt.x, pt.z);
+            Navi3DTriangle.p1.setTo(pt0.x, pt0.z);
+            Navi3DTriangle.p2.setTo(pt1.x, pt1.z);
+            Navi3DTriangle.p3.setTo(pt2.x, pt2.z);
+            return Navi3DTriangle.pointInsideTriangle2d();
+        };
+        /**
+        * @language zh_CN
+        * @private
+        * @return 判定2d点是否在一个2d的三角形内
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.pointInsideTriangle2d = function () {
+            if (Navi3DTriangle.product2d(Navi3DTriangle.p1, Navi3DTriangle.p2, Navi3DTriangle.p3) >= 0) {
+                return (Navi3DTriangle.product2d(Navi3DTriangle.p1, Navi3DTriangle.p2, Navi3DTriangle.pp) >= 0)
+                    && (Navi3DTriangle.product2d(Navi3DTriangle.p2, Navi3DTriangle.p3, Navi3DTriangle.pp)) >= 0
+                    && (Navi3DTriangle.product2d(Navi3DTriangle.p3, Navi3DTriangle.p1, Navi3DTriangle.pp) >= 0);
+            }
+            else {
+                return (Navi3DTriangle.product2d(Navi3DTriangle.p1, Navi3DTriangle.p2, Navi3DTriangle.pp) <= 0)
+                    && (Navi3DTriangle.product2d(Navi3DTriangle.p2, Navi3DTriangle.p3, Navi3DTriangle.pp)) <= 0
+                    && (Navi3DTriangle.product2d(Navi3DTriangle.p3, Navi3DTriangle.p1, Navi3DTriangle.pp) <= 0);
+            }
+        };
+        /**
+        * @language zh_CN
+        * 叉乘计算
+        * @param pt1        点1
+        * @param pt2        点2
+        * @param pt3        点3
+        * @return           结果值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.product2d = function (p1, p2, p3) {
+            var val = (p1.x - p3.x) * (p2.y - p3.y) - (p1.y - p3.y) * (p2.x - p3.x);
+            if (val > -0.00001 && val < 0.00001)
+                val = 0;
+            return val;
+        };
+        /**
+        * @language zh_CN
+        * 静态变量2d点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.p1 = new egret3d.Navi3DPoint2D();
+        /**
+        * @language zh_CN
+        * 静态变量2d点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.p2 = new egret3d.Navi3DPoint2D();
+        /**
+        * @language zh_CN
+        * 静态变量2d点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.p3 = new egret3d.Navi3DPoint2D();
+        /**
+        * @language zh_CN
+        * 静态变量2d点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DTriangle.pp = new egret3d.Navi3DPoint2D();
+        return Navi3DTriangle;
+    }(egret3d.Vector3D));
+    egret3d.Navi3DTriangle = Navi3DTriangle;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DMesh
+    * @classdesc
+    * 解析寻路网格生成的对象
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    var Navi3DMesh = (function () {
+        /**
+        * @language zh_CN
+        * constructor
+        * @param    pointList   顶点数据列表
+        * @param    triangleIndexList   顶点顺序列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        function Navi3DMesh(pointList, triangleIndexList) {
+            this._nav3dPoints = new Array();
+            this._nav3dEdges = new Array();
+            this._nav3dTriangles = new Array();
+            this._edgesDict = new egret3d.HashTable();
+            this.initPoints(pointList);
+            this.initEdgesAndTriangles(triangleIndexList);
+            this.createConnections();
+            this._nav3dAstar = new egret3d.Navi3DAstar();
+            this._nav3dFunnel = new egret3d.Navi3DFunnel();
+            this._terrainQuad = new egret3d.QuadRoot(8, 128);
+            this._terrainQuad.createQuadTree(this._nav3dTriangles);
+        }
+        Object.defineProperty(Navi3DMesh.prototype, "edges", {
+            /**
+            * @language zh_CN
+            * 网格中的边列表
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._nav3dEdges;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Navi3DMesh.prototype, "triangleList", {
+            /**
+            * @language zh_CN
+            * 寻路结果的三角带
+            * @return 三角形列表
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._triangleList;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Navi3DMesh.prototype, "points", {
+            /**
+            * @language zh_CN
+            * 网格中的点列表
+            * @return 点列表
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._nav3dPoints;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Navi3DMesh.prototype, "path", {
+            /**
+            * @language zh_CN
+            * 寻路结果中，3d点位置列表
+            * @return 3d点位置列表
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._path;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Navi3DMesh.prototype, "channel", {
+            /**
+            * @language zh_CN
+            * 网格中的三角形列表
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._nav3dTriangles;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+        * @language zh_CN
+        * 输入一个点，获取一个能匹配的三角形
+        * @param    point   输入的点
+        * @param    threshold   结果三角形最大距离阈值
+        * @return   返回三角形
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DMesh.prototype.getTriangleAtPoint = function (point, threshold) {
+            if (threshold === void 0) { threshold = 5; }
+            return this._terrainQuad.getTriangleAtPoint(point, threshold);
+        };
+        /**
+        * @language zh_CN
+        * 输入起点终点，搜寻路径
+        * @param    startPt   起点
+        * @param    endPt   终点
+        * @param    aiRadius   寻路肥胖半径
+        * @return   是否成功
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DMesh.prototype.findPath = function (startPt, endPt, aiRadius) {
+            if (aiRadius === void 0) { aiRadius = 5; }
+            this._path = null;
+            this._triangleList = null;
+            var startNode = this.getTriangleAtPoint(startPt, 10);
+            var endNode = this.getTriangleAtPoint(endPt, 10);
+            var success = this._nav3dAstar.findPath(this, startNode, endNode);
+            if (success) {
+                this._triangleList = this._nav3dAstar.channel;
+                success = this._nav3dFunnel.searchPath(this, startPt, endPt, this._triangleList, aiRadius);
+                this._path = this._nav3dFunnel.path;
+                return success;
+            }
+            return false;
+        };
+        /**
+        * @language zh_CN
+        * 初始化顶点列表
+        * @param    pointList   顶点坐标列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DMesh.prototype.initPoints = function (pointList) {
+            var point;
+            var nevPoint;
+            var count = pointList.length;
+            for (var i = 0; i < count; i++) {
+                point = pointList[i];
+                nevPoint = new egret3d.Navi3DPoint(i, point.x, point.y, point.z);
+                this._nav3dPoints.push(nevPoint);
+            }
+        };
+        /**
+        * @language zh_CN
+        * 初始化三角形和边列表
+        * @param    triangleIndexList   三角形顶点顺序列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DMesh.prototype.initEdgesAndTriangles = function (triangleIndexList) {
+            var indexOrderList;
+            var edge0;
+            var edge1;
+            var edge2;
+            var triangle;
+            var count = triangleIndexList.length;
+            for (var i = 0; i < count; i++) {
+                indexOrderList = triangleIndexList[i];
+                edge0 = this.tryCreateEdge(indexOrderList[0], indexOrderList[1]);
+                edge1 = this.tryCreateEdge(indexOrderList[1], indexOrderList[2]);
+                edge2 = this.tryCreateEdge(indexOrderList[2], indexOrderList[0]);
+                if (edge0 == null || edge1 == null || edge2 == null)
+                    continue;
+                triangle = new egret3d.Navi3DTriangle(i, edge0, edge1, edge2);
+                this._nav3dTriangles.push(triangle);
+            }
+        };
+        /**
+        * @language zh_CN
+        * 根据两个点的ID，创建一条边
+        * @param    pointAId   点A
+        * @param    pointBId   点B
+        * @return    创建的边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DMesh.prototype.tryCreateEdge = function (pointAId, pointBId) {
+            if (pointAId == pointBId) {
+                throw new Error("edge point index error!!!");
+            }
+            if (pointAId > pointBId) {
+                var tempId = pointAId;
+                pointAId = pointBId;
+                pointBId = tempId;
+            }
+            var edge = this._edgesDict.getValueByKey(pointAId + "_" + pointBId);
+            if (edge == null) {
+                edge = new egret3d.Navi3DEdge(this._nav3dPoints[pointAId], this._nav3dPoints[pointBId]);
+                this._nav3dEdges.push(edge);
+                this._edgesDict.put(pointAId + "_" + pointBId, edge);
+            }
+            return edge;
+        };
+        /**
+        * @language zh_CN
+        * 创建关系表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DMesh.prototype.createConnections = function () {
+            var triangleACount = this._nav3dTriangles.length;
+            var triangleBCount = this._nav3dTriangles.length;
+            var triangleA;
+            var triangleB;
+            var edge;
+            var publicEdge;
+            for (var i = 0; i < triangleACount; i++) {
+                //边上面记录拥有这条边的三角形
+                triangleA = this._nav3dTriangles[i];
+                for (var _i = 0, _a = triangleA.edges; _i < _a.length; _i++) {
+                    edge = _a[_i];
+                    edge.addTriangleOwners(triangleA);
+                }
+                for (var j = 0; j < triangleBCount; j++) {
+                    //三角形相邻关系
+                    triangleB = this._nav3dTriangles[j];
+                    if (triangleA == triangleB)
+                        continue;
+                    publicEdge = triangleA.loopPublicEdge(triangleB);
+                    if (publicEdge) {
+                        triangleA.addNeibour(publicEdge, triangleB);
+                        triangleB.addNeibour(publicEdge, triangleA);
+                    }
+                }
+            }
+        };
+        return Navi3DMesh;
+    }());
+    egret3d.Navi3DMesh = Navi3DMesh;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DFunnel
+    * @classdesc
+    * 寻找路径的方法
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    var Navi3DFunnel = (function () {
+        /**
+        * @language zh_CN
+        * constructor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        function Navi3DFunnel() {
+            /**
+            * @language zh_CN
+            * 寻路对象的半径
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this._aiRadius = 0;
+            /**
+            * @language zh_CN
+            * 公共边数据列表
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this._tempPublicEdgeList = new Array();
+            /**
+            * @language zh_CN
+            * 共面信息
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            this._tempSamePlaneList = new Array();
+            this._router = new egret3d.Navi3DRouter();
+        }
+        /**
+        * @language zh_CN
+        * 搜索路径
+        * @param mesh   搜索的范围
+        * @param startPt   起点
+        * @param endPt   终点
+        * @param triangleList   三角带
+        * @param radius   半径
+        * @return 是否寻路成功
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DFunnel.prototype.searchPath = function (mesh, startPt, endPt, triangleList, radius) {
+            if (radius === void 0) { radius = 0; }
+            if (radius <= 0)
+                radius = 1;
+            this._aiRadius = radius * 1.5;
+            //
+            this._navMesh = mesh;
+            //起点终点判断
+            if (!this.searchEnable(startPt, endPt, triangleList))
+                return false;
+            this.search(startPt, endPt, triangleList);
+            return true;
+        };
+        Object.defineProperty(Navi3DFunnel.prototype, "path", {
+            get: function () {
+                return this._result;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+        * @language zh_CN
+        * 检测是否满足搜索条件
+        * @param startPt   起点
+        * @param endPt   终点
+        * @param triangleList   三角带
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DFunnel.prototype.searchEnable = function (startPt, endPt, triangleList) {
+            if (startPt == null || endPt == null || this._navMesh == null || triangleList == null)
+                return false;
+            if (triangleList[0].plane.classifyPoint(startPt, Navi3DFunnel.EPSILON) != egret3d.PlaneClassification.INTERSECT) {
+                return false;
+            }
+            if (triangleList[triangleList.length - 1].plane.classifyPoint(endPt, Navi3DFunnel.EPSILON) != egret3d.PlaneClassification.INTERSECT) {
+                return false;
+            }
+            return true;
+        };
+        /**
+        * @language zh_CN
+        * 执行搜索
+        * @param startPt   起点坐标
+        * @param endPt   终点坐标
+        * @param triangleList   三角带
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DFunnel.prototype.search = function (startPt, endPt, triangleList) {
+            this._tempPublicEdgeList.length = 0;
+            this._tempSamePlaneList.length = 0;
+            var i = 0;
+            var crossedEdgeCount = triangleList.length - 1;
+            var tr;
+            var curEdge;
+            var pt;
+            var plane;
+            var crossPoint;
+            for (i = 0; i < crossedEdgeCount; i++) {
+                curEdge = triangleList[i].getPublicEdge(triangleList[i + 1]);
+                curEdge.crossPoint = null;
+                curEdge.initFatPoints(this._aiRadius);
+                this._tempPublicEdgeList.push(curEdge);
+                tr = triangleList[i];
+                plane = tr.plane;
+                tr = triangleList[i + 1];
+                pt = tr.getEdgeAgainstPoint(curEdge);
+                this._tempSamePlaneList.push(plane.classifyPoint(pt, Navi3DFunnel.EPSILON) == egret3d.PlaneClassification.INTERSECT);
+            }
+            this._router.continuePass(startPt, endPt, this._tempPublicEdgeList[0]);
+            crossedEdgeCount = this._tempPublicEdgeList.length;
+            var cornerPoint;
+            var cornerEdge;
+            var continuePass;
+            var lastEdge;
+            for (i = 0; i < crossedEdgeCount; i++) {
+                curEdge = this._tempPublicEdgeList[i];
+                tr = triangleList[i + 1];
+                lastEdge = i == crossedEdgeCount - 1;
+                if (lastEdge) {
+                    pt = endPt;
+                }
+                else {
+                    pt = tr.getEdgeAgainstPoint(curEdge);
+                }
+                continuePass = this._router.passEdge(curEdge, this._tempPublicEdgeList[i + 1], pt, lastEdge);
+                if (!continuePass) {
+                    cornerPoint = this._router.cornerPoint;
+                    cornerEdge = this._router.cornerEdge;
+                    i = this._tempPublicEdgeList.indexOf(cornerEdge);
+                    this._router.continuePass(cornerPoint, endPt, this._tempPublicEdgeList[i + 1]);
+                }
+            }
+            this.pushAllPathPoint2(startPt, endPt);
+            if (this._result.length >= 3) {
+                this.optimusTerminusFat();
+                this.optimusByRadius();
+            }
+        };
+        /**
+        * @language zh_CN
+        * 将端点换成肥胖检测点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DFunnel.prototype.optimusTerminusFat = function () {
+            var startFat;
+            var endFat;
+            var pt;
+            pt = this._result[1];
+            if (pt instanceof egret3d.Navi3DPointFat) {
+                startFat = pt;
+            }
+            pt = this._result[this._result.length - 2];
+            if (pt instanceof egret3d.Navi3DPointFat) {
+                endFat = pt;
+            }
+            if (startFat) {
+                this._result[1] = startFat.scalePoint();
+            }
+            if (endFat && startFat != endFat) {
+                this._result[this._result.length - 2] = endFat.scalePoint();
+            }
+        };
+        /**
+        * @language zh_CN
+        * 将穿越的公共边数据里的通过点加入到结果队列中
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DFunnel.prototype.pushAllPathPoint2 = function (startPt, endPt) {
+            var crossedEdgeCount = this._tempPublicEdgeList.length;
+            var curEdge;
+            var curEdgeJ;
+            this._result = new Array();
+            this._result.push(startPt);
+            var fromPoint = startPt;
+            var toPoint;
+            var fatPoint;
+            var crossPoint;
+            for (var i = 0; i < crossedEdgeCount; i++) {
+                curEdge = this._tempPublicEdgeList[i];
+                fatPoint = null;
+                if (curEdge.crossPoint) {
+                    fatPoint = this.getFatPoint(curEdge, curEdge.crossPoint);
+                    if (fatPoint) {
+                        this._result.push(fatPoint);
+                    }
+                    else {
+                        this._result.push(curEdge.crossPoint);
+                    }
+                    fromPoint = curEdge.crossPoint;
+                }
+                else {
+                    curEdgeJ = null;
+                    toPoint = null;
+                    //找到下一个点
+                    for (var j = i + 1; j < crossedEdgeCount; j++) {
+                        curEdgeJ = this._tempPublicEdgeList[j];
+                        toPoint = curEdgeJ.crossPoint;
+                        if (toPoint) {
+                            break;
+                        }
+                    }
+                    if (toPoint == null) {
+                        toPoint = endPt;
+                    }
+                    fatPoint = this.getFatPoint(curEdge, toPoint);
+                    if (fatPoint) {
+                        this._result.push(fatPoint);
+                    }
+                    else {
+                        Navi3DFunnel.CROSS_TEST_DIRECTION.setTo(toPoint.x - fromPoint.x, 0, toPoint.z - fromPoint.z);
+                        crossPoint = this._router.calcCrossEdge(curEdge, fromPoint, Navi3DFunnel.CROSS_TEST_DIRECTION);
+                        this._result.push(crossPoint);
+                    }
+                }
+            }
+            this._result.push(endPt);
+        };
+        /**
+        * @language zh_CN
+        * 优化通过的点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DFunnel.prototype.optimusByRadius = function () {
+            var optimusResult = new Array();
+            optimusResult.length = this._result.length;
+            var count = this._result.length - 2;
+            var pt0;
+            var pt1;
+            var pt2;
+            var fatPt0;
+            var fatPt1;
+            var fatPt2;
+            var edgePt0;
+            var edgePt1;
+            var edgePt2;
+            var centerEdge;
+            var checkEnable;
+            var optimusPoint;
+            var i;
+            for (i = 0; i < count; i++) {
+                edgePt0 = edgePt1 = edgePt2 = null;
+                checkEnable = false;
+                optimusPoint = null;
+                pt0 = this._result[i];
+                pt1 = this._result[i + 1];
+                pt2 = this._result[i + 2];
+                if (pt0 instanceof egret3d.Navi3DPointFat) {
+                    fatPt0 = pt0;
+                }
+                if (pt1 instanceof egret3d.Navi3DPointFat) {
+                    fatPt1 = pt1;
+                }
+                if (pt2 instanceof egret3d.Navi3DPointFat) {
+                    fatPt2 = pt2;
+                }
+                if (fatPt0) {
+                    edgePt0 = fatPt0.ownerPoint;
+                }
+                if (fatPt1) {
+                    edgePt1 = fatPt1.ownerPoint;
+                }
+                if (fatPt2) {
+                    edgePt2 = fatPt2.ownerPoint;
+                }
+                if (edgePt0 && edgePt1 && edgePt0 == edgePt1 && edgePt1 != edgePt2) {
+                    checkEnable = true;
+                }
+                if (edgePt2 && edgePt1 && edgePt2 == edgePt1 && edgePt0 != edgePt1) {
+                    checkEnable = true;
+                }
+                if (checkEnable) {
+                    Navi3DFunnel.CROSS_TEST_DIRECTION.copyFrom(pt0);
+                    Navi3DFunnel.CROSS_TEST_DIRECTION.decrementBy(pt2);
+                    centerEdge = fatPt1.ownerEdge;
+                    checkEnable = this._router.hasCrossPoint(centerEdge.pointA, centerEdge.pointB, pt2, Navi3DFunnel.CROSS_TEST_DIRECTION);
+                    if (checkEnable) {
+                        optimusPoint = this._router.calcCrossPointOut(edgePt1, pt1, pt2, Navi3DFunnel.CROSS_TEST_DIRECTION);
+                    }
+                    if (optimusPoint) {
+                        optimusResult[i + 1] = optimusPoint;
+                    }
+                }
+            }
+        };
+        /**
+        * @language zh_CN
+        * 对某个边获取肥胖监测点
+        * @param target 输入的坐标点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DFunnel.prototype.getFatPoint = function (edge, target) {
+            if (edge == null)
+                return null;
+            var fatPoint;
+            if (target instanceof egret3d.Navi3DPointFat) {
+                fatPoint = target;
+            }
+            var edgePoint;
+            if (fatPoint) {
+                edgePoint = fatPoint.ownerPoint;
+            }
+            else {
+                edgePoint = edge.getEqualPoint(target);
+            }
+            if (edgePoint == null)
+                return null;
+            fatPoint = edge.getFatPoint(edgePoint);
+            return fatPoint;
+        };
+        /**
+        * @language zh_CN
+        * 误差值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DFunnel.EPSILON = 5;
+        /**
+        * @language zh_CN
+        * 误差值的平方
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DFunnel.POWER_EPSILON = Navi3DFunnel.EPSILON * Navi3DFunnel.EPSILON;
+        /**
+        * @language zh_CN
+        * 计算用的Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DFunnel.CROSS_TEST_DIRECTION = new egret3d.Vector3D();
+        return Navi3DFunnel;
+    }());
+    egret3d.Navi3DFunnel = Navi3DFunnel;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @language zh_CN
+    * @class egret3d.Navi3DRouter
+    * @classdesc
+    * 纯2d的点
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    var Navi3DRouter = (function () {
+        /**
+        * @language zh_CN
+        * constructor
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        function Navi3DRouter() {
+        }
+        /**
+        * @language zh_CN
+        * 设定继续通过
+        * @param fromPt     起点
+        * @param endPt      终点
+        * @param fromEdge   上一次的边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DRouter.prototype.continuePass = function (fromPt, endPt, fromEdge) {
+            this.resetData();
+            this.curPoint = fromPt;
+            this.endPoint = endPt;
+            this.cornerEdge = fromEdge;
+        };
+        /**
+        * @language zh_CN
+        * 继续通过
+        * @param commonEdge          公共边
+        * @param nextCommonEdge      下一个公共边
+        * @param targetPoint         目标点
+        * @param lastEdge            是否为最后一个边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DRouter.prototype.passEdge = function (commonEdge, nextCommonEdge, targetPoint, lastEdge) {
+            if (this.rayA == null || this.rayB == null) {
+                this.rayA = Navi3DRouter.RAY_1;
+                this.rayB = Navi3DRouter.RAY_2;
+                this.rayAPoint = commonEdge.pointA;
+                this.rayBPoint = commonEdge.pointB;
+                this.rayA.setTo(this.rayAPoint.x - this.curPoint.x, 0, this.rayAPoint.z - this.curPoint.z);
+                this.rayB.setTo(this.rayBPoint.x - this.curPoint.x, 0, this.rayBPoint.z - this.curPoint.z);
+            }
+            if (lastEdge) {
+                return this.checkEndPoint(targetPoint);
+            }
+            Navi3DRouter.TEST_RAY.setTo(targetPoint.x - this.curPoint.x, 0, targetPoint.z - this.curPoint.z);
+            if (this.isPointAtCenter(Navi3DRouter.TEST_RAY, this.rayA, this.rayB)) {
+                if (!this.hasCrossPoint(nextCommonEdge.pointA, nextCommonEdge.pointB, this.rayAPoint, this.rayA)) {
+                    this.rayA.copyFrom(Navi3DRouter.TEST_RAY);
+                    if (targetPoint instanceof egret3d.Navi3DPoint) {
+                        this.rayAPoint = targetPoint;
+                    }
+                    else {
+                        this.rayAPoint = null;
+                    }
+                }
+                else {
+                    this.rayB.copyFrom(Navi3DRouter.TEST_RAY);
+                    if (targetPoint instanceof egret3d.Navi3DPoint) {
+                        this.rayBPoint = targetPoint;
+                    }
+                    else {
+                        this.rayBPoint = null;
+                    }
+                }
+                var anotherPoint = nextCommonEdge.getAnotherPoint(targetPoint);
+                Navi3DRouter.TEST_RAY.setTo(anotherPoint.x - this.curPoint.x, 0, anotherPoint.z - this.curPoint.z);
+                if (anotherPoint == this.rayAPoint || anotherPoint == this.rayBPoint || this.isPointAtCenter(Navi3DRouter.TEST_RAY, this.rayA, this.rayB)) {
+                    this.cornerEdge = nextCommonEdge;
+                }
+            }
+            else {
+                var needReturn;
+                Navi3DRouter.TEST_RAY_1.copyFrom(nextCommonEdge.pointA);
+                Navi3DRouter.TEST_RAY_1.decrementBy(this.curPoint);
+                Navi3DRouter.TEST_RAY_2.copyFrom(nextCommonEdge.pointB);
+                Navi3DRouter.TEST_RAY_2.decrementBy(this.curPoint);
+                Navi3DRouter.TEST_RAY_1.y = 0;
+                Navi3DRouter.TEST_RAY_2.y = 0;
+                if (this.isPointAtCenter(this.rayA, Navi3DRouter.TEST_RAY_1, Navi3DRouter.TEST_RAY_2)
+                    || this.isPointAtCenter(this.rayB, Navi3DRouter.TEST_RAY_1, Navi3DRouter.TEST_RAY_2)) {
+                    needReturn = false;
+                }
+                else {
+                    needReturn = true;
+                }
+                if (needReturn) {
+                    if (this.isPointAtCenter(this.rayA, Navi3DRouter.TEST_RAY, this.rayB)) {
+                        this.cornerPoint = this.rayAPoint;
+                    }
+                    else {
+                        this.cornerPoint = this.rayBPoint;
+                    }
+                    this.cornerEdge.crossPoint = this.cornerPoint;
+                    return false;
+                }
+            }
+            return true;
+        };
+        /**
+        * @language zh_CN
+        * @private
+        * 通过边的时候，发现为抵达终点的处理函数
+        * @param targetPoint          终点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DRouter.prototype.checkEndPoint = function (targetPoint) {
+            Navi3DRouter.TEST_RAY.setTo(targetPoint.x - this.curPoint.x, 0, targetPoint.z - this.curPoint.z);
+            if (this.isPointAtCenter(Navi3DRouter.TEST_RAY, this.rayA, this.rayB)) {
+            }
+            else {
+                if (this.isPointAtCenter(this.rayA, Navi3DRouter.TEST_RAY, this.rayB)) {
+                    this.cornerPoint = this.rayAPoint;
+                }
+                else {
+                    this.cornerPoint = this.rayBPoint;
+                }
+                this.cornerEdge.crossPoint = this.cornerPoint;
+                return false;
+            }
+            return true;
+        };
+        /**
+        * @language zh_CN
+        * 计算射线与线段的两个fatPoint之间交点
+        * @param _edge          线段
+        * @param linePoint      射线起点
+        * @param lineDirection  射线方向
+        * @return               交点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DRouter.prototype.calcCrossEdge = function (_edge, linePoint, lineDirection) {
+            return this.calcCrossPoint(_edge.fatPointA, _edge.fatPointB, linePoint, lineDirection);
+        };
+        /**
+        * @language zh_CN
+        * 计算射线与线段的交点
+        * @param _edge          线段
+        * @param linePoint      射线起点
+        * @param lineDirection  射线方向
+        * @return               交点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DRouter.prototype.calcCrossPoint = function (segmentPt1, segmentPt2, linePoint, lineDirection) {
+            Navi3DRouter.CALC_CROSS_POINT.copyFrom(segmentPt2);
+            Navi3DRouter.CALC_CROSS_POINT.decrementBy(segmentPt1);
+            var scale = ((segmentPt1.z - linePoint.z) * lineDirection.x - (segmentPt1.x - linePoint.x) * lineDirection.z) /
+                (Navi3DRouter.CALC_CROSS_POINT.x * lineDirection.z - lineDirection.x * Navi3DRouter.CALC_CROSS_POINT.z);
+            if (scale > 1) {
+                scale = 1;
+            }
+            else if (scale < 0) {
+                scale = 0;
+            }
+            Navi3DRouter.CALC_CROSS_POINT.scaleBy(scale);
+            Navi3DRouter.CALC_CROSS_POINT.incrementBy(segmentPt1);
+            return Navi3DRouter.CALC_CROSS_POINT.clone();
+        };
+        /**
+        * @language zh_CN
+        * 计算射线与线段交点，如果不在线段里面，则返回null
+        * @param segmentPt1      线段1端
+        * @param segmentPt2      线段另一端
+        * @param linePoint       射线起点
+        * @param lineDirection   射线方向
+        * @return                交点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DRouter.prototype.calcCrossPointOut = function (segmentPt1, segmentPt2, linePoint, lineDirection) {
+            Navi3DRouter.CALC_CROSS_POINT.copyFrom(segmentPt2);
+            Navi3DRouter.CALC_CROSS_POINT.decrementBy(segmentPt1);
+            var scale = ((segmentPt1.z - linePoint.z) * lineDirection.x - (segmentPt1.x - linePoint.x) * lineDirection.z) /
+                (Navi3DRouter.CALC_CROSS_POINT.x * lineDirection.z - lineDirection.x * Navi3DRouter.CALC_CROSS_POINT.z);
+            if (scale <= 1 && scale >= 0) {
+                return null;
+            }
+            Navi3DRouter.CALC_CROSS_POINT.scaleBy(scale);
+            Navi3DRouter.CALC_CROSS_POINT.incrementBy(segmentPt1);
+            return Navi3DRouter.CALC_CROSS_POINT.clone();
+        };
+        /**
+        * @language zh_CN
+        * 判定计算射线与线段是否有交点
+        * @param segmentPt1      线段1端
+        * @param segmentPt2      线段另一端
+        * @param linePoint       射线起点
+        * @param lineDirection   射线方向
+        * @return                是否有交点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DRouter.prototype.hasCrossPoint = function (segmentPt1, segmentPt2, linePoint, lineDirection) {
+            Navi3DRouter.CALC_CROSS_TEST.copyFrom(segmentPt2);
+            Navi3DRouter.CALC_CROSS_TEST.decrementBy(segmentPt1);
+            var scale = ((segmentPt1.z - linePoint.z) * lineDirection.x - (segmentPt1.x - linePoint.x) * lineDirection.z) /
+                (Navi3DRouter.CALC_CROSS_TEST.x * lineDirection.z - lineDirection.x * Navi3DRouter.CALC_CROSS_TEST.z);
+            return scale <= 1 && scale >= 0;
+        };
+        /**
+        * @language zh_CN
+        * @private
+        * 判定一个点是否在两个射线的夹角内侧
+        * @param point        点
+        * @param vectorA      射线A
+        * @param vectorB      射线B
+        * @return             是在内侧
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DRouter.prototype.isPointAtCenter = function (point, vectorA, vectorB) {
+            var cp1 = vectorA.crossProduct(point);
+            if (cp1.length == 0 && point.length < vectorA.length) {
+                return true;
+            }
+            var cp2 = vectorB.crossProduct(point);
+            if (cp2.length == 0 && point.length < vectorB.length) {
+                return true;
+            }
+            cp1.normalize();
+            cp2.normalize();
+            cp1.incrementBy(cp2);
+            return cp1.length < 0.01;
+        };
+        /**
+        * @language zh_CN
+        * 重置该router
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DRouter.prototype.resetData = function () {
+            this.cornerEdge = null;
+            this.cornerPoint = null;
+            this.curPoint = null;
+            this.rayA = this.rayB = null;
+            this.rayAPoint = this.rayBPoint = null;
+            Navi3DRouter.RAY_1.setTo(0, 0, 0);
+            Navi3DRouter.RAY_2.setTo(0, 0, 0);
+        };
+        /**
+        * @language zh_CN
+        * 静态变量射线1
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DRouter.RAY_1 = new egret3d.Vector3D();
+        /**
+        * @language zh_CN
+        * 静态变量射线2
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DRouter.RAY_2 = new egret3d.Vector3D();
+        /**
+        * @language zh_CN
+        * 计算用射线
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DRouter.TEST_RAY = new egret3d.Vector3D();
+        /**
+        * @language zh_CN
+        * 计算用射线1
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DRouter.TEST_RAY_1 = new egret3d.Vector3D();
+        /**
+        * @language zh_CN
+        * 计算用射线2
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DRouter.TEST_RAY_2 = new egret3d.Vector3D();
+        /**
+        * @language zh_CN
+        * 计算用的Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DRouter.CALC_CROSS_POINT = new egret3d.Vector3D();
+        /**
+        * @language zh_CN
+        * 计算用的Vector3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        Navi3DRouter.CALC_CROSS_TEST = new egret3d.Vector3D();
+        return Navi3DRouter;
+    }());
+    egret3d.Navi3DRouter = Navi3DRouter;
 })(egret3d || (egret3d = {}));
 var egret3d;
 (function (egret3d) {
@@ -26451,6 +29330,169 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
+     * @class egret3d.View3D
+     * @classdesc
+     * VRView3D 会把场景渲染成两个视口。
+     * 两个视口是由不同的摄像机渲染出来的结果，也相当由左右眼。
+     * @see egret3d.Camera3D
+     * @see egret3d.Scene3D
+     * @see egret3d.Egret3DCanvas
+     * @version Egret 3.0
+     * @platform Web,Native
+     */
+    var VRView3D = (function (_super) {
+        __extends(VRView3D, _super);
+        /**
+        * @language zh_CN
+        * 构建一个view3d对象
+        * @param x 视口的屏幕x坐标
+        * @param y 视口的屏幕y坐标
+        * @param width 视口的屏幕宽度
+        * @param height 视口的屏幕高度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        function VRView3D(x, y, width, height) {
+            _super.call(this, x, y, width, height, new egret3d.Camera3D(egret3d.CameraType.VR));
+            this.leftViewPort = new egret3d.Rectangle();
+            this.rightViewPort = new egret3d.Rectangle();
+            this.updateViewport();
+        }
+        VRView3D.prototype.updateViewport = function () {
+            this.leftViewPort.x = this._viewPort.x;
+            this.leftViewPort.y = this._viewPort.y;
+            this.leftViewPort.width = this._viewPort.width / 2;
+            this.leftViewPort.height = this._viewPort.height;
+            this.rightViewPort.x = this._viewPort.x + this.leftViewPort.width;
+            this.rightViewPort.y = this._viewPort.y;
+            this.rightViewPort.width = this.leftViewPort.width;
+            this.rightViewPort.height = this.leftViewPort.height;
+        };
+        Object.defineProperty(VRView3D.prototype, "x", {
+            /**
+            * @language zh_CN
+            * 设置当前视口的屏幕x坐标
+            * @param x 视口的屏幕x坐标
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            set: function (value) {
+                this._viewPort.x = value;
+                this.updateViewport();
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(VRView3D.prototype, "y", {
+            /**
+            * @language zh_CN
+            * 设置当前视口的屏幕y坐标
+            * @param y 视口的屏幕y坐标
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            set: function (value) {
+                this._viewPort.y = value;
+                this.updateViewport();
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(VRView3D.prototype, "width", {
+            /**
+            * @language zh_CN
+            * 设置视口的屏幕宽度
+            * @param width 视口的屏幕宽度
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            set: function (value) {
+                this._viewPort.width = value;
+                this._aspectRatio = this._viewPort.width / this._viewPort.height;
+                this._camera.aspectRatio = this._aspectRatio;
+                this.updateViewport();
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(VRView3D.prototype, "height", {
+            /**
+            * @language zh_CN
+            * 设置视口的屏幕高度
+            * @param width 视口的屏幕高度
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            set: function (value) {
+                this._viewPort.height = value;
+                this._aspectRatio = this._viewPort.width / this._viewPort.height;
+                this._camera.aspectRatio = this._aspectRatio;
+                this.updateViewport();
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        VRView3D.prototype.update = function (time, delay) {
+            this._entityCollect.update(this._camera);
+            this._render.update(time, delay, this._entityCollect, this._camera);
+            var viewPort = this.leftViewPort;
+            this._camera.viewPort = viewPort;
+            this._camera.tap(egret3d.CameraType.VR, egret3d.VRType.left);
+            egret3d.View3D._contex3DProxy.viewPort(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
+            egret3d.View3D._contex3DProxy.setScissorRectangle(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
+            if (this._cleanParmerts & egret3d.Context3DProxy.gl.COLOR_BUFFER_BIT) {
+                egret3d.View3D._contex3DProxy.clearColor(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w);
+            }
+            egret3d.View3D._contex3DProxy.clear(this._cleanParmerts);
+            this._render.draw(time, delay, egret3d.View3D._contex3DProxy, this._entityCollect, this._camera);
+            viewPort = this.rightViewPort;
+            this._camera.viewPort = viewPort;
+            this._camera.tap(egret3d.CameraType.VR, egret3d.VRType.right);
+            egret3d.View3D._contex3DProxy.viewPort(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
+            egret3d.View3D._contex3DProxy.setScissorRectangle(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
+            if (this._cleanParmerts & egret3d.Context3DProxy.gl.COLOR_BUFFER_BIT) {
+                egret3d.View3D._contex3DProxy.clearColor(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w);
+            }
+            egret3d.View3D._contex3DProxy.clear(this._cleanParmerts);
+            this._render.draw(time, delay, egret3d.View3D._contex3DProxy, this._entityCollect, this._camera);
+        };
+        Object.defineProperty(VRView3D.prototype, "eyeDistance", {
+            /**
+            * @language zh_CN
+            * 获取两只眼睛之间的距离
+            * @returns number 眼睛之间的距离
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            get: function () {
+                return this._camera.eyeMatrix.eyeSpace;
+            },
+            /**
+            * @language zh_CN
+            * 设置两只眼睛之间的距离
+            * @param eyeDis  两只眼睛之间的距离
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
+            set: function (eyeDis) {
+                this._camera.eyeMatrix.eyeSpace = eyeDis;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return VRView3D;
+    }(egret3d.View3D));
+    egret3d.VRView3D = VRView3D;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
     * @class egret3d.Egret3DCanvas
     * @classdesc
     * 3dCanvas 是一个3d渲染画布 它继承EventDispatcher 可以监听部分事件。
@@ -26706,4 +29748,186 @@ var egret3d;
         return Egret3DCanvas;
     }(egret3d.EventDispatcher));
     egret3d.Egret3DCanvas = Egret3DCanvas;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @private
+    */
+    var MeshData = (function () {
+        function MeshData(axis) {
+            var cubeGeometry = null;
+            switch (axis) {
+                case "x":
+                    cubeGeometry = new egret3d.CubeGeometry(100, 10, 10);
+                    break;
+                case "y":
+                    cubeGeometry = new egret3d.CubeGeometry(10, 100, 10);
+                    break;
+                case "z":
+                    cubeGeometry = new egret3d.CubeGeometry(10, 10, 100);
+                    break;
+            }
+            this.mesh = new egret3d.Mesh(cubeGeometry, new egret3d.TextureMaterial());
+        }
+        return MeshData;
+    }());
+    egret3d.MeshData = MeshData;
+    /**
+    * @private
+    */
+    var LocalAxis = (function (_super) {
+        __extends(LocalAxis, _super);
+        function LocalAxis(canvas3d, view3d) {
+            _super.call(this);
+            this._xyz = [];
+            this._currentDownIndex = -1;
+            this._currentAxisIndex = 0;
+            this._axisColor = [0xffff0000, 0xff00ff00, 0xff0000ff];
+            this._canvas3d = null;
+            this._view3d = null;
+            this._bindNode = null;
+            this.caheWorldPosition = new egret3d.Vector3D();
+            this.mousePosition = new egret3d.Vector3D();
+            this.dely = new egret3d.Vector3D();
+            this.sp = new egret3d.Vector3D();
+            this._canvas3d = canvas3d;
+            this._view3d = view3d;
+            this.initialize();
+        }
+        LocalAxis.prototype.bind = function (node) {
+            this._bindNode = node;
+            this.x = node.x;
+            this.y = node.y;
+            this.z = node.z;
+        };
+        LocalAxis.prototype.initialize = function () {
+            this._xyz.push(new MeshData("x"));
+            this._xyz.push(new MeshData("y"));
+            this._xyz.push(new MeshData("z"));
+            for (var i = 0; i < this._xyz.length; i++) {
+                this._xyz[i].mesh.enablePick = true;
+                this._xyz[i].mesh.addEventListener(egret3d.PickEvent3D.PICK_DOWN, this.onPickDown, this);
+                this.addChild(this._xyz[i].mesh);
+            }
+            egret3d.Input.addEventListener(egret3d.MouseEvent3D.MOUSE_DOWN, this.onMouseDown, this);
+            egret3d.Input.addEventListener(egret3d.MouseEvent3D.MOUSE_MOVE, this.onMouseMove, this);
+            egret3d.Input.addEventListener(egret3d.MouseEvent3D.MOUSE_UP, this.onMouseUp, this);
+            this._xyz[0].mesh.material.diffuseColor = this._axisColor[0];
+            this._xyz[1].mesh.material.diffuseColor = this._axisColor[1];
+            this._xyz[2].mesh.material.diffuseColor = this._axisColor[2];
+            egret3d.Input.addEventListener(egret3d.MouseEvent3D.MOUSE_MOVE, function (e) {
+                if (this._currentDownIndex == -1) {
+                    var meshArray = egret3d.Picker.pickObject3DList(this._canvas3d, this._view3d, [
+                        this._xyz[0].mesh,
+                        this._xyz[1].mesh,
+                        this._xyz[2].mesh
+                    ]);
+                    var axisIndex = -1;
+                    if (meshArray.length > 0) {
+                        for (var index = 0; index < this._xyz.length; index++) {
+                            if (this._xyz[index].mesh == meshArray[0]) {
+                                axisIndex = index;
+                                break;
+                            }
+                        }
+                    }
+                    if (this._currentAxisIndex != -1) {
+                        this._xyz[this._currentAxisIndex].mesh.material.diffuseColor = this._axisColor[this._currentAxisIndex];
+                        this._currentAxisIndex = -1;
+                    }
+                    if (axisIndex != -1) {
+                        this._currentAxisIndex = axisIndex;
+                        this._xyz[this._currentAxisIndex].mesh.material.diffuseColor = 0xffffff00;
+                    }
+                }
+            }, this);
+        };
+        LocalAxis.prototype.isPick = function () {
+            var meshArray = egret3d.Picker.pickObject3DList(this._canvas3d, this._view3d, [
+                this._xyz[0].mesh,
+                this._xyz[1].mesh,
+                this._xyz[2].mesh
+            ]);
+            return meshArray.length != 0;
+        };
+        LocalAxis.prototype.getCurrentIndex = function (mesh) {
+            for (var i = 0; i < this._xyz.length; i++) {
+                if (this._xyz[i].mesh == mesh) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+        LocalAxis.prototype.onMouseDown = function (e) {
+            this.sp.x = this.position.x;
+            this.sp.y = this.position.y;
+            this.sp.z = this.position.z;
+            this._view3d.camera3D.object3DToScreenRay(this.sp, this.sp);
+            this.mousePosition.x = egret3d.Input.mouseX;
+            this.mousePosition.y = egret3d.Input.mouseY;
+            this.mousePosition.z = this.sp.z;
+            this._view3d.camera3D.ScreenRayToObject3D(this.mousePosition, this.caheWorldPosition);
+        };
+        LocalAxis.prototype.onMouseMove = function (e) {
+            if (this._currentDownIndex <= -1) {
+                return;
+            }
+            this.sp.x = this.position.x;
+            this.sp.y = this.position.y;
+            this.sp.z = this.position.z;
+            this._view3d.camera3D.object3DToScreenRay(this.sp, this.sp);
+            this.mousePosition.x = egret3d.Input.mouseX;
+            this.mousePosition.y = egret3d.Input.mouseY;
+            this.mousePosition.z = this.sp.z;
+            this._view3d.camera3D.ScreenRayToObject3D(this.mousePosition, this.dely);
+            this.dely.x = this.dely.x - this.caheWorldPosition.x;
+            this.dely.y = this.dely.y - this.caheWorldPosition.y;
+            this.dely.z = this.dely.z - this.caheWorldPosition.z;
+            //console.log("pvec:" + this.sp.toString());
+            //console.log("pvec(" + pvec.x * this._view3d.width + " , " + pvec.y * this._view3d.height, " , " + pvec.z + ")");
+            //console.log("dely:" + dely.toString());
+            switch (this._currentDownIndex) {
+                case 0:
+                    this.x += this.dely.x;
+                    if (this._bindNode != null) {
+                        this._bindNode.x += this.dely.x;
+                    }
+                    break;
+                case 1:
+                    this.y += this.dely.y;
+                    if (this._bindNode != null) {
+                        this._bindNode.y += this.dely.y;
+                    }
+                    break;
+                case 2:
+                    this.z += this.dely.z;
+                    if (this._bindNode != null) {
+                        this._bindNode.z += this.dely.z;
+                    }
+                    break;
+            }
+            this._view3d.camera3D.ScreenRayToObject3D(new egret3d.Vector3D(egret3d.Input.mouseX, egret3d.Input.mouseY, this.mousePosition.z), this.caheWorldPosition);
+        };
+        LocalAxis.prototype.onMouseUp = function (e) {
+            this._currentDownIndex = -1;
+        };
+        LocalAxis.prototype.onPickDown = function (e) {
+            var index = this.getCurrentIndex(e.target);
+            this._currentDownIndex = index;
+            if (index <= -1) {
+                return;
+            }
+            switch (this._currentDownIndex) {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+            }
+        };
+        return LocalAxis;
+    }(egret3d.Object3D));
+    egret3d.LocalAxis = LocalAxis;
 })(egret3d || (egret3d = {}));
