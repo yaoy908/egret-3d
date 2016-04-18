@@ -132,43 +132,7 @@ class View3DTest {
         plane.y = -150;
         this._view3D.addChild3D(plane);
         
-        var width: number = 200;
-        var height: number = 200;
-
-        var row: number = 10000 /200 ;
-        var col: number = 3000 /200 + 2;
-
-        var geom: egret3d.Geometry = new egret3d.Geometry();
-        geom.vertexFormat = egret3d.VertexFormat.VF_POSITION;
-        geom.verticesData = new Array<number>();
-        geom.indexData = new Array<number>();
-
-
-        for(var i: number = 0;i < row;i++) {
-            for(var j: number = 0;j < col;j++) {
-                var index: number = i * col + j;
-                index = index * geom.vertexAttLength;
-                geom.verticesData[index + 0] = width * j - width * col / 2;
-                geom.verticesData[index + 1] = -149;
-                geom.verticesData[index + 2] = height * i - height * row / 2;
-               
-
-                if(j + 1 < col) {
-                    geom.indexData.push(i * col + j);
-                    geom.indexData.push(i * col + j + 1);
-                }
-
-                if(i + 1 < row) {
-                    geom.indexData.push(i * col + j);
-                    geom.indexData.push((i + 1) * col + j);
-                }
-            }
-        }
-
-
-        var wir: egret3d.Wireframe = new egret3d.Wireframe(geom);
-        wir.material.diffuseColor = 0x00ffff;
-        this._view3D.addChild3D(wir);
+    
     }
 	
     /**
