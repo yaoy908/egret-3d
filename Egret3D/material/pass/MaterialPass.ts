@@ -1,6 +1,5 @@
 ﻿module egret3d {
     
-    
     /**
     * @language zh_CN
     * @class egret3d.MaterialPass
@@ -47,7 +46,14 @@
         constructor(materialData: MaterialData) {
             this._materialData = materialData;
         }
-
+            
+        /**
+        * @language zh_CN
+        * 增加渲染方法
+        * @param method 渲染方法
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public addMethod(method: MethodBase) {
             if (method.methodType != -1) {
                 this.methodList.push(method);
@@ -59,7 +65,14 @@
                 new Error("method.methodType is null");
             }
         }
-
+                    
+        /**
+        * @language zh_CN
+        * 移除渲染方法
+        * @param method 渲染方法
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public removeMethod(method: MethodBase) {
             var index: number = this.methodList.indexOf(method);
             if (index != -1) {
@@ -72,6 +85,9 @@
             this._materialData.materialDataNeedChange = true;
         }
 
+        /**
+        * @private
+        */
         public passInvalid() {
             this._passChange = true;
         }
@@ -213,6 +229,9 @@
             this._passUsage.fragmentShader.addEndShaderName("end_fs");
         }
 
+        /**
+        * @private
+        */
         public upload(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, animation: IAnimation, geometry:Geometry) {
             this._passChange = false;
             this.initUseMethod(animation, geometry);
@@ -246,7 +265,10 @@
                 }
             }
         }
-
+        
+        /**
+        * @private
+        */
         public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation) {
             if (this._materialData.materialDataNeedChange) {
                 //this._materialData.materialDataNeedChange = false;
@@ -370,6 +392,10 @@
 
             if (this._passUsage.uniform_ProjectionMatrix) {
                 context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.projectMatrix.rawData);
+            }
+
+            if (this._passUsage.uniform_ViewProjectionMatrix) {
+                context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ViewProjectionMatrix.uniformIndex, false, camera3D.viewProjectionMatrix.rawData);
             }
 
             if (this.methodList) {
