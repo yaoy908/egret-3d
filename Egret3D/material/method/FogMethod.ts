@@ -174,6 +174,7 @@
         }
 
         /**
+        * @private
         * @language zh_CN
         * @param time
         * @param delay
@@ -188,13 +189,18 @@
         public upload(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
             usage["uniform_globalFog"] = context3DProxy.getUniformLocation(usage.program3D, "uniform_globalFog"); 
         }
-
+        
+        /**
+         * @language zh_CN
+         * @private
+         */
         public update(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
             context3DProxy.uniform1fv(usage["uniform_globalFog"], this.uniform_globalFog);
         }
 
         /**
          * @language zh_CN
+         * @private
          */
         public dispose() {
         }
