@@ -99,7 +99,6 @@
             this.addSubMaterial(0, material);
             this.material = material;
             this.bound = this.buildBoundBox();
-            this.initAABB();
         }
 
         public setMaterialByID() {
@@ -268,6 +267,7 @@
             (<BoundBox>bound.childBound).fillBox(min, max);
 
             this.bound = bound;
+            this.initAABB();
             return bound;
         }
 
