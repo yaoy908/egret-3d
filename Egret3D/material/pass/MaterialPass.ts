@@ -1,20 +1,49 @@
 ﻿module egret3d {
     
+    
     /**
-    * @private
+    * @language zh_CN
+    * @class egret3d.MaterialPass
+    * @classdesc
+    * 材质渲染pass 根据Mesh数据、模型的材质还有灯光数据的不同。
+    * 以不同的渲染方法，会组成相应的shader内容，然后渲染出不同的效果。
+    * @see egret3d.Mesh
+    * @version Egret 3.0
+    * @platform Web,Native
     */
     export class MaterialPass {
         protected _passUsage: PassUsage;
         protected _materialData: MaterialData;
         protected _passChange: boolean = true;
 
+        /**
+        * @private
+        */
         public methodList: Array<MethodBase> = new Array<MethodBase>();
+        
+        /**
+        * @private
+        */
         public methodDatas: Array<MethodData> = new Array<MethodData>();
-
+        
+        /**
+        * @private
+        */
         public vsShaderNames: Array<string> = new Array<string>();
+        
+        /**
+        * @private
+        */
         public fsShaderNames: Array<string> = new Array<string>();
-
+        
+        /**
+        * @private
+        */
         public lightGroup: LightGroup;
+                
+        /**
+        * @private
+        */
         constructor(materialData: MaterialData) {
             this._materialData = materialData;
         }
@@ -331,11 +360,17 @@
                     context3DProxy.uniform1fv(this._passUsage.uniform_pointLightSource.uniformIndex, this._passUsage.pointLightData);
             }
 
-            context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ModelMatrix.uniformIndex, false, modeltransform.rawData);
+            if (this._passUsage.uniform_ModelMatrix) {
+                context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ModelMatrix.uniformIndex, false, modeltransform.rawData);
+            }
 
-            context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ViewMatrix.uniformIndex, false, camera3D.viewMatrix.rawData);
+            if (this._passUsage.uniform_ViewMatrix) {
+                context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ViewMatrix.uniformIndex, false, camera3D.viewMatrix.rawData);
+            }
 
-            context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.projectMatrix.rawData);
+            if (this._passUsage.uniform_ProjectionMatrix) {
+                context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.projectMatrix.rawData);
+            }
 
             if (this.methodList) {
                 for (var i: number = 0; i < this.methodList.length; i++) {
