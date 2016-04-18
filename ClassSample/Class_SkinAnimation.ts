@@ -17,7 +17,7 @@
             this._egret3DCanvas.addView3D(view1);
             this.view1 = view1;
 
-            var load: URLLoader = new URLLoader("resource/lt11/body_12.esm");
+            var load: URLLoader = new URLLoader("resource/laohu/Mon_04.esm");
             load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoad, this);
 
 
@@ -59,10 +59,10 @@
             mesh.material.lightGroup = this.lights;
             this.laohu = mesh;
 
-            var loadtex: URLLoader = new URLLoader("resource/lt11/hero_12.png");
+            var loadtex: URLLoader = new URLLoader("resource/laohu/Mon_04.png");
             loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
             loadtex["mat"] = mat;
-            var load: URLLoader = new URLLoader("resource/lt11/body_12.eam");
+            var load: URLLoader = new URLLoader("resource/laohu/Bonezero.eam");
             load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onAnimation, this);
             load["mesh"] = mesh;
             mesh.y = 1000;

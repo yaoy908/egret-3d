@@ -25,7 +25,7 @@
 	
     <!--这个标签为不通过egret提供的第三方库的方式使用的 javascript 文件，请将这些文件放在libs下，但不要放在modules下面。-->
     <!--other_libs_files_start-->
-	<script egret="lib" src="libs/egret3d.js" src-release="libs/egret3d.js"></script>
+	<script egret="lib" src="libs/egret3d.js" src-release="libs/egret3d.min.js"></script>
     <!--other_libs_files_end-->
 
     <!--这个标签会被替换为项目中所有的 javascript 文件。删除 game_files 标签后，项目文件加载列表将不会变化，请谨慎操作！-->
@@ -37,18 +37,19 @@
 	<script egret="game" src="bin-debug/SampleCubeTransform.js"></script>
 	<script egret="game" src="bin-debug/SampleCullMode.js"></script>
 	<script egret="game" src="bin-debug/SampleDeviceMotion.js"></script>
+	<script egret="game" src="bin-debug/SampleDeviceOrientation.js"></script>
 	<script egret="game" src="bin-debug/SampleDirLight.js"></script>
 	<script egret="game" src="bin-debug/SampleEgret3DCanvas.js"></script>
 	<script egret="game" src="bin-debug/SampleEvent.js"></script>
 	<script egret="game" src="bin-debug/SampleGeometryUtil.js"></script>
 	<script egret="game" src="bin-debug/SampleMultipleView3D.js"></script>
+	<script egret="game" src="bin-debug/SampleOrientationChange.js"></script>
 	<script egret="game" src="bin-debug/SamplePointLight.js"></script>
 	<script egret="game" src="bin-debug/SampleSky.js"></script>
 	<script egret="game" src="bin-debug/SampleStaticModel.js"></script>
 	<script egret="game" src="bin-debug/SampleTextureCube.js"></script>
+	<script egret="game" src="bin-debug/SampleUvRoll.js"></script>
 	<script egret="game" src="bin-debug/SampleView3D.js"></script>
-	<script egret="game" src="bin-debug/SampleDeviceOrientation.js"></script>
-	<script egret="game" src="bin-debug/SampleOrientationChange.js"></script>
 	<!--game_files_end-->
     <script>
     window.addEventListener("touchmove", function (event) { event.preventDefault(); }, false);

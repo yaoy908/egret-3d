@@ -52,22 +52,6 @@
                     }
                     break;
             }
-            //var positionArray: Vector3D[] = Value.calculate(count, this.type, this.parameters);
-            //var position: Vector3D;
-
-            //var vertices: number = geometry.vertexCount / count;
-            //var index: number = 0;
-            //for (var i: number = 0; i < count; ++i) {
-            //    position = positionArray[i];
-
-            //    for (var j: number = 0; j < vertices; ++j) {
-            //        index = i * vertices + j;
-            //        index = index * geometry.vertexAttLength + this.offset;
-            //        geometry.verticesData[index + 0] = position.x - 250;
-            //        geometry.verticesData[index + 1] = position.y - 250;
-            //        geometry.verticesData[index + 2] = position.z - 250;
-            //    }
-            //}
         }
     }
 } 

@@ -485,14 +485,34 @@ declare module egret3d {
     /**
      * @private
      * @language zh_CN
-     * 手机朝向
+     * 设备的方向(设备横向持有或纵向持有)。
      * @version Egret 3.0
      * @platform Web,Native
      */
     enum Orientation {
+        /**
+         * 设备纵向持有0°,即纵向主方向。
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         Portrait_Primary = 0,
+        /**
+         * 设备纵向持有180°，即纵向次方向
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         Portrait_Secondary = 180,
+        /**
+         * 设备横向持有-90°,即横向主方向。
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         Landscape_Primary = -90,
+        /**
+        * 设备横向持有90°,即横向次方向。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         Landscape_Secondary = 90,
     }
     /**
@@ -532,7 +552,8 @@ declare module egret3d {
         private _orientation;
         /**
          * @language zh_CN
-         * 获取当前横竖屏枚举值,枚举值为其对应角度
+         * 获取设备的方向枚举值,枚举值为其对应角度
+         * @return {Orientation} 设备的方向枚举值
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -541,12 +562,14 @@ declare module egret3d {
         /**
          * @language zh_CN
          * 获取排除重力影响的加速度
+         * @return {DeviceAcceleration} 加速度,单位是m/s2
          * @version Egret 3.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 设置排除重力影响的加速度
+         * @param deviceAcceleration {DeviceAcceleration} 加速度,单位是m/s2。
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -555,12 +578,14 @@ declare module egret3d {
         /**
         * @language zh_CN
         * 获取受到重力影响的加速度
+        * @return {DeviceAcceleration} 加速度,单位是m/s2
         * @version Egret 3.0
         * @platform Web,Native
         */
         /**
         * @language zh_CN
         * 设置受到重力影响的加速度
+        * @param deviceAcceleration {DeviceAcceleration} 加速度,单位是m/s2。
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -568,13 +593,15 @@ declare module egret3d {
         private _rotationRate;
         /**
          * @language zh_CN
-         * 获取旋转速率
+         * 获取旋转角度的变化速率
+         * @return {DeviceAcceleration} 旋转速率,单位是deg/s。
          * @version Egret 3.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 设置旋转速率
+         * @param deviceRotationRate {DeviceRotationRate} 旋转速率,单位是deg/s。
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -583,12 +610,14 @@ declare module egret3d {
         /**
          * @language zh_CN
          * 获取是否是绝对旋转重力方向
+         * @return {boolean}。
          * @version Egret 3.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 设置是否是绝对旋转重力方向
+         * @param value {boolean}。
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -597,12 +626,14 @@ declare module egret3d {
         /**
          * @language zh_CN
          * 获取Alpha旋转，围绕Z轴旋转，即水平方向旋转
+         * @return {number} 旋转角度。
          * @version Egret 3.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 设置Alpha旋转，围绕Z轴旋转，即水平方向旋转
+         * @param value {number} 旋转角度。
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -611,12 +642,14 @@ declare module egret3d {
         /**
          * @language zh_CN
          * 获取Beta旋转，围绕X轴旋转，即前后方向旋转
+         * @return {number} 旋转角度。
          * @version Egret 3.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 设置Beta旋转，围绕X轴旋转，即前后方向旋转
+         * @param value {number} 旋转角度。
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -625,12 +658,14 @@ declare module egret3d {
         /**
          * @language zh_CN
          * 获取Gamma旋转，围绕Y轴旋转，即左右方向旋转
+         * @return {number} 旋转角度。
          * @version Egret 3.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 设置Gamma旋转，围绕Y轴旋转，即左右方向旋转
+         * @param value {number} 旋转角度。
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -3662,6 +3697,7 @@ declare module egret3d {
 }
 declare module egret3d {
     /**
+     * @private
      * @language zh_CN
      * @class egret3d.EyesMatrix
      * @classdesc
@@ -3702,6 +3738,7 @@ declare module egret3d {
         */
         constructor();
         /**
+        * @private
         * @language zh_CN
         * 数据更新
         * @param matrix 当前相机矩阵
@@ -3848,8 +3885,6 @@ declare module egret3d {
         * 射线方向
         */
         dir: Vector3D;
-        static sdir: Vector3D;
-        static sdir1: Matrix4_4;
         /**
         * @language zh_CN
         * constructor
@@ -8844,8 +8879,8 @@ declare module egret3d {
         private keyUp(e);
         private onWindowsResize(e);
         private onOrientationChange(e);
-        onDeviceMotion(e: DeviceMotionEvent): void;
-        onDeviceOrientation(e: DeviceOrientationEvent): void;
+        private onDeviceMotion(e);
+        private onDeviceOrientation(e);
         private GetSlideAngle(dx, dy);
         /**
         * @language zh_CN
@@ -8862,6 +8897,7 @@ declare module egret3d {
 }
 declare module egret3d {
     /**
+     * @private
      * @language zh_CN
      * @class egret3D.OrientationControler
      * @classdesc
@@ -9414,10 +9450,13 @@ declare module egret3d {
 }
 declare module egret3d {
     /**
-     * @class egret3d.AOMapMethod
-     * @classdesc
-     * AO贴图方法
-     */
+    * @class egret3d.TerrainARGBMethod
+    * @classdesc
+    * 地形贴图混合渲染方法。
+    * 使用一张贴图中的ARGB色来进行4张贴图进行混合。
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     class TerrainARGBMethod extends MethodBase {
         private controlTex;
         private splat_0;
@@ -9426,45 +9465,193 @@ declare module egret3d {
         private splat_3;
         private uvs;
         /**
-         * @language zh_CN
-         * @param texture
-         */
+        * @language zh_CN
+        * 创建地形贴图混合渲染方法
+        * @param controlTex 混合贴图
+        * @param splat_0 第一张贴图
+        * @param splat_1 第二张贴图
+        * @param splat_2 第三张贴图
+        * @param splat_3 第四张贴图
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         constructor(controlTex: ITexture, splat_0: ITexture, splat_1: ITexture, splat_2: ITexture, splat_3: ITexture);
         /**
-         * @language zh_CN
-         * 设置 UVTitling。
-         * @param index {Number} 图层索引
-         * @param x {Number} u 的重复次数
-         * @param y {Number} v 的重复次数
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
+        * @language zh_CN
+        * 设置 UVTitling。
+        * @param index {Number} 图层索引
+        * @param x {Number} u 的重复次数
+        * @param y {Number} v 的重复次数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         setUVTitling(index: number, x: number, y: number): void;
         /**
-         * @language zh_CN
-         * @param texture
-         */
+        * @language zh_CN
+        * 设置第一张贴图
+        * @param texture 贴图
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         splat_0_Texture: ITexture;
         /**
-         * @language zh_CN
-         * @param texture
-         */
+        * @language zh_CN
+        * 设置第二张贴图
+        * @param texture 贴图
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         splat_1_Texture: ITexture;
         /**
-         * @language zh_CN
-         * @param texture
-         */
+        * @language zh_CN
+        * 设置第三张贴图
+        * @version Egret 3.0
+        * @platform Web,Native
+        * @param texture 贴图
+        */
         splat_2_Texture: ITexture;
         /**
-         * @language zh_CN
-         * @param texture
-         */
+        * @language zh_CN
+        * 设置第四张贴图
+        * @param texture 贴图
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         splat_3_Texture: ITexture;
         /**
-         * @language zh_CN
-         * @param texture
-         */
+        * @language zh_CN
+        * 设置混合贴图
+        * @param texture 贴图
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         controlTexture: ITexture;
+        /**
+        * @private
+        * @language zh_CN
+        * @param time
+        * @param delay
+        * @param usage
+        * @param materialData
+        * @param geometry
+        * @param context3DProxy
+        * @param modeltransform
+        * @param modeltransform
+        * @param camera3D
+        */
+        upload(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D): void;
+        /**
+        * @language zh_CN
+        * @private
+        */
+        update(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D): void;
+        /**
+        * @language zh_CN
+        * @private
+        */
+        dispose(): void;
+    }
+}
+declare module egret3d {
+    /**
+    * @class egret3d.FogMethod
+    * @classdesc
+    * Exponential Height Fog渲染方法。
+    * 实现3种fog类型： line、exp、exp height
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class FogMethod extends MethodBase {
+        private uniform_globalFog;
+        private _fogColor;
+        private _globalDensity;
+        private _fogStartDistance;
+        private _fogDistanceScale;
+        private _height;
+        private _fogAlpha;
+        /**
+        * @language zh_CN
+        * 创建一个雾的渲染方法
+        * @param fogType 雾的类型 line/exp/expHeightFog
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor(fogType?: string);
+        /**
+        * @language zh_CN
+        * 获取雾颜色
+        * @returns 雾颜色 rgb  0xffffff
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        /**
+        * @language zh_CN
+        * 设置雾颜色
+        * @param value 雾颜色 rgb  0xffffff
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        fogColor: number;
+        /**
+        * @language zh_CN
+        * 获取雾的全局浓度
+        * @returns number 雾的全局浓度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        /**
+        * @language zh_CN
+        * 设置雾的全局浓度
+        * @param value 雾的全局浓度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        globalDensity: number;
+        /**
+        * @language zh_CN
+        * 获取雾的开始距离
+        * @returns number 雾的开始距离
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        /**
+        * @language zh_CN
+        * 设置雾的开始距离
+        * @param value 雾的开始距离
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        fogStartDistance: number;
+        /**
+        * @language zh_CN
+        * 获取雾的高度值
+        * @returns number 雾的高度值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        /**
+        * @language zh_CN
+        * 设置雾的高度值
+        * @param value 雾的高度值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        fogHeight: number;
+        /**
+        * @language zh_CN
+        * 获取雾的Alpha值
+        * @returns number 雾的Alpha值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        /**
+        * @language zh_CN
+        * 设置雾的Alpha值
+        * @param value 雾的Alpha值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        fogAlpha: number;
         /**
         * @language zh_CN
         * @param time
@@ -9483,6 +9670,225 @@ declare module egret3d {
          * @language zh_CN
          */
         dispose(): void;
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.UVRollMethod
+    * @classdesc
+    * 用来实现UV滚动效果的渲染方法
+    * @see egret3d.MethodBase
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class UVRollMethod extends MethodBase {
+        private _uvRoll;
+        private _speedU;
+        private _speedV;
+        private _time;
+        private _start;
+        /**
+        * @private
+        * @language zh_CN
+        */
+        constructor();
+        /**
+        * @language zh_CN
+        * 获取UV u的滚动速度
+        * @returns number u的滚动速度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        /**
+        * @language zh_CN
+        * 用来UV u的滚动速度
+        * @param value u的滚动速度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        speedU: number;
+        /**
+        * @language zh_CN
+        * 获取UV v的滚动速度
+        * @returns number v的滚动速度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        /**
+        * @language zh_CN
+        * 用来UV v的滚动速度
+        * @param value v的滚动速度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        speedV: number;
+        /**
+        * @language zh_CN
+        * 开始播放uv动画
+        * @param rest 如果为ture就是重置播放
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        start(rest?: boolean): void;
+        /**
+        * @language zh_CN
+        * 停止播放uv动画
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        stop(): void;
+        /**
+        * @private
+        * @language zh_CN
+        * @param time
+        * @param delay
+        * @param usage
+        * @param materialData
+        * @param geometry
+        * @param context3DProxy
+        * @param modeltransform
+        * @param modeltransform
+        * @param camera3D
+        */
+        upload(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D): void;
+        /**
+        * @private
+        * @language zh_CN
+        */
+        update(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D): void;
+    }
+}
+declare module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.UVSpriteSheetMethod
+    * @classdesc
+    * 用来实现UV精灵动画的渲染方法 。
+    * 一整张贴图中用行列来分割帧动画，然后实现每帧播放。
+    * row * col 是总帧数， frameNum是只播放的帧数.
+    * @see egret3d.MethodBase
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    class UVSpriteSheetMethod extends MethodBase {
+        private _uvSpriteSheet;
+        private _uvRectangle;
+        private _speed;
+        private _time;
+        private _numTime;
+        private _start;
+        private _frameNum;
+        private _row;
+        private _column;
+        private _currentFrame;
+        private frameList;
+        private _change;
+        /**
+        * @language zh_CN
+        * 创建一个UV精灵动画的渲染方法对象
+        * @param frameNum  帧数量
+        * @param row 行数
+        * @param column 列数
+        * @param numTime 播放总时间
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        constructor(frameNum: number, row: number, column: number, numTime: number);
+        private caculate();
+        /**
+        * @language zh_CN
+        * 获取动画播放总时间
+        * @returns number 播放总时间
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        /**
+        * @language zh_CN
+        * 设置动画播放总时间
+        * @param value 播放总时间
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        numTime: number;
+        /**
+        * @language zh_CN
+        * 获取动画帧数
+        * @returns number  动画帧数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        /**
+        * @language zh_CN
+        * 设置动画帧数
+        * @param value 动画帧数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        frameNum: number;
+        /**
+        * @language zh_CN
+        * 获取动画行数
+        * @returns number  动画行数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        /**
+        * @language zh_CN
+        * 设置动画行数
+        * @param value 动画行数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        row: number;
+        /**
+        * @language zh_CN
+        * 获取动画列数
+        * @returns number  动画列数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        /**
+        * @language zh_CN
+        * 设置动画列数
+        * @param value 动画列数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        column: number;
+        /**
+        * @language zh_CN
+        * 开始播放uv精灵动画
+        * @param rest 如果为ture就是重置播放
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        start(rest?: boolean): void;
+        /**
+        * @language zh_CN
+        * 停止播放uv精灵动画
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        stop(): void;
+        /**
+        * @private
+        * @language zh_CN
+        * @param time
+        * @param delay
+        * @param usage
+        * @param materialData
+        * @param geometry
+        * @param context3DProxy
+        * @param modeltransform
+        * @param modeltransform
+        * @param camera3D
+        */
+        upload(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D): void;
+        /**
+        * @private
+        */
+        update(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D): void;
     }
 }
 declare module egret3d {
@@ -10151,21 +10557,63 @@ declare module egret3d {
 }
 declare module egret3d {
     /**
-    * @private
+    * @language zh_CN
+    * @class egret3d.MaterialPass
+    * @classdesc
+    * 材质渲染pass 根据Mesh数据、模型的材质还有灯光数据的不同。
+    * 以不同的渲染方法，会组成相应的shader内容，然后渲染出不同的效果。
+    * @see egret3d.Mesh
+    * @version Egret 3.0
+    * @platform Web,Native
     */
     class MaterialPass {
         protected _passUsage: PassUsage;
         protected _materialData: MaterialData;
         protected _passChange: boolean;
+        /**
+        * @private
+        */
         methodList: Array<MethodBase>;
+        /**
+        * @private
+        */
         methodDatas: Array<MethodData>;
+        /**
+        * @private
+        */
         vsShaderNames: Array<string>;
+        /**
+        * @private
+        */
         fsShaderNames: Array<string>;
+        /**
+        * @private
+        */
         lightGroup: LightGroup;
+        /**
+        * @private
+        */
         constructor(materialData: MaterialData);
+        /**
+        * @language zh_CN
+        * 增加渲染方法
+        * @param method 渲染方法
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         addMethod(method: MethodBase): void;
+        /**
+        * @language zh_CN
+        * 移除渲染方法
+        * @param method 渲染方法
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         removeMethod(method: MethodBase): void;
         protected materialDataChange(): void;
+        /**
+        * @private
+        */
         passInvalid(): void;
         /**
        * @language zh_CN
@@ -10181,12 +10629,21 @@ declare module egret3d {
         * @version Egret 3.0
         * @platform Web,Native
         */
-        initUseMethod(animation: IAnimation): void;
-        upload(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, animation: IAnimation): void;
+        initUseMethod(animation: IAnimation, geom: Geometry): void;
+        /**
+        * @private
+        */
+        upload(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, animation: IAnimation, geometry: Geometry): void;
+        /**
+        * @private
+        */
         draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation): void;
     }
 }
 declare module egret3d {
+    /**
+    * @private
+    */
     class ColorPass extends MaterialPass {
         /**
        * @language zh_CN
@@ -10195,7 +10652,7 @@ declare module egret3d {
        * @version Egret 3.0
        * @platform Web,Native
        */
-        initUseMethod(animation: IAnimation): void;
+        initUseMethod(animation: IAnimation, geom: Geometry): void;
     }
 }
 declare module egret3d {
@@ -10211,7 +10668,7 @@ declare module egret3d {
         * @version Egret 3.0
         * @platform Web,Native
         */
-        initUseMethod(animation: IAnimation): void;
+        initUseMethod(animation: IAnimation, geom: Geometry): void;
     }
 }
 declare module egret3d {
@@ -10227,7 +10684,7 @@ declare module egret3d {
         * @version Egret 3.0
         * @platform Web,Native
         */
-        initUseMethod(animation: IAnimation): void;
+        initUseMethod(animation: IAnimation, geom: Geometry): void;
     }
 }
 declare module egret3d {
@@ -10851,12 +11308,13 @@ declare module egret3d {
         cube3D = 2,
         plane = 3,
         sphere = 4,
-        cone = 5,
-        triangle = 6,
-        cylinder = 7,
-        line = 8,
-        curve = 9,
-        beizier = 10,
+        sphere_plane = 5,
+        cone = 6,
+        triangle = 7,
+        cylinder = 8,
+        line = 9,
+        curve = 10,
+        beizier = 11,
     }
     class Value {
         private emitter;
@@ -10867,6 +11325,7 @@ declare module egret3d {
 }
 declare module egret3d {
     /**
+    * @private
     * @language zh_CN
     * @class egret3d.EmitterType
     * @classdesc
@@ -10960,6 +11419,7 @@ declare module egret3d {
    * @class egret3d.ParticleEmitter
    * @classdesc
    * 粒子发射器 有多种发射器类型 还分为两种粒子类型，重力粒子只朝一个方向运动，范围粒子是随范围运动
+   * @see egret3d.Mesh
    * @version Egret 3.0
    * @platform Web,Native
    */
@@ -11176,6 +11636,32 @@ declare module egret3d {
         * @platform Web,Native
         */
         getEndRot(): Vector3D;
+        /**
+        * @language zh_CN
+        * 设置粒子运动方向 只有重力粒子才有方向
+        * @param dir 粒子运动方向
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        setDirection(dir: Vector3D): void;
+        /**
+        * @language zh_CN
+        * 设置粒子运动方向 只有重力粒子才有方向
+        * @param x X运动方向值
+        * @param y Y运动方向值
+        * @param z Z运动方向值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        setDirectionXYZ(x: number, y: number, z: number): void;
+        /**
+        * @language zh_CN
+        * 获取粒子运动方向 只有重力粒子才有方向
+        * @returns Vector3D运动方向值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getDirection(): Vector3D;
         protected createNode(): void;
         protected build(): void;
         /**

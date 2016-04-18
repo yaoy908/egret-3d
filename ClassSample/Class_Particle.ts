@@ -33,7 +33,7 @@
 
             this.view1.addChild3D(particle);
             this.obj = particle;
-
+            particle.setEndRotXYZ(0, 360, 0);
 
             var loadtex: URLLoader = new URLLoader("resource/effect/vein_0025.png");
             loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
@@ -44,7 +44,6 @@
         protected obj: Object3D;
         protected onLoadTexture(e: LoaderEvent3D) {
             e.loader["mat"].diffuseTexture = e.loader.data;
-
         }
 
         public update(e: Event3D) {

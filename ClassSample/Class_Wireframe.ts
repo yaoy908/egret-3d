@@ -57,12 +57,58 @@
             geom.verticesData = cubeVer;
             geom.indexData = cubeLineInx;
 
-            var wireframe: Wireframe = new Wireframe(geom);
-            this.view1.addChild3D(wireframe);
+            //var wireframe: Wireframe = new Wireframe(geom);
+            //this.view1.addChild3D(wireframe);
+
+
+            var width: number = 20;
+            var height: number = 20;
+
+            var row: number = 20;
+            var col: number = 20;
+
+            var geom: egret3d.Geometry = new egret3d.Geometry();
+            geom.vertexFormat = egret3d.VertexFormat.VF_POSITION;
+            geom.verticesData = new Array<number>();
+            geom.indexData = new Array<number>();
+
+
+            for (var i: number = 0; i < row; i++) {
+                for (var j: number = 0; j < col; j++) {
+                    var index: number = i * col + j;
+                    index = index * geom.vertexAttLength;
+                    geom.verticesData[index + 0] = width * j - width * col / 2;
+                    geom.verticesData[index + 1] = 0;
+                    geom.verticesData[index + 2] = height * i - height * row / 2;
+                    //geom.verticesData[index + 3] = 1;
+                    //geom.verticesData[index + 4] = 1;
+                    //geom.verticesData[index + 5] = 0;
+                    //geom.verticesData[index + 6] = 1;
+                    //geom.verticesData[index + 7] = 0;
+                    //geom.verticesData[index + 8] = 0;
+                    //geom.verticesData[index + 9] = 1;
+                    //geom.verticesData[index + 10] = 0;
+                    //geom.verticesData[index + 11] = 0;
+
+                    if (j + 1 < col) {
+                        geom.indexData.push(i * col + j);
+                        geom.indexData.push(i * col + j + 1);
+                    }
+
+                    if (i + 1 < row) {
+                        geom.indexData.push(i * col + j);
+                        geom.indexData.push((i + 1) * col + j);
+                    }
+                }
+            }
+
+
+            var wir: egret3d.Wireframe = new egret3d.Wireframe(geom);
+            wir.material.diffuseColor = 0xffff00;
+            this.view1.addChild3D(wir);
 
             this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
-
         }
     
 

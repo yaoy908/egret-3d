@@ -154,13 +154,13 @@
          * @param lightData 灯光数据
          */
         public updateLightData(camera:Camera3D ,index: number, lightData: Float32Array) {
-            lightData[index * SpotLight.stride] = this.x;
-            lightData[index * SpotLight.stride + 1] = this.y;
-            lightData[index * SpotLight.stride + 2] = this.z;
+            lightData[index * SpotLight.stride] = this.globalPosition.x;
+            lightData[index * SpotLight.stride + 1] = this.globalPosition.y;
+            lightData[index * SpotLight.stride + 2] = this.globalPosition.z;
           
-            lightData[index * SpotLight.stride + 3] = this._rot.x * MathUtil.DEGREES_TO_RADIANS ;
-            lightData[index * SpotLight.stride + 4] = this._rot.y * MathUtil.DEGREES_TO_RADIANS ;
-            lightData[index * SpotLight.stride + 5] = this._rot.z * MathUtil.DEGREES_TO_RADIANS ; 
+            lightData[index * SpotLight.stride + 3] = this.globalRotation.x * MathUtil.DEGREES_TO_RADIANS ;
+            lightData[index * SpotLight.stride + 4] = this.globalRotation.y * MathUtil.DEGREES_TO_RADIANS ;
+            lightData[index * SpotLight.stride + 5] = this.globalRotation.z * MathUtil.DEGREES_TO_RADIANS ; 
          
             lightData[index * SpotLight.stride + 6] = this._diffuse.x;
             lightData[index * SpotLight.stride + 7] = this._diffuse.y;

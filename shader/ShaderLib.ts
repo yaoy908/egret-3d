@@ -103,6 +103,9 @@ module egret3d {
 			"vec4 diffuseColor ; \n" +
 			"void main() { \n" +
 			"diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
+			"if( diffuseColor.w == materialSource.cutAlpha ){ \n" +
+			"discard; \n" +
+			"} \n" +
 			"} \n",
 
 			"diffuse_vertex":
@@ -158,9 +161,6 @@ module egret3d {
 			"vec4 ambientColor; \n" +
 			"vec4 light ; \n" +
 			"void main() { \n" +
-			"if( varying_color.w == 0.0){ \n" +
-			"discard; \n" +
-			"} \n" +
 			"diffuseColor.xyz = materialSource.diffuse.xyz * diffuseColor.xyz ; \n" +
 			"outColor.xyz = (ambientColor.xyz + materialSource.ambient.xyz + light.xyz) * diffuseColor.xyz + specularColor.xyz * materialSource.specularScale; \n" +
 			"outColor.w = materialSource.alpha * diffuseColor.w ; \n" +
@@ -384,15 +384,58 @@ module egret3d {
 
 			"particle_vs":
 			"attribute vec3 attribute_offset; \n" +
-			"attribute float attribute_billboardXYZ; \n" +
 			"attribute vec3 attribute_lifecycle; \n" +
-			"attribute vec3 attribute_speed; \n" +
-			"attribute vec3 attribute_accele; \n" +
+			"attribute vec3 attribute_direction; \n" +
+			"attribute vec2 attribute_speed; \n" +
 			"uniform mat4 uniform_cameraMatrix; \n" +
 			"uniform float uniform_time; \n" +
-			"vec3 position; \n" +
+			"uniform float uniform_enableBillboardXYZ; \n" +
+			"uniform vec3 uniform_startColor; \n" +
+			"uniform vec3 uniform_endColor; \n" +
+			"uniform vec3 uniform_startScale; \n" +
+			"uniform vec3 uniform_endScale; \n" +
+			"uniform vec3 uniform_startRot; \n" +
+			"uniform vec3 uniform_endRot; \n" +
+			"const float PI = 3.1415926 ; \n" +
+			"vec4 position; \n" +
 			"float currentTime = 0.0; \n" +
 			"float totalTime = 0.0; \n" +
+			"mat4 buildRotMat4(vec3 rot) \n" +
+			"{ \n" +
+			"mat4 ret = mat4( \n" +
+			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
+			"vec4(0.0, 1.0, 0.0, 0.0), \n" +
+			"vec4(0.0, 0.0, 1.0, 0.0), \n" +
+			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
+			"); \n" +
+			"float s; \n" +
+			"float c; \n" +
+			"s = sin(rot.x); \n" +
+			"c = cos(rot.x); \n" +
+			"ret *= mat4( \n" +
+			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
+			"vec4(0.0, c, s, 0.0), \n" +
+			"vec4(0.0, -s, c, 0.0), \n" +
+			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
+			"); \n" +
+			"s = sin(rot.y); \n" +
+			"c = cos(rot.y); \n" +
+			"ret *= mat4( \n" +
+			"vec4(c, 0.0, -s, 0.0), \n" +
+			"vec4(0.0, 1.0, 0.0, 0.0), \n" +
+			"vec4(s, 0.0, c, 0.0), \n" +
+			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
+			"); \n" +
+			"s = sin(rot.z); \n" +
+			"c = cos(rot.z); \n" +
+			"ret *= mat4( \n" +
+			"vec4(c, s, 0.0, 0.0), \n" +
+			"vec4(-s, c, 0.0, 0.0), \n" +
+			"vec4(0.0, 0.0, 1.0, 0.0), \n" +
+			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
+			"); \n" +
+			"return ret; \n" +
+			"} \n" +
 			"void main(void) { \n" +
 			"varying_color = vec4(1.0, 1.0, 1.0, 1.0); \n" +
 			"mat4 billboardMatrix = mat4( \n" +
@@ -400,7 +443,7 @@ module egret3d {
 			"vec4(0.0, 1.0, 0.0, 0.0), \n" +
 			"vec4(0.0, 0.0, 1.0, 0.0), \n" +
 			"vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-			"if (attribute_billboardXYZ == 111.0) \n" +
+			"if (uniform_enableBillboardXYZ == 111.0) \n" +
 			"{ \n" +
 			"billboardMatrix = mat4( \n" +
 			"uniform_cameraMatrix[0], \n" +
@@ -410,7 +453,7 @@ module egret3d {
 			"} \n" +
 			"else \n" +
 			"{ \n" +
-			"if (mod(attribute_billboardXYZ, 10.0) == 1.0) \n" +
+			"if (mod(uniform_enableBillboardXYZ, 10.0) == 1.0) \n" +
 			"{ \n" +
 			"billboardMatrix *= mat4( \n" +
 			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
@@ -418,7 +461,7 @@ module egret3d {
 			"vec4(0.0, uniform_cameraMatrix[2].y, uniform_cameraMatrix[2].z, 0.0), \n" +
 			"vec4(0.0, 0.0, 0.0, 1.0)); \n" +
 			"} \n" +
-			"if (mod(attribute_billboardXYZ, 100.0) / 10.0 > 1.0) \n" +
+			"if (mod(uniform_enableBillboardXYZ, 100.0) / 10.0 > 1.0) \n" +
 			"{ \n" +
 			"billboardMatrix *= mat4( \n" +
 			"vec4(uniform_cameraMatrix[0].x, 0.0, uniform_cameraMatrix[0].z, 0.0), \n" +
@@ -426,7 +469,7 @@ module egret3d {
 			"vec4(uniform_cameraMatrix[2].x, 0.0, uniform_cameraMatrix[2].z, 0.0), \n" +
 			"vec4(0.0, 0.0, 0.0, 1.0)); \n" +
 			"} \n" +
-			"if (attribute_billboardXYZ / 100.0 > 1.0) \n" +
+			"if (uniform_enableBillboardXYZ / 100.0 > 1.0) \n" +
 			"{ \n" +
 			"billboardMatrix *= mat4( \n" +
 			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
@@ -438,7 +481,7 @@ module egret3d {
 			"mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
 			"mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); \n" +
 			"varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
-			"position = attribute_offset; \n" +
+			"position = vec4(attribute_offset, 1.0); \n" +
 			"outPosition = vec4(attribute_position, 1.0); \n" +
 			"outPosition = billboardMatrix * outPosition; \n" +
 			"totalTime = attribute_lifecycle.x + attribute_lifecycle.y; \n" +
@@ -467,10 +510,17 @@ module egret3d {
 			"} \n" +
 			"if (currentTime > 0.0) \n" +
 			"{ \n" +
-			"position.xyz += currentTime * 0.001 * (attribute_speed + attribute_accele * currentTime * 0.001); \n" +
+			"float t = currentTime * 0.001; \n" +
+			"float ratio = currentTime / attribute_lifecycle.y; \n" +
+			"position.xyz += attribute_direction * (t * (attribute_speed.x + attribute_speed.y * t)); \n" +
+			"varying_color.xyz += uniform_startColor + (uniform_endColor - uniform_startColor) *  ratio; \n" +
+			"vec3 rot = uniform_startRot + (uniform_endRot - uniform_startRot) *  ratio; \n" +
+			"rot  *= (PI / 180.0); \n" +
+			"position = buildRotMat4(rot) * position; \n" +
 			"} \n" +
-			"outPosition.xyz += position; \n" +
-			"outPosition = uniform_ViewMatrix * uniform_ModelMatrix * outPosition; \n" +
+			"position = uniform_ModelMatrix * position; \n" +
+			"outPosition.xyz += position.xyz; \n" +
+			"outPosition = uniform_ViewMatrix * outPosition; \n" +
 			"varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
 			"} \n",
 

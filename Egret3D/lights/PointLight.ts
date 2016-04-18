@@ -66,9 +66,9 @@
       
         public updateLightData(camera: Camera3D, index: number, lightData: Float32Array) {
 
-            lightData[index * PointLight.stride] = this.position.x;
-            lightData[index * PointLight.stride + 1] = this.position.y;
-            lightData[index * PointLight.stride + 2] = this.position.z;
+            lightData[index * PointLight.stride] = this.globalPosition.x;
+            lightData[index * PointLight.stride + 1] = this.globalPosition.y;
+            lightData[index * PointLight.stride + 2] = this.globalPosition.z;
 
             lightData[index * PointLight.stride + 3] = this._diffuse.x;
             lightData[index * PointLight.stride + 4] = this._diffuse.y;

@@ -1,4 +1,8 @@
 ﻿module egret3d {
+
+    /**
+    * @private
+    */
     export class ColorPass extends MaterialPass {
         /**
        * @language zh_CN
@@ -7,7 +11,7 @@
        * @version Egret 3.0
        * @platform Web,Native
        */
-        public initUseMethod(animation: IAnimation) {
+        public initUseMethod(animation: IAnimation, geom: Geometry) {
             this._passChange = false;
             var i: number = 0;
             this._passUsage = new PassUsage();

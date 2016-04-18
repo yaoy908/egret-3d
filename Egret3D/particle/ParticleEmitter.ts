@@ -1,6 +1,7 @@
 ﻿module egret3d {
 
     /**
+    * @private
     * @language zh_CN
     * @class egret3d.EmitterType
     * @classdesc
@@ -106,6 +107,7 @@
     * @class egret3d.ParticleEmitter
     * @classdesc
     * 粒子发射器 有多种发射器类型 还分为两种粒子类型，重力粒子只朝一个方向运动，范围粒子是随范围运动
+    * @see egret3d.Mesh
     * @version Egret 3.0
     * @platform Web,Native 
     */
@@ -475,8 +477,51 @@
             return this.nodeCollection.endRot;
         }
 
-        protected createNode() {
+        /**
+        * @language zh_CN
+        * 设置粒子运动方向 只有重力粒子才有方向
+        * @param dir 粒子运动方向
+        * @version Egret 3.0
+        * @platform Web,Native 
+        */
+        public setDirection(dir: Vector3D) {
+            if (this._dir_node) {
+                this._dir_node.direction.copyFrom(dir);
+                this._isChangeBuild = true;
+            }
+        }
 
+        /**
+        * @language zh_CN
+        * 设置粒子运动方向 只有重力粒子才有方向
+        * @param x X运动方向值
+        * @param y Y运动方向值
+        * @param z Z运动方向值
+        * @version Egret 3.0
+        * @platform Web,Native 
+        */
+        public setDirectionXYZ(x: number, y: number, z: number) {
+            if (this._dir_node) {
+                this._dir_node.direction.setTo(x, y, z);
+                this._isChangeBuild = true;
+            }
+        }
+                                                                
+        /**
+        * @language zh_CN
+        * 获取粒子运动方向 只有重力粒子才有方向
+        * @returns Vector3D运动方向值
+        * @version Egret 3.0
+        * @platform Web,Native 
+        */
+        public getDirection(): Vector3D {
+            if (this._dir_node) {
+                return this._dir_node.direction;
+            }
+            return new Vector3D();
+        }
+
+        protected createNode() {
 
             this._position_node.parameters = [500, 500, 500];
             this._lifecycle_node.startRange = [0, 1000];
@@ -488,7 +533,7 @@
             this.nodeCollection.addNode(this._dir_node);
             this.nodeCollection.addNode(this._speed_node);
 
-            this.geometry.vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_UV0 | VertexFormat.VF_COLOR;
+            this.geometry.vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_UV0;
             this.nodeCollection.calculate(this.geometry.vertexAttLength);
 
 

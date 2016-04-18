@@ -16,7 +16,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public initUseMethod(animation: IAnimation) {
+        public initUseMethod(animation: IAnimation, geom: Geometry) {
             this._passChange = false;
             var i: number = 0;
             this._passUsage = new PassUsage();
@@ -27,6 +27,7 @@
 
             this._passUsage.vertexShader.addUseShaderName("base_vs");
             this._passUsage.fragmentShader.addUseShaderName("base_fs");
+
             this._passUsage.fragmentShader.addUseShaderName("materialSource_fs");
 
             if (animation) {
