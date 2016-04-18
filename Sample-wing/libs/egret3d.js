@@ -17446,7 +17446,6 @@ var egret3d;
     * @class egret3d.UVRollMethod
     * @classdesc
     * 用来实现UV滚动效果的渲染方法
-    * @see egret3d.MethodBase
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -17577,7 +17576,6 @@ var egret3d;
     * 用来实现UV精灵动画的渲染方法 。
     * 一整张贴图中用行列来分割帧动画，然后实现每帧播放。
     * row * col 是总帧数， frameNum是只播放的帧数.
-    * @see egret3d.MethodBase
     * @version Egret 3.0
     * @platform Web,Native
     */
