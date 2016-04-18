@@ -1,6 +1,7 @@
 ﻿module egret3d {
 
     /**
+    * @private
     * @language zh_CN
     * @class egret3d.EmitterType
     * @classdesc
@@ -106,6 +107,7 @@
     * @class egret3d.ParticleEmitter
     * @classdesc
     * 粒子发射器 有多种发射器类型 还分为两种粒子类型，重力粒子只朝一个方向运动，范围粒子是随范围运动
+    * @see egret3d.Mesh
     * @version Egret 3.0
     * @platform Web,Native 
     */

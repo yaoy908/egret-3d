@@ -1,4 +1,7 @@
-﻿const int bonesNumber = 0;
+﻿attribute vec4 attribute_boneIndex ;
+attribute vec4 attribute_boneWeight ;
+
+const int bonesNumber = 0;
 uniform vec4 uniform_PoseMatrix[bonesNumber];
 uniform mat4 uniform_ModelMatrix ;
 
@@ -30,7 +33,7 @@ mat4 buildMat4(int index){
 
 void main(void){
 	vec4 temp_position = vec4(attribute_position, 1.0) ;
-	vec4 temp_normal = vec4(outNormal, 0.0) ;
+	vec4 temp_normal = vec4(attribute_normal, 0.0) ;
 
 	mat4 m0 = buildMat4(int(attribute_boneIndex.x));
 	mat4 m1 = buildMat4(int(attribute_boneIndex.y));
