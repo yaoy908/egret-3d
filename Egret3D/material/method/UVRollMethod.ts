@@ -5,7 +5,6 @@
     * @class egret3d.UVRollMethod
     * @classdesc
     * 用来实现UV滚动效果的渲染方法
-    * @see egret3d.MethodBase
     * @version Egret 3.0
     * @platform Web,Native
     */
