@@ -68,6 +68,9 @@ mat4 buildRotMat4(vec3 rot)
 }
 
 void main(void) {
+	varying_color = vec4(1.0, 1.0, 1.0, 1.0);
+
+
 
 	mat4 billboardMatrix = mat4(
 						vec4(1.0, 0.0, 0.0, 0.0),
@@ -115,7 +118,7 @@ void main(void) {
 
 	mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; 
 	mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); 
-	varying_eyeNormal = normalize(normalMatrix * -outNormal); 
+	varying_eyeNormal = normalize(normalMatrix * -attribute_normal); 
 	position = vec4(attribute_offset, 1.0);
 	outPosition = vec4(attribute_position, 1.0);
 	outPosition = billboardMatrix * outPosition;
