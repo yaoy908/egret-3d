@@ -2,7 +2,8 @@
     /**
     * @class egret3d.FogMethod
     * @classdesc
-    * Exponential Height Fog渲染方法
+    * Exponential Height Fog渲染方法。
+    * 实现3种fog类型： line、exp、exp height
     * @version Egret 3.0
     * @platform Web,Native
     */
