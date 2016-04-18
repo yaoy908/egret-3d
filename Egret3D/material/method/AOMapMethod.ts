@@ -3,7 +3,8 @@
     /**
     * @class egret3d.AOMapMethod
     * @classdesc
-    * AO贴图方法
+    * AO贴图渲染方法。
+    * 使用渲染好的AO贴图进行渲染，增加渲染表现效果。
     * @version Egret 3.0
     * @platform Web,Native
     */
