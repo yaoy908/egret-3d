@@ -1,17 +1,22 @@
 ﻿module egret3d {
     /**
-     * @class egret3d.AOMapMethod
-     * @classdesc
-     * AO贴图方法
-     */
+    * @class egret3d.AOMapMethod
+    * @classdesc
+    * AO贴图方法
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class AOMapMethod extends MethodBase {
 
         private aoPower: number = 1.0; 
         private texture: ITexture;
         /**
-         * @language zh_CN
-         * @param texture 
-         */
+        * @language zh_CN
+        * 创建AO贴图方法
+        * @param texture AO贴图
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         constructor(texture: ITexture) {
             super();
             this.fsShaderList.push("AOMap_fs");
@@ -19,9 +24,12 @@
         }
 
         /**
-         * @language zh_CN
-         * @param texture 
-         */
+        * @language zh_CN
+        * 设置AO贴图
+        * @param texture AO贴图
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set lightTexture(texture: ITexture) {
             this.texture = texture;
             this.materialData.aoTexture = this.texture;
@@ -29,28 +37,33 @@
         }
 
         /**
-               * @language zh_CN
-               * @param time
-               * @param delay
-               * @param usage
-               * @param materialData
-               * @param geometry
-               * @param context3DProxy
-               * @param modeltransform 
-               * @param modeltransform
-               * @param camera3D
-               */
+        * @private
+        * @language zh_CN
+        * @param time
+        * @param delay
+        * @param usage
+        * @param materialData
+        * @param geometry
+        * @param context3DProxy
+        * @param modeltransform 
+        * @param modeltransform
+        * @param camera3D
+        */
         public upload(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
             usage["aoPower"] = context3DProxy.getUniformLocation(usage.program3D, "aoPower"); 
         }
-
+        
+        /**
+        * @private
+        */
         public active(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
             context3DProxy.uniform1f(usage["aoPower"], this.aoPower);
         }
 
         /**
-         * @language zh_CN
-         */
+        * @language zh_CN
+        * @private
+        */
         public dispose() {
         }
     }

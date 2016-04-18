@@ -1,23 +1,29 @@
 ﻿module egret3d {
     /**
-     * @class egret3d.AOMapMethod
-     * @classdesc
-     * AO贴图方法
-     */
+    * @class egret3d.FogMethod
+    * @classdesc
+    * Exponential Height Fog渲染方法
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class FogMethod extends MethodBase {
 
         private uniform_globalFog: Float32Array = new Float32Array(7);
 
-        private _fogColor: number = 0x0000cc; 
-        private _globalDensity: number = 1.0; 
-        private _fogStartDistance: number = 1000; 
-        private _fogDistanceScale: number = 0.5; 
-        private _height: number = 500; 
-        private _fogAlpha: number = 1.0 ; 
+        private _fogColor: number = 0x0000cc;
+        private _globalDensity: number = 1.0;
+        private _fogStartDistance: number = 1000;
+        private _fogDistanceScale: number = 0.5;
+        private _height: number = 500;
+        private _fogAlpha: number = 1.0;
+
         /**
-         * @language zh_CN
-         * @param fogType line/exp/expHeightFog
-         */
+        * @language zh_CN
+        * 创建一个雾的渲染方法
+        * @param fogType 雾的类型 line/exp/expHeightFog
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         constructor(fogType: string = "expHeightFog_fs" ) {
             super();
             this.methodType = TextureMethodType.diffuse; 
@@ -30,7 +36,7 @@
             } else if (fogType == "expHeightFog_fs") {
                 this.fsShaderList.push("expHeightFog_fs");
             }
-            0.5, 0.6, 0.7
+            //0.5, 0.6, 0.7
             this.uniform_globalFog[0] = 0.5;
             this.uniform_globalFog[1] = 0.6;
             this.uniform_globalFog[2] = 0.7;
@@ -38,35 +44,75 @@
             this.uniform_globalFog[4] = this._fogStartDistance;
             this.uniform_globalFog[5] = this._height;
             this.uniform_globalFog[6] = this._fogAlpha;
-
-
         }
-
+        
+        /**
+        * @language zh_CN
+        * 设置雾颜色
+        * @param value 雾颜色 rgb  0xffffff
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set fogColor(value: number) {
             this._fogColor = value;
             this.uniform_globalFog[0] = (this._fogColor >> 16 & 0xff) / 255.0;
             this.uniform_globalFog[1] = (this._fogColor >> 8 & 0xff) / 255.0;
             this.uniform_globalFog[2] = (this._fogColor & 0xff) / 255.0;
         }
-
+                
+        /**
+        * @language zh_CN
+        * 获取雾颜色
+        * @returns 雾颜色 rgb  0xffffff
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get fogColor( ): number {
             return this.fogColor;
         }
-
+                        
+        /**
+        * @language zh_CN
+        * 设置雾的全局浓度
+        * @param value 雾的全局浓度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set globalDensity(value: number) {
             this._globalDensity = value;
             this.uniform_globalFog[3] = value;
         }
-
+                                
+        /**
+        * @language zh_CN
+        * 获取雾的全局浓度
+        * @returns number 雾的全局浓度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get globalDensity(): number {
             return this._globalDensity;
         }
-
+                                
+        /**
+        * @language zh_CN
+        * 设置雾的开始距离
+        * @param value 雾的开始距离
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set fogStartDistance(value: number) {
             this._fogStartDistance = value;
             this.uniform_globalFog[4] = value;
         }
-
+                                        
+        /**
+        * @language zh_CN
+        * 获取雾的开始距离
+        * @returns number 雾的开始距离
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get fogStartDistance(): number {
             return this._fogStartDistance;
         }
@@ -79,21 +125,49 @@
         //public get fogDistanceScale(): number {
         //    return this._fogDistanceScale;
         //}
-
+                                        
+        /**
+        * @language zh_CN
+        * 设置雾的高度值
+        * @param value 雾的高度值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set fogHeight(value: number) {
             this._height = value;
             this.uniform_globalFog[5] = value;
         }
-
+                                                
+        /**
+        * @language zh_CN
+        * 获取雾的高度值
+        * @returns number 雾的高度值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get fogHeight(): number {
             return this._height;
         }
-
+                                                
+        /**
+        * @language zh_CN
+        * 设置雾的Alpha值
+        * @param value 雾的Alpha值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set fogAlpha(value: number) {
             this._height = value;
             this.uniform_globalFog[6] = value;
         }
-
+                                                        
+        /**
+        * @language zh_CN
+        * 获取雾的Alpha值
+        * @returns number 雾的Alpha值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get fogAlpha(): number {
             return this._height;
         }
