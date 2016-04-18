@@ -17003,16 +17003,26 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
-     * @class egret3d.AOMapMethod
-     * @classdesc
-     * AO贴图方法
-     */
+    * @class egret3d.TerrainARGBMethod
+    * @classdesc
+    * 地形贴图混合渲染方法。
+    * 使用一张贴图中的ARGB色来进行4张贴图进行混合。
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     var TerrainARGBMethod = (function (_super) {
         __extends(TerrainARGBMethod, _super);
         /**
-         * @language zh_CN
-         * @param texture
-         */
+        * @language zh_CN
+        * 创建地形贴图混合渲染方法
+        * @param controlTex 混合贴图
+        * @param splat_0 第一张贴图
+        * @param splat_1 第二张贴图
+        * @param splat_2 第三张贴图
+        * @param splat_3 第四张贴图
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         function TerrainARGBMethod(controlTex, splat_0, splat_1, splat_2, splat_3) {
             _super.call(this);
             this.uvs = new Float32Array(8);
@@ -17033,23 +17043,26 @@ var egret3d;
             this.uvs[7] = 1.0;
         }
         /**
-         * @language zh_CN
-         * 设置 UVTitling。
-         * @param index {Number} 图层索引
-         * @param x {Number} u 的重复次数
-         * @param y {Number} v 的重复次数
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
+        * @language zh_CN
+        * 设置 UVTitling。
+        * @param index {Number} 图层索引
+        * @param x {Number} u 的重复次数
+        * @param y {Number} v 的重复次数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         TerrainARGBMethod.prototype.setUVTitling = function (index, x, y) {
             this.uvs[index * 2] = x;
             this.uvs[index * 2 + 1] = y;
         };
         Object.defineProperty(TerrainARGBMethod.prototype, "splat_0_Texture", {
             /**
-             * @language zh_CN
-             * @param texture
-             */
+            * @language zh_CN
+            * 设置第一张贴图
+            * @param texture 贴图
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             set: function (texture) {
                 this.splat_0 = texture;
                 this.materialData.splat_0Tex = texture;
@@ -17060,9 +17073,12 @@ var egret3d;
         });
         Object.defineProperty(TerrainARGBMethod.prototype, "splat_1_Texture", {
             /**
-             * @language zh_CN
-             * @param texture
-             */
+            * @language zh_CN
+            * 设置第二张贴图
+            * @param texture 贴图
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             set: function (texture) {
                 this.splat_1 = texture;
                 this.materialData.splat_1Tex = texture;
@@ -17073,9 +17089,12 @@ var egret3d;
         });
         Object.defineProperty(TerrainARGBMethod.prototype, "splat_2_Texture", {
             /**
-             * @language zh_CN
-             * @param texture
-             */
+            * @language zh_CN
+            * 设置第三张贴图
+            * @version Egret 3.0
+            * @platform Web,Native
+            * @param texture 贴图
+            */
             set: function (texture) {
                 this.splat_2 = texture;
                 this.materialData.splat_2Tex = texture;
@@ -17086,9 +17105,12 @@ var egret3d;
         });
         Object.defineProperty(TerrainARGBMethod.prototype, "splat_3_Texture", {
             /**
-             * @language zh_CN
-             * @param texture
-             */
+            * @language zh_CN
+            * 设置第四张贴图
+            * @param texture 贴图
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             set: function (texture) {
                 this.splat_3 = texture;
                 this.materialData.splat_3Tex = texture;
@@ -17099,9 +17121,12 @@ var egret3d;
         });
         Object.defineProperty(TerrainARGBMethod.prototype, "controlTexture", {
             /**
-             * @language zh_CN
-             * @param texture
-             */
+            * @language zh_CN
+            * 设置混合贴图
+            * @param texture 贴图
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             set: function (texture) {
                 this.controlTex = texture;
                 this.materialData.blendMaskTexture = texture;
@@ -17111,6 +17136,7 @@ var egret3d;
             configurable: true
         });
         /**
+        * @private
         * @language zh_CN
         * @param time
         * @param delay
@@ -17125,12 +17151,17 @@ var egret3d;
         TerrainARGBMethod.prototype.upload = function (time, delay, usage, geometry, context3DProxy, modeltransform, camera3D) {
             usage["uvs"] = context3DProxy.getUniformLocation(usage.program3D, "uvs");
         };
+        /**
+        * @language zh_CN
+        * @private
+        */
         TerrainARGBMethod.prototype.update = function (time, delay, usage, geometry, context3DProxy, modeltransform, camera3D) {
             context3DProxy.uniform1fv(usage["uvs"], this.uvs);
         };
         /**
-         * @language zh_CN
-         */
+        * @language zh_CN
+        * @private
+        */
         TerrainARGBMethod.prototype.dispose = function () {
         };
         return TerrainARGBMethod;
@@ -17140,16 +17171,22 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
-     * @class egret3d.AOMapMethod
-     * @classdesc
-     * AO贴图方法
-     */
+    * @class egret3d.FogMethod
+    * @classdesc
+    * Exponential Height Fog渲染方法。
+    * 实现3种fog类型： line、exp、exp height
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     var FogMethod = (function (_super) {
         __extends(FogMethod, _super);
         /**
-         * @language zh_CN
-         * @param fogType line/exp/expHeightFog
-         */
+        * @language zh_CN
+        * 创建一个雾的渲染方法
+        * @param fogType 雾的类型 line/exp/expHeightFog
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         function FogMethod(fogType) {
             if (fogType === void 0) { fogType = "expHeightFog_fs"; }
             _super.call(this);
@@ -17171,7 +17208,7 @@ var egret3d;
             else if (fogType == "expHeightFog_fs") {
                 this.fsShaderList.push("expHeightFog_fs");
             }
-            0.5, 0.6, 0.7;
+            //0.5, 0.6, 0.7
             this.uniform_globalFog[0] = 0.5;
             this.uniform_globalFog[1] = 0.6;
             this.uniform_globalFog[2] = 0.7;
@@ -17181,9 +17218,23 @@ var egret3d;
             this.uniform_globalFog[6] = this._fogAlpha;
         }
         Object.defineProperty(FogMethod.prototype, "fogColor", {
+            /**
+            * @language zh_CN
+            * 获取雾颜色
+            * @returns 雾颜色 rgb  0xffffff
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             get: function () {
                 return this.fogColor;
             },
+            /**
+            * @language zh_CN
+            * 设置雾颜色
+            * @param value 雾颜色 rgb  0xffffff
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             set: function (value) {
                 this._fogColor = value;
                 this.uniform_globalFog[0] = (this._fogColor >> 16 & 0xff) / 255.0;
@@ -17194,9 +17245,23 @@ var egret3d;
             configurable: true
         });
         Object.defineProperty(FogMethod.prototype, "globalDensity", {
+            /**
+            * @language zh_CN
+            * 获取雾的全局浓度
+            * @returns number 雾的全局浓度
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             get: function () {
                 return this._globalDensity;
             },
+            /**
+            * @language zh_CN
+            * 设置雾的全局浓度
+            * @param value 雾的全局浓度
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             set: function (value) {
                 this._globalDensity = value;
                 this.uniform_globalFog[3] = value;
@@ -17205,9 +17270,23 @@ var egret3d;
             configurable: true
         });
         Object.defineProperty(FogMethod.prototype, "fogStartDistance", {
+            /**
+            * @language zh_CN
+            * 获取雾的开始距离
+            * @returns number 雾的开始距离
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             get: function () {
                 return this._fogStartDistance;
             },
+            /**
+            * @language zh_CN
+            * 设置雾的开始距离
+            * @param value 雾的开始距离
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             set: function (value) {
                 this._fogStartDistance = value;
                 this.uniform_globalFog[4] = value;
@@ -17216,6 +17295,13 @@ var egret3d;
             configurable: true
         });
         Object.defineProperty(FogMethod.prototype, "fogHeight", {
+            /**
+            * @language zh_CN
+            * 获取雾的高度值
+            * @returns number 雾的高度值
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             get: function () {
                 return this._height;
             },
@@ -17226,6 +17312,13 @@ var egret3d;
             //public get fogDistanceScale(): number {
             //    return this._fogDistanceScale;
             //}
+            /**
+            * @language zh_CN
+            * 设置雾的高度值
+            * @param value 雾的高度值
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             set: function (value) {
                 this._height = value;
                 this.uniform_globalFog[5] = value;
@@ -17234,9 +17327,23 @@ var egret3d;
             configurable: true
         });
         Object.defineProperty(FogMethod.prototype, "fogAlpha", {
+            /**
+            * @language zh_CN
+            * 获取雾的Alpha值
+            * @returns number 雾的Alpha值
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             get: function () {
                 return this._height;
             },
+            /**
+            * @language zh_CN
+            * 设置雾的Alpha值
+            * @param value 雾的Alpha值
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             set: function (value) {
                 this._height = value;
                 this.uniform_globalFog[6] = value;
@@ -17274,14 +17381,20 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
-    * @private
+    * @language zh_CN
+    * @class egret3d.UVRollMethod
+    * @classdesc
+    * 用来实现UV滚动效果的渲染方法
+    * @see egret3d.MethodBase
+    * @version Egret 3.0
+    * @platform Web,Native
     */
     var UVRollMethod = (function (_super) {
         __extends(UVRollMethod, _super);
         /**
-         * @language zh_CN
-         * @param texture
-         */
+        * @private
+        * @language zh_CN
+        */
         function UVRollMethod() {
             _super.call(this);
             this._uvRoll = new Float32Array(2);
@@ -17293,9 +17406,23 @@ var egret3d;
             this.methodType = egret3d.TextureMethodType.diffuse;
         }
         Object.defineProperty(UVRollMethod.prototype, "speedU", {
+            /**
+            * @language zh_CN
+            * 获取UV u的滚动速度
+            * @returns number u的滚动速度
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             get: function () {
                 return this._speedU;
             },
+            /**
+            * @language zh_CN
+            * 用来UV u的滚动速度
+            * @param value u的滚动速度
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             set: function (value) {
                 this._speedU = value;
             },
@@ -17303,39 +17430,71 @@ var egret3d;
             configurable: true
         });
         Object.defineProperty(UVRollMethod.prototype, "speedV", {
+            /**
+            * @language zh_CN
+            * 获取UV v的滚动速度
+            * @returns number v的滚动速度
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             get: function () {
                 return this._speedV;
             },
+            /**
+            * @language zh_CN
+            * 用来UV v的滚动速度
+            * @param value v的滚动速度
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             set: function (value) {
                 this._speedV = value;
             },
             enumerable: true,
             configurable: true
         });
+        /**
+        * @language zh_CN
+        * 开始播放uv动画
+        * @param rest 如果为ture就是重置播放
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         UVRollMethod.prototype.start = function (rest) {
             if (rest === void 0) { rest = false; }
             if (rest)
                 this._time = 0;
             this._start = true;
         };
+        /**
+        * @language zh_CN
+        * 停止播放uv动画
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         UVRollMethod.prototype.stop = function () {
             this._start = false;
         };
         /**
-           * @language zh_CN
-           * @param time
-           * @param delay
-           * @param usage
-           * @param materialData
-           * @param geometry
-           * @param context3DProxy
-           * @param modeltransform
-           * @param modeltransform
-           * @param camera3D
-           */
+        * @private
+        * @language zh_CN
+        * @param time
+        * @param delay
+        * @param usage
+        * @param materialData
+        * @param geometry
+        * @param context3DProxy
+        * @param modeltransform
+        * @param modeltransform
+        * @param camera3D
+        */
         UVRollMethod.prototype.upload = function (time, delay, usage, geometry, context3DProxy, modeltransform, camera3D) {
             usage["uvRoll"] = context3DProxy.getUniformLocation(usage.program3D, "uvRoll");
         };
+        /**
+        * @private
+        * @language zh_CN
+        */
         UVRollMethod.prototype.update = function (time, delay, usage, geometry, context3DProxy, modeltransform, camera3D) {
             if (this._start) {
                 this._time += delay;
@@ -17351,14 +17510,28 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
-    * @private
+    * @language zh_CN
+    * @class egret3d.UVSpriteSheetMethod
+    * @classdesc
+    * 用来实现UV精灵动画的渲染方法 。
+    * 一整张贴图中用行列来分割帧动画，然后实现每帧播放。
+    * row * col 是总帧数， frameNum是只播放的帧数.
+    * @see egret3d.MethodBase
+    * @version Egret 3.0
+    * @platform Web,Native
     */
     var UVSpriteSheetMethod = (function (_super) {
         __extends(UVSpriteSheetMethod, _super);
         /**
-         * @language zh_CN
-         * @param texture
-         */
+        * @language zh_CN
+        * 创建一个UV精灵动画的渲染方法对象
+        * @param frameNum  帧数量
+        * @param row 行数
+        * @param column 列数
+        * @param numTime 播放总时间
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         function UVSpriteSheetMethod(frameNum, row, column, numTime) {
             _super.call(this);
             this._uvSpriteSheet = new Float32Array(4);
@@ -17401,9 +17574,23 @@ var egret3d;
             }
         };
         Object.defineProperty(UVSpriteSheetMethod.prototype, "numTime", {
+            /**
+            * @language zh_CN
+            * 获取动画播放总时间
+            * @returns number 播放总时间
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             get: function () {
                 return this._numTime;
             },
+            /**
+            * @language zh_CN
+            * 设置动画播放总时间
+            * @param value 播放总时间
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             set: function (value) {
                 if (this._numTime != value) {
                     this._change = true;
@@ -17414,9 +17601,23 @@ var egret3d;
             configurable: true
         });
         Object.defineProperty(UVSpriteSheetMethod.prototype, "frameNum", {
+            /**
+            * @language zh_CN
+            * 获取动画帧数
+            * @returns number  动画帧数
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             get: function () {
                 return this._frameNum;
             },
+            /**
+            * @language zh_CN
+            * 设置动画帧数
+            * @param value 动画帧数
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             set: function (value) {
                 if (this._frameNum != value) {
                     this._change = true;
@@ -17427,9 +17628,23 @@ var egret3d;
             configurable: true
         });
         Object.defineProperty(UVSpriteSheetMethod.prototype, "row", {
+            /**
+            * @language zh_CN
+            * 获取动画行数
+            * @returns number  动画行数
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             get: function () {
                 return this._row;
             },
+            /**
+            * @language zh_CN
+            * 设置动画行数
+            * @param value 动画行数
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             set: function (value) {
                 if (this._row != value) {
                     this._change = true;
@@ -17440,9 +17655,23 @@ var egret3d;
             configurable: true
         });
         Object.defineProperty(UVSpriteSheetMethod.prototype, "column", {
+            /**
+            * @language zh_CN
+            * 获取动画列数
+            * @returns number  动画列数
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             get: function () {
                 return this._column;
             },
+            /**
+            * @language zh_CN
+            * 设置动画列数
+            * @param value 动画列数
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             set: function (value) {
                 if (this._column != value) {
                     this._change = true;
@@ -17452,6 +17681,13 @@ var egret3d;
             enumerable: true,
             configurable: true
         });
+        /**
+        * @language zh_CN
+        * 开始播放uv精灵动画
+        * @param rest 如果为ture就是重置播放
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         UVSpriteSheetMethod.prototype.start = function (rest) {
             if (rest === void 0) { rest = false; }
             if (rest)
@@ -17460,24 +17696,34 @@ var egret3d;
             if (this._change)
                 this.caculate();
         };
+        /**
+        * @language zh_CN
+        * 停止播放uv精灵动画
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         UVSpriteSheetMethod.prototype.stop = function () {
             this._start = false;
         };
         /**
-           * @language zh_CN
-           * @param time
-           * @param delay
-           * @param usage
-           * @param materialData
-           * @param geometry
-           * @param context3DProxy
-           * @param modeltransform
-           * @param modeltransform
-           * @param camera3D
-           */
+        * @private
+        * @language zh_CN
+        * @param time
+        * @param delay
+        * @param usage
+        * @param materialData
+        * @param geometry
+        * @param context3DProxy
+        * @param modeltransform
+        * @param modeltransform
+        * @param camera3D
+        */
         UVSpriteSheetMethod.prototype.upload = function (time, delay, usage, geometry, context3DProxy, modeltransform, camera3D) {
             usage["uvSpriteSheet"] = context3DProxy.getUniformLocation(usage.program3D, "uvSpriteSheet");
         };
+        /**
+        * @private
+        */
         UVSpriteSheetMethod.prototype.update = function (time, delay, usage, geometry, context3DProxy, modeltransform, camera3D) {
             if (this._start) {
                 this._time += delay;
@@ -18370,20 +18616,75 @@ var egret3d;
 })(egret3d || (egret3d = {}));
 var egret3d;
 (function (egret3d) {
+    /**
+    * @private
+    */
     var ColorPass = (function (_super) {
         __extends(ColorPass, _super);
         function ColorPass() {
             _super.apply(this, arguments);
         }
         /**
-        * @language zh_CN
-        * @private
-        * 初始化 UseMethod。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
+       * @language zh_CN
+       * @private
+       * 初始化 UseMethod。
+       * @version Egret 3.0
+       * @platform Web,Native
+       */
         ColorPass.prototype.initUseMethod = function (animation, geom) {
-            _super.prototype.initUseMethod.call(this, animation, geom);
+            this._passChange = false;
+            var i = 0;
+            this._passUsage = new egret3d.PassUsage();
+            this._materialData.textureMethodTypes.push(egret3d.TextureMethodType.color);
+            this._passUsage.vertexShader.shaderType = egret3d.Shader.vertex;
+            this._passUsage.fragmentShader.shaderType = egret3d.Shader.fragment;
+            this._passUsage.vertexShader.addUseShaderName("base_vs");
+            this._passUsage.fragmentShader.addUseShaderName("base_fs");
+            this._passUsage.fragmentShader.addUseShaderName("materialSource_fs");
+            if (animation) {
+                this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
+                this._passUsage.vertexShader.addUseShaderName("skeleton_vertex");
+            }
+            else {
+                this._passUsage.vertexShader.addUseShaderName("diffuse_vertex");
+            }
+            if (this._materialData.textureMethodTypes.indexOf(egret3d.TextureMethodType.normal) != -1) {
+                this._passUsage.fragmentShader.addUseShaderName("normalMap_fragment");
+            }
+            if (this.lightGroup) {
+                this._passUsage.maxDirectLight = this.lightGroup.directLightList.length;
+                this._passUsage.maxSpotLight = this.lightGroup.spotLightList.length;
+                this._passUsage.maxPointLight = this.lightGroup.pointLightList.length;
+                this._passUsage.fragmentShader.addUseShaderName("lightingBase_fs");
+                if (this.lightGroup.directLightList.length) {
+                    this._passUsage.directLightData = new Float32Array(egret3d.DirectLight.stride * this.lightGroup.directLightList.length);
+                    this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
+                }
+                if (this.lightGroup.spotLightList.length) {
+                    this._passUsage.spotLightData = new Float32Array(egret3d.SpotLight.stride * this.lightGroup.spotLightList.length);
+                    this._passUsage.fragmentShader.addUseShaderName("spotLight_fragment");
+                }
+                if (this.lightGroup.pointLightList.length) {
+                    this._passUsage.pointLightData = new Float32Array(egret3d.PointLight.stride * this.lightGroup.pointLightList.length);
+                    this._passUsage.fragmentShader.addUseShaderName("pointLight_fragment");
+                }
+            }
+            if (this._materialData.textureMethodTypes.indexOf(egret3d.TextureMethodType.specular) != -1) {
+                this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
+            }
+            if (this.methodList) {
+                for (var i = 0; i < this.methodList.length; i++) {
+                    this.methodList[i].materialData = this._materialData;
+                    for (var j = 0; j < this.methodList[i].vsShaderList.length; j++) {
+                        this._passUsage.vertexShader.addUseShaderName(this.methodList[i].vsShaderList[j]);
+                    }
+                    for (var j = 0; j < this.methodList[i].fsShaderList.length; j++) {
+                        this._passUsage.fragmentShader.addUseShaderName(this.methodList[i].fsShaderList[j]);
+                    }
+                }
+            }
+            this._passUsage.vertexShader.addEndShaderName("end_vs");
+            this._passUsage.fragmentShader.addEndShaderName("end_fs");
         };
         return ColorPass;
     }(egret3d.MaterialPass));
@@ -18407,7 +18708,68 @@ var egret3d;
         * @platform Web,Native
         */
         DiffusePass.prototype.initUseMethod = function (animation, geom) {
-            _super.prototype.initUseMethod.call(this, animation, geom);
+            this._passChange = false;
+            var i = 0;
+            this._passUsage = new egret3d.PassUsage();
+            this._materialData.textureMethodTypes.push(egret3d.TextureMethodType.color);
+            this._passUsage.vertexShader.shaderType = egret3d.Shader.vertex;
+            this._passUsage.fragmentShader.shaderType = egret3d.Shader.fragment;
+            this._passUsage.vertexShader.addUseShaderName("base_vs");
+            this._passUsage.fragmentShader.addUseShaderName("base_fs");
+            this._passUsage.fragmentShader.addUseShaderName("materialSource_fs");
+            if (animation) {
+                if (animation.skeletonAnimationController) {
+                    this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
+                    this._passUsage.vertexShader.addUseShaderName("skeleton_vertex");
+                }
+                else if (animation.particleAnimationController) {
+                    this._passUsage.vertexShader.addUseShaderName("particle_vs");
+                }
+            }
+            else {
+                this._passUsage.vertexShader.addUseShaderName("diffuse_vertex");
+            }
+            if (this._materialData.textureMethodTypes.indexOf(egret3d.TextureMethodType.color) != -1) {
+                this._passUsage.fragmentShader.addUseShaderName("gamma_fs");
+                this._passUsage.fragmentShader.addUseShaderName("diffuse_fragment");
+            }
+            if (this._materialData.textureMethodTypes.indexOf(egret3d.TextureMethodType.normal) != -1) {
+                this._passUsage.fragmentShader.addUseShaderName("normalMap_fragment");
+            }
+            if (this.lightGroup) {
+                this._passUsage.maxDirectLight = this.lightGroup.directLightList.length;
+                this._passUsage.maxSpotLight = this.lightGroup.spotLightList.length;
+                this._passUsage.maxPointLight = this.lightGroup.pointLightList.length;
+                this._passUsage.fragmentShader.addUseShaderName("lightingBase_fs");
+                if (this.lightGroup.directLightList.length) {
+                    this._passUsage.directLightData = new Float32Array(egret3d.DirectLight.stride * this.lightGroup.directLightList.length);
+                    this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
+                }
+                if (this.lightGroup.spotLightList.length) {
+                    this._passUsage.spotLightData = new Float32Array(egret3d.SpotLight.stride * this.lightGroup.spotLightList.length);
+                    this._passUsage.fragmentShader.addUseShaderName("spotLight_fragment");
+                }
+                if (this.lightGroup.pointLightList.length) {
+                    this._passUsage.pointLightData = new Float32Array(egret3d.PointLight.stride * this.lightGroup.pointLightList.length);
+                    this._passUsage.fragmentShader.addUseShaderName("pointLight_fragment");
+                }
+            }
+            if (this._materialData.textureMethodTypes.indexOf(egret3d.TextureMethodType.specular) != -1) {
+                this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
+            }
+            if (this.methodList) {
+                for (var i = 0; i < this.methodList.length; i++) {
+                    this.methodList[i].materialData = this._materialData;
+                    for (var j = 0; j < this.methodList[i].vsShaderList.length; j++) {
+                        this._passUsage.vertexShader.addUseShaderName(this.methodList[i].vsShaderList[j]);
+                    }
+                    for (var j = 0; j < this.methodList[i].fsShaderList.length; j++) {
+                        this._passUsage.fragmentShader.addUseShaderName(this.methodList[i].fsShaderList[j]);
+                    }
+                }
+            }
+            this._passUsage.vertexShader.addEndShaderName("end_vs");
+            this._passUsage.fragmentShader.addEndShaderName("end_fs");
         };
         return DiffusePass;
     }(egret3d.MaterialPass));
@@ -19820,6 +20182,7 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
+    * @private
     * @language zh_CN
     * @class egret3d.EmitterType
     * @classdesc
@@ -19915,6 +20278,7 @@ var egret3d;
    * @class egret3d.ParticleEmitter
    * @classdesc
    * 粒子发射器 有多种发射器类型 还分为两种粒子类型，重力粒子只朝一个方向运动，范围粒子是随范围运动
+   * @see egret3d.Mesh
    * @version Egret 3.0
    * @platform Web,Native
    */
@@ -21555,33 +21919,6 @@ var egret3d;
         function ShaderLib() {
         }
         ShaderLib.lib = {
-            "AOMap_fs": "uniform sampler2D aoTexture ; \n" +
-                "uniform float aoPower ; \n" +
-                "void main(void){ \n" +
-                "float ao = texture2D( aoTexture , varying_uv1 ).x ; \n" +
-                "diffuseColor.xyz *= (ao * aoPower) ; \n" +
-                "} \n",
-            "attribute_color_vs": "attribute vec4 attribute_color; \n" +
-                "void main(void){ \n" +
-                "varying_color = attribute_color; \n" +
-                "} \n",
-            "attribute_normal_vs": "attribute vec3 attribute_normal; \n" +
-                "void main(void){ \n" +
-                "outNormal = attribute_normal; \n" +
-                "} \n",
-            "attribute_position_vs": "attribute vec3 attribute_position; \n",
-            "attribute_skin_vs": "attribute vec4 attribute_boneIndex ; \n" +
-                "attribute vec4 attribute_boneWeight ; \n" +
-                "void main(void){ \n" +
-                "} \n",
-            "attribute_tangent_vs": "attribute vec3 attribute_tangent; \n" +
-                "void main(void){ \n" +
-                "} \n",
-            "attribute_uv0_vs": "attribute vec2 attribute_uv0; \n" +
-                "void main(void){ \n" +
-                "varying_uv0 = attribute_uv0; \n" +
-                "} \n",
-            "attribute_uv1_vs": "attribute vec2 attribute_uv1; \n",
             "base_fs": "#extension GL_OES_standard_derivatives : enable \n" +
                 "varying vec3 varying_eyeNormal  ; \n" +
                 "varying vec2 varying_uv0; \n" +
@@ -21589,8 +21926,7 @@ var egret3d;
                 "varying vec4 varying_color; \n" +
                 "uniform vec3 uniform_eyepos ; \n" +
                 "uniform mat4 uniform_ViewMatrix ; \n" +
-                "uniform mat4 uniform_ProjectionMatrix; \n" +
-                "vec4 outColor ; \n" +
+                "vec4 outColor; \n" +
                 "vec4 diffuseColor ; \n" +
                 "vec4 specularColor ; \n" +
                 "vec4 ambientColor; \n" +
@@ -21610,7 +21946,11 @@ var egret3d;
                 "normal = normalize(varying_eyeNormal) ; \n" +
                 "uv_0 = varying_uv0; \n" +
                 "} \n",
-            "base_vs": "uniform mat4 uniform_ModelMatrix ; \n" +
+            "base_vs": "attribute vec3 attribute_position ; \n" +
+                "attribute vec3 attribute_normal ; \n" +
+                "attribute vec2 attribute_uv0 ; \n" +
+                "attribute vec4 attribute_color ; \n" +
+                "uniform mat4 uniform_ModelMatrix ; \n" +
                 "uniform mat4 uniform_ViewMatrix ; \n" +
                 "uniform mat4 uniform_ProjectionMatrix ; \n" +
                 "varying vec3 varying_ViewPose; \n" +
@@ -21618,7 +21958,6 @@ var egret3d;
                 "varying vec2 varying_uv0; \n" +
                 "varying vec4 varying_color; \n" +
                 "vec4 outPosition ; \n" +
-                "vec3 outNormal; \n" +
                 "mat3 transpose(mat3 m) { \n" +
                 "return mat3(m[0][0], m[1][0], m[2][0], \n" +
                 "m[0][1], m[1][1], m[2][1], \n" +
@@ -21637,9 +21976,8 @@ var egret3d;
                 "b21, (-a21 * a00 + a01 * a20), (a11 * a00 - a01 * a10)) / det; \n" +
                 "} \n" +
                 "void main(void){ \n" +
-                "varying_color = vec4(1.0, 1.0, 1.0, 1.0); \n" +
-                "varying_uv0 = vec2(0.0, 0.0); \n" +
-                "outNormal = vec3(0.0, 0.0, 0.0); \n" +
+                "varying_color = attribute_color; \n" +
+                "varying_uv0 = attribute_uv0; \n" +
                 "} \n",
             "cube_fragment": "uniform samplerCube diffuseTexture ; \n" +
                 "varying vec3 varying_pos; \n" +
@@ -21649,23 +21987,22 @@ var egret3d;
                 "gl_FragColor = ref ; \n" +
                 "} \n",
             "cube_vertex": "attribute vec3 attribute_position; \n" +
-                "uniform mat4 uniform_ModelMatrix ; \n" +
-                "uniform mat4 uniform_ViewProjectionMatrix ; \n" +
-                "uniform mat4 uniform_NormalMatrix ; \n" +
+                "uniform mat4 uniform_ModelMatrix; \n" +
+                "uniform mat4 uniform_ViewMatrix; \n" +
+                "uniform mat4 uniform_ProjectionMatrix; \n" +
                 "varying vec3 varying_pos; \n" +
                 "void main(void){ \n" +
                 "varying_pos =  attribute_position; \n" +
-                "gl_Position = uniform_ViewProjectionMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
+                "gl_Position = uniform_ProjectionMatrix * uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
                 "} \n",
             "diffuse_fragment": "uniform sampler2D diffuseTexture; \n" +
                 "vec4 diffuseColor ; \n" +
                 "void main() { \n" +
-                "diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
+                "diffuseColor = textureLinear(diffuseTexture , uv_0 ); \n" +
                 "} \n",
-            "diffuse_vs": "void main(void){ \n" +
-                "mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
-                "mat3 normalMatrix = transpose( inverse(mat3( modeViewMatrix )) ); \n" +
-                "varying_eyeNormal = normalize(normalMatrix * -outNormal); \n" +
+            "diffuse_vertex": "void main(void){ \n" +
+                "mat3 normalMatrix = transpose( inverse(mat3( uniform_ProjectionMatrix * uniform_ViewMatrix )) ); \n" +
+                "varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
                 "outPosition = uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
                 "varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
                 "} \n",
@@ -21710,27 +22047,10 @@ var egret3d;
                 "vec4 ambientColor; \n" +
                 "vec4 light ; \n" +
                 "void main() { \n" +
-                "if( varying_color.w == 0.0){ \n" +
-                "discard; \n" +
-                "} \n" +
-                "if (diffuseColor.x + diffuseColor.y + diffuseColor.z == 0.0) \n" +
-                "{ \n" +
-                "diffuseColor.xyz = materialSource.diffuse.xyz + diffuseColor.xyz; \n" +
-                "} \n" +
-                "else \n" +
-                "{ \n" +
-                "diffuseColor.xyz = materialSource.diffuse.xyz * diffuseColor.xyz; \n" +
-                "} \n" +
+                "diffuseColor.xyz = materialSource.diffuse.xyz * diffuseColor.xyz ; \n" +
                 "outColor.xyz = (ambientColor.xyz + materialSource.ambient.xyz + light.xyz) * diffuseColor.xyz + specularColor.xyz * materialSource.specularScale; \n" +
                 "outColor.w = materialSource.alpha * diffuseColor.w ; \n" +
-                "if (varying_color.x + varying_color.y + varying_color.z == 0.0) \n" +
-                "{ \n" +
-                "gl_FragColor = outColor; \n" +
-                "} \n" +
-                "else \n" +
-                "{ \n" +
-                "gl_FragColor = outColor * varying_color; \n" +
-                "} \n" +
+                "gl_FragColor = outColor * varying_color ; \n" +
                 "} \n",
             "end_vs": "vec4 endPosition ; \n" +
                 "void main() { \n" +
@@ -21738,52 +22058,6 @@ var egret3d;
                 "gl_Position = uniform_ProjectionMatrix * outPosition ; \n" +
                 "} \n" +
                 "                       \n",
-            "expFog_fs": "struct Fog{ \n" +
-                "vec3 fogColor  ; \n" +
-                "float globalDensity ; \n" +
-                "vec3 distance ; \n" +
-                "}; \n" +
-                "varying vec4 varying_pos; \n" +
-                "uniform float uniform_globalFog[7]; \n" +
-                "void main(void){ \n" +
-                "Fog fog; \n" +
-                "fog.fogColor = vec3(uniform_globalFog[0],uniform_globalFog[1],uniform_globalFog[2]); \n" +
-                "fog.globalDensity = uniform_globalFog[3]; \n" +
-                "fog.distance = vec2(uniform_globalFog[4], uniform_globalFog[5]); \n" +
-                "float d = distance(uniform_eyepos,varying_pos.xyz); \n" +
-                "float distFog = max( 0.0 , d - fog.distance.x )* fog.distance.y; \n" +
-                "float fogFactor = (1.0-exp( -distFog * 0.000001 * fog.globalDensity )) ; \n" +
-                "diffuseColor.xyz = mix( diffuseColor.xyz  , fog.fogColor , min(fogFactor,1.0) ); \n" +
-                "} \n" +
-                "  \n",
-            "expHeightFog_fs": "struct Fog{ \n" +
-                "vec3 fogColor  ; \n" +
-                "float globalDensity ; \n" +
-                "float fogStartDistance ; \n" +
-                "float fogHeightStart ; \n" +
-                "float fogAlpha ; \n" +
-                "}; \n" +
-                "varying vec4 varying_pos; \n" +
-                "uniform float uniform_globalFog[7]; \n" +
-                "vec3 applyFog( float yDistance, vec3  vpos , Fog fog ) \n" +
-                "{ \n" +
-                "float d = distance(uniform_eyepos,varying_pos.xyz); \n" +
-                "float distFog = max( 0.0 , d - fog.fogStartDistance ) ; \n" +
-                "float yFog = max(0.0, (vpos.y - fog.fogHeightStart - yDistance) )  ; \n" +
-                "float fogAmount =  1.0-(exp(-distFog * fog.globalDensity )) + (exp(-yFog * fog.globalDensity )); \n" +
-                "return mix( diffuseColor.xyz,fog.fogColor, clamp(fogAmount,0.0,fog.fogAlpha) ); \n" +
-                "} \n" +
-                "void main(void){ \n" +
-                "Fog fog; \n" +
-                "fog.fogColor = vec3(uniform_globalFog[0],uniform_globalFog[1],uniform_globalFog[2]); \n" +
-                "fog.globalDensity = uniform_globalFog[3]; \n" +
-                "fog.fogStartDistance = uniform_globalFog[4] ; \n" +
-                "fog.fogHeightStart = uniform_globalFog[5] ; \n" +
-                "fog.fogAlpha = uniform_globalFog[6] ; \n" +
-                "float yd = uniform_eyepos.y - varying_pos.y ; \n" +
-                "diffuseColor.xyz = applyFog( yd , varying_pos.xyz , fog ); \n" +
-                "} \n" +
-                "  \n",
             "flatNormal_fs": "#extension GL_OES_standard_derivatives : enable \n" +
                 "vec3 flatNormal(vec3 pos){ \n" +
                 "vec3 fdx = dFdx(pos); \n" +
@@ -21843,27 +22117,6 @@ var egret3d;
                 "float attenuation = 1.0 / (denom*denom); \n" +
                 "float t = (attenuation - f) / (1.0 - f); \n" +
                 "return max(t, 0.0); \n" +
-                "} \n",
-            "lightMap_fs": "uniform sampler2D lightTexture ; \n" +
-                "void main(void){ \n" +
-                "diffuseColor.xyz *= texture2D( lightTexture , varying_uv1 ).xyz * 2.0 ; \n" +
-                "} \n",
-            "lineFog": "struct Fog{ \n" +
-                "vec3 fogColor  ; \n" +
-                "float globalDensity ; \n" +
-                "vec3 distance ; \n" +
-                "}; \n" +
-                "varying vec4 varying_pos; \n" +
-                "uniform float uniform_globalFog[7]; \n" +
-                "void main(void){ \n" +
-                "Fog fog; \n" +
-                "fog.fogColor = vec3(uniform_globalFog[0],uniform_globalFog[1],uniform_globalFog[2]); \n" +
-                "fog.globalDensity = uniform_globalFog[3]; \n" +
-                "fog.distance = vec2(uniform_globalFog[4], uniform_globalFog[5]); \n" +
-                "float dist = abs( varying_ViewPose.z ); \n" +
-                "float fogFactor = ( fog.distance.y - dist) / (fog.distance.y - fog.distance.x); \n" +
-                "fogFactor = clamp( fogFactor, 0.0, 1.0 ); \n" +
-                "diffuseColor.xyz = mix( fog.fogColor, diffuseColor.xyz, fogFactor ); \n" +
                 "} \n",
             "materialSource_fs": "struct MaterialSource{ \n" +
                 "vec3 diffuse; \n" +
@@ -21927,145 +22180,6 @@ var egret3d;
                 "normalTex.y *= -1.0; \n" +
                 "normal.xyz = tbn( normalTex.xyz , normal.xyz , normalize(varying_ViewPose.xyz) , uv_0 ) ; \n" +
                 "} \n",
-            "particle_vs": "attribute vec3 attribute_offset; \n" +
-                "attribute vec3 attribute_lifecycle; \n" +
-                "attribute vec3 attribute_direction; \n" +
-                "attribute vec2 attribute_speed; \n" +
-                "uniform mat4 uniform_cameraMatrix; \n" +
-                "uniform float uniform_time; \n" +
-                "uniform float uniform_enableBillboardXYZ; \n" +
-                "uniform vec3 uniform_startColor; \n" +
-                "uniform vec3 uniform_endColor; \n" +
-                "uniform vec3 uniform_startScale; \n" +
-                "uniform vec3 uniform_endScale; \n" +
-                "uniform vec3 uniform_startRot; \n" +
-                "uniform vec3 uniform_endRot; \n" +
-                "const float PI = 3.1415926 ; \n" +
-                "vec4 position; \n" +
-                "float currentTime = 0.0; \n" +
-                "float totalTime = 0.0; \n" +
-                "mat4 buildRotMat4(vec3 rot) \n" +
-                "{ \n" +
-                "mat4 ret = mat4( \n" +
-                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
-                "vec4(0.0, 1.0, 0.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 1.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0) \n" +
-                "); \n" +
-                "float s; \n" +
-                "float c; \n" +
-                "s = sin(rot.x); \n" +
-                "c = cos(rot.x); \n" +
-                "ret *= mat4( \n" +
-                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
-                "vec4(0.0, c, s, 0.0), \n" +
-                "vec4(0.0, -s, c, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0) \n" +
-                "); \n" +
-                "s = sin(rot.y); \n" +
-                "c = cos(rot.y); \n" +
-                "ret *= mat4( \n" +
-                "vec4(c, 0.0, -s, 0.0), \n" +
-                "vec4(0.0, 1.0, 0.0, 0.0), \n" +
-                "vec4(s, 0.0, c, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0) \n" +
-                "); \n" +
-                "s = sin(rot.z); \n" +
-                "c = cos(rot.z); \n" +
-                "ret *= mat4( \n" +
-                "vec4(c, s, 0.0, 0.0), \n" +
-                "vec4(-s, c, 0.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 1.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0) \n" +
-                "); \n" +
-                "return ret; \n" +
-                "} \n" +
-                "void main(void) { \n" +
-                "mat4 billboardMatrix = mat4( \n" +
-                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
-                "vec4(0.0, 1.0, 0.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 1.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-                "if (uniform_enableBillboardXYZ == 111.0) \n" +
-                "{ \n" +
-                "billboardMatrix = mat4( \n" +
-                "uniform_cameraMatrix[0], \n" +
-                "uniform_cameraMatrix[1], \n" +
-                "uniform_cameraMatrix[2], \n" +
-                "vec4(0.0, 0.0,1.0, 1.0)); \n" +
-                "} \n" +
-                "else \n" +
-                "{ \n" +
-                "if (mod(uniform_enableBillboardXYZ, 10.0) == 1.0) \n" +
-                "{ \n" +
-                "billboardMatrix *= mat4( \n" +
-                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
-                "vec4(0.0, uniform_cameraMatrix[1].y, uniform_cameraMatrix[1].z, 0.0), \n" +
-                "vec4(0.0, uniform_cameraMatrix[2].y, uniform_cameraMatrix[2].z, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-                "} \n" +
-                "if (mod(uniform_enableBillboardXYZ, 100.0) / 10.0 > 1.0) \n" +
-                "{ \n" +
-                "billboardMatrix *= mat4( \n" +
-                "vec4(uniform_cameraMatrix[0].x, 0.0, uniform_cameraMatrix[0].z, 0.0), \n" +
-                "vec4(0.0, 1.0, 0.0, 0.0), \n" +
-                "vec4(uniform_cameraMatrix[2].x, 0.0, uniform_cameraMatrix[2].z, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-                "} \n" +
-                "if (uniform_enableBillboardXYZ / 100.0 > 1.0) \n" +
-                "{ \n" +
-                "billboardMatrix *= mat4( \n" +
-                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
-                "vec4(0.0, uniform_cameraMatrix[1].y, uniform_cameraMatrix[1].z, 0.0), \n" +
-                "vec4(0.0, uniform_cameraMatrix[2].y, uniform_cameraMatrix[2].z, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-                "} \n" +
-                "} \n" +
-                "mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
-                "mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); \n" +
-                "varying_eyeNormal = normalize(normalMatrix * -outNormal); \n" +
-                "position = vec4(attribute_offset, 1.0); \n" +
-                "outPosition = vec4(attribute_position, 1.0); \n" +
-                "outPosition = billboardMatrix * outPosition; \n" +
-                "totalTime = attribute_lifecycle.x + attribute_lifecycle.y; \n" +
-                "if (attribute_lifecycle.z == 1.0) \n" +
-                "{ \n" +
-                "currentTime = mod(uniform_time, totalTime); \n" +
-                "if (currentTime >= attribute_lifecycle.x && currentTime <= totalTime) \n" +
-                "{ \n" +
-                "currentTime = currentTime - attribute_lifecycle.x; \n" +
-                "} \n" +
-                "else \n" +
-                "{ \n" +
-                "varying_color.w = 0.0; \n" +
-                "} \n" +
-                "} \n" +
-                "else \n" +
-                "{ \n" +
-                "if (uniform_time < attribute_lifecycle.x || uniform_time > totalTime) \n" +
-                "{ \n" +
-                "varying_color.w = 0.0; \n" +
-                "} \n" +
-                "else \n" +
-                "{ \n" +
-                "currentTime = uniform_time - attribute_lifecycle.x; \n" +
-                "} \n" +
-                "} \n" +
-                "if (currentTime > 0.0) \n" +
-                "{ \n" +
-                "float t = currentTime * 0.001; \n" +
-                "float ratio = currentTime / attribute_lifecycle.y; \n" +
-                "position.xyz += attribute_direction * (t * (attribute_speed.x + attribute_speed.y * t)); \n" +
-                "varying_color.xyz += uniform_startColor + (uniform_endColor - uniform_startColor) *  ratio; \n" +
-                "vec3 rot = uniform_startRot + (uniform_endRot - uniform_startRot) *  ratio; \n" +
-                "rot  *= (PI / 180.0); \n" +
-                "position = buildRotMat4(rot) * position; \n" +
-                "} \n" +
-                "position = uniform_ModelMatrix * position; \n" +
-                "outPosition.xyz += position.xyz; \n" +
-                "outPosition = uniform_ViewMatrix * outPosition; \n" +
-                "varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
-                "} \n",
             "pointLight_fragment": "const int max_pointLight = 0 ; \n" +
                 "uniform float uniform_pointLightSource[12*max_pointLight] ; \n" +
                 "struct PointLight{ \n" +
@@ -22107,7 +22221,9 @@ var egret3d;
                 "void main() { \n" +
                 "calculatePointLight(materialSource); \n" +
                 "} \n",
-            "skeleton_vs": "const int bonesNumber = 0; \n" +
+            "skeleton_vertex": "attribute vec4 attribute_boneIndex ; \n" +
+                "attribute vec4 attribute_boneWeight ; \n" +
+                "const int bonesNumber = 0; \n" +
                 "uniform vec4 uniform_PoseMatrix[bonesNumber]; \n" +
                 "uniform mat4 uniform_ModelMatrix ; \n" +
                 "mat4 buildMat4(int index){ \n" +
@@ -22131,7 +22247,7 @@ var egret3d;
                 "} \n" +
                 "void main(void){ \n" +
                 "vec4 temp_position = vec4(attribute_position, 1.0) ; \n" +
-                "vec4 temp_normal = vec4(outNormal, 0.0) ; \n" +
+                "vec4 temp_normal = vec4(attribute_normal, 0.0) ; \n" +
                 "mat4 m0 = buildMat4(int(attribute_boneIndex.x)); \n" +
                 "mat4 m1 = buildMat4(int(attribute_boneIndex.y)); \n" +
                 "mat4 m2 = buildMat4(int(attribute_boneIndex.z)); \n" +
@@ -22154,40 +22270,6 @@ var egret3d;
                 "void main(void){ \n" +
                 "specularColor.xyz *= texture2D( specularTexture , uv_0 ).xyz ; \n" +
                 "} \n",
-            "terrainRGBA_fragment": "uniform sampler2D blendMaskTexture ; \n" +
-                "uniform sampler2D splat_0Tex ; \n" +
-                "uniform sampler2D splat_1Tex ; \n" +
-                "uniform sampler2D splat_2Tex ; \n" +
-                "uniform sampler2D splat_3Tex ; \n" +
-                "uniform float uvs[8]; \n" +
-                "void main() { \n" +
-                "vec4 splat_control = texture2D ( blendMaskTexture , varying_uv0 ); \n" +
-                "vec4 cc = vec4(0.0,0.0,0.0,1.0); \n" +
-                "vec2 uv = varying_uv0 ; \n" +
-                "cc.xyz = splat_control.x * texture2D (splat_0Tex, uv * vec2(uvs[0],uvs[1])).xyz ; \n" +
-                "cc.xyz += splat_control.y * texture2D (splat_1Tex, uv * vec2(uvs[2],uvs[3]) ).xyz; \n" +
-                "cc.xyz += splat_control.z * vec4(texture2D (splat_2Tex, uv* vec2(uvs[4],uvs[5]))).xyz; \n" +
-                "cc.xyz += (1.0-length(splat_control.xyz)) * vec4(texture2D (splat_3Tex, uv* vec2(uvs[6],uvs[7]))).xyz; \n" +
-                "diffuseColor.xyz = cc.xyz ; \n" +
-                "} \n",
-            "uvRoll_fs": "uniform float uvRoll[2] ; \n" +
-                "vec4 diffuseColor ; \n" +
-                "void main() { \n" +
-                "uv_0.xy += vec2(uvRoll[0],uvRoll[1]); \n" +
-                "diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
-                "} \n",
-            "uvSpriteSheet_fs": "uniform float uvSpriteSheet[4] ; \n" +
-                "vec4 diffuseColor ; \n" +
-                "void main() { \n" +
-                "uv_0.xy *= vec2(uvSpriteSheet[2],uvSpriteSheet[3]); \n" +
-                "uv_0.xy += vec2(uvSpriteSheet[0],uvSpriteSheet[1]); \n" +
-                "diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
-                "} \n",
-            "vertexPos_vs": "varying vec4 varying_pos; \n" +
-                "void main() { \n" +
-                "varying_pos = uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
-                "} \n" +
-                "                       \n",
         };
         return ShaderLib;
     }());
