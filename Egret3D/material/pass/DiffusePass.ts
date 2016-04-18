@@ -27,6 +27,7 @@
 
             this._passUsage.vertexShader.addUseShaderName("base_vs");
             this._passUsage.fragmentShader.addUseShaderName("base_fs");
+
             this._passUsage.fragmentShader.addUseShaderName("materialSource_fs");
 
             if (animation) {
