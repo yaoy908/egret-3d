@@ -56,19 +56,40 @@ class View3DTest {
         this._view3D.backColor = 0xffffffff;
         ///将View3D添加进Canvas中
         this._egret3DCanvas.addView3D(this._view3D);
+    
+        this.CreatCube();
+        
+        this.CreatGrid();
+        
+        this.CreatSky();
+        
+        ///启动Canvas。
+        this._egret3DCanvas.start();
+        ///注册每帧更新，让cube进行旋转
+        this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME,this.update,this);
+        ///设置window resize事件
+        egret3d.Input.addEventListener(egret3d.Event3D.RESIZE,this.OnWindowResize,this);
+	}
+	
+	
+	private CreatCube():void{
         ///创建颜色材质
         var mat_0: egret3d.TextureMaterial = new egret3d.TextureMaterial();
         ///创建立方体对象
         var geometery_0: egret3d.CubeGeometry = new egret3d.CubeGeometry(150,150,150);
         ///通过材质和立方体对象生成Mesh
         this._cube = new egret3d.Mesh(geometery_0,mat_0);
-     
         ///将mesh插入view3D
         this._view3D.addChild3D(this._cube);
-
-        
-        this.CreatGrid();
-        
+	}
+	
+	/**
+   * @language zh_CN        
+   * 创建天空盒子
+   * @version Egret 3.0
+   * @platform Web,Native
+   */
+	private CreatSky():void {
         ///天空贴图用于Sky类使用，其内部是将6张HTMLImageElement（网页图片元素）封装到CubeTexture对象，CubeTexture为引擎内部使用对象
         //* 需要在html中已有 < /p>
         //  < pre >
@@ -92,31 +113,62 @@ class View3DTest {
         ///将天空盒子插入view3D
         this._view3D.addChild3D(sky);
         ///启动Canvas。
-        this._egret3DCanvas.start();
-        
-        ///启动Canvas。
-        this._egret3DCanvas.start();
-        ///注册每帧更新，让cube进行旋转
-        this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME,this.update,this);
-        ///设置window resize事件
-        egret3d.Input.addEventListener(egret3d.Event3D.RESIZE,this.OnWindowResize,this);
+        this._egret3DCanvas.start();   
 	}
 	
 	/**
    * @language zh_CN        
-   * 创建纯色地面
+   * 创建纯色网格地面
    * @version Egret 3.0
    * @platform Web,Native
    */
     private CreatGrid(): void {
+        
+       
         ///生成面板
         var mat_1: egret3d.ColorMaterial = new egret3d.ColorMaterial(0xff000000);
         var geometery_1: egret3d.PlaneGeometry = new egret3d.PlaneGeometry(3000,10000);
         var plane = new egret3d.Mesh(geometery_1,mat_1);
         plane.y = -150;
         this._view3D.addChild3D(plane);
-
         
+        var width: number = 200;
+        var height: number = 200;
+
+        var row: number = 10000 /200 ;
+        var col: number = 3000 /200 + 2;
+
+        var geom: egret3d.Geometry = new egret3d.Geometry();
+        geom.vertexFormat = egret3d.VertexFormat.VF_POSITION;
+        geom.verticesData = new Array<number>();
+        geom.indexData = new Array<number>();
+
+
+        for(var i: number = 0;i < row;i++) {
+            for(var j: number = 0;j < col;j++) {
+                var index: number = i * col + j;
+                index = index * geom.vertexAttLength;
+                geom.verticesData[index + 0] = width * j - width * col / 2;
+                geom.verticesData[index + 1] = -149;
+                geom.verticesData[index + 2] = height * i - height * row / 2;
+               
+
+                if(j + 1 < col) {
+                    geom.indexData.push(i * col + j);
+                    geom.indexData.push(i * col + j + 1);
+                }
+
+                if(i + 1 < row) {
+                    geom.indexData.push(i * col + j);
+                    geom.indexData.push((i + 1) * col + j);
+                }
+            }
+        }
+
+
+        var wir: egret3d.Wireframe = new egret3d.Wireframe(geom);
+        wir.material.diffuseColor = 0x00ffff;
+        this._view3D.addChild3D(wir);
     }
 	
     /**

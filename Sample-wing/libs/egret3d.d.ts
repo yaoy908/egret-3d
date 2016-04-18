@@ -10311,21 +10311,63 @@ declare module egret3d {
 }
 declare module egret3d {
     /**
-    * @private
+    * @language zh_CN
+    * @class egret3d.MaterialPass
+    * @classdesc
+    * 材质渲染pass 根据Mesh数据、模型的材质还有灯光数据的不同。
+    * 以不同的渲染方法，会组成相应的shader内容，然后渲染出不同的效果。
+    * @see egret3d.Mesh
+    * @version Egret 3.0
+    * @platform Web,Native
     */
     class MaterialPass {
         protected _passUsage: PassUsage;
         protected _materialData: MaterialData;
         protected _passChange: boolean;
+        /**
+        * @private
+        */
         methodList: Array<MethodBase>;
+        /**
+        * @private
+        */
         methodDatas: Array<MethodData>;
+        /**
+        * @private
+        */
         vsShaderNames: Array<string>;
+        /**
+        * @private
+        */
         fsShaderNames: Array<string>;
+        /**
+        * @private
+        */
         lightGroup: LightGroup;
+        /**
+        * @private
+        */
         constructor(materialData: MaterialData);
+        /**
+        * @language zh_CN
+        * 增加渲染方法
+        * @param method 渲染方法
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         addMethod(method: MethodBase): void;
+        /**
+        * @language zh_CN
+        * 移除渲染方法
+        * @param method 渲染方法
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         removeMethod(method: MethodBase): void;
         protected materialDataChange(): void;
+        /**
+        * @private
+        */
         passInvalid(): void;
         /**
        * @language zh_CN
@@ -10342,7 +10384,13 @@ declare module egret3d {
         * @platform Web,Native
         */
         initUseMethod(animation: IAnimation, geom: Geometry): void;
+        /**
+        * @private
+        */
         upload(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, animation: IAnimation, geometry: Geometry): void;
+        /**
+        * @private
+        */
         draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation): void;
     }
 }
