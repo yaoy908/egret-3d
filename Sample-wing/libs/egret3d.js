@@ -22012,6 +22012,12 @@ var egret3d;
         function ShaderLib() {
         }
         ShaderLib.lib = {
+            "AOMap_fs": "uniform sampler2D aoTexture ; \n" +
+                "uniform float aoPower ; \n" +
+                "void main(void){ \n" +
+                "float ao = texture2D( aoTexture , varying_uv1 ).x ; \n" +
+                "diffuseColor.xyz *= (ao * aoPower) ; \n" +
+                "} \n",
             "base_fs": "#extension GL_OES_standard_derivatives : enable \n" +
                 "varying vec3 varying_eyeNormal  ; \n" +
                 "varying vec2 varying_uv0; \n" +
@@ -22019,7 +22025,8 @@ var egret3d;
                 "varying vec4 varying_color; \n" +
                 "uniform vec3 uniform_eyepos ; \n" +
                 "uniform mat4 uniform_ViewMatrix ; \n" +
-                "vec4 outColor; \n" +
+                "uniform mat4 uniform_ProjectionMatrix; \n" +
+                "vec4 outColor ; \n" +
                 "vec4 diffuseColor ; \n" +
                 "vec4 specularColor ; \n" +
                 "vec4 ambientColor; \n" +
@@ -22080,21 +22087,28 @@ var egret3d;
                 "gl_FragColor = ref ; \n" +
                 "} \n",
             "cube_vertex": "attribute vec3 attribute_position; \n" +
-                "uniform mat4 uniform_ModelMatrix; \n" +
-                "uniform mat4 uniform_ViewMatrix; \n" +
-                "uniform mat4 uniform_ProjectionMatrix; \n" +
+                "uniform mat4 uniform_ModelMatrix ; \n" +
+                "uniform mat4 uniform_ViewProjectionMatrix ; \n" +
+                "uniform mat4 uniform_NormalMatrix ; \n" +
                 "varying vec3 varying_pos; \n" +
                 "void main(void){ \n" +
                 "varying_pos =  attribute_position; \n" +
-                "gl_Position = uniform_ProjectionMatrix * uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
+                "gl_Position = uniform_ViewProjectionMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
                 "} \n",
             "diffuse_fragment": "uniform sampler2D diffuseTexture; \n" +
                 "vec4 diffuseColor ; \n" +
                 "void main() { \n" +
-                "diffuseColor = textureLinear(diffuseTexture , uv_0 ); \n" +
+                "if( diffuseColor.w == 0.0 ){ \n" +
+                "discard; \n" +
+                "} \n" +
+                "diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
+                "if( diffuseColor.w == materialSource.cutAlpha ){ \n" +
+                "discard; \n" +
+                "} \n" +
                 "} \n",
             "diffuse_vertex": "void main(void){ \n" +
-                "mat3 normalMatrix = transpose( inverse(mat3( uniform_ProjectionMatrix * uniform_ViewMatrix )) ); \n" +
+                "mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
+                "mat3 normalMatrix = transpose( inverse(mat3( modeViewMatrix )) ); \n" +
                 "varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
                 "outPosition = uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
                 "varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
@@ -22143,7 +22157,7 @@ var egret3d;
                 "diffuseColor.xyz = materialSource.diffuse.xyz * diffuseColor.xyz ; \n" +
                 "outColor.xyz = (ambientColor.xyz + materialSource.ambient.xyz + light.xyz) * diffuseColor.xyz + specularColor.xyz * materialSource.specularScale; \n" +
                 "outColor.w = materialSource.alpha * diffuseColor.w ; \n" +
-                "gl_FragColor = outColor * varying_color ; \n" +
+                "gl_FragColor = outColor * varying_color; \n" +
                 "} \n",
             "end_vs": "vec4 endPosition ; \n" +
                 "void main() { \n" +
@@ -22151,6 +22165,52 @@ var egret3d;
                 "gl_Position = uniform_ProjectionMatrix * outPosition ; \n" +
                 "} \n" +
                 "                       \n",
+            "expFog_fs": "struct Fog{ \n" +
+                "vec3 fogColor  ; \n" +
+                "float globalDensity ; \n" +
+                "vec3 distance ; \n" +
+                "}; \n" +
+                "varying vec4 varying_pos; \n" +
+                "uniform float uniform_globalFog[7]; \n" +
+                "void main(void){ \n" +
+                "Fog fog; \n" +
+                "fog.fogColor = vec3(uniform_globalFog[0],uniform_globalFog[1],uniform_globalFog[2]); \n" +
+                "fog.globalDensity = uniform_globalFog[3]; \n" +
+                "fog.distance = vec2(uniform_globalFog[4], uniform_globalFog[5]); \n" +
+                "float d = distance(uniform_eyepos,varying_pos.xyz); \n" +
+                "float distFog = max( 0.0 , d - fog.distance.x )* fog.distance.y; \n" +
+                "float fogFactor = (1.0-exp( -distFog * 0.000001 * fog.globalDensity )) ; \n" +
+                "diffuseColor.xyz = mix( diffuseColor.xyz  , fog.fogColor , min(fogFactor,1.0) ); \n" +
+                "} \n" +
+                "  \n",
+            "expHeightFog_fs": "struct Fog{ \n" +
+                "vec3 fogColor  ; \n" +
+                "float globalDensity ; \n" +
+                "float fogStartDistance ; \n" +
+                "float fogHeightStart ; \n" +
+                "float fogAlpha ; \n" +
+                "}; \n" +
+                "varying vec4 varying_pos; \n" +
+                "uniform float uniform_globalFog[7]; \n" +
+                "vec3 applyFog( float yDistance, vec3  vpos , Fog fog ) \n" +
+                "{ \n" +
+                "float d = distance(uniform_eyepos,varying_pos.xyz); \n" +
+                "float distFog = max( 0.0 , d - fog.fogStartDistance ) ; \n" +
+                "float yFog = max(0.0, (vpos.y - fog.fogHeightStart - yDistance) )  ; \n" +
+                "float fogAmount =  1.0-(exp(-distFog * fog.globalDensity )) + (exp(-yFog * fog.globalDensity )); \n" +
+                "return mix( diffuseColor.xyz,fog.fogColor, clamp(fogAmount,0.0,fog.fogAlpha) ); \n" +
+                "} \n" +
+                "void main(void){ \n" +
+                "Fog fog; \n" +
+                "fog.fogColor = vec3(uniform_globalFog[0],uniform_globalFog[1],uniform_globalFog[2]); \n" +
+                "fog.globalDensity = uniform_globalFog[3]; \n" +
+                "fog.fogStartDistance = uniform_globalFog[4] ; \n" +
+                "fog.fogHeightStart = uniform_globalFog[5] ; \n" +
+                "fog.fogAlpha = uniform_globalFog[6] ; \n" +
+                "float yd = uniform_eyepos.y - varying_pos.y ; \n" +
+                "diffuseColor.xyz = applyFog( yd , varying_pos.xyz , fog ); \n" +
+                "} \n" +
+                "  \n",
             "flatNormal_fs": "#extension GL_OES_standard_derivatives : enable \n" +
                 "vec3 flatNormal(vec3 pos){ \n" +
                 "vec3 fdx = dFdx(pos); \n" +
@@ -22210,6 +22270,27 @@ var egret3d;
                 "float attenuation = 1.0 / (denom*denom); \n" +
                 "float t = (attenuation - f) / (1.0 - f); \n" +
                 "return max(t, 0.0); \n" +
+                "} \n",
+            "lightMap_fs": "uniform sampler2D lightTexture ; \n" +
+                "void main(void){ \n" +
+                "diffuseColor.xyz *= texture2D( lightTexture , varying_uv1 ).xyz * 2.0 ; \n" +
+                "} \n",
+            "lineFog": "struct Fog{ \n" +
+                "vec3 fogColor  ; \n" +
+                "float globalDensity ; \n" +
+                "vec3 distance ; \n" +
+                "}; \n" +
+                "varying vec4 varying_pos; \n" +
+                "uniform float uniform_globalFog[7]; \n" +
+                "void main(void){ \n" +
+                "Fog fog; \n" +
+                "fog.fogColor = vec3(uniform_globalFog[0],uniform_globalFog[1],uniform_globalFog[2]); \n" +
+                "fog.globalDensity = uniform_globalFog[3]; \n" +
+                "fog.distance = vec2(uniform_globalFog[4], uniform_globalFog[5]); \n" +
+                "float dist = abs( varying_ViewPose.z ); \n" +
+                "float fogFactor = ( fog.distance.y - dist) / (fog.distance.y - fog.distance.x); \n" +
+                "fogFactor = clamp( fogFactor, 0.0, 1.0 ); \n" +
+                "diffuseColor.xyz = mix( fog.fogColor, diffuseColor.xyz, fogFactor ); \n" +
                 "} \n",
             "materialSource_fs": "struct MaterialSource{ \n" +
                 "vec3 diffuse; \n" +
@@ -22272,6 +22353,146 @@ var egret3d;
                 "vec3 normalTex = texture2D(normalTexture,uv_0).xyz *2.0 - 1.0; \n" +
                 "normalTex.y *= -1.0; \n" +
                 "normal.xyz = tbn( normalTex.xyz , normal.xyz , normalize(varying_ViewPose.xyz) , uv_0 ) ; \n" +
+                "} \n",
+            "particle_vs": "attribute vec3 attribute_offset; \n" +
+                "attribute vec3 attribute_lifecycle; \n" +
+                "attribute vec3 attribute_direction; \n" +
+                "attribute vec2 attribute_speed; \n" +
+                "uniform mat4 uniform_cameraMatrix; \n" +
+                "uniform float uniform_time; \n" +
+                "uniform float uniform_enableBillboardXYZ; \n" +
+                "uniform vec3 uniform_startColor; \n" +
+                "uniform vec3 uniform_endColor; \n" +
+                "uniform vec3 uniform_startScale; \n" +
+                "uniform vec3 uniform_endScale; \n" +
+                "uniform vec3 uniform_startRot; \n" +
+                "uniform vec3 uniform_endRot; \n" +
+                "const float PI = 3.1415926 ; \n" +
+                "vec4 position; \n" +
+                "float currentTime = 0.0; \n" +
+                "float totalTime = 0.0; \n" +
+                "mat4 buildRotMat4(vec3 rot) \n" +
+                "{ \n" +
+                "mat4 ret = mat4( \n" +
+                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
+                "vec4(0.0, 1.0, 0.0, 0.0), \n" +
+                "vec4(0.0, 0.0, 1.0, 0.0), \n" +
+                "vec4(0.0, 0.0, 0.0, 1.0) \n" +
+                "); \n" +
+                "float s; \n" +
+                "float c; \n" +
+                "s = sin(rot.x); \n" +
+                "c = cos(rot.x); \n" +
+                "ret *= mat4( \n" +
+                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
+                "vec4(0.0, c, s, 0.0), \n" +
+                "vec4(0.0, -s, c, 0.0), \n" +
+                "vec4(0.0, 0.0, 0.0, 1.0) \n" +
+                "); \n" +
+                "s = sin(rot.y); \n" +
+                "c = cos(rot.y); \n" +
+                "ret *= mat4( \n" +
+                "vec4(c, 0.0, -s, 0.0), \n" +
+                "vec4(0.0, 1.0, 0.0, 0.0), \n" +
+                "vec4(s, 0.0, c, 0.0), \n" +
+                "vec4(0.0, 0.0, 0.0, 1.0) \n" +
+                "); \n" +
+                "s = sin(rot.z); \n" +
+                "c = cos(rot.z); \n" +
+                "ret *= mat4( \n" +
+                "vec4(c, s, 0.0, 0.0), \n" +
+                "vec4(-s, c, 0.0, 0.0), \n" +
+                "vec4(0.0, 0.0, 1.0, 0.0), \n" +
+                "vec4(0.0, 0.0, 0.0, 1.0) \n" +
+                "); \n" +
+                "return ret; \n" +
+                "} \n" +
+                "void main(void) { \n" +
+                "varying_color = vec4(1.0, 1.0, 1.0, 1.0); \n" +
+                "mat4 billboardMatrix = mat4( \n" +
+                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
+                "vec4(0.0, 1.0, 0.0, 0.0), \n" +
+                "vec4(0.0, 0.0, 1.0, 0.0), \n" +
+                "vec4(0.0, 0.0, 0.0, 1.0)); \n" +
+                "if (uniform_enableBillboardXYZ == 111.0) \n" +
+                "{ \n" +
+                "billboardMatrix = mat4( \n" +
+                "uniform_cameraMatrix[0], \n" +
+                "uniform_cameraMatrix[1], \n" +
+                "uniform_cameraMatrix[2], \n" +
+                "vec4(0.0, 0.0,1.0, 1.0)); \n" +
+                "} \n" +
+                "else \n" +
+                "{ \n" +
+                "if (mod(uniform_enableBillboardXYZ, 10.0) == 1.0) \n" +
+                "{ \n" +
+                "billboardMatrix *= mat4( \n" +
+                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
+                "vec4(0.0, uniform_cameraMatrix[1].y, uniform_cameraMatrix[1].z, 0.0), \n" +
+                "vec4(0.0, uniform_cameraMatrix[2].y, uniform_cameraMatrix[2].z, 0.0), \n" +
+                "vec4(0.0, 0.0, 0.0, 1.0)); \n" +
+                "} \n" +
+                "if (mod(uniform_enableBillboardXYZ, 100.0) / 10.0 > 1.0) \n" +
+                "{ \n" +
+                "billboardMatrix *= mat4( \n" +
+                "vec4(uniform_cameraMatrix[0].x, 0.0, uniform_cameraMatrix[0].z, 0.0), \n" +
+                "vec4(0.0, 1.0, 0.0, 0.0), \n" +
+                "vec4(uniform_cameraMatrix[2].x, 0.0, uniform_cameraMatrix[2].z, 0.0), \n" +
+                "vec4(0.0, 0.0, 0.0, 1.0)); \n" +
+                "} \n" +
+                "if (uniform_enableBillboardXYZ / 100.0 > 1.0) \n" +
+                "{ \n" +
+                "billboardMatrix *= mat4( \n" +
+                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
+                "vec4(0.0, uniform_cameraMatrix[1].y, uniform_cameraMatrix[1].z, 0.0), \n" +
+                "vec4(0.0, uniform_cameraMatrix[2].y, uniform_cameraMatrix[2].z, 0.0), \n" +
+                "vec4(0.0, 0.0, 0.0, 1.0)); \n" +
+                "} \n" +
+                "} \n" +
+                "mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
+                "mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); \n" +
+                "varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
+                "position = vec4(attribute_offset, 1.0); \n" +
+                "outPosition = vec4(attribute_position, 1.0); \n" +
+                "outPosition = billboardMatrix * outPosition; \n" +
+                "totalTime = attribute_lifecycle.x + attribute_lifecycle.y; \n" +
+                "if (attribute_lifecycle.z == 1.0) \n" +
+                "{ \n" +
+                "currentTime = mod(uniform_time, totalTime); \n" +
+                "if (currentTime >= attribute_lifecycle.x && currentTime <= totalTime) \n" +
+                "{ \n" +
+                "currentTime = currentTime - attribute_lifecycle.x; \n" +
+                "} \n" +
+                "else \n" +
+                "{ \n" +
+                "varying_color.w = 0.0; \n" +
+                "} \n" +
+                "} \n" +
+                "else \n" +
+                "{ \n" +
+                "if (uniform_time < attribute_lifecycle.x || uniform_time > totalTime) \n" +
+                "{ \n" +
+                "varying_color.w = 0.0; \n" +
+                "} \n" +
+                "else \n" +
+                "{ \n" +
+                "currentTime = uniform_time - attribute_lifecycle.x; \n" +
+                "} \n" +
+                "} \n" +
+                "if (currentTime > 0.0) \n" +
+                "{ \n" +
+                "float t = currentTime * 0.001; \n" +
+                "float ratio = currentTime / attribute_lifecycle.y; \n" +
+                "position.xyz += attribute_direction * (t * (attribute_speed.x + attribute_speed.y * t)); \n" +
+                "varying_color.xyz += uniform_startColor + (uniform_endColor - uniform_startColor) *  ratio; \n" +
+                "vec3 rot = uniform_startRot + (uniform_endRot - uniform_startRot) *  ratio; \n" +
+                "rot  *= (PI / 180.0); \n" +
+                "position = buildRotMat4(rot) * position; \n" +
+                "} \n" +
+                "position = uniform_ModelMatrix * position; \n" +
+                "outPosition.xyz += position.xyz; \n" +
+                "outPosition = uniform_ViewMatrix * outPosition; \n" +
+                "varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
                 "} \n",
             "pointLight_fragment": "const int max_pointLight = 0 ; \n" +
                 "uniform float uniform_pointLightSource[12*max_pointLight] ; \n" +
@@ -22363,6 +22584,40 @@ var egret3d;
                 "void main(void){ \n" +
                 "specularColor.xyz *= texture2D( specularTexture , uv_0 ).xyz ; \n" +
                 "} \n",
+            "terrainRGBA_fragment": "uniform sampler2D blendMaskTexture ; \n" +
+                "uniform sampler2D splat_0Tex ; \n" +
+                "uniform sampler2D splat_1Tex ; \n" +
+                "uniform sampler2D splat_2Tex ; \n" +
+                "uniform sampler2D splat_3Tex ; \n" +
+                "uniform float uvs[8]; \n" +
+                "void main() { \n" +
+                "vec4 splat_control = texture2D ( blendMaskTexture , varying_uv0 ); \n" +
+                "vec4 cc = vec4(0.0,0.0,0.0,1.0); \n" +
+                "vec2 uv = varying_uv0 ; \n" +
+                "cc.xyz = splat_control.x * texture2D (splat_0Tex, uv * vec2(uvs[0],uvs[1])).xyz ; \n" +
+                "cc.xyz += splat_control.y * texture2D (splat_1Tex, uv * vec2(uvs[2],uvs[3]) ).xyz; \n" +
+                "cc.xyz += splat_control.z * vec4(texture2D (splat_2Tex, uv* vec2(uvs[4],uvs[5]))).xyz; \n" +
+                "cc.xyz += (1.0-length(splat_control.xyz)) * vec4(texture2D (splat_3Tex, uv* vec2(uvs[6],uvs[7]))).xyz; \n" +
+                "diffuseColor.xyz = cc.xyz ; \n" +
+                "} \n",
+            "uvRoll_fs": "uniform float uvRoll[2] ; \n" +
+                "vec4 diffuseColor ; \n" +
+                "void main() { \n" +
+                "uv_0.xy += vec2(uvRoll[0],uvRoll[1]); \n" +
+                "diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
+                "} \n",
+            "uvSpriteSheet_fs": "uniform float uvSpriteSheet[4] ; \n" +
+                "vec4 diffuseColor ; \n" +
+                "void main() { \n" +
+                "uv_0.xy *= vec2(uvSpriteSheet[2],uvSpriteSheet[3]); \n" +
+                "uv_0.xy += vec2(uvSpriteSheet[0],uvSpriteSheet[1]); \n" +
+                "diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
+                "} \n",
+            "vertexPos_vs": "varying vec4 varying_pos; \n" +
+                "void main() { \n" +
+                "varying_pos = uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
+                "} \n" +
+                "                       \n",
         };
         return ShaderLib;
     }());
