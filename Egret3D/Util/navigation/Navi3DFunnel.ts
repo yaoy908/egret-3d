@@ -100,6 +100,7 @@ module egret3d {
         * @param endPt   终点
         * @param triangleList   三角带
         * @param radius   半径
+        * @return 是否寻路成功
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -150,8 +151,8 @@ module egret3d {
         /**
         * @language zh_CN
         * 执行搜索
-        * @param startPt   起点
-        * @param endPt   终点
+        * @param startPt   起点坐标
+        * @param endPt   终点坐标
         * @param triangleList   三角带
         * @version Egret 3.0
         * @platform Web,Native
@@ -254,7 +255,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * 将公共边数据里的通过点加入到结果队列中
+        * 将穿越的公共边数据里的通过点加入到结果队列中
         * @version Egret 3.0
         * @platform Web,Native
         */

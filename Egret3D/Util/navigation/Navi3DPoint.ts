@@ -50,12 +50,7 @@ module egret3d {
         */
         public static CALC_VECTOR3D5: Vector3D = new Vector3D();
 
-        /**
-        * @language zh_CN
-        * id
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
+
         private _pointId: number = 0;
 
         /**
@@ -73,6 +68,12 @@ module egret3d {
             this._pointId = id;
         }
 
+        /**
+        * @language zh_CN
+        * @return 在Navi3DMesh中的唯一id
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get id(): number {
             return this._pointId;
         }

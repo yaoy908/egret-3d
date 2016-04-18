@@ -10,20 +10,10 @@ module egret3d {
     */
     export class Navi3DTriangle extends Vector3D implements IQuadNode {
 
-        /**
-        * @language zh_CN
-        * 该三角形的三个顶点
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
+        private _id: number = 0;
+        private _plane: Plane3D;
         private _points: Array<Navi3DPoint> = new Array<Navi3DPoint>();
 
-        /**
-        * @language zh_CN
-        * 该三角形的三条边
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
         private _edges: Array<Navi3DEdge> = new Array<Navi3DEdge>();
 
         /**
@@ -57,22 +47,7 @@ module egret3d {
         * @platform Web,Native
         */
         private _mask: number = 0;
-
-        /**
-        * @language zh_CN
-        * id
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        private _id: number = 0;
-
-        /**
-        * @language zh_CN
-        * 该三角形所在平面的对象
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        private _plane: Plane3D;
+        
 
         /**
         * @language zh_CN
@@ -124,7 +99,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * openId
+        * 开区间ID，标记寻路批次用
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -132,7 +107,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * closeId
+        * 闭区间ID，标记寻路批次用
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -241,6 +216,7 @@ module egret3d {
 
         /**
         * @language zh_CN
+        * @private
         * 构建点正对着的边，以及边正对着的点的哈希表
         * @version Egret 3.0
         * @platform Web,Native
@@ -258,14 +234,32 @@ module egret3d {
             }
         }
 
+        /**
+        * @language zh_CN
+        * @return 三角形的ID，在Navi3DMesh中的唯一ID
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get id(): number {
             return this._id;
         }
 
+        /**
+        * @language zh_CN
+        * @return 该三角形所在平面
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get plane(): Plane3D {
             return this._plane;
         }
 
+        /**
+        * @language zh_CN
+        * @return 该三角形的三个顶点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get points(): Array<Navi3DPoint> {
             return this._points;
         }
@@ -349,6 +343,12 @@ module egret3d {
             return this.testMask(Navi3DMaskType.WalkAble);
         }
 
+        /**
+        * @language zh_CN
+        * @return 该三角形的三条边
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get edges(): Array<Navi3DEdge> {
             return this._edges;
         }
@@ -483,8 +483,8 @@ module egret3d {
         
         /**
         * @language zh_CN
-        * 判定2d点是否在一个2d的三角形内
-        * @return           是否处于三角形内
+        * @private
+        * @return 判定2d点是否在一个2d的三角形内
         * @version Egret 3.0
         * @platform Web,Native
         */

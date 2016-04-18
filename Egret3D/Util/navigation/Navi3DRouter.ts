@@ -1,10 +1,10 @@
-module egret3d {
+ï»¿module egret3d {
 
     /**
     * @language zh_CN
     * @class egret3d.Navi3DRouter
     * @classdesc
-    * ´¿2dµÄµã
+    * çº¯2dçš„ç‚¹
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -12,7 +12,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ÖÕµã
+        * ç»ˆç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -20,7 +20,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * µ±Ç°µã
+        * å½“å‰ç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -28,7 +28,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ÉäÏßA
+        * å°„çº¿A
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -36,7 +36,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ÉäÏßB
+        * å°„çº¿B
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -44,7 +44,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ÉäÏßAµÄ¶ÔÓ¦µã
+        * å°„çº¿Açš„å¯¹åº”ç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -52,7 +52,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ÉäÏßBµÄ¶ÔÓ¦µã
+        * å°„çº¿Bçš„å¯¹åº”ç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -60,7 +60,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¾²Ì¬±äÁ¿ÉäÏß1
+        * é™æ€å˜é‡å°„çº¿1
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -68,7 +68,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¾²Ì¬±äÁ¿ÉäÏß2
+        * é™æ€å˜é‡å°„çº¿2
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -76,7 +76,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¼ÆËãÓÃÉäÏß
+        * è®¡ç®—ç”¨å°„çº¿
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -84,7 +84,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¼ÆËãÓÃÉäÏß1
+        * è®¡ç®—ç”¨å°„çº¿1
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -92,7 +92,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¼ÆËãÓÃÉäÏß2
+        * è®¡ç®—ç”¨å°„çº¿2
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -100,7 +100,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¼ÆËãÓÃµÄVector3D
+        * è®¡ç®—ç”¨çš„Vector3D
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -108,7 +108,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¼ÆËãÓÃµÄVector3D
+        * è®¡ç®—ç”¨çš„Vector3D
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -116,7 +116,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¼ÇÂ¼ÏÂµÄ¹Õµã
+        * è®°å½•ä¸‹çš„æ‹ç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -124,7 +124,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¼ÇÂ¼ÏÂµÄ¹ÕµãËùÔÚµÄ±ß
+        * è®°å½•ä¸‹çš„æ‹ç‚¹æ‰€åœ¨çš„è¾¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -142,10 +142,10 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * Éè¶¨¼ÌĞøÍ¨¹ı
-        * @param fromPt     Æğµã
-        * @param endPt      ÖÕµã
-        * @param fromEdge   ÉÏÒ»´ÎµÄ±ß
+        * è®¾å®šç»§ç»­é€šè¿‡
+        * @param fromPt     èµ·ç‚¹
+        * @param endPt      ç»ˆç‚¹
+        * @param fromEdge   ä¸Šä¸€æ¬¡çš„è¾¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -158,11 +158,11 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¼ÌĞøÍ¨¹ı
-        * @param commonEdge          ¹«¹²±ß
-        * @param nextCommonEdge      ÏÂÒ»¸ö¹«¹²±ß
-        * @param targetPoint         Ä¿±êµã
-        * @param lastEdge            ÊÇ·ñÎª×îºóÒ»¸ö±ß
+        * ç»§ç»­é€šè¿‡
+        * @param commonEdge          å…¬å…±è¾¹
+        * @param nextCommonEdge      ä¸‹ä¸€ä¸ªå…¬å…±è¾¹
+        * @param targetPoint         ç›®æ ‡ç‚¹
+        * @param lastEdge            æ˜¯å¦ä¸ºæœ€åä¸€ä¸ªè¾¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -243,8 +243,9 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * Í¨¹ı±ßµÄÊ±ºò£¬·¢ÏÖÎªµÖ´ïÖÕµãµÄ´¦Àíº¯Êı
-        * @param targetPoint          ÖÕµã
+        * @private
+        * é€šè¿‡è¾¹çš„æ—¶å€™ï¼Œå‘ç°ä¸ºæŠµè¾¾ç»ˆç‚¹çš„å¤„ç†å‡½æ•°
+        * @param targetPoint          ç»ˆç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -269,11 +270,11 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¼ÆËãÉäÏßÓëÏß¶ÎµÄÁ½¸öfatPointÖ®¼ä½»µã
-        * @param _edge          Ïß¶Î
-        * @param linePoint      ÉäÏßÆğµã
-        * @param lineDirection  ÉäÏß·½Ïò
-        * @return               ½»µã
+        * è®¡ç®—å°„çº¿ä¸çº¿æ®µçš„ä¸¤ä¸ªfatPointä¹‹é—´äº¤ç‚¹
+        * @param _edge          çº¿æ®µ
+        * @param linePoint      å°„çº¿èµ·ç‚¹
+        * @param lineDirection  å°„çº¿æ–¹å‘
+        * @return               äº¤ç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -283,11 +284,11 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¼ÆËãÉäÏßÓëÏß¶ÎµÄ½»µã
-        * @param _edge          Ïß¶Î
-        * @param linePoint      ÉäÏßÆğµã
-        * @param lineDirection  ÉäÏß·½Ïò
-        * @return               ½»µã
+        * è®¡ç®—å°„çº¿ä¸çº¿æ®µçš„äº¤ç‚¹
+        * @param _edge          çº¿æ®µ
+        * @param linePoint      å°„çº¿èµ·ç‚¹
+        * @param lineDirection  å°„çº¿æ–¹å‘
+        * @return               äº¤ç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -312,12 +313,12 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¼ÆËãÉäÏßÓëÏß¶Î½»µã£¬Èç¹û²»ÔÚÏß¶ÎÀïÃæ£¬Ôò·µ»Ønull
-        * @param segmentPt1      Ïß¶Î1¶Ë
-        * @param segmentPt2      Ïß¶ÎÁíÒ»¶Ë
-        * @param linePoint       ÉäÏßÆğµã
-        * @param lineDirection   ÉäÏß·½Ïò
-        * @return                ½»µã
+        * è®¡ç®—å°„çº¿ä¸çº¿æ®µäº¤ç‚¹ï¼Œå¦‚æœä¸åœ¨çº¿æ®µé‡Œé¢ï¼Œåˆ™è¿”å›null
+        * @param segmentPt1      çº¿æ®µ1ç«¯
+        * @param segmentPt2      çº¿æ®µå¦ä¸€ç«¯
+        * @param linePoint       å°„çº¿èµ·ç‚¹
+        * @param lineDirection   å°„çº¿æ–¹å‘
+        * @return                äº¤ç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -339,12 +340,12 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ÅĞ¶¨¼ÆËãÉäÏßÓëÏß¶ÎÊÇ·ñÓĞ½»µã
-        * @param segmentPt1      Ïß¶Î1¶Ë
-        * @param segmentPt2      Ïß¶ÎÁíÒ»¶Ë
-        * @param linePoint       ÉäÏßÆğµã
-        * @param lineDirection   ÉäÏß·½Ïò
-        * @return                ÊÇ·ñÓĞ½»µã
+        * åˆ¤å®šè®¡ç®—å°„çº¿ä¸çº¿æ®µæ˜¯å¦æœ‰äº¤ç‚¹
+        * @param segmentPt1      çº¿æ®µ1ç«¯
+        * @param segmentPt2      çº¿æ®µå¦ä¸€ç«¯
+        * @param linePoint       å°„çº¿èµ·ç‚¹
+        * @param lineDirection   å°„çº¿æ–¹å‘
+        * @return                æ˜¯å¦æœ‰äº¤ç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -360,11 +361,12 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ÅĞ¶¨Ò»¸öµãÊÇ·ñÔÚÁ½¸öÉäÏßµÄ¼Ğ½ÇÄÚ²à
-        * @param point        µã
-        * @param vectorA      ÉäÏßA
-        * @param vectorB      ÉäÏßB
-        * @return             ÊÇÔÚÄÚ²à
+        * @private
+        * åˆ¤å®šä¸€ä¸ªç‚¹æ˜¯å¦åœ¨ä¸¤ä¸ªå°„çº¿çš„å¤¹è§’å†…ä¾§
+        * @param point        ç‚¹
+        * @param vectorA      å°„çº¿A
+        * @param vectorB      å°„çº¿B
+        * @return             æ˜¯åœ¨å†…ä¾§
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -391,7 +393,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ÖØÖÃ¸Ãrouter
+        * é‡ç½®è¯¥router
         * @version Egret 3.0
         * @platform Web,Native
         */

@@ -180,7 +180,7 @@ module egret3d {
                 this._cells[cellIndex].nodeIndices.length = 0;
             }
 
-            //			traceTree(0);
+            //logTree(0);
         }
 
         /**
@@ -382,17 +382,17 @@ module egret3d {
         * @version Egret 3.0
         * @platform Web,Native
         */
-        private traceDeep: number = 0;
-        private traceTree(cellIndex: number): void {
+        private logDeep: number = 0;
+        private logTree(cellIndex: number): void {
             if (cellIndex < 0)
                 return;
 
-            this.traceDeep++;
+            this.logDeep++;
 
             var cell: QuadTreeCell = this._cells[cellIndex];
 
             var spaces: String = "";
-            for (var si: number = 0; si < (this.traceDeep - 1); si++)
+            for (var si: number = 0; si < (this.logDeep - 1); si++)
                 spaces += "-|";
 
             console.log(spaces + "i=" + cellIndex + " " +
@@ -411,10 +411,10 @@ module egret3d {
             }
             for (i = 0; i < cell.childCellIndices.length; i++) {
                 if (cell.childCellIndices[i] >= 0) {
-                    this.traceTree(cell.childCellIndices[i]);
+                    this.logTree(cell.childCellIndices[i]);
                 }
             }
-            this.traceDeep--;
+            this.logDeep--;
         }
 
     }

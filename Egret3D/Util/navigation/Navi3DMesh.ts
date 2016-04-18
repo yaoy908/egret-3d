@@ -12,30 +12,10 @@ module egret3d
 	export class Navi3DMesh
     {
 
-        /**
-        * @language zh_CN
-        * 网格中的点列表
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
         private _nav3dPoints: Array<Navi3DPoint>;
-
-        /**
-        * @language zh_CN
-        * 网格中的边列表
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
         private _nav3dEdges: Array<Navi3DEdge>;
-
-        /**
-        * @language zh_CN
-        * 网格中的三角形列表
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-		private _nav3dTriangles:Array<Navi3DTriangle>;
-
+        private _nav3dTriangles:Array<Navi3DTriangle>;
+        private _path: Array<Vector3D>;
         /**
         * @language zh_CN
         * aId_bId的形式创建map表 a小于b
@@ -52,7 +32,6 @@ module egret3d
         */
         private _nav3dAstar: Navi3DAstar;
 
-
         /**
         * @language zh_CN
         * 路径分析对象
@@ -60,7 +39,6 @@ module egret3d
         * @platform Web,Native
         */
         private _nav3dFunnel: Navi3DFunnel;
-
 
         /**
         * @language zh_CN
@@ -72,37 +50,65 @@ module egret3d
 
         /**
         * @language zh_CN
-        * 寻路结果中，3d点位置列表
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        private _path: Array<Vector3D>;
-
-        /**
-        * @language zh_CN
         * 寻路结果
         * @version Egret 3.0
         * @platform Web,Native
         */
         private _triangleList: Array<Navi3DTriangle>;
-		
+
+        /**
+        * @language zh_CN
+        * 网格中的边列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
 		public get edges():Array<Navi3DEdge>
 		{
             return this._nav3dEdges;
-		}
+        }
+
+        /**
+        * @language zh_CN
+        * 寻路结果的三角带
+        * @return 三角形列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get triangleList(): Array<Navi3DTriangle>
 		{
             return this._triangleList;
-		}
+        }
+
+        /**
+        * @language zh_CN
+        * 网格中的点列表
+        * @return 点列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
 		public get points():Array<Navi3DPoint>
 		{
             return this._nav3dPoints;
-		}
+        }
+
+        /**
+        * @language zh_CN
+        * 寻路结果中，3d点位置列表
+        * @return 3d点位置列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
 		public get path():Array<Vector3D>
 		{
             return this._path;
 		}
 
+        /**
+        * @language zh_CN
+        * 网格中的三角形列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
 		public get channel():Array<Navi3DTriangle>
 		{
             return this._nav3dTriangles;
@@ -235,10 +241,10 @@ module egret3d
 
         /**
         * @language zh_CN
-        * 输入2个点，创建边
+        * 根据两个点的ID，创建一条边
         * @param    pointAId   点A
         * @param    pointBId   点B
-        * @return    边
+        * @return    创建的边
         * @version Egret 3.0
         * @platform Web,Native
         */

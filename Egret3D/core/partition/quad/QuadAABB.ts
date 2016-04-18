@@ -59,6 +59,7 @@ module egret3d {
 
         /**
         * @language zh_CN
+        * @private
         * 记录该包围盒的全局位移偏移量
         * @version Egret 3.0
         * @platform Web,Native
@@ -67,6 +68,7 @@ module egret3d {
 
         /**
         * @language zh_CN
+        * @private
         * 设定一个微小的值
         * @version Egret 3.0
         * @platform Web,Native

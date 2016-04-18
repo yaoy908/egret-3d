@@ -43,7 +43,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-	     * 检测的nodes结果存放
+	     * 存放检测的nodes结果
 	     */
         private _collisionNodes: Array<IQuadNode>;
 
@@ -117,9 +117,9 @@ module egret3d {
             this._segBox.clear();
             this._segBox.setAABox(point.x, point.z, 1, 1);
 
-            // 获取Boundingbox中的三角
             this._collisionNodesIdx.length = 0;
             this._collisionNodes.length = 0;
+            // 获取Boundingbox中的node的ID
             var numTriangles: number = this._quadTree.getNodesIntersectingtAABox(this._collisionNodesIdx, this._segBox);
 
             // 检查那个三角与点(x,y)相交

@@ -1,69 +1,22 @@
-module egret3d
+ï»¿module egret3d
 {
     /**
     * @language zh_CN
     * @class egret3d.Navi3DAstar
     * @classdesc
-    * ÓÃÓÚNavigation MeshÖĞÑ°Â·µÄAĞÇËã·¨
+    * ç”¨äºNavigation Meshä¸­å¯»è·¯çš„Aæ˜Ÿç®—æ³•
     * @version Egret 3.0
     * @platform Web,Native
     */
 	export class Navi3DAstar
     {
-        /**
-        * @language zh_CN
-        * ¿ªÇø¼ä
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
+
         private _openedList: Array<Navi3DTriangle>;
-
-        /**
-        * @language zh_CN
-        * ±ÕÇø¼ä
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
         private _closedList: Array<Navi3DTriangle>;
-
-        /**
-        * @language zh_CN
-        * ÖÕµã
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
         private _endNode: Navi3DTriangle;
-
-        /**
-        * @language zh_CN
-        * Æğµã
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
         private _startNode: Navi3DTriangle;
-
-        /**
-        * @language zh_CN
-        * Èı½Ç´ø
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
         private _triangleChannel: Array<Navi3DTriangle>;
-
-        /**
-        * @language zh_CN
-        * Ñ°Â·µÄÊı¾İ
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
 		private _navMesh:Navi3DMesh;
-
-        /**
-        * @language zh_CN
-        * µ¥´ÎÑ°Â·Ê±ºòid±ê¼Ç
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
         private _findIndex: number = 0;
 
         /**
@@ -79,11 +32,11 @@ module egret3d
 
         /**
         * @language zh_CN
-        * ¿ªÊ¼ÕÒÑ°Â·¾¶£¬ÊäÈëÆğµãÖÕµã
-        * param navMesh ËÑË÷µÄmesh¶ÔÏó
-        * param startTriangle ¿ªÊ¼Èı½ÇĞÎ
-        * param endTriangle ½áÊøÈı½ÇĞÎ
-        * @return ÊÇ·ñËÑË÷³É¹¦
+        * å¼€å§‹æ‰¾å¯»è·¯å¾„ï¼Œè¾“å…¥èµ·ç‚¹ç»ˆç‚¹
+        * param navMesh æœç´¢çš„meshå¯¹è±¡
+        * param startTriangle å¼€å§‹ä¸‰è§’å½¢
+        * param endTriangle ç»“æŸä¸‰è§’å½¢
+        * @return æ˜¯å¦æœç´¢æˆåŠŸ
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -111,8 +64,8 @@ module egret3d
 
         /**
         * @language zh_CN
-        * ËÑÑ°
-        * @return ÊÇ·ñËÑË÷³É¹¦
+        * æœå¯»
+        * @return æ˜¯å¦æœç´¢æˆåŠŸ
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -157,7 +110,7 @@ module egret3d
                 this._closedList.push(node);
                 if (this._openedList.length == 0)
 				{
-//					trace("no path found");
+//					log("no path found");
 					return false;
 				}
                 this._openedList.sort(this.sortFun);
@@ -169,9 +122,9 @@ module egret3d
 
         /**
         * @language zh_CN
-        * ÅÅĞò¿ªÇø¼ä
-        * @param a ÓÃÓÚ±È½ÏµÄa¶ÔÏó
-        * @param b ÓÃÓÚ±È½ÏµÄb¶ÔÏó
+        * æ’åºå¼€åŒºé—´(ä»å°åˆ°å¤§)
+        * @param a ç”¨äºæ¯”è¾ƒçš„aå¯¹è±¡
+        * @param b ç”¨äºæ¯”è¾ƒçš„bå¯¹è±¡
         * @return 0,1,-1
         * @version Egret 3.0
         * @platform Web,Native
@@ -186,7 +139,7 @@ module egret3d
 
         /**
         * @language zh_CN
-        * »ØËİÂ·¾¶ÁĞ±í
+        * å›æº¯è·¯å¾„åˆ—è¡¨
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -204,7 +157,7 @@ module egret3d
 
         /**
         * @language zh_CN
-        * »ñÈ¡½á¹ûÊı¾İ£¨Èı½Ç´ø£©
+        * è·å–ç»“æœæ•°æ®ï¼ˆä¸‰è§’å¸¦ï¼‰
         * @version Egret 3.0
         * @platform Web,Native
         */

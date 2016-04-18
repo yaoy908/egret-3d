@@ -12,7 +12,6 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * @class egret3d.Navi3DAstar
         * 一个叶子单元最多包含子叶子树4个
         * @version Egret 3.0
         * @platform Web,Native
@@ -21,7 +20,6 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * @class egret3d.Navi3DAstar
         * (如果不是leaf)子节点的index, -1表示无子节点
         * @version Egret 3.0
         * @platform Web,Native
@@ -30,7 +28,6 @@ module egret3d {
         
         /**
         * @language zh_CN
-        * @class egret3d.Navi3DAstar
         * (如果是leaf) 三角面的index
         * @version Egret 3.0
         * @platform Web,Native
@@ -39,7 +36,6 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * @class egret3d.Navi3DAstar
         * 该节点的包围框
         * @version Egret 3.0
         * @platform Web,Native
@@ -48,7 +44,6 @@ module egret3d {
 
        /**
         * @language zh_CN
-        * @class egret3d.Navi3DAstar
         * 该叶子里面含有的顶点信息
         * @version Egret 3.0
         * @platform Web,Native

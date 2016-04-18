@@ -1,35 +1,22 @@
-module egret3d
+ï»¿module egret3d
 {
 
     /**
     * @language zh_CN
     * @class egret3d.Navi3DPointFat
     * @classdesc
-    * ÓÃÓÚÍø¸ñÖĞµÄ±ßÉÏ£¬Åö×²¼ì²âµÄµã
+    * ç”¨äºç½‘æ ¼ä¸­çš„è¾¹ä¸Šï¼Œç¢°æ’æ£€æµ‹çš„ç‚¹
     * @version Egret 3.0
     * @platform Web,Native
     */
     export class Navi3DPointFat extends Navi3DPoint {
 
-        /**
-        * @language zh_CN
-        * ËùÊô¶Ëµã
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
         private _ownerPoint: Navi3DPoint;
-
-        /**
-        * @language zh_CN
-        * ËùÊô±ß
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
         private _ownerEdge: Navi3DEdge;
 
         /**
         * @language zh_CN
-        * Óë¶ËµãµÄ¾àÀë
+        * ä¸ç«¯ç‚¹çš„è·ç¦»
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -38,8 +25,8 @@ module egret3d
         /**
         * @language zh_CN
         * constructor
-        * @param    _point   ¶Ëµã
-        * @param    _edge   ±ß
+        * @param    _point   ç«¯ç‚¹
+        * @param    _edge   è¾¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -49,19 +36,30 @@ module egret3d
             this._ownerPoint = _point;
         }
 
+        /**
+        * @language zh_CN
+        * @return éš¶å±äºå“ªä¸ªç«¯ç‚¹
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get ownerPoint(): Navi3DPoint {
             return this._ownerPoint;
         }
 
-
+        /**
+        * @language zh_CN
+        * @ return éš¶å±äºé‚£æ¡è¾¹
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get ownerEdge(): Navi3DEdge {
             return this._ownerEdge;
         }
 
         /**
         * @language zh_CN
-        * »ñµÃÒ»¸öµ±Ç°¶ÔÏóµÄ¸´ÖÆ£¬²¢ÇÒÊ¹ÓÃvalue½øĞĞÎ»ÖÃĞŞÕı
-        * @param    value   Ëõ·ÅÏµÊı
+        * è·å¾—ä¸€ä¸ªå½“å‰å¯¹è±¡çš„å¤åˆ¶ï¼Œå¹¶ä¸”ä½¿ç”¨valueè¿›è¡Œä½ç½®ä¿®æ­£
+        * @param    value   ç¼©æ”¾ç³»æ•°
         * @version Egret 3.0
         * @platform Web,Native
         */

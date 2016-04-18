@@ -1,65 +1,25 @@
-module egret3d {
+ï»¿module egret3d {
 
     /**
     * @language zh_CN
     * @class egret3d.Navi3DEdge
     * @classdesc
-    * ÓÃÓÚNavigation MeshÖĞÑ°Â·µÄÈı½ÇĞÎ±ßµÄ¶ÔÏó
+    * ç”¨äºNavigation Meshä¸­å¯»è·¯çš„ä¸‰è§’å½¢è¾¹çš„å¯¹è±¡
     * @version Egret 3.0
     * @platform Web,Native
     */
     export class Navi3DEdge {
-        /**
-        * @language zh_CN
-        * ¼ÇÂ¼¸Ã±ßµÄÍ¨¹ıÊôĞÔ
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
+
         private _edgeMask: number = 0;
-
-        /**
-        * @language zh_CN
-        * ±ß³¤
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
         private _edgeSize: number = 0;
-
-        /**
-        * @language zh_CN
-        * ¶ËµãA
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
         private _pointA: Navi3DPoint;
-
-        /**
-        * @language zh_CN
-        * ¶ËµãB
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
         private _pointB: Navi3DPoint;
-
-        /**
-        * @language zh_CN
-        * ËùÊôÈı½ÇĞÎÁĞ±í
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
         private _triangleOwners: Array<Navi3DTriangle>;
-
-        /**
-        * @language zh_CN
-        * ÖĞ¼äµÄµã
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
         private _centerPoint: Vector3D;
 
         /**
         * @language zh_CN
-        * ¶ËµãAÖÁBµÄ³¯ÏòÊ¸Á¿
+        * ç«¯ç‚¹Aè‡³Bçš„æœå‘çŸ¢é‡
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -67,7 +27,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¼ÇÂ¼´©Ô½µÄµã
+        * è®°å½•ç©¿è¶Šçš„ç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -75,7 +35,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¿¿½üAµÄ·ÊÅÖ¼ì²âµã
+        * é è¿‘Açš„è‚¥èƒ–æ£€æµ‹ç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -83,7 +43,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¿¿½üBµÄ·ÊÅÖ¼ì²âµã
+        * é è¿‘Bçš„è‚¥èƒ–æ£€æµ‹ç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -91,7 +51,7 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¼ÆËãÓÃµÄVector3D
+        * è®¡ç®—ç”¨çš„Vector3D
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -100,8 +60,8 @@ module egret3d {
         /**
         * @language zh_CN
         * constructor
-        * @param  point0 ¶¥µã0
-        * @param  point1 ¶¥µã1
+        * @param  point0 é¡¶ç‚¹0
+        * @param  point1 é¡¶ç‚¹1
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -120,22 +80,44 @@ module egret3d {
             this._centerPoint.setTo((point0.x + point1.x) / 2, (point0.y + point1.y) / 2, (point0.z + point1.z) / 2);
         }
 
+        /**
+        * @language zh_CN
+        * è·å¾—è¾¹é•¿
+        * @return é•¿åº¦
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get size(): Number {
             return this._edgeSize;
         }
 
+
+        /**
+        * @language zh_CN
+        * è·å¾—æ‰€å±ä¸‰è§’å½¢åˆ—è¡¨
+        * @return ä¸‰è§’å½¢åˆ—è¡¨
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get triangleOwners(): Array<Navi3DTriangle> {
             return this._triangleOwners;
         }
 
+        /**
+        * @language zh_CN
+        * è·å¾—çº¿æ®µçš„ä¸­é—´ç‚¹åæ ‡
+        * @return ä¸­é—´ç‚¹åæ ‡
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get centerPoint(): Vector3D {
             return this._centerPoint;
         }
 
         /**
         * @language zh_CN
-        * ³õÊ¼»¯·ÊÅÖ¼à²âµã
-        * @param  radius    ÊäÈëµÄ·ÊÅÖ¼ì²â°ë¾¶
+        * åˆå§‹åŒ–è‚¥èƒ–ç›‘æµ‹ç‚¹
+        * @param  radius    è¾“å…¥çš„è‚¥èƒ–æ£€æµ‹åŠå¾„
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -167,8 +149,8 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ¸ù¾İ¶Ëµã»ñÈ¡¶ÔÓ¦µÄ·ÊÅÖ¼ì²âµã
-        * @param  pt  ¶Ëµã
+        * æ ¹æ®ç«¯ç‚¹è·å–å¯¹åº”çš„è‚¥èƒ–æ£€æµ‹ç‚¹
+        * @param  pt  ç«¯ç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -180,8 +162,8 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ÊäÈëÒ»¸ö¶Ëµã»ñÈ¡ÁíÍâÒ»¸ö¶ËµãµÄ·ÊÅÖ¼ì²âµã
-        * @param  pt  ¶Ëµã
+        * è¾“å…¥ä¸€ä¸ªç«¯ç‚¹è·å–å¦å¤–ä¸€ä¸ªç«¯ç‚¹çš„è‚¥èƒ–æ£€æµ‹ç‚¹
+        * @param  pt  ç«¯ç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -193,8 +175,8 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ÊäÈëÒ»¸ö¶Ëµã»ñÈ¡ÁíÍâÒ»¸ö¶Ëµã
-        * @param  pt  ¶Ëµã
+        * è¾“å…¥ä¸€ä¸ªç«¯ç‚¹è·å–å¦å¤–ä¸€ä¸ªç«¯ç‚¹
+        * @param  pt  ç«¯ç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -206,9 +188,9 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ÅĞ¶¨Ò»¸öµãÊÇ·ñµÈ¼ÛÓÚÄ³¸ö¶Ëµã
-        * @param  pt ±»ÅĞ¶¨µÄµã
-        * @return ÅĞ¶¨½á¹û¶Ëµã
+        * åˆ¤å®šä¸€ä¸ªç‚¹æ˜¯å¦ç­‰ä»·äºæŸä¸ªç«¯ç‚¹
+        * @param  pt è¢«åˆ¤å®šçš„ç‚¹
+        * @return åˆ¤å®šç»“æœç«¯ç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -222,8 +204,8 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * Ìí¼ÓËùÊôÈı½ÇĞÎ
-        * @param  triangle ËùÊôÈı½ÇĞÎ
+        * æ·»åŠ æ‰€å±ä¸‰è§’å½¢
+        * @param  triangle æ‰€å±ä¸‰è§’å½¢
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -238,9 +220,9 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * »ñÈ¡ºÍÁíÍâÒ»Ìõ±ßµÄ¹«¹²¶Ëµã
-        * @param  edge ÁíÍâÒ»Ìõ±ß
-        * @return Navi3DPoint ¹«¹²±ß
+        * è·å–å’Œå¦å¤–ä¸€æ¡è¾¹çš„å…¬å…±ç«¯ç‚¹
+        * @param  edge å¦å¤–ä¸€æ¡è¾¹
+        * @return Navi3DPoint å…¬å…±è¾¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -256,9 +238,9 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * ÊäÈëÒ»¸öµã»ñ£¬»ñÈ¡ÓëÖ®µÈ¼ÛµÄÒ»¸ö¶Ëµã¶ÔÏó
-        * @param  p ÊäÈëµÄµã
-        * @return Navi3DPoint µÈ¼ÛµÄ¶Ëµã
+        * è¾“å…¥ä¸€ä¸ªç‚¹è·ï¼Œè·å–ä¸ä¹‹ç­‰ä»·çš„ä¸€ä¸ªç«¯ç‚¹å¯¹è±¡
+        * @param  p è¾“å…¥çš„ç‚¹
+        * @return Navi3DPoint ç­‰ä»·çš„ç«¯ç‚¹
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -270,23 +252,42 @@ module egret3d {
             return null;
         }
 
+        /**
+        * @language zh_CN
+        * ç«¯ç‚¹A
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get pointA(): Navi3DPoint {
             return this._pointA;
         }
 
+        /**
+        * @language zh_CN
+        * ç«¯ç‚¹B
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get pointB(): Navi3DPoint {
             return this._pointB;
         }
 
+        /**
+        * @language zh_CN
+        * è®°å½•è¯¥è¾¹çš„é€šè¿‡å±æ€§
+        * @return æ˜¯å¦å¯é€šè¿‡
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get walkAble(): Boolean {
             return (this._edgeMask & Navi3DMaskType.WalkAble) == Navi3DMaskType.WalkAble;
         }
 
         /**
         * @language zh_CN
-        * ²âÊÔÊÇ·ñÍ¨¹ı
-        * @param  value ±»²âÊÔµÄÖµ
-        * @return ÊÇ·ñÍ¨¹ı
+        * æµ‹è¯•æ˜¯å¦é€šè¿‡
+        * @param  value è¢«æµ‹è¯•çš„å€¼
+        * @return æ˜¯å¦é€šè¿‡
         * @version Egret 3.0
         * @platform Web,Native
         */
