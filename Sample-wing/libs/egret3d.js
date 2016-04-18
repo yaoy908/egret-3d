@@ -490,14 +490,34 @@ var egret3d;
     /**
      * @private
      * @language zh_CN
-     * 手机朝向
+     * 设备的方向(设备横向持有或纵向持有)。
      * @version Egret 3.0
      * @platform Web,Native
      */
     (function (Orientation) {
+        /**
+         * 设备纵向持有0°,即纵向主方向。
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         Orientation[Orientation["Portrait_Primary"] = 0] = "Portrait_Primary";
+        /**
+         * 设备纵向持有180°，即纵向次方向
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         Orientation[Orientation["Portrait_Secondary"] = 180] = "Portrait_Secondary";
+        /**
+         * 设备横向持有-90°,即横向主方向。
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         Orientation[Orientation["Landscape_Primary"] = -90] = "Landscape_Primary";
+        /**
+        * 设备横向持有90°,即横向次方向。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         Orientation[Orientation["Landscape_Secondary"] = 90] = "Landscape_Secondary";
     })(egret3d.Orientation || (egret3d.Orientation = {}));
     var Orientation = egret3d.Orientation;
@@ -521,7 +541,8 @@ var egret3d;
         Object.defineProperty(OrientationEvent3D.prototype, "orientation", {
             /**
              * @language zh_CN
-             * 获取当前横竖屏枚举值,枚举值为其对应角度
+             * 获取设备的方向枚举值,枚举值为其对应角度
+             * @return {Orientation} 设备的方向枚举值
              * @version Egret 3.0
              * @platform Web,Native
              */
@@ -536,6 +557,7 @@ var egret3d;
             /**
              * @language zh_CN
              * 获取排除重力影响的加速度
+             * @return {DeviceAcceleration} 加速度,单位是m/s2
              * @version Egret 3.0
              * @platform Web,Native
              */
@@ -545,6 +567,7 @@ var egret3d;
             /**
              * @language zh_CN
              * 设置排除重力影响的加速度
+             * @param deviceAcceleration {DeviceAcceleration} 加速度,单位是m/s2。
              * @version Egret 3.0
              * @platform Web,Native
              */
@@ -558,6 +581,7 @@ var egret3d;
             /**
             * @language zh_CN
             * 获取受到重力影响的加速度
+            * @return {DeviceAcceleration} 加速度,单位是m/s2
             * @version Egret 3.0
             * @platform Web,Native
             */
@@ -567,6 +591,7 @@ var egret3d;
             /**
             * @language zh_CN
             * 设置受到重力影响的加速度
+            * @param deviceAcceleration {DeviceAcceleration} 加速度,单位是m/s2。
             * @version Egret 3.0
             * @platform Web,Native
             */
@@ -579,7 +604,8 @@ var egret3d;
         Object.defineProperty(OrientationEvent3D.prototype, "rotationRate", {
             /**
              * @language zh_CN
-             * 获取旋转速率
+             * 获取旋转角度的变化速率
+             * @return {DeviceAcceleration} 旋转速率,单位是deg/s。
              * @version Egret 3.0
              * @platform Web,Native
              */
@@ -589,6 +615,7 @@ var egret3d;
             /**
              * @language zh_CN
              * 设置旋转速率
+             * @param deviceRotationRate {DeviceRotationRate} 旋转速率,单位是deg/s。
              * @version Egret 3.0
              * @platform Web,Native
              */
@@ -602,6 +629,7 @@ var egret3d;
             /**
              * @language zh_CN
              * 获取是否是绝对旋转重力方向
+             * @return {boolean}。
              * @version Egret 3.0
              * @platform Web,Native
              */
@@ -611,6 +639,7 @@ var egret3d;
             /**
              * @language zh_CN
              * 设置是否是绝对旋转重力方向
+             * @param value {boolean}。
              * @version Egret 3.0
              * @platform Web,Native
              */
@@ -624,6 +653,7 @@ var egret3d;
             /**
              * @language zh_CN
              * 获取Alpha旋转，围绕Z轴旋转，即水平方向旋转
+             * @return {number} 旋转角度。
              * @version Egret 3.0
              * @platform Web,Native
              */
@@ -633,6 +663,7 @@ var egret3d;
             /**
              * @language zh_CN
              * 设置Alpha旋转，围绕Z轴旋转，即水平方向旋转
+             * @param value {number} 旋转角度。
              * @version Egret 3.0
              * @platform Web,Native
              */
@@ -646,6 +677,7 @@ var egret3d;
             /**
              * @language zh_CN
              * 获取Beta旋转，围绕X轴旋转，即前后方向旋转
+             * @return {number} 旋转角度。
              * @version Egret 3.0
              * @platform Web,Native
              */
@@ -655,6 +687,7 @@ var egret3d;
             /**
              * @language zh_CN
              * 设置Beta旋转，围绕X轴旋转，即前后方向旋转
+             * @param value {number} 旋转角度。
              * @version Egret 3.0
              * @platform Web,Native
              */
@@ -668,6 +701,7 @@ var egret3d;
             /**
              * @language zh_CN
              * 获取Gamma旋转，围绕Y轴旋转，即左右方向旋转
+             * @return {number} 旋转角度。
              * @version Egret 3.0
              * @platform Web,Native
              */
@@ -677,6 +711,7 @@ var egret3d;
             /**
              * @language zh_CN
              * 设置Gamma旋转，围绕Y轴旋转，即左右方向旋转
+             * @param value {number} 旋转角度。
              * @version Egret 3.0
              * @platform Web,Native
              */
@@ -1197,7 +1232,7 @@ var egret3d;
             this.startScale = new egret3d.Vector3D(1, 1, 1);
             this.endScale = new egret3d.Vector3D(1, 1, 1);
             this.startRot = new egret3d.Vector3D();
-            this.endRot = new egret3d.Vector3D(0, 360, 0);
+            this.endRot = new egret3d.Vector3D();
             /**
             * @language zh_CN
             * @priavte
@@ -6150,6 +6185,7 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
+     * @private
      * @language zh_CN
      * @class egret3d.EyesMatrix
      * @classdesc
@@ -6182,6 +6218,7 @@ var egret3d;
             this.rightEyeMatrix = new egret3d.Matrix4_4();
         }
         /**
+        * @private
         * @language zh_CN
         * 数据更新
         * @param matrix 当前相机矩阵
@@ -6191,15 +6228,9 @@ var egret3d;
             this.dir.normalize();
             this.leftEyeMatrix.copyFrom(camera.modelMatrix);
             this.rightEyeMatrix.copyFrom(camera.modelMatrix);
-            this.leftEyeMatrix.appendTranslation(-this.dir.x * this.eyeSpace, -this.dir.y * this.eyeSpace, -this.dir.z * this.eyeSpace);
-            this.rightEyeMatrix.appendTranslation(this.dir.x * this.eyeSpace, this.dir.y * this.eyeSpace, this.dir.z * this.eyeSpace);
-            //this.targetPos.z = this.eyeFocalLength;
-            //this.eyePosition = matrix.position;
-            //this.quaternion.fromMatrix(matrix);
-            //this.leftEyeMatrix.copyRawDataFrom(matrix.rawData);
-            //this.rightEyeMatrix.copyRawDataFrom(matrix.rawData);
-            //this.leftEyeMatrix.appendTranslation(-this.eyeSpace * 0.5, 0.0, 0.0);
-            //this.rightEyeMatrix.appendTranslation(this.eyeSpace * 0.5, 0.0, 0.0);
+            var space = this.eyeSpace * 0.5;
+            this.leftEyeMatrix.appendTranslation(-this.dir.x * space, -this.dir.y * space, -this.dir.z * space);
+            this.rightEyeMatrix.appendTranslation(this.dir.x * space, this.dir.y * space, this.dir.z * space);
         };
         return EyesMatrix;
     }());
@@ -6679,8 +6710,6 @@ var egret3d;
             this.origin.setTo(0, 0, 0);
             this.dir.setTo(0, 0, 0);
         };
-        Ray.sdir = new egret3d.Vector3D();
-        Ray.sdir1 = new egret3d.Matrix4_4();
         return Ray;
     }());
     egret3d.Ray = Ray;
@@ -11585,9 +11614,9 @@ var egret3d;
          * @param lightData 灯光数据
          */
         PointLight.prototype.updateLightData = function (camera, index, lightData) {
-            lightData[index * PointLight.stride] = this.position.x;
-            lightData[index * PointLight.stride + 1] = this.position.y;
-            lightData[index * PointLight.stride + 2] = this.position.z;
+            lightData[index * PointLight.stride] = this.globalPosition.x;
+            lightData[index * PointLight.stride + 1] = this.globalPosition.y;
+            lightData[index * PointLight.stride + 2] = this.globalPosition.z;
             lightData[index * PointLight.stride + 3] = this._diffuse.x;
             lightData[index * PointLight.stride + 4] = this._diffuse.y;
             lightData[index * PointLight.stride + 5] = this._diffuse.z;
@@ -11767,12 +11796,12 @@ var egret3d;
          * @param lightData 灯光数据
          */
         SpotLight.prototype.updateLightData = function (camera, index, lightData) {
-            lightData[index * SpotLight.stride] = this.x;
-            lightData[index * SpotLight.stride + 1] = this.y;
-            lightData[index * SpotLight.stride + 2] = this.z;
-            lightData[index * SpotLight.stride + 3] = this._rot.x * egret3d.MathUtil.DEGREES_TO_RADIANS;
-            lightData[index * SpotLight.stride + 4] = this._rot.y * egret3d.MathUtil.DEGREES_TO_RADIANS;
-            lightData[index * SpotLight.stride + 5] = this._rot.z * egret3d.MathUtil.DEGREES_TO_RADIANS;
+            lightData[index * SpotLight.stride] = this.globalPosition.x;
+            lightData[index * SpotLight.stride + 1] = this.globalPosition.y;
+            lightData[index * SpotLight.stride + 2] = this.globalPosition.z;
+            lightData[index * SpotLight.stride + 3] = this.globalRotation.x * egret3d.MathUtil.DEGREES_TO_RADIANS;
+            lightData[index * SpotLight.stride + 4] = this.globalRotation.y * egret3d.MathUtil.DEGREES_TO_RADIANS;
+            lightData[index * SpotLight.stride + 5] = this.globalRotation.z * egret3d.MathUtil.DEGREES_TO_RADIANS;
             lightData[index * SpotLight.stride + 6] = this._diffuse.x;
             lightData[index * SpotLight.stride + 7] = this._diffuse.y;
             lightData[index * SpotLight.stride + 8] = this._diffuse.z;
@@ -14877,6 +14906,7 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
+     * @private
      * @language zh_CN
      * @class egret3D.OrientationControler
      * @classdesc
@@ -17110,6 +17140,366 @@ var egret3d;
 var egret3d;
 (function (egret3d) {
     /**
+     * @class egret3d.AOMapMethod
+     * @classdesc
+     * AO贴图方法
+     */
+    var FogMethod = (function (_super) {
+        __extends(FogMethod, _super);
+        /**
+         * @language zh_CN
+         * @param fogType line/exp/expHeightFog
+         */
+        function FogMethod(fogType) {
+            if (fogType === void 0) { fogType = "expHeightFog_fs"; }
+            _super.call(this);
+            this.uniform_globalFog = new Float32Array(7);
+            this._fogColor = 0x0000cc;
+            this._globalDensity = 1.0;
+            this._fogStartDistance = 1000;
+            this._fogDistanceScale = 0.5;
+            this._height = 500;
+            this._fogAlpha = 1.0;
+            this.methodType = egret3d.TextureMethodType.diffuse;
+            this.vsShaderList.push("vertexPos_vs");
+            if (fogType == "line") {
+                this.fsShaderList.push("lineFog");
+            }
+            else if (fogType == "exp") {
+                this.fsShaderList.push("expFog_fs");
+            }
+            else if (fogType == "expHeightFog_fs") {
+                this.fsShaderList.push("expHeightFog_fs");
+            }
+            0.5, 0.6, 0.7;
+            this.uniform_globalFog[0] = 0.5;
+            this.uniform_globalFog[1] = 0.6;
+            this.uniform_globalFog[2] = 0.7;
+            this.uniform_globalFog[3] = this._globalDensity;
+            this.uniform_globalFog[4] = this._fogStartDistance;
+            this.uniform_globalFog[5] = this._height;
+            this.uniform_globalFog[6] = this._fogAlpha;
+        }
+        Object.defineProperty(FogMethod.prototype, "fogColor", {
+            get: function () {
+                return this.fogColor;
+            },
+            set: function (value) {
+                this._fogColor = value;
+                this.uniform_globalFog[0] = (this._fogColor >> 16 & 0xff) / 255.0;
+                this.uniform_globalFog[1] = (this._fogColor >> 8 & 0xff) / 255.0;
+                this.uniform_globalFog[2] = (this._fogColor & 0xff) / 255.0;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(FogMethod.prototype, "globalDensity", {
+            get: function () {
+                return this._globalDensity;
+            },
+            set: function (value) {
+                this._globalDensity = value;
+                this.uniform_globalFog[3] = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(FogMethod.prototype, "fogStartDistance", {
+            get: function () {
+                return this._fogStartDistance;
+            },
+            set: function (value) {
+                this._fogStartDistance = value;
+                this.uniform_globalFog[4] = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(FogMethod.prototype, "fogHeight", {
+            get: function () {
+                return this._height;
+            },
+            //public set fogDistanceScale(value: number) {
+            //    this._fogDistanceScale = value;
+            //    this.uniform_globalFog[5] = value;
+            //}
+            //public get fogDistanceScale(): number {
+            //    return this._fogDistanceScale;
+            //}
+            set: function (value) {
+                this._height = value;
+                this.uniform_globalFog[5] = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(FogMethod.prototype, "fogAlpha", {
+            get: function () {
+                return this._height;
+            },
+            set: function (value) {
+                this._height = value;
+                this.uniform_globalFog[6] = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+        * @language zh_CN
+        * @param time
+        * @param delay
+        * @param usage
+        * @param materialData
+        * @param geometry
+        * @param context3DProxy
+        * @param modeltransform
+        * @param modeltransform
+        * @param camera3D
+        */
+        FogMethod.prototype.upload = function (time, delay, usage, geometry, context3DProxy, modeltransform, camera3D) {
+            usage["uniform_globalFog"] = context3DProxy.getUniformLocation(usage.program3D, "uniform_globalFog");
+        };
+        FogMethod.prototype.update = function (time, delay, usage, geometry, context3DProxy, modeltransform, camera3D) {
+            context3DProxy.uniform1fv(usage["uniform_globalFog"], this.uniform_globalFog);
+        };
+        /**
+         * @language zh_CN
+         */
+        FogMethod.prototype.dispose = function () {
+        };
+        return FogMethod;
+    }(egret3d.MethodBase));
+    egret3d.FogMethod = FogMethod;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @private
+    */
+    var UVRollMethod = (function (_super) {
+        __extends(UVRollMethod, _super);
+        /**
+         * @language zh_CN
+         * @param texture
+         */
+        function UVRollMethod() {
+            _super.call(this);
+            this._uvRoll = new Float32Array(2);
+            this._speedU = 0.00005;
+            this._speedV = 0.0;
+            this._time = 0.0;
+            this._start = false;
+            this.fsShaderList.push("uvRoll_fs");
+            this.methodType = egret3d.TextureMethodType.diffuse;
+        }
+        Object.defineProperty(UVRollMethod.prototype, "speedU", {
+            get: function () {
+                return this._speedU;
+            },
+            set: function (value) {
+                this._speedU = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(UVRollMethod.prototype, "speedV", {
+            get: function () {
+                return this._speedV;
+            },
+            set: function (value) {
+                this._speedV = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        UVRollMethod.prototype.start = function (rest) {
+            if (rest === void 0) { rest = false; }
+            if (rest)
+                this._time = 0;
+            this._start = true;
+        };
+        UVRollMethod.prototype.stop = function () {
+            this._start = false;
+        };
+        /**
+           * @language zh_CN
+           * @param time
+           * @param delay
+           * @param usage
+           * @param materialData
+           * @param geometry
+           * @param context3DProxy
+           * @param modeltransform
+           * @param modeltransform
+           * @param camera3D
+           */
+        UVRollMethod.prototype.upload = function (time, delay, usage, geometry, context3DProxy, modeltransform, camera3D) {
+            usage["uvRoll"] = context3DProxy.getUniformLocation(usage.program3D, "uvRoll");
+        };
+        UVRollMethod.prototype.update = function (time, delay, usage, geometry, context3DProxy, modeltransform, camera3D) {
+            if (this._start) {
+                this._time += delay;
+                this._uvRoll[0] = this._time * this._speedU;
+                this._uvRoll[1] = this._time * this._speedV;
+                context3DProxy.uniform1fv(usage["uvRoll"], this._uvRoll);
+            }
+        };
+        return UVRollMethod;
+    }(egret3d.MethodBase));
+    egret3d.UVRollMethod = UVRollMethod;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
+    * @private
+    */
+    var UVSpriteSheetMethod = (function (_super) {
+        __extends(UVSpriteSheetMethod, _super);
+        /**
+         * @language zh_CN
+         * @param texture
+         */
+        function UVSpriteSheetMethod(frameNum, row, column, numTime) {
+            _super.call(this);
+            this._uvSpriteSheet = new Float32Array(4);
+            this._uvRectangle = new egret3d.Rectangle();
+            this._speed = 0.0;
+            this._time = 0.0;
+            this._numTime = 0.4;
+            this._start = false;
+            this._frameNum = 12;
+            this._row = 4;
+            this._column = 4;
+            this._currentFrame = 0;
+            this.frameList = [];
+            this._change = false;
+            this.fsShaderList.push("uvSpriteSheet_fs");
+            this.methodType = egret3d.TextureMethodType.diffuse;
+            this.frameNum = frameNum;
+            this.row = row;
+            this.column = column;
+            this.numTime = numTime;
+        }
+        UVSpriteSheetMethod.prototype.caculate = function () {
+            this._speed = (this._numTime * 1000) / this._frameNum;
+            this._uvRectangle.x = 0.0;
+            this._uvRectangle.y = 0.0;
+            this._uvRectangle.width = 1.0 / this._row;
+            this._uvRectangle.height = 1.0 / this._column;
+            this.frameList.length = this._frameNum;
+            var rowIndex = 0;
+            var columnIndex = 0;
+            for (var i = 0; i < this._frameNum; i++) {
+                rowIndex = i % this._row;
+                columnIndex = Math.floor(i / this._column);
+                var rec = new egret3d.Rectangle();
+                rec.x = rowIndex * this._uvRectangle.width + this._uvRectangle.x;
+                rec.y = columnIndex * this._uvRectangle.height + this._uvRectangle.y;
+                rec.width = this._uvRectangle.width;
+                rec.height = this._uvRectangle.height;
+                this.frameList[i] = rec;
+            }
+        };
+        Object.defineProperty(UVSpriteSheetMethod.prototype, "numTime", {
+            get: function () {
+                return this._numTime;
+            },
+            set: function (value) {
+                if (this._numTime != value) {
+                    this._change = true;
+                    this._numTime = value;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(UVSpriteSheetMethod.prototype, "frameNum", {
+            get: function () {
+                return this._frameNum;
+            },
+            set: function (value) {
+                if (this._frameNum != value) {
+                    this._change = true;
+                    this._frameNum = value;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(UVSpriteSheetMethod.prototype, "row", {
+            get: function () {
+                return this._row;
+            },
+            set: function (value) {
+                if (this._row != value) {
+                    this._change = true;
+                    this._row = value;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(UVSpriteSheetMethod.prototype, "column", {
+            get: function () {
+                return this._column;
+            },
+            set: function (value) {
+                if (this._column != value) {
+                    this._change = true;
+                    this._column = value;
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        UVSpriteSheetMethod.prototype.start = function (rest) {
+            if (rest === void 0) { rest = false; }
+            if (rest)
+                this._time = 0;
+            this._start = true;
+            if (this._change)
+                this.caculate();
+        };
+        UVSpriteSheetMethod.prototype.stop = function () {
+            this._start = false;
+        };
+        /**
+           * @language zh_CN
+           * @param time
+           * @param delay
+           * @param usage
+           * @param materialData
+           * @param geometry
+           * @param context3DProxy
+           * @param modeltransform
+           * @param modeltransform
+           * @param camera3D
+           */
+        UVSpriteSheetMethod.prototype.upload = function (time, delay, usage, geometry, context3DProxy, modeltransform, camera3D) {
+            usage["uvSpriteSheet"] = context3DProxy.getUniformLocation(usage.program3D, "uvSpriteSheet");
+        };
+        UVSpriteSheetMethod.prototype.update = function (time, delay, usage, geometry, context3DProxy, modeltransform, camera3D) {
+            if (this._start) {
+                this._time += delay;
+                if (this._time / this._speed > 1.0) {
+                    this._currentFrame++;
+                    this._currentFrame = this._currentFrame % this._frameNum;
+                    this._time = 0;
+                    this._uvSpriteSheet[0] = this.frameList[this._currentFrame].x;
+                    this._uvSpriteSheet[1] = this.frameList[this._currentFrame].y;
+                    this._uvSpriteSheet[2] = this.frameList[this._currentFrame].width;
+                    this._uvSpriteSheet[3] = this.frameList[this._currentFrame].height;
+                    context3DProxy.uniform1fv(usage["uvSpriteSheet"], this._uvSpriteSheet);
+                }
+            }
+        };
+        return UVSpriteSheetMethod;
+    }(egret3d.MethodBase));
+    egret3d.UVSpriteSheetMethod = UVSpriteSheetMethod;
+})(egret3d || (egret3d = {}));
+var egret3d;
+(function (egret3d) {
+    /**
     * @private
     * @class egret3d.MethodUsageData
     * @classdesc
@@ -17661,31 +18051,61 @@ var egret3d;
         * @version Egret 3.0
         * @platform Web,Native
         */
-        MaterialPass.prototype.initUseMethod = function (animation) {
+        MaterialPass.prototype.initUseMethod = function (animation, geom) {
             this._passChange = false;
             var i = 0;
             this._passUsage = new egret3d.PassUsage();
+            this._materialData.textureMethodTypes.push(egret3d.TextureMethodType.color);
             this._passUsage.vertexShader.shaderType = egret3d.Shader.vertex;
             this._passUsage.fragmentShader.shaderType = egret3d.Shader.fragment;
-            if (this._materialData.textureMethodTypes.indexOf(egret3d.TextureMethodType.diffuse) != -1) {
-                this._passUsage.vertexShader.addUseShaderName("default_vertex");
-                this._passUsage.fragmentShader.addUseShaderName("diffuseMap_fragment");
+            this._passUsage.vertexShader.addUseShaderName("base_vs");
+            this._passUsage.fragmentShader.addUseShaderName("base_fs");
+            if (geom.vertexFormat & egret3d.VertexFormat.VF_POSITION) {
+                this._passUsage.vertexShader.addUseShaderName("attribute_position_vs");
+            }
+            if (geom.vertexFormat & egret3d.VertexFormat.VF_NORMAL) {
+                this._passUsage.vertexShader.addUseShaderName("attribute_normal_vs");
+            }
+            if (geom.vertexFormat & egret3d.VertexFormat.VF_TANGENT) {
+                this._passUsage.vertexShader.addUseShaderName("attribute_tangent_vs");
+            }
+            if (geom.vertexFormat & egret3d.VertexFormat.VF_COLOR) {
+                this._passUsage.vertexShader.addUseShaderName("attribute_color_vs");
+            }
+            if (geom.vertexFormat & egret3d.VertexFormat.VF_UV0) {
+                this._passUsage.vertexShader.addUseShaderName("attribute_uv0_vs");
+            }
+            if (geom.vertexFormat & egret3d.VertexFormat.VF_UV1) {
+                this._passUsage.vertexShader.addUseShaderName("attribute_uv1_vs");
+            }
+            if (geom.vertexFormat & egret3d.VertexFormat.VF_SKIN) {
+                this._passUsage.vertexShader.addUseShaderName("attribute_skin_vs");
+            }
+            this._passUsage.fragmentShader.addUseShaderName("materialSource_fs");
+            if (animation) {
+                if (animation.skeletonAnimationController) {
+                    this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
+                    this._passUsage.vertexShader.addUseShaderName("skeleton_vs");
+                }
+                else if (animation.particleAnimationController) {
+                    this._passUsage.vertexShader.addUseShaderName("particle_vs");
+                }
+            }
+            else {
+                this._passUsage.vertexShader.addUseShaderName("diffuse_vs");
+            }
+            if (this._materialData.textureMethodTypes.indexOf(egret3d.TextureMethodType.color) != -1) {
+                this._passUsage.fragmentShader.addUseShaderName("gamma_fs");
+                this._passUsage.fragmentShader.addUseShaderName("diffuse_fragment");
             }
             if (this._materialData.textureMethodTypes.indexOf(egret3d.TextureMethodType.normal) != -1) {
-                this._passUsage.vertexShader.addUseShaderName("");
                 this._passUsage.fragmentShader.addUseShaderName("normalMap_fragment");
-            }
-            if (this._materialData.textureMethodTypes.indexOf(egret3d.TextureMethodType.specular) != -1) {
-                this._passUsage.vertexShader.addUseShaderName("");
-                this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
-            }
-            if (animation) {
-                this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
             }
             if (this.lightGroup) {
                 this._passUsage.maxDirectLight = this.lightGroup.directLightList.length;
                 this._passUsage.maxSpotLight = this.lightGroup.spotLightList.length;
                 this._passUsage.maxPointLight = this.lightGroup.pointLightList.length;
+                this._passUsage.fragmentShader.addUseShaderName("lightingBase_fs");
                 if (this.lightGroup.directLightList.length) {
                     this._passUsage.directLightData = new Float32Array(egret3d.DirectLight.stride * this.lightGroup.directLightList.length);
                     this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
@@ -17699,23 +18119,26 @@ var egret3d;
                     this._passUsage.fragmentShader.addUseShaderName("pointLight_fragment");
                 }
             }
+            if (this._materialData.textureMethodTypes.indexOf(egret3d.TextureMethodType.specular) != -1) {
+                this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
+            }
             if (this.methodList) {
                 for (var i = 0; i < this.methodList.length; i++) {
                     this.methodList[i].materialData = this._materialData;
-                    for (var j = 0; j < this.methodList[i].vsShaderList.length; i++) {
+                    for (var j = 0; j < this.methodList[i].vsShaderList.length; j++) {
                         this._passUsage.vertexShader.addUseShaderName(this.methodList[i].vsShaderList[j]);
                     }
-                    for (var j = 0; j < this.methodList[i].fsShaderList.length; i++) {
-                        this._passUsage.vertexShader.addUseShaderName(this.methodList[i].fsShaderList[j]);
+                    for (var j = 0; j < this.methodList[i].fsShaderList.length; j++) {
+                        this._passUsage.fragmentShader.addUseShaderName(this.methodList[i].fsShaderList[j]);
                     }
                 }
             }
             this._passUsage.vertexShader.addEndShaderName("end_vs");
             this._passUsage.fragmentShader.addEndShaderName("end_fs");
         };
-        MaterialPass.prototype.upload = function (time, delay, context3DProxy, modeltransform, camera3D, animation) {
+        MaterialPass.prototype.upload = function (time, delay, context3DProxy, modeltransform, camera3D, animation, geometry) {
             this._passChange = false;
-            this.initUseMethod(animation);
+            this.initUseMethod(animation, geometry);
             this._passUsage.vertexShader.shader = this._passUsage.vertexShader.getShader(this._passUsage);
             this._passUsage.fragmentShader.shader = this._passUsage.fragmentShader.getShader(this._passUsage);
             this._passUsage.program3D = egret3d.ShaderPool.getProgram(this._passUsage.vertexShader.shader.id, this._passUsage.fragmentShader.shader.id);
@@ -17767,7 +18190,7 @@ var egret3d;
                 this._materialData.materialSourceData[19] = this._materialData.normalScale; //保留
             }
             if (this._passChange) {
-                this.upload(time, delay, context3DProxy, modeltransform, camera3D, animtion);
+                this.upload(time, delay, context3DProxy, modeltransform, camera3D, animtion, subGeometry.geometry);
             }
             context3DProxy.setProgram(this._passUsage.program3D);
             subGeometry.update(time, delay, this._passUsage, context3DProxy);
@@ -17799,6 +18222,9 @@ var egret3d;
             var sampler2D;
             for (var index in this._passUsage.sampler2DList) {
                 sampler2D = this._passUsage.sampler2DList[index];
+                if (!sampler2D.texture) {
+                    continue;
+                }
                 sampler2D.texture.upload(context3DProxy);
                 context3DProxy.setTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index, sampler2D.texture.texture2D);
                 if (this._materialData.materialDataNeedChange) {
@@ -17849,7 +18275,9 @@ var egret3d;
                 context3DProxy.uniformMatrix4fv(this._passUsage.uniform_cameraMatrix.uniformIndex, false, camera3D.modelMatrix.rawData);
             }
             if (animtion) {
-                context3DProxy.uniform1f(this._passUsage.uniform_time.uniformIndex, animtion.time);
+                if (this._passUsage.uniform_time) {
+                    context3DProxy.uniform1f(this._passUsage.uniform_time.uniformIndex, animtion.time);
+                }
                 if (animtion.skeletonAnimationController) {
                     context3DProxy.uniform4fv(this._passUsage.uniform_PoseMatrix.uniformIndex, animtion.skeletonAnimationController.currentSkeletonMatrixData);
                 }
@@ -17894,66 +18322,14 @@ var egret3d;
             _super.apply(this, arguments);
         }
         /**
-       * @language zh_CN
-       * @private
-       * 初始化 UseMethod。
-       * @version Egret 3.0
-       * @platform Web,Native
-       */
-        ColorPass.prototype.initUseMethod = function (animation) {
-            this._passChange = false;
-            var i = 0;
-            this._passUsage = new egret3d.PassUsage();
-            this._materialData.textureMethodTypes.push(egret3d.TextureMethodType.color);
-            this._passUsage.vertexShader.shaderType = egret3d.Shader.vertex;
-            this._passUsage.fragmentShader.shaderType = egret3d.Shader.fragment;
-            this._passUsage.vertexShader.addUseShaderName("base_vs");
-            this._passUsage.fragmentShader.addUseShaderName("base_fs");
-            this._passUsage.fragmentShader.addUseShaderName("materialSource_fs");
-            if (animation) {
-                this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
-                this._passUsage.vertexShader.addUseShaderName("skeleton_vertex");
-            }
-            else {
-                this._passUsage.vertexShader.addUseShaderName("diffuse_vertex");
-            }
-            if (this._materialData.textureMethodTypes.indexOf(egret3d.TextureMethodType.normal) != -1) {
-                this._passUsage.fragmentShader.addUseShaderName("normalMap_fragment");
-            }
-            if (this.lightGroup) {
-                this._passUsage.maxDirectLight = this.lightGroup.directLightList.length;
-                this._passUsage.maxSpotLight = this.lightGroup.spotLightList.length;
-                this._passUsage.maxPointLight = this.lightGroup.pointLightList.length;
-                this._passUsage.fragmentShader.addUseShaderName("lightingBase_fs");
-                if (this.lightGroup.directLightList.length) {
-                    this._passUsage.directLightData = new Float32Array(egret3d.DirectLight.stride * this.lightGroup.directLightList.length);
-                    this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
-                }
-                if (this.lightGroup.spotLightList.length) {
-                    this._passUsage.spotLightData = new Float32Array(egret3d.SpotLight.stride * this.lightGroup.spotLightList.length);
-                    this._passUsage.fragmentShader.addUseShaderName("spotLight_fragment");
-                }
-                if (this.lightGroup.pointLightList.length) {
-                    this._passUsage.pointLightData = new Float32Array(egret3d.PointLight.stride * this.lightGroup.pointLightList.length);
-                    this._passUsage.fragmentShader.addUseShaderName("pointLight_fragment");
-                }
-            }
-            if (this._materialData.textureMethodTypes.indexOf(egret3d.TextureMethodType.specular) != -1) {
-                this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
-            }
-            if (this.methodList) {
-                for (var i = 0; i < this.methodList.length; i++) {
-                    this.methodList[i].materialData = this._materialData;
-                    for (var j = 0; j < this.methodList[i].vsShaderList.length; j++) {
-                        this._passUsage.vertexShader.addUseShaderName(this.methodList[i].vsShaderList[j]);
-                    }
-                    for (var j = 0; j < this.methodList[i].fsShaderList.length; j++) {
-                        this._passUsage.fragmentShader.addUseShaderName(this.methodList[i].fsShaderList[j]);
-                    }
-                }
-            }
-            this._passUsage.vertexShader.addEndShaderName("end_vs");
-            this._passUsage.fragmentShader.addEndShaderName("end_fs");
+        * @language zh_CN
+        * @private
+        * 初始化 UseMethod。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        ColorPass.prototype.initUseMethod = function (animation, geom) {
+            _super.prototype.initUseMethod.call(this, animation, geom);
         };
         return ColorPass;
     }(egret3d.MaterialPass));
@@ -17976,69 +18352,8 @@ var egret3d;
         * @version Egret 3.0
         * @platform Web,Native
         */
-        DiffusePass.prototype.initUseMethod = function (animation) {
-            this._passChange = false;
-            var i = 0;
-            this._passUsage = new egret3d.PassUsage();
-            this._materialData.textureMethodTypes.push(egret3d.TextureMethodType.color);
-            this._passUsage.vertexShader.shaderType = egret3d.Shader.vertex;
-            this._passUsage.fragmentShader.shaderType = egret3d.Shader.fragment;
-            this._passUsage.vertexShader.addUseShaderName("base_vs");
-            this._passUsage.fragmentShader.addUseShaderName("base_fs");
-            this._passUsage.fragmentShader.addUseShaderName("materialSource_fs");
-            if (animation) {
-                if (animation.skeletonAnimationController) {
-                    this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
-                    this._passUsage.vertexShader.addUseShaderName("skeleton_vertex");
-                }
-                else if (animation.particleAnimationController) {
-                    this._passUsage.vertexShader.addUseShaderName("particle_vs");
-                }
-            }
-            else {
-                this._passUsage.vertexShader.addUseShaderName("diffuse_vertex");
-            }
-            if (this._materialData.textureMethodTypes.indexOf(egret3d.TextureMethodType.color) != -1) {
-                this._passUsage.fragmentShader.addUseShaderName("gamma_fs");
-                this._passUsage.fragmentShader.addUseShaderName("diffuse_fragment");
-            }
-            if (this._materialData.textureMethodTypes.indexOf(egret3d.TextureMethodType.normal) != -1) {
-                this._passUsage.fragmentShader.addUseShaderName("normalMap_fragment");
-            }
-            if (this.lightGroup) {
-                this._passUsage.maxDirectLight = this.lightGroup.directLightList.length;
-                this._passUsage.maxSpotLight = this.lightGroup.spotLightList.length;
-                this._passUsage.maxPointLight = this.lightGroup.pointLightList.length;
-                this._passUsage.fragmentShader.addUseShaderName("lightingBase_fs");
-                if (this.lightGroup.directLightList.length) {
-                    this._passUsage.directLightData = new Float32Array(egret3d.DirectLight.stride * this.lightGroup.directLightList.length);
-                    this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
-                }
-                if (this.lightGroup.spotLightList.length) {
-                    this._passUsage.spotLightData = new Float32Array(egret3d.SpotLight.stride * this.lightGroup.spotLightList.length);
-                    this._passUsage.fragmentShader.addUseShaderName("spotLight_fragment");
-                }
-                if (this.lightGroup.pointLightList.length) {
-                    this._passUsage.pointLightData = new Float32Array(egret3d.PointLight.stride * this.lightGroup.pointLightList.length);
-                    this._passUsage.fragmentShader.addUseShaderName("pointLight_fragment");
-                }
-            }
-            if (this._materialData.textureMethodTypes.indexOf(egret3d.TextureMethodType.specular) != -1) {
-                this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
-            }
-            if (this.methodList) {
-                for (var i = 0; i < this.methodList.length; i++) {
-                    this.methodList[i].materialData = this._materialData;
-                    for (var j = 0; j < this.methodList[i].vsShaderList.length; j++) {
-                        this._passUsage.vertexShader.addUseShaderName(this.methodList[i].vsShaderList[j]);
-                    }
-                    for (var j = 0; j < this.methodList[i].fsShaderList.length; j++) {
-                        this._passUsage.fragmentShader.addUseShaderName(this.methodList[i].fsShaderList[j]);
-                    }
-                }
-            }
-            this._passUsage.vertexShader.addEndShaderName("end_vs");
-            this._passUsage.fragmentShader.addEndShaderName("end_fs");
+        DiffusePass.prototype.initUseMethod = function (animation, geom) {
+            _super.prototype.initUseMethod.call(this, animation, geom);
         };
         return DiffusePass;
     }(egret3d.MaterialPass));
@@ -18061,7 +18376,7 @@ var egret3d;
         * @version Egret 3.0
         * @platform Web,Native
         */
-        CubePass.prototype.initUseMethod = function (animation) {
+        CubePass.prototype.initUseMethod = function (animation, geom) {
             this._passChange = false;
             this._materialData.textureMethodTypes.push(egret3d.TextureMethodType.color);
             var i = 0;
@@ -19066,12 +19381,13 @@ var egret3d;
         ValueType[ValueType["cube3D"] = 2] = "cube3D";
         ValueType[ValueType["plane"] = 3] = "plane";
         ValueType[ValueType["sphere"] = 4] = "sphere";
-        ValueType[ValueType["cone"] = 5] = "cone";
-        ValueType[ValueType["triangle"] = 6] = "triangle";
-        ValueType[ValueType["cylinder"] = 7] = "cylinder";
-        ValueType[ValueType["line"] = 8] = "line";
-        ValueType[ValueType["curve"] = 9] = "curve";
-        ValueType[ValueType["beizier"] = 10] = "beizier";
+        ValueType[ValueType["sphere_plane"] = 5] = "sphere_plane";
+        ValueType[ValueType["cone"] = 6] = "cone";
+        ValueType[ValueType["triangle"] = 7] = "triangle";
+        ValueType[ValueType["cylinder"] = 8] = "cylinder";
+        ValueType[ValueType["line"] = 9] = "line";
+        ValueType[ValueType["curve"] = 10] = "curve";
+        ValueType[ValueType["beizier"] = 11] = "beizier";
     })(egret3d.ValueType || (egret3d.ValueType = {}));
     var ValueType = egret3d.ValueType;
     var ValueShape = (function () {
@@ -19185,51 +19501,6 @@ var egret3d;
             return values;
         };
         return PlaneValueShape;
-    }(ValueShape));
-    var SphereValueShape = (function (_super) {
-        __extends(SphereValueShape, _super);
-        function SphereValueShape() {
-            _super.apply(this, arguments);
-        }
-        SphereValueShape.prototype.calculate = function (num) {
-            var parameters = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                parameters[_i - 1] = arguments[_i];
-            }
-            var values = [];
-            return values;
-        };
-        return SphereValueShape;
-    }(ValueShape));
-    var ConeValueShape = (function (_super) {
-        __extends(ConeValueShape, _super);
-        function ConeValueShape() {
-            _super.apply(this, arguments);
-        }
-        ConeValueShape.prototype.calculate = function (num) {
-            var parameters = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                parameters[_i - 1] = arguments[_i];
-            }
-            var values = [];
-            return values;
-        };
-        return ConeValueShape;
-    }(ValueShape));
-    var TriangleValueShape = (function (_super) {
-        __extends(TriangleValueShape, _super);
-        function TriangleValueShape() {
-            _super.apply(this, arguments);
-        }
-        TriangleValueShape.prototype.calculate = function (num) {
-            var parameters = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                parameters[_i - 1] = arguments[_i];
-            }
-            var values = [];
-            return values;
-        };
-        return TriangleValueShape;
     }(ValueShape));
     //圆柱体.以Y轴为高 (parameters = [R, height])
     var CylinderValueShape = (function (_super) {
@@ -19473,25 +19744,16 @@ var egret3d;
         };
         return BezierCurveValueShape;
     }(ValueShape));
-    var CurveVauleShape = (function (_super) {
-        __extends(CurveVauleShape, _super);
-        function CurveVauleShape() {
-            _super.apply(this, arguments);
-        }
-        return CurveVauleShape;
-    }(ValueShape));
-    var BezierValueShape = (function (_super) {
-        __extends(BezierValueShape, _super);
-        function BezierValueShape() {
-            _super.apply(this, arguments);
-        }
-        return BezierValueShape;
-    }(ValueShape));
     var Value = (function () {
         function Value() {
             this.emitter = {};
             this.emitter[ValueType.constValue] = new ConstValueShape();
+            this.emitter[ValueType.line] = new LineValueShape();
+            this.emitter[ValueType.plane] = new PlaneValueShape();
             this.emitter[ValueType.cube3D] = new CubeVector3DValueShape();
+            this.emitter[ValueType.sphere] = new BallValueShape();
+            this.emitter[ValueType.sphere_plane] = new BallSurfaceValueShape();
+            this.emitter[ValueType.cylinder] = new CylinderValueShape();
         }
         Value.calculate = function (count, type, parameters) {
             return Value._instance.emitter[type].calculate(count, parameters);
@@ -19946,6 +20208,47 @@ var egret3d;
         ParticleEmitter.prototype.getEndRot = function () {
             return this.nodeCollection.endRot;
         };
+        /**
+        * @language zh_CN
+        * 设置粒子运动方向 只有重力粒子才有方向
+        * @param dir 粒子运动方向
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        ParticleEmitter.prototype.setDirection = function (dir) {
+            if (this._dir_node) {
+                this._dir_node.direction.copyFrom(dir);
+                this._isChangeBuild = true;
+            }
+        };
+        /**
+        * @language zh_CN
+        * 设置粒子运动方向 只有重力粒子才有方向
+        * @param x X运动方向值
+        * @param y Y运动方向值
+        * @param z Z运动方向值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        ParticleEmitter.prototype.setDirectionXYZ = function (x, y, z) {
+            if (this._dir_node) {
+                this._dir_node.direction.setTo(x, y, z);
+                this._isChangeBuild = true;
+            }
+        };
+        /**
+        * @language zh_CN
+        * 获取粒子运动方向 只有重力粒子才有方向
+        * @returns Vector3D运动方向值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        ParticleEmitter.prototype.getDirection = function () {
+            if (this._dir_node) {
+                return this._dir_node.direction;
+            }
+            return new egret3d.Vector3D();
+        };
         ParticleEmitter.prototype.createNode = function () {
             this._position_node.parameters = [500, 500, 500];
             this._lifecycle_node.startRange = [0, 1000];
@@ -19955,7 +20258,7 @@ var egret3d;
             this.nodeCollection.addNode(this._lifecycle_node);
             this.nodeCollection.addNode(this._dir_node);
             this.nodeCollection.addNode(this._speed_node);
-            this.geometry.vertexFormat = egret3d.VertexFormat.VF_POSITION | egret3d.VertexFormat.VF_NORMAL | egret3d.VertexFormat.VF_UV0 | egret3d.VertexFormat.VF_COLOR;
+            this.geometry.vertexFormat = egret3d.VertexFormat.VF_POSITION | egret3d.VertexFormat.VF_UV0;
             this.nodeCollection.calculate(this.geometry.vertexAttLength);
             this.geometry.vertexAttLength = this.nodeCollection.numberOfVertices;
             this.geometry.vertexSizeInBytes = this.nodeCollection.vertexSizeInBytes;
@@ -20015,7 +20318,7 @@ var egret3d;
         __extends(ParticlePositionNode, _super);
         function ParticlePositionNode() {
             _super.call(this);
-            this.type = egret3d.EmitterType.ET_CUBE;
+            this.type = egret3d.EmitterType.ET_CYLINDER;
             this.parameters = [500, 500, 500];
             var var0 = new egret3d.GLSL.VarRegister();
             var0.name = "attribute_offset";
@@ -20024,8 +20327,22 @@ var egret3d;
         }
         ParticlePositionNode.prototype.getType = function () {
             switch (this.type) {
+                case egret3d.EmitterType.ET_LINE:
+                    return egret3d.ValueType.line;
+                case egret3d.EmitterType.ET_PLANE:
+                    return egret3d.ValueType.plane;
+                case egret3d.EmitterType.ET_CUBE_PLANE:
+                    return egret3d.ValueType.cube3D;
                 case egret3d.EmitterType.ET_CUBE:
                     return egret3d.ValueType.cube3D;
+                case egret3d.EmitterType.ET_SPHERE_PLANE:
+                    return egret3d.ValueType.sphere_plane;
+                case egret3d.EmitterType.ET_SPHERE:
+                    return egret3d.ValueType.sphere;
+                case egret3d.EmitterType.ET_CYLINDER_PLANE:
+                    return egret3d.ValueType.cylinder;
+                case egret3d.EmitterType.ET_CYLINDER:
+                    return egret3d.ValueType.cylinder;
             }
             return egret3d.ValueType.cube3D;
         };
@@ -20146,20 +20463,6 @@ var egret3d;
                     }
                     break;
             }
-            //var positionArray: Vector3D[] = Value.calculate(count, this.type, this.parameters);
-            //var position: Vector3D;
-            //var vertices: number = geometry.vertexCount / count;
-            //var index: number = 0;
-            //for (var i: number = 0; i < count; ++i) {
-            //    position = positionArray[i];
-            //    for (var j: number = 0; j < vertices; ++j) {
-            //        index = i * vertices + j;
-            //        index = index * geometry.vertexAttLength + this.offset;
-            //        geometry.verticesData[index + 0] = position.x - 250;
-            //        geometry.verticesData[index + 1] = position.y - 250;
-            //        geometry.verticesData[index + 2] = position.z - 250;
-            //    }
-            //}
         };
         return ParticleDirectionNode;
     }(egret3d.AnimationNode));
@@ -21198,12 +21501,6 @@ var egret3d;
         function ShaderLib() {
         }
         ShaderLib.lib = {
-            "AOMap_fs": "uniform sampler2D aoTexture ; \n" +
-                "uniform float aoPower ; \n" +
-                "void main(void){ \n" +
-                "float ao = texture2D( aoTexture , varying_uv1 ).x ; \n" +
-                "diffuseColor.xyz *= (ao * aoPower) ; \n" +
-                "} \n",
             "base_fs": "#extension GL_OES_standard_derivatives : enable \n" +
                 "varying vec3 varying_eyeNormal  ; \n" +
                 "varying vec2 varying_uv0; \n" +
@@ -21211,8 +21508,7 @@ var egret3d;
                 "varying vec4 varying_color; \n" +
                 "uniform vec3 uniform_eyepos ; \n" +
                 "uniform mat4 uniform_ViewMatrix ; \n" +
-                "uniform mat4 uniform_ProjectionMatrix; \n" +
-                "vec4 outColor ; \n" +
+                "vec4 outColor; \n" +
                 "vec4 diffuseColor ; \n" +
                 "vec4 specularColor ; \n" +
                 "vec4 ambientColor; \n" +
@@ -21273,13 +21569,13 @@ var egret3d;
                 "gl_FragColor = ref ; \n" +
                 "} \n",
             "cube_vertex": "attribute vec3 attribute_position; \n" +
-                "uniform mat4 uniform_ModelMatrix ; \n" +
-                "uniform mat4 uniform_ViewProjectionMatrix ; \n" +
-                "uniform mat4 uniform_NormalMatrix ; \n" +
+                "uniform mat4 uniform_ModelMatrix; \n" +
+                "uniform mat4 uniform_ViewMatrix; \n" +
+                "uniform mat4 uniform_ProjectionMatrix; \n" +
                 "varying vec3 varying_pos; \n" +
                 "void main(void){ \n" +
                 "varying_pos =  attribute_position; \n" +
-                "gl_Position = uniform_ViewProjectionMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
+                "gl_Position = uniform_ProjectionMatrix * uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
                 "} \n",
             "diffuse_fragment": "uniform sampler2D diffuseTexture; \n" +
                 "vec4 diffuseColor ; \n" +
@@ -21287,8 +21583,7 @@ var egret3d;
                 "diffuseColor = textureLinear(diffuseTexture , uv_0 ); \n" +
                 "} \n",
             "diffuse_vertex": "void main(void){ \n" +
-                "mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
-                "mat3 normalMatrix = transpose( inverse(mat3( modeViewMatrix )) ); \n" +
+                "mat3 normalMatrix = transpose( inverse(mat3( uniform_ProjectionMatrix * uniform_ViewMatrix )) ); \n" +
                 "varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
                 "outPosition = uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
                 "varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
@@ -21334,13 +21629,10 @@ var egret3d;
                 "vec4 ambientColor; \n" +
                 "vec4 light ; \n" +
                 "void main() { \n" +
-                "if( varying_color.w == 0.0){ \n" +
-                "discard; \n" +
-                "} \n" +
                 "diffuseColor.xyz = materialSource.diffuse.xyz * diffuseColor.xyz ; \n" +
                 "outColor.xyz = (ambientColor.xyz + materialSource.ambient.xyz + light.xyz) * diffuseColor.xyz + specularColor.xyz * materialSource.specularScale; \n" +
                 "outColor.w = materialSource.alpha * diffuseColor.w ; \n" +
-                "gl_FragColor = outColor * varying_color; \n" +
+                "gl_FragColor = outColor * varying_color ; \n" +
                 "} \n",
             "end_vs": "vec4 endPosition ; \n" +
                 "void main() { \n" +
@@ -21408,10 +21700,6 @@ var egret3d;
                 "float t = (attenuation - f) / (1.0 - f); \n" +
                 "return max(t, 0.0); \n" +
                 "} \n",
-            "lightMap_fs": "uniform sampler2D lightTexture ; \n" +
-                "void main(void){ \n" +
-                "diffuseColor.xyz *= texture2D( lightTexture , varying_uv1 ).xyz * 2.0 ; \n" +
-                "} \n",
             "materialSource_fs": "struct MaterialSource{ \n" +
                 "vec3 diffuse; \n" +
                 "vec3 ambient; \n" +
@@ -21473,146 +21761,6 @@ var egret3d;
                 "vec3 normalTex = texture2D(normalTexture,uv_0).xyz *2.0 - 1.0; \n" +
                 "normalTex.y *= -1.0; \n" +
                 "normal.xyz = tbn( normalTex.xyz , normal.xyz , normalize(varying_ViewPose.xyz) , uv_0 ) ; \n" +
-                "} \n",
-            "particle_vs": "attribute vec3 attribute_offset; \n" +
-                "attribute vec3 attribute_lifecycle; \n" +
-                "attribute vec3 attribute_direction; \n" +
-                "attribute vec2 attribute_speed; \n" +
-                "uniform mat4 uniform_cameraMatrix; \n" +
-                "uniform float uniform_time; \n" +
-                "uniform float uniform_enableBillboardXYZ; \n" +
-                "uniform vec3 uniform_startColor; \n" +
-                "uniform vec3 uniform_endColor; \n" +
-                "uniform vec3 uniform_startScale; \n" +
-                "uniform vec3 uniform_endScale; \n" +
-                "uniform vec3 uniform_startRot; \n" +
-                "uniform vec3 uniform_endRot; \n" +
-                "const float PI = 3.1415926 ; \n" +
-                "vec4 position; \n" +
-                "float currentTime = 0.0; \n" +
-                "float totalTime = 0.0; \n" +
-                "mat4 buildRotMat4(vec3 rot) \n" +
-                "{ \n" +
-                "mat4 ret = mat4( \n" +
-                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
-                "vec4(0.0, 1.0, 0.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 1.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0) \n" +
-                "); \n" +
-                "float s; \n" +
-                "float c; \n" +
-                "s = sin(rot.x); \n" +
-                "c = cos(rot.x); \n" +
-                "ret *= mat4( \n" +
-                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
-                "vec4(0.0, c, s, 0.0), \n" +
-                "vec4(0.0, -s, c, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0) \n" +
-                "); \n" +
-                "s = sin(rot.y); \n" +
-                "c = cos(rot.y); \n" +
-                "ret *= mat4( \n" +
-                "vec4(c, 0.0, -s, 0.0), \n" +
-                "vec4(0.0, 1.0, 0.0, 0.0), \n" +
-                "vec4(s, 0.0, c, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0) \n" +
-                "); \n" +
-                "s = sin(rot.z); \n" +
-                "c = cos(rot.z); \n" +
-                "ret *= mat4( \n" +
-                "vec4(c, s, 0.0, 0.0), \n" +
-                "vec4(-s, c, 0.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 1.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0) \n" +
-                "); \n" +
-                "return ret; \n" +
-                "} \n" +
-                "void main(void) { \n" +
-                "varying_color = vec4(1.0, 1.0, 1.0, 1.0); \n" +
-                "mat4 billboardMatrix = mat4( \n" +
-                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
-                "vec4(0.0, 1.0, 0.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 1.0, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-                "if (uniform_enableBillboardXYZ == 111.0) \n" +
-                "{ \n" +
-                "billboardMatrix = mat4( \n" +
-                "uniform_cameraMatrix[0], \n" +
-                "uniform_cameraMatrix[1], \n" +
-                "uniform_cameraMatrix[2], \n" +
-                "vec4(0.0, 0.0,1.0, 1.0)); \n" +
-                "} \n" +
-                "else \n" +
-                "{ \n" +
-                "if (mod(uniform_enableBillboardXYZ, 10.0) == 1.0) \n" +
-                "{ \n" +
-                "billboardMatrix *= mat4( \n" +
-                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
-                "vec4(0.0, uniform_cameraMatrix[1].y, uniform_cameraMatrix[1].z, 0.0), \n" +
-                "vec4(0.0, uniform_cameraMatrix[2].y, uniform_cameraMatrix[2].z, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-                "} \n" +
-                "if (mod(uniform_enableBillboardXYZ, 100.0) / 10.0 > 1.0) \n" +
-                "{ \n" +
-                "billboardMatrix *= mat4( \n" +
-                "vec4(uniform_cameraMatrix[0].x, 0.0, uniform_cameraMatrix[0].z, 0.0), \n" +
-                "vec4(0.0, 1.0, 0.0, 0.0), \n" +
-                "vec4(uniform_cameraMatrix[2].x, 0.0, uniform_cameraMatrix[2].z, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-                "} \n" +
-                "if (uniform_enableBillboardXYZ / 100.0 > 1.0) \n" +
-                "{ \n" +
-                "billboardMatrix *= mat4( \n" +
-                "vec4(1.0, 0.0, 0.0, 0.0), \n" +
-                "vec4(0.0, uniform_cameraMatrix[1].y, uniform_cameraMatrix[1].z, 0.0), \n" +
-                "vec4(0.0, uniform_cameraMatrix[2].y, uniform_cameraMatrix[2].z, 0.0), \n" +
-                "vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-                "} \n" +
-                "} \n" +
-                "mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
-                "mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); \n" +
-                "varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
-                "position = vec4(attribute_offset, 1.0); \n" +
-                "outPosition = vec4(attribute_position, 1.0); \n" +
-                "outPosition = billboardMatrix * outPosition; \n" +
-                "totalTime = attribute_lifecycle.x + attribute_lifecycle.y; \n" +
-                "if (attribute_lifecycle.z == 1.0) \n" +
-                "{ \n" +
-                "currentTime = mod(uniform_time, totalTime); \n" +
-                "if (currentTime >= attribute_lifecycle.x && currentTime <= totalTime) \n" +
-                "{ \n" +
-                "currentTime = currentTime - attribute_lifecycle.x; \n" +
-                "} \n" +
-                "else \n" +
-                "{ \n" +
-                "varying_color.w = 0.0; \n" +
-                "} \n" +
-                "} \n" +
-                "else \n" +
-                "{ \n" +
-                "if (uniform_time < attribute_lifecycle.x || uniform_time > totalTime) \n" +
-                "{ \n" +
-                "varying_color.w = 0.0; \n" +
-                "} \n" +
-                "else \n" +
-                "{ \n" +
-                "currentTime = uniform_time - attribute_lifecycle.x; \n" +
-                "} \n" +
-                "} \n" +
-                "if (currentTime > 0.0) \n" +
-                "{ \n" +
-                "float t = currentTime * 0.001; \n" +
-                "float ratio = currentTime / attribute_lifecycle.y; \n" +
-                "position.xyz += attribute_direction * (t * (attribute_speed.x + attribute_speed.y * t)); \n" +
-                "varying_color.xyz += uniform_startColor + (uniform_endColor - uniform_startColor) *  ratio; \n" +
-                "vec3 rot = uniform_startRot + (uniform_endRot - uniform_startRot) *  ratio; \n" +
-                "rot  *= (PI / 180.0); \n" +
-                "position = buildRotMat4(rot) * position; \n" +
-                "} \n" +
-                "position = uniform_ModelMatrix * position; \n" +
-                "outPosition.xyz += position.xyz; \n" +
-                "outPosition = uniform_ViewMatrix * outPosition; \n" +
-                "varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
                 "} \n",
             "pointLight_fragment": "const int max_pointLight = 0 ; \n" +
                 "uniform float uniform_pointLightSource[12*max_pointLight] ; \n" +
@@ -21704,22 +21852,6 @@ var egret3d;
                 "void main(void){ \n" +
                 "specularColor.xyz *= texture2D( specularTexture , uv_0 ).xyz ; \n" +
                 "} \n",
-            "terrainRGBA_fragment": "uniform sampler2D blendMaskTexture ; \n" +
-                "uniform sampler2D splat_0Tex ; \n" +
-                "uniform sampler2D splat_1Tex ; \n" +
-                "uniform sampler2D splat_2Tex ; \n" +
-                "uniform sampler2D splat_3Tex ; \n" +
-                "uniform float uvs[8]; \n" +
-                "void main() { \n" +
-                "vec4 splat_control = texture2D ( blendMaskTexture , varying_uv0 ); \n" +
-                "vec4 cc = vec4(0.0,0.0,0.0,1.0); \n" +
-                "vec2 uv = varying_uv0 ; \n" +
-                "cc.xyz = splat_control.x * texture2D (splat_0Tex, uv * vec2(uvs[0],uvs[1])).xyz ; \n" +
-                "cc.xyz += splat_control.y * texture2D (splat_1Tex, uv * vec2(uvs[2],uvs[3]) ).xyz; \n" +
-                "cc.xyz += splat_control.z * vec4(texture2D (splat_2Tex, uv* vec2(uvs[4],uvs[5]))).xyz; \n" +
-                "cc.xyz += (1.0-length(splat_control.xyz)) * vec4(texture2D (splat_3Tex, uv* vec2(uvs[6],uvs[7]))).xyz; \n" +
-                "diffuseColor.xyz = cc.xyz ; \n" +
-                "} \n",
         };
         return ShaderLib;
     }());
@@ -21737,10 +21869,11 @@ var egret3d;
             this.context = context;
         };
         ShaderPool.getGPUShader = function (shaderType, shaderID, source) {
-            var shader;
-            if (this.vsShaderHashMap.isHas(shaderID))
-                shader = this.vsShaderHashMap.getValue(shaderID);
-            else {
+            var shader = this.vsShaderHashMap.getValue(shaderID);
+            if (!shader) {
+                shader = this.fsShaderHashMap.getValue(shaderID);
+            }
+            if (!shader) {
                 if (shaderType == egret3d.Shader.vertex) {
                     shader = this.context.creatVertexShader(source);
                     shader.id = shaderID;
@@ -24088,7 +24221,7 @@ var egret3d;
             this._console = document.createElement('console');
             document.body.appendChild(this._console);
             this._console.style.color = "red";
-            this._console.style.zIndex = "0";
+            this._console.style.zIndex = "1000";
             this._console.style.position = "absolute";
             this._console.style.top = "10px";
             this._console.style.left = "10px";

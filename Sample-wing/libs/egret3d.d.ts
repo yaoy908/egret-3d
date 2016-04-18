@@ -485,14 +485,34 @@ declare module egret3d {
     /**
      * @private
      * @language zh_CN
-     * 手机朝向
+     * 设备的方向(设备横向持有或纵向持有)。
      * @version Egret 3.0
      * @platform Web,Native
      */
     enum Orientation {
+        /**
+         * 设备纵向持有0°,即纵向主方向。
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         Portrait_Primary = 0,
+        /**
+         * 设备纵向持有180°，即纵向次方向
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         Portrait_Secondary = 180,
+        /**
+         * 设备横向持有-90°,即横向主方向。
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         Landscape_Primary = -90,
+        /**
+        * 设备横向持有90°,即横向次方向。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         Landscape_Secondary = 90,
     }
     /**
@@ -532,7 +552,8 @@ declare module egret3d {
         private _orientation;
         /**
          * @language zh_CN
-         * 获取当前横竖屏枚举值,枚举值为其对应角度
+         * 获取设备的方向枚举值,枚举值为其对应角度
+         * @return {Orientation} 设备的方向枚举值
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -541,12 +562,14 @@ declare module egret3d {
         /**
          * @language zh_CN
          * 获取排除重力影响的加速度
+         * @return {DeviceAcceleration} 加速度,单位是m/s2
          * @version Egret 3.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 设置排除重力影响的加速度
+         * @param deviceAcceleration {DeviceAcceleration} 加速度,单位是m/s2。
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -555,12 +578,14 @@ declare module egret3d {
         /**
         * @language zh_CN
         * 获取受到重力影响的加速度
+        * @return {DeviceAcceleration} 加速度,单位是m/s2
         * @version Egret 3.0
         * @platform Web,Native
         */
         /**
         * @language zh_CN
         * 设置受到重力影响的加速度
+        * @param deviceAcceleration {DeviceAcceleration} 加速度,单位是m/s2。
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -568,13 +593,15 @@ declare module egret3d {
         private _rotationRate;
         /**
          * @language zh_CN
-         * 获取旋转速率
+         * 获取旋转角度的变化速率
+         * @return {DeviceAcceleration} 旋转速率,单位是deg/s。
          * @version Egret 3.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 设置旋转速率
+         * @param deviceRotationRate {DeviceRotationRate} 旋转速率,单位是deg/s。
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -583,12 +610,14 @@ declare module egret3d {
         /**
          * @language zh_CN
          * 获取是否是绝对旋转重力方向
+         * @return {boolean}。
          * @version Egret 3.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 设置是否是绝对旋转重力方向
+         * @param value {boolean}。
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -597,12 +626,14 @@ declare module egret3d {
         /**
          * @language zh_CN
          * 获取Alpha旋转，围绕Z轴旋转，即水平方向旋转
+         * @return {number} 旋转角度。
          * @version Egret 3.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 设置Alpha旋转，围绕Z轴旋转，即水平方向旋转
+         * @param value {number} 旋转角度。
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -611,12 +642,14 @@ declare module egret3d {
         /**
          * @language zh_CN
          * 获取Beta旋转，围绕X轴旋转，即前后方向旋转
+         * @return {number} 旋转角度。
          * @version Egret 3.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 设置Beta旋转，围绕X轴旋转，即前后方向旋转
+         * @param value {number} 旋转角度。
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -625,12 +658,14 @@ declare module egret3d {
         /**
          * @language zh_CN
          * 获取Gamma旋转，围绕Y轴旋转，即左右方向旋转
+         * @return {number} 旋转角度。
          * @version Egret 3.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 设置Gamma旋转，围绕Y轴旋转，即左右方向旋转
+         * @param value {number} 旋转角度。
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -3662,6 +3697,7 @@ declare module egret3d {
 }
 declare module egret3d {
     /**
+     * @private
      * @language zh_CN
      * @class egret3d.EyesMatrix
      * @classdesc
@@ -3702,6 +3738,7 @@ declare module egret3d {
         */
         constructor();
         /**
+        * @private
         * @language zh_CN
         * 数据更新
         * @param matrix 当前相机矩阵
@@ -3848,8 +3885,6 @@ declare module egret3d {
         * 射线方向
         */
         dir: Vector3D;
-        static sdir: Vector3D;
-        static sdir1: Matrix4_4;
         /**
         * @language zh_CN
         * constructor
@@ -8844,8 +8879,8 @@ declare module egret3d {
         private keyUp(e);
         private onWindowsResize(e);
         private onOrientationChange(e);
-        onDeviceMotion(e: DeviceMotionEvent): void;
-        onDeviceOrientation(e: DeviceOrientationEvent): void;
+        private onDeviceMotion(e);
+        private onDeviceOrientation(e);
         private GetSlideAngle(dx, dy);
         /**
         * @language zh_CN
@@ -8862,6 +8897,7 @@ declare module egret3d {
 }
 declare module egret3d {
     /**
+     * @private
      * @language zh_CN
      * @class egret3D.OrientationControler
      * @classdesc
@@ -9483,6 +9519,130 @@ declare module egret3d {
          * @language zh_CN
          */
         dispose(): void;
+    }
+}
+declare module egret3d {
+    /**
+     * @class egret3d.AOMapMethod
+     * @classdesc
+     * AO贴图方法
+     */
+    class FogMethod extends MethodBase {
+        private uniform_globalFog;
+        private _fogColor;
+        private _globalDensity;
+        private _fogStartDistance;
+        private _fogDistanceScale;
+        private _height;
+        private _fogAlpha;
+        /**
+         * @language zh_CN
+         * @param fogType line/exp/expHeightFog
+         */
+        constructor(fogType?: string);
+        fogColor: number;
+        globalDensity: number;
+        fogStartDistance: number;
+        fogHeight: number;
+        fogAlpha: number;
+        /**
+        * @language zh_CN
+        * @param time
+        * @param delay
+        * @param usage
+        * @param materialData
+        * @param geometry
+        * @param context3DProxy
+        * @param modeltransform
+        * @param modeltransform
+        * @param camera3D
+        */
+        upload(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D): void;
+        update(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D): void;
+        /**
+         * @language zh_CN
+         */
+        dispose(): void;
+    }
+}
+declare module egret3d {
+    /**
+    * @private
+    */
+    class UVRollMethod extends MethodBase {
+        private _uvRoll;
+        private _speedU;
+        private _speedV;
+        private _time;
+        private _start;
+        /**
+         * @language zh_CN
+         * @param texture
+         */
+        constructor();
+        speedU: number;
+        speedV: number;
+        start(rest?: boolean): void;
+        stop(): void;
+        /**
+           * @language zh_CN
+           * @param time
+           * @param delay
+           * @param usage
+           * @param materialData
+           * @param geometry
+           * @param context3DProxy
+           * @param modeltransform
+           * @param modeltransform
+           * @param camera3D
+           */
+        upload(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D): void;
+        update(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D): void;
+    }
+}
+declare module egret3d {
+    /**
+    * @private
+    */
+    class UVSpriteSheetMethod extends MethodBase {
+        private _uvSpriteSheet;
+        private _uvRectangle;
+        private _speed;
+        private _time;
+        private _numTime;
+        private _start;
+        private _frameNum;
+        private _row;
+        private _column;
+        private _currentFrame;
+        private frameList;
+        private _change;
+        /**
+         * @language zh_CN
+         * @param texture
+         */
+        constructor(frameNum: number, row: number, column: number, numTime: number);
+        private caculate();
+        numTime: number;
+        frameNum: number;
+        row: number;
+        column: number;
+        start(rest?: boolean): void;
+        stop(): void;
+        /**
+           * @language zh_CN
+           * @param time
+           * @param delay
+           * @param usage
+           * @param materialData
+           * @param geometry
+           * @param context3DProxy
+           * @param modeltransform
+           * @param modeltransform
+           * @param camera3D
+           */
+        upload(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D): void;
+        update(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D): void;
     }
 }
 declare module egret3d {
@@ -10181,21 +10341,21 @@ declare module egret3d {
         * @version Egret 3.0
         * @platform Web,Native
         */
-        initUseMethod(animation: IAnimation): void;
-        upload(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, animation: IAnimation): void;
+        initUseMethod(animation: IAnimation, geom: Geometry): void;
+        upload(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, animation: IAnimation, geometry: Geometry): void;
         draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation): void;
     }
 }
 declare module egret3d {
     class ColorPass extends MaterialPass {
         /**
-       * @language zh_CN
-       * @private
-       * 初始化 UseMethod。
-       * @version Egret 3.0
-       * @platform Web,Native
-       */
-        initUseMethod(animation: IAnimation): void;
+        * @language zh_CN
+        * @private
+        * 初始化 UseMethod。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        initUseMethod(animation: IAnimation, geom: Geometry): void;
     }
 }
 declare module egret3d {
@@ -10211,7 +10371,7 @@ declare module egret3d {
         * @version Egret 3.0
         * @platform Web,Native
         */
-        initUseMethod(animation: IAnimation): void;
+        initUseMethod(animation: IAnimation, geom: Geometry): void;
     }
 }
 declare module egret3d {
@@ -10227,7 +10387,7 @@ declare module egret3d {
         * @version Egret 3.0
         * @platform Web,Native
         */
-        initUseMethod(animation: IAnimation): void;
+        initUseMethod(animation: IAnimation, geom: Geometry): void;
     }
 }
 declare module egret3d {
@@ -10851,12 +11011,13 @@ declare module egret3d {
         cube3D = 2,
         plane = 3,
         sphere = 4,
-        cone = 5,
-        triangle = 6,
-        cylinder = 7,
-        line = 8,
-        curve = 9,
-        beizier = 10,
+        sphere_plane = 5,
+        cone = 6,
+        triangle = 7,
+        cylinder = 8,
+        line = 9,
+        curve = 10,
+        beizier = 11,
     }
     class Value {
         private emitter;
@@ -11176,6 +11337,32 @@ declare module egret3d {
         * @platform Web,Native
         */
         getEndRot(): Vector3D;
+        /**
+        * @language zh_CN
+        * 设置粒子运动方向 只有重力粒子才有方向
+        * @param dir 粒子运动方向
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        setDirection(dir: Vector3D): void;
+        /**
+        * @language zh_CN
+        * 设置粒子运动方向 只有重力粒子才有方向
+        * @param x X运动方向值
+        * @param y Y运动方向值
+        * @param z Z运动方向值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        setDirectionXYZ(x: number, y: number, z: number): void;
+        /**
+        * @language zh_CN
+        * 获取粒子运动方向 只有重力粒子才有方向
+        * @returns Vector3D运动方向值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        getDirection(): Vector3D;
         protected createNode(): void;
         protected build(): void;
         /**
