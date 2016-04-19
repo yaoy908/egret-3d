@@ -93,15 +93,27 @@
 
             var list: Array<string> = new Array<string>();
             var value: string = "";
+            var isE: boolean = false;
             for (var i: number = 0; i < line.length; ++i) {
+                if (isE) {
+                    if (line.charAt(i) == ";") {
+                        isE = false;
+                        if (value.length > 0) {
+                            list.push(value);
+                            value = "";
+                        }
+                        break;
+                    }
+                    value += line.charAt(i);
+                    continue;
+                }
                 if (line.charAt(i) != " " && line.charAt(i) != "\t" && line.charAt(i) != "," &&
-                    line.charAt(i) != "\r" && line.charAt(i) != "\n") {
+                    line.charAt(i) != "\r" && line.charAt(i) != "\n" && line.charAt(i) != ":") {
                     if (line.charAt(i) == ";") {
                         if (value.length > 0) {
                             list.push(value);
                             value = "";
                         }
-                        list.push(";");
                         break;
                     }
                     else if (line.charAt(i) == "=") {
@@ -110,6 +122,7 @@
                             value = "";
                         }
                         list.push("=");
+                        isE = true;
                         continue;
                     }
 
@@ -136,15 +149,15 @@
          * @param str 比较字符串
          * @returns 成功返回true
          */
-        public static  hasString(fields: Array<string>, str: string): boolean {
+        public static  hasString(fields: Array<string>, str: string): number {
 
             for (var i: number = 0; i < fields.length; ++i) {
                 if (fields[i] == str) {
-                    return true;
+                    return i;
                 }
             }
 
-            return false;
+            return -1;
         }
 
         /**
@@ -155,15 +168,18 @@
          */
         public static  getVarName(fields: Array<string>): string {
 
-            var equal: boolean = this.hasString(fields, "=");
-            if (equal) {
-                if (fields.length - 4 >= 0 && fields.length - 4 < fields.length) {
-                    return fields[fields.length - 4];
+            var index: number = this.hasString(fields, "=");
+            if (index >= 0) {
+                index -= 1;
+                if (index >= 0 && index < fields.length) {
+                    return fields[index];
                 }
-                return ""
             }
-            if (fields.length - 2 >= 0 && fields.length - 2 < fields.length) {
-                return fields[fields.length - 2];
+            else {
+                index = fields.length - 1;
+                if (index >= 0 && index < fields.length) {
+                    return fields[index];
+                }
             }
             return "";
         }
@@ -176,10 +192,11 @@
          */
         public static  getVarValue(fields: Array<string>): string {
 
-            var equal: boolean = this.hasString(fields, "=");
-            if (equal) {
-                if (fields.length - 2 >= 0 && fields.length - 2 < fields.length) {
-                    return fields[fields.length - 2];
+            var index: number = this.hasString(fields, "=");
+            if (index >= 0) {
+                index += 1;
+                if (index >= 0 && index < fields.length) {
+                    return fields[index];
                 }
             }
             return "";
@@ -193,16 +210,18 @@
          */
         public static getVarType(fields: Array<string>): string {
 
-            var equal: boolean = this.hasString(fields, "=");
-            if (equal) {
-                if (fields.length - 5 >= 0 && fields.length - 5 < fields.length) {
-                    return fields[fields.length - 5];
+            var index: number = this.hasString(fields, "=");
+            if (index >= 0) {
+                index -= 2;
+                if (index >= 0 && index < fields.length) {
+                    return fields[index];
                 }
-                return "";
             }
-
-            if (fields.length - 3 >= 0 && fields.length - 3 < fields.length) {
-                return fields[fields.length - 3];
+            else {
+                index = fields.length - 2;
+                if (index >= 0 && index < fields.length) {
+                    return fields[index];
+                }
             }
             return "";
         }
@@ -215,18 +234,18 @@
          */
         public static getVarKey(fields: Array<string>): string {
 
-            var equal: boolean = this.hasString(fields, "=");
-            if (equal) {
-                if (fields.length > 5) {
-                    return fields[0];
-                }
-                else {
-                    return "";
+            var index: number = this.hasString(fields, "=");
+            if (index >= 0) {
+                index -= 3;
+                if (index >= 0 && index < fields.length) {
+                    return fields[index];
                 }
             }
-
-            if (fields.length > 3) {
-                return fields[0];
+            else {
+                index = fields.length - 3;
+                if (index >= 0 && index < fields.length) {
+                    return fields[index];
+                }
             }
             return "";
         }
@@ -383,6 +402,7 @@
             tmpName = StringUtil.getVarName(tempArray);
             valueType = StringUtil.getVarType(tempArray);
             tmpVar = new GLSL.TmpVar(tmpName, valueType);
+            tmpVar.value = StringUtil.getVarValue(tempArray);
             return tmpVar;
         }
         

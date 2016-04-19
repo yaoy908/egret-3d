@@ -335,7 +335,11 @@
         * @param tempVar 
         */
         private static connectTemp(tempVar: GLSL.TmpVar): string {
-           return tempVar.valueType + " " + tempVar.name + "; \r\n";
+
+            if (tempVar.value != "") {
+                return tempVar.valueType + " " + tempVar.name + " = " + tempVar.value + "; \r\n";
+            }
+            return tempVar.valueType + " " + tempVar.name + "; \r\n";
         }
 
         /**

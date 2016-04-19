@@ -13,6 +13,50 @@ module egret3d {
 			"diffuseColor.xyz *= (ao * aoPower) ; \n" +
 			"} \n",
 
+			"attribute_color_vs":
+			"attribute vec4 attribute_color; \n" +
+			"void main(void){ \n" +
+			"e_color = attribute_color; \n" +
+			"} \n",
+
+			"attribute_normal_vs":
+			"attribute vec3 attribute_normal; \n" +
+			"void main(void){ \n" +
+			"e_normal = attribute_normal; \n" +
+			"} \n",
+
+			"attribute_position_vs":
+			"attribute vec3 attribute_position; \n" +
+			"void main(void){ \n" +
+			"e_position = attribute_position; \n" +
+			"} \n",
+
+			"attribute_skin_vs":
+			"attribute vec4 attribute_boneIndex; \n" +
+			"attribute vec4 attribute_boneWeight; \n" +
+			"void main(void){ \n" +
+			"e_boneIndex = attribute_boneIndex; \n" +
+			"e_boneWeight = attribute_boneWeight; \n" +
+			"} \n",
+
+			"attribute_tangent_vs":
+			"attribute vec3 attribute_tangent; \n" +
+			"void main(void){ \n" +
+			"e_tangent = attribute_tangent; \n" +
+			"} \n",
+
+			"attribute_uv0_vs":
+			"attribute vec2 attribute_uv0; \n" +
+			"void main(void){ \n" +
+			"e_uv0 = attribute_uv0; \n" +
+			"} \n",
+
+			"attribute_uv1_vs":
+			"attribute vec2 attribute_uv1; \n" +
+			"void main(void){ \n" +
+			"e_uv1 = attribute_uv1; \n" +
+			"} \n",
+
 			"base_fs":
 			"#extension GL_OES_standard_derivatives : enable \n" +
 			"varying vec3 varying_eyeNormal  ; \n" +
@@ -44,10 +88,14 @@ module egret3d {
 			"} \n",
 
 			"base_vs":
-			"attribute vec3 attribute_position ; \n" +
-			"attribute vec3 attribute_normal ; \n" +
-			"attribute vec2 attribute_uv0 ; \n" +
-			"attribute vec4 attribute_color ; \n" +
+			"vec3 e_position = vec3(0.0, 0.0, 0.0); \n" +
+			"vec3 e_normal = vec3(0.0, 0.0, 0.0); \n" +
+			"vec3 e_tangent = vec3(0.0, 0.0, 0.0); \n" +
+			"vec4 e_color = vec4(1.0, 1.0, 1.0, 1.0); \n" +
+			"vec2 e_uv0 = vec2(0.0, 0.0); \n" +
+			"vec2 e_uv1 = vec2(0.0, 0.0); \n" +
+			"vec4 e_boneIndex = vec4(0.0, 0.0, 0.0, 0.0); \n" +
+			"vec4 e_boneWeight = vec4(0.0, 0.0, 0.0, 0.0); \n" +
 			"uniform mat4 uniform_ModelMatrix ; \n" +
 			"uniform mat4 uniform_ViewMatrix ; \n" +
 			"uniform mat4 uniform_ProjectionMatrix ; \n" +
@@ -74,8 +122,8 @@ module egret3d {
 			"b21, (-a21 * a00 + a01 * a20), (a11 * a00 - a01 * a10)) / det; \n" +
 			"} \n" +
 			"void main(void){ \n" +
-			"varying_color = attribute_color; \n" +
-			"varying_uv0 = attribute_uv0; \n" +
+			"varying_color = e_color; \n" +
+			"varying_uv0 = e_uv0; \n" +
 			"} \n",
 
 			"cube_fragment":
@@ -115,8 +163,8 @@ module egret3d {
 			"void main(void){ \n" +
 			"mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
 			"mat3 normalMatrix = transpose( inverse(mat3( modeViewMatrix )) ); \n" +
-			"varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
-			"outPosition = uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
+			"varying_eyeNormal = normalize(normalMatrix * -e_normal); \n" +
+			"outPosition = uniform_ViewMatrix * uniform_ModelMatrix * vec4(e_position, 1.0) ; \n" +
 			"varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
 			"} \n",
 
@@ -483,9 +531,9 @@ module egret3d {
 			"} \n" +
 			"mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
 			"mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); \n" +
-			"varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
+			"varying_eyeNormal = normalize(normalMatrix * -e_normal); \n" +
 			"position = vec4(attribute_offset, 1.0); \n" +
-			"outPosition = vec4(attribute_position, 1.0); \n" +
+			"outPosition = vec4(e_position, 1.0); \n" +
 			"outPosition = billboardMatrix * outPosition; \n" +
 			"totalTime = attribute_lifecycle.x + attribute_lifecycle.y; \n" +
 			"if (attribute_lifecycle.z == 1.0) \n" +
@@ -571,8 +619,6 @@ module egret3d {
 			"} \n",
 
 			"skeleton_vertex":
-			"attribute vec4 attribute_boneIndex ; \n" +
-			"attribute vec4 attribute_boneWeight ; \n" +
 			"const int bonesNumber = 0; \n" +
 			"uniform vec4 uniform_PoseMatrix[bonesNumber]; \n" +
 			"uniform mat4 uniform_ModelMatrix ; \n" +
@@ -596,21 +642,21 @@ module egret3d {
 			"); \n" +
 			"} \n" +
 			"void main(void){ \n" +
-			"vec4 temp_position = vec4(attribute_position, 1.0) ; \n" +
-			"vec4 temp_normal = vec4(attribute_normal, 0.0) ; \n" +
-			"mat4 m0 = buildMat4(int(attribute_boneIndex.x)); \n" +
-			"mat4 m1 = buildMat4(int(attribute_boneIndex.y)); \n" +
-			"mat4 m2 = buildMat4(int(attribute_boneIndex.z)); \n" +
-			"mat4 m3 = buildMat4(int(attribute_boneIndex.w)); \n" +
-			"outPosition = m0 * temp_position * attribute_boneWeight.x; \n" +
-			"outPosition += m1 * temp_position * attribute_boneWeight.y; \n" +
-			"outPosition += m2 * temp_position * attribute_boneWeight.z; \n" +
-			"outPosition += m3 * temp_position * attribute_boneWeight.w; \n" +
+			"vec4 temp_position = vec4(e_position, 1.0) ; \n" +
+			"vec4 temp_normal = vec4(e_normal, 0.0) ; \n" +
+			"mat4 m0 = buildMat4(int(e_boneIndex.x)); \n" +
+			"mat4 m1 = buildMat4(int(e_boneIndex.y)); \n" +
+			"mat4 m2 = buildMat4(int(e_boneIndex.z)); \n" +
+			"mat4 m3 = buildMat4(int(e_boneIndex.w)); \n" +
+			"outPosition = m0 * temp_position * e_boneWeight.x; \n" +
+			"outPosition += m1 * temp_position * e_boneWeight.y; \n" +
+			"outPosition += m2 * temp_position * e_boneWeight.z; \n" +
+			"outPosition += m3 * temp_position * e_boneWeight.w; \n" +
 			"vec4 temp_n ; \n" +
-			"temp_n = m0 * temp_normal * attribute_boneWeight.x; \n" +
-			"temp_n += m1 * temp_normal * attribute_boneWeight.y; \n" +
-			"temp_n += m2 * temp_normal * attribute_boneWeight.z; \n" +
-			"temp_n += m3 * temp_normal * attribute_boneWeight.w; \n" +
+			"temp_n = m0 * temp_normal * e_boneWeight.x; \n" +
+			"temp_n += m1 * temp_normal * e_boneWeight.y; \n" +
+			"temp_n += m2 * temp_normal * e_boneWeight.z; \n" +
+			"temp_n += m3 * temp_normal * e_boneWeight.w; \n" +
 			"mat3 normalMatrix = transpose( inverse(mat3(uniform_ProjectionMatrix * uniform_ViewMatrix))); \n" +
 			"varying_eyeNormal = normalize(normalMatrix * -temp_n.xyz); \n" +
 			"outPosition = uniform_ViewMatrix * uniform_ModelMatrix * outPosition; \n" +
@@ -661,7 +707,7 @@ module egret3d {
 			"vertexPos_vs":
 			"varying vec4 varying_pos; \n" +
 			"void main() { \n" +
-			"varying_pos = uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
+			"varying_pos = uniform_ModelMatrix * vec4(e_position, 1.0) ; \n" +
 			"} \n" +
 			"                       \n",
 
