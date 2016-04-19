@@ -81,9 +81,9 @@
             Input.addEventListener(KeyEvent3D.KEY_UP, this.keyUp, this);
             Input.addEventListener(KeyEvent3D.KEY_DOWN, this.keyDown, this);
 
+            Input.addEventListener(TouchEvent3D.TOUCH_END, this.touchUp, this);
             Input.addEventListener(TouchEvent3D.TOUCH_START, this.touchDown, this);
-            Input.addEventListener(TouchEvent3D.TOUCH_END, this.touchDown, this);
-            Input.addEventListener(TouchEvent3D.TOUCH_MOVE, this.touchDown, this);
+            Input.addEventListener(TouchEvent3D.TOUCH_MOVE, this.touchMove, this);
         }
 
         private mouseMove(m: MouseEvent3D) {
