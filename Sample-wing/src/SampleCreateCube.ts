@@ -58,7 +58,7 @@ class SampleCreateCube extends SampleBase {
         ///@param target 目标的位置
         this._view3D.camera3D.lookAt(new egret3d.Vector3D(0,0,-1000),new egret3d.Vector3D(0,0,0));
         ///View3D的背景色设置
-        this._view3D.backColor = 0xff000000;
+        this._view3D.backColor = 0xffffffff;
         ///将View3D添加进Canvas中
         this._egret3DCanvas.addView3D(this._view3D);
         ///创建颜色材质
@@ -69,6 +69,7 @@ class SampleCreateCube extends SampleBase {
         this._cube = new egret3d.Mesh(geometery,mat);
         ///将mesh插入view3D
         this._view3D.addChild3D(this._cube);
+
         ///启动Canvas。
         this._egret3DCanvas.start();
         ///注册每帧更新，让cube进行旋转

@@ -57,7 +57,7 @@ class SampleUvRoll extends SampleBase {
         ///@param target 目标的位置
         this._view3D.camera3D.lookAt(new egret3d.Vector3D(0,0,-1000),new egret3d.Vector3D(0,0,0));
         ///View3D的背景色设置
-        this._view3D.backColor = 0xff000000;
+        this._view3D.backColor = 0xffffffff;
         ///将View3D添加进Canvas中
         this._egret3DCanvas.addView3D(this._view3D);
         ///启动Canvas。
@@ -74,8 +74,6 @@ class SampleUvRoll extends SampleBase {
         this.matPlane = new egret3d.TextureMaterial();
         ///纹理重复采样的方式开关
         this.matPlane.repeat = true;
-        ///混合模式
-        this.matPlane.blendMode = egret3d.BlendMode.ADD;
         var plane = new egret3d.Mesh(new egret3d.PlaneGeometry(1000,1000,10,10,1,1),this.matPlane);
         this._view3D.addChild3D(plane);
         ///读取纹理
