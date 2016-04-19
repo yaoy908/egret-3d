@@ -1,11 +1,12 @@
 /**
  * @language zh_CN
  * @classdesc
- * 正反面设置使用示例 
+ * UV序列帧动画使用示例
  * @version Egret 3.0
  * @platform Web,Native
  */
-class SampleCullMode extends SampleBase {
+class SampleUvSpriteSheet extends SampleBase {
+
     /**
     * Canvas操作对象
     * @version Egret 3.0
@@ -18,22 +19,20 @@ class SampleCullMode extends SampleBase {
     * @platform Web,Native
     */
     protected _view3D: egret3d.View3D;
+
     /**
-    * 立方体对象
+    * 面片纹理
     * @version Egret 3.0
     * @platform Web,Native
     */
-    protected _cube: egret3d.Mesh;
+    protected matPlane: egret3d.TextureMaterial;
+
     /**
-    * look at 摄像机控制器 。</p>
-    * 指定摄像机看向的目标对象。</p>
-    * 1.按下鼠标左键并移动鼠标可以使摄像机绕着目标进行旋转。</p>
-    * 2.按下键盘的(w s a d) 可以摄像机(上 下 左 右)移动。</p>
-    * 3.滑动鼠标滚轮可以控制摄像机的视距。</p>
+    * 摄像机控制器 ,实现摄像机平滑移动
     * @version Egret 3.0
     * @platform Web,Native
     */
-    private cameraCtl: egret3d.LookAtController;
+    protected ctl: egret3d.HoverController;
 
     public constructor() {
 
@@ -61,29 +60,48 @@ class SampleCullMode extends SampleBase {
         this._view3D.backColor = 0xffffffff;
         ///将View3D添加进Canvas中
         this._egret3DCanvas.addView3D(this._view3D);
-        ///创建颜色材质
-        var mat: egret3d.TextureMaterial = new egret3d.TextureMaterial();
-        ///设置正反面
-        mat.cullMode = egret3d.ContextConfig.FRONT;
-
-        ///创建立方体对象
-        var geometery: egret3d.CubeGeometry = new egret3d.CubeGeometry();
-        ///通过材质和立方体对象生成Mesh
-        this._cube = new egret3d.Mesh(geometery,mat);
-
-        ///将mesh插入view3D
-        this._view3D.addChild3D(this._cube);
         ///启动Canvas。
         this._egret3DCanvas.start();
-        ///注册每帧更新，让cube进行旋转
-        this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME,this.update,this);
+        ///设置window resize事件
+        egret3d.Input.addEventListener(egret3d.Event3D.RESIZE,this.OnWindowResize,this);
 
-        this.InitCameraCtl();
+        ///初始化摄像机控制器
+        this.ctl = new egret3d.HoverController(this._view3D.camera3D);
+        this.ctl.tiltAngle = 60;
+        this.ctl.distance = 1000;
+
+        ///添加面片
+        this.matPlane = new egret3d.TextureMaterial();
+        var plane = new egret3d.Mesh(new egret3d.PlaneGeometry(1000,1000,10,10,1,1),this.matPlane);
+        this._view3D.addChild3D(plane);
+
+        ///UV序列帧动画
+        var uvSpriteSheetMethod: egret3d.UVSpriteSheetMethod = new egret3d.UVSpriteSheetMethod(34,6,6,3.0);
+        ///添加渲染方式
+        this.matPlane.diffusePass.addMethod(uvSpriteSheetMethod);
+        ///抗锯齿设置
+        this.matPlane.smooth = false;
+        ///开始播放
+        uvSpriteSheetMethod.start(true);
+
+        ///加载纹理资源
+        var loadDiffuse: egret3d.URLLoader = new egret3d.URLLoader();
+        loadDiffuse.addEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onLoadDiffuse,this);
+        loadDiffuse.load("resource/squen/test1.png");
 
         this.CloseLoadingView();
 
-        ///设置window resize事件
-        egret3d.Input.addEventListener(egret3d.Event3D.RESIZE,this.OnWindowResize,this);
+        this._egret3DCanvas.addEventListener(egret3d.Event3D.ENTER_FRAME,this.update,this);
+    }
+
+    /**
+    * @language zh_CN        
+    * 读取纹理回调
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    protected onLoadDiffuse(e: egret3d.LoaderEvent3D) {
+        this.matPlane.diffuseTexture = e.loader.data;
     }
 
     /**
@@ -100,22 +118,7 @@ class SampleCullMode extends SampleBase {
         this._view3D.height = window.innerHeight;
     }
 
-    /**
-    * @language zh_CN        
-    * 初始化相机控制
-    * @version Egret 3.0
-    * @platform Web,Native
-    */
-    private InitCameraCtl() {
-        ///摄像机控制类
-        this.cameraCtl = new egret3d.LookAtController(this._view3D.camera3D,new egret3d.Object3D());
-        ///设置目标和相机的距离
-        this.cameraCtl.distance = 500;
-        ///设置相机x轴旋转
-        this.cameraCtl.rotationX = 60;
-    }
-
     public update(e: egret3d.Event3D) {
-        this.cameraCtl.update();
+        this.ctl.update();
     }
 }    

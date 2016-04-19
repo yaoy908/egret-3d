@@ -53,7 +53,7 @@ class SampleDeviceOrientation extends SampleBase {
         ///@param target 目标的位置
         this._view3D.camera3D.lookAt(new egret3d.Vector3D(0,0,-1000),new egret3d.Vector3D(0,0,0));
         ///View3D的背景色设置
-        this._view3D.backColor = 0xff000000;
+        this._view3D.backColor = 0xffffffff;
         ///将View3D添加进Canvas中
         this._egret3DCanvas.addView3D(this._view3D);
 
@@ -67,7 +67,7 @@ class SampleDeviceOrientation extends SampleBase {
         this._view3D.addChild3D(this._cube);
 
         ///生成背景板
-        var mat_1: egret3d.ColorMaterial = new egret3d.ColorMaterial(0xffffffff);
+        var mat_1: egret3d.ColorMaterial = new egret3d.ColorMaterial(0xff000000);
         var geometery_1: egret3d.PlaneGeometry = new egret3d.PlaneGeometry(400,400);
         var plane = new egret3d.Mesh(geometery_1,mat_1);
         plane.z = 300;

@@ -1,7 +1,4 @@
-﻿attribute vec4 attribute_boneIndex ;
-attribute vec4 attribute_boneWeight ;
-
-const int bonesNumber = 0;
+﻿const int bonesNumber = 0;
 uniform vec4 uniform_PoseMatrix[bonesNumber];
 uniform mat4 uniform_ModelMatrix ;
 
@@ -32,24 +29,24 @@ mat4 buildMat4(int index){
 }
 
 void main(void){
-	vec4 temp_position = vec4(attribute_position, 1.0) ;
-	vec4 temp_normal = vec4(attribute_normal, 0.0) ;
+	vec4 temp_position = vec4(e_position, 1.0) ;
+	vec4 temp_normal = vec4(e_normal, 0.0) ;
 
-	mat4 m0 = buildMat4(int(attribute_boneIndex.x));
-	mat4 m1 = buildMat4(int(attribute_boneIndex.y));
-	mat4 m2 = buildMat4(int(attribute_boneIndex.z));
-	mat4 m3 = buildMat4(int(attribute_boneIndex.w));
+	mat4 m0 = buildMat4(int(e_boneIndex.x));
+	mat4 m1 = buildMat4(int(e_boneIndex.y));
+	mat4 m2 = buildMat4(int(e_boneIndex.z));
+	mat4 m3 = buildMat4(int(e_boneIndex.w));
 
-	outPosition = m0 * temp_position * attribute_boneWeight.x;
-	outPosition += m1 * temp_position * attribute_boneWeight.y;
-	outPosition += m2 * temp_position * attribute_boneWeight.z;
-	outPosition += m3 * temp_position * attribute_boneWeight.w;
+	outPosition = m0 * temp_position * e_boneWeight.x;
+	outPosition += m1 * temp_position * e_boneWeight.y;
+	outPosition += m2 * temp_position * e_boneWeight.z;
+	outPosition += m3 * temp_position * e_boneWeight.w;
 
 	vec4 temp_n ;
-	temp_n = m0 * temp_normal * attribute_boneWeight.x;
-	temp_n += m1 * temp_normal * attribute_boneWeight.y;
-	temp_n += m2 * temp_normal * attribute_boneWeight.z;
-	temp_n += m3 * temp_normal * attribute_boneWeight.w;
+	temp_n = m0 * temp_normal * e_boneWeight.x;
+	temp_n += m1 * temp_normal * e_boneWeight.y;
+	temp_n += m2 * temp_normal * e_boneWeight.z;
+	temp_n += m3 * temp_normal * e_boneWeight.w;
 
     mat3 normalMatrix = transpose( inverse(mat3(uniform_ProjectionMatrix * uniform_ViewMatrix))); 
     varying_eyeNormal = normalize(normalMatrix * -temp_n.xyz);

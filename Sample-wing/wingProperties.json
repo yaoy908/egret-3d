@@ -55,6 +55,16 @@
 					"isFolder":false,
 					"key":"resource/white.jpg",
 					"name":"white.jpg"
+				},
+				{
+					"isFolder":false,
+					"key":"resource/effect/Lava_05.png",
+					"name":"Lava_05.png"
+				},
+				{
+					"isFolder":false,
+					"key":"resource/squen/test1.png",
+					"name":"test1.png"
 				}
 			]
 		}

@@ -21,6 +21,7 @@
         constructor(material: MaterialBase, width:number = 100, height:number = 100) {
             super(null, material);
             this.geometry = new PlaneGeometry(width, height);
+            this.bound = this.buildBoundBox();
         }
 
         /**

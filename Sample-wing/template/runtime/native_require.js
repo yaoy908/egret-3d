@@ -24,6 +24,7 @@ var game_file_list = [
 	"bin-debug/SampleStaticModel.js",
 	"bin-debug/SampleTextureCube.js",
 	"bin-debug/SampleUvRoll.js",
+	"bin-debug/SampleUvSpriteSheet.js",
 	"bin-debug/SampleView3D.js",
 	//----auto game_file_list end----
 ];

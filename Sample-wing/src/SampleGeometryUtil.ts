@@ -56,7 +56,7 @@ class SampleGeometryUtil extends SampleBase {
         ///@param target 目标的位置
         this._view3D.camera3D.lookAt(new egret3d.Vector3D(0,0,-1000),new egret3d.Vector3D(0,0,0));
         ///View3D的背景色设置
-        this._view3D.backColor = 0xff000000;
+        this._view3D.backColor = 0xffffffff;
         ///将View3D添加进Canvas中
         this._egret3DCanvas.addView3D(this._view3D);
         ///生成立方体
@@ -116,7 +116,7 @@ class SampleGeometryUtil extends SampleBase {
     private CreateCube(): egret3d.Mesh {
 
         ///创建颜色材质
-        var mat: egret3d.ColorMaterial = new egret3d.ColorMaterial(0xff0000);
+        var mat: egret3d.TextureMaterial = new egret3d.TextureMaterial();
         ///获取几何对象
         var ge: egret3d.Geometry = this.CreateGeometry();
         ///创建mesh
@@ -168,7 +168,11 @@ class SampleGeometryUtil extends SampleBase {
         verticesColor.push(1,1,1,1);
         ///定点第一uv
         var verticesUV0: Array<number> = new Array<number>();
-        verticesUV0.push(0.0,0.0);
+        verticesUV0.push(
+            1.0,0.0,
+            1.0,1.0,
+            0.0,1.0
+        );
         ///定点第二uv
         var verticesUV1: Array<number> = new Array<number>();
         verticesUV1.push(0.0,0.0);
@@ -179,7 +183,7 @@ class SampleGeometryUtil extends SampleBase {
             ge.verticesData.push(verticesNormal[0],verticesNormal[1],verticesNormal[2]);
             ge.verticesData.push(verticesTangent[0],verticesTangent[1],verticesTangent[2]);
             ge.verticesData.push(verticesColor[0],verticesColor[1],verticesColor[2],verticesColor[3]);
-            ge.verticesData.push(verticesUV0[0],verticesUV0[1]);
+            ge.verticesData.push(verticesUV0[i % 3],verticesUV0[i % 3]);
             ge.verticesData.push(verticesUV1[0],verticesUV1[1]);
         }
 

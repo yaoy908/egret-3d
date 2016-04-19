@@ -144,6 +144,7 @@
             this.particleType = ParticleType.PT_RANGE;
 
             this.build();
+
         }
 
                 

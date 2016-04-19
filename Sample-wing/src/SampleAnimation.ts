@@ -86,9 +86,9 @@ class SampleAnimation extends SampleBase {
         ///当前对象对视位置,其参数依次为:
         ///@param pos 对象的位置
         ///@param target 目标的位置
-        this._view3D.camera3D.lookAt(new egret3d.Vector3D(0,0,1000),new egret3d.Vector3D(10,20,30));
+        this._view3D.camera3D.lookAt(new egret3d.Vector3D(0,0,1000),new egret3d.Vector3D(0,0,0));
         ///View3D的背景色设置
-        this._view3D.backColor = 0xff000000;
+        this._view3D.backColor = 0xffffffff;
         ///将View3D添加进Canvas中
         this._egret3DCanvas.addView3D(this._view3D);
 
@@ -142,9 +142,9 @@ class SampleAnimation extends SampleBase {
         ///摄像机控制类
         this.cameraCtl = new egret3d.LookAtController(this._view3D.camera3D,new egret3d.Object3D());
         ///设置目标和相机的距离
-        this.cameraCtl.distance = 1000;
+        this.cameraCtl.distance = 300;
         ///设置相机x轴旋转
-        this.cameraCtl.rotationX = 60;
+        this.cameraCtl.rotationX = 0;
     }
 
     /**
@@ -171,6 +171,8 @@ class SampleAnimation extends SampleBase {
         }
 
         this.model.material.lightGroup = this.lights;
+
+        this.model.y = -100;
 
         ///插入model
         this._view3D.addChild3D(this.model);
