@@ -381,7 +381,7 @@
         }
 
         protected onUpdateTransform() {
-            this._viewMatrix.copyFrom(this._modeMatrix3D);
+            this._viewMatrix.copyFrom(this._modelMatrix3D);
             this._viewMatrix.invert();
         }
 
@@ -548,7 +548,7 @@
             target.y = (this._halfh - (this.viewPort.height - n.y)) / this._halfh;
 
             this.unproject(target.x, target.y, n.z, target);
-            this.sceneTransform.transformVector(target, target);
+            this.modelMatrix.transformVector(target, target);
 
             return target; 
         }

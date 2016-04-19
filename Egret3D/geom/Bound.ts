@@ -46,7 +46,7 @@
         * @returns 变换矩阵 
         */
         public get transform(): Matrix4_4 {
-            return this.owner.sceneTransform;
+            return this.owner.modelMatrix;
         }
 
 
