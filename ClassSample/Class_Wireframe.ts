@@ -18,77 +18,22 @@
             this.cameraCtl.distance = 1000;
             this.cameraCtl.rotationX = 60;
 
+            var wir: egret3d.Wireframe = new egret3d.Wireframe();
+            wir.material.diffuseColor = 0xffff00;
+            this.view1.addChild3D(wir);
 
-
-            var cubeVer = [
-                -100, 100, -100, 1.0, 0.0, 0.0, 1.0,       // 0
-                100, 100, -100, 0.0, 1.0, 0.0, 1.0,     // 1
-                -100, -100, -100, 0.0, 0.0, 1.0, 1.0,     // 2
-                100, -100, -100, 1.0, 0.0, 0.0, 1.0,     // 3
-
-                -100, 100, 100, 0.0, 1.0, 0.0, 1.0,     // 4
-                100, 100, 100, 0.0, 0.0, 1.0, 1.0,         // 5
-                -100, -100, 100, 1.0, 0.0, 0.0, 1.0,   // 6
-                100, -100, 100, 0.0, 1.0, 0.0, 1.0,     // 7
-            ];
-
-            var cubeLineInx = [
-                0, 1, 1, 3,    // 前
-                0, 2, 2, 3,
-
-                4, 6, 6, 7,    // 后
-                4, 5, 5, 7,
-
-                0, 4, 0, 1,    // 上
-                4, 5, 1, 5,
-
-                2, 3, 3, 7,    // 下    
-                6, 7, 2, 6,
-
-                0, 4, 4, 6,    // 左
-                0, 2, 6, 2,
-
-                3, 7, 1, 3,    // 右
-                1, 5, 5, 7
-            ];
-
-            var geom: Geometry = new Geometry();
-            geom.vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_COLOR;
-            geom.verticesData = cubeVer;
-            geom.indexData = cubeLineInx;
-
-            //var wireframe: Wireframe = new Wireframe(geom);
-            //this.view1.addChild3D(wireframe);
-
+            var geom: egret3d.Geometry = wir.geometry;
 
             var width: number = 20;
             var height: number = 20;
 
-            var row: number = 20;
-            var col: number = 20;
-
-            var geom: egret3d.Geometry = new egret3d.Geometry();
-            geom.vertexFormat = egret3d.VertexFormat.VF_POSITION;
-            geom.verticesData = new Array<number>();
-            geom.indexData = new Array<number>();
-
+            var row: number = 200;
+            var col: number = 200;
 
             for (var i: number = 0; i < row; i++) {
                 for (var j: number = 0; j < col; j++) {
                     var index: number = i * col + j;
-                    index = index * geom.vertexAttLength;
-                    geom.verticesData[index + 0] = width * j - width * col / 2;
-                    geom.verticesData[index + 1] = 0;
-                    geom.verticesData[index + 2] = height * i - height * row / 2;
-                    //geom.verticesData[index + 3] = 1;
-                    //geom.verticesData[index + 4] = 1;
-                    //geom.verticesData[index + 5] = 0;
-                    //geom.verticesData[index + 6] = 1;
-                    //geom.verticesData[index + 7] = 0;
-                    //geom.verticesData[index + 8] = 0;
-                    //geom.verticesData[index + 9] = 1;
-                    //geom.verticesData[index + 10] = 0;
-                    //geom.verticesData[index + 11] = 0;
+                    geom.setVerticesForIndex(index, egret3d.VertexFormat.VF_POSITION, [width * j - width * col / 2, 0, height * i - height * row / 2]);
 
                     if (j + 1 < col) {
                         geom.indexData.push(i * col + j);
@@ -101,11 +46,6 @@
                     }
                 }
             }
-
-
-            var wir: egret3d.Wireframe = new egret3d.Wireframe(geom);
-            wir.material.diffuseColor = 0xffff00;
-            this.view1.addChild3D(wir);
 
             this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
