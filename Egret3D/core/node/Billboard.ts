@@ -19,8 +19,7 @@
          * @platform Web,Native
          */
         constructor(material: MaterialBase, width:number = 100, height:number = 100) {
-            super(null, material);
-            this.geometry = new PlaneGeometry(width, height);
+            super(new PlaneGeometry(width, height, 1, 1, 1, 1, 1), material);
             this.bound = this.buildBoundBox();
         }
 
@@ -34,9 +33,9 @@
         * @platform Web,Native
         */
         public update(time: number, delay: number, camera: Camera3D) {
-            this._qut.fromEulerAngles(-90, 0, 0);
-            this._qut.multiply(camera.orientation, this._qut);
-            this.orientation = this._qut;
+            //this._qut.fromEulerAngles(-90, 0, 0);
+            //this._qut.multiply(camera.globalOrientation, this._qut);
+            this.globalOrientation = camera.globalOrientation;
         }
     }
 }

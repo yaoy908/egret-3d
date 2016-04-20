@@ -198,8 +198,6 @@
         public static buildGeomtry(source: GeometryData, vertexFormat: number): Geometry {
 
             var target: Geometry = new Geometry();
-            target.indexData = [];
-            target.verticesData = [];
             target.vertexFormat = vertexFormat;
 
             target.skeleton = source.skeleton;

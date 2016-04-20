@@ -38,10 +38,11 @@
                 }
 
                 if (node == "") {
-                    if (file.charAt(i) == " " || file.charAt(i) == "    ") {
+                    if (file.charAt(i) == " " || file.charAt(i) == "    " || file.charAt(i) == "\t") {
                         continue;
                     }
                 }
+
                 node += file.charAt(i);
                 if (endChar != "\n") {
                     if (node.indexOf("#extension") >= 0) {
@@ -385,6 +386,7 @@
             tmpName = StringUtil.getVarName(tempArray);
             valueType = StringUtil.getVarType(tempArray);
             attribute = new GLSL.Attribute(tmpName, valueType);
+            attribute.value = StringUtil.getVarValue(tempArray);
             return attribute;
         }
 

@@ -534,7 +534,7 @@
             this.nodeCollection.addNode(this._dir_node);
             this.nodeCollection.addNode(this._speed_node);
 
-            this.geometry.vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_UV0;
+            this.geometry.vertexFormat = VertexFormat.VF_POSITION |VertexFormat.VF_NORMAL | VertexFormat.VF_COLOR| VertexFormat.VF_UV0;
             this.nodeCollection.calculate(this.geometry.vertexAttLength);
 
 

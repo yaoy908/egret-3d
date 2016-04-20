@@ -1,11 +1,7 @@
-vec3 e_position = vec3(0.0, 0.0, 0.0);
-vec3 e_normal = vec3(0.0, 0.0, 0.0);
-vec3 e_tangent = vec3(0.0, 0.0, 0.0);
-vec4 e_color = vec4(1.0, 1.0, 1.0, 1.0);
-vec2 e_uv0 = vec2(0.0, 0.0);
-vec2 e_uv1 = vec2(0.0, 0.0);
-vec4 e_boneIndex = vec4(0.0, 0.0, 0.0, 0.0);
-vec4 e_boneWeight = vec4(0.0, 0.0, 0.0, 0.0);
+attribute vec3 attribute_position;
+attribute vec3 attribute_normal;
+attribute vec4 attribute_color;
+attribute vec2 attribute_uv0;
 
 uniform mat4 uniform_ModelMatrix ;
 uniform mat4 uniform_ViewMatrix ;
@@ -41,6 +37,6 @@ mat3 inverse(mat3 m) {
 }
 
 void main(void){
-	varying_color = e_color;
-	varying_uv0 = e_uv0;
+	varying_color = attribute_color;
+	varying_uv0 = attribute_uv0;
 }
