@@ -56,7 +56,7 @@
                 this._startNode.g = 0;
                 this._startNode.h = 0;
                 this._startNode.f = 0;
-				
+                this._startNode.parent = null;
                 return this.search();
 			}
 			return false;
@@ -69,72 +69,50 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        private search(): boolean
-		{
+        private search(): boolean {
             var node: Navi3DTriangle = this._startNode;
             var neibours: Array<Navi3DTriangle> = new Array<Navi3DTriangle>();
             var test: Navi3DTriangle;
-            while (node != this._endNode)
-			{
-				neibours = node.getNeibourTriangles(neibours, Navi3DMaskType.WalkAble, Navi3DMaskType.WalkAble);
-				for (test of neibours)
-				{
-					if(test == node || !test.walkAble)
-					{
-						continue;
-					}
+            while (node != this._endNode) {
+                neibours = node.getNeibourTriangles(neibours, Navi3DMaskType.WalkAble, Navi3DMaskType.WalkAble);
+                for (test of neibours) {
+                    if (test.closeId == this._findIndex)
+                        continue;
+                    if (test == node || !test.walkAble) {
+                        continue;
+                    }
                     var g: number = node.g + Navi3DPoint.calcDistance(test, node) * test.costMultiplier;
                     var h: number = Navi3DPoint.calcDistance(test, this._endNode);
                     var f: number = g + h;
-                    if (test.openId == this._findIndex || test.closeId == this._findIndex)
-					{
-						if(test.f > f)
-						{
-							test.f = f;
-							test.g = g;
-							test.h = h;
-							test.parent = node;
-						}
-					}
-					else
-					{
-						test.f = f;
-						test.g = g;
-						test.h = h;
-						test.parent = node;
+                    if (test.openId == this._findIndex) {
+                        if (test.f > f) {
+                            test.f = f;
+                            test.g = g;
+                            test.h = h;
+                            test.parent = node;
+                        }
+                    }
+                    else {
+                        test.f = f;
+                        test.g = g;
+                        test.h = h;
+                        test.parent = node;
                         test.openId = this._findIndex;
                         this._openedList.push(test);
-					}
-				}
+                    }
+                }
                 node.closeId = this._findIndex;
                 this._closedList.push(node);
-                if (this._openedList.length == 0)
-				{
-//					log("no path found");
-					return false;
-				}
-                this._openedList.sort(this.sortFun);
+                if (this._openedList.length == 0) {
+                    return false;
+                }
+                this._openedList.sort(function (a: Navi3DTriangle, b: Navi3DTriangle) {
+                    return a.f - b.f;
+                });
                 node = <Navi3DTriangle>(this._openedList.shift());
-			}
-			this.buildPath();
-			return true;
-        }
-
-        /**
-        * @language zh_CN
-        * 排序开区间(从小到大)
-        * @param a 用于比较的a对象
-        * @param b 用于比较的b对象
-        * @return 0,1,-1
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        private sortFun(a: Navi3DTriangle, b: Navi3DTriangle): number {
-            if (a.f > b.f)
-                return 1;
-            else if (a.f < b.f)
-                return -1;
-            return 0;
+            }
+            this.buildPath();
+            return true;
         }
 
         /**
