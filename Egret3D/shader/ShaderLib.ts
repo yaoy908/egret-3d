@@ -266,6 +266,25 @@ module egret3d {
 			"return toLinear_vec4_v1(texture2D(uTex, uv)); \n" +
 			"} \n",
 
+			"hud_fs":
+			"varying vec2 varying_uv0; \n" +
+			"uniform sampler2D diffuseTexture; \n" +
+			"void main(void) { \n" +
+			"vec4 color = texture2D(diffuseTexture, varying_uv0); \n" +
+			"gl_FragColor  = color; \n" +
+			"} \n",
+
+			"hud_vs":
+			"attribute vec3 attribute_position; \n" +
+			"attribute vec2 attribute_uv0; \n" +
+			"varying  vec2 varying_uv0; \n" +
+			"uniform  mat4 uniform_ViewProjectionMatrix; \n" +
+			"void main(void) { \n" +
+			"vec4 pos = vec4(attribute_position, 1.0); \n" +
+			"gl_Position = uniform_ViewProjectionMatrix * pos; \n" +
+			"varying_uv0 = attribute_uv0; \n" +
+			"} \n",
+
 			"lightingBase_fs":
 			"float phongSpecular(vec3 lightDirection,vec3 viewDirection,vec3 surfaceNormal,float shininess) { \n" +
 			"vec3 R = -reflect(lightDirection, surfaceNormal); \n" +

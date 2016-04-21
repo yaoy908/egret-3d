@@ -20,16 +20,16 @@
     export class CheckerboardTexture implements ITexture {
 
         /**
-         * @language zh_CN
-         * 公用棋盘格实例对象
-         */
+        * @private
+        * @language zh_CN
+        * 公用棋盘格实例对象
+        */
         public static texture: CheckerboardTexture = new CheckerboardTexture();
-        private _width: number = 32;
-        private _height: number = 32;
+
         private _pixelArray: Uint8Array;
 
-        public width: number;
-        public height: number;
+        public width: number = 32;
+        public height: number = 32;
         public texture2D: Texture2D;
         public texture3D: Texture3D;
 
@@ -43,7 +43,6 @@
         constructor() {
             this.buildCheckerboard();
         }
-
 
         /**
         * @language zh_CN
@@ -95,7 +94,7 @@
                 this.texture2D.smooth = this._smooth; 
                 this.texture2D.useMipmap = this._useMipmap; 
                 this.texture2D.mimapData = new Array<MipmapData>();
-                this.texture2D.mimapData.push(new MipmapData(this._pixelArray, this._width, this._height));
+                this.texture2D.mimapData.push(new MipmapData(this._pixelArray, this.width, this.height));
                 this.texture2D.useMipmap = false;
                 context3D.upLoadTextureData(0, this.texture2D);
             }
@@ -104,7 +103,7 @@
         private buildCheckerboard(): void {
             if (!this._pixelArray) {
 
-                this._pixelArray = new Uint8Array(this._width * this._height * 4);
+                this._pixelArray = new Uint8Array(this.width * this.height * 4);
 
                 var colors: Color[] = [Color.white(), Color.black()];
 
@@ -112,8 +111,8 @@
 
                 var blockSize: number = 4;
 
-                for (var y: number = 0; y < this._height; y++) {
-                    for (var x: number = 0; x < this._width; x++) {
+                for (var y: number = 0; y < this.height; y++) {
+                    for (var x: number = 0; x < this.width; x++) {
 
                         if ((x % blockSize) == 0) {
                             colorIndex = (colorIndex + 1) % 2;
@@ -126,10 +125,10 @@
                             colorIndex = 0;
                         }
 
-                        this._pixelArray[(y * (this._width * 4) + x * 4) + 0] = colors[colorIndex].r;
-                        this._pixelArray[(y * (this._width * 4) + x * 4) + 1] = colors[colorIndex].g;
-                        this._pixelArray[(y * (this._width * 4) + x * 4) + 2] = colors[colorIndex].b;
-                        this._pixelArray[(y * (this._width * 4) + x * 4) + 3] = colors[colorIndex].a;
+                        this._pixelArray[(y * (this.width * 4) + x * 4) + 0] = colors[colorIndex].r;
+                        this._pixelArray[(y * (this.width * 4) + x * 4) + 1] = colors[colorIndex].g;
+                        this._pixelArray[(y * (this.width * 4) + x * 4) + 2] = colors[colorIndex].b;
+                        this._pixelArray[(y * (this.width * 4) + x * 4) + 3] = colors[colorIndex].a;
                     }
                 }
             }

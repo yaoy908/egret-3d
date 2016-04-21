@@ -20,7 +20,9 @@
          */
         constructor(material: MaterialBase, width:number = 100, height:number = 100) {
             super(new PlaneGeometry(width, height, 1, 1, 1, 1, 1), material);
-            this.bound = this.buildBoundBox();
+            if (!this.bound) {
+                this.bound = this.buildBoundBox();
+            }
         }
 
         /**

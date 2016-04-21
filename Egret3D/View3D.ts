@@ -35,7 +35,14 @@
         protected _cleanParmerts: number = Context3DProxy.gl.COLOR_BUFFER_BIT | Context3DProxy.gl.DEPTH_BUFFER_BIT; 
         private _sizeDiry: boolean = false;
 
-        
+        protected _renderTarget: RenderTargetTexture = new RenderTargetTexture();
+
+        protected _huds: Array<HUD> = new Array<HUD>();
+
+        public get renderTarget(): RenderTargetTexture {
+            return this._renderTarget;
+        }
+
         /**
         * @language zh_CN
         * 构建一个view3d对象
@@ -59,6 +66,11 @@
             this._viewPort.height = height;
             this._aspectRatio = this._viewPort.width / this._viewPort.height;
             this._camera.aspectRatio = this._aspectRatio;
+
+            this._renderTarget.width = 512;
+            this._renderTarget.height = 512;
+            this._renderTarget.upload(View3D._contex3DProxy);
+
         }
 
         public blender(cleanColor:boolean, cleanDepth:boolean) {
@@ -229,6 +241,16 @@
             return this._viewPort.height;
         }
 
+        /**
+        * @language zh_CN
+        * 获取视口数据 x y width height
+        * @returns Rectangle 视口数据
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get viewPort(): Rectangle {
+            return this._viewPort;
+        }
                         
         /**
         * @private
@@ -276,6 +298,34 @@
         }
 
         /**
+        * @language zh_CN
+        * 添加 HUD 到渲染列表中
+        * @param hud 需要增加的HUD
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public addHUD(hud: HUD) {
+            if (this._huds.indexOf(hud) == -1) {
+                hud.viewPort = this._viewPort;
+                this._huds.push(hud);
+            }
+        }
+
+        /**
+        * @language zh_CN
+        * 在渲染列表中删除一个HUD
+        * @param hud 需要删除的HUD
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public delHUD(hud: HUD) {
+            var index: number = this._huds.indexOf(hud);
+            if (index >= 0 && index < this._huds.length) {
+                this._huds.splice(index, 1);
+            }
+        }
+
+        /**
         * @private
         * @language zh_CN
         * @version Egret 3.0
@@ -286,7 +336,12 @@
             this._entityCollect.update(this._camera);
 
             this._render.update(time, delay, this._entityCollect, this._camera);
-    
+
+            if (this._renderTarget) {
+                View3D._contex3DProxy.setRenderToTexture(this._renderTarget.texture2D, true, 0);
+                this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera);
+                View3D._contex3DProxy.setRenderToBackBuffer();
+            }
 
             View3D._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
             View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
@@ -296,6 +351,10 @@
             }
             View3D._contex3DProxy.clear(this._cleanParmerts);
             this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera);
+
+            for (var i: number = 0; i < this._huds.length; ++i) {
+                this._huds[i].draw(View3D._contex3DProxy);
+            }
         }
 
 

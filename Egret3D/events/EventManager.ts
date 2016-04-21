@@ -14,7 +14,7 @@
         private _canvas: Egret3DCanvas;
 
         private _pickEvent3d: PickEvent3D;
-
+        private _retRenderList: Array<IRender> = new Array<IRender>();
 
         private get _view3ds(): Array<View3D> {
             return this._canvas.view3Ds;
@@ -79,7 +79,7 @@
                     continue;
                 }
                 var collect = view.entityCollect.mousePickList;
-                var ret: Array<IRender> = Picker.pickObject3DList(canvas, view, collect);
+                var ret: Array<IRender> = Picker.pickObject3DList(canvas, view, collect, false, this._retRenderList);
                 var len = ret.length;
                 if (len <= 0) {
                     continue;
@@ -109,7 +109,7 @@
                     else {
 
                         if (mouseChilder) {
-                            ret = Picker.pickObject3DList(canvas, view, ret, true);
+                            ret = Picker.pickObject3DList(canvas, view, ret, true, this._retRenderList);
                             dis = Number.MAX_VALUE;
                             len = ret.length;
                             if (len <= 0) {
