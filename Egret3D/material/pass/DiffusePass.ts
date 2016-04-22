@@ -50,7 +50,10 @@
             if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.normal) != -1) {
                 this._passUsage.fragmentShader.addUseShaderName("normalMap_fragment");
             }
-
+            if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.shadow) != -1) {
+                this._passUsage.vertexShader.addUseShaderName("shadow_vs");
+                this._passUsage.fragmentShader.addUseShaderName("shadow_fs");
+            }
             if (this.lightGroup) {
                 this._passUsage.maxDirectLight = this.lightGroup.directLightList.length;
                 this._passUsage.maxSpotLight = this.lightGroup.spotLightList.length;

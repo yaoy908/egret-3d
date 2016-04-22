@@ -88,7 +88,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public shadowMapTex: ITexture;
+        public shadowMapTexture: ITexture;
 
         /**
         * @language zh_CN
@@ -472,7 +472,7 @@
             //data.specularTex = this.specularTex;
             //data.lightMapTex = this.lightMapTex;
             //data.environmentMapTex = this.environmentMapTex;
-            data.shadowMapTex = this.shadowMapTex;
+            data.shadowMapTexture = this.shadowMapTexture;
             //data.splat_0Tex = this.splat_0Tex;
             //data.splat_1Tex = this.splat_1Tex;
             //data.splat_2Tex = this.splat_2Tex;

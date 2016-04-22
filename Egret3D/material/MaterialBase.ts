@@ -76,7 +76,7 @@
          * @language zh_CN
          * 设置材质 lightGroup 。
          * 设置材质球接受的灯光组。
-         * @param lightGroup {LightGroup}
+         * @param lightGroup LightGroup
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -87,9 +87,41 @@
 
         /**
          * @language zh_CN
+         * 设置材质 shadowMapTexture 。
+         * 设置材质球的阴影贴图。
+         * @param texture ITexture
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public set shadowMapTexture(texture: ITexture) {
+            if (texture) {
+                this.materialData.shadowMapTexture = texture;
+                this.materialData.textureChange = true;
+
+                if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.shadow) == -1) {
+                    this.materialData.textureMethodTypes.push(TextureMethodType.shadow);
+                    this.diffusePass.passInvalid();
+                }
+            }
+        }
+
+        /**
+        * @language zh_CN
+        * 返回材质 shadowMapTexture。
+        * 返回材质球的阴影贴图。
+        * @returns ITexture 阴影贴图
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get shadowMapTexture(): ITexture {
+            return this.materialData.shadowMapTexture;
+        }
+
+        /**
+         * @language zh_CN
          * 设置材质 diffuseTexture 。
          * 设置材质球的漫反射贴图。
-         * @param texture {ITexture}
+         * @param texture ITexture
          * @version Egret 3.0
          * @platform Web,Native
          */

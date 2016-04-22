@@ -7,6 +7,7 @@
         diffuse,
         normal,
         specular,
-        color
+        color,
+        shadow
     }
 }

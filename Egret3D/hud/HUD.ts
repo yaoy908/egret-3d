@@ -405,7 +405,6 @@
                 context.uniformMatrix4fv(this._passUsage.uniform_ViewProjectionMatrix.uniformIndex, false, this.transformMatrix.rawData);
             }
 
-
             context.setCulling(this.cullMode);
 
             if (this.bothside) {
@@ -416,6 +415,7 @@
             context.enable(ContextConfig.BLEND);
             context.setBlendFactors(ContextConfig.SRC_ALPHA, ContextConfig.ONE_MINUS_SRC_ALPHA);
             context.drawElement(DrawMode.TRIANGLES, 0, 6);
+            context.clear(ContextConfig.DEPTH_BUFFER_BIT);
         }
     }
 }

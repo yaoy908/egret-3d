@@ -162,6 +162,7 @@
          * @language zh_CN
          */
         public varying_eyedir: GLSL.Attribute;
+
         /**
          * @language zh_CN
          */
@@ -194,7 +195,7 @@
         /**
          * @language zh_CN
          */
-        public uniform_shadowMatrix: GLSL.Uniform;
+        public uniform_ShadowMatrix: GLSL.Uniform;
         /**
          * @language zh_CN
          */
