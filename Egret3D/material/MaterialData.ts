@@ -275,8 +275,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public ambientColor: number = 0xffffff;
-        //public ambientColor: number = 0x00235c;
+        public ambientColor: number = 0x000000;
 
         /**
         * @language zh_CN

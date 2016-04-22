@@ -453,7 +453,7 @@
             var m: Matrix4_4 = Matrix4_4.getAxisRotation(axis.x, axis.y, axis.z, degrees);
             ///this.append(m);
 
-            var tmp: Matrix4_4 = new Matrix4_4();
+            var tmp: Matrix4_4 = MathUtil.CALCULATION_MATRIX;
             var s: number, c: number;
 
             var angle: number = degrees * MathUtil.DEGREES_TO_RADIANS;
@@ -1033,29 +1033,8 @@
         */
         public recompose(components: Vector3D[]): boolean {
 
-            if (components.length < 3) return false
-            this.identity();
-            this.appendScale(components[2].x, components[2].y, components[2].z);
-
-            var angle: number;
-            angle = -components[1].x * MathUtil.DEGREES_TO_RADIANS;
-
-            MathUtil.CALCULATION_MATRIX.copyRawDataFrom(new Float32Array([1, 0, 0, 0, 0, Math.cos(angle), -Math.sin(angle), 0, 0, Math.sin(angle), Math.cos(angle), 0, 0, 0, 0, 0]));
-            this.append(MathUtil.CALCULATION_MATRIX);
-            angle = -components[1].y * MathUtil.DEGREES_TO_RADIANS;
-
-            MathUtil.CALCULATION_MATRIX.copyRawDataFrom(new Float32Array([Math.cos(angle), 0, Math.sin(angle), 0, 0, 1, 0, 0, -Math.sin(angle), 0, Math.cos(angle), 0, 0, 0, 0, 0]));
-            this.append(MathUtil.CALCULATION_MATRIX);
-            angle = -components[1].z * MathUtil.DEGREES_TO_RADIANS;
-
-            MathUtil.CALCULATION_MATRIX.copyRawDataFrom(new Float32Array([Math.cos(angle), -Math.sin(angle), 0, 0, Math.sin(angle), Math.cos(angle), 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]));
-            this.append(MathUtil.CALCULATION_MATRIX);
-
-            this.rawData[12] = components[0].x;
-            this.rawData[13] = components[0].y;
-            this.rawData[14] = components[0].z;
-            this.rawData[15] = 1;
-
+            MathUtil.CALCULATION_QUATERNION.fromEulerAngles(components[1].x, components[1].y, components[1].z);
+            this.makeTransform(components[0], components[2], MathUtil.CALCULATION_QUATERNION);
             return true;
         }
 

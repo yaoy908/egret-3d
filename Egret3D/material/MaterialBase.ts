@@ -89,7 +89,7 @@
          * @language zh_CN
          * 设置材质 diffuseTexture 。
          * 设置材质球的漫反射贴图。
-         * @param texture {TextureBase}
+         * @param texture {ITexture}
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -109,7 +109,7 @@
         * @language zh_CN
         * 返回材质 diffuseTexture。
         * 返回材质球的漫反射贴图。
-        * @returns {TextureBase}
+        * @returns ITexture 漫反射贴图
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -574,7 +574,7 @@
         /**
         * @language zh_CN
         * 返回材质 bothside 值。
-       * 返回是否显示双面的开关，一般情况不需要。
+       * 返回是否显示双面的开关。
         * @returns {boolean}
         * @version Egret 3.0
         * @platform Web,Native

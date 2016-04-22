@@ -296,7 +296,7 @@
             if (this._materialData.alphaBlending)
                 Context3DProxy.gl.depthMask(false);
 
-            Context3DProxy.gl.enable(ContextConfig.BLEND);
+            context3DProxy.enable(ContextConfig.BLEND);
             context3DProxy.setBlendFactors(this._materialData.blend_src, this._materialData.blend_dest);
 
             if (this._passUsage.uniform_materialSource) {

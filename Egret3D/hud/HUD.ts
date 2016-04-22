@@ -12,6 +12,21 @@
     */
     export class HUD {
 
+        /**
+        * @language zh_CN
+        * 显示双面的开关。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public bothside: boolean = false;
+        
+        /**
+        * @language zh_CN
+        * cull模式。 正面可见ContextConfig.BACK 背面可见ContextConfig.FRONT
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public cullMode: number = ContextConfig.BACK;
         private static singleQuadData: Array<number> = [
             -0.5, -0.5, 0.0, 0.0, 1.0,
             0.5, -0.5, 0.0, 1.0, 1.0,
@@ -23,7 +38,9 @@
 
         private static vertexBytes: number = 20;
 
-        public diffuseTexture: ITexture;
+        protected _diffuseTexture: ITexture;
+
+
 
         protected _viewPort: Rectangle;
         protected _rectangle: Rectangle = new Rectangle();
@@ -39,6 +56,7 @@
 
         private _indexBuffer3D: IndexBuffer3D;
         private _vertexBuffer3D: VertexBuffer3D;
+        private _changeTexture: boolean = false;
 
         protected _passUsage: PassUsage = new PassUsage();
 
@@ -51,6 +69,29 @@
             this.y = y;
             this.width = width;
             this.height = height;
+        }
+        
+        /**
+        * @language zh_CN
+        * 返回HUD的漫反射贴图。
+        * @returns ITexture 漫反射贴图
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get diffuseTexture(): ITexture {
+            return this._diffuseTexture;
+        }
+        
+        /**
+         * @language zh_CN
+         * 设置HUD的漫反射贴图。
+         * @param texture ITexture
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public set diffuseTexture(texture: ITexture) {
+            this._changeTexture = true;
+            this._diffuseTexture = texture;
         }
 
         /**
@@ -222,38 +263,60 @@
 
             this._rotation.z = value;
         }
-
+                                
+        /**
+        * @private
+        */
         public set viewPort(viewPort: Rectangle) {
             this._viewPort = viewPort;
         }
-
+                                        
+        /**
+        * @private
+        */
         public get transformMatrix(): Matrix4_4 {
             if (!this._viewPort) {
                 return this._transformMatrix;
             }
             if (this._change) {
 
-                //this._position.x = (this._viewPort.width - (this._rectangle.x + this._viewPort.x + this._rectangle.width / 2) * 2.0) * (1 / this._viewPort.width);
-                //this._position.y = (this._viewPort.height - (this._rectangle.y + this._viewPort.y + this._rectangle.height / 2) * 2.0) * (1 / this._viewPort.height);
-
                 this._scale.x = this._rectangle.width / this._viewPort.width * 2.0;
                 this._scale.y = this._rectangle.height / this._viewPort.height * 2.0;
 
-                this._position.x = ((this._rectangle.x + this._viewPort.x + this._rectangle.width / 2) * 2.0) * (1 / this._viewPort.width);
-                this._position.y = ((this._rectangle.y + this._viewPort.y + this._rectangle.height / 2) * 2.0) * (1 / this._viewPort.height);
+                this._scale.z = 1;
 
+                this._position.x = -(this._viewPort.width - (this._rectangle.x + this._viewPort.x + this._rectangle.width / 2) * 2.0) * (1 / this._viewPort.width);
+                this._position.y = (this._viewPort.height - (this._rectangle.y + this._viewPort.y + this._rectangle.height / 2) * 2.0) * (1 / this._viewPort.height);;
+                this._position.z = 0;
 
                 this._transformMatrix.recompose(this._transformComponents);
                 this._change = false;
             }
             return this._transformMatrix;
         }
-
+        
+        protected updateTexture(context: Context3DProxy) {
+            var sampler2D: GLSL.Sampler2D;
+            for (var index in this._passUsage.sampler2DList) {
+                sampler2D = this._passUsage.sampler2DList[index];
+                sampler2D.uniformIndex = context.getUniformLocation(this._passUsage.program3D, sampler2D.varName);
+                sampler2D.texture = this[sampler2D.varName];
+            }
+            this._changeTexture = false;
+        }     
+                                   
+        /**
+        * @private
+        */
         public upload(context: Context3DProxy) {
-            this._vertexBuffer3D = context.creatVertexBuffer(HUD.singleQuadData);
-            this._indexBuffer3D = context.creatIndexBuffer(HUD.singleQuadIndex);
+            if (!this._vertexBuffer3D) {
+                this._vertexBuffer3D = context.creatVertexBuffer(HUD.singleQuadData);
+            }
 
-            this._attList.length = 0;
+            if (!this._indexBuffer3D) {
+                this._indexBuffer3D = context.creatIndexBuffer(HUD.singleQuadIndex);
+            }
+
 
             this._passUsage.vertexShader.shaderType = Shader.vertex;
             this._passUsage.fragmentShader.shaderType = Shader.fragment;
@@ -274,21 +337,8 @@
                 }
             }
 
-            var sampler2D: GLSL.Sampler2D;
-            for (var index in this._passUsage.sampler2DList) {
-                sampler2D = this._passUsage.sampler2DList[index];
-                sampler2D.uniformIndex = context.getUniformLocation(this._passUsage.program3D, sampler2D.varName);
-                sampler2D.texture = this[sampler2D.varName];
-            }
-
-            var sampler3D: GLSL.Sampler2D;
-            for (var index in this._passUsage.sampler3DList) {
-                sampler3D = this._passUsage.sampler3DList[index];
-                sampler3D.uniformIndex = context.getUniformLocation(this._passUsage.program3D, sampler3D.varName);
-            }
-
+            this._attList.length = 0;
             var offset: number = 0;
-
             if (this._passUsage.attribute_position) {
                 if (!this._passUsage.attribute_position.uniformIndex) {
                     this._passUsage.attribute_position.uniformIndex = context.getShaderAttribLocation(this._passUsage.program3D, this._passUsage.attribute_position.varName);
@@ -319,21 +369,25 @@
 
                 offset += Geometry.uvSize * Float32Array.BYTES_PER_ELEMENT;
             }
-
-
         }
-
+                                        
+        /**
+        * @private
+        */
         public draw(context: Context3DProxy) {
             if (!this._passUsage.program3D) {
                 this.upload(context);
             }
-            
             context.setProgram(this._passUsage.program3D);
             context.bindVertexBuffer(this._vertexBuffer3D);
             context.bindIndexBuffer(this._indexBuffer3D);
 
             for (var i: number = 0; i < this._attList.length; ++i) {
                 context.vertexAttribPointer(this._attList[i].uniformIndex, this._attList[i].size, this._attList[i].dataType, this._attList[i].normalized, this._attList[i].stride, this._attList[i].offset);
+            }
+
+            if (this._changeTexture) {
+                this.updateTexture(context);
             }
 
             //texture 2D
@@ -350,6 +404,14 @@
             if (this._passUsage.uniform_ViewProjectionMatrix) {
                 context.uniformMatrix4fv(this._passUsage.uniform_ViewProjectionMatrix.uniformIndex, false, this.transformMatrix.rawData);
             }
+
+
+            context.setCulling(this.cullMode);
+
+            if (this.bothside) {
+                context.disable(ContextConfig.CULL_FACE);
+            } else
+                context.enable(ContextConfig.CULL_FACE);
 
             context.enable(ContextConfig.BLEND);
             context.setBlendFactors(ContextConfig.SRC_ALPHA, ContextConfig.ONE_MINUS_SRC_ALPHA);
