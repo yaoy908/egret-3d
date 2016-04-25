@@ -160,6 +160,11 @@
                 this._passUsage.fragmentShader.addUseShaderName("normalMap_fragment");
             }
 
+            if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.shadow) != -1) {
+                this._passUsage.vertexShader.addUseShaderName("shadow_vs");
+                this._passUsage.fragmentShader.addUseShaderName("shadow_fs");
+            }
+
             if (this.lightGroup) {
                 this._passUsage.maxDirectLight = this.lightGroup.directLightList.length;
                 this._passUsage.maxSpotLight = this.lightGroup.spotLightList.length;
@@ -296,7 +301,7 @@
             if (this._materialData.alphaBlending)
                 Context3DProxy.gl.depthMask(false);
 
-            Context3DProxy.gl.enable(ContextConfig.BLEND);
+            context3DProxy.enable(ContextConfig.BLEND);
             context3DProxy.setBlendFactors(this._materialData.blend_src, this._materialData.blend_dest);
 
             if (this._passUsage.uniform_materialSource) {
@@ -368,6 +373,18 @@
 
             if (this._passUsage.uniform_ViewProjectionMatrix) {
                 context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ViewProjectionMatrix.uniformIndex, false, camera3D.viewProjectionMatrix.rawData);
+            }
+
+            if (this._passUsage.uniform_ShadowMatrix) {
+
+                var a: Float32Array = new Float32Array([0.5, 0, 0, 0,
+                    0, 0.5, 0, 0,
+                    0, 0, 0.5, 0,
+                    0.5, 0.5, 0.5, 1.0]);
+                var mat: Matrix4_4 = new Matrix4_4(a);
+
+                mat.append(camera3D.viewProjectionMatrix);
+                context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ShadowMatrix.uniformIndex, false, mat.rawData);
             }
 
             if (this.methodList) {

@@ -27,17 +27,20 @@
         * @param canvas 当前canvas
         * @param view 当前检测view
         * @param objects 检测的对象列表
-        * @param childBox 检测是否用子包围盒
+        * @param childBox 检测是否用子包围盒 默认false就可以了 
         * @returns 拾取的object列表
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public static pickObject3DList(canvas: Egret3DCanvas, view:View3D, objects: Array<IRender>, childBox:boolean = false): Array<IRender> {
-            var ret: Array<IRender> = new Array<IRender>();
+        public static pickObject3DList(canvas: Egret3DCanvas, view:View3D, objects: Array<IRender>, childBox:boolean = false, target:Array<IRender> = null): Array<IRender> {
+            if (!target) {
+                target = new Array<IRender>(); 
+            }
+            target.length = 0;
             var ray: Ray = this.ray;
 
             if (Input.mouseX < view.x || Input.mouseX > x + view.width || Input.mouseY < view.y || Input.mouseY > y + view.height) {
-                return ret;
+                return target;
             }
 
             var x: number = Input.mouseX - view.x;
@@ -56,13 +59,13 @@
                                 bound = renderItem.currentBound;
                                 if (bound) {
                                     if (ray.IntersectMesh(bound.vexData, bound.indexData, bound.vexLength, bound.indexData.length / 3, 0, renderItem.modelMatrix, renderItem.pickResult)) {
-                                        ret.push(objects[i]);
+                                        target.push(objects[i]);
                                     }
                                 }
                             }
                             else {
                                 if (ray.IntersectMesh(bound.vexData, bound.indexData, bound.vexLength, bound.indexData.length / 3, 0, renderItem.modelMatrix, renderItem.pickResult)) {
-                                    ret.push(objects[i]);
+                                    target.push(objects[i]);
                                 }
                             }
                         }
@@ -88,7 +91,7 @@
                         }
 
                         if (ray.IntersectMeshEx(renderItem, uvoffset, renderItem.pickResult)) {
-                            ret.push(objects[i]);
+                            target.push(objects[i]);
                         }
                         break;
                     case PickType.UVPick:
@@ -110,12 +113,12 @@
                             uvoffset += Geometry.colorSize;
                         }
                         if (ray.IntersectMeshEx(renderItem, uvoffset, renderItem.pickResult)) {
-                            ret.push(objects[i]);
+                            target.push(objects[i]);
                         }
                         break;
                 }
             }
-            return ret;
+            return target;
         }
     }
 }

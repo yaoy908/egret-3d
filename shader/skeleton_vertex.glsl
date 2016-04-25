@@ -51,6 +51,8 @@ void main(void){
 	outPosition += m2 * temp_position * e_boneWeight.z;
 	outPosition += m3 * temp_position * e_boneWeight.w;
 
+	e_position = outPosition.xyz;
+
 	vec4 temp_n ;
 	temp_n = m0 * temp_normal * e_boneWeight.x;
 	temp_n += m1 * temp_normal * e_boneWeight.y;
