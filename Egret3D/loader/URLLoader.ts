@@ -19,7 +19,7 @@
 
         private _xhr: XMLHttpRequest;
         private _event: LoaderEvent3D = new LoaderEvent3D();
-
+        private _progressEvent: ProgressEvent;
         /**
          * @language zh_CN
          * 控制以哪种方式接收加载的数据.
@@ -266,6 +266,26 @@
         */
         public data: any = null;
 
+        /**
+        * @language zh_CN
+        * 已经获取到的字节数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get bytesLoaded(): number {
+            return this._progressEvent ? this._progressEvent.loaded : 0;
+        }
+
+        /**
+        * @language zh_CN
+        * 需要获取的总字节数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get bytesTotal(): number {
+            return this._progressEvent ? this._progressEvent.total : 0;
+        }
+
         private onReadyStateChange(event: Event): void {
             if (this._xhr.readyState == 4) {
                 if (this._xhr.status >= 400 /*|| this._xhr.status == 0*/) {
@@ -335,6 +355,7 @@
             this._event.eventType = LoaderEvent3D.LOADER_PROGRESS;
             this._event.target = this;
             this._event.loader = this;
+            this._progressEvent = event;
             this.dispatchEvent(this._event);
         }
 
