@@ -62,7 +62,8 @@
             geom.indexData = meshIndicesData;
 
 
-            var wireframe: Wireframe = new Wireframe(geom);
+            var wireframe: Wireframe = new Wireframe();
+            wireframe.geometry = geom;
             this.view1.addChild3D(wireframe);
         }
 
@@ -192,7 +193,8 @@
             geom.verticesData = pathVertexData;
             geom.indexData = pathIndicesData;
 
-            this._pathWireFrame = new Wireframe(geom);
+            this._pathWireFrame = new Wireframe();
+            this._pathWireFrame.geometry = geom;
             this.view1.addChild3D(this._pathWireFrame);
         }
 
