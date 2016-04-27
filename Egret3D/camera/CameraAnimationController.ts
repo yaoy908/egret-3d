@@ -11,6 +11,11 @@
     * @platform Web,Native
     */
     export class CameraAnimationController{
+        /**
+        * @language zh_CN
+        * 动画播放完一个周期的事件
+        */
+        public static EVENT_CAMERA_COMPLETE: string = "event_camera_complete";
 
         /**
         * @language zh_CN
@@ -28,7 +33,6 @@
         */
         public name: string;
 
-
         private _camera: Camera3D;
         private _playing: boolean = false;
         private _playTime: number = 0;
@@ -36,7 +40,7 @@
         private _loop: boolean = true;
         private _smooth: boolean = false;
         private _cameraAnimationFrame: CameraAnimationFrame = new CameraAnimationFrame();
-
+        private _event: Event3D = new Event3D();
         /**
         * @language zh_CN
         * 构造函数
@@ -114,9 +118,16 @@
 
             var currentFrameIndex: number = Math.floor(Tnow / (160)) % this.cameraAnimationFrames.length;
 
-            if (!this._loop && this._currentFrameIndex > currentFrameIndex) {
-                this._playing = false;
-                this._camera.isController = true;
+            if (this._currentFrameIndex > currentFrameIndex) {
+                if (!this._loop) {
+                    this._playing = false;
+                    this._camera.isController = true;
+                }
+                if (this._camera) {
+                    this._event.eventType = CameraAnimationController.EVENT_CAMERA_COMPLETE;
+                    this._event.target = this;
+                    this._camera.dispatchEvent(this._event);
+                }
             }
 
             this._currentFrameIndex = currentFrameIndex;
