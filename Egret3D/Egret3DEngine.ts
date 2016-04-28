@@ -24,6 +24,8 @@
             return xhr;
         }
 
+        public static onTsconfig: Function;
+
         /**
          * @language zh_CN
          * 请求读取
@@ -79,12 +81,18 @@
             var obj = eval("(" + source + ")");
 
             for (var i: number = 0; i < obj.files.length; ++i) {
-                this.importList[i] = "/js/Egret3D/";
-                this.importList[i] += obj.files[i];
-                this.importList[i] = this.importList[i].replace(".ts", ".js");
+                Egret3DEngine.importList[i] = "/js/Egret3D/";
+                Egret3DEngine.importList[i] += obj.files[i];
+                Egret3DEngine.importList[i] = Egret3DEngine.importList[i].replace(".ts", ".js");
             }
 
-            this.startLoadScript(null);
+            Egret3DEngine.onTsconfig();
+
+            Egret3DEngine.startLoadScript(null);
+        }
+
+        public static addImportScript(path: string) {
+            Egret3DEngine.importList.push(path);
         }
 
         private static startLoadScript(e) {
