@@ -19,32 +19,42 @@
     export class LightGroup {
 
         /**
-         * @language zh_CN  
-         * 灯光个数
-         */
+        * @language zh_CN  
+        * 灯光个数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public lightNum: number = 0;
 
         /**
-         * @language zh_CN  
-         * 方向光列表
-         */
+        * @language zh_CN  
+        * 方向光列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public directLightList: Array<DirectLight>;
 
         /**
-         * @language zh_CN  
-         * 聚光灯列表
-         */
+        * @language zh_CN  
+        * 聚光灯列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public spotLightList: Array<SpotLight>;
 
         /**
-         * @language zh_CN  
-         * 点光源列表
-         */
+        * @language zh_CN  
+        * 点光源列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public pointLightList: Array<PointLight>;
 
         /**
         * @language zh_CN
         * 创建一个灯光组
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         constructor() {
             this.directLightList = new Array<DirectLight>();
@@ -53,10 +63,12 @@
         }
 
         /**
-         * @language zh_CN
-         * 为灯光组,添加一个灯光
-         * @param light  Direct Light
-         */
+        * @language zh_CN
+        * 为灯光组,添加一个灯光
+        * @param light Light
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public addLight(light: LightBase) {
             switch (light.lightType){
                 case LightType.directlight:
@@ -72,6 +84,39 @@
                 case LightType.spotLightlight:
                     this.spotLightList.push(<SpotLight>light);
                     this.lightNum++;
+                    break;
+            }
+        }
+                
+        /**
+        * @language zh_CN
+        * 删除一个灯光
+        * @param light Light
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public removeLight(light: LightBase) {
+            switch (light.lightType) {
+                case LightType.directlight:
+                    var index: number = this.directLightList.indexOf(<DirectLight>light);
+                    if (index >= 0 && index < this.directLightList.length) {
+                        this.directLightList.splice(index, 1);
+                        this.lightNum--;
+                    }
+                    break;
+                case LightType.pointlight:
+                    var index: number = this.pointLightList.indexOf(<PointLight>light);
+                    if (index >= 0 && index < this.pointLightList.length) {
+                        this.pointLightList.splice(index, 1);
+                        this.lightNum--;
+                    }
+                    break;
+                case LightType.spotLightlight:
+                    var index: number = this.spotLightList.indexOf(<SpotLight>light);
+                    if (index >= 0 && index < this.spotLightList.length) {
+                        this.spotLightList.splice(index, 1);
+                        this.lightNum--;
+                    }
                     break;
             }
         }

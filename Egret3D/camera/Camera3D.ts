@@ -393,6 +393,9 @@
          * @platform Web,Native
          */
         public get viewMatrix(): Matrix4_4 {
+            if (this._transformChange) {
+                this.modelMatrix;
+            }
             return this._viewMatrix;
         }
         
