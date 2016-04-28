@@ -48,6 +48,7 @@ module egret3d {
 			"attribute vec3 attribute_normal; \n" +
 			"attribute vec4 attribute_color; \n" +
 			"attribute vec2 attribute_uv0; \n" +
+			"vec3 e_position = vec3(0.0, 0.0, 0.0); \n" +
 			"uniform mat4 uniform_ModelMatrix ; \n" +
 			"uniform mat4 uniform_ViewMatrix ; \n" +
 			"uniform mat4 uniform_ProjectionMatrix ; \n" +
@@ -74,6 +75,7 @@ module egret3d {
 			"b21, (-a21 * a00 + a01 * a20), (a11 * a00 - a01 * a10)) / det; \n" +
 			"} \n" +
 			"void main(void){ \n" +
+			"e_position = attribute_position; \n" +
 			"varying_color = attribute_color; \n" +
 			"varying_uv0 = attribute_uv0; \n" +
 			"} \n",
@@ -315,6 +317,7 @@ module egret3d {
 
 			"lightMap_fs":
 			"uniform sampler2D lightTexture ; \n" +
+			"varying vec2 varying_uv1 ; \n" +
 			"void main(void){ \n" +
 			"diffuseColor.xyz *= texture2D( lightTexture , varying_uv1 ).xyz * 2.0 ; \n" +
 			"} \n",
@@ -589,6 +592,35 @@ module egret3d {
 			"calculatePointLight(materialSource); \n" +
 			"} \n",
 
+			"secondaryUV_vs":
+			"attribute vec2 attribute_uv1; \n" +
+			"varying vec2 varying_uv1 ; \n" +
+			"void main(void){ \n" +
+			"varying_uv1 = attribute_uv1 ; \n" +
+			"} \n",
+
+			"shadow_fs":
+			"uniform sampler2D shadowMapTexture; \n" +
+			"varying vec4 varying_ShadowCoord; \n" +
+			"void main() { \n" +
+			"vec4 shadowCoordinateWdivide = varying_ShadowCoord / varying_ShadowCoord.w; \n" +
+			"shadowCoordinateWdivide.z += 0.0005; \n" +
+			"float distanceFromLight = texture2D(shadowMapTexture, shadowCoordinateWdivide.st).z; \n" +
+			"float shadow = 1.0; \n" +
+			"if (varying_ShadowCoord.w > 0.0) \n" +
+			"{ \n" +
+			"shadow = distanceFromLight < shadowCoordinateWdivide.z ? 0.5 : 1.0; \n" +
+			"} \n" +
+			"diffuseColor = diffuseColor * shadow; \n" +
+			"} \n",
+
+			"shadow_vs":
+			"uniform mat4 uniform_ShadowMatrix; \n" +
+			"varying vec4 varying_ShadowCoord; \n" +
+			"void main() { \n" +
+			"varying_ShadowCoord = uniform_ShadowMatrix * vec4(e_position, 1.0); \n" +
+			"} \n",
+
 			"skeleton_vertex":
 			"attribute vec4 attribute_boneIndex; \n" +
 			"attribute vec4 attribute_boneWeight; \n" +
@@ -629,6 +661,7 @@ module egret3d {
 			"outPosition += m1 * temp_position * e_boneWeight.y; \n" +
 			"outPosition += m2 * temp_position * e_boneWeight.z; \n" +
 			"outPosition += m3 * temp_position * e_boneWeight.w; \n" +
+			"e_position = outPosition.xyz; \n" +
 			"vec4 temp_n ; \n" +
 			"temp_n = m0 * temp_normal * e_boneWeight.x; \n" +
 			"temp_n += m1 * temp_normal * e_boneWeight.y; \n" +

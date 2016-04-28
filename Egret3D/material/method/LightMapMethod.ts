@@ -8,13 +8,12 @@
         private texture: ITexture;
         /**
          * @language zh_CN
-         * @param texture 
          */
-        constructor(texture: ITexture) {
+        constructor() {
             super();
-            this.fsShaderList.push("lightMap_fs");
             this.methodType = TextureMethodType.diffuse; 
-            this.lightTexture = texture;
+            this.vsShaderList.push("secondaryUV_vs");
+            this.fsShaderList.push("lightMap_fs");
         }
 
         /**
@@ -24,6 +23,7 @@
         public set lightTexture(texture: ITexture) {
             this.texture = texture;
             this.materialData.lightTexture = this.texture;
+            this.materialData.textureChange = true;
         }
 
       /**

@@ -125,7 +125,8 @@
         "material/method/FogMethod.ts",
         "material/method/UVRollMethod.ts",
         "material/method/UVSpriteSheetMethod.ts",
-
+        "material/method/LightMapMethod.ts",
+        
         "material/pass/PassUsage.ts",
         "material/MaterialData.ts",
 
