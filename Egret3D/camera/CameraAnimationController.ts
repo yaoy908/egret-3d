@@ -38,9 +38,12 @@
         private _playTime: number = 0;
         private _currentFrameIndex: number = 0;
         private _loop: boolean = true;
-        private _smooth: boolean = false;
+        private _smooth: boolean = true;
         private _cameraAnimationFrame: CameraAnimationFrame = new CameraAnimationFrame();
         private _event: Event3D = new Event3D();
+        private _quatCurrentFrame: Quaternion = new Quaternion();
+        private _quatnNextFrame: Quaternion = new Quaternion();
+        private _quatn: Quaternion = new Quaternion();
         /**
         * @language zh_CN
         * 构造函数
@@ -144,7 +147,15 @@
                 
                 ///(v1.x - v0.x) * t + v0.x;
                 this._cameraAnimationFrame.fov = (nextFrame.fov - currentFrame.fov) * t + currentFrame.fov;
-                this._cameraAnimationFrame.rotation.copyFrom(currentFrame.rotation); ///.lerp(currentFrame.rotation, nextFrame.rotation, t);
+
+                this._quatCurrentFrame.fromEulerAngles(currentFrame.rotation.x, currentFrame.rotation.y, currentFrame.rotation.z);
+
+                this._quatnNextFrame.fromEulerAngles(nextFrame.rotation.x, nextFrame.rotation.y, nextFrame.rotation.z);
+
+                this._quatn.lerp(this._quatCurrentFrame, this._quatnNextFrame, t);
+
+                this._quatn.toEulerAngles(this._cameraAnimationFrame.rotation);
+
                 this._cameraAnimationFrame.translation.lerp(currentFrame.translation, nextFrame.translation, t);
             }
             else {
@@ -154,9 +165,8 @@
             }
 
             this._camera.fieldOfView = this._cameraAnimationFrame.fov;
-            this._camera.rotationX = this._cameraAnimationFrame.rotation.x * MathUtil.RADIANS_TO_DEGREES + 90;
-            this._camera.rotationY = this._cameraAnimationFrame.rotation.y * MathUtil.RADIANS_TO_DEGREES;
-            this._camera.rotationZ = this._cameraAnimationFrame.rotation.z * MathUtil.RADIANS_TO_DEGREES;
+
+            this._camera.rotation = this._cameraAnimationFrame.rotation;
             this._camera.position = this._cameraAnimationFrame.translation;
         }
     }
