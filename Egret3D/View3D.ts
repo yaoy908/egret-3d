@@ -25,7 +25,6 @@
         protected _scene: Scene3D = new Scene3D();
         protected _render: RenderBase;
 
-        protected _aspectRatio: number = 1;
         protected _scissorRect: Rectangle = new Rectangle();
         protected _viewMatrix: Matrix4_4 = new Matrix4_4();
 
@@ -38,6 +37,8 @@
         protected _renderTarget: RenderTargetTexture = new RenderTargetTexture();
 
         protected _huds: Array<HUD> = new Array<HUD>();
+
+        //protected _testCamera: Camera3D = new Camera3D();
 
         public get renderTarget(): RenderTargetTexture {
             return this._renderTarget;
@@ -64,12 +65,14 @@
             this._viewPort.y = y;
             this._viewPort.width = width;
             this._viewPort.height = height;
-            this._aspectRatio = this._viewPort.width / this._viewPort.height;
-            this._camera.aspectRatio = this._aspectRatio;
+            this._camera.aspectRatio = this._viewPort.width / this._viewPort.height;
 
             this._renderTarget.width = 512;
             this._renderTarget.height = 512;
             this._renderTarget.upload(View3D._contex3DProxy);
+
+            //this._testCamera.lookAt(new Vector3D(0, 500, -500), new Vector3D(0, 0, 0));
+            //this._testCamera.name = "testCamera";
 
         }
 
@@ -202,8 +205,7 @@
         */
         public set width(value: number) {
             this._viewPort.width = value;
-            this._aspectRatio = this._viewPort.width / this._viewPort.height;
-            this._camera.aspectRatio = this._aspectRatio;
+            this._camera.aspectRatio = this._viewPort.width / this._viewPort.height;
         }
                 
         /**
@@ -226,8 +228,7 @@
         */
         public set height(value: number) {
             this._viewPort.height = value;
-            this._aspectRatio = this._viewPort.width / this._viewPort.height;
-            this._camera.aspectRatio = this._aspectRatio;
+            this._camera.aspectRatio = this._viewPort.width / this._viewPort.height;
         }
                 
         /**
@@ -337,11 +338,11 @@
 
             this._render.update(time, delay, this._entityCollect, this._camera);
 
-            if (this._renderTarget) {
-                View3D._contex3DProxy.setRenderToTexture(this._renderTarget.texture2D, true, 0);
-                this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera);
-                View3D._contex3DProxy.setRenderToBackBuffer();
-            }
+            //if (this._renderTarget) {
+            //    View3D._contex3DProxy.setRenderToTexture(this._renderTarget.texture2D, true, 0);
+            //    this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._testCamera);
+            //    View3D._contex3DProxy.setRenderToBackBuffer();
+            //}
 
             View3D._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
             View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);

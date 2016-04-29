@@ -115,7 +115,7 @@
             if (!this._playing)
                 return;
 
-            this._playTime += delay * 10;
+            this._playTime += delay * 5;
 
             var Tnow: number = this._playTime % ((this.cameraAnimationFrames[this.cameraAnimationFrames.length - 1].time - this.cameraAnimationFrames[0].time) + (160));
 

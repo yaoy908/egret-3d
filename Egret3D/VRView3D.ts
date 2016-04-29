@@ -78,8 +78,7 @@
         */
         public set width(value: number) {
             this._viewPort.width = value;
-            this._aspectRatio = this._viewPort.width / this._viewPort.height;
-            this._camera.aspectRatio = this._aspectRatio;
+            this._camera.aspectRatio = this._viewPort.width / this._viewPort.height;
             this.updateViewport();
         }
     
@@ -92,8 +91,7 @@
         */
         public set height(value: number) {
             this._viewPort.height = value;
-            this._aspectRatio = this._viewPort.width / this._viewPort.height;
-            this._camera.aspectRatio = this._aspectRatio;
+            this._camera.aspectRatio = this._viewPort.width / this._viewPort.height;
             this.updateViewport();
         }
 
