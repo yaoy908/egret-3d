@@ -28,6 +28,7 @@
 
             var plane: Mesh;
             var material: ColorMaterial = new ColorMaterial(0xf0f000);
+            material.ambientColor = 0xffffff;
             material.bothside = true;
             for (var i: number = 0; i < 100; i++) {
                 plane = new Mesh(geom, material);
