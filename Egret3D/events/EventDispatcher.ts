@@ -23,9 +23,11 @@
          * @platform Web,Native
          */
         public dispatchEvent(event3D: Event3D) {
-            if (this.listeners[event3D.eventType] != null) {
-                for (var i: number = 0; i < this.listeners[event3D.eventType].length; i++) {
-                    var listener: EventListener = this.listeners[event3D.eventType][i];
+            var list: any = this.listeners[event3D.eventType];
+            if (list != null) {
+                list = list.slice();
+                for (var i: number = 0; i < list.length; i++) {
+                    var listener: EventListener = list[i];
                     try {
                         listener.handler.call(listener.thisObject, event3D);
                     } catch (error) {
@@ -73,6 +75,7 @@
          */
         public removeEventListener(type: string, callback: Function, thisObject: any): void {
             if (this.hasEventListener(type, thisObject, callback)) {
+
                 for (var i: number = 0; i < this.listeners[type].length; i++) {
                     var listener: EventListener = this.listeners[type][i];
                     if (listener.equalCurrentListener(type, thisObject, callback)) {

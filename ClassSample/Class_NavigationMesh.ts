@@ -62,7 +62,8 @@
             geom.indexData = meshIndicesData;
 
 
-            var wireframe: Wireframe = new Wireframe(geom);
+            var wireframe: Wireframe = new Wireframe();
+            wireframe.geometry = geom;
             this.view1.addChild3D(wireframe);
         }
 
@@ -142,15 +143,15 @@
         private randomPath():void
 		{
             var indexStart: number, indexEnd: number;
-            indexStart = this._naviMesh.channel.length * Math.random();
-            indexEnd = this._naviMesh.channel.length * Math.random();
+            indexStart = this._naviMesh.triangles.length * Math.random();
+            indexEnd = this._naviMesh.triangles.length * Math.random();
             indexStart = Math.floor(indexStart);
             indexEnd = Math.floor(indexEnd);
 
             var startNode: Navi3DTriangle, endNode: Navi3DTriangle;
 
-            var startPoint: Vector3D = this._naviMesh.channel[indexStart].randomPoint();
-            var endPoint: Vector3D = this._naviMesh.channel[indexEnd].randomPoint();
+            var startPoint: Vector3D = this._naviMesh.triangles[indexStart].randomPoint();
+            var endPoint: Vector3D = this._naviMesh.triangles[indexEnd].randomPoint();
 
             this.findPathFromPoint(startPoint, endPoint);
         }
@@ -158,7 +159,7 @@
 
         private findPathFromPoint(f: Vector3D, t: Vector3D): void {
             var time: number = new Date().getTime();
-            //console.log(f.x, f.y, f.z, t.x, t.y, t.z);
+            console.log(f.x, f.y, f.z, t.x, t.y, t.z);
             //f.setTo(187.70807647744004, 280, 118.22329192860805);
             //t.setTo(109.09339033058711, 180.65538407432982, 127.51791953946402);
             var success: boolean = this._naviMesh.findPath(f, t, 10);
@@ -192,7 +193,8 @@
             geom.verticesData = pathVertexData;
             geom.indexData = pathIndicesData;
 
-            this._pathWireFrame = new Wireframe(geom);
+            this._pathWireFrame = new Wireframe();
+            this._pathWireFrame.geometry = geom;
             this.view1.addChild3D(this._pathWireFrame);
         }
 

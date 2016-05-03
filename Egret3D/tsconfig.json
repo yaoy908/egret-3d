@@ -151,7 +151,8 @@
         "material/method/FogMethod.ts",
         "material/method/UVRollMethod.ts",
         "material/method/UVSpriteSheetMethod.ts",
-
+        "material/method/LightMapMethod.ts",
+        
         "material/pass/PassUsage.ts",
         "material/MaterialData.ts",
 
@@ -205,6 +206,7 @@
         "texture/CubeTexture.ts",
         "texture/CheckerboardTexture.ts",
         "texture/VideoTexture.ts",
+        "texture/RenderTargetTexture.ts",
 
         "Util/ByteArray.ts",
         "Util/Debug.ts",
@@ -231,6 +233,8 @@
         "Util/navigation/Navi3DMesh.ts",
         "Util/navigation/Navi3DFunnel.ts",
         "Util/navigation/Navi3DRouter.ts",
+
+        "hud/HUD.ts",
 
         "View3D.ts",
         "VRView3D.ts",

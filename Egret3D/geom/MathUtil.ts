@@ -33,6 +33,11 @@
         public static CALCULATION_MATRIX: Matrix4_4 = new Matrix4_4();
 
         /**
+        * @private
+        */
+        public static CALCULATION_QUATERNION: Quaternion = new Quaternion();
+
+        /**
         * @language zh_CN
         * 四元数转矩阵
         * @param quarternion 源四元数

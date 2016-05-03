@@ -29,7 +29,10 @@
             super(new CubeGeometry(10000, 10000, 10000), cubMaterial);
             this._camera = camera;
             cubMaterial.cullMode = ContextConfig.FRONT;
-        } 
+            if (!this.bound) {
+                this.bound = this.buildBoundBox();
+            }
+        }
                         
         /**
         * @language zh_CN

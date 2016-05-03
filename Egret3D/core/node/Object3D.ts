@@ -57,9 +57,7 @@
         public static renderListChange: boolean = true;
         protected static s_id: number = 0;
 
-        protected _modeMatrix3D: Matrix4_4 = new Matrix4_4();
-        protected _sceneTransform: Matrix4_4 = new Matrix4_4();
-
+        protected _modelMatrix3D: Matrix4_4 = new Matrix4_4();
         protected _transformChange: boolean = true;
 
         protected _pos: Vector3D = new Vector3D();
@@ -651,7 +649,7 @@
             if (this._transformChange) {
                 this.updateModleMatrix();
             }
-            return this._modeMatrix3D;
+            return this._modelMatrix3D;
         }
 
         /**
@@ -684,7 +682,7 @@
                 this._globalSca.copyFrom(this._sca);
                 this._globalRot.copyFrom(this._rot);
             }
-            this._modeMatrix3D.makeTransform(this._globalPos, this._globalSca, this._globalOrientation);
+            this._modelMatrix3D.makeTransform(this._globalPos, this._globalSca, this._globalOrientation);
             this._transformChange = false;
 
             this.onUpdateTransform();
@@ -1314,23 +1312,6 @@
         */
         public update(time: number, delay: number, camera:Camera3D) {
 
-        }
-
-        public get sceneTransform(): Matrix4_4 {
-            this.updateSceneTransform();
-            return this._sceneTransform;
-        }
-
-        /**
-         * Updates the scene transformation matrix.
-         */
-        protected updateSceneTransform(): void {
-            if (this.parent && !this.parent._isRoot) {
-                this._sceneTransform.copyFrom(this.parent.sceneTransform);
-                this._sceneTransform.multiply(this.modelMatrix);
-            } else
-                this._sceneTransform.copyFrom(this.modelMatrix);
-            //this._sceneTransform.invert();
         }
 
         /**

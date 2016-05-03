@@ -349,6 +349,7 @@ module egret3d {
 
             for (i = 0; i < count; i++) {
                 edgePt0 = edgePt1 = edgePt2 = null;
+                fatPt0 = fatPt1 = fatPt2 = null;
                 checkEnable = false;
                 optimusPoint = null;
 

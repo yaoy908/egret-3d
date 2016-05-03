@@ -25,35 +25,6 @@
             this._passUsage.vertexShader.shaderType = Shader.vertex;
             this._passUsage.fragmentShader.shaderType = Shader.fragment;
 
-            if (geom.vertexFormat & VertexFormat.VF_POSITION) {
-                this._passUsage.vertexShader.addUseShaderName("attribute_position_vs");
-            }
-
-            if (geom.vertexFormat & VertexFormat.VF_NORMAL) {
-                this._passUsage.vertexShader.addUseShaderName("attribute_normal_vs");
-            }
-
-            if (geom.vertexFormat & VertexFormat.VF_TANGENT) {
-                this._passUsage.vertexShader.addUseShaderName("attribute_tangent_vs");
-            }
-
-            if (geom.vertexFormat & VertexFormat.VF_COLOR) {
-                this._passUsage.vertexShader.addUseShaderName("attribute_color_vs");
-            }
-
-            if (geom.vertexFormat & VertexFormat.VF_UV0) {
-                this._passUsage.vertexShader.addUseShaderName("attribute_uv0_vs");
-            }
-
-            if (geom.vertexFormat & VertexFormat.VF_UV1) {
-                this._passUsage.vertexShader.addUseShaderName("attribute_uv1_vs");
-            }
-
-            if (geom.vertexFormat & VertexFormat.VF_SKIN) {
-                this._passUsage.vertexShader.addUseShaderName("attribute_skin_vs");
-            }
-
-
             this._passUsage.vertexShader.addUseShaderName("base_vs");
             this._passUsage.fragmentShader.addUseShaderName("base_fs");
            
@@ -85,7 +56,10 @@
             if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.normal) != -1) {
                 this._passUsage.fragmentShader.addUseShaderName("normalMap_fragment");
             }
-
+            if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.shadow) != -1) {
+                this._passUsage.vertexShader.addUseShaderName("shadow_vs");
+                this._passUsage.fragmentShader.addUseShaderName("shadow_fs");
+            }
             if (this.lightGroup) {
                 this._passUsage.maxDirectLight = this.lightGroup.directLightList.length;
                 this._passUsage.maxSpotLight = this.lightGroup.spotLightList.length;

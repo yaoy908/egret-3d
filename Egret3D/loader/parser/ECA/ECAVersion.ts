@@ -30,9 +30,9 @@
                 cameraAnimationFrame.fov = bytes.readFloat();
 
                 cameraAnimationFrame.rotation = new Vector3D(
-                    bytes.readFloat(),
-                    bytes.readFloat(),
-                    bytes.readFloat());
+                    bytes.readFloat() * MathUtil.RADIANS_TO_DEGREES + 90,
+                    bytes.readFloat() * MathUtil.RADIANS_TO_DEGREES,
+                    bytes.readFloat() * MathUtil.RADIANS_TO_DEGREES);
 
                 cameraAnimationFrame.translation = new Vector3D(
                     bytes.readFloat(),

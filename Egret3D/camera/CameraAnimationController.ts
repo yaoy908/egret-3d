@@ -11,6 +11,11 @@
     * @platform Web,Native
     */
     export class CameraAnimationController{
+        /**
+        * @language zh_CN
+        * 动画播放完一个周期的事件
+        */
+        public static EVENT_CAMERA_COMPLETE: string = "event_camera_complete";
 
         /**
         * @language zh_CN
@@ -28,15 +33,17 @@
         */
         public name: string;
 
-
         private _camera: Camera3D;
         private _playing: boolean = false;
         private _playTime: number = 0;
         private _currentFrameIndex: number = 0;
         private _loop: boolean = true;
-        private _smooth: boolean = false;
+        private _smooth: boolean = true;
         private _cameraAnimationFrame: CameraAnimationFrame = new CameraAnimationFrame();
-
+        private _event: Event3D = new Event3D();
+        private _quatCurrentFrame: Quaternion = new Quaternion();
+        private _quatnNextFrame: Quaternion = new Quaternion();
+        private _quatn: Quaternion = new Quaternion();
         /**
         * @language zh_CN
         * 构造函数
@@ -108,15 +115,22 @@
             if (!this._playing)
                 return;
 
-            this._playTime += delay * 10;
+            this._playTime += delay * 5;
 
             var Tnow: number = this._playTime % ((this.cameraAnimationFrames[this.cameraAnimationFrames.length - 1].time - this.cameraAnimationFrames[0].time) + (160));
 
             var currentFrameIndex: number = Math.floor(Tnow / (160)) % this.cameraAnimationFrames.length;
 
-            if (!this._loop && this._currentFrameIndex > currentFrameIndex) {
-                this._playing = false;
-                this._camera.isController = true;
+            if (this._currentFrameIndex > currentFrameIndex) {
+                if (!this._loop) {
+                    this._playing = false;
+                    this._camera.isController = true;
+                }
+                if (this._camera) {
+                    this._event.eventType = CameraAnimationController.EVENT_CAMERA_COMPLETE;
+                    this._event.target = this;
+                    this._camera.dispatchEvent(this._event);
+                }
             }
 
             this._currentFrameIndex = currentFrameIndex;
@@ -133,7 +147,15 @@
                 
                 ///(v1.x - v0.x) * t + v0.x;
                 this._cameraAnimationFrame.fov = (nextFrame.fov - currentFrame.fov) * t + currentFrame.fov;
-                this._cameraAnimationFrame.rotation.copyFrom(currentFrame.rotation); ///.lerp(currentFrame.rotation, nextFrame.rotation, t);
+
+                this._quatCurrentFrame.fromEulerAngles(currentFrame.rotation.x, currentFrame.rotation.y, currentFrame.rotation.z);
+
+                this._quatnNextFrame.fromEulerAngles(nextFrame.rotation.x, nextFrame.rotation.y, nextFrame.rotation.z);
+
+                this._quatn.lerp(this._quatCurrentFrame, this._quatnNextFrame, t);
+
+                this._quatn.toEulerAngles(this._cameraAnimationFrame.rotation);
+
                 this._cameraAnimationFrame.translation.lerp(currentFrame.translation, nextFrame.translation, t);
             }
             else {
@@ -143,9 +165,8 @@
             }
 
             this._camera.fieldOfView = this._cameraAnimationFrame.fov;
-            this._camera.rotationX = this._cameraAnimationFrame.rotation.x * MathUtil.RADIANS_TO_DEGREES + 90;
-            this._camera.rotationY = this._cameraAnimationFrame.rotation.y * MathUtil.RADIANS_TO_DEGREES;
-            this._camera.rotationZ = this._cameraAnimationFrame.rotation.z * MathUtil.RADIANS_TO_DEGREES;
+
+            this._camera.rotation = this._cameraAnimationFrame.rotation;
             this._camera.position = this._cameraAnimationFrame.translation;
         }
     }

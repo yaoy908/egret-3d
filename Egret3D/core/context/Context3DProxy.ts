@@ -354,7 +354,7 @@
             var rttframeBuffer = Context3DProxy.gl.createFramebuffer();
             var texture2D: Texture2D = this.creatTexture2D();
             var depthRenderbuffer = Context3DProxy.gl.createRenderbuffer();
-            Context3DProxy.gl.bindFramebuffer(Context3DProxy.gl.FRAMEBUFFER, rttframeBuffer);
+
 
             Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture2D.texture);
 
@@ -381,13 +381,15 @@
                     break;
             }
 
-            Context3DProxy.gl.framebufferTexture2D(Context3DProxy.gl.FRAMEBUFFER, Context3DProxy.gl.COLOR_ATTACHMENT0, Context3DProxy.gl.TEXTURE_2D, texture2D.texture, 0);
-
             Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MAG_FILTER, Context3DProxy.gl.LINEAR);
             Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, Context3DProxy.gl.LINEAR);
             Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_S, Context3DProxy.gl.CLAMP_TO_EDGE);
             Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_T, Context3DProxy.gl.CLAMP_TO_EDGE);
-            ///Context3DProxy.gl.generateMipmap(Context3DProxy.gl.TEXTURE_2D);  
+            Context3DProxy.gl.generateMipmap(Context3DProxy.gl.TEXTURE_2D);  
+
+            Context3DProxy.gl.bindFramebuffer(Context3DProxy.gl.FRAMEBUFFER, rttframeBuffer);
+            Context3DProxy.gl.framebufferTexture2D(Context3DProxy.gl.FRAMEBUFFER, Context3DProxy.gl.COLOR_ATTACHMENT0, Context3DProxy.gl.TEXTURE_2D, texture2D.texture, 0);
+
             ///配置渲染缓冲 
             Context3DProxy.gl.bindRenderbuffer(Context3DProxy.gl.RENDERBUFFER, depthRenderbuffer);
             Context3DProxy.gl.renderbufferStorage(Context3DProxy.gl.RENDERBUFFER, Context3DProxy.gl.DEPTH_COMPONENT16, width, height);
@@ -416,17 +418,21 @@
                 //Context3DProxy.gl.renderbufferStorage(Context3DProxy.gl.RENDERBUFFER, Context3DProxy.gl.DEPTH_COMPONENT16, texture.width, texture.height);
             }
 
-            Context3DProxy.gl.viewport(0, 0, texture.width, texture.height);
-           
             //if (Context3DProxy.gl.checkFramebufferStatus(Context3DProxy.gl.FRAMEBUFFER) != Context3DProxy.gl.FRAMEBUFFER_COMPLETE)
             //{
             //    alert("缓冲失败");
             //}
 
+            Context3DProxy.gl.viewport(0, 0, texture.width, texture.height);
+            Context3DProxy.gl.scissor(0, 0, texture.width, texture.height);
+
             Context3DProxy.gl.bindFramebuffer(Context3DProxy.gl.FRAMEBUFFER, texture.frameBuffer);
+            Context3DProxy.gl.clearColor(0, 0, 0, 1);
             Context3DProxy.gl.clear(Context3DProxy.gl.COLOR_BUFFER_BIT | Context3DProxy.gl.DEPTH_BUFFER_BIT);
+
             Context3DProxy.gl.framebufferTexture2D(Context3DProxy.gl.FRAMEBUFFER, Context3DProxy.gl.COLOR_ATTACHMENT0, Context3DProxy.gl.TEXTURE_2D, texture.texture, 0);
             Context3DProxy.gl.framebufferRenderbuffer(Context3DProxy.gl.FRAMEBUFFER, Context3DProxy.gl.DEPTH_ATTACHMENT, Context3DProxy.gl.RENDERBUFFER, texture.renderbuffer);
+       
         }
                         
         /**

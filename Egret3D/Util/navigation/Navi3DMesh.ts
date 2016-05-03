@@ -69,18 +69,6 @@ module egret3d
 
         /**
         * @language zh_CN
-        * 寻路结果的三角带
-        * @return 三角形列表
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public get triangleList(): Array<Navi3DTriangle>
-		{
-            return this._triangleList;
-        }
-
-        /**
-        * @language zh_CN
         * 网格中的点列表
         * @return 点列表
         * @version Egret 3.0
@@ -109,7 +97,7 @@ module egret3d
         * @version Egret 3.0
         * @platform Web,Native
         */
-		public get channel():Array<Navi3DTriangle>
+		public get triangles():Array<Navi3DTriangle>
 		{
             return this._nav3dTriangles;
 		}
