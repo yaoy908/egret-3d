@@ -35,7 +35,7 @@
         * @param vScale V缩放
         * @param aixs 0:Y轴为0 1:Z轴为0 2:X轴为0
         */
-        constructor(width: number = 500, height: number = 500, segmentsW: number = 1, segmentsH: number = 1, uScale: number = 1, vScale: number = 1,aixs:number = 0) {
+        constructor(width: number = 500, height: number = 500, segmentsW: number = 1, segmentsH: number = 1, uScale: number = 1, vScale: number = 1, aixs: Vector3D = Vector3D.Y_AXIS) {
             super();
             this._width = width;
             this._height = height;
@@ -43,11 +43,11 @@
             this._segmentsH = segmentsH;
             this._scaleU = uScale;
             this._scaleV = vScale;
-
+            
             this.buildGeometry(aixs);
         }     
 
-        private buildGeometry(aixs: number): void {
+        private buildGeometry(aixs: Vector3D = Vector3D.Y_AXIS): void {
 
             this.vertexFormat  = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0;
 
@@ -73,7 +73,7 @@
                     y = (yi / this._segmentsH - .5) * this._height;
 
                     switch (aixs) {
-                        case 0:
+                        case Vector3D.X_AXIS:
                             this.verticesData[index++] = x;
                             this.verticesData[index++] = 0;
                             this.verticesData[index++] = y;
@@ -82,7 +82,7 @@
                             this.verticesData[index++] = 1;
                             this.verticesData[index++] = 0;
                             break;
-                        case 1:
+                        case Vector3D.Y_AXIS:
                             this.verticesData[index++] = x;
                             this.verticesData[index++] = y;
                             this.verticesData[index++] = 0;
@@ -91,7 +91,7 @@
                             this.verticesData[index++] = 0;
                             this.verticesData[index++] = -1;
                             break;
-                        case 2:
+                        case Vector3D.Z_AXIS:
                             this.verticesData[index++] = 0;
                             this.verticesData[index++] = x;
                             this.verticesData[index++] = y;

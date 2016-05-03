@@ -254,8 +254,6 @@
         */
         public subGeometrys: Array<SubGeometry> = new Array<SubGeometry>();       
 
-        public nodeCollection: AnimaNodeCollection;
-
         /**
         * @language zh_CN
         * @private
@@ -297,7 +295,7 @@
             subGeometry.matID = 0;
             subGeometry.geometry = this;
             subGeometry.start = 0;
-            subGeometry.count = this.indexData.length;
+            subGeometry.count = this.indexData ? this.indexData.length : 0 ;
             this.subGeometrys.push(subGeometry);
         }
 
@@ -433,8 +431,13 @@
         * @platform Web,Native
         */
         public upload(context3DProxy: Context3DProxy) {
-            this.sharedIndexBuffer = context3DProxy.creatIndexBuffer(this.indexData);
-            this.sharedVertexBuffer = context3DProxy.creatVertexBuffer(this.verticesData);
+            if (!this.sharedIndexBuffer && !this.sharedVertexBuffer) {
+                this.sharedIndexBuffer = context3DProxy.creatIndexBuffer(this.indexData);
+                this.sharedVertexBuffer = context3DProxy.creatVertexBuffer(this.verticesData);
+            } else {
+                (<Float32Array>this.sharedVertexBuffer.arrayBuffer).set(this.verticesData);
+                context3DProxy.uploadVertexBuffer(this.sharedVertexBuffer);
+            }
         }
 
         /**

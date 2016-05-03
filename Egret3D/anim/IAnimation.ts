@@ -51,17 +51,11 @@
 
         /**
         * @language zh_CN
-        * 动画节点容器
-        */
-        animaNodeCollection?: AnimaNodeCollection;
-
-        /**
-        * @language zh_CN
         * 更新调度
         * @param time 总时间
         * @param delay 帧间隔时间
         */
-        update(time: number, delay: number): void;
+        update(time: number, delay: number, geometry: Geometry, context: Context3DProxy ): void;
 
         /**
         * @language zh_CN
@@ -88,15 +82,17 @@
         * 获取动画列表
         * @return 动画名称数组
         */
-        getAnimList(): string[];
+        animStateNames: string[];
 
         /**
         * @language zh_CN
         * 获取动画节点
         * @return 动画节点数组
         */
-        getAnimNode(): Array<AnimationNode>;
+        animStates: IAnimationState[];
 
+        addAnimState(animState: IAnimationState)
+        removeAnimState(animState: IAnimationState)
         /**
         * @language zh_CN
         * 克隆新的IAnimation对象

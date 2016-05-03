@@ -547,5 +547,11 @@
 
             return ret;
         }
+
+        public static getURLName(url: string): string {
+            var urlArray: string[] = url.split(".");
+            urlArray = urlArray[0].split("/");
+            return urlArray[urlArray.length-1] ;
+        }
     }
 }

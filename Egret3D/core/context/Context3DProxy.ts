@@ -179,7 +179,7 @@
         * @param indexData
         */
         public creatIndexBuffer(indexData: Array<number>): IndexBuffer3D {
-            var indexDataArray = new Uint16Array(indexData);
+            var indexDataArray = new Int16Array(indexData);
 
             var indexBuffer: WebGLBuffer = Context3DProxy.gl.createBuffer();
             Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
@@ -196,17 +196,22 @@
         * 创建 顶点数据流
         * @param vertexData
         */
-        public creatVertexBuffer(vertexData: Array<number>): VertexBuffer3D {
+        public creatVertexBuffer(vertexData: Array<number>, dawType: number = Context3DProxy.gl.STATIC_DRAW ): VertexBuffer3D {
             var vertexDataArray: Float32Array = new Float32Array(vertexData);
 
             var vertexBuffer: WebGLBuffer = Context3DProxy.gl.createBuffer();
             Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ARRAY_BUFFER, vertexBuffer);
-            Context3DProxy.gl.bufferData(Context3DProxy.gl.ARRAY_BUFFER, vertexDataArray, Context3DProxy.gl.STATIC_DRAW);
+            Context3DProxy.gl.bufferData(Context3DProxy.gl.ARRAY_BUFFER, vertexDataArray, dawType );
 
             var vb: VertexBuffer3D = new VertexBuffer3D(vertexBuffer);
             vb.arrayBuffer = vertexDataArray;
 
             return vb;
+        }
+
+        public uploadVertexBuffer(vertexBuffer3D:VertexBuffer3D) {
+            Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ARRAY_BUFFER, vertexBuffer3D.buffer );
+            Context3DProxy.gl.bufferData(Context3DProxy.gl.ARRAY_BUFFER, vertexBuffer3D.arrayBuffer, Context3DProxy.gl.DYNAMIC_DRAW);
         }
 
         /// public upLoadTextureData(mipLevel: number, texture: Texture2D , data:any ) {

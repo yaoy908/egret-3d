@@ -96,8 +96,9 @@
                 }
             }
 
-            this.addSubMaterial(0, material);
-            this.material = material;
+            this.material = material ? material : new TextureMaterial() ;
+            this.addSubMaterial(0, this.material);
+            
             this.bound = this.buildBoundBox();
         }
 
@@ -208,13 +209,10 @@
         * @platform Web,Native
         */
         public update(time: number, delay: number, camera: Camera3D) {
-            super.update(time, delay, camera);
             if (this.isDisable)
                 return;
 
-            if (this.animation) {
-                this.animation.update(time, delay);
-            }
+            super.update(time, delay, camera);
         }
 
         /**
@@ -293,6 +291,10 @@
                 else {
                     this.muiltMaterial[0].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
                 }
+            }
+
+            if (this.animation) {
+                this.animation.update(time, delay, this.geometry, context3DProxy );
             }
 
         }

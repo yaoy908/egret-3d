@@ -18,6 +18,7 @@
         public static parse(datas: ArrayBuffer): Geometry {
 
             var bytes: ByteArray = new ByteArray(datas);
+            bytes.endian = Endian.LITTLE_ENDIAN;
             var fileFormatBytes: ByteArray = new ByteArray();
             bytes.readBytes(fileFormatBytes, 0, 3);
             var version: number = bytes.readUnsignedInt();

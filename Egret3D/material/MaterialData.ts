@@ -352,7 +352,13 @@
         public roughness: number = 1.0; 
 
         
-
+       /**
+        * @language zh_CN
+        * 反射颜色的强度值，出射光照的出射率。
+        * @default 1.0
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public albedo: number = 0.95; 
 
         /**

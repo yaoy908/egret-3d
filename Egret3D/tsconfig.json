@@ -7,34 +7,9 @@
         "out": "./egret3d.js"
     },
     "files": [
+        
+        "Egret3DState.ts",
         "config/TextureMethodType.ts",
-
-        "events/PickResult.ts",
-        "events/IDispatchEvent.ts",
-        "events/Event3D.ts",
-        "events/MouseEvent3D.ts",
-        "events/TouchEvent3D.ts",
-        "events/PickEvent3D.ts",
-        "events/KeyEvent3D.ts",
-        "events/OrientationEvent3D.ts",
-        "events/LoaderEvent3D.ts",
-        "events/ParserEvent3D.ts",
-        "events/EventDispatcher.ts",
-        "events/EventManager.ts",
-
-        "anim/IAnimation.ts",
-        "anim/AnimationNode.ts",
-        "anim/AnimaNodeCollection.ts",
-        "anim/skeletonAnimation/Joint.ts",
-        "anim/skeletonAnimation/Skeleton.ts",
-        "anim/skeletonAnimation/SkeletonAnimation.ts",
-        "anim/skeletonAnimation/SkeletonAnimationClip.ts",
-        "anim/particle/ParticleAnimation.ts",
-
-        "audio/Channel.ts",
-        "audio/Channel3d.ts",
-        "audio/Sound.ts",
-        "audio/AudioManager.ts",
 
         "geom/UV.ts",
         "geom/Point.ts",
@@ -50,7 +25,58 @@
         "geom/Ray.ts",
         "geom/Color.ts",
         "geom/Bound.ts",
+        "data/HashMap.ts",
         "geom/BoundBox.ts",
+        "events/PickResult.ts",
+        "events/IDispatchEvent.ts",
+        "events/Event3D.ts",
+        "events/MouseEvent3D.ts",
+        "events/TouchEvent3D.ts",
+        "events/PickEvent3D.ts",
+        "events/KeyEvent3D.ts",
+        "events/OrientationEvent3D.ts",
+        "events/LoaderEvent3D.ts",
+        "events/ParserEvent3D.ts",
+        "events/EventDispatcher.ts",
+        "events/EventManager.ts",
+
+        "shader/register/ShaderBase.ts",
+        "shader/register/VarRegister.ts",
+        "shader/register/Attribute.ts",
+        "shader/register/AttributeType.ts",
+        "shader/register/ConstVar.ts",
+        "shader/register/Sampler2D.ts",
+        "shader/register/Sampler3D.ts",
+        "shader/register/TmpVar.ts",
+        "shader/register/Uniform.ts",
+        "shader/register/UniformType.ts",
+        "shader/register/VarConfig.ts",
+        "shader/register/Varying.ts",
+        "shader/register/Extension.ts",
+        "shader/register/VaryingType.ts",
+
+        "shader/FragmentShader.ts",
+        "shader/ShaderLib.ts",
+        "shader/ShaderPool.ts",
+        "shader/ShaderContent.ts",
+        "shader/ShaderUtil.ts",
+
+        "anim/AnimationNode.ts",
+        "anim/AnimationCurve.ts",
+        "anim/IAnimationState.ts",
+        "anim/IAnimation.ts",
+
+        "anim/skeletonAnimation/Joint.ts",
+        "anim/skeletonAnimation/Skeleton.ts",
+        "anim/skeletonAnimation/SkeletonAnimation.ts",
+        "anim/skeletonAnimation/SkeletonAnimationClip.ts",
+
+        "audio/Channel.ts",
+        "audio/Channel3d.ts",
+        "audio/Sound.ts",
+        "audio/AudioManager.ts",
+
+
 
         "controller/ControllerBase.ts",
         "controller/LookAtController.ts",
@@ -90,7 +116,7 @@
         "core/traverse/Tag.ts",
         "core/traverse/Picker.ts",
 
-        "data/HashMap.ts",
+
 
         "geometry/Geometry.ts",
         "geometry/GeometryData.ts",
@@ -99,7 +125,7 @@
         "geometry/CylinderGeometry.ts",
         "geometry/PlaneGeometry.ts",
         "geometry/SphereGeometry.ts",
-        
+
         "input/input.ts",
         "input/OrientationController.ts",
 
@@ -133,46 +159,43 @@
         "material/pass/ColorPass.ts",
         "material/pass/DiffusePass.ts",
         "material/pass/CubePass.ts",
+        "material/pass/PBRPass.ts",
 
         "material/MaterialBase.ts",
 
         "material/ColorMaterial.ts",
         "material/TextureMaterial.ts",
         "material/CubeTextureMaterial.ts",
+        "material/PBRMaterial.ts",
 
         "render/RenderBase.ts",
         "render/DefaultRender.ts",
 
         "particle/Value.ts",
+        "particle/particleNode/ParticleEndNode.ts",
+        "particle/particleNode/ParticleTime.ts",
+        "particle/particleNode/ParticlePosition.ts",
+        "particle/particleNode/ParticleRotation.ts",
+        "particle/particleNode/ParticleScale.ts",
+        
+        "particle/particleNode/ParticleFollowNode.ts",
+        "particle/particleNode/ParticleUniformSpeedNode.ts",
+        "particle/particleNode/ParticleAccelerationSpeedNode.ts",
+        "particle/particleNode/ParticleScaleByLifeNode.ts",
+        "particle/particleNode/ParticleRotationNode.ts",
+
+
+        "particle/particleAnimationState.ts",
+        "particle/ParticleAnimation.ts",
         "particle/ParticleEmitter.ts",
-        "particle/particleNode/ParticlePositionNode.ts",
-        "particle/particleNode/ParticleLifecycleNode.ts",
-        "particle/particleNode/ParticleDirectionNode.ts",
-        "particle/particleNode/ParticleSpeedNode.ts",
+
+        // "particle/particleNode/ParticlePositionNode.ts",
+        // "particle/particleNode/ParticleLifecycleNode.ts",
+        // "particle/particleNode/ParticleDirectionNode.ts",
+        // "particle/particleNode/ParticleSpeedNode.ts",
 
         "scene/Scene3D.ts",
         "scene/TreeBase.ts",
-
-        "shader/register/ShaderBase.ts",
-        "shader/register/VarRegister.ts",
-        "shader/register/Attribute.ts",
-        "shader/register/AttributeType.ts",
-        "shader/register/ConstVar.ts",
-        "shader/register/Sampler2D.ts",
-        "shader/register/Sampler3D.ts",
-        "shader/register/TmpVar.ts",
-        "shader/register/Uniform.ts",
-        "shader/register/UniformType.ts",
-        "shader/register/VarConfig.ts",
-        "shader/register/Varying.ts",
-        "shader/register/Extension.ts",
-        "shader/register/VaryingType.ts",
-
-        "shader/FragmentShader.ts",
-        "shader/ShaderLib.ts",
-        "shader/ShaderPool.ts",
-        "shader/ShaderContent.ts",
-        "shader/ShaderUtil.ts",
 
         "texture/ITexture.ts",
         "texture/ImageTexture.ts",

@@ -260,6 +260,29 @@
 
         /**
         * @language zh_CN
+        * 加载的地址的上级目录，为了方便获取资源
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public parentUrl: string = "";
+
+        /**
+        * @language zh_CN
+        * 当前加载资源的名字
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public resourceName: string = ""; 
+
+        /**
+        * @language zh_CN
+        * 加载load 的临时资源，用户可自行配置的容器，大方便好用
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public tempData: any;
+        /**
+        * @language zh_CN
         * 加载的数据.
         * @version Egret 3.0
         * @platform Web,Native
@@ -362,6 +385,7 @@
         }
 
         protected doLoadComplete() {
+            this.resourceName = StringUtil.getURLName( this.url );
             this._event.eventType = LoaderEvent3D.LOADER_COMPLETE;
             this._event.target = this;
             this._event.loader = this;
