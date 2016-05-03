@@ -1,3 +1,4 @@
+
 vec3 e_position = vec3(0.0, 0.0, 0.0);
 vec3 e_normal = vec3(0.0, 0.0, 0.0);
 vec3 e_tangent = vec3(0.0, 0.0, 0.0);
@@ -7,6 +8,8 @@ vec2 e_uv1 = vec2(0.0, 0.0);
 vec4 e_boneIndex = vec4(0.0, 0.0, 0.0, 0.0);
 vec4 e_boneWeight = vec4(0.0, 0.0, 0.0, 0.0);
 
+//shader 中自动识别unifor 和赋予 uniform index
+//外部一定要有值传输进来，如果这个index从来没有用过， webgl 会报错
 uniform mat4 uniform_ModelMatrix ;
 uniform mat4 uniform_ViewMatrix ;
 uniform mat4 uniform_ProjectionMatrix ;
