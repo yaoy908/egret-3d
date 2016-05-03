@@ -287,7 +287,7 @@ module egret3d {
         * @param list            用于存储结果
         * @param edgeMask        边的通过属性过滤
         * @param triangleMask    三角形通过属性过滤
-        * @return                获得到的相邻三角形的队列
+        * @returns Array<Navi3DTriangle> 获得到的相邻三角形的队列
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -316,7 +316,7 @@ module egret3d {
         * 使用mask对所有的边进行过滤，获得结果
         * @param list            用于存储结果
         * @param edgeMask        边的通过属性过滤
-        * @return                获得到的边的队列
+        * @returns Array<Navi3DEdge> 获得到的边的队列
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -336,6 +336,7 @@ module egret3d {
         /**
         * @language zh_CN
         * 获得通过属性
+        * @returns boolean 是否通过
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -345,7 +346,8 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * @return 该三角形的三条边
+        * 该三角形的三条边
+        * @returns 该三角形的三条边
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -357,7 +359,7 @@ module egret3d {
         * @language zh_CN
         * 获得通过属性
         * @param value      用于过滤的值
-        * @return           是否通过
+        * @returns boolean 是否通过
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -369,7 +371,7 @@ module egret3d {
         * @language zh_CN
         * 根据三角形的一边获取另外一个点
         * @param edge      输入边
-        * @return          端点
+        * @returns Navi3DPoint 端点
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -381,7 +383,7 @@ module egret3d {
         * @language zh_CN
         * 根据一个顶点，获取对面的边
         * @param point     输入点
-        * @return          边
+        * @returns Navi3DEdge 边
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -393,7 +395,7 @@ module egret3d {
         * @language zh_CN
         * 稍微快一些的共边检测，需要等到mesh初始化完毕才可以
         * @param triangle  三角形
-        * @return          公共边
+        * @returns Navi3DEdge 公共边
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -414,7 +416,7 @@ module egret3d {
         * @language zh_CN
         * 费时间一些的检测共边
         * @param triangle  三角形
-        * @return          公共边
+        * @returns Navi3DEdge 公共边
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -435,7 +437,7 @@ module egret3d {
         /**
         * @language zh_CN
         * 在三角形内随机一个位置
-        * @return          点
+        * @returns Vector3D 点
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -466,7 +468,7 @@ module egret3d {
         * @param pt1        三角形的顶点1
         * @param pt2        三角形的顶点2
         * @param pt3        三角形的顶点3
-        * @return           是否处于三角形内
+        * @returns boolean 是否处于三角形内
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -484,7 +486,7 @@ module egret3d {
         /**
         * @language zh_CN
         * @private
-        * @return 判定2d点是否在一个2d的三角形内
+        * @returns boolean 判定2d点是否在一个2d的三角形内
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -507,7 +509,7 @@ module egret3d {
         * @param pt1        点1
         * @param pt2        点2
         * @param pt3        点3
-        * @return           结果值
+        * @returns number 结果值
         * @version Egret 3.0
         * @platform Web,Native
         */
