@@ -594,7 +594,7 @@
                         this.verticesData[index * this.vertexAttLength + offset + 0] = 0;
                         this.verticesData[index * this.vertexAttLength + offset + 1] = 0;
                         this.verticesData[index * this.vertexAttLength + offset + 2] = 0;
-                        this.verticesData[index * this.vertexAttLength + offset + 3] = 0;
+                        this.verticesData[index * this.vertexAttLength + offset + 3] = 1;
                     }
                     offset += Geometry.colorSize;
                 }
