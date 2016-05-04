@@ -90,9 +90,11 @@
         * @param animName 动画名
         * @param speed 播放速度
         */
-        public play(animName?: string, speed?: number) {
+        public play(animName?: string, speed?: number,reset:boolean = true ) {
             this._play = true;
-            this.time = 0;
+            if (reset){
+                this.time = 0;
+            }
             this.delay = 0;
         }
 

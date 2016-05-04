@@ -75,6 +75,15 @@
                 this.animNodes.splice(index, 1);
         }
 
+         /**
+        * @language zh_CN
+        * 清空分配好的动画节点
+        * @param node 节点对象
+        */
+        public clean() {
+            this.animNodes.length = 0; 
+        }
+
         /**
         * @language zh_CN
         * 计算节点

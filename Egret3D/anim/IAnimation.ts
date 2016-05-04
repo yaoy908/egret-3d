@@ -63,7 +63,7 @@
         * @param animName 动画名称
         * @param speed 播放速度（默认为1）
         */
-        play(animName?: string, speed?: number): void;
+        play(animName?: string, speed?: number , reset?:boolean ): void;
 
         /**
         * @language zh_CN

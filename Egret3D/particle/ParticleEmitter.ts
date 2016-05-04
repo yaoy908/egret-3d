@@ -3,7 +3,7 @@
     /**
    * @class egret3d.ParticleEmitter
    * @classdesc
-   * 粒子发射器 有多种发射器类型 还分为两种粒子类型，重力粒子只朝一个方向运动，范围粒子是随范围运动
+   * 粒子发射器 
    * @see egret3d.Mesh
    * @version Egret 3.0
    * @platform Web,Native 
@@ -12,9 +12,12 @@
 
         private particleGeometryShape: Geometry;
         private particleAnimation: ParticleAnimation;
-        private _isChangeBuild: boolean = true;
+
         private _particleFollowNode: ParticleFollowNode; 
         private _particleState: ParticleAnimationState; 
+        private _isChangeBuild: boolean = true;
+
+        private _particleAnimNodes: AnimationNode[] = [] ;
 
         /**
         * @language zh_CN
@@ -40,22 +43,59 @@
             this.geometry.buildDefaultSubGeometry();
             this.geometry.subGeometrys[0].count = this._particleState.maxParticles * this.particleGeometryShape.indexData.length ;
 
+            this.buildBoudBox();
         }
 
+        /**
+        * @language zh_CN
+        * 设置跟随的目标，如果设置了，粒子发射器会跟随目标 
+        */
         public set followTarget(o: Object3D) {
             this._particleState.followTarget = o;
         }
 
+        /**
+        * @language zh_CN
+        * 设置跟随的目标，如果设置了，粒子发射器会跟随目标
+        */
         public get followTarget(): Object3D {
             return this._particleState.followTarget;
         }
 
-        public play() {
-            if (this._isChangeBuild) {
-                this._isChangeBuild = false;
-                this.initlize();
+        /**
+        * @language zh_CN
+        * 给粒子发射器添加 粒子效果节点
+        */
+        public addAnimNode(node: AnimationNode) {
+            var index: number = this._particleAnimNodes.indexOf(node);
+            if (index == -1) {
+                this._particleAnimNodes.push( node );
+                this._isChangeBuild = true;
             }
-            this.animation.play();
+        }
+
+        /**
+        * @language zh_CN
+        * 移除粒子发射器上的效果节点
+        */
+        public removeAnimNode(node: AnimationNode) {
+            var index: number = this._particleAnimNodes.indexOf(node);
+            if (index != -1) {
+                this._particleAnimNodes.slice(index);
+                this._isChangeBuild = true;
+            }
+        }
+
+        /**  
+        * 播放粒子
+        **/
+        public play( prewarm:boolean = false ) {
+            if (prewarm) {
+                this.animation.time = this._particleState.totalTime;
+                this.animation.play("",1.0,false);
+            } else {
+                this.animation.play();
+            }
         }
 
         protected initlize() {
@@ -96,7 +136,7 @@
                 }
             }
 
-            this.buildBoundBox();
+            //this.buildBoundBox();
 
             //最后根据节点功能，填充模型
             this.particleAnimation.particleAnimationState.fill(this.geometry, this._particleState.maxParticles);
@@ -104,23 +144,30 @@
 
         private initMainAnimNode() {
 
+            //clean
+            this.particleAnimation.particleAnimationState.clean();
+
+            //time 
             var particleTimeNode: ParticleTime = new ParticleTime();
             (<ConstValueShape>particleTimeNode.delay).value = 0 ;
             (<ConstValueShape>particleTimeNode.life).value = 2.0;
             (<ConstValueShape>particleTimeNode.rate).value = 0.01 ;
 
+            //position
             var particlePosition: ParticlePosition = new ParticlePosition();
             particlePosition.positions = new CubeVector3DValueShape(); 
 
+            //rotation
             var particleRotation: ParticleRotation = new ParticleRotation();
             particleRotation.rotations = new Vec3ConstValueShape(); 
-            //(<Vec3ConstValueShape>particleRotation.rotations). = 0;
 
+            //scale
             var particleScale: ParticleScale = new ParticleScale();
             particleScale.scale = new ConstRandomValueShape();
             (<ConstRandomValueShape>particleScale.scale).min = 0.1;
             (<ConstRandomValueShape>particleScale.scale).max = 3.0;
 
+            //end
             var particleEndNode: ParticleEndNode = new ParticleEndNode();
             this._particleFollowNode = new ParticleFollowNode();
 
@@ -140,12 +187,9 @@
         }
 
         private initOtherAnimNode() {
-            var acc: ParticleAccelerationSpeedNode = new ParticleAccelerationSpeedNode();
-            acc.speedShape = new Vec3ConstValueShape();
-            (<Vec3ConstValueShape>acc.speedShape).minX = 0;
-            (<Vec3ConstValueShape>acc.speedShape).minY = -100;
-            (<Vec3ConstValueShape>acc.speedShape).minZ = 0;
-            this.particleAnimation.particleAnimationState.addNode(acc);
+            for (var i: number = 0; i < this._particleAnimNodes.length; i++) {
+                this.particleAnimation.particleAnimationState.addNode(this._particleAnimNodes[i]);
+            }
         }
 
         /**
@@ -165,7 +209,16 @@
         * @private
         */
         public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
+            if (this._isChangeBuild) this.initlize();
             super.renderDiffusePass(time, delay, context3DProxy, camera3D);
+        }
+
+        private buildBoudBox() {
+            var bound: BoundBox = new BoundBox(this);
+            bound.fillBox(new Vector3D(-50, -50, -50), new Vector3D(50, 50, 50));
+            //(<BoundBox>bound.childBound).fillBox(new Vector3D(-50,-50,-50), new Vector3D(50,50,50));
+            this.bound = bound;
+            this.initAABB();
         }
     }
 }
