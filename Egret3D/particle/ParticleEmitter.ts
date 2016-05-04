@@ -22,6 +22,9 @@
         /**
         * @language zh_CN
         * 构造函数 
+        * @param geo 粒子的几何形状
+        * @param material 粒子的材质
+        * @param maxParticles 粒子最大个数
         * @version Egret 3.0
         * @platform Web,Native 
         */
@@ -46,9 +49,13 @@
             this.buildBoudBox();
         }
 
+        
         /**
         * @language zh_CN
         * 设置跟随的目标，如果设置了，粒子发射器会跟随目标 
+        * @param o 粒子发射器会跟随目标 
+        * @version Egret 3.0
+        * @platform Web,Native 
         */
         public set followTarget(o: Object3D) {
             this._particleState.followTarget = o;
@@ -56,15 +63,22 @@
 
         /**
         * @language zh_CN
-        * 设置跟随的目标，如果设置了，粒子发射器会跟随目标
+        * 获取跟随的目标
+        * @returns Object3D 跟随的目标 
+        * @version Egret 3.0
+        * @platform Web,Native 
         */
         public get followTarget(): Object3D {
             return this._particleState.followTarget;
         }
 
+        
         /**
         * @language zh_CN
         * 给粒子发射器添加 粒子效果节点
+        * @param node 粒子效果节点 
+        * @version Egret 3.0
+        * @platform Web,Native 
         */
         public addAnimNode(node: AnimationNode) {
             var index: number = this._particleAnimNodes.indexOf(node);
@@ -73,10 +87,13 @@
                 this._isChangeBuild = true;
             }
         }
-
+                
         /**
         * @language zh_CN
         * 移除粒子发射器上的效果节点
+        * @param node 粒子效果节点 
+        * @version Egret 3.0
+        * @platform Web,Native 
         */
         public removeAnimNode(node: AnimationNode) {
             var index: number = this._particleAnimNodes.indexOf(node);
@@ -85,10 +102,14 @@
                 this._isChangeBuild = true;
             }
         }
-
-        /**  
+                        
+        /**
+        * @language zh_CN
         * 播放粒子
-        **/
+        * @param prewarm 是否预热
+        * @version Egret 3.0
+        * @platform Web,Native 
+        */
         public play( prewarm:boolean = false ) {
             if (prewarm) {
                 this.animation.time = this._particleState.totalTime;

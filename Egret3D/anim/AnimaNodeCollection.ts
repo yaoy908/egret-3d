@@ -20,24 +20,6 @@
         */
         public nodes: Array<AnimationNode> = new Array<AnimationNode>();
 
-        public enableBillboardX: boolean = true;
-
-        public enableBillboardY: boolean = true;
-
-        public enableBillboardZ: boolean = true;
-
-        public startColor: Vector3D = new Vector3D(1, 1, 1);
-
-        public endColor: Vector3D = new Vector3D(1, 1, 1);
-
-        public startScale: Vector3D = new Vector3D(1, 1, 1);
-
-        public endScale: Vector3D = new Vector3D(1, 1, 1);
-
-        public startRot: Vector3D = new Vector3D();
-
-        public endRot: Vector3D = new Vector3D();
-
         /**
         * @language zh_CN
         * 顶点数

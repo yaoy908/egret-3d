@@ -1,11 +1,18 @@
 ﻿module egret3d {
+
+    /**
+    * @private
+    */
     export enum ValueType {
         float,
         vec2,
         vec3,
         vec4
     }
-
+        
+    /**
+    * @private
+    */
     export class ValueShape {
         public valueType: ValueType;
         public calculate(num: number, valueShape:ValueShape = null ): any {
@@ -13,7 +20,10 @@
             return null;
         }
     }
-
+        
+    /**
+    * @private
+    */
     export class ConstValueShape extends ValueShape {
         public valueType: ValueType = ValueType.float;
 
@@ -26,7 +36,10 @@
             return values;
         }
     }
-
+            
+    /**
+    * @private
+    */
     export class ConstRandomValueShape extends ValueShape {
         public valueType: ValueType = ValueType.float;
 
@@ -40,7 +53,10 @@
             return values;
         }
     }
-
+            
+    /**
+    * @private
+    */
     export class Vec2ConstValueShape extends ValueShape {
         public valueType: ValueType = ValueType.vec2;
 
@@ -57,7 +73,10 @@
             return values;
         }
     }
-
+            
+    /**
+    * @private
+    */
     export class Vec2ConstRandomValueShape extends ValueShape {
         public valueType: ValueType = ValueType.vec2;
 
@@ -76,7 +95,10 @@
             return values;
         }
     }
-
+            
+    /**
+    * @private
+    */
     export class Vec3ConstValueShape extends ValueShape {
         public valueType: ValueType = ValueType.vec3;
 
@@ -95,7 +117,10 @@
             return values;
         }
     }
-
+            
+    /**
+    * @private
+    */
     export class Vec3ConstRandomValueShape extends ValueShape {
         public valueType: ValueType = ValueType.vec3;
 
@@ -117,7 +142,10 @@
             return values;
         }
     }
-
+            
+    /**
+    * @private
+    */
     export class CubeVector3DValueShape extends ValueShape {
         public valueType: ValueType = ValueType.vec3;
 
@@ -144,7 +172,10 @@
             return values;
         }
     }
-
+            
+    /**
+    * @private
+    */
     export class PlaneValueShape extends ValueShape {
         public valueType: ValueType = ValueType.vec3;
 
@@ -163,8 +194,11 @@
             return values;
         }
     }
-
-    //圆柱体.以Y轴为高 (parameters = [R, height])
+            
+    /**
+    * @private
+    *圆柱体.以Y轴为高 (parameters = [R, height])
+    */
     export class CylinderValueShape extends ValueShape {
         public valueType: ValueType = ValueType.vec3;
 
@@ -191,7 +225,10 @@
         }
     }
 
-    //线性分布
+    /**
+    * @private
+    * 线性分布
+    */
     class LineValueShape extends ValueShape {
         public valueType: ValueType = ValueType.vec3;
 
@@ -233,8 +270,11 @@
             return values;
         }
     }
-
-    //球表面分布
+    
+    /**
+    * @private
+    * 球表面分布
+    */
     class BallSurfaceValueShape extends ValueShape {
         public valueType: ValueType = ValueType.vec3;
 
@@ -276,8 +316,11 @@
             return values;
         }
     }
-
-    //球内分布
+        
+    /**
+    * @private
+    * 球内分布
+    */
     class BallValueShape extends ValueShape {
         public valueType: ValueType = ValueType.vec3;
 
@@ -312,8 +355,11 @@
             return values;
         }
     }
-
-    //平面圆
+            
+    /**
+    * @private
+    * 平面圆
+    */
     class CircleValueShape extends ValueShape {
         public valueType: ValueType = ValueType.vec3;
 
@@ -365,8 +411,11 @@
             return values;
         }
     }
-
-    //贝塞尔曲线, 以Y为平面, parameters = [p0, p1, p2, p3]
+                
+    /**
+    * @private
+    * 贝塞尔曲线, 以Y为平面, parameters = [p0, p1, p2, p3]
+    */
     class BezierCurveValueShape extends ValueShape {
         public valueType: ValueType = ValueType.vec3;
 
@@ -400,7 +449,10 @@
             return values;
         }
     }
-
+                
+    /**
+    * @private
+    */
     export class Value {
         private emitter: any = {};
         private static _instance: Value = new Value();

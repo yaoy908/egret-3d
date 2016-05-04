@@ -1,10 +1,19 @@
 ﻿module egret3d {
-        
+
     /**
-    * @private
+    * @language zh_CN
+    * @class egret3d.ParticleAccelerationSpeedNode
+    * @classdesc
+    * 粒子加速度效果节点
+    * @see egret3d.AnimationNode
+    * @version Egret 3.0
+    * @platform Web,Native
     */
     export class ParticleAccelerationSpeedNode extends AnimationNode {
-
+        
+        /**
+        * @private
+        */
         public speedShape: ValueShape = new Vec3ConstRandomValueShape();
         private attribute_accelerationSpeed: GLSL.VarRegister
         constructor() {
@@ -18,6 +27,14 @@
             this.attributes.push(this.attribute_accelerationSpeed);
         }
 
+        /**
+        * @language zh_CN
+        * 填充顶点数据
+        * @param geometry 网格数据
+        * @param count 粒子数量
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public build(geometry: Geometry, count: number) {
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;

@@ -38,7 +38,15 @@
             this.attribute_time.size = 4;
             this.attributes.push(this.attribute_time);
         }
-
+        
+        /**
+        * @language zh_CN
+        * 填充顶点数据
+        * @param geometry 网格数据
+        * @param count 粒子数量
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public build(geometry: Geometry, count: number) {
 
             this.particleAnimationState = <ParticleAnimationState>this.state;

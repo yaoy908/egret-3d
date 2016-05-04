@@ -17,10 +17,16 @@
             this.attribute_uniformSpeed.size = 3;
             this.attributes.push(this.attribute_uniformSpeed);
         }
-
+        
+        /**
+        * @language zh_CN
+        * 填充顶点数据
+        * @param geometry 网格数据
+        * @param count 粒子数量
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public build(geometry: Geometry, count: number) {
-
-
 
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;

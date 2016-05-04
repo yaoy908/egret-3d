@@ -9,26 +9,44 @@
     * @platform Web,Native
     */
     export class ParticleAnimation extends EventDispatcher implements IAnimation {
-
+                    
+        /**
+        * @language zh_CN
+        * 粒子发射器
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public emit: ParticleEmitter;
-
+            
+        /**
+        * @language zh_CN
+        * 粒子动画状态机
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public particleAnimationState: ParticleAnimationState;
 
         /**
         * @language zh_CN
         * 总时间
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public time: number = 0;
 
         /**
         * @language zh_CN
         * 帧间隔时间
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public delay: number = 0;
 
         /**
         * @language zh_CN
         * 播放速度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public speed: number = 1;
 
@@ -36,6 +54,8 @@
         * @language zh_CN
         * 获取动画列表
         * @return 动画名称数组
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public animStateNames: string[];
 
@@ -43,12 +63,16 @@
         * @language zh_CN
         * 获取动画节点
         * @return 动画节点数组
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public animStates: IAnimationState[];
 
         /**
         * @language zh_CN
         * 动画节点容器
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         private _play: boolean = false;
 
@@ -57,7 +81,8 @@
         /**
         * @language zh_CN
         * 构造函数
-        * @param nodeCollection 动画节点容器对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         constructor() {
             super();
@@ -68,10 +93,13 @@
         }
 
         /**
+        * @private
         * @language zh_CN
         * 更新调度
         * @param time 总时间
         * @param delay 帧间隔时间
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public update(time: number, delay: number , geometry:Geometry , context:Context3DProxy ) {
             if (!this._play) {
@@ -89,6 +117,8 @@
         * 播放动画
         * @param animName 动画名
         * @param speed 播放速度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public play(animName?: string, speed?: number,reset:boolean = true ) {
             this._play = true;
@@ -101,6 +131,8 @@
         /**
         * @language zh_CN
         * 停止播放
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public stop() {
             this._play = false;
@@ -110,6 +142,8 @@
         * @language zh_CN
         * 是否正在播放中
         * @return 是否播放中
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public isPlay(): boolean {
             return this._play ;
@@ -119,6 +153,8 @@
         * @language zh_CN
         * 添加动画状态
         * @return 动画名称列表
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public addAnimState(animState: IAnimationState) {
             var has: number = this.animStates.indexOf(animState);
@@ -130,6 +166,8 @@
         * @language zh_CN
         * 上传动画状态
         * @return 动画名称列表
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public removeAnimState(animState: IAnimationState) {
             var has: number = this.animStates.indexOf(animState);
@@ -138,6 +176,7 @@
         }
 
         /**
+        * @private
         * @language zh_CN
         * 获取动画列表
         * @return 动画名称列表
@@ -147,6 +186,7 @@
         }
 
         /**
+        * @private
         * @language zh_CN
         * 获取动画节点
         * @return 动画节点数组
@@ -155,22 +195,8 @@
             return [];
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-       
-
         /**
+        * @private
         * @language zh_CN
         * 克隆新的ParticleAnimation对象;
         * @return 新的ParticleAnimation对象

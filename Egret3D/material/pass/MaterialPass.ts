@@ -383,14 +383,14 @@
 
             if (this._passUsage.uniform_ShadowMatrix) {
 
-                var a: Float32Array = new Float32Array([0.5, 0, 0, 0,
-                    0, 0.5, 0, 0,
-                    0, 0, 0.5, 0,
-                    0.5, 0.5, 0.5, 1.0]);
-                var mat: Matrix4_4 = new Matrix4_4(a);
+                //var a: Float32Array = new Float32Array([0.5, 0, 0, 0,
+                //    0, 0.5, 0, 0,
+                //    0, 0, 0.5, 0,
+                //    0.5, 0.5, 0.5, 1.0]);
+                //var mat: Matrix4_4 = new Matrix4_4(a);
 
-                mat.append(camera3D.viewProjectionMatrix);
-                context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ShadowMatrix.uniformIndex, false, mat.rawData);
+                //mat.append(camera3D.viewProjectionMatrix);
+                //context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ShadowMatrix.uniformIndex, false, mat.rawData);
             }
 
             if (this.methodList) {

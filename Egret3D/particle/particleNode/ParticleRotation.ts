@@ -1,10 +1,19 @@
 ﻿module egret3d {
 
     /**
-    * @private
+    * @language zh_CN
+    * @class egret3d.ParticleRotation
+    * @classdesc
+    * 粒子旋转效果节点
+    * @see egret3d.AnimationNode
+    * @version Egret 3.0
+    * @platform Web,Native
     */
     export class ParticleRotation extends AnimationNode {
-      
+              
+        /**
+        * @private
+        */
         public rotations: ValueShape = new Vec3ConstValueShape();
         private attribute_time: GLSL.VarRegister;
         private particleAnimationState: ParticleAnimationState;
@@ -14,7 +23,15 @@
 
             this.name = "ParticleRotation";
         }
-
+        
+        /**
+        * @language zh_CN
+        * 填充顶点数据
+        * @param geometry 网格数据
+        * @param count 粒子数量
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public build(geometry: Geometry, count: number) {
 
             this.particleAnimationState = <ParticleAnimationState>this.state;
