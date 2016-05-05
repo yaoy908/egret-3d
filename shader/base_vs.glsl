@@ -5,6 +5,8 @@ attribute vec2 attribute_uv0;
 
 vec3 e_position = vec3(0.0, 0.0, 0.0);
 
+//shader 中自动识别unifor 和赋予 uniform index
+//外部一定要有值传输进来，如果这个index从来没有用过， webgl 会报错
 uniform mat4 uniform_ModelMatrix ;
 uniform mat4 uniform_ViewMatrix ;
 uniform mat4 uniform_ProjectionMatrix ;

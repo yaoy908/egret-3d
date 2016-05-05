@@ -70,7 +70,7 @@ module egret3d
         /**
         * @language zh_CN
         * 网格中的点列表
-        * @return 点列表
+        * @returns  Array<Navi3DPoint> 点列表
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -82,7 +82,7 @@ module egret3d
         /**
         * @language zh_CN
         * 寻路结果中，3d点位置列表
-        * @return 3d点位置列表
+        * @returns Array<Vector3D> 3d点位置列表
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -94,6 +94,7 @@ module egret3d
         /**
         * @language zh_CN
         * 网格中的三角形列表
+        * @returns Array<Navi3DTriangle> 三角形列表
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -137,7 +138,7 @@ module egret3d
         * 输入一个点，获取一个能匹配的三角形
         * @param    point   输入的点
         * @param    threshold   结果三角形最大距离阈值
-        * @return   返回三角形
+        * @returns   Navi3DTriangle 返回三角形
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -152,7 +153,7 @@ module egret3d
         * @param    startPt   起点
         * @param    endPt   终点
         * @param    aiRadius   寻路肥胖半径
-        * @return   是否成功
+        * @returns  boolean  是否成功
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -232,7 +233,7 @@ module egret3d
         * 根据两个点的ID，创建一条边
         * @param    pointAId   点A
         * @param    pointBId   点B
-        * @return    创建的边
+        * @returns  Navi3DEdge  创建的边
         * @version Egret 3.0
         * @platform Web,Native
         */

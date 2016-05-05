@@ -146,6 +146,12 @@
                 }
                 else if (animation.particleAnimationController) {
                     this._passUsage.vertexShader.addUseShaderName("particle_vs");
+                    for (var i: number = 0; i < animation.particleAnimationController.particleAnimationState.vertex_shaders.length; i++){
+                        this._passUsage.vertexShader.addUseShaderName(animation.particleAnimationController.particleAnimationState.vertex_shaders[i]);
+                    }
+                    for (var i: number = 0; i < animation.particleAnimationController.particleAnimationState.fragment_shaders.length; i++) {
+                        this._passUsage.fragmentShader.addUseShaderName(animation.particleAnimationController.particleAnimationState.fragment_shaders[i]);
+                    }
                 }
             }
             else {
@@ -377,14 +383,14 @@
 
             if (this._passUsage.uniform_ShadowMatrix) {
 
-                var a: Float32Array = new Float32Array([0.5, 0, 0, 0,
-                    0, 0.5, 0, 0,
-                    0, 0, 0.5, 0,
-                    0.5, 0.5, 0.5, 1.0]);
-                var mat: Matrix4_4 = new Matrix4_4(a);
+                //var a: Float32Array = new Float32Array([0.5, 0, 0, 0,
+                //    0, 0.5, 0, 0,
+                //    0, 0, 0.5, 0,
+                //    0.5, 0.5, 0.5, 1.0]);
+                //var mat: Matrix4_4 = new Matrix4_4(a);
 
-                mat.append(camera3D.viewProjectionMatrix);
-                context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ShadowMatrix.uniformIndex, false, mat.rawData);
+                //mat.append(camera3D.viewProjectionMatrix);
+                //context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ShadowMatrix.uniformIndex, false, mat.rawData);
             }
 
             if (this.methodList) {
@@ -402,42 +408,17 @@
             }
 
             if (animtion) {
-                if (this._passUsage.uniform_time) {
-                    context3DProxy.uniform1f(this._passUsage.uniform_time.uniformIndex, animtion.time);
-                }
 
                 if (animtion.skeletonAnimationController) {
+                    if (this._passUsage.uniform_time) {
+                        context3DProxy.uniform1f(this._passUsage.uniform_time.uniformIndex, animtion.time);
+                    }
                     context3DProxy.uniform4fv(this._passUsage.uniform_PoseMatrix.uniformIndex, animtion.skeletonAnimationController.currentSkeletonMatrixData);
                 }
 
-                if (animtion.particleAnimationController && animtion.animaNodeCollection) {
-                    if (this._passUsage.uniform_enableBillboardXYZ) {
-                        var f: number = (animtion.animaNodeCollection.enableBillboardX ? 1 : 0) + (animtion.animaNodeCollection.enableBillboardY ? 10 : 0) + (animtion.animaNodeCollection.enableBillboardZ ? 100 : 0);
-                        context3DProxy.uniform1f(this._passUsage.uniform_enableBillboardXYZ.uniformIndex, f);
-                    }
-
-                    if (this._passUsage.uniform_startColor) {
-                        context3DProxy.uniform3f(this._passUsage.uniform_startColor.uniformIndex, animtion.animaNodeCollection.startColor.x, animtion.animaNodeCollection.startColor.y, animtion.animaNodeCollection.startColor.z);
-        
-                    }
-                    if (this._passUsage.uniform_endColor) {
-                        context3DProxy.uniform3f(this._passUsage.uniform_endColor.uniformIndex, animtion.animaNodeCollection.startColor.x, animtion.animaNodeCollection.endColor.y, animtion.animaNodeCollection.endColor.z);
-                    }
-
-                    //if (this._passUsage.uniform_startScale) {
-                    //    context3DProxy.uniform3f(this._passUsage.uniform_startScale.uniformIndex, animtion.animaNodeCollection.startScale.x, animtion.animaNodeCollection.startScale.y, animtion.animaNodeCollection.startScale.z);
-
-                    //}
-                    //if (this._passUsage.uniform_endScale) {
-                    //    context3DProxy.uniform3f(this._passUsage.uniform_endScale.uniformIndex, animtion.animaNodeCollection.endScale.x, animtion.animaNodeCollection.endScale.y, animtion.animaNodeCollection.endScale.z);
-                    //}
-
-                    if (this._passUsage.uniform_startRot) {
-                        context3DProxy.uniform3f(this._passUsage.uniform_startRot.uniformIndex, animtion.animaNodeCollection.startRot.x, animtion.animaNodeCollection.startRot.y, animtion.animaNodeCollection.startRot.z);
-
-                    }
-                    if (this._passUsage.uniform_endRot) {
-                        context3DProxy.uniform3f(this._passUsage.uniform_endRot.uniformIndex, animtion.animaNodeCollection.endRot.x, animtion.animaNodeCollection.endRot.y, animtion.animaNodeCollection.endRot.z);
+                if (animtion.particleAnimationController) {
+                    if (this._passUsage.uniform_time) {
+                        context3DProxy.uniform4f(this._passUsage.uniform_time.uniformIndex, animtion.time * 0.001, animtion.particleAnimationController.particleAnimationState.duration, animtion.particleAnimationController.particleAnimationState.loop, animtion.particleAnimationController.particleAnimationState.totalTime );
                     }
                 }
             }

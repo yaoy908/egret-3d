@@ -8,7 +8,7 @@
     */
     export class RenderBase {
 
-        ///protected _context3D: Context3D;
+        ///protected _context3D: Context3DProxy;
         protected _renderIndex: number = 0;
         protected _numEntity: number = 0; 
                         

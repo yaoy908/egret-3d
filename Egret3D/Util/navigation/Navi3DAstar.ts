@@ -1,6 +1,7 @@
 ﻿module egret3d
 {
     /**
+    * @private
     * @language zh_CN
     * @class egret3d.Navi3DAstar
     * @classdesc
@@ -36,7 +37,7 @@
         * param navMesh 搜索的mesh对象
         * param startTriangle 开始三角形
         * param endTriangle 结束三角形
-        * @return 是否搜索成功
+        * @returns 是否搜索成功
         * @version Egret 3.0
         * @platform Web,Native
         */

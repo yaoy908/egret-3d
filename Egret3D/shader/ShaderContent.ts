@@ -140,13 +140,13 @@
                 this.funcNames.push(name);
             }
             else {
-                if (name == "main") {
+               // if (name == "main") {
                     var newfunc: string = this.mergeMainFunc(this.funcDict[name], func);
                     this.funcDict[name] = newfunc;
-                }
-                else {
-                    console.log("<" + name + ">" + "函数重复");
-                }
+               // }
+               // else {
+               //     console.log("<" + name + ">" + "函数重复");
+               // }
             }
 
             if (this.funcDict["main"]) {

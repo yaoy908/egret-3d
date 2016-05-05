@@ -37,6 +37,12 @@
                 }
                 else if (animation.particleAnimationController) {
                     this._passUsage.vertexShader.addUseShaderName("particle_vs");
+                    for (var i: number = 0; i < animation.particleAnimationController.particleAnimationState.vertex_shaders.length; i++) {
+                        this._passUsage.vertexShader.addUseShaderName(animation.particleAnimationController.particleAnimationState.vertex_shaders[i]);
+                    }
+                    for (var i: number = 0; i < animation.particleAnimationController.particleAnimationState.fragment_shaders.length; i++) {
+                        this._passUsage.fragmentShader.addUseShaderName(animation.particleAnimationController.particleAnimationState.fragment_shaders[i]);
+                    }
                 }
             }
             else {

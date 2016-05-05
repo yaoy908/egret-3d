@@ -81,9 +81,11 @@
 
         public size: number = 0;
         public dataType: number = 0;
-        public normalized: boolean = false ;
+        public normalized: boolean = false;
         public stride: number = 0;
         public offset: number = 0;
+        public offsetIndex: number = 0;
+        public offsetBytes: number = 0;
                                                 
         /**
         * @language zh_CN
