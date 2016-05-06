@@ -57,6 +57,20 @@
         */
         public smooth: boolean = false;
 
+        /**
+       * @language zh_CN
+       * 获取动画列表
+       * @return 动画名称数组
+       */
+        public animStateNames: string[];
+
+        /**
+        * @language zh_CN
+        * 获取动画节点
+        * @return 动画节点数组
+        */
+        public animStates: IAnimationState[];
+
         private _initialSkeleton: Skeleton = null;
         private _animList: Array<string> = [];
         private _skeletonMatrix: Float32Array;
@@ -131,6 +145,11 @@
         */
         public get jointNumber(): number {
             return this._initialSkeleton.numJoint;
+        }
+
+        public addAnimState(animState: IAnimationState) {
+        }
+        public removeAnimState(animState: IAnimationState) {
         }
 
         /**
@@ -532,23 +551,6 @@
                 }
             }
 
-        }
-
-        /**
-        * @language zh_CN
-        * 获取动画列表
-        * @return 动画列表
-        */
-        public getAnimList(): string[] {
-            return this._animList;
-        }
-
-        /**
-        * @language zh_CN
-        * 获取动画节点
-        */
-        public getAnimNode(): AnimationNode[] {
-            return [];
         }
 
         /**

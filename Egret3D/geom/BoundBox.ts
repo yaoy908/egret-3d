@@ -13,23 +13,6 @@
         
         /**
         * @language zh_CN
-        * 顶点数据
-        */
-        public vexData: Array<number> = new Array<number>();
-                        
-        /**
-        * @language zh_CN
-        * 索引数据
-        */
-        public indexData: Array<number> = new Array<number>();
-
-        /**
-        * @language zh_CN
-        * 顶点长度
-        */
-        public vexLength: number = 3;
-        /**
-        * @language zh_CN
         * 盒子最小点
         */
         public min: Vector3D = new Vector3D();

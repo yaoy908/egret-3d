@@ -70,7 +70,8 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * @return 在Navi3DMesh中的唯一id
+        * 在Navi3DMesh中的唯一id
+        * @returns number 唯一id
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -83,7 +84,7 @@ module egret3d {
         * 判定两个坐标位置是否等价
         * @param    p1   坐标1
         * @param    p2   坐标2
-        * @return   是否等价
+        * @returns  boolean 是否等价
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -96,7 +97,7 @@ module egret3d {
         * 计算两个坐标点之间的距离
         * @param    p1   坐标1
         * @param    p2   坐标2
-        * @return   距离
+        * @returns number   距离
         * @version Egret 3.0
         * @platform Web,Native
         */

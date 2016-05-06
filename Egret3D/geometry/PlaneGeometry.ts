@@ -15,14 +15,55 @@
      */
     export class PlaneGeometry extends Geometry {
 
-      
+
         private _segmentsW: number = 1;
+        /**
+        * @language zh_CN
+        * 宽度分段数
+        */
+        public get segmentsW(): number {
+            return this._segmentsW;
+        }
         private _segmentsH: number = 1;
+        /**
+        * @language zh_CN
+        * 高度分段数
+        */
+        public get segmentsH(): number {
+            return this._segmentsH;
+        }
         private _width: number = 500.0;
+        /**
+        * @language zh_CN
+        * 宽度
+        */
+        public get width(): number {
+            return this._width;
+        }
         private _height: number = 500.0;
+        /**
+        * @language zh_CN
+        * 宽度
+        */
+        public get height(): number {
+            return this._height;
+        }
         private _scaleU: number = 1;
+        /**
+        * @language zh_CN
+        * U缩放
+        */
+        public get scaleU(): number {
+            return this._scaleU;
+        }
         private _scaleV: number = 1;
-        private _rotation: Vector3D;
+        /**
+        * @language zh_CN
+        * U缩放
+        */
+        public get scaleV(): number {
+            return this._scaleV;
+        }
 
         /**
         * @language zh_CN
@@ -35,7 +76,7 @@
         * @param vScale V缩放
         * @param aixs 0:Y轴为0 1:Z轴为0 2:X轴为0
         */
-        constructor(width: number = 500, height: number = 500, segmentsW: number = 1, segmentsH: number = 1, uScale: number = 1, vScale: number = 1,aixs:number = 0) {
+        constructor(width: number = 500, height: number = 500, segmentsW: number = 1, segmentsH: number = 1, uScale: number = 1, vScale: number = 1, aixs: number = 0) {
             super();
             this._width = width;
             this._height = height;
@@ -45,11 +86,11 @@
             this._scaleV = vScale;
 
             this.buildGeometry(aixs);
-        }     
+        }
 
         private buildGeometry(aixs: number): void {
 
-            this.vertexFormat  = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0;
+            this.vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0;
 
             var x: number, y: number;
             var numIndices: number;
@@ -110,7 +151,7 @@
                             this.verticesData[index++] = 0;
                             break;
                     }
-                   
+
 
                     this.verticesData[index++] = 1;
                     this.verticesData[index++] = 0;

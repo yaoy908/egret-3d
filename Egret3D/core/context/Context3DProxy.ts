@@ -3,10 +3,10 @@
     /**
     * @class egret3d.Context3DProxy
     * @classdesc
-    * Context3D 类提供了用于呈现几何定义图形的上下文。</p>
+    * Context3DProxy 类提供了用于呈现几何定义图形的上下文。</p>
     *
     * 渲染上下文包括一个绘图表面及其关联的资源和状态。</p>
-    * Context3D 渲染上下文是一个可编程的管道，基于OpenGL ES 2.0规范。</p>
+    * Context3DProxy 渲染上下文是一个可编程的管道，基于OpenGL ES 2.0规范。</p>
     * 您可以通过提供适当的顶点和像素片段程序来创建 2D/3D渲染器，不同的平台有不同的硬件限制，对于移动端限制要求比较大。</p>
     * 一个canvas 只能申请一个Context3DProxy。</p>
     *
@@ -51,7 +51,7 @@
 
         /**
        * @language zh_CN
-       * get GPU Context3D 
+       * get GPU Context3DProxy 
        * 注册并初始化相关 GPU 参数配置信息
        * 用于设置显卡的相关参数
        * @param GPU_CONFIG
@@ -179,7 +179,7 @@
         * @param indexData
         */
         public creatIndexBuffer(indexData: Array<number>): IndexBuffer3D {
-            var indexDataArray = new Uint16Array(indexData);
+            var indexDataArray = new Int16Array(indexData);
 
             var indexBuffer: WebGLBuffer = Context3DProxy.gl.createBuffer();
             Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
@@ -196,17 +196,22 @@
         * 创建 顶点数据流
         * @param vertexData
         */
-        public creatVertexBuffer(vertexData: Array<number>): VertexBuffer3D {
+        public creatVertexBuffer(vertexData: Array<number>, dawType: number = Context3DProxy.gl.STATIC_DRAW ): VertexBuffer3D {
             var vertexDataArray: Float32Array = new Float32Array(vertexData);
 
             var vertexBuffer: WebGLBuffer = Context3DProxy.gl.createBuffer();
             Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ARRAY_BUFFER, vertexBuffer);
-            Context3DProxy.gl.bufferData(Context3DProxy.gl.ARRAY_BUFFER, vertexDataArray, Context3DProxy.gl.STATIC_DRAW);
+            Context3DProxy.gl.bufferData(Context3DProxy.gl.ARRAY_BUFFER, vertexDataArray, dawType );
 
             var vb: VertexBuffer3D = new VertexBuffer3D(vertexBuffer);
             vb.arrayBuffer = vertexDataArray;
 
             return vb;
+        }
+
+        public uploadVertexBuffer(vertexBuffer3D:VertexBuffer3D) {
+            Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ARRAY_BUFFER, vertexBuffer3D.buffer );
+            Context3DProxy.gl.bufferData(Context3DProxy.gl.ARRAY_BUFFER, vertexBuffer3D.arrayBuffer, Context3DProxy.gl.DYNAMIC_DRAW);
         }
 
         /// public upLoadTextureData(mipLevel: number, texture: Texture2D , data:any ) {

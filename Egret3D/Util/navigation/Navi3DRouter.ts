@@ -1,6 +1,7 @@
 ﻿module egret3d {
 
     /**
+    * @private
     * @language zh_CN
     * @class egret3d.Navi3DRouter
     * @classdesc
@@ -163,6 +164,7 @@
         * @param nextCommonEdge      下一个公共边
         * @param targetPoint         目标点
         * @param lastEdge            是否为最后一个边
+        * @returns boolean 是否通过
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -274,7 +276,7 @@
         * @param _edge          线段
         * @param linePoint      射线起点
         * @param lineDirection  射线方向
-        * @return               交点
+        * @returns     Vector3D          交点
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -288,7 +290,7 @@
         * @param _edge          线段
         * @param linePoint      射线起点
         * @param lineDirection  射线方向
-        * @return               交点
+        * @returns Vector3D 交点
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -318,7 +320,7 @@
         * @param segmentPt2      线段另一端
         * @param linePoint       射线起点
         * @param lineDirection   射线方向
-        * @return                交点
+        * @return Vector3D 交点
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -345,7 +347,7 @@
         * @param segmentPt2      线段另一端
         * @param linePoint       射线起点
         * @param lineDirection   射线方向
-        * @return                是否有交点
+        * @returns boolean 是否有交点
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -366,7 +368,7 @@
         * @param point        点
         * @param vectorA      射线A
         * @param vectorB      射线B
-        * @return             是在内侧
+        * @returns boolean 是在内侧
         * @version Egret 3.0
         * @platform Web,Native
         */

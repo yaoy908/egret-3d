@@ -1,54 +1,157 @@
 ﻿module egret3d {
-    export enum ValueType {
-        constValue,
-        constRandomValue,
-        cube3D,
-        plane,
-        sphere,
-        sphere_plane,
-        cone,
-        triangle,
-        cylinder,
-        line,
-        curve,
-        beizier
-    }
 
-    class ValueShape {
-        public calculate(num: number, ...data): any {
+    /**
+    * @private
+    */
+    export enum ValueType {
+        float,
+        vec2,
+        vec3,
+        vec4
+    }
+        
+    /**
+    * @private
+    */
+    export class ValueShape {
+        public valueType: ValueType;
+        public calculate(num: number, valueShape:ValueShape = null ): any {
             new Error("asd");
             return null;
         }
     }
+        
+    /**
+    * @private
+    */
+    export class ConstValueShape extends ValueShape {
+        public valueType: ValueType = ValueType.float;
 
-    class ConstValueShape extends ValueShape {
-        public calculate(num: number, ...parameters): any {
+        public value: number = 5;
+        public calculate(num: number): any {
             var values: number[] = [];
-            var parameter: any[] = parameters[0];
             for (var i: number = 0; i < num; i++) {
-                values.push(parameter[0] + Math.random() * (parameter[1] - parameter[0]));
+                values.push(this.value);
             }
             return values;
         }
     }
+            
+    /**
+    * @private
+    */
+    export class ConstRandomValueShape extends ValueShape {
+        public valueType: ValueType = ValueType.float;
 
-    class ConstRandomValueShape extends ValueShape {
-        public calculate(num: number, ...parameters): any {
+        public min: number = 0;
+        public max: number = 100;
+        public calculate(num: number): any {
+            var values: number[] = [];
+            for (var i: number = 0; i < num; i++) {
+                values.push(this.min + Math.random() * (this.max - this.min));
+            }
+            return values;
+        }
+    }
+            
+    /**
+    * @private
+    */
+    export class Vec2ConstValueShape extends ValueShape {
+        public valueType: ValueType = ValueType.vec2;
+
+        public minX: number = 0;
+        public minY: number = 0;
+        public calculate(num: number): any {
+            var values: Point[] = [];
+            for (var i: number = 0; i < num; i++) {
+                var p: Point = new Point();
+                p.x = this.minX ;
+                p.y = this.minY ;
+                values.push(p);
+            }
+            return values;
+        }
+    }
+            
+    /**
+    * @private
+    */
+    export class Vec2ConstRandomValueShape extends ValueShape {
+        public valueType: ValueType = ValueType.vec2;
+
+        public minX: number = 0;
+        public minY: number = 0;
+        public maxX: number = 100;
+        public maxY: number = 100;
+        public calculate(num: number): any {
+            var values: Point[] = [];
+            for (var i: number = 0; i < num; i++) {
+                var p: Point = new Point();
+                p.x = this.minX + Math.random() * (this.maxX - this.minX);
+                p.y = this.minY + Math.random() * (this.maxY - this.minY);
+                values.push(p);
+            }
+            return values;
+        }
+    }
+            
+    /**
+    * @private
+    */
+    export class Vec3ConstValueShape extends ValueShape {
+        public valueType: ValueType = ValueType.vec3;
+
+        public minX: number = 0;
+        public minY: number = 0;
+        public minZ: number = 0;
+        public calculate(num: number): any {
             var values: Vector3D[] = [];
-            var val: Vector3D;
-            var parameter: any[] = parameters[0];
             for (var i: number = 0; i < num; i++) {
-                val = new Vector3D();
-                val.x = Math.random() * parameter[0];
-                val.y = Math.random() * parameter[1];
-                val.z = Math.random() * parameter[2];
-                values.push(val);
+                var p: Vector3D = new Vector3D();
+                p.x = this.minX;
+                p.y = this.minY;
+                p.z = this.minZ;
+                values.push(p);
             }
             return values;
         }
     }
+            
+    /**
+    * @private
+    */
+    export class Vec3ConstRandomValueShape extends ValueShape {
+        public valueType: ValueType = ValueType.vec3;
 
-    class CubeVector3DValueShape extends ValueShape {
+        public minX: number = -50;
+        public minY: number = -50;
+        public minZ: number = -50;
+        public maxX: number = 50;
+        public maxY: number = 50;
+        public maxZ: number = 50;
+        public calculate(num: number): any {
+            var values: Vector3D[] = [];
+            for (var i: number = 0; i < num; i++) {
+                var p: Vector3D = new Vector3D();
+                p.x = this.minX + Math.random() * (this.maxX - this.minX);
+                p.y = this.minY + Math.random() * (this.maxY - this.minY);
+                p.z = this.minZ + Math.random() * (this.maxZ - this.minZ);
+                values.push(p);
+            }
+            return values;
+        }
+    }
+            
+    /**
+    * @private
+    */
+    export class CubeVector3DValueShape extends ValueShape {
+        public valueType: ValueType = ValueType.vec3;
+
+        public width: number = 100;
+        public height: number = 100;
+        public depth: number = 100;
 
         /**
         * @language zh_CN
@@ -56,56 +159,62 @@
         * @param parameters [width, height, depth]
         * @returns Vector3D[] 
         */
-        public calculate(num: number, ...parameters): any{
+        public calculate(num: number): any{
             var values: Vector3D[] = [];
             var val: Vector3D;
-            var parameter: any[] = parameters[0];
             for (var i: number = 0; i < num; i++) {
                 val = new Vector3D();
-                val.x = Math.random() * parameter[0] - parameter[0] * 0.5;
-                val.y = Math.random() * parameter[1] - parameter[1] * 0.5;
-                val.z = Math.random() * parameter[2] - parameter[2] * 0.5;
+                val.x = Math.random() * this.width - (this.width*0.5) ;
+                val.y = Math.random() * this.height - (this.height * 0.5);
+                val.z = Math.random() * this.depth - (this.depth * 0.5);
                 values.push(val);
             }
             return values;
         }
     }
+            
+    /**
+    * @private
+    */
+    export class PlaneValueShape extends ValueShape {
+        public valueType: ValueType = ValueType.vec3;
 
-    class PlaneValueShape extends ValueShape {
-      
-        public calculate(num: number, ...parameters): any {
+        public width: number = 100;
+        public height: number = 100;
+        public calculate(num: number): any {
             var values: Vector3D[] = [];
-            var tmpPar = parameters[0];
             var pos: Vector3D;
-            var width: number = tmpPar[0];
-            var height: number = tmpPar[1];
             for (var i: number = 0; i < num; i++) {
                 pos = new Vector3D();
-                pos.x = Math.random() * width - width * 0.5;
-                pos.y = Math.random() * height - height * 0.5;
-                pos.z = 0;
+                pos.x = Math.random() * this.width - (this.width * 0.5);
+                pos.y = 0;
+                pos.z = Math.random() * this.height - (this.height * 0.5);
                 values.push(pos);
             }
             return values;
         }
     }
+            
+    /**
+    * @private
+    *圆柱体.以Y轴为高 (parameters = [R, height])
+    */
+    export class CylinderValueShape extends ValueShape {
+        public valueType: ValueType = ValueType.vec3;
 
-    //圆柱体.以Y轴为高 (parameters = [R, height])
-    class CylinderValueShape extends ValueShape {
-        public calculate(num: number, ...parameters): any {
+        public radius: number = 20;
+        public height: number = 20;
+        public calculate(num: number): any {
             var values: Vector3D[] = [];
-            var tmpPar = parameters[0];
             var pos: Vector3D;
-            var r: number = tmpPar[0];
-            var height: number = tmpPar[1];
             for (var i: number = 0; i < num; i++) {
                 pos = new Vector3D();
-                pos.x = Math.random() * r;
-                pos.z = Math.random() * r;
+                pos.x = Math.random() * this.radius ;
+                pos.z = Math.random() * this.radius ;
                 if (Math.random() > 0.5) pos.x *= -1;
                 if (Math.random() > 0.5) pos.z *= -1;
-                pos.y = Math.random() * height - height * 0.5;
-                if ((pos.x * pos.x + pos.z * pos.z) > (r * r)) {
+                pos.y = Math.random() * this.height - this.height * 0.5;
+                if ((pos.x * pos.x + pos.z * pos.z) > (this.radius * this.radius)) {
                     //不在圆内就重新随机 
                     i--;
                 } else {
@@ -116,23 +225,59 @@
         }
     }
 
-    //线性分布
+    /**
+    * @private
+    * 线性分布
+    */
     class LineValueShape extends ValueShape {
-        public calculate(num: number, ...parameters): any {
+        public valueType: ValueType = ValueType.vec3;
+
+        public points: Vector3D[] = [new Vector3D(), new Vector3D(100, 0, 0), new Vector3D(100, 200, 0)];
+
+        public calculate(num: number): any {
+            if (this.points.length == 1) return this.points;
+
             var values: Vector3D[] = [];
-            var tmpPar = parameters[0];
             var pos: Vector3D;
-            var length: number = tmpPar[0];
-            for (var i: number = 0; i < num; i++) {
-                pos = new Vector3D(Math.random() * length, 0, 0);
-                values.push(pos);
+            var numLen: number = 0;
+            var segment: number = 0;
+            for (var i: number = 1; i < this.points.length; i++) {
+                numLen += Vector3D.distance(this.points[i - 1], this.points[i]);
             }
+            segment = numLen / num;
+            var ntmp: Vector3D = new Vector3D();
+            var sourceD: number = 0; 
+            var nD: number = 0; 
+            var len: number = 0 ; 
+            for (var i: number = 1; i < this.points.length; i++) {
+
+                ntmp.x = this.points[i].x - this.points[i - 1].x;
+                ntmp.y = this.points[i].y - this.points[i - 1].y;
+                ntmp.z = this.points[i].z - this.points[i - 1].z; 
+
+                ntmp.normalize();
+                ntmp.scaleBy(segment + len);
+
+                sourceD = Vector3D.distance(this.points[i - 1], this.points[i]);
+                nD = Vector3D.distance(ntmp, this.points[i]);
+
+                if (nD > sourceD) {
+                    len += nD;
+                }
+
+            }
+
             return values;
         }
     }
-
-    //球表面分布
+    
+    /**
+    * @private
+    * 球表面分布
+    */
     class BallSurfaceValueShape extends ValueShape {
+        public valueType: ValueType = ValueType.vec3;
+
         //parameters = [R]
         public calculate(num: number, ...parameters): any {
             var values: Vector3D[] = [];
@@ -171,9 +316,14 @@
             return values;
         }
     }
-
-    //球内分布
+        
+    /**
+    * @private
+    * 球内分布
+    */
     class BallValueShape extends ValueShape {
+        public valueType: ValueType = ValueType.vec3;
+
 
         //parameters = [R]
         public calculation(num: number, ...parameters): any {
@@ -205,9 +355,15 @@
             return values;
         }
     }
-
-    //平面圆
+            
+    /**
+    * @private
+    * 平面圆
+    */
     class CircleValueShape extends ValueShape {
+        public valueType: ValueType = ValueType.vec3;
+
+
         public calculate(num: number, ...parameters): any {
             var values: Vector3D[];
             var tmpPar = parameters[0];
@@ -255,9 +411,15 @@
             return values;
         }
     }
-
-    //贝塞尔曲线, 以Y为平面, parameters = [p0, p1, p2, p3]
+                
+    /**
+    * @private
+    * 贝塞尔曲线, 以Y为平面, parameters = [p0, p1, p2, p3]
+    */
     class BezierCurveValueShape extends ValueShape {
+        public valueType: ValueType = ValueType.vec3;
+
+
         public calculate(num: number, ...parameters): any {
             var values: Vector3D[] = [];
             //var tmpPar = parameters[0];
@@ -287,22 +449,29 @@
             return values;
         }
     }
-
+                
+    /**
+    * @private
+    */
     export class Value {
         private emitter: any = {};
         private static _instance: Value = new Value();
         constructor() {
-            this.emitter[ValueType.constValue] = new ConstValueShape();
-            this.emitter[ValueType.line] = new LineValueShape();
-            this.emitter[ValueType.plane] = new PlaneValueShape();
-            this.emitter[ValueType.cube3D] = new CubeVector3DValueShape();
-            this.emitter[ValueType.sphere] = new BallValueShape();
-            this.emitter[ValueType.sphere_plane] = new BallSurfaceValueShape();
-            this.emitter[ValueType.cylinder] = new CylinderValueShape();
+            //this.emitter[ValueType.constValue] = new ConstValueShape();
+            //this.emitter[ValueType.line] = new LineValueShape();
+            //this.emitter[ValueType.plane] = new PlaneValueShape();
+            //this.emitter[ValueType.cube3D] = new CubeVector3DValueShape();
+            //this.emitter[ValueType.sphere] = new BallValueShape();
+            //this.emitter[ValueType.sphere_plane] = new BallSurfaceValueShape();
+            //this.emitter[ValueType.cylinder] = new CylinderValueShape();
         }
 
-        public static calculate(count: number, type: ValueType, parameters: any):Array<any> {
-            return Value._instance.emitter[type].calculate(count, parameters);
+        public static calculate(count: number, valueShape: ValueShape):Array<any> {
+            return valueShape.calculate(count, valueShape);
+        }
+
+        public static getValues(count: number, valueType: ValueType, parameters ) {
         }
     }
+
 }

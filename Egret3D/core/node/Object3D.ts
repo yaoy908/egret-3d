@@ -1117,7 +1117,7 @@
         * 移除child子对象 并返回
         * 移除显示列表中的指定对象，如果为空将会返回
         * @param child 子对象
-        * @returns 如果成功就返回child,否则返回null
+        * @returns Object3D 如果成功就返回child,否则返回null
         * @version Egret 3.0
         * @platform Web,Native
         */

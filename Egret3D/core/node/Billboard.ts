@@ -19,7 +19,7 @@
          * @platform Web,Native
          */
         constructor(material: MaterialBase, width:number = 100, height:number = 100) {
-            super(new PlaneGeometry(width, height, 1, 1, 1, 1, 1), material);
+            super(new PlaneGeometry(width, height, 1, 1, 1, 1, Vector3D.Y_AXIS), material);
             if (!this.bound) {
                 this.bound = this.buildBoundBox();
             }

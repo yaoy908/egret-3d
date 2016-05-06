@@ -2,6 +2,7 @@
 {
 
     /**
+    * @private
     * @language zh_CN
     * @class egret3d.Navi3DPointFat
     * @classdesc
@@ -38,7 +39,7 @@
 
         /**
         * @language zh_CN
-        * @return 隶属于哪个端点
+        * @returns 隶属于哪个端点
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -48,7 +49,7 @@
 
         /**
         * @language zh_CN
-        * @ return 隶属于那条边
+        * @returns 隶属于那条边
         * @version Egret 3.0
         * @platform Web,Native
         */

@@ -95,7 +95,7 @@
         /**
         * @language zh_CN
         * 获得所属三角形列表
-        * @return 三角形列表
+        * @returns  Array<Navi3DTriangle> 三角形列表
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -106,7 +106,7 @@
         /**
         * @language zh_CN
         * 获得线段的中间点坐标
-        * @return 中间点坐标
+        * @returns Vector3D 中间点坐标
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -151,6 +151,7 @@
         * @language zh_CN
         * 根据端点获取对应的肥胖检测点
         * @param  pt  端点
+        * @returns Navi3DPointFat 肥胖检测点
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -164,6 +165,7 @@
         * @language zh_CN
         * 输入一个端点获取另外一个端点的肥胖检测点
         * @param  pt  端点
+        * @returns Navi3DPointFat 肥胖检测点
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -177,6 +179,7 @@
         * @language zh_CN
         * 输入一个端点获取另外一个端点
         * @param  pt  端点
+        * @returns Navi3DPoint 另外一个端点
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -190,7 +193,7 @@
         * @language zh_CN
         * 判定一个点是否等价于某个端点
         * @param  pt 被判定的点
-        * @return 判定结果端点
+        * @returns Navi3DPoint 判定结果端点
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -222,7 +225,7 @@
         * @language zh_CN
         * 获取和另外一条边的公共端点
         * @param  edge 另外一条边
-        * @return Navi3DPoint 公共边
+        * @returns Navi3DPoint 公共边
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -240,7 +243,7 @@
         * @language zh_CN
         * 输入一个点获，获取与之等价的一个端点对象
         * @param  p 输入的点
-        * @return Navi3DPoint 等价的端点
+        * @returns Navi3DPoint 等价的端点
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -255,6 +258,7 @@
         /**
         * @language zh_CN
         * 端点A
+        * @returns Navi3DPoint 端点A
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -265,6 +269,7 @@
         /**
         * @language zh_CN
         * 端点B
+        * @returns Navi3DPoint 端点B
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -275,11 +280,11 @@
         /**
         * @language zh_CN
         * 记录该边的通过属性
-        * @return 是否可通过
+        * @returns boolean 是否可通过
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public get walkAble(): Boolean {
+        public get walkAble(): boolean {
             return (this._edgeMask & Navi3DMaskType.WalkAble) == Navi3DMaskType.WalkAble;
         }
 
@@ -287,11 +292,11 @@
         * @language zh_CN
         * 测试是否通过
         * @param  value 被测试的值
-        * @return 是否通过
+        * @returns boolean 是否通过
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public testMask(value: number): Boolean {
+        public testMask(value: number): boolean {
             return (this._edgeMask & value) == value;
         }
 
