@@ -1,7 +1,3 @@
-
-//目标位置
-uniform vec4 uniform_follow ;
-
 float particle(  ){
 	return 1.0 ;
 }

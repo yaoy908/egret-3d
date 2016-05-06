@@ -44,8 +44,9 @@ float particle(  ){
 				return currentTime = 0.0 ;
 	}else{
 			duration = uniform_time.w ;
-			currentTime = mod(currentTime,duration);
-			if( currentTime > emit.life )
+			currentTime = max( currentTime - numberSpace , 0.0 );
+			currentTime = mod( currentTime ,duration); 
+			if( currentTime >= emit.life )
 				return currentTime = 0.0 ;
 	}
   

@@ -3,10 +3,10 @@
     /**
     * @class egret3d.Context3DProxy
     * @classdesc
-    * Context3D 类提供了用于呈现几何定义图形的上下文。</p>
+    * Context3DProxy 类提供了用于呈现几何定义图形的上下文。</p>
     *
     * 渲染上下文包括一个绘图表面及其关联的资源和状态。</p>
-    * Context3D 渲染上下文是一个可编程的管道，基于OpenGL ES 2.0规范。</p>
+    * Context3DProxy 渲染上下文是一个可编程的管道，基于OpenGL ES 2.0规范。</p>
     * 您可以通过提供适当的顶点和像素片段程序来创建 2D/3D渲染器，不同的平台有不同的硬件限制，对于移动端限制要求比较大。</p>
     * 一个canvas 只能申请一个Context3DProxy。</p>
     *
@@ -51,7 +51,7 @@
 
         /**
        * @language zh_CN
-       * get GPU Context3D 
+       * get GPU Context3DProxy 
        * 注册并初始化相关 GPU 参数配置信息
        * 用于设置显卡的相关参数
        * @param GPU_CONFIG

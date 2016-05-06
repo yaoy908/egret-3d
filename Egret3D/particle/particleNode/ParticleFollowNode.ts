@@ -1,10 +1,22 @@
 ﻿module egret3d {
 
     /**
-    * @private
+    * @language zh_CN
+    * @class egret3d.ParticleFollowNode
+    * @classdesc
+    * 粒子跟随效果节点
+    * @see egret3d.AnimationNode
+    * @version Egret 3.0
+    * @platform Web,Native
     */
     export class ParticleFollowNode extends AnimationNode {
-
+                
+        /**
+        * @language zh_CN
+        * 跟随目标
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public follow: Object3D;
         private attribute_followPosition: GLSL.VarRegister;
         private attribute_followRotation: GLSL.VarRegister;
@@ -24,6 +36,14 @@
 
         }
 
+        /**
+        * @language zh_CN
+        * 填充顶点数据
+        * @param geometry 网格数据
+        * @param count 粒子数量
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public build(geometry: Geometry, count: number) {
             this.count = count;
             this.particleAnimationState = <ParticleAnimationState>this.state;

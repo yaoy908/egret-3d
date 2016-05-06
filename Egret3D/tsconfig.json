@@ -190,11 +190,6 @@
         "particle/ParticleAnimation.ts",
         "particle/ParticleEmitter.ts",
 
-        // "particle/particleNode/ParticlePositionNode.ts",
-        // "particle/particleNode/ParticleLifecycleNode.ts",
-        // "particle/particleNode/ParticleDirectionNode.ts",
-        // "particle/particleNode/ParticleSpeedNode.ts",
-
         "scene/Scene3D.ts",
         "scene/TreeBase.ts",
 
@@ -238,8 +233,6 @@
 
         "View3D.ts",
         "VRView3D.ts",
-        "Egret3DCanvas.ts",
-
-        "axi/LocalAxis.ts"
+        "Egret3DCanvas.ts"
     ]
 }	

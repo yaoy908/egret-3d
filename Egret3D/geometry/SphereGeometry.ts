@@ -16,8 +16,30 @@
     export class SphereGeometry extends Geometry {
 
         private _segmentsW: number = 50;
+        /**
+        * @language zh_CN
+        * 宽度分段数
+        */
+        public get segmentsW(): number {
+            return this._segmentsW;
+        }
         private _segmentsH: number = 50;
+        /**
+        * @language zh_CN
+        * 高度分段数
+        */
+        public get segmentsH(): number {
+            return this._segmentsH;
+        }
         private _radius: number = 100;
+        /**
+        * @language zh_CN
+        * 半径
+        */
+        public get radius(): number {
+            return this._radius;
+        }
+
 
         /**
         * @language zh_CN
@@ -37,7 +59,8 @@
         }
 
         private buildSphere(front: boolean = true) {
-            this.vertexFormat  = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 | VertexFormat.VF_UV1;
+            this.vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 | VertexFormat.VF_UV1;
+
 
             var i: number = 0, j: number = 0, triIndex: number = 0;
             var numVerts: number = (this._segmentsH + 1) * (this._segmentsW + 1);
