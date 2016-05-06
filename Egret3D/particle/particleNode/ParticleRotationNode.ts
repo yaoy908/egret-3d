@@ -19,8 +19,8 @@
             this.attribute_Rotation.size = 1;
             this.attributes.push(this.attribute_Rotation);
 
-            (<ConstRandomValueShape>this.rotation).min = -300;
-            (<ConstRandomValueShape>this.rotation).max = 300;
+            (<ConstRandomValueShape>this.rotation).min = -180;
+            (<ConstRandomValueShape>this.rotation).max = 180;
 
         }
 

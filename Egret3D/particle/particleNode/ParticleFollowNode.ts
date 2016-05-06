@@ -71,8 +71,12 @@
                             geometry.verticesData[index + 2] = this.follow.z;
                         }
                     } else {
-                        this.duration = this.particleAnimationState.totalTime;
-                        this.tempTime = this.tempTime % this.duration ;
+                        this.duration = this.particleAnimationState.totalTime ;
+                        this.tempTime =(this.tempTime - numberSpace);
+                        this.tempTime = this.tempTime % this.duration;
+
+                        //this.tempTime = (this.tempTime - Math.floor(this.tempTime));
+
                         if (this.tempTime - delay * 0.001 <= numberSpace )
                         {
                             geometry.verticesData[index + 0] = this.follow.x;
@@ -81,7 +85,6 @@
                         }
                     }
                 }
-
             }
             if (true) {
                 geometry.upload(context);

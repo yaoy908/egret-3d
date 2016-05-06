@@ -10,6 +10,11 @@
    */
     export class ParticleEmitter extends Mesh {
 
+        public timeNode: ParticleTime;
+        public positionNode: ParticlePosition;
+        public rotationNode: ParticleRotation;
+        public scaleNode: ParticleScale;
+
         private particleGeometryShape: Geometry;
         private particleAnimation: ParticleAnimation;
 
@@ -18,6 +23,7 @@
         private _isChangeBuild: boolean = true;
 
         private _particleAnimNodes: AnimationNode[] = [] ;
+        private _play: boolean = false; 
 
         /**
         * @language zh_CN
@@ -43,7 +49,58 @@
             this.geometry.buildDefaultSubGeometry();
             this.geometry.subGeometrys[0].count = this._particleState.maxParticles * this.particleGeometryShape.indexData.length ;
 
+            this.initMainAnimNode();
             this.buildBoudBox();
+        }
+
+        /**
+          * @language zh_CN
+          * 粒子发射器的 发射量 = 1000ms * value 为1s中发射的量
+          */
+        public set rate(value: number) {
+            this._particleState.rate;
+        }
+
+         /**
+          * @language zh_CN
+          * 粒子发射器的 发射量 = 1000ms * value 为1s中发射的量
+          */
+        public get rate(): number {
+            return this._particleState.rate;
+        }
+
+        /**
+        * @language zh_CN
+        * 粒子发射器的 发射，是否进行循环播放
+        */
+        public set loop(flag: boolean) {
+            if (flag)
+                this._particleState.loop = 1;
+            else
+                this._particleState.loop = 0;
+        }
+
+        public get loop(): boolean {
+            if (this._particleState.loop)
+                return true;
+            else
+                return false;
+        }
+
+        /**
+        * @language zh_CN
+        * 粒子发射器的 发射时间周期，如果loop 为true 这个值将会无效
+        */
+        public set duration(value: number) {
+            this._particleState.duration = value;
+        }
+
+        /**
+        * @language zh_CN
+        * 粒子发射器的 发射时间周期，如果loop 为true 这个值将会无效
+        */
+        public get duration(): number {
+            return this._particleState.duration ;
         }
 
         /**
@@ -96,19 +153,20 @@
             } else {
                 this.animation.play();
             }
+            this._play = !this._play;
         }
 
         protected initlize() {
             this._isChangeBuild = false;
             //根据 模型形状初始化 
             var vertexIndex: number = 0;
-            var vertexArray: Array<number> = new Array<number>();
+            var vertexArray: Array<number> = new Array<number>();  
 
             //根据 动画功能节点初始化 着色器 并初始化粒子顶点结构
             this.geometry.vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_UV0;
 
             //根据动画节点，预计算顶点信息，长度，字节总量
-            this.initMainAnimNode();
+            this.initOtherAnimNode();
             
             this.geometry.verticesData = new Array<number>();
             for (var i: number = 0; i < this._particleState.maxParticles; ++i) {
@@ -143,53 +201,53 @@
         }
 
         private initMainAnimNode() {
-
             //clean
             this.particleAnimation.particleAnimationState.clean();
 
             //time 
-            var particleTimeNode: ParticleTime = new ParticleTime();
-            (<ConstValueShape>particleTimeNode.delay).value = 0 ;
-            (<ConstValueShape>particleTimeNode.life).value = 2.0;
-            (<ConstValueShape>particleTimeNode.rate).value = 0.01 ;
+            this.timeNode = new ParticleTime();
+            (<ConstValueShape>this.timeNode.delay).value = 0 ;
+            (<ConstValueShape>this.timeNode.life).value = 2.0;
+            (<ConstValueShape>this.timeNode.rate).value = 0.01 ;
 
             //position
-            var particlePosition: ParticlePosition = new ParticlePosition();
-            particlePosition.positions = new CubeVector3DValueShape(); 
+            this.positionNode = new ParticlePosition();
+            this.positionNode.positions = new Vec3ConstValueShape(); 
 
             //rotation
-            var particleRotation: ParticleRotation = new ParticleRotation();
-            particleRotation.rotations = new Vec3ConstValueShape(); 
+            this.rotationNode = new ParticleRotation();
+            this.rotationNode.rotations = new Vec3ConstValueShape(); 
 
             //scale
-            var particleScale: ParticleScale = new ParticleScale();
-            particleScale.scale = new ConstRandomValueShape();
-            (<ConstRandomValueShape>particleScale.scale).min = 0.1;
-            (<ConstRandomValueShape>particleScale.scale).max = 3.0;
+            this.scaleNode = new ParticleScale();
+            this.scaleNode.scale = new ConstRandomValueShape();
+            (<ConstRandomValueShape>this.scaleNode.scale).min = 0.1;
+            (<ConstRandomValueShape>this.scaleNode.scale).max = 1.0;
+        }
+
+        private initOtherAnimNode() {
 
             //end
             var particleEndNode: ParticleEndNode = new ParticleEndNode();
             this._particleFollowNode = new ParticleFollowNode();
 
-            this.particleAnimation.particleAnimationState.addNode(particleTimeNode);
-            this.particleAnimation.particleAnimationState.addNode(particleRotation);
-            this.particleAnimation.particleAnimationState.addNode(particlePosition);
-            this.particleAnimation.particleAnimationState.addNode(particleScale);
+            this.particleAnimation.particleAnimationState.addNode(this.timeNode);
+            this.particleAnimation.particleAnimationState.addNode(this.positionNode);
+            this.particleAnimation.particleAnimationState.addNode(this.rotationNode);
+            this.particleAnimation.particleAnimationState.addNode(this.scaleNode);
             this.particleAnimation.particleAnimationState.addNode(this._particleFollowNode);
 
             //加入自定义节点
-            this.initOtherAnimNode();
+            for (var i: number = 0; i < this._particleAnimNodes.length; i++) {
+                this.particleAnimation.particleAnimationState.addNode(this._particleAnimNodes[i]);
+            }
 
             //永远是最后一个加入
             this.particleAnimation.particleAnimationState.addNode(particleEndNode);
             //计算加入动画后，会获取的节点信息，重新计算 geometry 结构
             this.particleAnimation.particleAnimationState.calculate(this.geometry);
-        }
 
-        private initOtherAnimNode() {
-            for (var i: number = 0; i < this._particleAnimNodes.length; i++) {
-                this.particleAnimation.particleAnimationState.addNode(this._particleAnimNodes[i]);
-            }
+       
         }
 
         /**
@@ -201,7 +259,7 @@
         public update(time: number, delay: number, camera: Camera3D) {
             super.update(time, delay, camera);
             if (this._particleState.followTarget && this._particleFollowNode) {
-                this._particleFollowNode.follow = this._particleState.followTarget; 
+               this._particleFollowNode.follow = this._particleState.followTarget; 
             }
         }
 
@@ -209,15 +267,15 @@
         * @private
         */
         public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
-            if (this._isChangeBuild) this.initlize();
-            super.renderDiffusePass(time, delay, context3DProxy, camera3D);
+            if (this._play){
+                 if (this._isChangeBuild) this.initlize();
+                 super.renderDiffusePass(time, delay, context3DProxy, camera3D);
+            }
         }
 
         private buildBoudBox() {
-            var bound: BoundBox = new BoundBox(this);
-            bound.fillBox(new Vector3D(-50, -50, -50), new Vector3D(50, 50, 50));
-            //(<BoundBox>bound.childBound).fillBox(new Vector3D(-50,-50,-50), new Vector3D(50,50,50));
-            this.bound = bound;
+            this.bound = new BoundBox(this);
+            (<BoundBox>this.bound).fillBox(new Vector3D(-50, -50, -50), new Vector3D(50, 50, 50));
             this.initAABB();
         }
     }

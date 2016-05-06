@@ -9,7 +9,6 @@
             super();
             this.name = "ParticleEndNode"; 
             this.vertex_ShaderName = "particle_end";
-
         }
 
         public build(geometry: Geometry, count: number) {
