@@ -1,11 +1,10 @@
 attribute vec3 attribute_position;
-
+attribute vec3 attribute_normal;
+attribute vec4 attribute_color;
 attribute vec2 attribute_uv0;
 
 vec3 e_position = vec3(0.0, 0.0, 0.0);
 
-//shader ���Զ�ʶ��unifor �͸��� uniform index
-//�ⲿһ��Ҫ��ֵ������������������index����û���ù��� webgl �ᱨ��
 uniform mat4 uniform_ModelMatrix ;
 uniform mat4 uniform_ViewMatrix ;
 uniform mat4 uniform_ProjectionMatrix ;
@@ -41,6 +40,6 @@ mat3 inverse(mat3 m) {
 
 void main(void){
 	e_position = attribute_position;
-	
+	varying_color = attribute_color;
 	varying_uv0 = attribute_uv0;
 }

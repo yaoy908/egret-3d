@@ -297,12 +297,21 @@
 
         /**
         * @language zh_CN
-        * shininess 值。
+        * 材质球的高光强度。
         * @default 8.0
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public shininess: number = 20.0;
+        public specularLevel: number = 20.0;
+
+        /**
+        * @language zh_CN
+        * 材质球的光滑度。
+        * @default 8.0
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public gloss: number = 20.0;
 
         /**
         * @language zh_CN
@@ -348,7 +357,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public roughness: number = 1.0; 
+        //public roughness: number = 1.0; 
 
         
        /**
@@ -496,14 +505,15 @@
             data.ambientColor = this.ambientColor;
             data.diffuseColor = this.diffuseColor;
             data.specularColor = this.specularColor;
-            data.shininess = this.shininess;
+           
             data.cutAlpha = this.cutAlpha;
             data.alpha = this.alpha;
-            data.roughness = this.roughness;
-            data.roughness = this.roughness;
+           
+            data.specularLevel = this.specularLevel;
+            data.gloss = this.gloss;
             data.albedo = this.albedo;
-            data.specularScale = this.specularScale;
 
+            data.specularScale = this.specularScale;
             data.materialDataNeedChange = this.materialDataNeedChange;
             data.textureChange = true;
 

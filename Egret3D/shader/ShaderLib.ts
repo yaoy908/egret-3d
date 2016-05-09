@@ -35,8 +35,6 @@ module egret3d {
 			"return normalize(cross(fdx, fdy)); \n" +
 			"} \n" +
 			"void main() { \n" +
-			"if(varying_color.w == 0.0 ) \n" +
-			"discard ; \n" +
 			"diffuseColor  = vec4(1.0,1.0,1.0,1.0); \n" +
 			"specularColor = vec4(0.0,0.0,0.0,0.0); \n" +
 			"ambientColor  = vec4(0.0,0.0,0.0,0.0); \n" +
@@ -116,12 +114,15 @@ module egret3d {
 			"} \n",
 
 			"diffuse_vertex":
+			"attribute vec3 attribute_normal; \n" +
+			"attribute vec4 attribute_color; \n" +
 			"void main(void){ \n" +
 			"mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
 			"mat3 normalMatrix = transpose( inverse(mat3( modeViewMatrix )) ); \n" +
 			"varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
 			"outPosition = uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
 			"varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
+			"varying_color = attribute_color; \n" +
 			"} \n",
 
 			"directLight_fragment":
@@ -154,7 +155,7 @@ module egret3d {
 			"float specAngle = max(dot(halfDir, N), 0.0); \n" +
 			"if( lambertTerm> 0.0){ \n" +
 			"specular = pow(specAngle, materialSource.shininess ); \n" +
-			"specularColor.xyz += materialSource.specular * specular ; \n" +
+			"specularColor.xyz += materialSource.specular * specular * materialSource.roughness ; \n" +
 			"} \n" +
 			"} \n" +
 			"} \n" +
@@ -317,11 +318,21 @@ module egret3d {
 			"return max(t, 0.0); \n" +
 			"} \n",
 
+			"lightMapSpecularPower_fs":
+			"uniform sampler2D lightTexture ; \n" +
+			"varying vec2 varying_uv1 ; \n" +
+			"void main(void){ \n" +
+			"vec3 lightmap = texture2D( lightTexture , varying_uv1 ).xyz * 1.5; \n" +
+			"diffuseColor.xyz *= lightmap ; \n" +
+			"specularColor.xyz *= lightmap; \n" +
+			"} \n",
+
 			"lightMap_fs":
 			"uniform sampler2D lightTexture ; \n" +
 			"varying vec2 varying_uv1 ; \n" +
 			"void main(void){ \n" +
-			"diffuseColor.xyz *= texture2D( lightTexture , varying_uv1 ).xyz * 2.0 ; \n" +
+			"vec3 lightmap = texture2D( lightTexture , varying_uv1 ).xyz * 1.5; \n" +
+			"diffuseColor.xyz *= lightmap ; \n" +
 			"} \n",
 
 			"lineFog":
@@ -416,7 +427,6 @@ module egret3d {
 			"} \n",
 
 			"particle_end":
-			"uniform vec4 uniform_follow ; \n" +
 			"float particle(  ){ \n" +
 			"return 1.0 ; \n" +
 			"} \n" +
@@ -430,7 +440,7 @@ module egret3d {
 			"	 \n",
 
 			"particle_follow_vs":
-			"attribute vec4 attribute_followPosition ; \n" +
+			"attribute vec3 attribute_followPosition ; \n" +
 			"float particle(  ){ \n" +
 			"globalPosition.xyz += attribute_followPosition.xyz; \n" +
 			"} \n" +
@@ -446,8 +456,9 @@ module egret3d {
 			"particle_ScaleByLife":
 			"attribute vec2 attribute_ScaleByLife ; \n" +
 			"float particle(  ){ \n" +
-			"float scale = (attribute_ScaleByLife.y - attribute_ScaleByLife.x); \n" +
-			"localPosition.xyz += (currentTime/life) * outPosition.xyz * scale; \n" +
+			"float scale = -(attribute_ScaleByLife.y - attribute_ScaleByLife.x); \n" +
+			"float l = clamp(max(scale,0.0),0.0,1.0); \n" +
+			"localPosition.xyz = (emit.life*l - currentTime ) * localPosition.xyz * scale; \n" +
 			"} \n",
 
 			"particle_time":
@@ -477,8 +488,9 @@ module egret3d {
 			"return currentTime = 0.0 ; \n" +
 			"}else{ \n" +
 			"duration = uniform_time.w ; \n" +
-			"currentTime = mod(currentTime,duration); \n" +
-			"if( currentTime > emit.life ) \n" +
+			"currentTime = max( currentTime - numberSpace , 0.0 ); \n" +
+			"currentTime = mod( currentTime ,duration); \n" +
+			"if( currentTime >= emit.life ) \n" +
 			"return currentTime = 0.0 ; \n" +
 			"} \n" +
 			"if( currentTime <= 0.0 ) \n" +
@@ -502,9 +514,7 @@ module egret3d {
 			"} \n",
 
 			"particle_vs":
-			"attribute vec3 attribute_offsetPosition ; \n" +
 			"uniform mat4 uniform_cameraMatrix; \n" +
-			"uniform vec4 offestPosition; \n" +
 			"const float PI = 3.1415926 ; \n" +
 			"float currentTime = 0.0; \n" +
 			"float totalTime = 0.0; \n" +
@@ -561,7 +571,7 @@ module egret3d {
 			"mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
 			"mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); \n" +
 			"localPosition = outPosition = vec4(e_position, 1.0); \n" +
-			"globalPosition.xyz = attribute_offsetPosition; \n" +
+			"globalPosition.xyz = vec3(0.0,0.0,0.0); \n" +
 			"} \n",
 
 			"particle_vsback":
@@ -774,6 +784,7 @@ module egret3d {
 			"skeleton_vertex":
 			"attribute vec4 attribute_boneIndex; \n" +
 			"attribute vec4 attribute_boneWeight; \n" +
+			"attribute vec3 attribute_normal; \n" +
 			"vec4 e_boneIndex = vec4(0.0, 0.0, 0.0, 0.0); \n" +
 			"vec4 e_boneWeight = vec4(0.0, 0.0, 0.0, 0.0); \n" +
 			"const int bonesNumber = 0; \n" +

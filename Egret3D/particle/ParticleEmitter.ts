@@ -46,7 +46,7 @@
             this.particleAnimation.emit = this;
 
             //this.particleGeometryShape = geo ? geo : new CubeGeometry(100,100,100);
-            this.particleGeometryShape = geo ? geo : new PlaneGeometry(50.0, 50.0, 1, 1, 1, 1, Vector3D.Y_AXIS);
+            this.particleGeometryShape = geo ? geo : new PlaneGeometry(50.0, 50.0, 1, 1, 1, 1);
 
             this.geometry = new Geometry();
             this.geometry.buildDefaultSubGeometry();

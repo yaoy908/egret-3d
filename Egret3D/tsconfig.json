@@ -98,7 +98,6 @@
         "core/node/Object3D.ts",
         "core/node/Entity.ts",
         "core/node/Mesh.ts",
-        "core/node/Billboard.ts",
         "core/node/Sky.ts",
         "core/node/SphereSky.ts",
         "core/node/Wireframe.ts",
@@ -160,14 +159,12 @@
         "material/pass/ColorPass.ts",
         "material/pass/DiffusePass.ts",
         "material/pass/CubePass.ts",
-        "material/pass/PBRPass.ts",
 
         "material/MaterialBase.ts",
 
         "material/ColorMaterial.ts",
         "material/TextureMaterial.ts",
         "material/CubeTextureMaterial.ts",
-        "material/PBRMaterial.ts",
 
         "render/RenderBase.ts",
         "render/DefaultRender.ts",
@@ -233,6 +230,29 @@
 
         "View3D.ts",
         "VRView3D.ts",
-        "Egret3DCanvas.ts"
-    ]
+        "Egret3DCanvas.ts",
+
+        "Feature/DataInfo/MaterialData.ts",
+        "Feature/DataInfo/MeshData.ts",
+        "Feature/DataInfo/SceneNode.ts",
+        "Feature/DataInfo/DirectionLightData.ts",
+        "Feature/DataInfo/PointLightData.ts",
+        "Feature/DataInfo/MaterialMethodData.ts",
+        
+        
+        "Feature/loader/EgretSceneXmlParser.ts",
+        "Feature/loader/EgretSceneSourceLib.ts",
+        "Feature/loader/EgretSceneLoader.ts",
+        "Feature/loader/EgretMaterialMethodParser.ts",
+        
+        
+        "Feature/ui/LoadingUI.ts",
+        
+        "Feature/utils/AxisMesh.ts",
+        "Feature/utils/FPSCounter.ts",
+        
+        "Feature/controller/EgretCameraZoomController.ts",
+        "Feature/EgretWorld.ts",
+        "Feature/EgretConfig.ts"
+]      
 }	

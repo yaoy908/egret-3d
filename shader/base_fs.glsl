@@ -27,9 +27,6 @@ vec3 flatNormals(vec3 pos) {
 
 
 void main() {
-	
-	if(varying_color.w == 0.0 )
-		discard ;
     
 	diffuseColor  = vec4(1.0,1.0,1.0,1.0);
 	specularColor = vec4(0.0,0.0,0.0,0.0);

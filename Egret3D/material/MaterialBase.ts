@@ -340,55 +340,55 @@
 
         /**
          * @language zh_CN
-         * 设置材质 shininess 值。
-         * 设置材质球的 光滑程度 值越大，越不光滑
+         * 设置材质 specularLevel 值。
+         * 设置材质球的材质球的高光强度
          * @param value {Number}
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public set shininess(value: number) {
-            if (this.materialData.shininess != value) {
-                this.materialData.shininess = value;
+        public set specularLevel(value: number) {
+            if (this.materialData.specularLevel != value) {
+                this.materialData.specularLevel = value;
                 this.materialData.materialDataNeedChange = true;
             }
         }
 
         /**
          * @language zh_CN
-         * 返回材质 shininess 值。
-         * 返回材质 光滑程度 值越大，越不光滑
+         * 返回材质 specularLevel 值。
+         * 返回材质 材质球的高光强度
          * @returns {Number}
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public get shininess(): number {
-            return this.materialData.shininess;
+        public get specularLevel(): number {
+            return this.materialData.specularLevel;
         }
 
         /**
          * @language zh_CN
-         * 设置材质 roughness 值。
-         * 设置材质 镜面平滑程度 值。
+         * 设置材质 gloss 值。
+         * 设置材质 镜面平滑程度值。
          * @param value {Number}
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public set roughness(value: number) {
-            if (this.materialData.roughness != value) {
-                this.materialData.roughness = value;
+        public set gloss(value: number) {
+            if (this.materialData.gloss != value) {
+                this.materialData.gloss = value;
                 this.materialData.materialDataNeedChange = true;
             }
         }
 
         /**
          * @language zh_CN
-         * 返回材质 roughness 值。
+         * 返回材质球的镜面平滑程度值。
          * @returns {Number}
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public get roughness(): number {
-            return this.materialData.roughness;
+        public get gloss(): number {
+            return this.materialData.gloss;
         }
 
          /**

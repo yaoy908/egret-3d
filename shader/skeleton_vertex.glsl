@@ -1,5 +1,6 @@
 ﻿attribute vec4 attribute_boneIndex;
 attribute vec4 attribute_boneWeight;
+attribute vec3 attribute_normal;
 
 vec4 e_boneIndex = vec4(0.0, 0.0, 0.0, 0.0);
 vec4 e_boneWeight = vec4(0.0, 0.0, 0.0, 0.0);

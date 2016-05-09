@@ -9,11 +9,16 @@
         /**
          * @language zh_CN
          */
-        constructor() {
+        constructor( useSpecularPower:boolean = true ) {
             super();
             this.methodType = TextureMethodType.diffuse; 
             this.vsShaderList.push("secondaryUV_vs");
-            this.fsShaderList.push("lightMap_fs");
+
+            if (useSpecularPower){
+                this.fsShaderList.push("lightMapSpecularPower_fs");
+            } else {
+                this.fsShaderList.push("lightMap_fs");
+            }
         }
 
         /**

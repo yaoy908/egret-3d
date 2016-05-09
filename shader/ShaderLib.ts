@@ -114,12 +114,15 @@ module egret3d {
 			"} \n",
 
 			"diffuse_vertex":
+			"attribute vec3 attribute_normal; \n" +
+			"attribute vec4 attribute_color; \n" +
 			"void main(void){ \n" +
 			"mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
 			"mat3 normalMatrix = transpose( inverse(mat3( modeViewMatrix )) ); \n" +
 			"varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
 			"outPosition = uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; \n" +
 			"varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
+			"varying_color = attribute_color; \n" +
 			"} \n",
 
 			"directLight_fragment":
@@ -152,7 +155,7 @@ module egret3d {
 			"float specAngle = max(dot(halfDir, N), 0.0); \n" +
 			"if( lambertTerm> 0.0){ \n" +
 			"specular = pow(specAngle, materialSource.shininess ); \n" +
-			"specularColor.xyz += materialSource.specular * specular ; \n" +
+			"specularColor.xyz += materialSource.specular * specular * materialSource.roughness ; \n" +
 			"} \n" +
 			"} \n" +
 			"} \n" +
@@ -315,11 +318,21 @@ module egret3d {
 			"return max(t, 0.0); \n" +
 			"} \n",
 
+			"lightMapSpecularPower_fs":
+			"uniform sampler2D lightTexture ; \n" +
+			"varying vec2 varying_uv1 ; \n" +
+			"void main(void){ \n" +
+			"vec3 lightmap = texture2D( lightTexture , varying_uv1 ).xyz * 1.5; \n" +
+			"diffuseColor.xyz *= lightmap ; \n" +
+			"specularColor.xyz *= lightmap; \n" +
+			"} \n",
+
 			"lightMap_fs":
 			"uniform sampler2D lightTexture ; \n" +
 			"varying vec2 varying_uv1 ; \n" +
 			"void main(void){ \n" +
-			"diffuseColor.xyz *= texture2D( lightTexture , varying_uv1 ).xyz * 2.0 ; \n" +
+			"vec3 lightmap = texture2D( lightTexture , varying_uv1 ).xyz * 1.5; \n" +
+			"diffuseColor.xyz *= lightmap ; \n" +
 			"} \n",
 
 			"lineFog":
@@ -407,20 +420,167 @@ module egret3d {
 			"normal.xyz = tbn( normalTex.xyz , normal.xyz , normalize(varying_ViewPose.xyz) , uv_0 ) ; \n" +
 			"} \n",
 
+			"particle_accelerationSpeed":
+			"attribute vec3 attribute_accelerationSpeed ; \n" +
+			"float particle(  ){ \n" +
+			"globalPosition.xyz += currentTime * currentTime * attribute_accelerationSpeed  ; \n" +
+			"} \n",
+
+			"particle_end":
+			"float particle(  ){ \n" +
+			"return 1.0 ; \n" +
+			"} \n" +
+			"void main(void) { \n" +
+			"outPosition.xyz = localPosition.xyz  ; \n" +
+			"outPosition = billboardMatrix * outPosition; \n" +
+			"outPosition.xyz += globalPosition.xyz; \n" +
+			"outPosition = uniform_ModelMatrix * outPosition; \n" +
+			"outPosition = uniform_ViewMatrix * outPosition; \n" +
+			"} \n" +
+			"	 \n",
+
+			"particle_follow_vs":
+			"attribute vec3 attribute_followPosition ; \n" +
+			"float particle(  ){ \n" +
+			"globalPosition.xyz += attribute_followPosition.xyz; \n" +
+			"} \n" +
+			"	 \n",
+
+			"particle_Rotation":
+			"attribute float attribute_Rotation ; \n" +
+			"float particle(  ){ \n" +
+			"float rot = currentTime * attribute_Rotation  * (3.1415926 / 180.0); \n" +
+			"localPosition = buildRotMat4(vec3(0.0,0.0,rot)) * localPosition; \n" +
+			"} \n",
+
+			"particle_ScaleByLife":
+			"attribute vec2 attribute_ScaleByLife ; \n" +
+			"float particle(  ){ \n" +
+			"float scale = -(attribute_ScaleByLife.y - attribute_ScaleByLife.x); \n" +
+			"float l = clamp(max(scale,0.0),0.0,1.0); \n" +
+			"localPosition.xyz = (emit.life*l - currentTime ) * localPosition.xyz * scale; \n" +
+			"} \n",
+
+			"particle_time":
+			"attribute vec4 attribute_time ; \n" +
+			"uniform vec4 uniform_time ; \n" +
+			"float currentTime = 0.0; \n" +
+			"struct ParticleData{ \n" +
+			"float delay; \n" +
+			"float life; \n" +
+			"float rate; \n" +
+			"float index; \n" +
+			"}; \n" +
+			"float particle(  ){ \n" +
+			"ParticleData emit ; \n" +
+			"emit.delay = attribute_time.x ; \n" +
+			"emit.life = attribute_time.y ; \n" +
+			"emit.rate = attribute_time.z ; \n" +
+			"emit.index = attribute_time.w ; \n" +
+			"float time = uniform_time.x ; \n" +
+			"float duration = uniform_time.y ; \n" +
+			"float loop = uniform_time.z ; \n" +
+			"float maxLife = uniform_time.w ; \n" +
+			"float numberSpace = emit.index * emit.rate ; \n" +
+			"currentTime = max(time - numberSpace - emit.delay,0.0) ; \n" +
+			"if(loop==0.0){ \n" +
+			"if( numberSpace > duration ) \n" +
+			"return currentTime = 0.0 ; \n" +
+			"}else{ \n" +
+			"duration = uniform_time.w ; \n" +
+			"currentTime = max( currentTime - numberSpace , 0.0 ); \n" +
+			"currentTime = mod( currentTime ,duration); \n" +
+			"if( currentTime >= emit.life ) \n" +
+			"return currentTime = 0.0 ; \n" +
+			"} \n" +
+			"if( currentTime <= 0.0 ) \n" +
+			"return currentTime ; \n" +
+			"} \n" +
+			"void e_discard(){ \n" +
+			"varying_color.w = 0.0 ; \n" +
+			"} \n" +
+			"void main(void) { \n" +
+			"float active = particle(  ) ; \n" +
+			"if( active == 0.0 ){ \n" +
+			"e_discard(); \n" +
+			"}else{ \n" +
+			"} \n" +
+			"} \n",
+
+			"particle_uniformSpeed":
+			"attribute vec3 attribute_uniformSpeed ; \n" +
+			"float particle(  ){ \n" +
+			"globalPosition.xyz += currentTime * attribute_uniformSpeed ; \n" +
+			"} \n",
+
 			"particle_vs":
+			"uniform mat4 uniform_cameraMatrix; \n" +
+			"const float PI = 3.1415926 ; \n" +
+			"float currentTime = 0.0; \n" +
+			"float totalTime = 0.0; \n" +
+			"vec4 localPosition; \n" +
+			"vec4 globalPosition; \n" +
+			"mat4 buildRotMat4(vec3 rot) \n" +
+			"{ \n" +
+			"mat4 ret = mat4( \n" +
+			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
+			"vec4(0.0, 1.0, 0.0, 0.0), \n" +
+			"vec4(0.0, 0.0, 1.0, 0.0), \n" +
+			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
+			"); \n" +
+			"float s; \n" +
+			"float c; \n" +
+			"s = sin(rot.x); \n" +
+			"c = cos(rot.x); \n" +
+			"ret *= mat4( \n" +
+			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
+			"vec4(0.0, c, s, 0.0), \n" +
+			"vec4(0.0, -s, c, 0.0), \n" +
+			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
+			"); \n" +
+			"s = sin(rot.y); \n" +
+			"c = cos(rot.y); \n" +
+			"ret *= mat4( \n" +
+			"vec4(c, 0.0, -s, 0.0), \n" +
+			"vec4(0.0, 1.0, 0.0, 0.0), \n" +
+			"vec4(s, 0.0, c, 0.0), \n" +
+			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
+			"); \n" +
+			"s = sin(rot.z); \n" +
+			"c = cos(rot.z); \n" +
+			"ret *= mat4( \n" +
+			"vec4(c, s, 0.0, 0.0), \n" +
+			"vec4(-s, c, 0.0, 0.0), \n" +
+			"vec4(0.0, 0.0, 1.0, 0.0), \n" +
+			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
+			"); \n" +
+			"return ret; \n" +
+			"} \n" +
+			"void main(void) { \n" +
+			"varying_color = vec4(1.0, 1.0, 1.0, 1.0); \n" +
+			"mat4 billboardMatrix = mat4( \n" +
+			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
+			"vec4(0.0, 1.0, 0.0, 0.0), \n" +
+			"vec4(0.0, 0.0, 1.0, 0.0), \n" +
+			"vec4(0.0, 0.0, 0.0, 1.0)); \n" +
+			"billboardMatrix = mat4( \n" +
+			"uniform_cameraMatrix[0], \n" +
+			"uniform_cameraMatrix[1], \n" +
+			"uniform_cameraMatrix[2], \n" +
+			"vec4(0.0, 0.0,1.0, 1.0)); \n" +
+			"mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
+			"mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); \n" +
+			"localPosition = outPosition = vec4(e_position, 1.0); \n" +
+			"globalPosition.xyz = vec3(0.0,0.0,0.0); \n" +
+			"} \n",
+
+			"particle_vsback":
 			"attribute vec3 attribute_offset; \n" +
 			"attribute vec3 attribute_lifecycle; \n" +
 			"attribute vec3 attribute_direction; \n" +
 			"attribute vec2 attribute_speed; \n" +
 			"uniform mat4 uniform_cameraMatrix; \n" +
 			"uniform float uniform_time; \n" +
-			"uniform float uniform_enableBillboardXYZ; \n" +
-			"uniform vec3 uniform_startColor; \n" +
-			"uniform vec3 uniform_endColor; \n" +
-			"uniform vec3 uniform_startScale; \n" +
-			"uniform vec3 uniform_endScale; \n" +
-			"uniform vec3 uniform_startRot; \n" +
-			"uniform vec3 uniform_endRot; \n" +
 			"const float PI = 3.1415926 ; \n" +
 			"vec4 position; \n" +
 			"float currentTime = 0.0; \n" +
@@ -505,9 +665,9 @@ module egret3d {
 			"} \n" +
 			"mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
 			"mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); \n" +
-			"varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
+			"varying_eyeNormal = normalize(normalMatrix * -e_normal); \n" +
 			"position = vec4(attribute_offset, 1.0); \n" +
-			"outPosition = vec4(attribute_position, 1.0); \n" +
+			"outPosition = vec4(e_position, 1.0); \n" +
 			"outPosition = billboardMatrix * outPosition; \n" +
 			"totalTime = attribute_lifecycle.x + attribute_lifecycle.y; \n" +
 			"if (attribute_lifecycle.z == 1.0) \n" +
@@ -624,6 +784,7 @@ module egret3d {
 			"skeleton_vertex":
 			"attribute vec4 attribute_boneIndex; \n" +
 			"attribute vec4 attribute_boneWeight; \n" +
+			"attribute vec3 attribute_normal; \n" +
 			"vec4 e_boneIndex = vec4(0.0, 0.0, 0.0, 0.0); \n" +
 			"vec4 e_boneWeight = vec4(0.0, 0.0, 0.0, 0.0); \n" +
 			"const int bonesNumber = 0; \n" +

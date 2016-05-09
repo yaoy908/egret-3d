@@ -26,7 +26,13 @@
     * @platform Web,Native
     */
     export class LightBase extends Object3D {
-     
+
+         /**
+         *@language zh_CN 
+         *@private
+         * 灯光在配置表中的id，用于和贴图建立绑定关系
+         */
+        public lightId: Number = -1;
         /**
          *@language zh_CN 
          *@private
