@@ -22,7 +22,7 @@ module egret3d
         * @version Egret 3.0
         * @platform Web,Native
         */
-		private _edgesDict:HashTable;
+		private _edgesDict:DoubleArray;
 
         /**
         * @language zh_CN
@@ -117,7 +117,7 @@ module egret3d
 			this._nav3dPoints = new Array<Navi3DPoint>();
             this._nav3dEdges = new Array<Navi3DEdge>();
             this._nav3dTriangles = new Array<Navi3DTriangle>();
-            this._edgesDict = new HashTable();
+            this._edgesDict = new DoubleArray();
 			
             this.initPoints(pointList);
             this.initEdgesAndTriangles(triangleIndexList);

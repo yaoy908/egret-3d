@@ -35,8 +35,8 @@
 
             this.matPlane = new TextureMaterial();
             this.matPlane.lightGroup = this.lights;
-            this.matPlane.shininess = 0.5 ;
-            this.matPlane.roughness = 1.0;
+            this.matPlane.specularLevel = 0.5 ;
+            this.matPlane.gloss = 1.0;
 
             this.matPlane.repeat = true;
             this.matPlane.uvRectangle(0, 0, 2.0, 2.0);

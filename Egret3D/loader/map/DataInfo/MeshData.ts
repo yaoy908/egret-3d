@@ -1,4 +1,12 @@
-module ecore {
+module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.MeshData
+    * @classdesc
+    * 模型数据
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class MeshData {
         public name: string;
         public materialID: number = -1;

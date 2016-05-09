@@ -1,5 +1,13 @@
-module ecore {
-    export class MaterialData {
+module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.MaterialSphereData
+    * @classdesc
+    * 材质球的特效数据
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export class MaterialSphereData {
         public id: number = 0;
 
         public diffuseTextureName: string;
