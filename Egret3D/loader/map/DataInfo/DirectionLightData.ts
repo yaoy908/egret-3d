@@ -1,4 +1,12 @@
 ﻿module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.DirectionLightData
+    * @classdesc
+    * 平行光数据
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class DirectionLightData {
         
         public id:number = 0;

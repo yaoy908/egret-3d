@@ -1,25 +1,128 @@
 ﻿module egret3d {
+     /**
+     * @language zh_CN
+     * @class egret3d.EgretMapXmlParser
+     * @classdesc
+     * 解析egret地图xml配置文件的类
+     * 用于解析egret地图文件的类，解析完后，该类中保存有xml中所有的信息
+     *
+     * @version Egret 3.0
+     * @platform Web,Native
+     */
     export class EgretMapXmlParser {
+
+        /**
+         * @language zh_CN
+         * 模型文件数据列表
+         * @version Egret 3.0
+         *@platform Web,Native
+         */
         public esmList: Array<MeshData>;
+
+        /**
+         * @language zh_CN
+         * 材质球数据列表
+         * @version Egret 3.0
+         *@platform Web,Native
+         */
         public materialList: Array<MaterialSphereData>;
+
+        /**
+         * @language zh_CN
+         * 相机动画文件数据列表
+         * @version Egret 3.0
+         *@platform Web,Native
+         */
         public ecaList: Array<string>;
+
+         /**
+         * @language zh_CN
+         * 蒙皮文件数据列表
+         * @version Egret 3.0
+         *@platform Web,Native
+         */
         public eamList: Array<string>;
 
+        /**
+         * @language zh_CN
+         * 平行光数据列表
+         * @version Egret 3.0
+         *@platform Web,Native
+         */
         public dirLightDatas: Array<DirectionLightData>;
+
+        /**
+         * @language zh_CN
+         * 点光源数据列表
+         * @version Egret 3.0
+         *@platform Web,Native
+         */
         public pointLightDatas: Array<PointLightData>;
 
+        /**
+         * @language zh_CN
+         * 是否开启配置的平行光源
+         * @version Egret 3.0
+         *@platform Web,Native
+         */
         public enableDirectLight: boolean;
+
+        /**
+         * @language zh_CN
+         * 是否开启配置的点光源
+         * @version Egret 3.0
+         *@platform Web,Native
+         */
         public enablePointLight: boolean;
 
+        /**
+         * @language zh_CN
+         * 贴图文件相对路径
+         * @version Egret 3.0
+         *@platform Web,Native
+         */
         public texturePath: string;
+
+        /**
+         * @language zh_CN
+         * 模型文件相对路径
+         * @version Egret 3.0
+         *@platform Web,Native
+         */
         public esmPath: string;
+
+        /**
+         * @language zh_CN
+         * 相机动画文件相对路径
+         * @version Egret 3.0
+         *@platform Web,Native
+         */
         public ecaPath: string;
+
+        /**
+         * @language zh_CN
+         * 蒙皮动画文件相对路径
+         * @version Egret 3.0
+         *@platform Web,Native
+         */
         public eamPath: string;
 
+        /**
+         * @language zh_CN
+         * 地图名
+         * @version Egret 3.0
+         *@platform Web,Native
+         */
         public sceneName: string;
 
         
-
+        /**
+         * @language zh_CN
+         * 构造函数
+         * 先创建该parser，然后执行parseXml函数
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public constructor() {
         }
 
@@ -73,7 +176,15 @@
 
             
         }
-        //解析xml
+
+        /**
+         * @language zh_CN
+         * 解析xml
+         * @param sceneName 地图名
+         * @param xml 加载得到的xml字符串
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public parseXml(sceneName:string, text: string): void {
             this.reset();
             //
@@ -140,11 +251,18 @@
         }
 
 
-        //test
+        //加入相机动画
         private parseCameraAnim(): void {
             this.ecaList = ["Camera001", "Camera002", "Camera003", "Camera004", "Camera005"];
         }
 
+        /**
+        * @private
+        * @language zh_CN
+        * 解析node节点的属性值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public static eachXmlAttr(item: Node, fun: Function): void {
             if (item == null || fun == null)
                 return;
@@ -461,10 +579,10 @@
         }
 
 
-        public dispose(): void {
-            this.materialList = this.esmList = this.eamList = this.ecaList = null;
-            this.esmPath = this.texturePath = this.ecaPath = this.eamPath = null;
-        }
+        //public dispose(): void {
+        //    this.materialList = this.esmList = this.eamList = this.ecaList = null;
+        //    this.esmPath = this.texturePath = this.ecaPath = this.eamPath = null;
+        //}
 
 
 

@@ -1,4 +1,18 @@
 ﻿module egret3d {
+     /**
+     * @language zh_CN
+     * @class egret3d.EgretMapLoader
+     * @classdesc
+     * 加载egret地图类
+     * 用于加载和解析egret地图文件的类，加载完毕后，mesh内容已经添加到了container中.
+     * 主要封装了esm/eca/png/eam的加载和组装，以及mesh的render method相关信息，和灯光数据的生效.
+     * 加载完毕后，会派发事件LoaderEvent3D.LOADER_COMPLETE
+     * @see egret3d.EventDispatcher
+     *
+     * @version Egret 3.0
+     * @platform Web,Native
+     */
+
     export class EgretMapLoader extends EventDispatcher{
 
         private _sceneName: string;
@@ -8,47 +22,97 @@
 
         private _container: Object3D;
         private _defaultMaterial: TextureMaterial;
-        private _materialMap: HashTable;
-        private _lightHashMap: HashTable;
+        private _materialMap: DoubleArray;
+        private _lightHashMap: DoubleArray;
 
         private _sourceLib: EgretMapSourceLib;
         private _parser: EgretMapXmlParser;
         //0：未开始 1：正在加载 2：加载完毕
         private _loadStatus: number = 0;
+
+
+         /**
+         * @language zh_CN
+         * 构造函数
+         * 先创建loader，然后执行loadScene函数，监听complete事件以获得加载完毕的回调
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         constructor() {
             super();
             this._container = new Object3D();
             this._sourceLib = new EgretMapSourceLib();
-            this._materialMap = new HashTable();
-            this._lightHashMap = new HashTable();
+            this._materialMap = new DoubleArray();
+            this._lightHashMap = new DoubleArray();
         }
 
+
+        /**
+        * @language zh_CN
+        * 加载完毕后，所有的mesh会存放到该Object3D中
+        * @returns Object3D 
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get container(): Object3D{
             return this._container;
         }
 
+         /**
+         * @language zh_CN
+         * 加载完毕后，所有的相机动画解析完毕的数据会放入到该数组中
+         * @returns Array<CameraAnimationController>
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public get cameraAnims(): Array<CameraAnimationController> {
             return this._cameraAnims;
         }
 
+        /**
+         * @language zh_CN
+         * 统计加载进度信息
+         * @returns number（0-1）
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public calcProgress(): number {
             if (this._loadStatus == 0)
                 return 0;
             return this._sourceLib.progress;
         }
 
-        public get lightHashMap(): HashTable {
+        /**
+         * @language zh_CN
+         * 获取所有的灯光实例化信息
+         * 加载完毕之后，会实例化所有的灯光，并且通过mesh中的lightIds自动分配到每个mesh的lightGroup中
+         * @returns egret3d.HashTable
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public get lightHashMap(): DoubleArray {
             return this._lightHashMap;
         }
 
-        public get sourceLib(): EgretMapSourceLib {
-            return this._sourceLib;
-        }
-
+         /**
+         * @language zh_CN
+         * 获取xml的解析实例，以便获取更多场景的配置信息
+         * @returns egret3d.EgretMapXmlParser
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public get parser(): EgretMapXmlParser {
             return this._parser;
         }
 
+
+         /**
+         * @language zh_CN
+         * 加载目标地址的地图配置信息，加载完毕后自动解析文件以及开始后续加载
+         * @param url 地图配置文件地址
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public loadScene(name: string): void {
             this._sceneName = name;
 
@@ -282,16 +346,16 @@
 
 
 
-        public dispose(): void {
-            this._materialMap.clear();
-            this._sourceLib.dispose();
+        //public dispose(): void {
+        //    this._materialMap.clear();
+        //    this._sourceLib.dispose();
 
-            this._lightHashMap.clear();
-            this._lightHashMap = null;
+        //    this._lightHashMap.clear();
+        //    this._lightHashMap = null;
 
-            this._parser.dispose();
-            this._parser = null;
-        }
+        //    this._parser.dispose();
+        //    this._parser = null;
+        //}
 
 
        

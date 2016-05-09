@@ -1,6 +1,12 @@
 module egret3d {
-
-    //场景节点类型;
+    /**
+    * @language zh_CN
+    * @class egret3d.SceneNodeType
+    * @classdesc
+    * 场景节点类型;
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export enum SceneNodeType {
         //未知对象;
         Unknown,

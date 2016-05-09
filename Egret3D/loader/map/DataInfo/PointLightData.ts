@@ -1,4 +1,12 @@
 ﻿module egret3d {
+    /**
+    * @language zh_CN
+    * @class egret3d.PointLightData
+    * @classdesc
+    * 点光源数据
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class PointLightData {
 
         public id: number = 0;

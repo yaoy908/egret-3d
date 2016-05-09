@@ -214,7 +214,7 @@
         "core/partition/quad/QuadRoot.ts",
         "core/partition/quad/QuadTreeCell.ts",
 
-        "Util/HashTable.ts",
+        "Util/DoubleArray.ts",
         "Util/navigation/Navi3DAstar.ts",
         "Util/navigation/Navi3DEdge.ts",
         "Util/navigation/Navi3DMaskType.ts",

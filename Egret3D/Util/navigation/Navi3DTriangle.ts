@@ -22,7 +22,7 @@ module egret3d {
         * @version Egret 3.0
         * @platform Web,Native
         */
-        private _neibourTriangles: HashTable = new HashTable();
+        private _neibourTriangles: DoubleArray = new DoubleArray();
 
         /**
         * @language zh_CN
@@ -30,7 +30,7 @@ module egret3d {
         * @version Egret 3.0
         * @platform Web,Native
         */
-        private _pointAgainstEdge: HashTable = new HashTable();
+        private _pointAgainstEdge: DoubleArray = new DoubleArray();
 
         /**
         * @language zh_CN
@@ -38,7 +38,7 @@ module egret3d {
         * @version Egret 3.0
         * @platform Web,Native
         */
-        private _edgeAgainstPoint: HashTable = new HashTable();
+        private _edgeAgainstPoint: DoubleArray = new DoubleArray();
 
         /**
         * @language zh_CN

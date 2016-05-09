@@ -1,6 +1,25 @@
 ﻿module egret3d {
     export class EgretMaterialMethodParser {
 
+     /**
+     * @language zh_CN
+     * @class egret3d.EgretMaterialMethodParser
+     * @classdesc
+     * 解析材质球渲染的method数据
+     *
+     * @version Egret 3.0
+     * @platform Web,Native
+     */
+
+
+         /**
+         * @language zh_CN
+         * 解析单个材质球渲染的method数据，一个材质球下面会有多个MaterialMethodData
+         * @param xml 材质球信息记录xml
+         * @returns MaterialMethodData
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public static parse(xml: Node): MaterialMethodData {
             if (xml.childNodes.length == 1)
                 return null;

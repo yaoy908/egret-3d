@@ -2,13 +2,13 @@
 
     /**
     * @language zh_CN
-    * @class egret3d.HashTable
+    * @class egret3d.DoubleArray
     * @classdesc
-    * 纯2d的点
+    * 利用2个数组实现键值对的数组
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class HashTable {
+    export class DoubleArray {
 
         /**
         * @language zh_CN
@@ -17,7 +17,7 @@
         * @platform Web,Native
         */
         private _keys: Array<any> = new Array<any>();
-
+        
         /**
         * @language zh_CN
         * 值队列
