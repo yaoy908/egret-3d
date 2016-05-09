@@ -2,15 +2,35 @@
 
     
     /**
-     * @private
      * @language zh_CN
      * 鼠标键码
      * @version Egret 3.0
      * @platform Web,Native
      */
     export enum MouseCode {
+
+        /**
+        * @language zh_CN
+        * 鼠标左键
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         Mouse_Left = 0,
+
+        /**
+        * @language zh_CN
+        * 鼠标中键
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         Mouse_Mid = 1,
+
+        /**
+        * @language zh_CN
+        * 鼠标右键
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         Mouse_Right = 2,
     }
 

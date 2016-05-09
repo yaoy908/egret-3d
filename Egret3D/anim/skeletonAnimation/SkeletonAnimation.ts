@@ -1,73 +1,92 @@
 ﻿module egret3d {
 
     /**
-     * @language zh_CN
-     * @class egret3d.SkeletonAnimation
-     * @classdesc
-     * SkeletonAnimation 类表示骨骼动画控制类
-     * 
-     * 骨骼动画控制类中管理若干个 SkeletonAnimationClip（骨骼动画） 对象，每个SkeletonAnimationClip对象，都是对*.eam 文件的实例。
-     * @includeExample anim/skeletonAnimation/SkeletonAnimation.ts
-     * @see egret3d.SkeletonAnimationClip
-     * @version Egret 3.0
-     * @platform Web,Native
-     * @includeExample animation/skeletonAnimation/SkeletonAnimation.ts
-     */
+    * @language zh_CN
+    * @class egret3d.SkeletonAnimation
+    * @classdesc
+    * SkeletonAnimation 类表示骨骼动画控制类
+    * 
+    * 骨骼动画控制类中管理若干个 SkeletonAnimationClip（骨骼动画） 对象，每个SkeletonAnimationClip对象，都是对*.eam 文件的实例。
+    * @includeExample anim/skeletonAnimation/SkeletonAnimation.ts
+    * @see egret3d.SkeletonAnimationClip
+    * @version Egret 3.0
+    * @platform Web,Native
+    * @includeExample animation/skeletonAnimation/SkeletonAnimation.ts
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class SkeletonAnimation extends EventDispatcher implements IAnimation {
 
         /**
         * @language zh_CN
         * 动画播放完一个周期的事件
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static EVENT_PLAY_COMPLETE: string = "event_play_complete";
 
         /**
         * @language zh_CN
         * 动画帧更改的事件
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static EVENT_FRAME_CHANGE: string = "event_frame_change";
 
         /**
         * @language zh_CN
         * 时间
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public time: number;
 
         /**
         * @language zh_CN
         * 延迟
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public delay: number;
 
         /**
         * @language zh_CN
         * 速度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public speed: number;
 
         /**
         * @language zh_CN
         * 当前动画
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public currentAnim: string;
 
         /**
         * @language zh_CN
         * 是否开启平滑
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public smooth: boolean = false;
 
         /**
-       * @language zh_CN
-       * 获取动画列表
-       * @return 动画名称数组
-       */
+        * @private
+        * @language zh_CN
+        * 获取动画列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public animStateNames: string[];
 
         /**
         * @language zh_CN
-        * 获取动画节点
-        * @return 动画节点数组
+        * 获取动画状态机列表
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public animStates: IAnimationState[];
 
@@ -94,6 +113,13 @@
         private _temp_vec3: Vector3D = new Vector3D();
         private _event3D: Event3D = new Event3D();
 
+        /**
+        * @language zh_CN
+        * 创建骨骼动画对象
+        * @prame initialSkeleton TPose骨架 初始骨架
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         constructor(initialSkeleton: Skeleton) {
             super();
             this._initialSkeleton = initialSkeleton;
@@ -103,7 +129,9 @@
         /**
         * @language zh_CN
         * 骨骼动画容器
-        * @return SkeletonAnimation对象
+        * @returns SkeletonAnimation 骨骼动画对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get skeletonAnimationController(): SkeletonAnimation {
             return this;
@@ -112,7 +140,9 @@
         /**
         * @language zh_CN
         * 克隆新的SkeletonAnimation对象
-        * @return 新的SkeletonAnimation对象
+        * @returns SkeletonAnimation 新的SkeletonAnimation对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public clone(): SkeletonAnimation {
 
@@ -134,6 +164,9 @@
         /**
         * @language zh_CN
         * 当前播放的骨架矩阵阵列数组
+        * @returns Float32Array 骨架矩阵阵列数组
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get currentSkeletonMatrixData(): Float32Array {
             return this._skeletonMatrix;
@@ -142,21 +175,40 @@
         /**
         * @language zh_CN
         * 骨骼数
+        * @returns number 骨骼数
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get jointNumber(): number {
             return this._initialSkeleton.numJoint;
         }
 
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public addAnimState(animState: IAnimationState) {
         }
+
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public removeAnimState(animState: IAnimationState) {
         }
 
         /**
         * @language zh_CN
         * 添加SkeletonAnimationClip对象
+        * 注意：添加的SkeletonAnimationClip对象 需要先把animationState.animationName 先赋值.
         * @param animationState SkeletonAnimationClip对象
-        * @return SkeletonAnimationClip对象
+        * @returns SkeletonAnimationClip 对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public addSkeletonAnimationClip(animationState: SkeletonAnimationClip): SkeletonAnimationClip {
 
@@ -216,10 +268,13 @@
         }
 
         /**
+        * @private
         * @language zh_CN
         * 更新
         * @param time 总时间
         * @param delay 延迟时间
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public update(time: number, delay: number): void {
 
@@ -344,6 +399,8 @@
         * @param animName 动画名称
         * @param speed 速度
         * @return 是否成功
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public play(animName: string = null, speed: number = 1.0): boolean {
 
@@ -375,7 +432,9 @@
         * 播放一次
         * @param animName 动画名称
         * @param speed 播放速度
-        * @return 是否成功
+        * @returns boolean 是否成功
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public playOnce(animName: string = null, speed: number = 1.0): boolean {
 
@@ -413,7 +472,10 @@
 
         /**
         * @language zh_CN
-        * 当前帧索引
+        * 获取当前帧索引
+        * @returns number 当前帧索引
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get currentFrame(): number {
             return this._currentFrame;
@@ -421,7 +483,10 @@
 
         /**
         * @language zh_CN
-        * 当前帧索引
+        * 设置当前帧索引
+        * @prame value 当前帧索引
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set currentFrame(value: number) {
 
@@ -434,8 +499,10 @@
         /**
         * @language zh_CN
         * 获取总帧数
-        * @param animName 动画名称
-        * @return 动画总帧数
+        * @param animName 动画名称 默认参数为null，为null返回的就是当前播放的动画总帧数
+        * @returns number 动画总帧数
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public getTotalNumberOfFrame(animName: string = null): number {
 
@@ -452,6 +519,8 @@
         /**
         * @language zh_CN
         * 停止动画播放
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public stop(): void {
 
@@ -461,7 +530,9 @@
         /**
         * @language zh_CN
         * 动画是否在播放
-        * @return 是否在播放
+        * @returns boolean 是否在播放
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public isPlay(): boolean {
 
@@ -476,6 +547,8 @@
         * @language zh_CN
         * 设置动画播放速度
         * @param speed 播放速度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public setPlaySpeed(speed: number): void {
             this._playSpeed = speed;
@@ -486,7 +559,9 @@
         * 绑定3D对象到骨骼
         * @param jointName 骨骼名称
         * @param obj3d 3D对象
-        * @return 是否成功
+        * @returns boolean 是否成功
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public bindToJointPose(jointName: string, obj3d: Object3D): boolean {
 

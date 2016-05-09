@@ -1,33 +1,40 @@
 ﻿module egret3d {
 
     /**
-     * @private
-     * @language zh_CN
-     * @class egret3d.Skeleton
-     * @classdesc
-     * Skeleton 类表示骨架类，其中包含若干个 Joint（骨骼关节） 对象，Skeleton（骨架类）是组成骨骼动画的单帧单位。
-     * 
-     * @version Egret 3.0
-     * @platform Web,Native
-     * @includeExample animation/skeletonAnimation/Skeleton.ts
-     */
+    * @language zh_CN
+    * @class egret3d.Skeleton
+    * @classdesc
+    * Skeleton 类表示骨架类，其中包含若干个 Joint（骨骼关节） 对象，Skeleton（骨架类）是组成骨骼动画的单帧单位。
+    * 
+    * @version Egret 3.0
+    * @platform Web,Native
+    * @includeExample animation/skeletonAnimation/Skeleton.ts
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class Skeleton {
 
         /**
         * @language zh_CN
         * 当前骨架帧时间
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public frameTime: number = 0;
 
         /**
         * @language zh_CN
         * 骨架包含的骨骼
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public joints: Array<Joint> = [];
 
         /**
         * @language zh_CN
         * 骨架矩阵是否有效
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public skeletonMatrixValid: boolean = false;
 
@@ -40,6 +47,13 @@
         private _temp_v1: Vector3D = new Vector3D();
         private _temp_v2: Vector3D = new Vector3D();
 
+        /**
+        * @language zh_CN
+        * 创建一个骨架对象
+        * @prame initialSkeleton TPose骨架 初始骨架
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         constructor(initialSkeleton: Skeleton = null) {
 
             if (initialSkeleton) {
@@ -50,7 +64,9 @@
         /**
         * @language zh_CN
         * 克隆新骨架对象
-        * @return 新骨架对象
+        * @returns Skeleton 新骨架对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public clone(): Skeleton {
 
@@ -68,6 +84,8 @@
         /**
         * @language zh_CN
         * 重置骨架数据
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public reset(): void {
 
@@ -99,6 +117,8 @@
         * @language zh_CN
         * 设置初始骨架
         * @param value 初始骨架
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set initialSkeleton(value: Skeleton) {
 
@@ -115,6 +135,8 @@
         /**
         * @language zh_CN
         * 初始骨架
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get initialSkeleton(): Skeleton {
             return this._initialSkeleton;
@@ -123,6 +145,8 @@
         /**
         * @language zh_CN
         * 骨架矩阵阵列
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get skeletonMatrix(): Float32Array {
             return this._skeletonMatrix;
@@ -131,6 +155,8 @@
         /**
         * @language zh_CN
         * 骨骼数量
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get numJoint(): number {
             return this.joints.length;
@@ -141,6 +167,8 @@
         * 通过名称查找指定骨骼
         * @param name 骨骼名称
         * @return 骨骼对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public findJoint(name: string): Joint {
 
@@ -156,7 +184,9 @@
         * @language zh_CN
         * 通过名称查找骨骼索引编号
         * @param name 骨骼名称
-        * @return 骨骼索引编号
+        * @returns number 骨骼索引编号
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public findJointIndex(name: string): number {
 
@@ -174,6 +204,8 @@
         * @param skeleton0 骨架0
         * @param skeleton1 骨架1
         * @param tNow 新骨架帧时间（骨架0.frameTime ~ 骨架1.frameTime）
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public skeletonLerp(skeleton0: Skeleton, skeleton1: Skeleton, tNow: number): void {
 
@@ -190,6 +222,8 @@
         * @param skeleton0 骨架0
         * @param skeleton1 骨架1
         * @param t 时间因子(0.0~1.0);
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public lerp(skeleton0: Skeleton, skeleton1: Skeleton, t: number): void {
 
@@ -226,7 +260,9 @@
         * @language zh_CN
         * 骨架转矩阵阵列数组
         * @param target 用于储存的矩阵阵列数组
-        * @return 矩阵阵列数组
+        * @returns Float32Array 矩阵阵列数组
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public toMatrixData(target: Float32Array = null): Float32Array {
 
@@ -266,6 +302,8 @@
         /**
         * @language zh_CN
         * 更新骨架矩阵
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public updateSkeletonMatrix(): void {
 
@@ -282,6 +320,8 @@
         * @language zh_CN
         * 计算骨骼世界矩阵
         * @param initialSkeleton 初始骨架对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public calculateJointWorldMatrix(initialSkeleton: Skeleton): void {
 

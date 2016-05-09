@@ -12,18 +12,24 @@
         /**
         * @language zh_CN
         * 1弧度为多少角度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static RADIANS_TO_DEGREES: number = 180 / Math.PI;
 
         /**
         * @language zh_CN
         * 1角度为多少弧度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static DEGREES_TO_RADIANS: number = Math.PI / 180;
 
         /**
         * @private
         * 1角度为多少弧度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static RAW_DATA_CONTAINER: Float32Array = new Float32Array(16);
 
@@ -41,8 +47,10 @@
         * @language zh_CN
         * 四元数转矩阵
         * @param quarternion 源四元数
-        * @param m 目标矩阵
+        * @param m 目标矩阵 默认为null 如果为null将会new 一个Matrix4_4
         * @returns 返回转出矩阵
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static quaternion2matrix(quarternion: Quaternion, m: Matrix4_4 = null): Matrix4_4 {
             var x: number = quarternion.x;
@@ -86,8 +94,10 @@
         * @language zh_CN
         * 得到矩阵朝前的方向
         * @param m 源矩阵
-        * @param v 返回的方向 可为null
-        * @returns 返回方向
+        * @param v 返回的方向 可为null 如果为null将会new 一个Vector3D
+        * @returns Vector3D 返回方向
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static getForward(m: Matrix4_4, v: Vector3D = null): Vector3D {
             if (v === null) {
@@ -103,8 +113,10 @@
         * @language zh_CN
         * 得到矩阵朝上的方向
         * @param m 源矩阵
-        * @param v 返回的方向 可为null
-        * @returns 返回方向
+        * @param v 返回的方向 可为null 如果为null将会new 一个Vector3D
+        * @returns Vector3D 返回方向
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static getUp(m: Matrix4_4, v: Vector3D = null): Vector3D {
             //v ||= new Vector3D(0.0, 0.0, 0.0);
@@ -125,8 +137,10 @@
         * @language zh_CN
         * 得到矩阵朝右的方向
         * @param m 源矩阵
-        * @param v 返回的方向 可为null
-        * @returns 返回方向
+        * @param v 返回的方向 可为null 如果为null将会new 一个Vector3D
+        * @returns Vector3D 返回方向
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static getRight(m: Matrix4_4, v: Vector3D = null): Vector3D {
             //v ||= new Vector3D(0.0, 0.0, 0.0);
@@ -147,7 +161,9 @@
         * 比较两个矩阵是否相同
         * @param m1 矩阵1
         * @param m2 矩阵2
-        * @returns 相同返回true
+        * @returns boolean 相同返回true
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static compare(m1: Matrix4_4, m2: Matrix4_4): boolean {
             var r1: Float32Array = MathUtil.RAW_DATA_CONTAINER;
@@ -166,8 +182,10 @@
         * @language zh_CN
         * 得到平面的反射矩阵
         * @param plane 反射的面
-        * @param target 计算返回的矩阵
-        * @returns 返回计算的结果
+        * @param target 计算返回的矩阵 可为null 如果为null将会new 一个Matrix4_4
+        * @returns Matrix4_4 返回计算的结果
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static reflection(plane: Plane3D, target: Matrix4_4 = null): Matrix4_4 {
             if (target === null)
@@ -204,8 +222,10 @@
         * @language zh_CN
         * 得到矩阵的平移
         * @param transform 计算的矩阵
-        * @param result 计算返回平移坐标
-        * @returns 返回平移坐标
+        * @param result 计算返回平移坐标 可为null 如果为null将会new 一个Vector3D
+        * @returns Vector3D 返回平移坐标
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static getTranslation(transform: Matrix4_4, result: Vector3D = null): Vector3D {
             if (!result)
@@ -221,15 +241,17 @@
         * @param value 当前判定的值
         * @param min_inclusive 最小取值
         * @param max_inclusive 最大取值
-        * @returns 计算后的结果
+        * @returns number 计算后的结果
+        * @version Egret 3.0
+        * @platform Web,Native
         */
-        public static clampf(value: number, min_inclusive: number, max_inclusive: number) {
+        public static clampf(value: number, min_inclusive: number, max_inclusive: number) : number {
             if (min_inclusive > max_inclusive) {
                 var temp: number = min_inclusive;
                 min_inclusive = max_inclusive;
                 max_inclusive = temp;
             }
-            return value < min_inclusive ? min_inclusive : value < max_inclusive ? value : max_inclusive;
+            return value < min_inclusive ? min_inclusive : (value < max_inclusive ? value : max_inclusive);
         }
     }
 } 

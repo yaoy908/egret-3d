@@ -535,7 +535,6 @@
             var offset: number = 0;
             var srcOffset: number = 0;
             for (var i: number = 0; i < vertexCount; ++i) {
-                index ++;
                 offset = 0;
                 if (this.vertexFormat & VertexFormat.VF_POSITION) {
                     if (vf & VertexFormat.VF_POSITION) {
@@ -591,9 +590,9 @@
                         srcOffset += Geometry.colorSize;
                     }
                     else {
-                        this.verticesData[index * this.vertexAttLength + offset + 0] = 0;
-                        this.verticesData[index * this.vertexAttLength + offset + 1] = 0;
-                        this.verticesData[index * this.vertexAttLength + offset + 2] = 0;
+                        this.verticesData[index * this.vertexAttLength + offset + 0] = 1;
+                        this.verticesData[index * this.vertexAttLength + offset + 1] = 1;
+                        this.verticesData[index * this.vertexAttLength + offset + 2] = 1;
                         this.verticesData[index * this.vertexAttLength + offset + 3] = 1;
                     }
                     offset += Geometry.colorSize;
@@ -639,6 +638,8 @@
                     }
                     offset += Geometry.skinSize;
                 }
+
+                index++;
             }
         }
     }

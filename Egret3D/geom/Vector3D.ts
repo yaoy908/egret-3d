@@ -19,6 +19,8 @@
         /**
         * @language zh_CN
         * X轴坐标 (1,0,0).
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static X_AXIS: Vector3D = new Vector3D(1, 0, 0);
 
@@ -29,6 +31,8 @@
         /**
         * @language zh_CN
         * Y轴坐标 (0,1,0).
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static Y_AXIS: Vector3D = new Vector3D(0, 1, 0);
 
@@ -39,6 +43,8 @@
         /**
         * @language zh_CN
         * Z轴坐标 (0,0,1).
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static Z_AXIS: Vector3D = new Vector3D(0, 0, 1);
 
@@ -50,6 +56,8 @@
         /**
         * @language zh_CN
         * 在三维空间中x坐标，默认值是0
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public x: number;
 
@@ -61,6 +69,8 @@
         /**
         * @language zh_CN
         * 在三维空间中y坐标，默认值是0
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public y: number;
 
@@ -72,6 +82,8 @@
         /**
         * @language zh_CN
         * 在三维空间中z坐标，默认值是0
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public z: number;
 
@@ -79,12 +91,16 @@
         * @language zh_CN
         * 可作为一种透视投影的三维位置或投影
         * 也可以做四元数中的w
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public w: number;
 
         /**
         * @language en_US
         *  设置w分量
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set a(value: number) {
             this.w = value;
@@ -93,6 +109,8 @@
         /**
         * @language en_US
         *  设置x分量
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set r(value: number) {
             this.x = value;
@@ -101,6 +119,8 @@
         /**
         * @language en_US
         *  设置y分量
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set g(value: number) {
             this.y = value;
@@ -109,6 +129,8 @@
         /**
         * @language en_US
         *  设置z分量
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set b(value: number) {
             this.z = value;
@@ -117,6 +139,8 @@
         /**
         * @language en_US
         *  得到w分量
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get a(): number {
             return this.w;
@@ -125,6 +149,8 @@
         /**
         * @language en_US
         *  得到x分量
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get r(): number {
             return this.x;
@@ -133,6 +159,8 @@
         /**
         * @language en_US
         *  得到y分量
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get g(): number {
             return this.y;
@@ -141,6 +169,8 @@
         /**
         * @language en_US
         *  得到z分量
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get b(): number {
             return this.z;
@@ -156,6 +186,8 @@
         /**
         * @language zh_CN
         * 向量的长度，原点(0, 0, 0)到(x, y, z)的距离
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get length(): number {
             return Math.sqrt(this.lengthSquared);
@@ -172,6 +204,8 @@
         /**
         * @language zh_CN
         * 3维向量的坐标x的平方加 y的平方加 z的平方
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get lengthSquared(): number {
             return this.x * this.x + this.y * this.y + this.z * this.z;
@@ -192,6 +226,8 @@
         /**
         * @language zh_CN
         * 创建一个对象实例，默认为(0, 0, 0, 0)
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         constructor(x: number = 0, y: number = 0, z: number = 0, w: number = 0) {
             this.x = x;
@@ -219,6 +255,8 @@
         * @language zh_CN
         * 向量相加，结果返回一个新实例
         * @returns Vector3D 结果返回
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public add(a: Vector3D): Vector3D {
             return new Vector3D(this.x + a.x, this.y + a.y, this.z + a.z, this.w + a.w)
@@ -236,6 +274,8 @@
         * @language zh_CN
         * 克隆一个Vector3D
         * @returns 返回克隆后的实例
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public clone(): Vector3D {
             return new Vector3D(this.x, this.y, this.z, this.w);
@@ -252,6 +292,8 @@
         * @language zh_CN
         * 复制Vector3D对象
         * @param src 数据源
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public copyFrom(src: Vector3D): void {
             this.x = src.x;
@@ -283,7 +325,9 @@
         * 两个Vector3D进行叉乘 this 叉乘 a
         * 叉乘后的结果是这两条向量的垂直向量
         * @param a 
-        * @returns 返回叉乘结果
+        * @returns Vector3D 返回叉乘结果
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public crossProduct(a: Vector3D): Vector3D {
             return new Vector3D(this.y * a.z - this.z * a.y, this.z * a.x - this.x * a.z, this.x * a.y - this.y * a.x, 1);
@@ -305,6 +349,8 @@
         * @language zh_CN
         * 当前向量减去a向量，结果赋值给自己
         * @param a 减去的向量
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public decrementBy(a: Vector3D) {
             this.x -= a.x;
@@ -328,7 +374,9 @@
         * 计算两个Vector3D之间的距离
         * @param pt1 坐标1
         * @param pt2 坐标2
-        * @returns 两个Vector3D之间的距离
+        * @returns number 两个Vector3D之间的距离
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         static distance(pt1: Vector3D, pt2: Vector3D): number {
             var x: number = (pt1.x - pt2.x);
@@ -367,7 +415,9 @@
         * @language zh_CN
         * 计算两个Vector3D的点积,返回两个Vector3D之间的夹角关系
         * @param a 另一个Vector3D
-        * @returns 返回两个Vector3D之间的夹角关系
+        * @returns number 返回两个Vector3D之间的夹角关系
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public dotProduct(a: Vector3D): number {
             return this.x * a.x + this.y * a.y + this.z * a.z;
@@ -387,8 +437,10 @@
         * @language zh_CN
         * 求两个Vector3D的值是否全等
         * @param toCompare 与些Vector3D进行比较
-        * @param allFour 是否比较w分量
-        * @returns 全等返回true
+        * @param allFour 默认参数为1，是否比较w分量
+        * @returns boolean 全等返回true
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public equals(toCompare: Vector3D, allFour: boolean = false): boolean {
             return (this.x == toCompare.x && this.y == toCompare.y && this.z == toCompare.z && (!allFour || this.w == toCompare.w));
@@ -410,6 +462,8 @@
         * @language zh_CN
         * 当前Vector3D加等于a Vector3D，只加x y z 3个分量
         * @param a 加等a
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public incrementBy(a: Vector3D) {
             this.x += a.x;
@@ -417,30 +471,14 @@
             this.z += a.z;
         }
 
-        //public static unit(a, b) {
-        //    var length = a.length();
-        //    b.x = a.x / length;
-        //    b.y = a.y / length;
-        //    b.z = a.z / length;
-        //    return b;
-        //}
-
-        //public static cross(a, b, c) {
-        //    c.x = a.y * b.z - a.z * b.y;
-        //    c.y = a.z * b.x - a.x * b.z;
-        //    c.z = a.x * b.y - a.y * b.x;
-        //    return c;
-        //}
-        public cross(v): Vector3D {
-            var vx: number = this.y * v.z - this.z * v.y;
-            var vy: number = this.z * v.x - this.x * v.z;
-            var vz: number = this.x * v.y - this.y * v.x;
-            this.x = vx;
-            this.y = vy;
-            this.z = vz; 
-            return this ;
-        }
-
+        /**
+        * @language zh_CN
+        * 当前Vector3D除分量 或者 除Vector3D
+        * @param v 如果是number就是除分量 如果为Vector3D 就是除Vector3D
+        * @return Vector3D 返回自己，计算之后的结果
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public divide(v): Vector3D {
             if (v instanceof Vector3D) return new Vector3D(this.x / v.x, this.y / v.y, this.z / v.z);
             else {
@@ -448,18 +486,7 @@
                 this.y = this.y / v;
                 this.z = this.z / v;
             }
-            return this; 
-        }
-
-        public unit(): Vector3D {
-            return this.divide(this.length);
-        }
-
-        public dot(v): Vector3D {
-            this.x = this.x * v.x;
-            this.y = this.y * v.y;
-            this.z = this.z * v.z;
-            return this ;
+            return this;
         }
 
         /**
@@ -472,6 +499,8 @@
         /**
         * @language zh_CN
         * 当前Vector3D x y z 3个分量取反
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public negate(): void {
             this.x = -this.x;
@@ -491,7 +520,9 @@
         /**
         * @language zh_CN
         * 当前Vector3D标准化
-        * @param thickness 使当前Vector3D的长度为thickness 原点(0, 0, 0)到(x, y, z)的距离
+        * @param thickness 默认参数为1，使当前Vector3D的长度为thickness 原点(0, 0, 0)到(x, y, z)的距离
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public normalize(thickness: number = 1) {
             if (this.length != 0) {
@@ -518,6 +549,8 @@
         * @language zh_CN
         * 当前Vector3D扩大s倍
         * @param s 扩大的倍数
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public scaleBy(s: number): void {
             this.x *= s;
@@ -539,7 +572,9 @@
         * @param xa 
         * @param yz 
         * @param za 
-        * @param wz 
+        * @param wz
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public setTo(xa: number, ya: number, za: number, wa:number = 1): void {
             this.x = xa;
@@ -565,8 +600,10 @@
         * @language zh_CN
         * 当前Vector3D减去a Vector3D 结果返回新实例
         * @param a 减去的Vector3D
-        * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
-        * @returns 结果返回
+        * @param target 默认参数为null,如果当前参数为null那么就会new一个新的Vector3D返回
+        * @returns Vector3D 结果返回
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public subtract(a: Vector3D, target: Vector3D = null): Vector3D {
             if (!target) {
@@ -581,7 +618,9 @@
         * 当前Vector3D乘other Vector3D 结果返回新实例
         * @param a 相乘的Vector3D
         * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
-        * @returns 结果返回
+        * @returns Vector3D 结果返回
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public multiply(other: Vector3D, target: Vector3D = null): Vector3D {
             if (!target) {
@@ -605,7 +644,9 @@
         * 当前Vector3D除以other Vector3D 结果返回新实例
         * @param a 相除的Vector3D
         * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
-        * @returns 结果返回
+        * @returns Vector3D 结果返回
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public divided(other: Vector3D, target: Vector3D = null): Vector3D {
             if (!target) {
@@ -630,6 +671,8 @@
         * @param v0 Vector3D 1
         * @param v1 Vector3D 2
         * @param t 时刻
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public lerp(v0: Vector3D, v1: Vector3D, t: number): void {
             var v0x: number = v0.x, v0y: number = v0.y, v0z: number = v0.z, v0w: number = v0.w;
@@ -645,6 +688,8 @@
         * @language zh_CN
         * 当前Vector3D以字符串形式返回
         * @returns string
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public toString(): string {
             return "<" + this.x + ", " + this.y + ", " + this.z + ">";
@@ -654,6 +699,8 @@
         * @language zh_CN
         * 解析字符串为Vector3D
         * @param str 格式用空格间隔开，只解析为x,y,z
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public parsing(str: string): void {
 

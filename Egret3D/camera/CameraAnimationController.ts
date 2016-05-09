@@ -102,6 +102,7 @@
         }
 
         /**
+        * @private
         * @language zh_CN
         * 数据更新
         * @param time 当前时间
@@ -172,7 +173,6 @@
     }
     
     /**
-    * @private
     * @class egret3d.CameraAnimationFrame
     * @classdesc
     * 摄像机动画每帧数据

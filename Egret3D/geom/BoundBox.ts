@@ -14,56 +14,75 @@
         /**
         * @language zh_CN
         * 盒子最小点
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public min: Vector3D = new Vector3D();
                 
         /**
         * @language zh_CN
         * 盒子最大点
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public max: Vector3D = new Vector3D();
              
         /**
         * @language zh_CN
         * 盒子宽
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public width: number = 0;
                                 
         /**
         * @language zh_CN
         * 盒子高
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public heigth: number = 0;
 
         /**
         * @language zh_CN
         * 盒子长
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public depth: number = 0;
 
         /**
         * @language zh_CN
         * 盒子体积
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public volume: number = 0;
         
         /**
         * @language zh_CN
         * 盒子包围球中心点
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public center: Vector3D = new Vector3D();
                 
         /**
         * @language zh_CN
         * 盒子包围球半径
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public radius: number = 0;
 
         /**
         * @language zh_CN
-        * constructor
-        * @param min
-        * @param max
+        * 创建一个包围
+        * @param owner 绑定的Object3D对象
+        * @param min 最小点
+        * @param max 最大点
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         constructor(owner:Object3D = null, min: Vector3D = new Vector3D(), max: Vector3D = new Vector3D()) {
             super(owner);
@@ -75,7 +94,9 @@
         /**
         * @language zh_CN
         * 拷贝一个包围盒
-        * @param box 
+        * @param box 数据来源
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public copyFrom(box: BoundBox) {
             this.min.copyFrom(box.min);
@@ -86,7 +107,10 @@
         /**
         * @language zh_CN
         * 填充当前包围盒
-        * @param box 
+        * @param min 最小点
+        * @param max 最大点
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public fillBox(min: Vector3D, max: Vector3D) {
             this.min.copyFrom(min);
@@ -98,7 +122,9 @@
         * @language zh_CN
         * 检测一个点是否包围盒内
         * @param pos 检测的点
-        * @returns 成功返回true
+        * @returns boolean 成功返回true
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public pointIntersect(pos: Vector3D): boolean {
             if (pos.x <= this.max.x && pos.x >= this.min.x &&
@@ -114,7 +140,9 @@
         * 检测两个包围盒是否相交
         * @param box2 其中一个包围盒 
         * @param boxIntersect 相交的包围盒 默认为空
-        * @returns 成功返回true
+        * @returns boolean 成功返回true
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public intersectAABBs(box2: BoundBox, boxIntersect: BoundBox = null): boolean {
             if (this.min.x > box2.max.x) {
@@ -159,7 +187,9 @@
         * 检测两个包围对象是否相交
         * @param 检测的目标
         * @param 相交的结果 可以为null
-        * @returns  成功返回true
+        * @returns boolean 成功返回true
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public intersect(target: Bound, intersect: Bound = null): boolean {
             return this.intersectAABBs(<BoundBox>target, <BoundBox>intersect);
@@ -168,7 +198,9 @@
         /**
         * @language zh_CN
         * 以字符串形式返回box的值
-        * @returns 字符串
+        * @returns string 字符串
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public toString(): string {
             return "BoundBox [min:(" + this.min.x + ", " + this.min.y + ", " + this.min.z + ") max:(" + this.max.x + ", " + this.max.y + ", " + this.max.z + ")]";
@@ -177,6 +209,8 @@
         /**
         * @language zh_CN
         * 计算包围盒数据
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public calculateBox() {
             this.vexData.length = 0;
@@ -244,7 +278,7 @@
         * @language zh_CN
         * 检测一个盒子是否在视椎体内
         * @param frustum 视椎体
-        * @returns 在视椎内返回ture
+        * @returns boolean 在视椎内返回ture
         * @version Egret 3.0
         * @platform Web,Native
         */
