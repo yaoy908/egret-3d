@@ -49,7 +49,7 @@
         protected onLoad(e: LoaderEvent3D) {
 
             var mat: TextureMaterial = new TextureMaterial();
-            mat.shininess = 10.0;
+            mat.gloss = 10.0;
             mat.ambientColor = 0xffffff;
             this.mat = mat;
             var ge: Geometry = e.loader.data;

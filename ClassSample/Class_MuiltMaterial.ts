@@ -36,7 +36,7 @@
         protected mat: TextureMaterial;
         protected onLoad(e:LoaderEvent3D) {
             var mat: TextureMaterial = new TextureMaterial();
-            mat.shininess = 0.1;
+            mat.gloss = 0.1;
             mat.specularColor = 0;
             mat.ambientColor = 0xffffff;
             this.mat = mat;
