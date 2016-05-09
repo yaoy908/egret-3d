@@ -74,6 +74,10 @@
         constructor() {
         }
 
+        /**
+        * @private
+        * @language zh_CN
+        */
         public upload(passUsage: PassUsage, contextPorxy: Context3DProxy) {
 
             this._attributeDiry = false;

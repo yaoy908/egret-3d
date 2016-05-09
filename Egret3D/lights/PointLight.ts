@@ -27,43 +27,70 @@
          */
         public static stride: number = 12;
 
-
         /**
-         * @language zh_CN
-         * @private
-         * constructor 
-         * @param color {Number}
-         */
+        * @language zh_CN
+        * 创建一个点光源
+        * @param color 灯光颜色值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         constructor(color: number) {
             super();
             this.lightType = LightType.pointlight;
             this.diffuse = color;
         }
 
+        /**
+        * @language zh_CN
+        * 设置灯光半径
+        * @param value 灯光半径
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set radius(value: number) {
             this._radius = value;
         }
 
+        /**
+        * @language zh_CN
+        * 获取灯光半径
+        * @returns number 灯光半径
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get radius(): number {
             return this._radius;
         }
 
+        /**
+        * @language zh_CN
+        * 设置灯光衰减度
+        * @param value 灯光衰减度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set falloff(value: number) {
             this._falloff = value;
         }
 
+        /**
+        * @language zh_CN
+        * 获取灯光衰减度
+        * @returns number 灯光衰减度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get falloff(): number {
             return this._falloff;
         }
 
         /**
-         * @language zh_CN
-         * @private
-         * 更新灯光数据
-         * @param index 灯光ID
-         * @param lightData 灯光数据
-         */
-      
+        * @language zh_CN
+        * @private
+        * 更新灯光数据
+        * @param index 灯光ID
+        * @param lightData 灯光数据
+        */
         public updateLightData(camera: Camera3D, index: number, lightData: Float32Array) {
 
             lightData[index * PointLight.stride] = this.globalPosition.x;

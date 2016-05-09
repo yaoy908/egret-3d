@@ -1,9 +1,9 @@
 ﻿module egret3d {
     
     /**
+     * @private
      * @language zh_CN
      * @class egret3d.GeometryType
-     * @private
      * @classdesc
      * @version Egret 3.0
      * @platform Web,Native
@@ -103,44 +103,58 @@
     export class Geometry {
 
        /**
-       * @language zh_CN
-       * 模型的类别，是属于 静态模型，还是蒙皮动画模型，还是粒子模型，还是 特定模型
-       * 
-       */
+        * @language zh_CN
+        * 模型的类别，是属于 静态模型，还是蒙皮动画模型，还是粒子模型，还是 特定模型
+        *
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public geomtryType: number = -1;
 
         /**
-       * @language zh_CN
-       * 顶点格式
-       */
+        * @language zh_CN
+        * 顶点格式
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         private _vertexFormat: number = 0 ;
 
         /**
         * @language zh_CN
         * 顶点属性长度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public vertexAttLength: number = 0;
 
         /**
         * @language zh_CN
         * 顶点数据
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public verticesData: Array<number> = new Array<number>();
 
         /**
         * @language zh_CN
         * 索引数据
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public indexData: Array<number> = new Array<number>();
                 
         /**
         * @language zh_CN
         * shader buffer
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public sharedVertexBuffer: VertexBuffer3D;
         /**
         * @language zh_CN
         * shader index
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public sharedIndexBuffer: IndexBuffer3D;
 
@@ -148,6 +162,8 @@
         * @private
         * @language zh_CN
         * 顶点坐标数据
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public source_positionData: Array<number> = new Array<number>();
                         
@@ -155,6 +171,8 @@
         * @private
         * @language zh_CN
         * 顶点法线数据
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public source_normalData: Array<number> = new Array<number>();
                                 
@@ -162,6 +180,8 @@
         * @private
         * @language zh_CN
         * 顶点切线数据
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public source_tangentData: Array<number> = new Array<number>();
                                 
@@ -169,6 +189,8 @@
         * @private
         * @language zh_CN
         * 顶点颜色数据
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public source_colorData: Array<number> = new Array<number>();
                                 
@@ -176,6 +198,8 @@
         * @private
         * @language zh_CN
         * 顶点uv数据
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public source_uvData: Array<number> = new Array<number>();
                                 
@@ -183,6 +207,8 @@
         * @private
         * @language zh_CN
         * 顶点第二uv数据
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public source_uv2Data: Array<number> = new Array<number>();
 
@@ -190,6 +216,8 @@
         * @private
         * @language zh_CN
         * 顶点第二uv数据
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public source_SkinData: Array<number> = new Array<number>();
 
@@ -201,54 +229,72 @@
         /**
         * @language zh_CN
         * 顶点字节数
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public vertexSizeInBytes: number;
 
         /**
         * @language zh_CN
         * 顶点坐标大小
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static positionSize: number = 3;
 
         /**
         * @language zh_CN
         * 顶点法线大小
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static normalSize: number = 3;
 
         /**
         * @language zh_CN
         * 顶点切线大小
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static tangentSize: number = 3;
 
         /**
         * @language zh_CN
         * 顶点色大小
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static colorSize: number = 4;
 
         /**
         * @language zh_CN
         * 顶点uv大小
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static uvSize: number = 2;
 
         /**
         * @language zh_CN
         * 顶点uv2大小
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static uv2Size: number = 2;
 
         /**
         * @language zh_CN
         * 顶点uv2大小
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static skinSize: number = 8;
 
         /**
         * @language zh_CN
         * geometry子集
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public subGeometrys: Array<SubGeometry> = new Array<SubGeometry>();       
 
@@ -266,6 +312,8 @@
         * @language zh_CN
         * 得到顶点的数量
         * @returns number 顶点的数量
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get vertexCount(): number {
             if (this._vertexCount < 0) {
@@ -279,6 +327,8 @@
         * @language zh_CN
         * 设置顶点的数量
         * @param value 顶点的数量
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set vertexCount(value:number) {
             this._vertexCount = value;
@@ -307,6 +357,8 @@
         *不能计算的就默认为0
         *@param vertexFormat 需要定义的顶点格式类型 VertexFormat.VF_COLOR | VertexFormat.VF_UV1
         * this.useVertexFormat( VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_COLOR |  VertexFormat.VF_UV0 | VertexFormat.VF_UV1 );//定义了一个完整的数据结构
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set vertexFormat(vertexFormat: number) {
             this._vertexFormat = vertexFormat;
