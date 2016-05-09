@@ -1,5 +1,5 @@
-module ecore {
-    export class MaterialData {
+module egret3d {
+    export class MaterialSphereData {
         public id: number = 0;
 
         public diffuseTextureName: string;

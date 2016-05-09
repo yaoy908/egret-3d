@@ -232,27 +232,20 @@
         "VRView3D.ts",
         "Egret3DCanvas.ts",
 
-        "Feature/DataInfo/MaterialData.ts",
-        "Feature/DataInfo/MeshData.ts",
-        "Feature/DataInfo/SceneNode.ts",
-        "Feature/DataInfo/DirectionLightData.ts",
-        "Feature/DataInfo/PointLightData.ts",
-        "Feature/DataInfo/MaterialMethodData.ts",
+        "loader/map/DataInfo/MaterialMethodData.ts",
+        "loader/map/DataInfo/MaterialSphereData.ts",
+        "loader/map/DataInfo/MeshData.ts",
+        "loader/map/DataInfo/SceneNode.ts",
+        "loader/map/DataInfo/DirectionLightData.ts",
+        "loader/map/DataInfo/PointLightData.ts",
         
         
-        "Feature/loader/EgretSceneXmlParser.ts",
-        "Feature/loader/EgretSceneSourceLib.ts",
-        "Feature/loader/EgretSceneLoader.ts",
-        "Feature/loader/EgretMaterialMethodParser.ts",
+        "loader/map/EgretMapConfig.ts",
+        "loader/map/parse/EgretMaterialMethodParser.ts",
+        "loader/map/parse/EgretMapXmlParser.ts",
+        "loader/map/EgretMapSourceLib.ts",
+        "loader/map/EgretMapLoader.ts"
         
-        
-        "Feature/ui/LoadingUI.ts",
-        
-        "Feature/utils/AxisMesh.ts",
-        "Feature/utils/FPSCounter.ts",
-        
-        "Feature/controller/EgretCameraZoomController.ts",
-        "Feature/EgretWorld.ts",
-        "Feature/EgretConfig.ts"
+
 ]      
 }	

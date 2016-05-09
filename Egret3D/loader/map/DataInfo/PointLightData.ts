@@ -1,4 +1,4 @@
-﻿module ecore {
+﻿module egret3d {
     export class PointLightData {
 
         public id: number = 0;

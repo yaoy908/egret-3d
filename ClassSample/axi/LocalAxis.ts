@@ -3,7 +3,7 @@
     /**
     * @private
     */
-    export class MeshData {
+    export class LocalMeshData {
         public mesh: Mesh;
 
         constructor(axis: string) {
@@ -31,7 +31,7 @@
     */
     export class LocalAxis extends Object3D {
 
-        private _xyz: MeshData[] = [];
+        private _xyz: LocalMeshData[] = [];
         private _currentDownIndex: number = -1;
         private _currentAxisIndex: number = 0;
         private _axisColor: number[] = [0xffff0000, 0xff00ff00, 0xff0000ff];
@@ -54,9 +54,9 @@
         }
 
         public initialize(): void {
-            this._xyz.push(new MeshData("x"));
-            this._xyz.push(new MeshData("y"));
-            this._xyz.push(new MeshData("z"));
+            this._xyz.push(new LocalMeshData("x"));
+            this._xyz.push(new LocalMeshData("y"));
+            this._xyz.push(new LocalMeshData("z"));
             for (var i = 0; i < this._xyz.length; i++) {
                 this._xyz[i].mesh.enablePick = true;
                 this._xyz[i].mesh.addEventListener(PickEvent3D.PICK_DOWN, this.onPickDown, this);

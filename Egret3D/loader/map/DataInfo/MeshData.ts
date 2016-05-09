@@ -1,4 +1,4 @@
-module ecore {
+module egret3d {
     export class MeshData {
         public name: string;
         public materialID: number = -1;

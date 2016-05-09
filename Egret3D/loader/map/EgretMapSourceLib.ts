@@ -1,15 +1,15 @@
-﻿module demo {
-    export class EgretSceneSourceLib extends egret3d.EventDispatcher {
+﻿module egret3d {
+    export class EgretMapSourceLib extends EventDispatcher {
 
-        private _imageLoaders: egret3d.HashTable;
-        private _esmLoaders: egret3d.HashTable;
-        private _ecaLoaders: egret3d.HashTable;
-        private _eamLoaders: egret3d.HashTable;
+        private _imageLoaders: HashTable;
+        private _esmLoaders: HashTable;
+        private _ecaLoaders: HashTable;
+        private _eamLoaders: HashTable;
 
-        private _loaderMapList: Array<egret3d.HashTable>;
+        private _loaderMapList: Array<HashTable>;
 
        
-        private _parser: EgretSceneXmlParser;
+        private _parser: EgretMapXmlParser;
         private _totalCount: number = 0;
         private _loadedCount: number = 0;
         
@@ -18,15 +18,15 @@
         public constructor() {
             super();
 
-            this._imageLoaders = new egret3d.HashTable();
-            this._esmLoaders = new egret3d.HashTable();
-            this._ecaLoaders = new egret3d.HashTable();
-            this._eamLoaders = new egret3d.HashTable();
+            this._imageLoaders = new HashTable();
+            this._esmLoaders = new HashTable();
+            this._ecaLoaders = new HashTable();
+            this._eamLoaders = new HashTable();
 
             this._loaderMapList = [this._imageLoaders, this._esmLoaders, this._ecaLoaders, this._eamLoaders];
         }
 
-        public startLoad(parser: EgretSceneXmlParser): void {
+        public startLoad(parser: EgretMapXmlParser): void {
             this._parser = parser;
 
             //去重操作
@@ -37,7 +37,7 @@
 
             var source: string;
 
-            var meshData: ecore.MeshData;
+            var meshData: MeshData;
             var clipName: string;
             for (meshData of this._parser.esmList) {
                 this.pushSource(esms, meshData.name);
@@ -47,7 +47,7 @@
                 
             }
 
-            var materialData: ecore.MaterialData;
+            var materialData: MaterialSphereData;
             for (materialData of this._parser.materialList) {
                 this.pushSource(imgs, materialData.diffuseTextureName);
                 if (materialData.method) {
@@ -63,19 +63,19 @@
             var url: string;
 
             for (source of imgs) {
-                url = EgretConfig.ScenePath + this._parser.sceneName + "/" + this._parser.texturePath + "/" + source;
+                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + this._parser.texturePath + "/" + source;
                 this.loadOne(this._imageLoaders, url, source);
             }
             for (source of esms) {
-                url = EgretConfig.ScenePath + this._parser.sceneName + "/" + this._parser.esmPath + "/" + source + EgretConfig.EsmSuffix;
+                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + this._parser.esmPath + "/" + source + EgretMapConfig.EsmSuffix;
                 this.loadOne(this._esmLoaders, url, source);
             }
             for (source of ecas) {
-                url = EgretConfig.ScenePath + this._parser.sceneName + "/" + this._parser.ecaPath + "/" + source + EgretConfig.EcaSuffix;
+                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + this._parser.ecaPath + "/" + source + EgretMapConfig.EcaSuffix;
                 this.loadOne(this._ecaLoaders, url, source);
             }
             for (source of eams) {
-                url = EgretConfig.ScenePath + this._parser.sceneName + "/" + this._parser.eamPath + "/" + source + EgretConfig.EamSuffix;
+                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + this._parser.eamPath + "/" + source + EgretMapConfig.EamSuffix;
                 this.loadOne(this._eamLoaders, url, source);
             }
 
@@ -93,50 +93,50 @@
             }
         }
 
-        private loadOne(loaderMap: egret3d.HashTable, url: string, source: string): void {
-            var loader: egret3d.URLLoader = new egret3d.URLLoader(url);
-            loader.addEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE, this.onLoaded, this);
+        private loadOne(loaderMap: HashTable, url: string, source: string): void {
+            var loader: URLLoader = new URLLoader(url);
+            loader.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoaded, this);
             loaderMap.put(source, loader);
         }
 
 
-        private onLoaded(e: egret3d.LoaderEvent3D): void {
-            e.loader.removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE, this.onLoaded, this);
+        private onLoaded(e: LoaderEvent3D): void {
+            e.loader.removeEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoaded, this);
             this._loadedCount++;
             if (this._loadedCount == this._totalCount) {
-                var event: egret3d.LoaderEvent3D = new egret3d.LoaderEvent3D(egret3d.LoaderEvent3D.LOADER_COMPLETE);
+                var event: LoaderEvent3D = new LoaderEvent3D(LoaderEvent3D.LOADER_COMPLETE);
                 this.dispatchEvent(event);
             }
         }
 
 
-        public getImage(name: string): egret3d.ITexture {
+        public getImage(name: string): ITexture {
 
-            var loader: egret3d.URLLoader = this._imageLoaders.getValueByKey(name);
+            var loader: URLLoader = this._imageLoaders.getValueByKey(name);
             if (loader)
                 return loader.data;
             return null;
         }
 
-        public getEsm(name: string): egret3d.Geometry {
+        public getEsm(name: string): Geometry {
 
-            var loader: egret3d.URLLoader = this._esmLoaders.getValueByKey(name);
+            var loader: URLLoader = this._esmLoaders.getValueByKey(name);
             if (loader)
                 return loader.data;
             return null;
         }
 
-        public getEca(name: string): egret3d.CameraAnimationController {
+        public getEca(name: string): CameraAnimationController {
 
-            var loader: egret3d.URLLoader = this._ecaLoaders.getValueByKey(name);
+            var loader: URLLoader = this._ecaLoaders.getValueByKey(name);
             if (loader)
                 return loader.data;
             return null;
         }
 
-        public getEam(name: string): egret3d.SkeletonAnimationClip {
+        public getEam(name: string): SkeletonAnimationClip {
 
-            var loader: egret3d.URLLoader = this._eamLoaders.getValueByKey(name);
+            var loader: URLLoader = this._eamLoaders.getValueByKey(name);
             if (loader)
                 return loader.data;
             return null;
@@ -146,13 +146,13 @@
 
         public get progress(): number {
             var value: number = 0;
-            var loader: egret3d.URLLoader;
+            var loader: URLLoader;
             var percent: number = 1 / this._totalCount;
 
-           var loader: egret3d.URLLoader;
-            var loaderList: Array<egret3d.URLLoader>;
+           var loader: URLLoader;
+            var loaderList: Array<URLLoader>;
 
-            var hashTable: egret3d.HashTable;
+            var hashTable: HashTable;
             for (hashTable of this._loaderMapList) {
                 loaderList = this._imageLoaders.getValues();
                 for (loader of loaderList) {

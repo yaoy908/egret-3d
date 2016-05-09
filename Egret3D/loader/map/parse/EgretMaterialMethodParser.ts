@@ -1,7 +1,7 @@
-﻿module demo {
+﻿module egret3d {
     export class EgretMaterialMethodParser {
 
-        public static parse(xml: Node): ecore.MaterialMethodData {
+        public static parse(xml: Node): MaterialMethodData {
             if (xml.childNodes.length == 1)
                 return null;
 
@@ -13,10 +13,10 @@
                 item = xml.childNodes[i];
                 nodeName = item.nodeName;
 
-                if (nodeName == ecore.MaterialMethodData.lightmapMethod) {
-                    var method: ecore.MaterialMethodData = new ecore.MaterialMethodData();
+                if (nodeName == MaterialMethodData.lightmapMethod) {
+                    var method: MaterialMethodData = new MaterialMethodData();
                     method.type = nodeName;
-                    EgretSceneXmlParser.eachXmlAttr(item, function (label: string, value: string): void {
+                    EgretMapXmlParser.eachXmlAttr(item, function (label: string, value: string): void {
                         if (label == "texture") {
                             method.texture = value;
                         } else if (label == "usePower") {

@@ -1,12 +1,12 @@
-﻿module demo {
-    export class EgretSceneXmlParser {
-        public esmList: Array<ecore.MeshData>;
-        public materialList: Array<ecore.MaterialData>;
+﻿module egret3d {
+    export class EgretMapXmlParser {
+        public esmList: Array<MeshData>;
+        public materialList: Array<MaterialSphereData>;
         public ecaList: Array<string>;
         public eamList: Array<string>;
 
-        public dirLightDatas: Array<ecore.DirectionLightData>;
-        public pointLightDatas: Array<ecore.PointLightData>;
+        public dirLightDatas: Array<DirectionLightData>;
+        public pointLightDatas: Array<PointLightData>;
 
         public enableDirectLight: boolean;
         public enablePointLight: boolean;
@@ -67,8 +67,8 @@
             this.materialList = [];
             this.esmList = [];
 
-            this.pointLightDatas = new Array<ecore.PointLightData>();
-            this.dirLightDatas = new Array<ecore.DirectionLightData>();
+            this.pointLightDatas = new Array<PointLightData>();
+            this.dirLightDatas = new Array<DirectionLightData>();
             this.texturePath = this.esmPath = this.ecaPath = null;
 
             
@@ -103,8 +103,8 @@
             var count: number = 0;
             var item: Node;
 
-            var meshData: ecore.MeshData;
-            var materialData: ecore.MaterialData;
+            var meshData: MeshData;
+            var MaterialSphereData: MaterialSphereData;
 
             //___________esm
             for (i = 0, count = meshList.length; i < count; i++) {
@@ -118,9 +118,9 @@
             //___________mat
             for (i = 0, count = matList.length; i < count; i++) {
                 item = matList[i];
-                materialData = this.parseMaterial(item);
-                if (materialData) {
-                    this.materialList.push(materialData);
+                MaterialSphereData = this.parseMaterial(item);
+                if (MaterialSphereData) {
+                    this.materialList.push(MaterialSphereData);
                 }
             }
 
@@ -156,13 +156,13 @@
         }
 
         private eachAttr(item: Node, fun: Function): void {
-            EgretSceneXmlParser.eachXmlAttr(item, fun);
+            EgretMapXmlParser.eachXmlAttr(item, fun);
         }
 
-        private parseMesh(xml: Node): ecore.MeshData {
+        private parseMesh(xml: Node): MeshData {
             if (xml.childNodes.length == 1)
                 return null;
-            var data: ecore.MeshData = new ecore.MeshData();
+            var data: MeshData = new MeshData();
 
             this.eachAttr(xml, function (label: string, value: string): void {
                 if (label == "vertexColor") {
@@ -258,10 +258,10 @@
 
        
 
-        private parseMaterial(xml: Node): ecore.MaterialData {
+        private parseMaterial(xml: Node): MaterialSphereData {
             if (xml.childNodes.length == 0)
                 return null;
-            var data: ecore.MaterialData = new ecore.MaterialData();
+            var data: MaterialSphereData = new MaterialSphereData();
 
             this.eachAttr(xml, function (label: string, value: string): void {
                 if (label == "id") {
@@ -320,7 +320,7 @@
                 } else if (nodeName == "cullMode") {
                     data.cullMode = Number(item.textContent);
                 } else if (nodeName == "blendMode") {
-                    data.blendMode = egret3d.BlendMode[item.textContent];
+                    data.blendMode = BlendMode[item.textContent];
                 } else if (nodeName == "methods") {
                     data.method = EgretMaterialMethodParser.parse(item);
                 }
@@ -363,7 +363,7 @@
                         continue;
                     if (childNode.nodeName == "sunLight") {
                         
-                        var dirLight: ecore.DirectionLightData = new ecore.DirectionLightData();
+                        var dirLight: DirectionLightData = new DirectionLightData();
                         this.dirLightDatas.push(dirLight);
 
                         this.eachAttr(childNode, function (label: string, value: string): void {
@@ -407,7 +407,7 @@
                         }
                          
                     } else if (childNode.nodeName == "pointLight") {
-                        var pLight: ecore.PointLightData = new ecore.PointLightData();
+                        var pLight: PointLightData = new PointLightData();
                         this.pointLightDatas.push(pLight);
 
                         this.eachAttr(childNode, function (label: string, value: string): void {

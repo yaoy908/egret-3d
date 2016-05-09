@@ -1,4 +1,4 @@
-module ecore {
+module egret3d {
 
     //场景节点类型;
     export enum SceneNodeType {

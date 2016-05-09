@@ -1,4 +1,4 @@
-﻿module ecore {
+﻿module egret3d {
     export class MaterialMethodData {
 
         public static lightmapMethod: string = "lightmapMethod";
