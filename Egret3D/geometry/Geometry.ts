@@ -535,7 +535,7 @@
             var offset: number = 0;
             var srcOffset: number = 0;
             for (var i: number = 0; i < vertexCount; ++i) {
-                index += i;
+                index ++;
                 offset = 0;
                 if (this.vertexFormat & VertexFormat.VF_POSITION) {
                     if (vf & VertexFormat.VF_POSITION) {
