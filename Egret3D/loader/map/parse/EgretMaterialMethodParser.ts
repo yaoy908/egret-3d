@@ -1,7 +1,5 @@
 ﻿module egret3d {
-    export class EgretMaterialMethodParser {
-
-     /**
+    /**
      * @language zh_CN
      * @class egret3d.EgretMaterialMethodParser
      * @classdesc
@@ -10,7 +8,7 @@
      * @version Egret 3.0
      * @platform Web,Native
      */
-
+    export class EgretMaterialMethodParser {
 
          /**
          * @language zh_CN

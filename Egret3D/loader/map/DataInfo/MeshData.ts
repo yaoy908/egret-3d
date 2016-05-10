@@ -121,6 +121,10 @@ module egret3d {
          */
         public sz: number = 1;
 
+        /**
+        * @language zh_CN
+        * constructor 
+        */
         public constructor() {
         }
        

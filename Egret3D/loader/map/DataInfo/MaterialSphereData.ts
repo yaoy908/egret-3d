@@ -187,7 +187,10 @@ module egret3d {
         public methods: Array<MaterialMethodData>;
        
         
-
+        /**
+        * @language zh_CN
+        * constructor 
+        */
         constructor() {
             
         }

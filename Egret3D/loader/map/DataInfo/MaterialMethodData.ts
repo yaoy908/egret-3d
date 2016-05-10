@@ -65,6 +65,10 @@
          */
         public vSpeed: number = 0;
 
+        /**
+        * @language zh_CN
+        * constructor 
+        */
         constructor() {
         }
     }
