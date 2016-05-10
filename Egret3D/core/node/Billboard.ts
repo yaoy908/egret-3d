@@ -13,13 +13,17 @@
          * @language zh_CN
          * 指定材质，和公告板宽、高，构建一个公告板
          * @param material 渲染材质
+         * @param geometry 几何数据
          * @param width 公告板宽度
          * @param height 公告板高度
          * @version Egret 3.0
          * @platform Web,Native
          */
-        constructor(material: MaterialBase, width:number = 100, height:number = 100) {
-            super(new PlaneGeometry(width, height, 1, 1, 1, 1), material);
+        constructor(material: MaterialBase, geometry: Geometry = null, width: number = 100, height: number = 100) {
+            if (geometry == null) {
+                geometry = new PlaneGeometry(width, height, 1, 1, 1, 1);
+            }
+            super(geometry, material);
             if (!this.bound) {
                 this.bound = this.buildBoundBox();
             }
