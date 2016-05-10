@@ -84,9 +84,11 @@ module egret3d {
         public endian:string;
 
         /**
-         * 创建一个 egret.ByteArray 对象以引用指定的 ArrayBuffer 对象
-         * @param buffer {ArrayBuffer} 数据源
-         */
+        * 创建一个 egret.ByteArray 对象以引用指定的 ArrayBuffer 对象
+        * @param buffer {ArrayBuffer} 数据源
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         constructor(buffer?:ArrayBuffer) {
             this._setArrayBuffer(buffer || new ArrayBuffer(this.BUFFER_EXT_SIZE));
             this.endian = Endian.BIG_ENDIAN;
@@ -98,17 +100,35 @@ module egret3d {
             this._position = 0;
         }
 
+        /**
+        * @language zh_CN
+        * 获取ArrayBuffer
+        * @returns ArrayBuffer 
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get buffer():ArrayBuffer {
             return this.data.buffer;
         }
 
         /**
-         * @private
-         */
+        * @language zh_CN
+        * 设置ArrayBuffer
+        * @param value
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set buffer(value:ArrayBuffer) {
             this.data = new DataView(value);
         }
 
+        /**
+        * @language zh_CN
+        * 获取dataView
+        * @returns DataView
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get dataView():DataView {
             return this.data;
         }
@@ -124,28 +144,46 @@ module egret3d {
         }
 
         /**
-         * @private
-         */
+        * @language zh_CN
+        * 设置DataView
+        * @param value
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set dataView(value:DataView) {
             this.data = value;
             this.write_position = value.byteLength;
         }
 
         /**
-         * @private
-         */
+        * @language zh_CN
+        * 获取buffer的偏移位置
+        * @rerurns number 偏移位置
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get bufferOffset():number {
             return this.data.byteOffset;
         }
 
         /**
-         * 将文件指针的当前位置（以字节为单位）移动或返回到 ByteArray 对象中。下一次调用读取方法时将在此位置开始读取，或者下一次调用写入方法时将在此位置开始写入。
-         * @member {number} egret.ByteArray#position
-         */
+        * @language zh_CN
+        * 将文件指针的当前位置（以字节为单位）移动或返回到 ByteArray 对象中。下一次调用读取方法时将在此位置开始读取，或者下一次调用写入方法时将在此位置开始写入。
+        * @rerurns number 当前位置
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get position():number {
             return this._position;
         }
 
+        /**
+        * @language zh_CN
+        * 设置文件指针的当前位置
+        * @param value 当前位置
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set position(value:number) {
             if (this._position < value) {
                 if (!this.validate(value - this._position)) {
@@ -157,15 +195,26 @@ module egret3d {
         }
 
         /**
-         * ByteArray 对象的长度（以字节为单位）。
-         * 如果将长度设置为大于当前长度的值，则用零填充字节数组的右侧。
-         * 如果将长度设置为小于当前长度的值，将会截断该字节数组。
-         * @member {number} egret.ByteArray#length
-         */
+        * @language zh_CN
+        * ByteArray 对象的长度（以字节为单位）。
+        * 如果将长度设置为大于当前长度的值，则用零填充字节数组的右侧。
+        * 如果将长度设置为小于当前长度的值，将会截断该字节数组。
+        * @member {number} egret.ByteArray#length
+        * @returns number ByteArray的长度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get length():number {
             return this.write_position;
         }
 
+        /**
+        * @language zh_CN
+        * 设置ByteArray 对象的长度（以字节为单位）。
+        * @param value ByteArray对象的长度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set length(value:number) {
             this.validateBuffer(value, true);
         }

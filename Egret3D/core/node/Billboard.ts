@@ -13,9 +13,9 @@
          * @language zh_CN
          * 指定材质，和公告板宽、高，构建一个公告板
          * @param material 渲染材质
-         * @param geometry 几何数据
-         * @param width 公告板宽度
-         * @param height 公告板高度
+         * @param geometry 几何数据，默认参数为null 为null会在内部创建一个PlaneGeometry
+         * @param width 公告板宽度 默认参数为 100
+         * @param height 公告板高度 默认参数为 100
          * @version Egret 3.0
          * @platform Web,Native
          */

@@ -27,9 +27,35 @@
          */
         public imageData: HTMLImageElement;
 
+        /**
+        * @language zh_CN
+        * 贴图的宽度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public width: number;
+
+        /**
+        * @language zh_CN
+        * 贴图的高度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public height: number;
+        /**
+        * @language zh_CN
+        * Texture2D 对象
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public texture2D: Texture2D;
+
+        /**
+        * @language zh_CN
+        * Texture3D 对象
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public texture3D: Texture3D;
 
          /**

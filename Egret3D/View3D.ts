@@ -40,6 +40,12 @@
 
         //protected _testCamera: Camera3D = new Camera3D();
 
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get renderTarget(): RenderTargetTexture {
             return this._renderTarget;
         }
@@ -51,7 +57,7 @@
         * @param y 视口的屏幕y坐标
         * @param width 视口的屏幕宽度
         * @param height 视口的屏幕高度
-        * @param camera 摄像机
+        * @param camera 摄像机 默认参数为null，会在内部新建一个CameraType.perspective 类型的Camera3D
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -76,6 +82,14 @@
 
         }
 
+        /**
+        * @language zh_CN
+        * 设置是否清除背景缓冲颜色 和 深度
+        * @param cleanColor 是否清除背景缓冲颜色
+        * @param cleanDepth 是否清除背景缓冲深度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public blender(cleanColor:boolean, cleanDepth:boolean) {
             this._cleanParmerts = (cleanColor ? Context3DProxy.gl.COLOR_BUFFER_BIT : 0) | (cleanDepth ? Context3DProxy.gl.DEPTH_BUFFER_BIT : 0);
         }

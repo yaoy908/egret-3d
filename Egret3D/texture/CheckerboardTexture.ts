@@ -20,26 +20,56 @@
     export class CheckerboardTexture implements ITexture {
 
         /**
-        * @private
         * @language zh_CN
         * 公用棋盘格实例对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static texture: CheckerboardTexture = new CheckerboardTexture();
 
         private _pixelArray: Uint8Array;
 
+        /**
+        * @language zh_CN
+        * 贴图的宽度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public width: number = 32;
+
+        /**
+        * @language zh_CN
+        * 贴图的高度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public height: number = 32;
+
+        /**
+        * @language zh_CN
+        * Texture2D 对象
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public texture2D: Texture2D;
+
+        /**
+        * @language zh_CN
+        * Texture3D 对象
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public texture3D: Texture3D;
 
         private _smooth: boolean = true;
         private _useMipmap: boolean = true;
 
         /**
-         * @language zh_CN
-         * 构造函数
-         */
+        * @language zh_CN
+        * 构造函数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         constructor() {
             this.buildCheckerboard();
         }
@@ -48,6 +78,8 @@
         * @language zh_CN
         * 设置贴图是否使用 mipmap , mipmap为一个贴图的LOD层级贴图。例如（1024*1024的贴图，往下就会自动生成 512*512,256*256,128*128,64*64,32*32,16*16,8*8,4*4,2*2,1*1）
         * @param img HTMLImageElement（网页图像元素）
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set useMipmap(flag: boolean) {
             this._useMipmap = flag;

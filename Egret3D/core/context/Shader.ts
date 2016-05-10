@@ -56,10 +56,13 @@
         * WebGLShader 的引用
         */
         private _shader: WebGLShader;
-                        
+
         /**
         * @language zh_CN
         * 构造
+        * @param shader WebGLShader对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         constructor(shader: WebGLShader) {
             this._shader = shader;

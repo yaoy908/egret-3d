@@ -50,14 +50,12 @@
 
 
         /**
-       * @language zh_CN
-       * get GPU Context3DProxy 
-       * 注册并初始化相关 GPU 参数配置信息
-       * 用于设置显卡的相关参数
-       * @param GPU_CONFIG
-       * @param canvasRec
-       * @event call
-       */
+        * @private
+        * @language zh_CN
+        * get GPU Context3DProxy 
+        * 注册并初始化相关 GPU 参数配置信息
+        * 用于设置显卡的相关参数
+        */
         public register() {
 
             var ext: any = Context3DProxy.gl.getExtension('WEBGL_compressed_texture_s3tc');
@@ -143,11 +141,13 @@
         /**
         * @language zh_CN
         * 视口设置定义，用来确定我们定义的视口在canvas中的所在位置
-        * @param x position X
-        * @param y position Y
-        * @param width  3D canvas width
-        * @param height  3D canvas  height
+        * @param x 屏幕坐标 X
+        * @param y 屏幕坐标 Y
+        * @param width  宽度
+        * @param height 高度
         * @see egret3d.Egret3DCanvas
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public viewPort(x: number, y: number, width: number, height: number) {
             Context3DProxy.gl.viewport(x, ContextConfig.canvasRectangle.height - height - y, width, height);
@@ -158,6 +158,9 @@
         * 创建 显卡程序
         * @param vsShader
         * @param fsShader
+        * @returns Program3D
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public creatProgram(vsShader: Shader, fsShader: Shader): Program3D {
             var shaderProgram = Context3DProxy.gl.createProgram();
@@ -177,6 +180,8 @@
         * @language zh_CN
         * 创建 顶点索引流
         * @param indexData
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public creatIndexBuffer(indexData: Array<number>): IndexBuffer3D {
             var indexDataArray = new Int16Array(indexData);
@@ -195,6 +200,8 @@
         * @language zh_CN
         * 创建 顶点数据流
         * @param vertexData
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public creatVertexBuffer(vertexData: Array<number>, dawType: number = Context3DProxy.gl.STATIC_DRAW ): VertexBuffer3D {
             var vertexDataArray: Float32Array = new Float32Array(vertexData);
@@ -209,6 +216,13 @@
             return vb;
         }
 
+        /**
+        * @language zh_CN
+        * 提交顶点数据
+        * @param vertexBuffer3D 顶点buffer
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public uploadVertexBuffer(vertexBuffer3D:VertexBuffer3D) {
             Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ARRAY_BUFFER, vertexBuffer3D.buffer );
             Context3DProxy.gl.bufferData(Context3DProxy.gl.ARRAY_BUFFER, vertexBuffer3D.arrayBuffer, Context3DProxy.gl.DYNAMIC_DRAW);
@@ -236,6 +250,8 @@
         * @param mag_filter
         * @param wrap_u_filter
         * @param wrap_v_filter
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public setTexture2DSamplerState(min_filter: number, mag_filter: number, wrap_u_filter: number, wrap_v_filter: number) {
             Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, min_filter);
@@ -249,6 +265,8 @@
         * 提交2D纹理
         * @param mipLevel
         * @param texture
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public upLoadTextureData(mipLevel: number, texture: Texture2D) {
             Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture.texture);
@@ -285,6 +303,8 @@
         * 提交2D压缩纹理，用硬件来解析dds贴图
         * @param mipLevel
         * @param texture
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public upLoadCompressedTexture2D(mipLevel: number, texture: Texture2D) {
             Context3DProxy.gl.compressedTexImage2D(Context3DProxy.gl.TEXTURE_2D, mipLevel, texture.colorFormat, texture.mimapData[mipLevel].width, texture.mimapData[mipLevel].height, texture.border, texture.mimapData[mipLevel].data);
@@ -293,6 +313,8 @@
         /**
         * @language zh_CN
         * 创建 2维贴图 向显卡提交buffer申请 并创建Texture2D对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public creatTexture2D(): Texture2D {
             var texture: Texture2D = new Texture2D();
@@ -303,6 +325,8 @@
         /**
         * @language zh_CN
         * 创建 Cube贴图 向显卡提交buffer申请 并创建Texture3D对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public creatCubeTexture(): Texture3D {
             var texture: Texture3D = new Texture3D();
@@ -314,6 +338,8 @@
         * @language zh_CN
         * @private
         * @param tex
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uploadCubetexture(tex: Texture3D) {
             /// 创建纹理并绑定纹理数据
@@ -349,6 +375,8 @@
         * @param width
         * @param height
         * @param format
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public createFramebuffer(width: number, height: number, format: FrameBufferFormat): Texture2D {
             var rttframeBuffer = Context3DProxy.gl.createFramebuffer();
@@ -411,6 +439,8 @@
         * @param texture
         * @param enableDepthAndStencil
         * @param surfaceSelector
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public setRenderToTexture(texture: Texture2D, enableDepthAndStencil: Boolean = false, surfaceSelector: number = 0) {
             if (enableDepthAndStencil) {
@@ -437,21 +467,23 @@
                         
         /**
         * @language zh_CN
-        * @private
-        *
+        * 设置渲染缓冲为屏幕
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public setRenderToBackBuffer() {
-
             Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, null);
             Context3DProxy.gl.bindFramebuffer(Context3DProxy.gl.FRAMEBUFFER, null);
             Context3DProxy.gl.bindRenderbuffer(Context3DProxy.gl.RENDERBUFFER, null);
-
         }
                                 
         /**
         * @language zh_CN
         * 向显卡请求创建顶点shader对象 
-        * @param source shader代码内容 
+        * @param source shader代码内容
+        * @returns Shader shader对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public creatVertexShader(source: string): Shader {
             var shader: WebGLShader = Context3DProxy.gl.createShader(Context3DProxy.gl.VERTEX_SHADER);
@@ -466,7 +498,10 @@
         /**
         * @language zh_CN
         * 向显卡请求创建片段shader对象 
-        * @param source shader代码内容 
+        * @param source shader代码内容
+        * @returns Shader shader对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public creatFragmentShader(source: string): Shader {
             var shader: WebGLShader = Context3DProxy.gl.createShader(Context3DProxy.gl.FRAGMENT_SHADER);
@@ -481,7 +516,9 @@
         /**
         * @language zh_CN
         * 清除渲染buffer
-        * @param BUFFER_BIT r g b a 0x00000000
+        * @param BUFFER_BIT 
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public clear(BUFFER_BIT:number) {
             Context3DProxy.gl.clear(BUFFER_BIT);
@@ -494,6 +531,8 @@
         * @param g 绿色值
         * @param b 蓝色值
         * @param a alpha值
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public clearColor(r: number, g: number, b: number, a: number) {
             Context3DProxy.gl.clearColor(r, g, b, a);
@@ -514,6 +553,8 @@
         * @language zh_CN
         * 清除渲染区域的 模板
         * @param stencil 模板值
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public clearStencil(stencil: number) {
             Context3DProxy.gl.clearStencil(stencil);
@@ -523,6 +564,8 @@
         * @language zh_CN
         * 使用显卡着色器
         * @param program 设置当学显卡当前渲染程序
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public setProgram(program: Program3D) {
             if (this._cacheProgram != program) {
@@ -536,6 +579,8 @@
         * 获取矩阵变量ID
         * @param program
         * @param name
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public getUniformLocation(programe3D: Program3D, name: string): any {
             return Context3DProxy.gl.getUniformLocation(programe3D.program, name);
@@ -547,6 +592,8 @@
         * 传值给shader一个float
         * @param location 指明要更改的uniform变量
         * @param x  uniform变量变量值
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniform1f(location: any, x: number): void {
             Context3DProxy.gl.uniform1f(location, x);
@@ -557,6 +604,8 @@
         * 传值给shader 一个vec3(float, float, float) 也可以是一个vec3数组
         * @param location 指明要更改的uniform变量
         * @param v uniform变量变量值Float32Array[3]
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniform1fv(location: any, v: any): void {
             Context3DProxy.gl.uniform1fv(location, v);
@@ -567,6 +616,8 @@
         * 传值给shader一个int
         * @param location 指明要更改的uniform变量
         * @param x uniform变量变量值
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniform1i(location: any, x: number): void {
             Context3DProxy.gl.uniform1i(location, x);
@@ -577,6 +628,8 @@
         * 传值给shader一个int数组
         * @param location 指明要更改的uniform变量
         * @param v int数组的值
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniform1iv(location: any, v: Int32Array): void {
             Context3DProxy.gl.uniform1iv(location, v);
@@ -588,6 +641,8 @@
         * @param location 指明要更改的uniform变量
         * @param x float x 的值
         * @param y float y 的值
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniform2f(location: any, x: number, y: number): void {
             Context3DProxy.gl.uniform2f(location, x, y);
@@ -598,6 +653,8 @@
         * 传值给shader vec(float, float)
         * @param location 指明要更改的uniform变量
         * @param v Float32Array[2]
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniform2fv(location: any, v: any): void {
             Context3DProxy.gl.uniform2fv(location, v);
@@ -609,6 +666,8 @@
         * @param location 指明要更改的uniform变量
         * @param x number x 的值
         * @param y number y 的值
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniform2i(location: any, x: number, y: number): void {
             Context3DProxy.gl.uniform2i(location, x, y);
@@ -619,6 +678,8 @@
         * 传值给shader
         * @param location 指明要更改的uniform变量
         * @param v
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniform2iv(location: any, v: Int32Array): void {
             Context3DProxy.gl.uniform2iv(location, v);
@@ -631,6 +692,8 @@
         * @param x
         * @param y
         * @param z
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniform3f(location: any, x: number, y: number, z: number): void {
             Context3DProxy.gl.uniform3f(location, x, y, z);
@@ -641,6 +704,8 @@
         * 传值给shader vec3(float, float, float)
         * @param location 指明要更改的uniform变量
         * @param v Float32Array[3]
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniform3fv(location: any, v: any): void {
             Context3DProxy.gl.uniform3fv(location, v);
@@ -653,6 +718,8 @@
         * @param x
         * @param y
         * @param z
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniform3i(location: any, x: number, y: number, z: number): void {
             Context3DProxy.gl.uniform3i(location, x, y, z);
@@ -663,6 +730,8 @@
         * 传值给shader vec3(int, int, int)
         * @param location 指明要更改的uniform变量
         * @param v Int32Array[3]
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniform3iv(location: any, v: Int32Array): void {
             Context3DProxy.gl.uniform3iv(location, v);
@@ -676,6 +745,8 @@
         * @param y
         * @param z
         * @param w
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniform4f(location: any, x: number, y: number, z: number, w: number): void {
             Context3DProxy.gl.uniform4f(location, x, y, z, w);
@@ -686,6 +757,8 @@
         * 传值给shader vec(float, float, float, float)
         * @param location 指明要更改的uniform变量
         * @param v Float32Array[4]
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniform4fv(location: any, v: any): void {
             Context3DProxy.gl.uniform4fv(location, v);
@@ -699,6 +772,8 @@
         * @param y
         * @param z
         * @param w
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniform4i(location: any, x: number, y: number, z: number, w: number): void {
             Context3DProxy.gl.uniform4i(location, x, y, z, w);
@@ -720,6 +795,8 @@
         * @param location 指明要更改的uniform变量
         * @param transpose 是否转置
         * @param value 矩阵值 Float32Array[4]
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniformMatrix2fv(location: any, transpose: boolean, value: any): void {
             Context3DProxy.gl.uniformMatrix2fv(location, transpose, value);
@@ -731,6 +808,8 @@
         * @param location 指明要更改的uniform变量
         * @param transpose 是否转置
         * @param value 矩阵值 Float32Array[9]
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniformMatrix3fv(location: any, transpose: boolean, value: any): void {
             Context3DProxy.gl.uniformMatrix3fv(location, transpose, value);
@@ -742,6 +821,8 @@
         * @param location 指明要更改的uniform变量
         * @param transpose 是否转置
         * @param value 矩阵值 Float32Array[16]
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public uniformMatrix4fv(location: any, transpose: boolean, value: any): void {
             Context3DProxy.gl.uniformMatrix4fv(location, transpose, value);
@@ -751,7 +832,9 @@
         * @language zh_CN
         * 设置 绘制混合模式
         * @param src 
-        * @param dst 
+        * @param dst
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public setBlendFactors(src: number, dst: number) {
             Context3DProxy.gl.blendFunc(src, dst);
@@ -763,6 +846,8 @@
         * @param mode 
         * @see egret3d.ContextConfig.FRONT
         * @see egret3d.ContextConfig.BACK
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public setCulling(mode: number) {
             Context3DProxy.gl.cullFace(mode);
@@ -771,7 +856,9 @@
         /**
         * @language zh_CN
         * 开启 绘制模式
-        * @param cap 
+        * @param cap
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public enable(cap: number) {
             Context3DProxy.gl.enable(cap);
@@ -780,7 +867,9 @@
         /**
         * @language zh_CN
         * 关闭 绘制模式
-        * @param cap 
+        * @param cap
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public disable(cap: number) {
             Context3DProxy.gl.disable(cap);
@@ -790,7 +879,9 @@
         * @language zh_CN
         * 开启 深度模式 及 深度测试比较模式
         * @param flag 
-        * @param compareMode 
+        * @param compareMode
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public depthFunc(compareMode: number = 0) {
               Context3DProxy.gl.depthFunc(compareMode);
@@ -800,7 +891,9 @@
         * @language zh_CN
         * 开启 深度模式 及 深度测试比较模式
         * @param flag 
-        * @param compareMode 
+        * @param compareMode
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public enableDepthTest(flag: boolean, compareMode: number = 0) {
             if (flag)
@@ -813,6 +906,8 @@
         * @param programe 
         * @param attribName
         * @returns 着色器变量
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public getShaderAttribLocation(programe: Program3D, attribName: string): any {
             return Context3DProxy.gl.getAttribLocation(programe.program, attribName);
@@ -827,6 +922,8 @@
         * @param normalized 是否单位化
         * @param stride 字节数
         * @param offset 当前变量字节偏移
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public vertexAttribPointer(index: number, size: number, dataType: number, normalized: boolean, stride: number, offset: number) {
             Context3DProxy.gl.vertexAttribPointer(index, size, dataType, normalized, stride, offset);
@@ -839,7 +936,9 @@
         * 实时传入显卡顶点着色器变量数组数据
         * @param floats 
         * @param offest 
-        * @param numLen 
+        * @param numLen
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public setVertexShaderConstData(floats: Float32Array, offest: number, numLen: number) {
             Context3DProxy.gl.vertexAttrib4fv(offest, floats.subarray(offest, numLen));
@@ -851,7 +950,9 @@
         * 实时传入显卡片段着色器变量数组数据
         * @param floats 
         * @param offest 
-        * @param numLen 
+        * @param numLen
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public setFragmentShaderConstData(floats: Float32Array, offest: number, numLen: number) {
         }
@@ -864,6 +965,8 @@
         * @param index 
         * @param texture 
         * @see egret3d.ContextSamplerType
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public setTexture2DAt(samplerIndex: number, uniLocation: number, index: number, texture: Texture2D) {
             Context3DProxy.gl.activeTexture(samplerIndex);
@@ -879,6 +982,8 @@
         * @param index 
         * @param texture 
         * @see egret3d.ContextSamplerType
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public setCubeTextureAt(samplerIndex: number, uniLocation: number, index: number, texture: Texture3D) {
             Context3DProxy.gl.activeTexture(samplerIndex);
@@ -890,7 +995,9 @@
         * @language zh_CN
         * @private
         * 设置矩形裁切区域
-        * @param rectangle 
+        * @param rectangle
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public setScissorRectangle(x: number, y: number, width: number, height: number) {
             Context3DProxy.gl.scissor(x, ContextConfig.canvasRectangle.height - height - y, width, height);
@@ -900,6 +1007,8 @@
         * @language zh_CN
         * @private
         * 设置模板测试
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public setStencilReferenceValue() {
         }
@@ -908,6 +1017,8 @@
         * @language zh_CN
         * @private
         * 设置模板测试
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public setStencilActions(triangleFace: string, compareMode: string, actionOnBothPass: string, actionOnDepthFail: string, actionOnDepthPassStencilFail: string) {
         }
@@ -915,7 +1026,9 @@
         /**
         * @language zh_CN
         * 绑定顶点Buffer
-        * @param vertexBuffer 
+        * @param vertexBuffer
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public bindVertexBuffer(vertexBuffer: VertexBuffer3D) {
             Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ARRAY_BUFFER, vertexBuffer.buffer);
@@ -924,7 +1037,9 @@
          /**
         * @language zh_CN
         * 绑定顶点索引Buffer
-        * @param vertexBuffer 
+        * @param vertexBuffer
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public bindIndexBuffer(indexBuffer: IndexBuffer3D) {
             Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
@@ -936,6 +1051,8 @@
         * @param type 图元类型
         * @param first 第一个顶点索引
         * @param length 顶点个数
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public drawArrays(type: number, first: number, length: number) {
             Context3DProxy.gl.drawArrays(type, first, length);
@@ -948,6 +1065,8 @@
         * @param indexBuffer 索引数据
         * @param offset 顶点索引偏移 (字节数)
         * @param length 顶点个数
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public drawElement(type: number, offset: number, length: number) {
             Context3DProxy.gl.drawElements(type, length, Context3DProxy.gl.UNSIGNED_SHORT, offset );
@@ -957,6 +1076,8 @@
         * @language zh_CN
         * @private
         * 绘制提交
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public flush() {
             Context3DProxy.gl.flush();
