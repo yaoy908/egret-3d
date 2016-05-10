@@ -31,17 +31,21 @@
         
         /**
         * @language zh_CN
-        * @private
         * WebGLProgram 的引用
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public program: WebGLProgram;
                 
         /**
         * @language zh_CN
         * 构造
+        * @param pg3D WebGLProgram对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
-        constructor( pg3D:WebGLProgram ) {
-            this.program = pg3D; 
+        constructor(pg3D: WebGLProgram) {
+            this.program = pg3D;
         }
     }
 }

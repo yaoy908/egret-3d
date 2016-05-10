@@ -20,6 +20,8 @@
        * @language zh_CN
        * @private
        * 提交显卡的 index
+        * @version Egret 3.0
+        * @platform Web,Native
        */
         public index: number;
 
@@ -27,6 +29,8 @@
         * @language zh_CN
         * @private
         * 显卡中上传使用的 border 边框像素大小
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public border: number;
 
@@ -34,6 +38,8 @@
         * @language zh_CN
         * @private
         * 纹理贴图的颜色模式
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public colorformat: number;
 
@@ -41,6 +47,8 @@
         * @language zh_CN
         * @private
         * 纹理贴图标准的格式
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public internalformat: InternalFormat;
 
@@ -48,18 +56,24 @@
         * @language zh_CN
         * @private
         * context.creatTexture()接口生成的GPU纹理
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public texture: WebGLTexture;
 
         /**
          * @language zh_CN
          * 是否使用mipmap
+        * @version Egret 3.0
+        * @platform Web,Native
          */
         public useMipmap: boolean;
 
         /**
          * @language zh_CN
          * mipmap数据
+        * @version Egret 3.0
+        * @platform Web,Native
          */
         public mimapData: Array<MipmapData>;
 
@@ -73,6 +87,8 @@
         /**
          * @language zh_CN
          * 构造函数
+        * @version Egret 3.0
+        * @platform Web,Native
          */
         constructor() {
             this.border = 0;

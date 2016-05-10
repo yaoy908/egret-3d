@@ -41,6 +41,7 @@
         /**
         * @language zh_CN
         * 构造一个Egret3DCanvas对象
+        * @param blend2D 暂时未使用，默认参数为false
         * @version Egret 3.0
         * @platform Web,Native
         */

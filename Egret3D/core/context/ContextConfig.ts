@@ -96,7 +96,6 @@
         SCREEN
     }
     /**
-     * @private
      * @class egret3d.ContextSamplerType
      * @classdesc
      * 贴图采样类型
@@ -432,8 +431,9 @@
         */
         static clientRect: ClientRect;
 
+        /**
+        * @private
+        */
         static LEQUAL: number;
-
-       
     }
 }

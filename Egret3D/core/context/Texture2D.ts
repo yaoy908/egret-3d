@@ -62,6 +62,8 @@
          /**
          * @language zh_CN
          * 是否自动模糊
+        * @version Egret 3.0
+        * @platform Web,Native
          */
         public smooth: boolean = true;
 
@@ -69,12 +71,16 @@
         /**
          * @language zh_CN
          * 贴图元素对象
+        * @version Egret 3.0
+        * @platform Web,Native
          */
         public imageData: HTMLImageElement;
 
         /**
          * @language zh_CN
          * mipmap数据
+        * @version Egret 3.0
+        * @platform Web,Native
          */
         public mimapData: Array<MipmapData>;
 
@@ -92,6 +98,8 @@
         * @language zh_CN
         * 提交给显卡的贴图尺寸大小 贴图宽度
         * <p>当作为renderTexture使用时一定要传入真实尺寸
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public width: number;
 
@@ -99,12 +107,16 @@
         * @language zh_CN
         * 提交给显卡的贴图尺寸大小 贴图高度
         * <p>当作为renderTexture使用时一定要传入真实尺寸
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public height: number;
 
         /**
          * @language zh_CN
          * 构造函数
+        * @version Egret 3.0
+        * @platform Web,Native
          */
         constructor() {
             this.border = 0;
