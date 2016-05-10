@@ -15,14 +15,14 @@
          * @language zh_CN
          * 地图配置信息的版本号
          * @version Egret 3.0
-         *@platform Web,Native
+         * @platform Web,Native
          */
         public version: number = 1;
         /**
          * @language zh_CN
          * 模型文件数据列表
          * @version Egret 3.0
-         *@platform Web,Native
+         * @platform Web,Native
          */
         public esmList: Array<MeshData>;
 
@@ -30,7 +30,7 @@
          * @language zh_CN
          * 材质球数据列表
          * @version Egret 3.0
-         *@platform Web,Native
+         * @platform Web,Native
          */
         public materialList: Array<MaterialSphereData>;
 
@@ -38,7 +38,7 @@
          * @language zh_CN
          * 相机动画文件数据列表
          * @version Egret 3.0
-         *@platform Web,Native
+         * @platform Web,Native
          */
         public ecaList: Array<string>;
 
@@ -46,7 +46,7 @@
          * @language zh_CN
          * 蒙皮文件数据列表
          * @version Egret 3.0
-         *@platform Web,Native
+         * @platform Web,Native
          */
         public eamList: Array<string>;
 
@@ -54,7 +54,7 @@
          * @language zh_CN
          * 平行光数据列表
          * @version Egret 3.0
-         *@platform Web,Native
+         * @platform Web,Native
          */
         public dirLightDatas: Array<DirectionLightData>;
 
@@ -62,7 +62,7 @@
          * @language zh_CN
          * 点光源数据列表
          * @version Egret 3.0
-         *@platform Web,Native
+         * @platform Web,Native
          */
         public pointLightDatas: Array<PointLightData>;
 
@@ -70,7 +70,7 @@
          * @language zh_CN
          * 是否开启配置的平行光源
          * @version Egret 3.0
-         *@platform Web,Native
+         * @platform Web,Native
          */
         public enableDirectLight: boolean;
 
@@ -78,7 +78,7 @@
          * @language zh_CN
          * 是否开启配置的点光源
          * @version Egret 3.0
-         *@platform Web,Native
+         * @platform Web,Native
          */
         public enablePointLight: boolean;
 
@@ -86,7 +86,7 @@
          * @language zh_CN
          * 贴图文件相对路径
          * @version Egret 3.0
-         *@platform Web,Native
+         * @platform Web,Native
          */
         public texturePath: string;
 
@@ -94,7 +94,7 @@
          * @language zh_CN
          * 模型文件相对路径
          * @version Egret 3.0
-         *@platform Web,Native
+         * @platform Web,Native
          */
         public esmPath: string;
 
@@ -102,7 +102,7 @@
          * @language zh_CN
          * 相机动画文件相对路径
          * @version Egret 3.0
-         *@platform Web,Native
+         * @platform Web,Native
          */
         public ecaPath: string;
 
@@ -110,7 +110,7 @@
          * @language zh_CN
          * 蒙皮动画文件相对路径
          * @version Egret 3.0
-         *@platform Web,Native
+         * @platform Web,Native
          */
         public eamPath: string;
 
@@ -118,7 +118,7 @@
          * @language zh_CN
          * 地图名
          * @version Egret 3.0
-         *@platform Web,Native
+         * @platform Web,Native
          */
         public sceneName: string;
 
@@ -209,6 +209,7 @@
             var matList: NodeList = obj.getElementsByTagName("mat");
             var meshList: NodeList = obj.getElementsByTagName("mesh");
             var environment: NodeList = obj.getElementsByTagName("env");
+            var cameraAnimList: NodeList = obj.getElementsByTagName("cameraAnims");
 
             this.parseEnvironment(environment);
             
@@ -221,15 +222,15 @@
             //
             var i: number = 0;
             var count: number = 0;
-            var item: Node;
+            var tempNode: Node;
 
             var meshData: MeshData;
-            var MaterialSphereData: MaterialSphereData;
-
+            var materialData: MaterialSphereData;
+            var cameraAnim: string;
             //___________esm
             for (i = 0, count = meshList.length; i < count; i++) {
-                item = meshList[i];
-                meshData = this.parseMesh(item);
+                tempNode = meshList[i];
+                meshData = this.parseMesh(tempNode);
                 if (meshData) {
                     this.esmList.push(meshData);
                 }
@@ -237,15 +238,21 @@
 
             //___________mat
             for (i = 0, count = matList.length; i < count; i++) {
-                item = matList[i];
-                MaterialSphereData = this.parseMaterial(item);
-                if (MaterialSphereData) {
-                    this.materialList.push(MaterialSphereData);
+                tempNode = matList[i];
+                materialData = this.parseMaterial(tempNode);
+                if (materialData) {
+                    this.materialList.push(materialData);
                 }
             }
 
             //___________eca
-            this.parseCameraAnim();
+            for (i = 0, count = cameraAnimList[0].childNodes.length; i < count; i++) {
+                tempNode = cameraAnimList[0].childNodes[i];
+                cameraAnim = this.parseCameraAnim(tempNode);
+                if (cameraAnim) {
+                    this.ecaList.push(cameraAnim);
+                }
+            }
 
             //___________eam
             for (meshData of this.esmList) {
@@ -259,10 +266,10 @@
  
         }
 
-
-        //加入相机动画
-        private parseCameraAnim(): void {
-            this.ecaList = ["Camera001", "Camera002", "Camera003", "Camera004", "Camera005"];
+        private parseCameraAnim(xml: Node): string {
+            if(xml.nodeName == "eca")
+                return xml.textContent;
+            return null;
         }
 
         /**
@@ -292,10 +299,7 @@
             var data: MeshData = new MeshData();
 
             this.eachAttr(xml, function (label: string, value: string): void {
-                if (label == "vertexColor") {
-                    data.vertexColor = (value + "").toLocaleLowerCase() == "true";
-                }
-                else if (label == "name") {
+                if (label == "name") {
                     data.name = value;
                 } else if (label == "billboard") {
                     data.billboard = value == "true";

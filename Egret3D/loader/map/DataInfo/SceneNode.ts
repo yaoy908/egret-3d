@@ -8,17 +8,52 @@ module egret3d {
     * @platform Web,Native
     */
     export enum SceneNodeType {
-        //未知对象;
+        /**
+         * @language zh_CN
+         * 未知类型
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         Unknown,
-        //网格模型对象;
+
+        /**
+         * @language zh_CN
+         * mesh对象
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         Mesh,
-        //灯光对象;
+
+        /**
+         * @language zh_CN
+         * 灯光对象
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         Light,
-        //相机对象;
+
+        /**
+         * @language zh_CN
+         * 相机对象
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         Camera,
-        //材质球
+
+        /**
+         * @language zh_CN
+         * 材质球对象
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         Material,
-        //根节点
+
+         /**
+         * @language zh_CN
+         * 根节点
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         Scene,
     }
 }
