@@ -81,6 +81,10 @@
          */
         public posZ: number = 0;
 
+        /**
+        * @language zh_CN
+        * constructor 
+        */
         public constructor() {
         }
 

@@ -73,6 +73,10 @@
          */
         public dirZ: number = 0.2;
 
+        /**
+        * @language zh_CN
+        * constructor 
+        */
         public constructor() {
         }
 

@@ -9,6 +9,10 @@
     */
     export class EgretMapConfig {
 
+        /**
+        * @language zh_CN
+        * constructor 
+        */
         constructor() {
 
         }
