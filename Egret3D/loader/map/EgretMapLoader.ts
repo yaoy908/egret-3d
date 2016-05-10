@@ -16,7 +16,6 @@
     export class EgretMapLoader extends EventDispatcher{
 
         private _sceneName: string;
-        private _lights: LightGroup;
         private _cameraAnims: Array<CameraAnimationController>;
         private _xmlLoader: URLLoader;
 
@@ -154,8 +153,6 @@
 
         //灯光
         private createLight(): void {
-            this._lights = new LightGroup();
-
              //平行光
             if (this._parser.enableDirectLight && this._parser.dirLightDatas) {
                 var dData: DirectionLightData;
@@ -170,7 +167,6 @@
                     dirLight.intensity = dData.intensity;
 
                     this._lightHashMap.put(dData.id, dirLight);
-                    this._lights.addLight(dirLight);
                    
                 }
             }
@@ -193,7 +189,6 @@
                     pLight.intensity = pData.intensity;
 
                     this._lightHashMap.put(pData.id, pLight);
-                    this._lights.addLight(pLight);
 
                 }
             }
@@ -205,7 +200,6 @@
             this._defaultMaterial = new TextureMaterial(CheckerboardTexture.texture);
             this._defaultMaterial.diffuseColor = 0xff808080;
             this._defaultMaterial.ambientColor = 0x808080;
-            this._defaultMaterial.lightGroup = this._lights;
         }
 
         //根据xml中每个材质球，创建材质
@@ -217,7 +211,6 @@
                 material = new TextureMaterial();
                 this._materialMap.put(materialData.id, material);
 
-                material.lightGroup = this._lights;
 
                 material.diffuseColor = materialData.diffuseColor;
                 material.ambientColor = materialData.ambientColor;
