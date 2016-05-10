@@ -20,6 +20,8 @@
         /**
         * @language zh_CN
         * 宽度分段数
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get segmentsW(): number {
             return this._segmentsW;
@@ -28,6 +30,8 @@
         /**
         * @language zh_CN
         * 高度分段数
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get segmentsH(): number {
             return this._segmentsH;
@@ -36,6 +40,8 @@
         /**
         * @language zh_CN
         * 宽度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get width(): number {
             return this._width;
@@ -44,6 +50,8 @@
         /**
         * @language zh_CN
         * 宽度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get height(): number {
             return this._height;
@@ -52,6 +60,8 @@
         /**
         * @language zh_CN
         * U缩放
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get scaleU(): number {
             return this._scaleU;
@@ -60,6 +70,8 @@
         /**
         * @language zh_CN
         * U缩放
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get scaleV(): number {
             return this._scaleV;
@@ -68,15 +80,17 @@
         /**
         * @language zh_CN
         * 构造函数
-        * @param width 宽度
-        * @param height 高度
-        * @param segmentsW 宽度分段数
-        * @param segmentsH 高度分段数
-        * @param uScale U缩放
-        * @param vScale V缩放
-        * @param aixs 0:Y轴为0 1:Z轴为0 2:X轴为0
+        * @param width 宽度 默认 500
+        * @param height 高度 默认 500
+        * @param segmentsW 宽度分段数 默认 1
+        * @param segmentsH 高度分段数 默认 1
+        * @param uScale U缩放 默认 1
+        * @param vScale V缩放 默认 1
+        * @param aixs 面的朝向 默认 Vector3D.Y_AXIS
+        * @version Egret 3.0
+        * @platform Web,Native
         */
-        constructor(width: number = 500, height: number = 500, segmentsW: number = 1, segmentsH: number = 1, uScale: number = 1, vScale: number = 1, aixs: Vector3D = Vector3D.X_AXIS) {
+        constructor(width: number = 500, height: number = 500, segmentsW: number = 1, segmentsH: number = 1, uScale: number = 1, vScale: number = 1, aixs: Vector3D = Vector3D.Y_AXIS) {
             super();
             this._width = width;
             this._height = height;
@@ -114,7 +128,7 @@
                     y = (yi / this._segmentsH - .5) * this._height;
 
                     switch (aixs) {
-                        case Vector3D.X_AXIS:
+                        case Vector3D.Y_AXIS:
                             this.verticesData[index++] = x;
                             this.verticesData[index++] = 0;
                             this.verticesData[index++] = y;
@@ -123,7 +137,7 @@
                             this.verticesData[index++] = 1;
                             this.verticesData[index++] = 0;
                             break;
-                        case Vector3D.Y_AXIS:
+                        case Vector3D.Z_AXIS:
                             this.verticesData[index++] = x;
                             this.verticesData[index++] = y;
                             this.verticesData[index++] = 0;
@@ -132,7 +146,7 @@
                             this.verticesData[index++] = 0;
                             this.verticesData[index++] = -1;
                             break;
-                        case Vector3D.Z_AXIS:
+                        case Vector3D.X_AXIS:
                             this.verticesData[index++] = 0;
                             this.verticesData[index++] = x;
                             this.verticesData[index++] = y;

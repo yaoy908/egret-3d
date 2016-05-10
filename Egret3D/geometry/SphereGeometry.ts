@@ -19,6 +19,8 @@
         /**
         * @language zh_CN
         * 宽度分段数
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get segmentsW(): number {
             return this._segmentsW;
@@ -27,6 +29,8 @@
         /**
         * @language zh_CN
         * 高度分段数
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get segmentsH(): number {
             return this._segmentsH;
@@ -35,6 +39,8 @@
         /**
         * @language zh_CN
         * 半径
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get radius(): number {
             return this._radius;
@@ -44,9 +50,11 @@
         /**
         * @language zh_CN
         * 构造函数
-        * @param r 半径
-        * @param segmentsW 宽度分段数
-        * @param segmentsH 高度分段数
+        * @param r 半径 默认值 100
+        * @param segmentsW 宽度分段数 默认值 15
+        * @param segmentsH 高度分段数 默认值 15
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         constructor(r: number = 100.0, segmentsW: number = 15, segmentsH: number = 15) {
             super();

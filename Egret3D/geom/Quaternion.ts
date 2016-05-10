@@ -20,6 +20,8 @@
         /**
         * @language zh_CN
         * 四元数的x值.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public x: number = 0;
 
@@ -30,6 +32,8 @@
         /**
         * @language zh_CN
         * 四元数的y值.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public y: number = 0;
 
@@ -40,6 +44,8 @@
         /**
         * @language zh_CN
         * 四元数的z值.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public z: number = 0;
 
@@ -50,6 +56,8 @@
         /**
         * @language zh_CN
         * 四元数的w值.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public w: number = 1;
 
@@ -68,6 +76,8 @@
         * @param y
         * @param z
         * @param w
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         constructor(x: number = 0, y: number = 0, z: number = 0, w: number = 1) {
             this.x = x;
@@ -86,7 +96,9 @@
         *  
         * 返回四元数的大小.
         * @param w
-        * @returns 四元数的大小.
+        * @returns number 四元数的大小.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get magnitude(): number {
             return Math.sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
@@ -104,6 +116,8 @@
         * 两个四元数相乘,然后结果给当调用者.
         * @param qa 第一个四元数
         * @param qb 第二个四元数
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public multiply(qa: Quaternion, qb: Quaternion) {
             var w1: number = qa.w, x1: number = qa.x, y1: number = qa.y, z1: number = qa.z;
@@ -120,7 +134,9 @@
         * 四元数乘以一个3维向量，结果返回一个四元数
         * @param vector 相乘的向量
         * @param target 返回的结果，如果为null就会实例化一个四元数对象返回
-        * @returns 返回相乘后的结果
+        * @returns Quaternion 返回相乘后的结果
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public multiplyVector(vector: Vector3D, target: Quaternion = null): Quaternion {
             if (target === null) {
@@ -152,6 +168,8 @@
         *
         * @param axis   旋转轴
         * @param angle  旋转角度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public fromAxisAngle(axis: Vector3D, angle: number) {
             angle *= Math.PI / 180.0;
@@ -172,6 +190,8 @@
         *
         * @param axis 轴心
         * @returns 角度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public toAxisAngle(axis: Vector3D): number {
             var sqrLength: number = this.x * this.x + this.y * this.y + this.z * this.z;
@@ -207,6 +227,8 @@
         * @param qa 四元数1
         * @param qb 四元数2
         * @param t 差值时刻
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public slerp(qa: Quaternion, qb: Quaternion, t: number) {
             var w1: number = qa.w, x1: number = qa.x, y1: number = qa.y, z1: number = qa.z;
@@ -260,6 +282,8 @@
         * @param qa 四元数1
         * @param qb 四元数2
         * @param t 差值时刻
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public lerp(qa: Quaternion, qb: Quaternion, t: number) {
             var w1: number = qa.w, x1: number = qa.x, y1: number = qa.y, z1: number = qa.z;
@@ -301,6 +325,9 @@
         * @param ax x轴旋转角度
         * @param ay y轴旋转角度
         * @param az z轴旋转角度
+        * @return Quaternion 四元数对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public fromEulerAngles(ax: number, ay: number, az: number):Quaternion {
             ax *= MathUtil.DEGREES_TO_RADIANS;
@@ -330,8 +357,10 @@
         * @language zh_CN
         * 把四元数转成欧拉角返回
         *
-        * @param target 转成的欧拉返回值，如果为null就新建一个对象返回
-        * @retruns 转成的欧拉返回值
+        * @param target 默认参数为null，转成的欧拉返回值，如果为null就新建一个对象返回
+        * @retruns Vector3D 转成的欧拉返回值
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public toEulerAngles(target: Vector3D = null): Vector3D {
             if (target === null) {
@@ -358,6 +387,8 @@
         /**
         * @language zh_CN
         * 单位化四元数
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public normalize(val: number = 1) {
             var mag: number = val / Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
@@ -377,7 +408,9 @@
         /**
         * @language zh_CN
         * 以字符串形式返回四元数的值
-        * @returns 
+        * @returns string
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public toString(): string {
             return "{x:" + this.x + " y:" + this.y + " z:" + this.z + " w:" + this.w + "}";
@@ -394,7 +427,9 @@
         * 把一个四元数转换成矩阵
         * @param target 返回转换后的矩阵，如果为null就新建一个对象返回
         * @see egret3d.Matrix4_4
-        * @returns 返回转换后的矩阵
+        * @returns  Matrix4_4 返回转换后的矩阵
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public toMatrix3D(target: Matrix4_4 = null): Matrix4_4 {
             var rawData: Float32Array = MathUtil.RAW_DATA_CONTAINER;
@@ -436,6 +471,8 @@
         * @language zh_CN
         * 用一个旋转矩阵生成四元数
         * @param matrix 旋转矩阵
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public fromMatrix(matrix: Matrix4_4) {
             var v: Vector3D = matrix.decompose(Orientation3D.QUATERNION)[1];
@@ -448,7 +485,10 @@
         /**
         * @language zh_CN
         * 返回一个把当前四元数取逆后的四元数
-        * @param target 如果当前参数为null那么就会new一个新的四元数对象返回
+        * @param target 默认参数为null,如果当前参数为null那么就会new一个新的四元数对象返回
+        * @return Quaternion 四元数
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public inverse(target: Quaternion = null): Quaternion {
             if (!target) {
@@ -476,7 +516,9 @@
         /**
         * @language zh_CN
         * 克隆一个四元数
-        * @returns 当前四元数复制后返回.
+        * @returns Quaternion 当前四元数复制后返回.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public clone(): Quaternion {
             return new Quaternion(this.x, this.y, this.z, this.w);
@@ -493,8 +535,10 @@
         * @language zh_CN
         * 旋转一个3量坐标点
         * @param vector 被旋转的对象
-        * @param target 旋转后的坐标对象。如果为null，将创建一个新的对象
-        * @returns 返回旋转后的坐标对象
+        * @param target 默认参数为null，旋转后的坐标对象。如果为null，将创建一个新的对象
+        * @returns Vector3D 返回旋转后的坐标对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public transformVector(vector: Vector3D, target: Vector3D = null): Vector3D {
             var x1: number, y1: number, z1: number, w1: number;
@@ -525,6 +569,8 @@
         * @language zh_CN
         * 将数据从四元数复制到该实例
         * @param q 被复制的四元数对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public copyFrom(q: Quaternion) {
             this.x = q.x;

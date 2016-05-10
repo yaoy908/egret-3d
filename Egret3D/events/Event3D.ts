@@ -94,7 +94,7 @@
         /**
         * @language zh_CN
         * 创建一个作为参数传递给事件侦听器的 Event3D 对象。
-        * @param typeName {string} 事件类型
+        * @param typeName string 事件类型
         * @param data {any}附加数据(可选)
         * @version Egret 3.0
         * @platform Web,Native

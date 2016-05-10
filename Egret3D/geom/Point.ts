@@ -13,9 +13,11 @@
 	     * The horizontal coordinate of the point. The default value is 0.
 	     */
         /**
-         * @language zh_CN
-	     * x坐标
-	     */
+        * @language zh_CN
+        * x坐标
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public x: number;
 
         /**
@@ -23,20 +25,26 @@
          * The vertical coordinate of the point. The default value is 0.
          */
         /**
-         * @language zh_CN
-	     * y坐标
-	     */
+        * @language zh_CN
+        * y坐标
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public y: number;
 
         /**
          * @language en_US
          * The length of the line segment from(0,0) to this point.
          * @returns length
+                * @version Egret 3.0
+        * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 返回从(0, 0)到(x, y)的距离
-         * @returns 当前2维向量的长度
+         * @returns number 当前2维向量的长度
+         * @version Egret 3.0
+         * @platform Web,Native
          */
         public get length(): number {
             return Math.sqrt(this.x * this.x + this.y * this.y);
@@ -53,8 +61,10 @@
         /**
          * @language zh_CN
          * 创建一个Point实例
-         * @param x
-         * @param y
+         * @param x x坐标 默认为0
+         * @param y y坐标 默认为0
+         * @version Egret 3.0
+         * @platform Web,Native
          */
         constructor(x: number = 0, y: number = 0) {
             this.x = x;
@@ -73,6 +83,8 @@
          * @language zh_CN
          * 当前Point加上v Point，结果返回新的实例
          * @param v
+         * @version Egret 3.0
+         * @platform Web,Native
          */
         public add(v: Point): Point {
             return new Point(this.x + v.x, this.y + v.y);
@@ -87,7 +99,9 @@
         /**
          * @language zh_CN
          * 克隆Point
-         * @param 返回克隆后的Point
+         * @returns  Point 返回克隆后的Point
+         * @version Egret 3.0
+         * @platform Web,Native
          */
         public clone(): Point {
             return new Point(this.x, this.y);
@@ -96,7 +110,9 @@
         /**
          * @language zh_CN
          * 复制源Point的值
-         * @param sourcePoint
+         * @param sourcePoint 数据源
+         * @version Egret 3.0
+         * @platform Web,Native
          */
         public copyFrom(sourcePoint: Point) {
             this.x = sourcePoint.x;
@@ -116,6 +132,9 @@
          * @language zh_CN
          * 比较两个Point是否全等
          * @param toCompare 被比较的Point
+         * @returns boolean 全等返回true
+         * @version Egret 3.0
+         * @platform Web,Native
          */
         public equals(toCompare: Point): boolean {
             return (this.x == toCompare.x && this.y == toCompare.y);
@@ -133,7 +152,9 @@
         /**
          * @language zh_CN
          * 当前Point标准化
-         * @param thickness 使当前Point的长度为thickness 原点(0, 0)到(x, y)的距离
+         * @param thickness 默认参数为1，使当前Point的长度为thickness 原点(0, 0)到(x, y)的距离
+         * @version Egret 3.0
+         * @platform Web,Native
          */
         public normalize(thickness: number = 1) {
             if (this.length != 0) {
@@ -161,6 +182,8 @@
          * 当前Point偏移位置
          * @param dx 偏移的x坐标
          * @param dx 偏移的y坐标
+         * @version Egret 3.0
+         * @platform Web,Native
          */
         public offset(dx: number, dy: number) {
             this.x += dx;
@@ -179,7 +202,9 @@
          * @language zh_CN
          * 当前Point减去v Point,结果返回一个新实例
          * @param v 
-         * @returns 结果返回
+         * @returns Point 结果返回
+         * @version Egret 3.0
+         * @platform Web,Native
          */
         public subtract(v: Point): Point {
             return new Point(this.x - v.x, this.y - v.y);
@@ -198,6 +223,8 @@
         * @language zh_CN
         * 当前Point以字符串形式返回
         * @returns string
+         * @version Egret 3.0
+         * @platform Web,Native
         */
         public toString(): string {
             return "[Point] (x=" + this.x + ", y=" + this.y + ")";
@@ -214,7 +241,9 @@
         /**
         * @language zh_CN
         * 计算两个Point之间的距离
-        * @returns 返回两个Point之间的距离
+        * @returns number 返回两个Point之间的距离
+         * @version Egret 3.0
+         * @platform Web,Native
         */
         public static distance(pt1: Point, pt2: Point): number {
             var dx: number = pt2.x - pt1.x;

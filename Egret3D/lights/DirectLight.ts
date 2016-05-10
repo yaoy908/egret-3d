@@ -26,8 +26,10 @@
 
         /**
         * @language zh_CN
-        * @private
+        * 创建一个平行光对象
         * @param dir 光线的方向
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         constructor(dir: Vector3D) {
             super();
@@ -44,6 +46,8 @@
         * 背光颜色
         * 模拟间接光照而开发的背光，而不用去同时打两盏不同方向的组合灯光，可以优化显示效果
         * @param color 背光颜色色值
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set ambient(color: number) {
             this._ambient.w = (color >> 24 & 0xff) / 255;

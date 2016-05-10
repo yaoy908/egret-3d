@@ -20,6 +20,8 @@
         /**
         * @language zh_CN
         * 圆柱体高度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get height(): number {
             return this._height;
@@ -29,15 +31,21 @@
         /**
         * @language zh_CN
         * 圆柱体半径
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get radius(): number {
             return this._radius;
         }
 
         /**
-          * @language zh_CN
-          * 构造函数
-          */
+        * @language zh_CN
+        * 构造函数
+        * @param height 宽度 默认为100
+        * @param radius 半径 默认为200
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         constructor(height: number = 100, radius: number = 200) {
             super();
             this._height = height;

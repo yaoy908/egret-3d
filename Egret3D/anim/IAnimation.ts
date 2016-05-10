@@ -1,7 +1,6 @@
 ﻿module egret3d {
 
     /**
-     * @private
      * @language zh_CN
      * @class egret3d.IAnimation
      * @classdesc
@@ -34,26 +33,35 @@
         /**
         * @language zh_CN
         * 总时间
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         time: number;
 
         /**
         * @language zh_CN
         * 帧间隔时间
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         delay: number;
 
         /**
         * @language zh_CN
         * 动画播放速度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         speed: number;
 
         /**
+        * @private
         * @language zh_CN
         * 更新调度
         * @param time 总时间
         * @param delay 帧间隔时间
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         update(time: number, delay: number, geometry: Geometry, context: Context3DProxy ): void;
 
@@ -62,41 +70,65 @@
         * 播放动画
         * @param animName 动画名称
         * @param speed 播放速度（默认为1）
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         play(animName?: string, speed?: number , reset?:boolean ): void;
 
         /**
         * @language zh_CN
         * 停止动画播放
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         stop(): void;
 
         /**
         * @language zh_CN
         * 是否正在播放
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         isPlay(): boolean;
 
         /**
         * @language zh_CN
         * 获取动画列表
-        * @return 动画名称数组
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         animStateNames: string[];
 
         /**
         * @language zh_CN
         * 获取动画节点
-        * @return 动画节点数组
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         animStates: IAnimationState[];
 
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         addAnimState(animState: IAnimationState)
+
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         removeAnimState(animState: IAnimationState)
+
         /**
         * @language zh_CN
         * 克隆新的IAnimation对象
-        * @return 新的IAnimation对象
+        * @returns IAnimation 新的IAnimation对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         clone(): IAnimation;
     }

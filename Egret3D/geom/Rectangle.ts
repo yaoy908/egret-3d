@@ -12,31 +12,38 @@
      * 您可以使用 new Rectangle() 构造函数创建 Rectangle 对象。
      * @version Egret 3.0
      * @platform Web,Native
-    
      */
     export class Rectangle {
 
         /**
         * @language zh_CN
         * 矩形左上角的 x 坐标
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public x: number = 0;
         
         /**  
         * @language zh_CN
         * 矩形左上角的 y 坐标
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public y: number = 0;
         
         /**
         * @language zh_CN
         * 矩形的宽度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public width: number = 0;
         
         /**
         * @language zh_CN
         * 矩形的高度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public height: number = 0;
                 
@@ -48,6 +55,8 @@
          * @param y 矩形左上角的 y 坐标。 
          * @param width 矩形的宽度
          * @param height 矩形的高度
+         * @version Egret 3.0
+         * @platform Web,Native
          */
         constructor(x: number = 0, y: number = 0, width: number = 32, height: number = 32) {
             this.x = x;
@@ -60,7 +69,10 @@
          * @language zh_CN
          * 检测x y 是否在当前矩形内
          * @param x  x 坐标。 
-         * @param y  y 坐标。 
+         * @param y  y 坐标。
+         * @returns boolean 是否在当前矩形内
+         * @version Egret 3.0
+         * @platform Web,Native
          */
         public inner(x: number, y: number): boolean {
             if (x < this.x || x > this.x + this.width ||
