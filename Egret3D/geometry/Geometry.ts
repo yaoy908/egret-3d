@@ -423,7 +423,7 @@
                 }
 
                 if (this.vertexFormat & VertexFormat.VF_NORMAL) {
-                    this.verticesData.push(this.source_normalData[i * Geometry.normalSize]);
+                    this.verticesData.push(this.source_normalData[i * Geometry.normalSize]);    
                     this.verticesData.push(this.source_normalData[i * Geometry.normalSize + 1]);
                     this.verticesData.push(this.source_normalData[i * Geometry.normalSize + 2]);
                 }
@@ -692,6 +692,42 @@
                 }
 
                 index++;
+            }
+        }
+
+        /**
+        * @language zh_CN
+        * 获取顶点索引数据
+        * @param start 数据开始位置
+        * @param count 需要的索引数据，默认参数为-1，如果为-1那么取从start后面的所有索引数据
+        * @param target 取到之后的数据，默认参数为null，如果为null那么就会new Array<number>进行返回
+        * @returns Array<number> 索引数据
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public getVertexIndices(start: number, count: number = -1, target: Array<number> = null): Array<number> {
+            if (!target) {
+                target = new Array<number>();
+            }
+            count == -1 ? count = this.indexData.length : count;
+
+            for (var i: number = 0; i < count - start; ++i) {
+                target[i] = this.indexData[i + start];
+            }
+            return target;
+        }
+
+        /**
+        * @language zh_CN
+        * 设置顶点索引数据
+        * @param start 数据开始位置
+        * @param indices 数据
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public setVertexIndices(start: number, indices: Array<number>) {
+            for (var i: number = 0; i < indices.length; ++i) {
+                this.indexData[start + i] = indices[i];
             }
         }
     }
