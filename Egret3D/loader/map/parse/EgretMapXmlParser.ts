@@ -288,6 +288,8 @@
                 }
                 else if (label == "name") {
                     data.name = value;
+                } else if (label == "billboard") {
+                    data.billboard = value == "true";
                 }
             });
 
@@ -440,11 +442,13 @@
                 } else if (nodeName == "blendMode") {
                     data.blendMode = BlendMode[item.textContent];
                 } else if (nodeName == "methods") {
-                    data.method = EgretMaterialMethodParser.parse(item);
+                    data.methods = EgretMaterialMethodParser.parse(item);
                 }
 
             }
-
+            if (data.methods == null) {
+                data.methods = [];
+            }
 
             return data;
         }

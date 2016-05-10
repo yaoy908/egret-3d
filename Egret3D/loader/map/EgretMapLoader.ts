@@ -236,7 +236,7 @@
                 material.acceptShadow = materialData.acceptShadow;
                 material.smooth = true;//materialData.smooth;
                 material.repeat = true;//materialData.repeat;
-                material.bothside = false;//materialData.bothside;
+                material.bothside = materialData.bothside;
 
                 material.drawMode = 0x4;//materialData.drawMode;
                 material.cullMode = 0x405;//materialData.cullMode;
@@ -248,16 +248,22 @@
                 material.normalTexture = this._sourceLib.getImage(materialData.normalTextureName);
                 material.diffuseTexture = this._sourceLib.getImage(materialData.diffuseTextureName);
                 material.specularTexture = this._sourceLib.getImage(materialData.specularTextureName);
-                if (materialData.method) {
-                    if (materialData.method.type == MaterialMethodData.lightmapMethod) {
-                        var lightmapMethod: LightmapMethod = new LightmapMethod(materialData.method.usePower);
-                        var lightTexture: ITexture = this._sourceLib.getImage(materialData.method.texture);
+
+                var method: MaterialMethodData;
+                for (method of materialData.methods) {
+                    if (method.type == MaterialMethodData.lightmapMethod) {
+                        var lightmapMethod: LightmapMethod = new LightmapMethod(method.usePower);
+                        var lightTexture: ITexture = this._sourceLib.getImage(method.texture);
                         material.diffusePass.addMethod(lightmapMethod);
                         lightmapMethod.lightTexture = lightTexture ? lightTexture : CheckerboardTexture.texture;
+                    } else if (method.type == MaterialMethodData.uvRollMethod) {
+                        var uvScrollMethod: UVRollMethod = new UVRollMethod();
+                        uvScrollMethod.speedU = method.uSpeed;
+                        uvScrollMethod.speedV = method.vSpeed;
+                        uvScrollMethod.start(true);
+                        material.diffusePass.addMethod(uvScrollMethod);
                     }
-                    
                 }
-                
             }
 
 
@@ -282,7 +288,11 @@
 
                 geometry = this._sourceLib.getEsm(data.name);
 
-                mesh = new Mesh(geometry, realMat);
+                if (data.billboard) {
+                    mesh = new Billboard(realMat, geometry);
+                } else {
+                    mesh = new Mesh(geometry, realMat);
+                }
                 mesh.name = data.name;
 
                 mesh.x = data.x;

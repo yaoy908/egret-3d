@@ -13,6 +13,7 @@ module egret3d {
         public vertexColor: boolean;
         public skinClips: Array<string>;
         public lightIds: Array<any>;
+        public billboard: boolean = false;
 
         public x: number = 0;
         public y: number = 0;

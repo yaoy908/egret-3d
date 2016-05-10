@@ -98,6 +98,7 @@
         "core/node/Object3D.ts",
         "core/node/Entity.ts",
         "core/node/Mesh.ts",
+        "core/node/BillBoard.ts",
         "core/node/Sky.ts",
         "core/node/SphereSky.ts",
         "core/node/Wireframe.ts",

@@ -20,20 +20,23 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public static parse(xml: Node): MaterialMethodData {
-            if (xml.childNodes.length == 1)
+        public static parse(xml: Node): Array<MaterialMethodData> {
+            if (xml.childNodes.length <= 1)
                 return null;
 
+            var list = [];
             var item: Node;
             var nodeName: string;
             var i: number = 0;
             var count: number = 0;
+            var method: MaterialMethodData;
+
             for (i = 0, count = xml.childNodes.length; i < count; i++) {
                 item = xml.childNodes[i];
                 nodeName = item.nodeName;
 
                 if (nodeName == MaterialMethodData.lightmapMethod) {
-                    var method: MaterialMethodData = new MaterialMethodData();
+                    method = new MaterialMethodData();
                     method.type = nodeName;
                     EgretMapXmlParser.eachXmlAttr(item, function (label: string, value: string): void {
                         if (label == "texture") {
@@ -42,12 +45,23 @@
                             method.usePower = (value + "").toLocaleLowerCase() == "true";
                         }
                     });
+                    list.push(method);
 
-                    return method;
+                } else if (nodeName == MaterialMethodData.uvRollMethod) {
+                    method = new MaterialMethodData();
+                    method.type = nodeName;
+                    EgretMapXmlParser.eachXmlAttr(item, function (label: string, value: string): void {
+                        if (label == "uSpeed") {
+                            method.uSpeed = Number(value);
+                        } else if (label == "vSpeed") {
+                            method.vSpeed = Number(value);
+                        }
+                    });
+                    list.push(method);
 
                 }
             }
-            return null;
+            return list;
         }
 
 

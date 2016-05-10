@@ -37,7 +37,7 @@ module egret3d {
         public cullMode: number;
         public blendMode: number;
 
-        public method: MaterialMethodData;
+        public methods: Array<MaterialMethodData>;
        
         
 

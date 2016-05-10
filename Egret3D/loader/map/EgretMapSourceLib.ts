@@ -75,10 +75,16 @@
             }
 
             var materialData: MaterialSphereData;
+            var materialMethod: MaterialMethodData;
+
             for (materialData of this._parser.materialList) {
                 this.pushSource(imgs, materialData.diffuseTextureName);
-                if (materialData.method) {
-                    this.pushSource(imgs, materialData.method.texture);
+                if (materialData.methods) {
+                    for (materialMethod of materialData.methods) {
+                        if (materialMethod.type == MaterialMethodData.lightmapMethod) {
+                            this.pushSource(imgs, materialMethod.texture);
+                        }
+                    }
                 }
                 this.pushSource(imgs, materialData.normalTextureName);
                 this.pushSource(imgs, materialData.specularTextureName);

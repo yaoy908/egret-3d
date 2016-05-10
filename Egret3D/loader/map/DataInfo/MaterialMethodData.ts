@@ -10,10 +10,13 @@
     export class MaterialMethodData {
 
         public static lightmapMethod: string = "lightmapMethod";
+        public static uvRollMethod: string = "uvRollMethod";
 
         public type: string;
         public usePower: boolean;
         public texture: string;
+        public uSpeed: number = 0;
+        public vSpeed: number = 0;
 
         constructor() {
         }
