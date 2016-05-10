@@ -13,6 +13,13 @@
 
         /**
          * @language zh_CN
+         * 地图配置信息的版本号
+         * @version Egret 3.0
+         *@platform Web,Native
+         */
+        public version: number = 1;
+        /**
+         * @language zh_CN
          * 模型文件数据列表
          * @version Egret 3.0
          *@platform Web,Native
@@ -191,6 +198,8 @@
             this.sceneName = sceneName;
             var obj = this.parsingXML(text);
 
+            var versionList: NodeList = obj.getElementsByTagName("version");
+            this.version = Number(versionList[0].textContent);
 
             var texturePathList: NodeList = obj.getElementsByTagName("texturePath");
             var modelPathList: NodeList = obj.getElementsByTagName("modelPath");
