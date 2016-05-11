@@ -5,7 +5,13 @@ module egret3d {
 	export class ShaderLib {
 		static lib: { [key:string]: string } = 
 		{
- 			"AOMap_fs":
+ 			"alphaMask_fs":
+			"uniform sampler2D maskTexture ; \n" +
+			"void main(void){ \n" +
+			"materialSource.alpha *= texture2D( maskTexture , uv_0 ).x; \n" +
+			"} \n",
+
+			"AOMap_fs":
 			"uniform sampler2D aoTexture ; \n" +
 			"uniform float aoPower ; \n" +
 			"void main(void){ \n" +
@@ -864,6 +870,7 @@ module egret3d {
 			"void main() { \n" +
 			"uv_0.xy += vec2(uvRoll[0],uvRoll[1]); \n" +
 			"diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
+			"diffuseColor.xyz /= diffuseColor.w; \n" +
 			"} \n",
 
 			"uvSpriteSheet_fs":

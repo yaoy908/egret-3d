@@ -256,6 +256,12 @@
                         uvScrollMethod.start(true);
                         material.diffusePass.addMethod(uvScrollMethod);
                     }
+                    else if (method.type == MaterialMethodData.alphaMaskMethod) {
+                        var maskmapMethod: AlphaMaskMethod = new AlphaMaskMethod();
+                        var lightTexture: ITexture = this._sourceLib.getImage(method.texture);
+                        material.diffusePass.addMethod(maskmapMethod);
+                        maskmapMethod.maskTexture = lightTexture ? lightTexture : CheckerboardTexture.texture;
+                    }
                 }
             }
 

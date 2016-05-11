@@ -32,32 +32,22 @@
             for (i = 0, count = xml.childNodes.length; i < count; i++) {
                 item = xml.childNodes[i];
                 nodeName = item.nodeName;
-
-                if (nodeName == MaterialMethodData.lightmapMethod) {
-                    method = new MaterialMethodData();
-                    method.type = nodeName;
-                    EgretMapXmlParser.eachXmlAttr(item, function (label: string, value: string): void {
-                        if (label == "texture") {
-                            method.texture = value;
-                        } else if (label == "usePower") {
-                            method.usePower = (value + "").toLocaleLowerCase() == "true";
-                        }
-                    });
-                    list.push(method);
-
-                } else if (nodeName == MaterialMethodData.uvRollMethod) {
-                    method = new MaterialMethodData();
-                    method.type = nodeName;
-                    EgretMapXmlParser.eachXmlAttr(item, function (label: string, value: string): void {
-                        if (label == "uSpeed") {
-                            method.uSpeed = Number(value);
-                        } else if (label == "vSpeed") {
-                            method.vSpeed = Number(value);
-                        }
-                    });
-                    list.push(method);
-
-                }
+                if (nodeName == "#text")
+                    continue;
+                method = new MaterialMethodData();
+                method.type = nodeName;
+                EgretMapXmlParser.eachXmlAttr(item, function (label: string, value: string): void {
+                    if (label == "texture") {
+                        method.texture = value;
+                    } else if (label == "usePower") {
+                        method.usePower = (value + "").toLocaleLowerCase() == "true";
+                    } else if (label == "uSpeed") {
+                        method.uSpeed = Number(value);
+                    } else if (label == "vSpeed") {
+                        method.vSpeed = Number(value);
+                    }
+                });
+                list.push(method);
             }
             return list;
         }

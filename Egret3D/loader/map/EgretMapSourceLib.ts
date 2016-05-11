@@ -81,9 +81,7 @@
                 this.pushSource(imgs, materialData.diffuseTextureName);
                 if (materialData.methods) {
                     for (materialMethod of materialData.methods) {
-                        if (materialMethod.type == MaterialMethodData.lightmapMethod) {
-                            this.pushSource(imgs, materialMethod.texture);
-                        }
+                       this.pushSource(imgs, materialMethod.texture);
                     }
                 }
                 this.pushSource(imgs, materialData.normalTextureName);
