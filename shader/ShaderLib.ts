@@ -870,7 +870,7 @@ module egret3d {
 			"void main() { \n" +
 			"uv_0.xy += vec2(uvRoll[0],uvRoll[1]); \n" +
 			"diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
-			"diffuseColor.xyz /= diffuseColor.w; \n" +
+			"diffuseColor.xyz = clamp(diffuseColor.xyz / diffuseColor.w,0.0,1.0); \n" +
 			"} \n",
 
 			"uvSpriteSheet_fs":
