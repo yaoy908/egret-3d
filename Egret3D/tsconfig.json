@@ -234,12 +234,12 @@
         "VRView3D.ts",
         "Egret3DCanvas.ts",
 
+        "loader/map/DataInfo/SourceDataBase.ts",
         "loader/map/DataInfo/MaterialMethodData.ts",
         "loader/map/DataInfo/MaterialSphereData.ts",
         "loader/map/DataInfo/MeshData.ts",
         "loader/map/DataInfo/SceneNode.ts",
-        "loader/map/DataInfo/DirectionLightData.ts",
-        "loader/map/DataInfo/PointLightData.ts",
+        "loader/map/DataInfo/LightData.ts",
         
         
         "loader/map/EgretMapConfig.ts",

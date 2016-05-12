@@ -7,15 +7,7 @@ module egret3d {
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class MaterialSphereData {
-
-        /**
-         * @language zh_CN
-         * 材质球的id，全局唯一
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public id: number = 0;
+    export class MaterialSphereData extends SourceDataBase{
 
         /**
          * @language zh_CN
@@ -192,7 +184,7 @@ module egret3d {
         * constructor 
         */
         constructor() {
-            
+            super();
         }
     }
 }
