@@ -98,19 +98,19 @@
             var url: string;
 
             for (source of ecas) {
-                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + this._parser.ecaPath + "/" + source + EgretMapConfig.EcaSuffix;
+                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + source;
                 this.createLoader(this._ecaLoaders, url, source);
             }
             for (source of imgs) {
-                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + this._parser.texturePath + "/" + source;
+                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + source;
                 this.createLoader(this._imageLoaders, url, source);
             }
             for (source of eams) {
-                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + this._parser.eamPath + "/" + source + EgretMapConfig.EamSuffix;
+                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + source;
                 this.createLoader(this._eamLoaders, url, source);
             }
             for (source of esms) {
-                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + this._parser.esmPath + "/" + source + EgretMapConfig.EsmSuffix;
+                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + source;
                 this.createLoader(this._esmLoaders, url, source);
             }
 
