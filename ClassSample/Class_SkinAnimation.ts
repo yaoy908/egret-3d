@@ -21,9 +21,9 @@
             load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoad, this);
 
 
-            //var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));
-            //dirLight.diffuse = 0xffffff;
-            //this.lights.addLight(dirLight);
+            var dirLight: DirectLight = new DirectLight(new Vector3D(-0.0, -0.6, 0.2));
+            dirLight.diffuse = 0xffffff;
+            this.lights.addLight(dirLight);
 
             //var po: PointLight = new PointLight(0xffffff);
             //po.y = 200;
@@ -48,8 +48,9 @@
             var tex: ImageTexture = new ImageTexture(img);
 
             var mat: TextureMaterial = new TextureMaterial();
-            //mat.shininess = 10.0;
-            //mat.ambientColor = 0xffffff;
+            mat.gloss = 10.0;
+            mat.ambientColor = 0xf8f8f8;
+            mat.specularLevel = 0.0;
             this.mat = mat;
             var ge: Geometry = e.loader.data;
             var mesh: Mesh = new Mesh(ge, mat);
@@ -65,7 +66,6 @@
             var load: URLLoader = new URLLoader("resource/laohu/Bonezero.eam");
             load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onAnimation, this);
             load["mesh"] = mesh;
-            mesh.y = 1000;
             this.cameraCtl.lookAtObject = mesh;
         }
 
