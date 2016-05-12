@@ -165,7 +165,7 @@
                 this._cameraAnimationFrame.translation.copyFrom(currentFrame.translation);
             }
 
-            this._camera.fieldOfView = this._cameraAnimationFrame.fov;
+            //this._camera.fieldOfView = this._cameraAnimationFrame.fov;
 
             this._camera.rotation = this._cameraAnimationFrame.rotation;
             this._camera.position = this._cameraAnimationFrame.translation;

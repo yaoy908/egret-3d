@@ -84,38 +84,6 @@
 
         /**
          * @language zh_CN
-         * 贴图文件相对路径
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public texturePath: string;
-
-        /**
-         * @language zh_CN
-         * 模型文件相对路径
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public esmPath: string;
-
-        /**
-         * @language zh_CN
-         * 相机动画文件相对路径
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public ecaPath: string;
-
-        /**
-         * @language zh_CN
-         * 蒙皮动画文件相对路径
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public eamPath: string;
-
-        /**
-         * @language zh_CN
          * 地图名
          * @version Egret 3.0
          * @platform Web,Native
@@ -179,7 +147,6 @@
 
             this.pointLightDatas = new Array<PointLightData>();
             this.dirLightDatas = new Array<DirectionLightData>();
-            this.texturePath = this.esmPath = this.ecaPath = null;
 
             
         }
@@ -201,11 +168,6 @@
             var versionList: NodeList = obj.getElementsByTagName("version");
             this.version = Number(versionList[0].textContent);
 
-            var texturePathList: NodeList = obj.getElementsByTagName("texturePath");
-            var modelPathList: NodeList = obj.getElementsByTagName("modelPath");
-            var ecaPathList: NodeList = obj.getElementsByTagName("ecaPath");
-            var eamPathList: NodeList = obj.getElementsByTagName("eamPath");
-
             var matList: NodeList = obj.getElementsByTagName("mat");
             var meshList: NodeList = obj.getElementsByTagName("mesh");
             var environment: NodeList = obj.getElementsByTagName("env");
@@ -215,10 +177,6 @@
             
 
 
-            this.texturePath = texturePathList[0].attributes[0].value;
-            this.esmPath = modelPathList[0].attributes[0].value;
-            this.eamPath = eamPathList[0].attributes[0].value;
-            this.ecaPath = ecaPathList[0].attributes[0].value;
             //
             var i: number = 0;
             var count: number = 0;
