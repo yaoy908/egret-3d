@@ -26,7 +26,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public vertex_ShaderName: string = "";
+        public vertex_ShaderName: { [shaderPhase: number]: string[] } = {};
         
         /**
         * @language zh_CN
@@ -34,7 +34,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public frament_ShaderName: string = "" ;
+        public frament_ShaderName: { [shaderPhase: number]: string[] } = {};
                         
         /**
         * @private

@@ -11,13 +11,19 @@
         shadow
     }
 
-    export enum MethodType {
+    export enum ShaderPhaseType {
+        start_vertex,
         local_vertex,
         global_vertex,
-        diffuse,
-        specular,
-        normal,
-        color,
-        shadow
+        end_vertex,
+
+        start_fragment,
+        materialsource_fragment,
+        diffuse_fragment,
+        normal_fragment,
+        specular_fragment,
+        shadow_fragment,
+        lighting_fragment,
+        end_fragment,
     }
 }

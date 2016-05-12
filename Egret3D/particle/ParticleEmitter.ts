@@ -227,9 +227,13 @@
 
             //time 
             this.timeNode = new ParticleTime();
-            (<ConstValueShape>this.timeNode.delay).value = 0 ;
-            (<ConstValueShape>this.timeNode.life).value = 2.0;
-            (<ConstValueShape>this.timeNode.rate).value = 0.01 ;
+            (<ConstValueShape>this.timeNode.delay).value = 0;
+
+            this.timeNode.life = new ConstRandomValueShape();
+            (<ConstRandomValueShape>this.timeNode.life).min = 1.0;
+            (<ConstRandomValueShape>this.timeNode.life).max = 10.0;
+
+            (<ConstValueShape>this.timeNode.rate).value = 0.01;
 
             //position
             this.positionNode = new ParticlePosition();
@@ -241,9 +245,10 @@
 
             //scale
             this.scaleNode = new ParticleScale();
-            this.scaleNode.scale = new ConstRandomValueShape();
-            (<ConstRandomValueShape>this.scaleNode.scale).min = 0.1;
-            (<ConstRandomValueShape>this.scaleNode.scale).max = 1.0;
+            this.scaleNode.scale = new ConstValueShape();
+            (<ConstValueShape>this.scaleNode.scale).value = 0.4;
+            //(<ConstRandomValueShape>this.scaleNode.scale).min = 0.1;
+            //(<ConstRandomValueShape>this.scaleNode.scale).max = 1.0;
         }
 
         private initOtherAnimNode() {
@@ -279,9 +284,7 @@
         */
         public update(time: number, delay: number, camera: Camera3D) {
             super.update(time, delay, camera);
-            if (this._particleState.followTarget && this._particleFollowNode) {
-               this._particleFollowNode.follow = this._particleState.followTarget; 
-            }
+           
         }
 
         /**

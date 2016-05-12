@@ -56,7 +56,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public vertex_shaders: string[];
+        public vertex_shaders: { [shaderPhaseType: number]: string[] } = {};
                                 
         /**
         * @language zh_CN
@@ -64,7 +64,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public fragment_shaders: string[];
+        public fragment_shaders: { [shaderPhaseType: number]: string[] } = {};
                                                 
         /**
         * @language zh_CN
@@ -131,6 +131,14 @@
         * @platform Web,Native
         */
         public followTarget: Object3D = null;
+
+        /**
+        * @language zh_CN
+        * 粒子循环周期中存在的间隔值，对开发者来说，无意义
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public delayLife: number = 0; 
                 
         /**
         * @language zh_CN
@@ -144,8 +152,6 @@
 
             this.animNodes = [];
             this.keyFrames = [];
-            this.vertex_shaders = [];
-            this.fragment_shaders = [];
         }
 
         /**
@@ -186,26 +192,46 @@
             this.animNodes.length = 0; 
         }
 
+        //private addShaderPhase(shaderPhase: { [shaderPhase: number]: string[] }) {
+        //    var names: string[];
+        //    var phase: any; 
+        //    for (phase in shaderPhase) {
+        //        names = <string[]>shaderPhase[phase];
+        //        for (var i: number = 0; i < names.length; i++) {
+        //            this.vertex_shaders[phase] = this.vertex_shaders[phase] || [];
+        //            this.vertex_shaders[phase].push(names[i]);
+        //        }
+        //    }
+        //}
+
+        private addShaderPhase(sourcePhase: { [shaderPhase: number]: string[] }, targetPhase: { [shaderPhase: number]: string[] }) {
+            var names: string[];
+            var phase: any;
+            for (phase in sourcePhase) {
+                names = <string[]>sourcePhase[phase];
+                for (var i: number = 0; i < names.length; i++) {
+                    targetPhase[phase] = targetPhase[phase] || [];
+                    targetPhase[phase].push(names[i]);
+                }
+            }
+        }
+
         /**
         * @language zh_CN
         * 计算节点
         * @private 
         */
         public calculate(geometry: Geometry) {
-            this.vertex_shaders.length = 0;
-            this.fragment_shaders.length = 0;
-
+            //this.vertex_shaders[ShaderPhaseType.local_vertex] = [];
+            //this.fragment_shaders[ShaderPhaseType.diffuse_fragment] = [];
             for (var i: number = 0; i < this.animNodes.length; i++) {
+                this.addShaderPhase(this.animNodes[i].vertex_ShaderName, this.vertex_shaders);
+                this.addShaderPhase(this.animNodes[i].frament_ShaderName, this.fragment_shaders);
 
-                if (this.animNodes[i].vertex_ShaderName != "")
-                    this.vertex_shaders.push(this.animNodes[i].vertex_ShaderName);
-                if (this.animNodes[i].frament_ShaderName!="")
-                    this.fragment_shaders.push(this.animNodes[i].frament_ShaderName);
-
-                var offsetIndex: number = geometry.vertexAttLength ; 
+                var offsetIndex: number = geometry.vertexAttLength;
                 for (var j: number = 0; j < this.animNodes[i].attributes.length; ++j) {
                     if (this.animNodes[i].attributes[j].size > 0) {
-                        this.animNodes[i].attributes[j].offsetIndex = offsetIndex ; 
+                        this.animNodes[i].attributes[j].offsetIndex = offsetIndex;
                         geometry.vertexAttLength += this.animNodes[i].attributes[j].size;
                         geometry.vertexSizeInBytes += this.animNodes[i].attributes[j].size * 4;
                         geometry.subGeometrys[0].preAttList.push(this.animNodes[i].attributes[j]);
@@ -229,7 +255,7 @@
         * @language zh_CN
         * @private 
         */
-        public update(time: number, delay: number, geometry: Geometry,  context: Context3DProxy ) {
+        public update(time: number, delay: number, geometry: Geometry, context: Context3DProxy) {
             for (var i: number = 0; i < this.animNodes.length; i++) {
                 this.animNodes[i].update(time, delay,geometry,context);
             }

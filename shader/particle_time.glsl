@@ -11,7 +11,7 @@ attribute vec4 attribute_time ;
 //y: duration second
 //z: loop 1.0:0.0
 //w: +/-
-uniform vec4 uniform_time ;
+uniform float uniform_time[5] ;
 
 //按秒为单位
 //当前时间
@@ -31,21 +31,21 @@ float particle(  ){
 	emit.rate = attribute_time.z ; 
 	emit.index = attribute_time.w ; 
 	
-	float time = uniform_time.x ; 
-	float duration = uniform_time.y ; 
-	float loop = uniform_time.z ; 
-	float maxLife = uniform_time.w ; 
+	float time = uniform_time[0] ; 
+	float loop = uniform_time[1]; 
+	float duration = uniform_time[2]; 
+	float delayLife = uniform_time[3]; 
+	float maxLife = uniform_time[4]; 
 	
 	float numberSpace = emit.index * emit.rate ; 
 	currentTime = max(time - numberSpace - emit.delay,0.0) ;
 	
 	if(loop==0.0){
-			if( numberSpace > duration )
-				return currentTime = 0.0 ;
+		if( numberSpace > duration )
+			return currentTime = 0.0 ;
 	}else{
-			duration = uniform_time.w ;
-			currentTime = max( currentTime - numberSpace , 0.0 );
-			currentTime = mod( currentTime ,duration); 
+		duration = maxLife + emit.rate - delayLife ; 
+		currentTime = mod( currentTime , duration ); 
 			if( currentTime >= emit.life )
 				return currentTime = 0.0 ;
 	}

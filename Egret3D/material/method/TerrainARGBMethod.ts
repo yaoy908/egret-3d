@@ -31,8 +31,7 @@
         */
         constructor(controlTex: ITexture, splat_0: ITexture, splat_1: ITexture, splat_2: ITexture, splat_3: ITexture) {
             super();
-            this.methodType = TextureMethodType.diffuse ; 
-            this.fsShaderList.push("terrainRGBA_fragment");
+            this.fsShaderList[ShaderPhaseType.diffuse_fragment].push("terrainRGBA_fragment");
 
             this.controlTex = controlTex;
             this.splat_0 = splat_0;

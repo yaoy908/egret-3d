@@ -31,7 +31,9 @@
             super();
 
             this.name = "ParticleSpeedNode";
-            this.vertex_ShaderName = "particle_time";
+
+            this.vertex_ShaderName[ShaderPhaseType.local_vertex] = this.vertex_ShaderName[ShaderPhaseType.local_vertex] || [];
+            this.vertex_ShaderName[ShaderPhaseType.local_vertex].push("particle_time");
 
             this.attribute_time = new GLSL.VarRegister();
             this.attribute_time.name = "attribute_time";
@@ -68,7 +70,10 @@
                 var maxCycle: number = maxSpace + lifeTime;
 
                 this.particleAnimationState.maxSpace = Math.max(this.particleAnimationState.maxSpace, maxSpace);
-                this.particleAnimationState.totalTime = Math.max(this.particleAnimationState.totalTime, maxCycle);
+                if (this.particleAnimationState.totalTime < maxCycle) {
+                    this.particleAnimationState.totalTime = maxCycle;
+                    this.particleAnimationState.delayLife = lifeTime; 
+                }
 
                 for (var j: number = 0; j < vertices; ++j) {
                     index = i * vertices + j;

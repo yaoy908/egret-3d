@@ -5,9 +5,8 @@
     */
     export class MethodBase {
 
-        public methodType: number = -1 ;
-        public vsShaderList: Array<string> = [] ;
-        public fsShaderList: Array<string> = [];
+        public vsShaderList: { [shaderPhaseType: number]: string[] } = [];
+        public fsShaderList: { [shaderPhaseType: number]: string[] } = [];
 
         public materialData: MaterialData;
 

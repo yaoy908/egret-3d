@@ -105,11 +105,11 @@
             if (!this._play) {
                 return;
             }
+          
+            if (this.particleAnimationState)
+                this.particleAnimationState.update(this.time, this.delay, geometry, context);
             this.delay = delay; 
             this.time += this.delay; 
-
-            if (this.particleAnimationState)
-                this.particleAnimationState.update(this.time , delay , geometry , context );
         }
 
         /**

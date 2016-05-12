@@ -1,5 +1,7 @@
 ﻿attribute vec4 attribute_boneIndex;
 attribute vec4 attribute_boneWeight;
+attribute vec3 attribute_normal;
+attribute vec4 attribute_color;
 
 vec4 e_boneIndex = vec4(0.0, 0.0, 0.0, 0.0);
 vec4 e_boneWeight = vec4(0.0, 0.0, 0.0, 0.0);
@@ -35,6 +37,7 @@ mat4 buildMat4(int index){
 }
 
 void main(void){
+	varying_color = attribute_color; 
 	e_boneIndex = attribute_boneIndex;
 	e_boneWeight = attribute_boneWeight;
 
@@ -63,6 +66,6 @@ void main(void){
     varying_eyeNormal = normalize(normalMatrix * -temp_n.xyz);
    
 	outPosition = uniform_ViewMatrix * uniform_ModelMatrix * outPosition; 
-  
+  	
     varying_ViewPose = outPosition.xyz / outPosition.w;
 }

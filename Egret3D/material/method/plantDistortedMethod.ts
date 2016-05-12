@@ -20,9 +20,7 @@
         */
         constructor() {
             super();
-            this.vsShaderList.push("detail_Bending_vs");
-            //this.fsShaderList.push("uvRoll_fs");
-            this.methodType = TextureMethodType.diffuse;
+            this.vsShaderList[ShaderPhaseType.local_vertex].push("detail_Bending_vs");
         }
 
         public set windDirAndSpeed(dirAndStr: Vector3D) {

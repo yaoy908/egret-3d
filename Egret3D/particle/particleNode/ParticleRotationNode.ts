@@ -12,7 +12,9 @@
 
             super();
             this.name = "ParticleRotationNode"; 
-            this.vertex_ShaderName = "particle_Rotation";
+
+            this.vertex_ShaderName[ShaderPhaseType.local_vertex] = this.vertex_ShaderName[ShaderPhaseType.local_vertex] || [];
+            this.vertex_ShaderName[ShaderPhaseType.local_vertex].push("particle_Rotation");
 
             this.attribute_Rotation = new GLSL.VarRegister();
             this.attribute_Rotation.name = "attribute_Rotation";

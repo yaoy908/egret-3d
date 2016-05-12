@@ -10,7 +10,9 @@
         constructor() {
             super();
             this.name = "ParticleUniformSpeedNode"; 
-            this.vertex_ShaderName = "particle_uniformSpeed";
+
+            this.vertex_ShaderName[ShaderPhaseType.global_vertex] = this.vertex_ShaderName[ShaderPhaseType.global_vertex] || [];
+            this.vertex_ShaderName[ShaderPhaseType.global_vertex].push("particle_uniformSpeed");
 
             this.attribute_uniformSpeed = new GLSL.VarRegister();
             this.attribute_uniformSpeed.name = "attribute_uniformSpeed";

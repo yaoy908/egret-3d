@@ -17,88 +17,89 @@
         * @platform Web,Native
         */
         public initUseMethod(animation: IAnimation, geom: Geometry) {
-            this._passChange = false;
-            var i: number = 0;
-            this._passUsage = new PassUsage();
-            this._materialData.textureMethodTypes.push(TextureMethodType.color);
+            super.initUseMethod(animation, geom);
+            //this._passChange = false;
+            //var i: number = 0;
+            //this._passUsage = new PassUsage();
+            //this._materialData.textureMethodTypes.push(TextureMethodType.color);
 
-            this._passUsage.vertexShader.shaderType = Shader.vertex;
-            this._passUsage.fragmentShader.shaderType = Shader.fragment;
+            //this._passUsage.vertexShader.shaderType = Shader.vertex;
+            //this._passUsage.fragmentShader.shaderType = Shader.fragment;
 
-            this._passUsage.vertexShader.addUseShaderName("base_vs");
-            this._passUsage.fragmentShader.addUseShaderName("base_fs");
+            //this._passUsage.vertexShader.addUseShaderName("base_vs");
+            //this._passUsage.fragmentShader.addUseShaderName("base_fs");
            
-            this._passUsage.fragmentShader.addUseShaderName("materialSource_fs");
+            //this._passUsage.fragmentShader.addUseShaderName("materialSource_fs");
 
-            if (animation) {
-                if (animation.skeletonAnimationController) {
-                    this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
-                    this._passUsage.vertexShader.addUseShaderName("skeleton_vertex");
-                }
-                else if (animation.particleAnimationController) {
-                    this._passUsage.vertexShader.addUseShaderName("particle_vs");
-                    for (var i: number = 0; i < animation.particleAnimationController.particleAnimationState.vertex_shaders.length; i++) {
-                        this._passUsage.vertexShader.addUseShaderName(animation.particleAnimationController.particleAnimationState.vertex_shaders[i]);
-                    }
-                    for (var i: number = 0; i < animation.particleAnimationController.particleAnimationState.fragment_shaders.length; i++) {
-                        this._passUsage.fragmentShader.addUseShaderName(animation.particleAnimationController.particleAnimationState.fragment_shaders[i]);
-                    }
-                }
-            }
-            else {
-                this._passUsage.vertexShader.addUseShaderName("diffuse_vertex");
-            }
+            //if (animation) {
+            //    if (animation.skeletonAnimationController) {
+            //        this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
+            //        this._passUsage.vertexShader.addUseShaderName("skeleton_vertex");
+            //    }
+            //    else if (animation.particleAnimationController) {
+            //        this._passUsage.vertexShader.addUseShaderName("particle_vs");
+            //        for (var i: number = 0; i < animation.particleAnimationController.particleAnimationState.vertex_shaders.length; i++) {
+            //            this._passUsage.vertexShader.addUseShaderName(animation.particleAnimationController.particleAnimationState.vertex_shaders[i]);
+            //        }
+            //        for (var i: number = 0; i < animation.particleAnimationController.particleAnimationState.fragment_shaders.length; i++) {
+            //            this._passUsage.fragmentShader.addUseShaderName(animation.particleAnimationController.particleAnimationState.fragment_shaders[i]);
+            //        }
+            //    }
+            //}
+            //else {
+            //    this._passUsage.vertexShader.addUseShaderName("diffuse_vertex");
+            //}
 
-            if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.color) != -1) {
-                this._passUsage.fragmentShader.addUseShaderName("gamma_fs");
-                this._passUsage.fragmentShader.addUseShaderName("diffuse_fragment");
-            }
-            if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.normal) != -1) {
-                this._passUsage.fragmentShader.addUseShaderName("normalMap_fragment");
-            }
-            if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.shadow) != -1) {
-                this._passUsage.vertexShader.addUseShaderName("shadow_vs");
-                this._passUsage.fragmentShader.addUseShaderName("shadow_fs");
-            }
-            if (this.lightGroup) {
-                this._passUsage.maxDirectLight = this.lightGroup.directLightList.length;
-                this._passUsage.maxSpotLight = this.lightGroup.spotLightList.length;
-                this._passUsage.maxPointLight = this.lightGroup.pointLightList.length;
+            //if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.color) != -1) {
+            //    this._passUsage.fragmentShader.addUseShaderName("gamma_fs");
+            //    this._passUsage.fragmentShader.addUseShaderName("diffuse_fragment");
+            //}
+            //if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.normal) != -1) {
+            //    this._passUsage.fragmentShader.addUseShaderName("normalMap_fragment");
+            //}
+            //if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.shadow) != -1) {
+            //    this._passUsage.vertexShader.addUseShaderName("shadow_vs");
+            //    this._passUsage.fragmentShader.addUseShaderName("shadow_fs");
+            //}
+            //if (this.lightGroup) {
+            //    this._passUsage.maxDirectLight = this.lightGroup.directLightList.length;
+            //    this._passUsage.maxSpotLight = this.lightGroup.spotLightList.length;
+            //    this._passUsage.maxPointLight = this.lightGroup.pointLightList.length;
 
-                this._passUsage.fragmentShader.addUseShaderName("lightingBase_fs");
+            //    this._passUsage.fragmentShader.addUseShaderName("lightingBase_fs");
 
-                if (this.lightGroup.directLightList.length) {
-                    this._passUsage.directLightData = new Float32Array(DirectLight.stride * this.lightGroup.directLightList.length);
-                    this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
-                }
-                if (this.lightGroup.spotLightList.length) {
-                    this._passUsage.spotLightData = new Float32Array(SpotLight.stride * this.lightGroup.spotLightList.length);
-                    this._passUsage.fragmentShader.addUseShaderName("spotLight_fragment");
-                }
-                if (this.lightGroup.pointLightList.length) {
-                    this._passUsage.pointLightData = new Float32Array(PointLight.stride * this.lightGroup.pointLightList.length);
-                    this._passUsage.fragmentShader.addUseShaderName("pointLight_fragment");
-                }
-            }
+            //    if (this.lightGroup.directLightList.length) {
+            //        this._passUsage.directLightData = new Float32Array(DirectLight.stride * this.lightGroup.directLightList.length);
+            //        this._passUsage.fragmentShader.addUseShaderName("directLight_fragment");
+            //    }
+            //    if (this.lightGroup.spotLightList.length) {
+            //        this._passUsage.spotLightData = new Float32Array(SpotLight.stride * this.lightGroup.spotLightList.length);
+            //        this._passUsage.fragmentShader.addUseShaderName("spotLight_fragment");
+            //    }
+            //    if (this.lightGroup.pointLightList.length) {
+            //        this._passUsage.pointLightData = new Float32Array(PointLight.stride * this.lightGroup.pointLightList.length);
+            //        this._passUsage.fragmentShader.addUseShaderName("pointLight_fragment");
+            //    }
+            //}
 
-            if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.specular) != -1) {
-                this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
-            }
+            //if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.specular) != -1) {
+            //    this._passUsage.fragmentShader.addUseShaderName("specularMap_fragment");
+            //}
 
-            if (this.methodList) {
-                for (var i: number = 0; i < this.methodList.length; i++) {
-                    this.methodList[i].materialData = this._materialData; 
-                    for (var j: number = 0; j < this.methodList[i].vsShaderList.length; j++) {
-                        this._passUsage.vertexShader.addUseShaderName(this.methodList[i].vsShaderList[j]);
-                    }
-                    for (var j: number = 0; j < this.methodList[i].fsShaderList.length; j++) {
-                        this._passUsage.fragmentShader.addUseShaderName(this.methodList[i].fsShaderList[j]);
-                    }
-                }
-            }
+            //if (this.methodList) {
+            //    for (var i: number = 0; i < this.methodList.length; i++) {
+            //        this.methodList[i].materialData = this._materialData; 
+            //        for (var j: number = 0; j < this.methodList[i].vsShaderList.length; j++) {
+            //            this._passUsage.vertexShader.addUseShaderName(this.methodList[i].vsShaderList[j]);
+            //        }
+            //        for (var j: number = 0; j < this.methodList[i].fsShaderList.length; j++) {
+            //            this._passUsage.fragmentShader.addUseShaderName(this.methodList[i].fsShaderList[j]);
+            //        }
+            //    }
+            //}
 
-            this._passUsage.vertexShader.addEndShaderName("end_vs");
-            this._passUsage.fragmentShader.addEndShaderName("end_fs");
+            //this._passUsage.vertexShader.addEndShaderName("end_vs");
+            //this._passUsage.fragmentShader.addEndShaderName("end_fs");
 
   
         }

@@ -241,6 +241,26 @@
 
         /**
         * @language zh_CN
+        * 设置模型渲染模式。模型渲染中，带透明贴图的 去除不渲染透明透明部分的阀值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set cutAlpha(v: number) {
+            this.materialData.cutAlpha = v; 
+        }
+
+        /**
+        * @language zh_CN
+        * 设置模型渲染模式。模型渲染中，带透明贴图的 去除不渲染透明透明部分的阀值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get cutAlpha(): number {
+            return this.materialData.cutAlpha; 
+        }
+
+        /**
+        * @language zh_CN
         * 设置材质 diffuseColor。
         * 设置 16 进制的漫反射颜色
         * @param color {Number}
@@ -648,9 +668,12 @@
         public set blendMode(value: BlendMode) {
             this.materialData.blendMode = value;
             switch (value) {
+            //his.materialData.blend_src = ContextConfig.SRC_ALPHA; 透明
+            //this.materialData.blend_dest = ContextConfig.SRC_COLOR;
                 case BlendMode.NORMAL:
-                    this.materialData.blend_src = ContextConfig.ONE;
-                    this.materialData.blend_dest = ContextConfig.ZERO;
+                    this.materialData.blend_src = ContextConfig.SRC_ALPHA;
+                    this.materialData.blend_dest = ContextConfig.ONE_MINUS_SRC_ALPHA;
+                    this.materialData.alphaBlending = false;
                     break;
                 case BlendMode.LAYER:
                     this.materialData.blend_src = ContextConfig.SRC_ALPHA;

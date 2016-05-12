@@ -19,7 +19,8 @@
         constructor() {
             super();
             this.name = "ParticleAccelerationSpeedNode"; 
-            this.vertex_ShaderName = "particle_accelerationSpeed";
+            this.vertex_ShaderName[ShaderPhaseType.global_vertex] = this.vertex_ShaderName[ShaderPhaseType.global_vertex] || [];
+            this.vertex_ShaderName[ShaderPhaseType.global_vertex].push("particle_accelerationSpeed");
 
             this.attribute_accelerationSpeed = new GLSL.VarRegister();
             this.attribute_accelerationSpeed.name = "attribute_accelerationSpeed";

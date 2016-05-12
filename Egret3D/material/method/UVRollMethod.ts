@@ -22,8 +22,7 @@
         */
         constructor() {
             super();
-            this.fsShaderList.push("uvRoll_fs");
-            this.methodType = TextureMethodType.diffuse;
+            this.fsShaderList[ShaderPhaseType.diffuse_fragment].push("uvRoll_fs");
         }
 
         /**

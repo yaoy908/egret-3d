@@ -11,9 +11,9 @@
          */
         constructor() {
             super();
-            this.methodType = TextureMethodType.diffuse; 
-            this.vsShaderList.push("secondaryUV_vs");
-            this.fsShaderList.push("lightMap_fs");
+            //this.methodType = TextureMethodType.diffuse; 
+            //this.vsShaderList.push("secondaryUV_vs");
+            //this.fsShaderList.push("lightMap_fs");
         }
 
         /**

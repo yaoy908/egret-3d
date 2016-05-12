@@ -55,7 +55,6 @@
         "shader/register/Extension.ts",
         "shader/register/VaryingType.ts",
 
-        "shader/FragmentShader.ts",
         "shader/ShaderLib.ts",
         "shader/ShaderPool.ts",
         "shader/ShaderContent.ts",
