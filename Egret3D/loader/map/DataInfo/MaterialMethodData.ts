@@ -7,7 +7,7 @@
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class MaterialMethodData {
+    export class MaterialMethodData extends SourceDataBase{
 
         /**
          * @language zh_CN
@@ -82,6 +82,7 @@
         */
 
         constructor() {
+            super();
         }
     }
 }

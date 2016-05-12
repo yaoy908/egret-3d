@@ -52,19 +52,11 @@
 
         /**
          * @language zh_CN
-         * 平行光数据列表
+         * 光源数据列表
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public dirLightDatas: Array<DirectionLightData>;
-
-        /**
-         * @language zh_CN
-         * 点光源数据列表
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public pointLightDatas: Array<PointLightData>;
+        public lightDatas: Array<LightData>;
 
         /**
          * @language zh_CN
@@ -139,16 +131,13 @@
 
             
 
-        private reset(): void {
+        private init(): void {
             this.ecaList = [];
             this.eamList = [];
             this.materialList = [];
             this.esmList = [];
 
-            this.pointLightDatas = new Array<PointLightData>();
-            this.dirLightDatas = new Array<DirectionLightData>();
-
-            
+            this.lightDatas = [];
         }
 
         /**
@@ -160,7 +149,7 @@
          * @platform Web,Native
          */
         public parseXml(sceneName:string, text: string): void {
-            this.reset();
+            this.init();
             //
             this.sceneName = sceneName;
             var obj = this.parsingXML(text);
@@ -454,26 +443,27 @@
                     childNode = item.childNodes[i2];
                     if (childNode.nodeName == "#text")
                         continue;
-                    if (childNode.nodeName == "sunLight") {
+                    if (childNode.nodeName == "light") {
                         
-                        var dirLight: DirectionLightData = new DirectionLightData();
-                        this.dirLightDatas.push(dirLight);
+                        var lightData: LightData = new LightData();
+                        this.lightDatas.push(lightData);
 
                         this.eachAttr(childNode, function (label: string, value: string): void {
                             if (label == "id") {
-                                dirLight.id = Number(value);
+                                lightData.id = Number(value);
                             }
                         });
 
-                        var sunNode: Node;
+                        var lightNode: Node;
                         for (var sunI: number = 0, sunCount: number = childNode.childNodes.length; sunI < sunCount; sunI++) {
-                            sunNode = childNode.childNodes[sunI];
-
-                            if (sunNode.nodeName == "#text")
+                            lightNode = childNode.childNodes[sunI];
+                            if (lightNode.nodeName == "#text")
                                 continue;
-                            if (sunNode.nodeName == "direction") {
+                            if (lightNode.nodeName == "type") {
+                                lightData.type = LightType[lightNode.textContent];
+                            }else if (lightNode.nodeName == "direction") {
                                 var dirX: number, dirY: number, dirZ: number;
-                                this.eachAttr(sunNode, function (label: string, value: string): void {
+                                this.eachAttr(lightNode, function (label: string, value: string): void {
                                     if (label == "x") {
                                         dirX = Number(value);
                                     } else if (label == "y") {
@@ -483,41 +473,21 @@
                                     }
 
                                 });
-                                dirLight.dirX = dirX;
-                                dirLight.dirY = dirY;
-                                dirLight.dirZ = dirZ;
+                                lightData.dirX = dirX;
+                                lightData.dirY = dirY;
+                                lightData.dirZ = dirZ;
                                 
-                            } else if (sunNode.nodeName == "diffuseColor") {
-                                dirLight.diffuseColor = Number(sunNode.textContent);
-                            } else if (sunNode.nodeName == "ambientColor") {
-                                dirLight.ambientColor = Number(sunNode.textContent);
-                            } else if (sunNode.nodeName == "intensity") {
-                                dirLight.intensity = Number(sunNode.textContent);
-                            } else if (sunNode.nodeName == "halfIntensity") {
-                                dirLight.halfIntensity = Number(sunNode.textContent);
-                            }
-
-                        }
-                         
-                    } else if (childNode.nodeName == "pointLight") {
-                        var pLight: PointLightData = new PointLightData();
-                        this.pointLightDatas.push(pLight);
-
-                        this.eachAttr(childNode, function (label: string, value: string): void {
-                            if (label == "id") {
-                                pLight.id = Number(value);
-                            }
-                        });
-
-                        var pNode: Node;
-                        for (var pI: number = 0, pCount: number = childNode.childNodes.length; pI < pCount; pI++) {
-                            pNode = childNode.childNodes[pI];
-
-                            if (pNode.nodeName == "#text")
-                                continue;
-                            if (pNode.nodeName == "position") {
+                            } else if (lightNode.nodeName == "diffuseColor") {
+                                lightData.diffuseColor = Number(lightNode.textContent);
+                            } else if (lightNode.nodeName == "ambientColor") {
+                                lightData.ambientColor = Number(lightNode.textContent);
+                            } else if (lightNode.nodeName == "intensity") {
+                                lightData.intensity = Number(lightNode.textContent);
+                            } else if (lightNode.nodeName == "halfIntensity") {
+                                lightData.halfIntensity = Number(lightNode.textContent);
+                            } if (lightNode.nodeName == "position") {
                                 var posX: number, posY: number, posZ: number;
-                                this.eachAttr(pNode, function (label: string, value: string): void {
+                                this.eachAttr(lightNode, function (label: string, value: string): void {
                                     if (label == "x") {
                                         posX = Number(value);
                                     } else if (label == "y") {
@@ -527,25 +497,19 @@
                                     }
 
                                 });
-                                pLight.posX = posX;
-                                pLight.posY = posY;
-                                pLight.posZ = posZ;
+                                lightData.posX = posX;
+                                lightData.posY = posY;
+                                lightData.posZ = posZ;
 
-                            } else if (pNode.nodeName == "diffuseColor") {
-                                pLight.diffuseColor = Number(pNode.textContent);
-                            } else if (pNode.nodeName == "ambientColor") {
-                                pLight.ambientColor = Number(pNode.textContent);
-                            } else if (pNode.nodeName == "falloff") {
-                                pLight.falloff = Number(pNode.textContent);
-                            } else if (pNode.nodeName == "radius") {
-                                pLight.radius = Number(pNode.textContent);
-                            } else if (pNode.nodeName == "intensity") {
-                                pLight.intensity = Number(pNode.textContent);
+                            }else if (lightNode.nodeName == "falloff") {
+                                lightData.falloff = Number(lightNode.textContent);
+                            } else if (lightNode.nodeName == "radius") {
+                                lightData.radius = Number(lightNode.textContent);
                             }
-                            
 
                         }
-                    } else if (childNode.nodeName == "fog") {
+                         
+                    }else if (childNode.nodeName == "fog") {
 
                     }
                    
