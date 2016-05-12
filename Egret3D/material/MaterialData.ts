@@ -125,6 +125,16 @@
         */
         public lightTexture: ITexture = CheckerboardTexture.texture ;
 
+
+        /**
+        * @language zh_CN
+        * 遮罩贴图。
+        * @default CheckerboardTexture.texture
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public maskTexture: ITexture = CheckerboardTexture.texture;
+
         /**
         * @language zh_CN
         * ao 贴图。

@@ -152,7 +152,8 @@
         "material/method/UVRollMethod.ts",
         "material/method/UVSpriteSheetMethod.ts",
         "material/method/LightMapMethod.ts",
-        
+        "material/method/AlphaMaskMethod.ts",
+
         "material/pass/PassUsage.ts",
         "material/MaterialData.ts",
 

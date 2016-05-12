@@ -25,6 +25,15 @@
          */
         public static uvRollMethod: string = "uvRollMethod";
 
+
+        /**
+         * @language zh_CN
+         * alpha遮罩
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public static alphaMaskMethod: string = "alphaMaskMethod";
+
         /**
          * @language zh_CN
          * 特效的类型
@@ -65,10 +74,13 @@
          */
         public vSpeed: number = 0;
 
+        
+
         /**
         * @language zh_CN
         * constructor 
         */
+
         constructor() {
         }
     }
