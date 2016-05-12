@@ -23,7 +23,7 @@ module egret3d {
 			"#extension GL_OES_standard_derivatives : enable \n" +
 			"varying vec3 varying_eyeNormal  ; \n" +
 			"varying vec2 varying_uv0; \n" +
-			"varying vec3 varying_ViewPose; \n" +
+			"varying vec4 varying_ViewPose; \n" +
 			"varying vec4 varying_color; \n" +
 			"uniform vec3 uniform_eyepos ; \n" +
 			"uniform mat4 uniform_ViewMatrix ; \n" +
@@ -57,7 +57,7 @@ module egret3d {
 			"uniform mat4 uniform_ModelMatrix ; \n" +
 			"uniform mat4 uniform_ViewMatrix ; \n" +
 			"uniform mat4 uniform_ProjectionMatrix ; \n" +
-			"varying vec3 varying_ViewPose; \n" +
+			"varying vec4 varying_ViewPose; \n" +
 			"varying vec3 varying_eyeNormal  ; \n" +
 			"varying vec2 varying_uv0; \n" +
 			"varying vec4 varying_color; \n" +
@@ -137,7 +137,7 @@ module egret3d {
 			"mat3 normalMatrix = transpose( inverse(mat3( modeViewMatrix )) ); \n" +
 			"varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
 			"outPosition = uniform_ViewMatrix * uniform_ModelMatrix * vec4(e_position, 1.0) ; \n" +
-			"varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
+			"varying_ViewPose = outPosition.xyzw; \n" +
 			"varying_color = attribute_color; \n" +
 			"} \n",
 
@@ -374,13 +374,12 @@ module egret3d {
 			"materialSource.alpha = uniform_materialSource[9]; \n" +
 			"materialSource.cutAlpha = uniform_materialSource[10]; \n" +
 			"materialSource.shininess = uniform_materialSource[11]; \n" +
-			"materialSource.roughness = uniform_materialSource[12]; \n" +
+			"materialSource.specularScale = uniform_materialSource[12]; \n" +
 			"materialSource.albedo = uniform_materialSource[13]; \n" +
 			"materialSource.uvRectangle.x = uniform_materialSource[14]; \n" +
 			"materialSource.uvRectangle.y = uniform_materialSource[15]; \n" +
 			"materialSource.uvRectangle.z = uniform_materialSource[16]; \n" +
 			"materialSource.uvRectangle.w = uniform_materialSource[17]; \n" +
-			"materialSource.specularScale = uniform_materialSource[18]; \n" +
 			"materialSource.normalScale = uniform_materialSource[19]; \n" +
 			"uv_0 = varying_uv0.xy * materialSource.uvRectangle.zw + materialSource.uvRectangle.xy ; \n" +
 			"} \n",
@@ -725,19 +724,17 @@ module egret3d {
 			"pointLight.falloff = uniform_pointLightSource[i*12+11]; \n" +
 			"ambientColor.xyz += pointLight.diffuse.xyz * pointLight.ambient ; \n" +
 			"vec4 lightVirePos = uniform_ViewMatrix * vec4(pointLight.position.xyz,1.0) ; \n" +
-			"vec3 lightDir = varying_ViewPose.xyz - (lightVirePos.xyz/lightVirePos.w) ; \n" +
-			"lightDir = normalize(lightDir); \n" +
-			"float distance = length( lightDir ); \n" +
-			"float lambertTerm = pointLight.intensity / ( distance * distance )  ; \n" +
-			"float NdotL = dot( N, lightDir ); \n" +
-			"NdotL = clamp( NdotL ,0.0,1.0 ); \n" +
-			"light.xyz += pointLight.diffuse * NdotL * lambertTerm ; \n" +
-			"if( lambertTerm> 0.0){ \n" +
-			"vec3 viewDir = normalize(varying_ViewPose); \n" +
-			"vec3 H = normalize( lightDir + viewDir ); \n" +
+			"vec3 lightDir = varying_ViewPose.xyz - lightVirePos.xyz ; \n" +
+			"float intensity = max(dot(N,normalize(lightDir)), 0.0); \n" +
+			"float lightDist = length( lightDir ); \n" +
+			"float attenuation = pointLight.intensity / (3.0 + 0.001 * lightDist +  0.00009 * lightDist * lightDist); \n" +
+			"light.xyz += pointLight.diffuse * intensity * attenuation ; \n" +
+			"if( attenuation> 0.0){ \n" +
+			"vec3 viewDir = normalize(varying_ViewPose.xyz/varying_ViewPose.w); \n" +
+			"vec3 H = normalize( normalize(lightDir) + viewDir ); \n" +
 			"float NdotH = dot( normal, H ); \n" +
-			"lambertTerm = pow( clamp( NdotH ,0.0,1.0),materialSource.shininess ); \n" +
-			"specularColor.xyz += lambertTerm * materialSource.specular * materialSource.specularScale ; \n" +
+			"float lambertTerm = pow( clamp( NdotH ,0.0,1.0),materialSource.shininess ); \n" +
+			"specularColor.xyz += lambertTerm * materialSource.specular * attenuation ; \n" +
 			"} \n" +
 			"}; \n" +
 			"} \n" +
