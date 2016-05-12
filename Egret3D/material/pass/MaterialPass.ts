@@ -158,7 +158,6 @@
             this._passChange = false;
             var i: number = 0;
             this._passUsage = new PassUsage();
-            this._materialData.textureMethodTypes.push(TextureMethodType.color);
 
             //pre Phase ---------------------------------------------------
             if (animation) {
@@ -179,6 +178,16 @@
             }
             if (this._materialData.acceptShadow) {
                 // to add accept shadow maping shader
+            }
+
+            if (this._materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.normal_fragment) != -1 ) {
+                this._fs_shader_methods[ShaderPhaseType.normal_fragment] = [];
+                this._fs_shader_methods[ShaderPhaseType.normal_fragment].push("normalMap_fragment");
+            }
+
+            if (this._materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.specular_fragment) != -1) {
+                this._fs_shader_methods[ShaderPhaseType.specular_fragment] = [];
+                this._fs_shader_methods[ShaderPhaseType.specular_fragment].push("specularMap_fragment");
             }
 
             if (this.lightGroup) {
@@ -250,14 +259,14 @@
             shaderList = this._fs_shader_methods[ShaderPhaseType.normal_fragment];
             if (shaderList && shaderList.length > 0)
                 this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
-            else
-                this.addMethodShaders(this._passUsage.fragmentShader, ["normalMap_fragment"]);
+            //else
+            //    this.addMethodShaders(this._passUsage.fragmentShader, ["normalMap_fragment"]);
             //specular
             shaderList = this._fs_shader_methods[ShaderPhaseType.specular_fragment];
             if (shaderList && shaderList.length > 0)
                 this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
-            else
-                this.addMethodShaders(this._passUsage.fragmentShader, ["specularMap_fragment"]);
+            //else
+            //    this.addMethodShaders(this._passUsage.fragmentShader, ["specularMap_fragment"]);
             //shadow
             shaderList = this._fs_shader_methods[ShaderPhaseType.shadow_fragment];
             if (shaderList && shaderList.length > 0)

@@ -14,7 +14,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public textureMethodTypes: Array<number> = []; 
+        public shaderPhaseTypes: ShaderPhaseType[] = []; 
 
         /**
         * @language zh_CN

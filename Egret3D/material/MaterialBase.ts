@@ -98,8 +98,8 @@
                 this.materialData.shadowMapTexture = texture;
                 this.materialData.textureChange = true;
 
-                if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.shadow) == -1) {
-                    this.materialData.textureMethodTypes.push(TextureMethodType.shadow);
+                if (this.materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.shadow_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes.push(ShaderPhaseType.shadow_fragment);
                     this.diffusePass.passInvalid();
                 }
             }
@@ -130,8 +130,8 @@
                 this.materialData.diffuseTexture = texture;
                 this.materialData.textureChange = true;
 
-                if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.diffuse) == -1) {
-                    this.materialData.textureMethodTypes.push(TextureMethodType.diffuse);
+                if (this.materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.diffuse_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes.push(ShaderPhaseType.diffuse_fragment);
                     this.diffusePass.passInvalid();
                 }
             }
@@ -162,8 +162,8 @@
                 this.materialData.normalTexture = texture;
                 this.materialData.textureChange = true;
 
-                if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.normal) == -1) {
-                    this.materialData.textureMethodTypes.push(TextureMethodType.normal);
+                if (this.materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.normal_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes.push(ShaderPhaseType.normal_fragment);
                     this.diffusePass.passInvalid();
                 }
 
@@ -193,8 +193,8 @@
             if (texture) {
                 this.materialData.specularTexture = texture;
                 this.materialData.textureChange = true;
-                if (this.materialData.textureMethodTypes.indexOf(TextureMethodType.specular) == -1) {
-                    this.materialData.textureMethodTypes.push(TextureMethodType.specular);
+                if (this.materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.specular_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes.push(ShaderPhaseType.specular_fragment);
                     this.diffusePass.passInvalid();
                 }
             }
