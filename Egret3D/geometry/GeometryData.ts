@@ -234,7 +234,7 @@
                         color.x = source.source_vertexColorData[index + 0];
                         color.y = source.source_vertexColorData[index + 1];
                         color.z = source.source_vertexColorData[index + 2];
-                        color.z = source.source_vertexColorData[index + 3];
+                        color.w = source.source_vertexColorData[index + 3];
                     }
                     if (source.uvIndices && source.source_uvData && source.source_uvData.length > 0) {
                         index = source.uvIndices[faceIndex * 3 + i] * Geometry.uvSize;

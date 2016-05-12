@@ -1,7 +1,6 @@
 ﻿module egret3d {
 
     /**
-    * @private
     * 摄像机类型
     * @version Egret 3.0
     * @platform Web,Native
@@ -167,13 +166,14 @@
         }
 
         /**
-         * @language zh_CN        
-         * 打开VR相机
-         * @param cameraType 相机类型
-         * @param vrType VR类型
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
+        * @private
+        * @language zh_CN        
+        * 打开VR相机
+        * @param cameraType 相机类型
+        * @param vrType VR类型
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public tap(cameraType: CameraType, vrType: VRType = null ) {
             if (cameraType == CameraType.VR) {
                 this.eyeMatrix.update( this );
@@ -205,7 +205,7 @@
         * @language zh_CN        
         * 返回相机横纵比
         *  
-        * @returns 横纵比
+        * @returns number 横纵比
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -232,7 +232,7 @@
         * @language zh_CN
         * 返回相机fovY
         *  
-        * @returns fovY
+        * @returns number fovY
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -309,18 +309,18 @@
         }
 
 
-        /**
-        * @language zh_CN
-        * 视图noormal矩阵
-        * normal 矩阵用来纠正透视相机影响视图变形，所影响的法线轴变形，一般用 modeviewMatrix 的逆举证的转置矩阵。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public get normalMatrix(): Matrix4_4 {
-            this._normalMatrix.copyFrom(this.viewMatrix);
-            this._normalMatrix.multiply(this.projectMatrix);
-            return this._normalMatrix; 
-        }
+        ///**
+        //* @language zh_CN
+        //* 视图noormal矩阵
+        //* normal 矩阵用来纠正透视相机影响视图变形，所影响的法线轴变形，一般用 modeviewMatrix 的逆举证的转置矩阵。
+        //* @version Egret 3.0
+        //* @platform Web,Native
+        //*/
+        //public get normalMatrix(): Matrix4_4 {
+        //    this._normalMatrix.copyFrom(this.viewMatrix);
+        //    this._normalMatrix.multiply(this.projectMatrix);
+        //    return this._normalMatrix; 
+        //}
         
         /**
          * @private
@@ -411,11 +411,12 @@
         }
 
         /**
-         * @language zh_CN
-         * 更新正交矩阵
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
+        * @private
+        * @language zh_CN
+        * 更新正交矩阵
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public updataOrth() {
             var _projectionHeight: number = 800;
             var raw: Float32Array = new Float32Array(16);
@@ -514,7 +515,6 @@
         * @private
         * @language zh_CN
         * 当前对象数据更新
-        * @private
         * @param camera 当前渲染的摄相机
         * @param time 当前时间
         * @param delay 每帧时间间隔
@@ -528,7 +528,14 @@
         }
 
         private _halfw: number ; 
-        private _halfh: number ; 
+        private _halfh: number; 
+
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public object3DToScreenRay(n: Vector3D,target:Vector3D): Vector3D {
 
             this._halfw = this.viewPort.width * 0.5;
@@ -542,6 +549,12 @@
             return target ;
         }
 
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public ScreenRayToObject3D(n: Vector3D, target: Vector3D): Vector3D {
 
             this._halfw = this.viewPort.width * 0.5;

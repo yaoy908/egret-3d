@@ -30,8 +30,8 @@ void calculateDirectLight( MaterialSource materialSource ){
         vec3 halfDir = normalize(lightDir + viewDir); 
         float specAngle = max(dot(halfDir, N), 0.0); 
 		if( lambertTerm> 0.0){
-			 specular = pow(specAngle, materialSource.shininess ); 
-             specularColor.xyz += materialSource.specular * specular ; 
+			specular = pow(specAngle, materialSource.shininess ); 
+            specularColor.xyz += materialSource.specular * specular * materialSource.roughness ; 
 		}
     }
 }

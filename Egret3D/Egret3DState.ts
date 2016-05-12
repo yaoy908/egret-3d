@@ -1,4 +1,8 @@
 ﻿module egret3d {
+
+    /**
+     * @private
+     */
     export class Egret3DState {
 
         private static use: boolean = false; 

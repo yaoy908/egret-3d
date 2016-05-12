@@ -21,24 +21,28 @@
     export class VertexBuffer3D{
 
         /**
-         *
-         * @language zh_CN
-         * @private
-         * WebGLBuffer的引用
-         */
+        *
+        * @language zh_CN
+        * @private
+        * WebGLBuffer的引用
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public buffer:WebGLBuffer;
 
         /**
-         * @language zh_CN
-         * @private
-         */
+        * @language zh_CN
+        * @private
+        */
         public arrayBuffer: ArrayBuffer;
 
         /**
-         * @language zh_CN
-         * 构造
-         * @param buffer webglbuffer
-         */
+        * @language zh_CN
+        * 构造
+        * @param buffer WebGLBuffer
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         constructor(buffer:WebGLBuffer) {
             this.buffer = buffer;
         }

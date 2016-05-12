@@ -17,4 +17,5 @@ app.css
 /obj/Debug
 /bin/egret3d.dll.config
 /bin/egret3d.pdb
-/shader/ShaderLib.ts
+/resource/scene/Sponza
+/Feature

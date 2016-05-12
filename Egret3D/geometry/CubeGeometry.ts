@@ -24,6 +24,8 @@
         /**
         * @language zh_CN
         * Cube宽度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get width(): number {
             return this._width;
@@ -32,9 +34,11 @@
 
         private _height: number = 80;
         /**
-       * @language zh_CN
-       * Cube高度
-       */
+        * @language zh_CN
+        * Cube高度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get height(): number {
             return this._height;
         }
@@ -44,6 +48,8 @@
         /**
         * @language zh_CN
         * Cube深度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get depth(): number {
             return this._depth;
@@ -52,9 +58,11 @@
         /**
         * @language zh_CN
         * 构造函数
-        * @param width 宽度
-        * @param _height 高度
-        * @param _depth 深度
+        * @param width 宽度 默认为80
+        * @param height 高度 默认为80
+        * @param depth 深度 默认为80
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         constructor(width: number = 80, height: number = 80, depth: number = 80) {
             super();
@@ -65,8 +73,11 @@
         }
 
         /**
+        * @private
         * @language zh_CN
         * 生成网格
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public buildGeomtry(front: boolean) {
             this.vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_NORMAL | VertexFormat.VF_TANGENT | VertexFormat.VF_COLOR | VertexFormat.VF_UV0 | VertexFormat.VF_UV1;

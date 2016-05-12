@@ -334,8 +334,8 @@
 
                 this._materialData.materialSourceData[9] = this._materialData.alpha;
                 this._materialData.materialSourceData[10] = this._materialData.cutAlpha;
-                this._materialData.materialSourceData[11] = this._materialData.shininess;
-                this._materialData.materialSourceData[12] = this._materialData.roughness;
+                this._materialData.materialSourceData[11] = this._materialData.specularLevel;
+                this._materialData.materialSourceData[12] = this._materialData.gloss;
                 this._materialData.materialSourceData[13] = this._materialData.albedo;
 
                 this._materialData.materialSourceData[14] = this._materialData.uvRectangle.x;

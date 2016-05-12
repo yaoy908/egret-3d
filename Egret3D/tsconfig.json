@@ -97,7 +97,7 @@
         "core/node/Object3D.ts",
         "core/node/Entity.ts",
         "core/node/Mesh.ts",
-        "core/node/Billboard.ts",
+        "core/node/BillBoard.ts",
         "core/node/Sky.ts",
         "core/node/SphereSky.ts",
         "core/node/Wireframe.ts",
@@ -152,7 +152,8 @@
         "material/method/UVSpriteSheetMethod.ts",
         "material/method/LightMapMethod.ts",
         "material/method/PlantDistortedMethod.ts",
-        
+        "material/method/AlphaMaskMethod.ts",
+
         "material/pass/PassUsage.ts",
         "material/MaterialData.ts",
 
@@ -160,14 +161,12 @@
         "material/pass/ColorPass.ts",
         "material/pass/DiffusePass.ts",
         "material/pass/CubePass.ts",
-        "material/pass/PBRPass.ts",
 
         "material/MaterialBase.ts",
 
         "material/ColorMaterial.ts",
         "material/TextureMaterial.ts",
         "material/CubeTextureMaterial.ts",
-        "material/PBRMaterial.ts",
 
         "render/RenderBase.ts",
         "render/DefaultRender.ts",
@@ -217,7 +216,7 @@
         "core/partition/quad/QuadRoot.ts",
         "core/partition/quad/QuadTreeCell.ts",
 
-        "Util/HashTable.ts",
+        "Util/DoubleArray.ts",
         "Util/navigation/Navi3DAstar.ts",
         "Util/navigation/Navi3DEdge.ts",
         "Util/navigation/Navi3DMaskType.ts",
@@ -233,6 +232,22 @@
 
         "View3D.ts",
         "VRView3D.ts",
-        "Egret3DCanvas.ts"
-    ]
+        "Egret3DCanvas.ts",
+
+        "loader/map/DataInfo/MaterialMethodData.ts",
+        "loader/map/DataInfo/MaterialSphereData.ts",
+        "loader/map/DataInfo/MeshData.ts",
+        "loader/map/DataInfo/SceneNode.ts",
+        "loader/map/DataInfo/DirectionLightData.ts",
+        "loader/map/DataInfo/PointLightData.ts",
+        
+        
+        "loader/map/EgretMapConfig.ts",
+        "loader/map/parse/EgretMaterialMethodParser.ts",
+        "loader/map/parse/EgretMapXmlParser.ts",
+        "loader/map/EgretMapSourceLib.ts",
+        "loader/map/EgretMapLoader.ts"
+        
+
+]      
 }	

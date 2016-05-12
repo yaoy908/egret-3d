@@ -102,6 +102,9 @@
             this.bound = this.buildBoundBox();
         }
 
+
+        public lightGroup: LightGroup;
+
         public setMaterialByID() {
         }
 
@@ -286,9 +289,15 @@
                 this._subGeometry = this.geometry.subGeometrys[this._i];
                 this._matID = this._subGeometry.matID;
                 if (this.muiltMaterial[this._matID]) {
+                    if (this.lightGroup) {
+                        this.muiltMaterial[this._matID].lightGroup = this.lightGroup;
+                    }
                     this.muiltMaterial[this._matID].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
                 }
                 else {
+                    if (this.lightGroup) {
+                        this.muiltMaterial[0].lightGroup = this.lightGroup;
+                    }
                     this.muiltMaterial[0].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
                 }
             }

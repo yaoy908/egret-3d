@@ -18,6 +18,8 @@
         /**
         * @language zh_CN
         * 一个由 16 个数字组成的矢量，其中，每四个元素可以是 4x4 矩阵的一行或一列
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public rawData: Float32Array;
         private result: Float32Array = new Float32Array(16);
@@ -26,6 +28,8 @@
         * @language zh_CN
         * 构造
         * @param datas {number[16]}
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         constructor(datas: Float32Array = null) {
             if (datas)
@@ -37,18 +41,13 @@
         }
 
         /**
-        * @language en_US
-        * Build a lookat matrix. (left-handed)
-        * @param eye The eye position.
-        * @param at The target position.
-        * @param up The up direction.
-        */
-        /**
         * @language zh_CN
         * 生成一个注视目标的矩阵.
         * @param eye 眼睛的位置.
         * @param at 目标的位置.
         * @param up 向上的方向.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public lookAt(eye: Vector3D, at: Vector3D, up: Vector3D) {
             var zaxis: Vector3D = at.subtract(eye);
@@ -79,6 +78,13 @@
             this.rawData[15] = 1;
         }
 
+        /**
+        * @language zh_CN
+        * 矩阵相乘.
+        * @param mat4 相乘的矩阵
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public multiply(mat4: Matrix4_4) {
             var a = this.rawData, b = mat4.rawData, r = this.result;
 
@@ -171,20 +177,14 @@
         //}
 
         /**
-        * @language en_US
-        * Build a perspective projection matrix. (left-handed)
-        * @param fovy .
-        * @param aspect .
-        * @param zn min z.
-        * @param zf max z.
-        */
-        /**
         * @language zh_CN
         * 生成一个透视投影矩阵.
         * @param fovy 观察时y 轴方向的角度，就是观察范围夹角。
         * @param aspect 横纵比，在视空间宽度除以高度.
         * @param zn 近裁剪面位置Z值.
         * @param zf 远裁剪面位置Z值.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public perspective(fovy: number, aspect: number, zn: number, zf: number) {
             var angle: number = fovy * (Math.PI / 180.0);
@@ -213,20 +213,14 @@
         }
 
         /**
-        * @language en_US
-        * Build an ortho matrix. (left-handed)
-        * @param w screen width.
-        * @param h screen height.
-        * @param zn min z.
-        * @param zf max z.
-        */
-        /**
         * @language zh_CN
         * 生成一个透视投影矩阵.
         * @param w 屏幕的宽度。
         * @param h 屏幕的高度.
         * @param zn 近裁剪面位置Z值.
         * @param zf 远裁剪面位置Z值.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public ortho(w: number, h: number, zn: number, zf: number) {
             this.rawData[0] = 2 / w;
@@ -251,16 +245,6 @@
         }
 
         /**
-        * @language en_US
-        * Build an ortho matrix. (left-handed)
-        * @param l min x.
-        * @param r max x.
-        * @param b min y.
-        * @param t max y.
-        * @param zn min z.
-        * @param zf max z.
-        */
-        /**
         * @language zh_CN
         * 生成一个透视投影矩阵.
         * @param l 观察时X轴最小值.
@@ -269,6 +253,8 @@
         * @param t 观察时Y轴最大值.
         * @param zn 近裁剪面位置Z值.
         * @param zf 远裁剪面位置Z值.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public orthoOffCenter(l: number, r: number, b: number, t: number, zn: number, zf: number) {
             this.rawData[0] = 2 / (r - 1);
@@ -293,14 +279,11 @@
         }
 
         /**
-        * @language en_US
-        * matrix multiply
-        * @param lhs .
-        */
-        /**
         * @language zh_CN
         * 通过将当前 Matrix4_4 对象与另一个 Matrix4_4 对象相乘来前置一个矩阵
         * @param lhs 目标矩阵.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public append(lhs: Matrix4_4) {
             var m111: number = this.rawData[0], m121: number = this.rawData[4], m131: number = this.rawData[8], m141: number = this.rawData[12], m112: number = this.rawData[1], m122: number = this.rawData[5], m132: number = this.rawData[9], m142: number = this.rawData[13], m113: number = this.rawData[2], m123: number = this.rawData[6], m133: number = this.rawData[10], m143: number = this.rawData[14], m114: number = this.rawData[3], m124: number = this.rawData[7], m134: number = this.rawData[11], m144: number = this.rawData[15], m211: number = lhs.rawData[0], m221: number = lhs.rawData[4], m231: number = lhs.rawData[8], m241: number = lhs.rawData[12], m212: number = lhs.rawData[1], m222: number = lhs.rawData[5], m232: number = lhs.rawData[9], m242: number = lhs.rawData[13], m213: number = lhs.rawData[2], m223: number = lhs.rawData[6], m233: number = lhs.rawData[10], m243: number = lhs.rawData[14], m214: number = lhs.rawData[3], m224: number = lhs.rawData[7], m234: number = lhs.rawData[11], m244: number = lhs.rawData[15];
@@ -327,16 +310,12 @@
         }
 
         /**
-        * @language en_US
-        * matrix add
-        * @param lhs
-        * @returns
-        */
-        /**
         * @language zh_CN
         * 矩阵相加.
         * @param lhs 目标矩阵.
         * @returns 相加后的结果.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public add(lhs: Matrix4_4): Matrix4_4 {
             var m111: number = this.rawData[0], m121: number = this.rawData[4], m131: number = this.rawData[8], m141: number = this.rawData[12], m112: number = this.rawData[1], m122: number = this.rawData[5], m132: number = this.rawData[9], m142: number = this.rawData[13], m113: number = this.rawData[2], m123: number = this.rawData[6], m133: number = this.rawData[10], m143: number = this.rawData[14], m114: number = this.rawData[3], m124: number = this.rawData[7], m134: number = this.rawData[11], m144: number = this.rawData[15], m211: number = lhs.rawData[0], m221: number = lhs.rawData[4], m231: number = lhs.rawData[8], m241: number = lhs.rawData[12], m212: number = lhs.rawData[1], m222: number = lhs.rawData[5], m232: number = lhs.rawData[9], m242: number = lhs.rawData[13], m213: number = lhs.rawData[2], m223: number = lhs.rawData[6], m233: number = lhs.rawData[10], m243: number = lhs.rawData[14], m214: number = lhs.rawData[3], m224: number = lhs.rawData[7], m234: number = lhs.rawData[11], m244: number = lhs.rawData[15];
@@ -364,16 +343,12 @@
         }
 
         /**
-        * @language en_US
-        * matrix add
-        * @param lhs 
-        * @returns reslut
-        */
-        /**
         * @language zh_CN
         * 矩阵相减.
         * @param lhs 目标矩阵.
-        * @returns 相加减的结果.
+        * @returns Matrix4_4 相加减的结果.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public sub(lhs: Matrix4_4): Matrix4_4 {
             var m111: number = this.rawData[0], m121: number = this.rawData[4], m131: number = this.rawData[8], m141: number = this.rawData[12], m112: number = this.rawData[1], m122: number = this.rawData[5], m132: number = this.rawData[9], m142: number = this.rawData[13], m113: number = this.rawData[2], m123: number = this.rawData[6], m133: number = this.rawData[10], m143: number = this.rawData[14], m114: number = this.rawData[3], m124: number = this.rawData[7], m134: number = this.rawData[11], m144: number = this.rawData[15], m211: number = lhs.rawData[0], m221: number = lhs.rawData[4], m231: number = lhs.rawData[8], m241: number = lhs.rawData[12], m212: number = lhs.rawData[1], m222: number = lhs.rawData[5], m232: number = lhs.rawData[9], m242: number = lhs.rawData[13], m213: number = lhs.rawData[2], m223: number = lhs.rawData[6], m233: number = lhs.rawData[10], m243: number = lhs.rawData[14], m214: number = lhs.rawData[3], m224: number = lhs.rawData[7], m234: number = lhs.rawData[11], m244: number = lhs.rawData[15];
@@ -404,7 +379,9 @@
         * @language zh_CN
         * 矩阵乘分量.
         * @param v .
-        * @returns 返回一个相乘后的结果 矩阵.
+        * @returns Matrix4_4 返回一个相乘后的结果 矩阵.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public mult(v:number): Matrix4_4 {
             this.rawData[0] *= v;
@@ -435,6 +412,8 @@
         * @param x 绕x轴旋转角度.
         * @param y 绕y轴旋转角度.
         * @param z 绕z轴旋转角度.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public rotation(x: number, y: number, z: number) {
             this.appendRotation(x, Vector3D.X_AXIS);
@@ -447,6 +426,8 @@
         * 当前矩阵乘 (按axis轴旋转degrees角度创建出来的矩阵)
         * @param degrees 旋转角度.
         * @param axis 绕axis轴旋转角度.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public appendRotation(degrees: number, axis: Vector3D): void
         {
@@ -490,6 +471,8 @@
         * @param xScale x轴缩放
         * @param yScale y轴缩放
         * @param zScale z轴缩放
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public appendScale(xScale: number, yScale: number, zScale: number) {
             this.rawData[0] = xScale; this.rawData[1] = 0.0; this.rawData[2] = 0.0;
@@ -503,6 +486,8 @@
         * @param x x轴坐标
         * @param y y轴坐标
         * @param z z轴坐标
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public appendTranslation(x: number, y: number, z: number) {
             this.rawData[12] += x;
@@ -513,7 +498,9 @@
         /**
         * @language zh_CN
         * 返回一个当前矩阵的克隆矩阵
-        * @returns 克隆后的矩阵
+        * @returns Matrix4_4 克隆后的矩阵
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public clone(): Matrix4_4 {
             var ret: Matrix4_4 = new Matrix4_4();
@@ -526,6 +513,8 @@
         * 给当前矩阵其中一行赋值
         * @param column 拷贝的行
         * @param vector3D 拷贝的值
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public copyColumnFrom(column: number, vector3D: Vector3D) {
             switch (column) {
@@ -563,6 +552,8 @@
         * 拷贝矩阵中的其中一行 把值存在vector3D.
         * @param column 拷贝的行
         * @param vector3D 拷贝存值目标
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public copyRowTo(column: number, vector3D: Vector3D) {
             switch (column) {
@@ -600,6 +591,8 @@
         * 把一个矩阵的值赋给当前矩阵.
         * @param sourceMatrix3D 源矩阵.
         * @returns 返回当前矩阵
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public copyFrom(sourceMatrix3D: Matrix4_4): Matrix4_4 {
             var len: number = sourceMatrix3D.rawData.length;
@@ -614,6 +607,8 @@
         * @param vector 源数组.
         * @param index 从数组的index 开始copy.
         * @param transpose 是否转置当前矩阵.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public copyRawDataFrom(vector: Float32Array, index: number = 0, transpose: boolean = false): void {
             if (transpose)
@@ -633,6 +628,8 @@
         * @param vector 目标数组.
         * @param index 从数组的index 开始copy.
         * @param transpose 是否转置当前矩阵.
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public copyRawDataTo(vector: Float32Array, index: number = 0, transpose: boolean = false) {
             if (transpose)
@@ -652,6 +649,8 @@
         * 给当前矩阵的某一列 赋值
         * @param col 列
         * @param vector3D 值来源
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public copyColFrom(col: number, vector3D: Vector3D) {
             switch (col) {
@@ -689,6 +688,8 @@
         * 拷贝当前矩阵的某一列
         * @param col 列
         * @param vector3D 拷贝目标
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public copyColTo(col: number, vector3D: Vector3D) {
             switch (col) {
@@ -726,6 +727,8 @@
         * @language zh_CN
         * 拷贝当前矩阵
         * @param dest 拷贝目标
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public copyToMatrix3D(dest: Matrix4_4) {
             dest.rawData = this.rawData.slice(0);
@@ -736,6 +739,8 @@
         * 分解当前矩阵
         * @param orientationStyle 分解类型
         * @returns Vector3D[3] pos rot scale
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public decompose(orientationStyle: string = "eulerAngles"): Vector3D[] {
             var q: Quaternion;
@@ -840,8 +845,10 @@
         * @language zh_CN
         * 当前矩阵变换一个向量
         * @param v 要变换的向量
-        * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
-        * @returns 变换后的向量
+        * @param target 默认为 null 如果当前参数为null那么就会new一个新的Vector3D返回
+        * @returns Vector3D 变换后的向量
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public deltaTransformVector(v: Vector3D, target: Vector3D = null): Vector3D {
             if (!target) {
@@ -861,6 +868,8 @@
         /**
         * @language zh_CN
         * 单位化当前矩阵
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public identity() {
             this.rawData[1] = 0;
@@ -887,6 +896,8 @@
         * @language zh_CN
         * 填充当前矩阵
         * @param value 填充的值
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public fill( value:number ) {
             this.rawData[1] = value;
@@ -910,6 +921,8 @@
         /**
         * @language zh_CN
         * 当前矩阵求逆
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public invers33() {
             /// Invert a 3x3 using cofactors.  This is about 8 times faster than
@@ -948,7 +961,9 @@
         /**
         * @language zh_CN
         * 当前矩阵求逆
-        * @returns 是否能求逆
+        * @returns boolean 是否能求逆
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public invert(): boolean {
             var d = this.determinant;
@@ -999,6 +1014,8 @@
         * @param pos  位移
         * @param scale 缩放
         * @param rot 旋转
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public makeTransform(pos: Vector3D, scale: Vector3D, rot: Quaternion) {
             
@@ -1029,7 +1046,9 @@
         * @language zh_CN
         * 生成一个变换矩阵
         * @param components Vector3D[3] 位移 旋转 缩放
-        * @returns 生成是否成功
+        * @returns boolean 生成是否成功
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public recompose(components: Vector3D[]): boolean {
 
@@ -1043,7 +1062,9 @@
         * 用当前矩阵变换一个3D向量
         * @param v 变换的向量
         * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
-        * @returns 变换后的向量
+        * @returns Vector3D 变换后的向量
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public transformVector(v: Vector3D, target: Vector3D = null): Vector3D {
             if (!target) {
@@ -1063,12 +1084,14 @@
         }
 
         /**
-  * @language zh_CN
-  * 用当前矩阵变换一个3D向量
-  * @param v 变换的向量
-  * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
-  * @returns 变换后的向量
-  */
+        * @language zh_CN
+        * 用当前矩阵变换一个3D向量
+        * @param v 变换的向量
+        * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
+        * @returns Vector3D 变换后的向量
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public transformVector4(v: Vector3D, target: Vector3D = null): Vector3D {
             if (!target) {
                 target = new Vector3D();
@@ -1088,12 +1111,14 @@
         }
 
         /**
-         * @language zh_CN
-         * 用当前矩阵变换一个3D向量
-         * @param v 变换的向量
-         * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
-         * @returns 变换后的向量
-         */
+        * @language zh_CN
+        * 用当前矩阵变换一个3D向量
+        * @param v 变换的向量
+        * @param target 如果当前参数为null那么就会new一个新的Vector3D返回
+        * @returns Vector3D 变换后的向量
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public mat3TransformVector(v: Vector3D, target: Vector3D = null): Vector3D {
             if (!target) {
                 target = new Vector3D();
@@ -1114,7 +1139,9 @@
         * @language zh_CN
         * 用当前矩阵变换一个3D平面
         * @param plane 变换的平面
-        * @returns 变换后的平面
+        * @returns Plane3D 变换后的平面
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public transformPlane(plane: Plane3D): Plane3D {
             var mat: Matrix4_4 = new Matrix4_4();
@@ -1138,6 +1165,8 @@
         /**
         * @language zh_CN
         * 当前矩阵转置
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public transpose() {
            
@@ -1166,6 +1195,9 @@
         * @param y 中心轴的y
         * @param z 中心轴的z
         * @param degrees 旋转角度
+        * @returns Matrix4_4 矩阵
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public static getAxisRotation(x: number, y: number, z: number, degrees: number): Matrix4_4 {
             var m: Matrix4_4 = new Matrix4_4();
@@ -1200,7 +1232,9 @@
         * @language zh_CN
         * 返回矩阵行列式
         *  
-        * @returns 行列式值
+        * @returns number 行列式值
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get determinant(): number {
             return ((this.rawData[0] * this.rawData[5] - this.rawData[4] * this.rawData[1]) * (this.rawData[10] * this.rawData[15] - this.rawData[14] * this.rawData[11]) - (this.rawData[0] * this.rawData[9] - this.rawData[8] * this.rawData[1]) * (this.rawData[6] * this.rawData[15] - this.rawData[14] * this.rawData[7]) + (this.rawData[0] * this.rawData[13] - this.rawData[12] * this.rawData[1]) * (this.rawData[6] * this.rawData[11] - this.rawData[10] * this.rawData[7]) + (this.rawData[4] * this.rawData[9] - this.rawData[8] * this.rawData[5]) * (this.rawData[2] * this.rawData[15] - this.rawData[14] * this.rawData[3]) - (this.rawData[4] * this.rawData[13] - this.rawData[12] * this.rawData[5]) * (this.rawData[2] * this.rawData[11] - this.rawData[10] * this.rawData[3]) + (this.rawData[8] * this.rawData[13] - this.rawData[12] * this.rawData[9]) * (this.rawData[2] * this.rawData[7] - this.rawData[6] * this.rawData[3]));
@@ -1211,7 +1245,9 @@
         * @language zh_CN
         * 返回矩阵位移
         *  
-        * @returns 位移
+        * @returns Vector3D 位移
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get position(): Vector3D {
             return new Vector3D(this.rawData[12], this.rawData[13], this.rawData[14]);
@@ -1222,6 +1258,8 @@
         * 设置矩阵位移
         *  
         * @param value 位移
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set position(value: Vector3D) {
             this.rawData[12] = value.x;
@@ -1233,7 +1271,9 @@
         * @language zh_CN
         * 返回矩阵缩放
         *  
-        * @returns 缩放
+        * @returns Vector3D 缩放
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get scale(): Vector3D {
             return new Vector3D(this.rawData[0], this.rawData[5], this.rawData[10]);
@@ -1243,7 +1283,9 @@
         * @language zh_CN
         * 以字符串返回矩阵的值
         *  
-        * @returns 字符
+        * @returns string 字符
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public toString(): string {
             return "matrix3d(" + Math.round(this.rawData[0] * 1000) / 1000 + "," + Math.round(this.rawData[1] * 1000) / 1000 + "," + Math.round(this.rawData[2] * 1000) / 1000 + "," + Math.round(this.rawData[3] * 1000) / 1000 + "," + Math.round(this.rawData[4] * 1000) / 1000 + "," + Math.round(this.rawData[5] * 1000) / 1000 + "," + Math.round(this.rawData[6] * 1000) / 1000 + "," + Math.round(this.rawData[7] * 1000) / 1000 + "," + Math.round(this.rawData[8] * 1000) / 1000 + "," + Math.round(this.rawData[9] * 1000) / 1000 + "," + Math.round(this.rawData[10] * 1000) / 1000 + "," + Math.round(this.rawData[11] * 1000) / 1000 + "," + Math.round(this.rawData[12] * 1000) / 1000 + "," + Math.round(this.rawData[13] * 1000) / 1000 + "," + Math.round(this.rawData[14] * 1000) / 1000 + "," + Math.round(this.rawData[15] * 1000) / 1000 + ")";
@@ -1255,6 +1297,8 @@
         * @param m0 矩阵0
         * @param m1 矩阵1
         * @param t 时间差 0.0 - 1.0
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public lerp(m0: Matrix4_4, m1: Matrix4_4, t: number): void {
             ///t(m1 - m0) + m0

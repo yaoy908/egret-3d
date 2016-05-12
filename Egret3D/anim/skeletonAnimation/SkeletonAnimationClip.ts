@@ -17,6 +17,8 @@
         /**
         * @language zh_CN
         * 帧数
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public frameCount: number = 0;
 
@@ -37,7 +39,10 @@
 
         /**
         * @language zh_CN
-        * 父对象
+        * 获取骨骼动画对象
+        * @returns SkeletonAnimation 骨骼动画对象
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get parent(): SkeletonAnimation {
             return this._parent;
@@ -45,7 +50,10 @@
 
         /**
         * @language zh_CN
-        * 动画Pose骨架序列
+        * 获取动画Pose骨架序列
+        * @returns Array<Skeleton> 骨架序列
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get poseArray(): Array<Skeleton> {
             return this._poseArray;
@@ -53,7 +61,10 @@
 
         /**
         * @language zh_CN
-        * 动画Pose骨架序列
+        * 设置动画Pose骨架序列
+        * @prame array 动画Pose骨架序列
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set poseArray(array: Array<Skeleton>) {
 
@@ -65,7 +76,9 @@
         /**
         * @language zh_CN
         * 克隆新的SkeletonAnimationClip对象
-        * @return 新的SkeletonAnimationClip
+        * @returns SkeletonAnimationClip 新的SkeletonAnimationClip
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public clone(): SkeletonAnimationClip {
 
@@ -81,7 +94,9 @@
         /**
         * @language zh_CN
         * 是否已经结束
-        * @return 是否已经结束
+        * @returns boolean 是否已经结束
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public hasEnded(): boolean {
             return ((this._timePosition >= this._length) && !this._loop);
@@ -91,6 +106,8 @@
         * @language zh_CN
         * 添加动画播放时间偏移量
         * @param offset 时间增量
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public addTime(offset: number) {
             this.timePosition += offset;
@@ -98,7 +115,10 @@
 
         /**
         * @language zh_CN
-        * 当前帧索引
+        * 获取当前帧索引
+        * @returns number 当前帧索引
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get currentFrameIndex(): number {
 
@@ -109,7 +129,10 @@
 
         /**
         * @language zh_CN
-        * 当前帧索引
+        * 设置当前帧索引
+        * @prame value 当前帧索引
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set currentFrameIndex(value: number) {
 
@@ -120,7 +143,10 @@
 
         /**
         * @language zh_CN
-        * 下一帧的索引
+        * 获取下一帧的索引
+        * @returns number 下一帧的索引
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get nextFrameIndex(): number {
             return (this.currentFrameIndex + 1) % this._poseArray.length;
@@ -128,7 +154,10 @@
 
         /**
         * @language zh_CN
-        * 动画名称
+        * 获取动画名称
+        * @returns number 动画名称
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get animationName(): string {
             return this._animName;
@@ -136,7 +165,10 @@
 
         /**
         * @language zh_CN
-        * 动画名称
+        * 设置动画名称
+        * @param name 动画名称
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set animationName(name: string) {
             this._animName = name;
@@ -144,7 +176,10 @@
 
         /**
         * @language zh_CN
-        * 动画长度
+        * 获取动画长度
+        * @returns number 动画长度
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get length(): number {
             return this._length;
@@ -152,7 +187,10 @@
 
         /**
         * @language zh_CN
-        * 采样率
+        * 获取采样率
+        * @returns number 采样率
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get sampling(): number {
             return this._sampling;
@@ -160,7 +198,10 @@
 
         /**
         * @language zh_CN
-        * 采样率
+        * 设置采样率
+        * @param value 采样率
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set sampling(value: number) {
             this._sampling = Math.max(value, 1);
@@ -168,7 +209,10 @@
 
         /**
         * @language zh_CN
-        * 是否循环
+        * 获取是否循环
+        * @returns boolean 是否循环
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get loop(): boolean {
             return this._loop;
@@ -176,7 +220,10 @@
 
         /**
         * @language zh_CN
-        * 是否循环
+        * 设置是否循环
+        * @param value 是否循环
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set loop(value: boolean) {
             this._loop = value;
@@ -184,7 +231,10 @@
 
         /**
         * @language zh_CN
-        * 是否播放中
+        * 获取是否播放中
+        * @returns boolean 是否播放中
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public get play(): boolean {
             return this._playing;
@@ -192,13 +242,17 @@
 
         /**
         * @language zh_CN
-        * 是否播放
+        * 设置是否播放
+        * @param value 是否播放
+        * @version Egret 3.0
+        * @platform Web,Native
         */
         public set play(value: boolean) {
             this._playing = value;
         }
 
         /**
+        * @private
         * @language zh_CN
         * 是否启用
         */
@@ -207,6 +261,7 @@
         }
 
         /**
+        * @private
         * @language zh_CN
         * 是否启用
         */
@@ -216,6 +271,7 @@
         }
 
         /**
+        * @private
         * @language zh_CN
         * 混合权重
         */
@@ -224,6 +280,7 @@
         }
 
         /**
+        * @private
         * @language zh_CN
         * 混合权重
         */
@@ -235,6 +292,7 @@
         }
 
         /**
+        * @private
         * @language zh_CN
         * 播放的时间位置
         */
@@ -243,6 +301,7 @@
         }
 
         /**
+        * @private
         * @language zh_CN
         * 播放的时间位置
         */
@@ -269,6 +328,7 @@
         }
 
         /**
+        * @private
         * @language zh_CN
         * 填充帧
         * @param initialSkeleton 初始骨架

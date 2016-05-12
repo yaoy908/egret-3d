@@ -75,9 +75,16 @@
 
         protected onAnimation(e: LoaderEvent3D) {
             var clip: SkeletonAnimationClip = e.loader.data;
-            clip.animationName = name;
-            e.loader["mesh"].animation.addSkeletonAnimationClip(clip);
-            e.loader["mesh"].animation.play(name);
+            clip.animationName = "xxxx";
+            var mesh: Mesh = e.loader["mesh"];
+            mesh.animation.skeletonAnimationController.addSkeletonAnimationClip(clip);
+            mesh.animation.skeletonAnimationController.play(clip.animationName);
+
+            mesh = new Mesh(new CubeGeometry(20, 20, 20), null);
+            this.view1.addChild3D(mesh);
+
+            //e.loader["mesh"].animation.addSkeletonAnimationClip(clip);
+            //e.loader["mesh"].animation.play(name);
         }
 
         public update(e: Event3D) {

@@ -46,7 +46,7 @@
         * @param v1 三角形的第二个顶点
         * @param v2 三角形的第三个顶点
         * @param ret t(交点到射线起始点的距离) u(交点在v1-v0上的投影的位置) v(交点在v1-v2上的投影的位置, 交点为ret=v0+pU*(v1-v0)+pV*(v2-v0))
-        * @returns 相交返回true
+        * @returns boolean 相交返回true
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -117,7 +117,7 @@
         * 检测射线相交模型
         * @param renderItem 检测的模型
         * @param inPos 相交点
-        * @returns 相交返回true
+        * @returns boolean 相交返回true
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -134,7 +134,7 @@
         * @param faces 模型面数
         * @param inPos 返回相交点
         * @param mMat 顶点的世界变换矩阵
-        * @returns 相交返回true
+        * @returns boolean 相交返回true
         * @version Egret 3.0
         * @platform Web,Native
         */

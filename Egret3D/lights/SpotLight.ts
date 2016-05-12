@@ -23,12 +23,14 @@
          * @priavete 
          */
         public static stride: number = 14;
+
         /**
-         * @language zh_CN
-         * @priavete 
-         * constructor 
-         * @param color {Vector3D}
-         */
+        * @language zh_CN
+        * 创建一个聚光源
+        * @param color 灯光颜色值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         constructor(color: number) {
             super();
             this.diffuse = color;
@@ -36,111 +38,130 @@
         }
                                 
         /**
-         * @language zh_CN
-         *   
-         * spot 的 裁切范围
-         * spot light 照射范围的大小指数
-         *  
-         * @param value Cutoff
-         */
+        * @language zh_CN
+        *   
+        * spot 的 裁切范围
+        * spot light 照射范围的大小指数
+        * @param value Cutoff
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set spotCosCutoff(value: number) {
             this._spotCosCutoff = value;
         }
                 
         /**
-         * @language zh_CN
-         *          
-         * spot 的 裁切范围
-         * spot light 照射范围的大小指数
-         * @returns Cutoff -spot 的 裁切范围
-         */
+        * @language zh_CN
+        *          
+        * spot 的 裁切范围
+        * spot light 照射范围的大小指数
+        * @returns number Cutoff -spot 的 裁切范围
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get spotCosCutoff(): number {
             return this._spotCosCutoff ;
         }
                         
         /**
-         * @language zh_CN
-         * spot 的 灯光强弱
-         * spot light 灯光圆形范围内随半径大小改变发生的灯光强弱指数
-         *  
-         * @param value 灯光强弱指数
-         */
+        * @language zh_CN
+        * spot 的 灯光强弱
+        * spot light 灯光圆形范围内随半径大小改变发生的灯光强弱指数
+        *  
+        * @param value 灯光强弱指数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set spotExponent(value: number) {
             this._spotExponent = value; 
         }
                 
         /**
-         * @language zh_CN
-         *    
-         * spot 的 灯光强弱
-         * spot light 灯光圆形范围内随半径大小改变发生的灯光强弱指数
-         * @returns 灯光强弱指数
-         */
+        * @language zh_CN
+        *    
+        * spot 的 灯光强弱
+        * spot light 灯光圆形范围内随半径大小改变发生的灯光强弱指数
+        * @returns number 灯光强弱指数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get spotExponent(): number {
             return this._spotExponent;
         }
                                 
         /**
-         * @language zh_CN
-         *    
-         * spot 的 灯光衰减
-         * spot light 灯光圆形范围内随半径大小改变发生的灯光衰减常数指数
-         * @param value 持续衰减
-         */
+        * @language zh_CN
+        *    
+        * spot 的 灯光衰减
+        * spot light 灯光圆形范围内随半径大小改变发生的灯光衰减常数指数
+        * @param value 持续衰减
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set constantAttenuation(value: number) {
             this._constantAttenuation = value;
         }
                 
         /**
-         * @language zh_CN
-         * spot 的 灯光衰减
-         * spot light 灯光圆形范围内随半径大小改变发生的灯光衰减常数指数
-         * @returns 持续衰减
-         */
+        * @language zh_CN
+        * spot 的 灯光衰减
+        * spot light 灯光圆形范围内随半径大小改变发生的灯光衰减常数指数
+        * @returns number 持续衰减
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get constantAttenuation(): number {
             return this._constantAttenuation ;
         }
 
         /**
-         * @language zh_CN
-         *  
-         * spot 的 灯光线性衰减
-         * spot light 灯光圆形范围内随半径大小改变发生的灯光线性衰减
-         * @param value 线性衰减 
-         */
+        * @language zh_CN
+        *  
+        * spot 的 灯光线性衰减
+        * spot light 灯光圆形范围内随半径大小改变发生的灯光线性衰减
+        * @param value 线性衰减
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set linearAttenuation(value: number) {
             this._linearAttenuation = value;
         }
                 
         /**
-         * @language zh_CN
-         *  
-         * spot 的 灯光线性衰减
-         * spot light 灯光圆形范围内随半径大小改变发生的灯光线性衰减
-         * @returns 线性衰减   
-         */
+        * @language zh_CN
+        *  
+        * spot 的 灯光线性衰减
+        * spot light 灯光圆形范围内随半径大小改变发生的灯光线性衰减
+        * @returns number 线性衰减
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get linearAttenuation(): number {
             return this._linearAttenuation;
         }
         
         /**
-         * @language zh_CN
-         *     
-         * spot 的 灯光线性2次衰减
-         * spot light 灯光圆形范围内随半径大小改变发生的灯光线性2次衰减
-         * @param value 2次衰减
-         */
+        * @language zh_CN
+        *     
+        * spot 的 灯光线性2次衰减
+        * spot light 灯光圆形范围内随半径大小改变发生的灯光线性2次衰减
+        * @param value 2次衰减
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set quadraticAttenuation(value: number) {
             this._quadraticAttenuation = value;
         }
         
         /**
-         * @language zh_CN
-         *  
-         * spot 的 灯光线性2次衰减
-         * spot light 灯光圆形范围内随半径大小改变发生的灯光线性2次衰减
-         * @returns 返回2次衰减
-         */
+        * @language zh_CN
+        *  
+        * spot 的 灯光线性2次衰减
+        * spot light 灯光圆形范围内随半径大小改变发生的灯光线性2次衰减
+        * @returns number 返回2次衰减
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get quadraticAttenuation(): number {
             return this._quadraticAttenuation;
         }

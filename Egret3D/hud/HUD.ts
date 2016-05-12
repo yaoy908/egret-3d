@@ -61,6 +61,17 @@
         protected _passUsage: PassUsage = new PassUsage();
 
         protected _attList: Array<GLSL.Attribute> = new Array<GLSL.Attribute>();
+
+        /**
+        * @language zh_CN
+        * 创建一个HUD对象
+        * @param x 屏幕x坐标 默认值 0
+        * @param y 屏幕y坐标 默认值 0
+        * @param width hud宽度 默认值 100
+        * @param height hud高度 默认值 100
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         constructor(x:number = 0, y :number = 0, width:number = 100, height:number = 100) {
             this._transformComponents.push(this._position);
             this._transformComponents.push(this._rotation);

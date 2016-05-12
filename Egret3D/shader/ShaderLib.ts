@@ -5,7 +5,13 @@ module egret3d {
 	export class ShaderLib {
 		static lib: { [key:string]: string } = 
 		{
- 			"AOMap_fs":
+ 			"alphaMask_fs":
+			"uniform sampler2D maskTexture ; \n" +
+			"void main(void){ \n" +
+			"materialSource.alpha *= texture2D( maskTexture , uv_0 ).x; \n" +
+			"} \n",
+
+			"AOMap_fs":
 			"uniform sampler2D aoTexture ; \n" +
 			"uniform float aoPower ; \n" +
 			"void main(void){ \n" +
@@ -34,8 +40,6 @@ module egret3d {
 			"return normalize(cross(fdx, fdy)); \n" +
 			"} \n" +
 			"void main() { \n" +
-			"if(varying_color.w == 0.0 ) \n" +
-			"discard ; \n" +
 			"diffuseColor  = vec4(1.0,1.0,1.0,1.0); \n" +
 			"specularColor = vec4(0.0,0.0,0.0,0.0); \n" +
 			"ambientColor  = vec4(0.0,0.0,0.0,0.0); \n" +
@@ -46,6 +50,8 @@ module egret3d {
 
 			"base_vs":
 			"attribute vec3 attribute_position; \n" +
+			"attribute vec3 attribute_normal; \n" +
+			"attribute vec4 attribute_color; \n" +
 			"attribute vec2 attribute_uv0; \n" +
 			"vec3 e_position = vec3(0.0, 0.0, 0.0); \n" +
 			"uniform mat4 uniform_ModelMatrix ; \n" +
@@ -75,6 +81,7 @@ module egret3d {
 			"} \n" +
 			"void main(void){ \n" +
 			"e_position = attribute_position; \n" +
+			"varying_color = attribute_color; \n" +
 			"varying_uv0 = attribute_uv0; \n" +
 			"} \n",
 
@@ -164,7 +171,7 @@ module egret3d {
 			"float specAngle = max(dot(halfDir, N), 0.0); \n" +
 			"if( lambertTerm> 0.0){ \n" +
 			"specular = pow(specAngle, materialSource.shininess ); \n" +
-			"specularColor.xyz += materialSource.specular * specular ; \n" +
+			"specularColor.xyz += materialSource.specular * specular * materialSource.roughness ; \n" +
 			"} \n" +
 			"} \n" +
 			"} \n" +
@@ -302,11 +309,21 @@ module egret3d {
 			"lightingBase_fs":
 			"",
 
+			"lightMapSpecularPower_fs":
+			"uniform sampler2D lightTexture ; \n" +
+			"varying vec2 varying_uv1 ; \n" +
+			"void main(void){ \n" +
+			"vec3 lightmap = texture2D( lightTexture , varying_uv1 ).xyz * 1.5; \n" +
+			"diffuseColor.xyz *= lightmap ; \n" +
+			"specularColor.xyz *= lightmap; \n" +
+			"} \n",
+
 			"lightMap_fs":
 			"uniform sampler2D lightTexture ; \n" +
 			"varying vec2 varying_uv1 ; \n" +
 			"void main(void){ \n" +
-			"diffuseColor.xyz *= texture2D( lightTexture , varying_uv1 ).xyz * 2.0 ; \n" +
+			"vec3 lightmap = texture2D( lightTexture , varying_uv1 ).xyz * 1.5; \n" +
+			"diffuseColor.xyz *= lightmap ; \n" +
 			"} \n",
 
 			"lineFog":
@@ -842,6 +859,7 @@ module egret3d {
 			"void main() { \n" +
 			"uv_0.xy += vec2(uvRoll[0],uvRoll[1]); \n" +
 			"diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
+			"diffuseColor.xyz = clamp(diffuseColor.xyz / diffuseColor.w,0.0,1.0); \n" +
 			"} \n",
 
 			"uvSpriteSheet_fs":

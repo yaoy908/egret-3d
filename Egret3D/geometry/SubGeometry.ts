@@ -74,6 +74,10 @@
         constructor() {
         }
 
+        /**
+        * @private
+        * @language zh_CN
+        */
         public upload(passUsage: PassUsage, contextPorxy: Context3DProxy) {
 
             this._attributeDiry = false;
@@ -113,14 +117,6 @@
                 }
 
                 offsetBytes += Geometry.normalSize * Float32Array.BYTES_PER_ELEMENT;
-            }
-            else {
-                if (passUsage.attribute_normal) {
-                    if (!passUsage.attribute_normal.uniformIndex) {
-                        passUsage.attribute_normal.uniformIndex = contextPorxy.getShaderAttribLocation(passUsage.program3D, passUsage.attribute_normal.varName);
-                        Context3DProxy.gl.enableVertexAttribArray(passUsage.attribute_normal.uniformIndex);
-                    }
-                }
             }
 
             if (this.geometry.vertexFormat & VertexFormat.VF_TANGENT) {

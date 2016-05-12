@@ -1,6 +1,7 @@
 ﻿uniform sampler2D lightTexture ;
 varying vec2 varying_uv1 ;
 void main(void){
-    diffuseColor.xyz *= texture2D( lightTexture , varying_uv1 ).xyz * 2.0 ;
+	vec3 lightmap = texture2D( lightTexture , varying_uv1 ).xyz * 1.5;
+    diffuseColor.xyz *= lightmap ;//texture2D( lightTexture , varying_uv1 ).xyz * 2.0;
 }
 
