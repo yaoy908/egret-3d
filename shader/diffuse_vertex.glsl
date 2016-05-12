@@ -7,7 +7,7 @@ void main(void){
    varying_eyeNormal = normalize(normalMatrix * -attribute_normal); 
    
    outPosition = uniform_ViewMatrix * uniform_ModelMatrix * vec4(e_position, 1.0) ; 
-   varying_ViewPose = outPosition.xyz / outPosition.w;
+   varying_ViewPose = outPosition.xyzw;
    
    varying_color = attribute_color;
 }
