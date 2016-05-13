@@ -67,5 +67,5 @@ void main(void){
    
 	outPosition = uniform_ViewMatrix * uniform_ModelMatrix * outPosition; 
   	
-    varying_ViewPose = outPosition.xyz / outPosition.w;
+    varying_ViewPose = outPosition ;
 }

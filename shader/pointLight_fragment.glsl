@@ -35,7 +35,7 @@ void calculatePointLight(MaterialSource materialSource){
 			vec3 H = normalize( normalize(lightDir) + viewDir ); 
 			float NdotH = dot( normal, H ); 
 			float lambertTerm = pow( clamp( NdotH ,0.0,1.0),materialSource.shininess ); 
-			specularColor.xyz += lambertTerm * materialSource.specular * attenuation ; 
+			specularColor.xyz += pointLight.diffuse * lambertTerm * materialSource.specular * attenuation ; 
 		} 
 	};
 }
