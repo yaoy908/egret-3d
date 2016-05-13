@@ -27,7 +27,9 @@
         private _totalCount: number = 0;
         private _loadedCount: number = 0;
         
-        
+        private _waitingLoaders: DoubleArray;
+        private _loadingList: Array<any>;
+
          /**
          * @language zh_CN
          * 构造函数
@@ -43,6 +45,8 @@
             this._ecaLoaders = new DoubleArray();
             this._eamLoaders = new DoubleArray();
 
+            this._waitingLoaders = new DoubleArray();
+            this._loadingList = [];
             this._loaderMapList = [this._imageLoaders, this._esmLoaders, this._ecaLoaders, this._eamLoaders];
         }
 
@@ -93,21 +97,21 @@
             //加载
             var url: string;
 
-            for (source of imgs) {
-                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + this._parser.texturePath + "/" + source;
-                this.loadOne(this._imageLoaders, url, source);
-            }
-            for (source of esms) {
-                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + this._parser.esmPath + "/" + source + EgretMapConfig.EsmSuffix;
-                this.loadOne(this._esmLoaders, url, source);
-            }
             for (source of ecas) {
-                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + this._parser.ecaPath + "/" + source + EgretMapConfig.EcaSuffix;
-                this.loadOne(this._ecaLoaders, url, source);
+                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + source;
+                this.createLoader(this._ecaLoaders, url, source);
+            }
+            for (source of imgs) {
+                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + source;
+                this.createLoader(this._imageLoaders, url, source);
             }
             for (source of eams) {
-                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + this._parser.eamPath + "/" + source + EgretMapConfig.EamSuffix;
-                this.loadOne(this._eamLoaders, url, source);
+                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + source;
+                this.createLoader(this._eamLoaders, url, source);
+            }
+            for (source of esms) {
+                url = EgretMapConfig.ScenePath + this._parser.sceneName + "/" + source;
+                this.createLoader(this._esmLoaders, url, source);
             }
 
             this._totalCount =
@@ -115,6 +119,9 @@
                 + this._esmLoaders.getKeys().length
                 + this._ecaLoaders.getKeys().length
                 + this._eamLoaders.getKeys().length;
+
+
+            this.loadNextOne();
         }
 
 
@@ -124,20 +131,44 @@
             }
         }
 
-        private loadOne(loaderMap: DoubleArray, url: string, source: string): void {
-            var loader: URLLoader = new URLLoader(url);
+        private createLoader(loaderMap: DoubleArray, url: string, source: string): void {
+            var loader: URLLoader = new URLLoader();
             loader.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoaded, this);
             loaderMap.put(source, loader);
+
+            this._waitingLoaders.put(url, loader);
         }
 
 
         private onLoaded(e: LoaderEvent3D): void {
             e.loader.removeEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoaded, this);
             this._loadedCount++;
+
+            var index: number = this._loadingList.indexOf(e.loader);
+            if (index > -1) {
+                this._loadingList.splice(index, 1);
+            }
+
             if (this._loadedCount == this._totalCount) {
                 var event: LoaderEvent3D = new LoaderEvent3D(LoaderEvent3D.LOADER_COMPLETE);
                 this.dispatchEvent(event);
+            } else {
+                this.loadNextOne();
             }
+        }
+
+
+        private loadNextOne(): void {
+            if (this._loadingList.length >= 3)
+                return;
+            var keys: Array<any> = this._waitingLoaders.getKeys();
+            if (keys.length == 0)
+                return;
+            var url: string = keys[0];
+            var loader: URLLoader = this._waitingLoaders.getValueByKey(url);
+            loader.load(url);
+            this._loadingList.push(loader);
+            this._waitingLoaders.remove(url);
         }
 
         /**
@@ -213,23 +244,31 @@
          * @platform Web,Native
          */
         public get progress(): number {
-            var value: number = 0;
             var loader: URLLoader;
-            var percent: number = 1 / this._totalCount;
-
-           var loader: URLLoader;
+            var loader: URLLoader;
             var loaderList: Array<URLLoader>;
 
+            var total: number = 0;
+            var loaded: number = 0;
+
+            var loadingCount: number = 0;
             var hashTable: DoubleArray;
             for (hashTable of this._loaderMapList) {
-                loaderList = this._imageLoaders.getValues();
+                loaderList = hashTable.getValues();
                 for (loader of loaderList) {
                     if (loader.bytesTotal <= 0)
                         continue;
-                    value += percent * loader.bytesLoaded / loader.bytesTotal;
+                    loaded += loader.bytesLoaded;
+                    total += loader.bytesTotal;
+                    loadingCount++;
                 }
             }
 
+            if (loadingCount == 0) {
+                return 0;
+            }
+
+            var value: number = (loaded / total) * (loadingCount / this._totalCount);
             return value;
 
         }

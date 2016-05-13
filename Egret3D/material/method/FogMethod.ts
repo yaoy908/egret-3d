@@ -27,15 +27,15 @@
         */
         constructor(fogType: string = "expHeightFog_fs" ) {
             super();
-            this.methodType = TextureMethodType.diffuse; 
-            this.vsShaderList.push("vertexPos_vs");
+
+            this.vsShaderList[ShaderPhaseType.local_vertex].push( "vertexPos_vs" );
 
             if (fogType == "line") {
-                this.fsShaderList.push("lineFog");
+                this.fsShaderList[ShaderPhaseType.lighting_fragment].push("lineFog");
             } else if (fogType == "exp") {
-                this.fsShaderList.push("expFog_fs");
+                this.fsShaderList[ShaderPhaseType.lighting_fragment].push("expFog_fs");
             } else if (fogType == "expHeightFog_fs") {
-                this.fsShaderList.push("expHeightFog_fs");
+                this.fsShaderList[ShaderPhaseType.lighting_fragment].push("expHeightFog_fs");
             }
             //0.5, 0.6, 0.7
             this.uniform_globalFog[0] = 0.5;

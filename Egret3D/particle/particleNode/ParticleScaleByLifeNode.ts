@@ -14,7 +14,9 @@
 
             super();
             this.name = "ParticleScaleByLifeNode"; 
-            this.vertex_ShaderName = "particle_ScaleByLife";
+
+            this.vertex_ShaderName[ShaderPhaseType.local_vertex] = this.vertex_ShaderName[ShaderPhaseType.local_vertex] || [];
+            this.vertex_ShaderName[ShaderPhaseType.local_vertex].push("particle_ScaleByLife");
 
             this.attribute_Scale = new GLSL.VarRegister();
             this.attribute_Scale.name = "attribute_ScaleByLife";

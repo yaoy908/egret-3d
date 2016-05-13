@@ -22,13 +22,16 @@
         */
         constructor( useSpecularPower:boolean = true ) {
             super();
-            this.methodType = TextureMethodType.diffuse; 
-            this.vsShaderList.push("secondaryUV_vs");
+
+            this.vsShaderList[ShaderPhaseType.local_vertex] = this.vsShaderList[ShaderPhaseType.local_vertex] || [];
+            this.vsShaderList[ShaderPhaseType.local_vertex].push("secondaryUV_vs");
 
             if (useSpecularPower){
-                this.fsShaderList.push("lightMapSpecularPower_fs");
+                this.fsShaderList[ShaderPhaseType.shadow_fragment] = this.fsShaderList[ShaderPhaseType.shadow_fragment] || [];
+                this.fsShaderList[ShaderPhaseType.shadow_fragment].push("lightMapSpecularPower_fs");
             } else {
-                this.fsShaderList.push("lightMap_fs");
+                this.fsShaderList[ShaderPhaseType.shadow_fragment] = this.fsShaderList[ShaderPhaseType.shadow_fragment] || [];
+                this.fsShaderList[ShaderPhaseType.shadow_fragment].push("lightMap_fs");
             }
         }
 

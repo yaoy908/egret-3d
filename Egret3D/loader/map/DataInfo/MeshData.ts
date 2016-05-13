@@ -7,7 +7,7 @@ module egret3d {
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class MeshData {
+    export class MeshData extends SourceDataBase{
 
         /**
          * @language zh_CN
@@ -126,6 +126,7 @@ module egret3d {
         * constructor 
         */
         public constructor() {
+            super();
         }
        
     }

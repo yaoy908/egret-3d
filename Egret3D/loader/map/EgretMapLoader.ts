@@ -154,43 +154,38 @@
         //灯光
         private createLight(): void {
              //平行光
-            if (this._parser.enableDirectLight && this._parser.dirLightDatas) {
-                var dData: DirectionLightData;
-                for (dData of this._parser.dirLightDatas) {
-                    var direction: Vector3D = new Vector3D(dData.dirX, dData.dirY, dData.dirZ);
+            var lightData: LightData;
+            for (lightData of this._parser.lightDatas) {
+                if (lightData.type == LightType.directlight && this._parser.enableDirectLight) {
+                    var direction: Vector3D = new Vector3D(lightData.dirX, lightData.dirY, lightData.dirZ);
                     var dirLight: DirectLight = new DirectLight(direction);
-                    dirLight.lightId = dData.id;
-                    dirLight.diffuse = dData.diffuseColor;
+                    dirLight.lightId = lightData.id;
+                    dirLight.diffuse = lightData.diffuseColor;
 
-                    dirLight.ambient = dData.ambientColor;
-                    dirLight.halfIntensity = dData.halfIntensity;
-                    dirLight.intensity = dData.intensity;
+                    dirLight.ambient = lightData.ambientColor;
+                    dirLight.halfIntensity = lightData.halfIntensity;
+                    dirLight.intensity = lightData.intensity;
 
-                    this._lightHashMap.put(dData.id, dirLight);
-                   
-                }
-            }
+                    this._lightHashMap.put(lightData.id, dirLight);
 
-            //点光源
-            if (this._parser.enablePointLight && this._parser.pointLightDatas) {
-                var pData: PointLightData;
-                for (pData of this._parser.pointLightDatas) {
+                } else if (lightData.type == LightType.pointlight && this._parser.enableDirectLight) {
                     var pLight: PointLight = new PointLight(0);
-                    pLight.lightId = pData.id;
-                    pLight.x = pData.posX;
-                    pLight.y = pData.posY;
-                    pLight.z = pData.posZ;
+                    pLight.lightId = lightData.id;
+                    pLight.x = lightData.posX;
+                    pLight.y = lightData.posY;
+                    pLight.z = lightData.posZ;
 
-                    pLight.ambient = pData.ambientColor;
-                    pLight.diffuse = pData.diffuseColor;
-                    pLight.radius = pData.radius;
+                    pLight.ambient = lightData.ambientColor;
+                    pLight.diffuse = lightData.diffuseColor;
+                    pLight.radius = lightData.radius;
 
-                    pLight.falloff = pData.falloff;
-                    pLight.intensity = pData.intensity;
+                    pLight.falloff = lightData.falloff;
+                    pLight.intensity = lightData.intensity;
 
-                    this._lightHashMap.put(pData.id, pLight);
-
+                    this._lightHashMap.put(lightData.id, pLight);
                 }
+
+                   
             }
             
         }

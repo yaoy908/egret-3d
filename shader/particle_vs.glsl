@@ -1,4 +1,4 @@
-
+attribute vec4 attribute_color;
 
 uniform mat4 uniform_cameraMatrix;
 const float PI = 3.1415926 ;

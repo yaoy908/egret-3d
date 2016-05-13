@@ -25,15 +25,18 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        vertex_shaders: string[];
+        vertex_shaders: { [shaderPhaseType: number]: string[] };
+                                         
                         
+
+    
         /**
         * @language zh_CN
         * 动画状态机片段着色器文件名列表
         * @version Egret 3.0
         * @platform Web,Native
         */
-        fragment_shaders: string[];
+        fragment_shaders: { [shaderPhaseType: number]: string[] };
                                 
         /**
         * @language zh_CN

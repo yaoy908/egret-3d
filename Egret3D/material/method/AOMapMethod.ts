@@ -21,7 +21,7 @@
         */
         constructor(texture: ITexture) {
             super();
-            this.fsShaderList.push("AOMap_fs");
+            this.fsShaderList[ShaderPhaseType.shadow_fragment].push("AOMap_fs");
             this.lightTexture = texture;
         }
 

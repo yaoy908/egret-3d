@@ -7,5 +7,6 @@ void main(void) {
 	outPosition.xyz += globalPosition.xyz;
 	outPosition = uniform_ModelMatrix * outPosition; 
 	outPosition = uniform_ViewMatrix * outPosition; 
+	gl_Position = uniform_ProjectionMatrix * outPosition ;
 }
 	

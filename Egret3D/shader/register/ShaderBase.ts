@@ -32,7 +32,8 @@
         * @param materialData
         * @param usage
         */
-        constructor( ) {
+        constructor(type:number) {
+            this.shaderType = type; 
         }
 
         /**

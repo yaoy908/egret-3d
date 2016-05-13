@@ -20,6 +20,8 @@
     */
     export class PointLight extends LightBase {
 
+        private scenePosMat: Matrix4_4 = new Matrix4_4();
+        private static scenePos: Vector3D = new Vector3D();
         /**
          * @language zh_CN
          * @private
@@ -92,6 +94,21 @@
         * @param lightData 灯光数据
         */
         public updateLightData(camera: Camera3D, index: number, lightData: Float32Array) {
+
+            //this.scenePosMat.identity();
+            //this.scenePosMat.copyFrom(this.modelMatrix);
+            //this.scenePosMat.multiply(camera.viewMatrix);
+            //this.scenePosMat.multiply(camera.projectMatrix);
+
+            //PointLight.scenePos.x = this.globalPosition.x;
+            //PointLight.scenePos.y = this.globalPosition.y;
+            //PointLight.scenePos.z = this.globalPosition.z;
+            //PointLight.scenePos.w = 1.0;
+            //this.scenePosMat.transformVector4(PointLight.scenePos, PointLight.scenePos);
+
+            //PointLight.scenePos.x = PointLight.scenePos.x ;
+            //PointLight.scenePos.y = PointLight.scenePos.y ;
+            //PointLight.scenePos.z = PointLight.scenePos.z ;
 
             lightData[index * PointLight.stride] = this.globalPosition.x;
             lightData[index * PointLight.stride + 1] = this.globalPosition.y;

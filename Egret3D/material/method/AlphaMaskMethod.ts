@@ -20,8 +20,9 @@
         */
         constructor() {
             super();
-            this.methodType = TextureMethodType.diffuse;
-            this.fsShaderList.push("alphaMask_fs");
+
+            this.fsShaderList[ShaderPhaseType.shadow_fragment] = this.fsShaderList[ShaderPhaseType.shadow_fragment]|| [] ;
+            this.fsShaderList[ShaderPhaseType.shadow_fragment].push("alphaMask_fs");
         }
 
         /**

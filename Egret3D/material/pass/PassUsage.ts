@@ -296,8 +296,8 @@
 
         //public vertexShaderRegister: ver;
    
-        public vertexShader: ShaderBase = new ShaderBase();
-        public fragmentShader: ShaderBase = new ShaderBase();
+        public vertexShader: ShaderBase = new ShaderBase(Shader.vertex);
+        public fragmentShader: ShaderBase = new ShaderBase(Shader.fragment);
 
         public maxDirectLight: number = 0;
         public maxSpotLight: number = 0;
