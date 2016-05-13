@@ -162,16 +162,15 @@ module egret3d {
 			"directLight.intensity = uniform_directLightSource[i*11+9]; \n" +
 			"directLight.halfIntensity = uniform_directLightSource[i*11+10]; \n" +
 			"ambientColor.xyz += directLight.ambient.xyz * directLight.diffuse ; \n" +
-			"vec3 lightDir = normalize(directLight.direction); \n" +
+			"vec3 lightDir = mat3(uniform_ViewMatrix) * normalize(directLight.direction); \n" +
 			"lambertTerm = max(dot(lightDir,N), 0.0); \n" +
 			"light.xyz += directLight.diffuse * lambertTerm * directLight.intensity ; \n" +
-			"specular = 0.0; \n" +
-			"vec3 viewDir = normalize(varying_ViewPose); \n" +
-			"vec3 halfDir = normalize(lightDir + viewDir); \n" +
-			"float specAngle = max(dot(halfDir, N), 0.0); \n" +
 			"if( lambertTerm> 0.0){ \n" +
-			"specular = pow(specAngle, materialSource.shininess ); \n" +
-			"specularColor.xyz += materialSource.specular * specular * materialSource.roughness ; \n" +
+			"vec3 viewDir = normalize(varying_ViewPose.xyz/varying_ViewPose.w); \n" +
+			"vec3 H = normalize( normalize(lightDir) + viewDir ); \n" +
+			"float NdotH = dot( normal, H ); \n" +
+			"float lambertTerm = pow( clamp( NdotH ,0.0,1.0),materialSource.shininess ); \n" +
+			"specularColor.xyz += directLight.diffuse * materialSource.specular * lambertTerm; \n" +
 			"} \n" +
 			"} \n" +
 			"} \n" +
@@ -734,7 +733,7 @@ module egret3d {
 			"vec3 H = normalize( normalize(lightDir) + viewDir ); \n" +
 			"float NdotH = dot( normal, H ); \n" +
 			"float lambertTerm = pow( clamp( NdotH ,0.0,1.0),materialSource.shininess ); \n" +
-			"specularColor.xyz += lambertTerm * materialSource.specular * attenuation ; \n" +
+			"specularColor.xyz += pointLight.diffuse * lambertTerm * materialSource.specular * attenuation ; \n" +
 			"} \n" +
 			"}; \n" +
 			"} \n" +
@@ -823,7 +822,7 @@ module egret3d {
 			"mat3 normalMatrix = transpose( inverse(mat3(uniform_ProjectionMatrix * uniform_ViewMatrix))); \n" +
 			"varying_eyeNormal = normalize(normalMatrix * -temp_n.xyz); \n" +
 			"outPosition = uniform_ViewMatrix * uniform_ModelMatrix * outPosition; \n" +
-			"varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
+			"varying_ViewPose = outPosition ; \n" +
 			"} \n",
 
 			"specularMap_fragment":

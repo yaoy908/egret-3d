@@ -114,7 +114,7 @@
                     y = (yi / this._segmentsH - .5) * this._height;
 
                     switch (aixs) {
-                        case Vector3D.X_AXIS:
+                        case Vector3D.Y_AXIS:
                             this.verticesData[index++] = x;
                             this.verticesData[index++] = 0;
                             this.verticesData[index++] = y;
@@ -123,7 +123,7 @@
                             this.verticesData[index++] = 1;
                             this.verticesData[index++] = 0;
                             break;
-                        case Vector3D.Y_AXIS:
+                        case Vector3D.Z_AXIS:
                             this.verticesData[index++] = x;
                             this.verticesData[index++] = y;
                             this.verticesData[index++] = 0;
@@ -132,7 +132,7 @@
                             this.verticesData[index++] = 0;
                             this.verticesData[index++] = -1;
                             break;
-                        case Vector3D.Z_AXIS:
+                        case Vector3D.X_AXIS:
                             this.verticesData[index++] = 0;
                             this.verticesData[index++] = x;
                             this.verticesData[index++] = y;
