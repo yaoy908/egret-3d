@@ -21,18 +21,17 @@ void calculateDirectLight( MaterialSource materialSource ){
 		directLight.halfIntensity = uniform_directLightSource[i*11+10]; 
        
         ambientColor.xyz += directLight.ambient.xyz * directLight.diffuse ;
-        vec3 lightDir = normalize(directLight.direction);
+        vec3 lightDir = mat3(uniform_ViewMatrix) * normalize(directLight.direction);
         lambertTerm = max(dot(lightDir,N), 0.0); 
         light.xyz += directLight.diffuse * lambertTerm * directLight.intensity ; 
         
-        specular = 0.0; 
-        vec3 viewDir = normalize(varying_ViewPose); 
-        vec3 halfDir = normalize(lightDir + viewDir); 
-        float specAngle = max(dot(halfDir, N), 0.0); 
-		if( lambertTerm> 0.0){
-			specular = pow(specAngle, materialSource.shininess ); 
-            specularColor.xyz += materialSource.specular * specular * materialSource.roughness ; 
-		}
+        if( lambertTerm> 0.0){ 
+			vec3 viewDir = normalize(varying_ViewPose.xyz/varying_ViewPose.w); 
+			vec3 H = normalize( normalize(lightDir) + viewDir ); 
+			float NdotH = dot( normal, H ); 
+			float lambertTerm = pow( clamp( NdotH ,0.0,1.0),materialSource.shininess ); 
+			specularColor.xyz += directLight.diffuse * materialSource.specular * lambertTerm; 
+		} 
     }
 }
 
