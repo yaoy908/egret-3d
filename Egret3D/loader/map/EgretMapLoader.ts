@@ -1,18 +1,19 @@
 ﻿module egret3d {
-     /**
-     * @language zh_CN
-     * @class egret3d.EgretMapLoader
-     * @classdesc
-     * 加载egret地图类
-     * 用于加载和解析egret地图文件的类，加载完毕后，mesh内容已经添加到了container中.
-     * 主要封装了esm/eca/png/eam的加载和组装，以及mesh的render method相关信息，和灯光数据的生效.
-     * 加载完毕后，会派发事件LoaderEvent3D.LOADER_COMPLETE
-     * @see egret3d.EventDispatcher
-     *
-     * @version Egret 3.0
-     * @platform Web,Native
-     */
 
+    /**
+    * @language zh_CN
+    * @class egret3d.EgretMapLoader
+    * @classdesc
+    * 加载egret地图类
+    * 用于加载和解析egret地图文件的类，加载完毕后，mesh内容已经添加到了container中.
+    * 主要封装了esm/eca/png/eam的加载和组装，以及mesh的render method相关信息，和灯光数据的生效.
+    * 加载完毕后，会派发事件LoaderEvent3D.LOADER_COMPLETE
+    * @see egret3d.EventDispatcher
+    *
+    * @includeExample loader/map/EgretMapLoader.ts
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class EgretMapLoader extends EventDispatcher{
 
         private _sceneName: string;
