@@ -74,9 +74,9 @@
         * @param segmentsH 高度分段数
         * @param uScale U缩放
         * @param vScale V缩放
-        * @param aixs 0:Y轴为0 1:Z轴为0 2:X轴为0
+        * @param aixs 平面的朝向 默认参数为Vector3D.Y_AXIS
         */
-        constructor(width: number = 500, height: number = 500, segmentsW: number = 1, segmentsH: number = 1, uScale: number = 1, vScale: number = 1, aixs: Vector3D = Vector3D.X_AXIS) {
+        constructor(width: number = 500, height: number = 500, segmentsW: number = 1, segmentsH: number = 1, uScale: number = 1, vScale: number = 1, aixs: Vector3D = Vector3D.Y_AXIS) {
             super();
             this._width = width;
             this._height = height;
