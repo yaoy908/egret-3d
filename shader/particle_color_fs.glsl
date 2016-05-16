@@ -1,5 +1,4 @@
 uniform float uniform_colorTransform[16] ;
-const vec4 bit_shift = vec4(256.0*256.0*256.0, 256.0*256.0, 256.0, 1.0);
 const vec4 bit_mask  = vec4(0.0001, 0.01, 1.0, 0.000001 );
 vec4 pack_depth(float depth)
 {
