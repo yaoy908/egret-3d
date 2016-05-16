@@ -84,6 +84,21 @@ module egret3d {
 			"varying_uv0 = attribute_uv0; \n" +
 			"} \n",
 
+			"bezier":
+			"vec2 quadratic_bezier(vec2 A, vec2 B, vec2 C, float t) \n" +
+			"{ \n" +
+			"vec2 D = mix(A, B, t); \n" +
+			"vec2 E = mix(B, C, t); \n" +
+			"return mix(D, E, t); \n" +
+			"} \n" +
+			"vec2 cubic_bezier(vec2 A, vec2 B, vec2 C, vec2 D, float t) \n" +
+			"{ \n" +
+			"vec2 E = mix(A, B, t); \n" +
+			"vec2 F = mix(B, C, t); \n" +
+			"vec2 G = mix(C, D, t); \n" +
+			"return quadratic_bezier(E, F, G, t); \n" +
+			"} \n",
+
 			"cube_fragment":
 			"uniform samplerCube diffuseTexture ; \n" +
 			"varying vec3 varying_pos; \n" +
@@ -416,7 +431,6 @@ module egret3d {
 
 			"particle_color_fs":
 			"uniform float uniform_colorTransform[16] ; \n" +
-			"const vec4 bit_shift = vec4(256.0*256.0*256.0, 256.0*256.0, 256.0, 1.0); \n" +
 			"const vec4 bit_mask  = vec4(0.0001, 0.01, 1.0, 0.000001 ); \n" +
 			"vec4 pack_depth(float depth) \n" +
 			"{ \n" +
@@ -481,12 +495,32 @@ module egret3d {
 			"localPosition = buildRotMat4(vec3(0.0,0.0,rot)) * localPosition; \n" +
 			"} \n",
 
-			"particle_ScaleByLife":
-			"attribute vec2 attribute_ScaleByLife ; \n" +
+			"particle_size_vs":
+			"uniform float uniform_size[16] ; \n" +
+			"const vec4 bit_mask  = vec4(0.0001, 0.01, 1.0, 0.000001 ); \n" +
+			"vec4 pack_depth(float depth) \n" +
+			"{ \n" +
+			"vec4 res ; \n" +
+			"res.w =  floor(depth * bit_mask.w ); \n" +
+			"res.x =  floor((depth-res.w*1000000.0) * bit_mask.x ) ; \n" +
+			"res.y =  floor((depth-res.w*1000000.0-res.x*10000.0) * bit_mask.y ); \n" +
+			"res.z =  floor(depth-res.w*1000000.0-res.x*10000.0-res.y*100.0) ; \n" +
+			"return res; \n" +
+			"} \n" +
 			"float particle(  ParticleData emit ){ \n" +
-			"float scale = -(attribute_ScaleByLife.y - attribute_ScaleByLife.x); \n" +
-			"float l = clamp(max(scale,0.0),0.0,1.0); \n" +
-			"localPosition.xyz = (emit.life*l - currentTime ) * localPosition.xyz * scale; \n" +
+			"float w = pt.w/pt.y; \n" +
+			"vec4 startSize ; \n" +
+			"vec4 nextSize ; \n" +
+			"for( int i = 1 ; i < 8 ; i++ ){ \n" +
+			"startSize = pack_depth(uniform_scale[i-1]) ; \n" +
+			"nextSize = pack_depth(uniform_scale[i]) ; \n" +
+			"} \n" +
+			"float len = nextSegment - startSegment ; \n" +
+			"float ws = ( w - startSegment ) / len ; \n" +
+			"vec4 start = pack_depth(startSize) ; \n" +
+			"vec4 end = pack_depth(nextSize) ; \n" +
+			"vec2 p = cubic_bezier( vec2(start.x,end.x) , vec2(start.y,end.y) , vec2(start.z,end.z) , vec2(start.w,end.w) , ws); \n" +
+			"localPosition.xyz *= p.y ; \n" +
 			"} \n",
 
 			"particle_time":
@@ -659,141 +693,6 @@ module egret3d {
 			"globalPosition.xyz = vec3(0.0,0.0,0.0); \n" +
 			"} \n",
 
-			"particle_vsback":
-			"attribute vec3 attribute_offset; \n" +
-			"attribute vec3 attribute_lifecycle; \n" +
-			"attribute vec3 attribute_direction; \n" +
-			"attribute vec2 attribute_speed; \n" +
-			"uniform mat4 uniform_cameraMatrix; \n" +
-			"uniform float uniform_time; \n" +
-			"const float PI = 3.1415926 ; \n" +
-			"vec4 position; \n" +
-			"float currentTime = 0.0; \n" +
-			"float totalTime = 0.0; \n" +
-			"mat4 buildRotMat4(vec3 rot) \n" +
-			"{ \n" +
-			"mat4 ret = mat4( \n" +
-			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
-			"vec4(0.0, 1.0, 0.0, 0.0), \n" +
-			"vec4(0.0, 0.0, 1.0, 0.0), \n" +
-			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
-			"); \n" +
-			"float s; \n" +
-			"float c; \n" +
-			"s = sin(rot.x); \n" +
-			"c = cos(rot.x); \n" +
-			"ret *= mat4( \n" +
-			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
-			"vec4(0.0, c, s, 0.0), \n" +
-			"vec4(0.0, -s, c, 0.0), \n" +
-			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
-			"); \n" +
-			"s = sin(rot.y); \n" +
-			"c = cos(rot.y); \n" +
-			"ret *= mat4( \n" +
-			"vec4(c, 0.0, -s, 0.0), \n" +
-			"vec4(0.0, 1.0, 0.0, 0.0), \n" +
-			"vec4(s, 0.0, c, 0.0), \n" +
-			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
-			"); \n" +
-			"s = sin(rot.z); \n" +
-			"c = cos(rot.z); \n" +
-			"ret *= mat4( \n" +
-			"vec4(c, s, 0.0, 0.0), \n" +
-			"vec4(-s, c, 0.0, 0.0), \n" +
-			"vec4(0.0, 0.0, 1.0, 0.0), \n" +
-			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
-			"); \n" +
-			"return ret; \n" +
-			"} \n" +
-			"void main(void) { \n" +
-			"varying_color = vec4(1.0, 1.0, 1.0, 1.0); \n" +
-			"mat4 billboardMatrix = mat4( \n" +
-			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
-			"vec4(0.0, 1.0, 0.0, 0.0), \n" +
-			"vec4(0.0, 0.0, 1.0, 0.0), \n" +
-			"vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-			"if (uniform_enableBillboardXYZ == 111.0) \n" +
-			"{ \n" +
-			"billboardMatrix = mat4( \n" +
-			"uniform_cameraMatrix[0], \n" +
-			"uniform_cameraMatrix[1], \n" +
-			"uniform_cameraMatrix[2], \n" +
-			"vec4(0.0, 0.0,1.0, 1.0)); \n" +
-			"} \n" +
-			"else \n" +
-			"{ \n" +
-			"if (mod(uniform_enableBillboardXYZ, 10.0) == 1.0) \n" +
-			"{ \n" +
-			"billboardMatrix *= mat4( \n" +
-			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
-			"vec4(0.0, uniform_cameraMatrix[1].y, uniform_cameraMatrix[1].z, 0.0), \n" +
-			"vec4(0.0, uniform_cameraMatrix[2].y, uniform_cameraMatrix[2].z, 0.0), \n" +
-			"vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-			"} \n" +
-			"if (mod(uniform_enableBillboardXYZ, 100.0) / 10.0 > 1.0) \n" +
-			"{ \n" +
-			"billboardMatrix *= mat4( \n" +
-			"vec4(uniform_cameraMatrix[0].x, 0.0, uniform_cameraMatrix[0].z, 0.0), \n" +
-			"vec4(0.0, 1.0, 0.0, 0.0), \n" +
-			"vec4(uniform_cameraMatrix[2].x, 0.0, uniform_cameraMatrix[2].z, 0.0), \n" +
-			"vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-			"} \n" +
-			"if (uniform_enableBillboardXYZ / 100.0 > 1.0) \n" +
-			"{ \n" +
-			"billboardMatrix *= mat4( \n" +
-			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
-			"vec4(0.0, uniform_cameraMatrix[1].y, uniform_cameraMatrix[1].z, 0.0), \n" +
-			"vec4(0.0, uniform_cameraMatrix[2].y, uniform_cameraMatrix[2].z, 0.0), \n" +
-			"vec4(0.0, 0.0, 0.0, 1.0)); \n" +
-			"} \n" +
-			"} \n" +
-			"mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
-			"mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); \n" +
-			"varying_eyeNormal = normalize(normalMatrix * -e_normal); \n" +
-			"position = vec4(attribute_offset, 1.0); \n" +
-			"outPosition = vec4(e_position, 1.0); \n" +
-			"outPosition = billboardMatrix * outPosition; \n" +
-			"totalTime = attribute_lifecycle.x + attribute_lifecycle.y; \n" +
-			"if (attribute_lifecycle.z == 1.0) \n" +
-			"{ \n" +
-			"currentTime = mod(uniform_time, totalTime); \n" +
-			"if (currentTime >= attribute_lifecycle.x && currentTime <= totalTime) \n" +
-			"{ \n" +
-			"currentTime = currentTime - attribute_lifecycle.x; \n" +
-			"} \n" +
-			"else \n" +
-			"{ \n" +
-			"varying_color.w = 0.0; \n" +
-			"} \n" +
-			"} \n" +
-			"else \n" +
-			"{ \n" +
-			"if (uniform_time < attribute_lifecycle.x || uniform_time > totalTime) \n" +
-			"{ \n" +
-			"varying_color.w = 0.0; \n" +
-			"} \n" +
-			"else \n" +
-			"{ \n" +
-			"currentTime = uniform_time - attribute_lifecycle.x; \n" +
-			"} \n" +
-			"} \n" +
-			"if (currentTime > 0.0) \n" +
-			"{ \n" +
-			"float t = currentTime * 0.001; \n" +
-			"float ratio = currentTime / attribute_lifecycle.y; \n" +
-			"position.xyz += attribute_direction * (t * (attribute_speed.x + attribute_speed.y * t)); \n" +
-			"varying_color.xyz += uniform_startColor + (uniform_endColor - uniform_startColor) *  ratio; \n" +
-			"vec3 rot = uniform_startRot + (uniform_endRot - uniform_startRot) *  ratio; \n" +
-			"rot  *= (PI / 180.0); \n" +
-			"position = buildRotMat4(rot) * position; \n" +
-			"} \n" +
-			"position = uniform_ModelMatrix * position; \n" +
-			"outPosition.xyz += position.xyz; \n" +
-			"outPosition = uniform_ViewMatrix * outPosition; \n" +
-			"varying_ViewPose = outPosition.xyz / outPosition.w; \n" +
-			"} \n",
-
 			"pointLight_fragment":
 			"const int max_pointLight = 0 ; \n" +
 			"uniform float uniform_pointLightSource[12*max_pointLight] ; \n" +
@@ -945,6 +844,7 @@ module egret3d {
 
 			"uvRoll_fs":
 			"uniform float uvRoll[2] ; \n" +
+			"uniform sampler2D diffuseTexture; \n" +
 			"vec4 diffuseColor ; \n" +
 			"void main() { \n" +
 			"uv_0.xy += vec2(uvRoll[0],uvRoll[1]); \n" +
@@ -954,6 +854,7 @@ module egret3d {
 
 			"uvSpriteSheet_fs":
 			"uniform float uvSpriteSheet[4] ; \n" +
+			"uniform sampler2D diffuseTexture; \n" +
 			"vec4 diffuseColor ; \n" +
 			"void main() { \n" +
 			"uv_0.xy *= vec2(uvSpriteSheet[2],uvSpriteSheet[3]); \n" +

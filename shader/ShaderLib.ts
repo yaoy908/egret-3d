@@ -84,6 +84,21 @@ module egret3d {
 			"varying_uv0 = attribute_uv0; \n" +
 			"} \n",
 
+			"bezier":
+			"vec2 quadratic_bezier(vec2 A, vec2 B, vec2 C, float t) \n" +
+			"{ \n" +
+			"vec2 D = mix(A, B, t); \n" +
+			"vec2 E = mix(B, C, t); \n" +
+			"return mix(D, E, t); \n" +
+			"} \n" +
+			"vec2 cubic_bezier(vec2 A, vec2 B, vec2 C, vec2 D, float t) \n" +
+			"{ \n" +
+			"vec2 E = mix(A, B, t); \n" +
+			"vec2 F = mix(B, C, t); \n" +
+			"vec2 G = mix(C, D, t); \n" +
+			"return quadratic_bezier(E, F, G, t); \n" +
+			"} \n",
+
 			"cube_fragment":
 			"uniform samplerCube diffuseTexture ; \n" +
 			"varying vec3 varying_pos; \n" +
@@ -416,7 +431,6 @@ module egret3d {
 
 			"particle_color_fs":
 			"uniform float uniform_colorTransform[16] ; \n" +
-			"const vec4 bit_shift = vec4(256.0*256.0*256.0, 256.0*256.0, 256.0, 1.0); \n" +
 			"const vec4 bit_mask  = vec4(0.0001, 0.01, 1.0, 0.000001 ); \n" +
 			"vec4 pack_depth(float depth) \n" +
 			"{ \n" +
@@ -481,12 +495,32 @@ module egret3d {
 			"localPosition = buildRotMat4(vec3(0.0,0.0,rot)) * localPosition; \n" +
 			"} \n",
 
-			"particle_ScaleByLife":
-			"attribute vec2 attribute_ScaleByLife ; \n" +
+			"particle_size_vs":
+			"uniform float uniform_size[16] ; \n" +
+			"const vec4 bit_mask  = vec4(0.0001, 0.01, 1.0, 0.000001 ); \n" +
+			"vec4 pack_depth(float depth) \n" +
+			"{ \n" +
+			"vec4 res ; \n" +
+			"res.w =  floor(depth * bit_mask.w ); \n" +
+			"res.x =  floor((depth-res.w*1000000.0) * bit_mask.x ) ; \n" +
+			"res.y =  floor((depth-res.w*1000000.0-res.x*10000.0) * bit_mask.y ); \n" +
+			"res.z =  floor(depth-res.w*1000000.0-res.x*10000.0-res.y*100.0) ; \n" +
+			"return res; \n" +
+			"} \n" +
 			"float particle(  ParticleData emit ){ \n" +
-			"float scale = -(attribute_ScaleByLife.y - attribute_ScaleByLife.x); \n" +
-			"float l = clamp(max(scale,0.0),0.0,1.0); \n" +
-			"localPosition.xyz = (emit.life*l - currentTime ) * localPosition.xyz * ( scale + 1.0 ); \n" +
+			"float w = pt.w/pt.y; \n" +
+			"vec4 startSize ; \n" +
+			"vec4 nextSize ; \n" +
+			"for( int i = 1 ; i < 8 ; i++ ){ \n" +
+			"startSize = pack_depth(uniform_scale[i-1]) ; \n" +
+			"nextSize = pack_depth(uniform_scale[i]) ; \n" +
+			"} \n" +
+			"float len = nextSegment - startSegment ; \n" +
+			"float ws = ( w - startSegment ) / len ; \n" +
+			"vec4 start = pack_depth(startSize) ; \n" +
+			"vec4 end = pack_depth(nextSize) ; \n" +
+			"vec2 p = cubic_bezier( vec2(start.x,end.x) , vec2(start.y,end.y) , vec2(start.z,end.z) , vec2(start.w,end.w) , ws); \n" +
+			"localPosition.xyz *= p.y ; \n" +
 			"} \n",
 
 			"particle_time":
@@ -810,6 +844,7 @@ module egret3d {
 
 			"uvRoll_fs":
 			"uniform float uvRoll[2] ; \n" +
+			"uniform sampler2D diffuseTexture; \n" +
 			"vec4 diffuseColor ; \n" +
 			"void main() { \n" +
 			"uv_0.xy += vec2(uvRoll[0],uvRoll[1]); \n" +
@@ -819,6 +854,7 @@ module egret3d {
 
 			"uvSpriteSheet_fs":
 			"uniform float uvSpriteSheet[4] ; \n" +
+			"uniform sampler2D diffuseTexture; \n" +
 			"vec4 diffuseColor ; \n" +
 			"void main() { \n" +
 			"uv_0.xy *= vec2(uvSpriteSheet[2],uvSpriteSheet[3]); \n" +

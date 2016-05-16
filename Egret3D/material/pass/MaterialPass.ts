@@ -79,15 +79,11 @@
         * @platform Web,Native
         */
         public addMethod(method: MethodBase) {
-            //var shaderPhase: string;
-            //var shaderList: string[];
-            //for (shaderPhase in method.vsShaderList) {
-            //    shaderList = this._vs_shader_methods[shaderPhase];
-            //    for (var i: number = 0; i < shaderList.length; i++ ){
-            //        this._vs_shader_methods[shaderPhase].push(shaderList[i]);
-            //    }
-            //}
-            //this._passChange = true;
+            var index: number = this.methodList.indexOf(method);
+            if (index == -1) {
+                this.methodList.push(method);
+                this._passChange = true;
+            }
         }
 
         /**
@@ -167,6 +163,30 @@
             }
         }
 
+        private initOthreMethods() {
+            var shaderPhase: string;
+            var shaderList: string[];
+            for (var d: number = 0; d < this.methodList.length;d++ ) {
+                var method: MethodBase = this.methodList[d];
+                
+
+                for (shaderPhase in method.vsShaderList) {
+                    shaderList = method.vsShaderList[shaderPhase];
+                    for (var i: number = 0; i < shaderList.length; i++) {
+                        this._vs_shader_methods[shaderPhase] = this._vs_shader_methods[shaderPhase] || [] ;
+                        this._vs_shader_methods[shaderPhase].push(shaderList[i]);
+                    }
+                }
+                for (shaderPhase in method.fsShaderList) {
+                    shaderList = method.fsShaderList[shaderPhase];
+                    for (var i: number = 0; i < shaderList.length; i++) {
+                        this._fs_shader_methods[shaderPhase] = this._fs_shader_methods[shaderPhase] || [];
+                        this._fs_shader_methods[shaderPhase].push(shaderList[i]);
+                    }
+                }
+            }
+        }
+
         /**
         * @language zh_CN
         * @private
@@ -180,6 +200,7 @@
             this._passUsage = new PassUsage();
 
             //pre Phase ---------------------------------------------------
+            this.initOthreMethods();
             if (animation) {
                 // to add accept animation shader
                 if (animation.skeletonAnimationController) {
@@ -196,6 +217,7 @@
                     this.addShaderPhase(animation.particleAnimationController.particleAnimationState.fragment_shaders, this._fs_shader_methods);
                 }
             }
+
             if (this._materialData.acceptShadow) {
                 // to add accept shadow maping shader
             }
