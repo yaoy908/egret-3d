@@ -86,6 +86,7 @@
         }
                 
         /**
+        * @private
         * @language zh_CN
         * 删除一个灯光
         * @param light Light
