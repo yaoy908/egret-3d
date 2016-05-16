@@ -169,9 +169,7 @@ class SampleGeometryUtil extends SampleBase {
         ///定点第一uv
         var verticesUV0: Array<number> = new Array<number>();
         verticesUV0.push(
-            1.0,0.0,
-            1.0,1.0,
-            0.0,1.0
+            0.0,0.0
         );
         ///定点第二uv
         var verticesUV1: Array<number> = new Array<number>();
@@ -183,7 +181,7 @@ class SampleGeometryUtil extends SampleBase {
             ge.verticesData.push(verticesNormal[0],verticesNormal[1],verticesNormal[2]);
             ge.verticesData.push(verticesTangent[0],verticesTangent[1],verticesTangent[2]);
             ge.verticesData.push(verticesColor[0],verticesColor[1],verticesColor[2],verticesColor[3]);
-            ge.verticesData.push(verticesUV0[i % 3],verticesUV0[i % 3]);
+            ge.verticesData.push(verticesUV1[0],verticesUV1[1]);
             ge.verticesData.push(verticesUV1[0],verticesUV1[1]);
         }
 
