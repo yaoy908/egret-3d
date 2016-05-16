@@ -45,7 +45,7 @@
 
             this.particleAnimation.emit = this;
 
-            this.particleGeometryShape = geo ? geo : new PlaneGeometry(50.0, 50.0, 1, 1, 1, 1, Vector3D.Y_AXIS);
+            this.particleGeometryShape = geo ? geo : new PlaneGeometry(50.0, 50.0, 1, 1, 1, 1, Vector3D.Z_AXIS);
 
             this.geometry = new Geometry();
             this.geometry.buildDefaultSubGeometry();
@@ -233,7 +233,7 @@
             //(<ConstRandomValueShape>this.timeNode.life).min = 1.0;
             //(<ConstRandomValueShape>this.timeNode.life).max = 10.0;
 
-            (<ConstValueShape>this.timeNode.rate).value = 0.05;
+            (<ConstValueShape>this.timeNode.rate).value = 0.04;
 
             //position
             this.positionNode = new ParticlePosition();
@@ -258,10 +258,10 @@
             this._particleFollowNode = new ParticleFollowNode();
 
             this.particleAnimation.particleAnimationState.addNode(this.timeNode);
-           //this.particleAnimation.particleAnimationState.addNode(this.positionNode);
-           //this.particleAnimation.particleAnimationState.addNode(this.rotationNode);
-           //this.particleAnimation.particleAnimationState.addNode(this.scaleNode);
-           //this.particleAnimation.particleAnimationState.addNode(this._particleFollowNode);
+            this.particleAnimation.particleAnimationState.addNode(this.positionNode);
+            this.particleAnimation.particleAnimationState.addNode(this.rotationNode);
+            this.particleAnimation.particleAnimationState.addNode(this.scaleNode);
+            this.particleAnimation.particleAnimationState.addNode(this._particleFollowNode);
 
             //加入自定义节点
             for (var i: number = 0; i < this._particleAnimNodes.length; i++) {
@@ -293,7 +293,7 @@
         public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
             if (this._play){
                  if (this._isChangeBuild) this.initlize();
-                 //super.renderDiffusePass(time, delay, context3DProxy, camera3D);
+                // super.renderDiffusePass(time, delay, context3DProxy, camera3D);
 
                  this._i = 0;
                  this.geometry.update(time, delay, context3DProxy, camera3D);
@@ -310,7 +310,7 @@
                          this.muiltMaterial[this._matID].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
                      }
                      else {
-
+                 
                          if (this.lightGroup) {
                              this.muiltMaterial[0].lightGroup = this.lightGroup;
                          }

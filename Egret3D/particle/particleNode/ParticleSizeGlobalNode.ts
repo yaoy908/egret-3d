@@ -3,19 +3,19 @@
     /**
     * @private
     */
-    export class ParticleColorGlobalNode extends AnimationNode {
+    export class ParticleSizeGlobalNode extends AnimationNode {
 
         public colorSegment: Float32Array = new Float32Array( 16 ); 
         constructor() {
 
             super();
-            this.name = "ParticleColorGlobalNode"; 
+            this.name = "ParticleSizeGlobalNode"; 
 
-            this.vertex_ShaderName[ShaderPhaseType.global_vertex] = this.vertex_ShaderName[ShaderPhaseType.global_vertex] || [];
-            this.vertex_ShaderName[ShaderPhaseType.global_vertex].push("particle_color_vs");
+            this.vertex_ShaderName[ShaderPhaseType.local_vertex] = this.vertex_ShaderName[ShaderPhaseType.local_vertex] || [];
+            this.vertex_ShaderName[ShaderPhaseType.local_vertex].push("particle_size_vs");
             
-            this.frament_ShaderName[ShaderPhaseType.muilt_end_fragment] = this.frament_ShaderName[ShaderPhaseType.muilt_end_fragment] || [];
-            this.frament_ShaderName[ShaderPhaseType.muilt_end_fragment].push("particle_color_fs");
+            //this.frament_ShaderName[ShaderPhaseType.muilt_end_fragment] = this.frament_ShaderName[ShaderPhaseType.muilt_end_fragment] || [];
+            //this.frament_ShaderName[ShaderPhaseType.muilt_end_fragment].push("particle_color_fs");
 
         }
         
@@ -51,7 +51,7 @@
         * @private
         */
         public update(time: number, delay: number, geometry: Geometry, passUsage: PassUsage, context: Context3DProxy) {
-            context.uniform1fv(passUsage["uniform_colorTransform"].uniformIndex, this.colorSegment);
+            context.uniform1fv(passUsage["uniform_size"].uniformIndex, this.colorSegment);
         }
 
         public getGpuColor(r: number, g: number, b: number, a: number): number {

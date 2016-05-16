@@ -39,6 +39,7 @@
         */
         constructor(frameNum: number, row: number, column: number, numTime:number ) {
             super();
+            this.fsShaderList[ShaderPhaseType.diffuse_fragment] = this.fsShaderList[ShaderPhaseType.diffuse_fragment] || [];
             this.fsShaderList[ShaderPhaseType.diffuse_fragment].push("uvSpriteSheet_fs");
 
             this.frameNum = frameNum;

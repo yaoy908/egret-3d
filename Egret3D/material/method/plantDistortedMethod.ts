@@ -20,6 +20,7 @@
         */
         constructor() {
             super();
+            this.vsShaderList[ShaderPhaseType.local_vertex] = this.vsShaderList[ShaderPhaseType.local_vertex] || [];
             this.vsShaderList[ShaderPhaseType.local_vertex].push("detail_Bending_vs");
         }
 

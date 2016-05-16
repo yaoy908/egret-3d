@@ -22,6 +22,8 @@
         */
         constructor() {
             super();
+
+            this.fsShaderList[ShaderPhaseType.diffuse_fragment] = this.fsShaderList[ShaderPhaseType.diffuse_fragment] || [];
             this.fsShaderList[ShaderPhaseType.diffuse_fragment].push("uvRoll_fs");
         }
 

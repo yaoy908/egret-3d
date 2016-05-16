@@ -31,6 +31,8 @@
         */
         constructor(controlTex: ITexture, splat_0: ITexture, splat_1: ITexture, splat_2: ITexture, splat_3: ITexture) {
             super();
+
+            this.fsShaderList[ShaderPhaseType.diffuse_fragment] = this.fsShaderList[ShaderPhaseType.diffuse_fragment] || [];
             this.fsShaderList[ShaderPhaseType.diffuse_fragment].push("terrainRGBA_fragment");
 
             this.controlTex = controlTex;

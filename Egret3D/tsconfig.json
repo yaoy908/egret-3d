@@ -184,6 +184,7 @@
         "particle/particleNode/ParticleScaleByLifeNode.ts",
         "particle/particleNode/ParticleRotationNode.ts",
         "particle/particleNode/ParticleColorGlobalNode.ts",
+        "particle/particleNode/ParticleSizeGlobalNode.ts",
 
         "particle/particleAnimationState.ts",
         "particle/ParticleAnimation.ts",
