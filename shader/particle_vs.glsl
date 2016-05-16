@@ -1,4 +1,5 @@
 //attribute vec4 attribute_color;
+attribute vec3 attribute_offsetPosition;
 uniform mat4 uniform_cameraMatrix;
 const float PI = 3.1415926 ;
 float currentTime = 0.0;
@@ -74,6 +75,6 @@ void main(void) {
 	mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); 
 	
 	localPosition = outPosition = vec4(e_position, 1.0); 
-	// globalPosition.xyz = attribute_offsetPosition; 
 	globalPosition.xyz = vec3(0.0,0.0,0.0);
+	globalPosition.xyz = attribute_offsetPosition; 
 }

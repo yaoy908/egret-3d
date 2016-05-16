@@ -11,6 +11,10 @@
             super();
             this.name = "ParticleColorGlobalNode"; 
 
+            
+            //this.vertex_ShaderName[ShaderPhaseType.local_vertex] = this.vertex_ShaderName[ShaderPhaseType.local_vertex] || [];
+            //this.vertex_ShaderName[ShaderPhaseType.local_vertex].push("bezier");
+
             this.vertex_ShaderName[ShaderPhaseType.global_vertex] = this.vertex_ShaderName[ShaderPhaseType.global_vertex] || [];
             this.vertex_ShaderName[ShaderPhaseType.global_vertex].push("particle_color_vs");
             
@@ -28,11 +32,11 @@
         * @platform Web,Native
         */
         public build(geometry: Geometry, count: number) {
-            this.colorSegment[0] = this.getGpuColor(1.0, 0.0, 0.0, 1.0);
-            this.colorSegment[1] = this.getGpuColor(0.0, 1.0, 0.0, 1.0);
-            this.colorSegment[2] = this.getGpuColor(0.0, 0.0, 1.0, 1.0);
-            this.colorSegment[3] = this.getGpuColor(0.0, 1.0, 1.0, 1.0);
-            this.colorSegment[4] = this.getGpuColor(1.0, 1.0, 1.0, 0.0);
+            this.colorSegment[0] = this.getGpuColor(255.0, 0.0, 0.0, 255.0);
+            this.colorSegment[1] = this.getGpuColor(0.0, 255.0, 0.0, 255.0);
+            this.colorSegment[2] = this.getGpuColor(0.0, 0.0, 255.0, 255.0);
+            this.colorSegment[3] = this.getGpuColor(0.0, 255.0, 255.0, 255.0);
+            this.colorSegment[4] = this.getGpuColor(255.0, 255.0, 255.0, 0.0);
             this.colorSegment[5] = 0.0;
             this.colorSegment[6] = 0.0;
             this.colorSegment[7] = 0.0;
@@ -55,7 +59,7 @@
         }
 
         public getGpuColor(r: number, g: number, b: number, a: number): number {
-            return a * 1000000.0 + r * 10000.0 + g * 100.0 + b;
+            return a * 0x1000000 + r * 0x10000 + g * 0x100 + b;
         }
     }
 } 

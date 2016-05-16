@@ -1,42 +1,73 @@
 uniform float uniform_size[16] ;
-const vec4 bit_mask  = vec4(0.0001, 0.01, 1.0, 0.000001 );
+
+vec2 quadratic_bezier(vec2 A, vec2 B, vec2 C, float t)
+{
+    vec2 D = mix(A, B, t);
+    vec2 E = mix(B, C, t); 
+
+    return mix(D, E, t);
+}
+
+vec2 cubic_bezier(vec2 A, vec2 B, vec2 C, vec2 D, float t)
+{
+    vec2 E = mix(A, B, t);
+    vec2 F = mix(B, C, t);
+    vec2 G = mix(C, D, t);
+
+    return quadratic_bezier(E, F, G, t);
+}
+
 vec4 pack_depth(float depth)
 {
     vec4 res ;
-    res.w =  floor(depth * bit_mask.w );
-    res.x =  floor((depth-res.w*1000000.0) * bit_mask.x ) ;
-    res.y =  floor((depth-res.w*1000000.0-res.x*10000.0) * bit_mask.y );
-    res.z =  floor(depth-res.w*1000000.0-res.x*10000.0-res.y*100.0) ;
+    float res1 = depth/256.0;
+    res.z = fract( res1 );
+    res1 -= res.z;
+    
+    res1 = res1/256.0;
+    res.y = fract( res1 );
+    res1 -= res.y;
+    
+    res1 = res1/256.0;
+    res.x = fract( res1 );
+    res1 -= res.x;
+    
+    res1 = res1/256.0;
+    res.w = res1;
     return res;
 }
 
-float particle(  ParticleData emit ){
-	float w = pt.w/pt.y;
+void main() {
+	float w = currentTime/emit.life;
 		
-	vec4 startSize ;
-    vec4 nextSize ;
-    
-    for( int i = 1 ; i < 8 ; i++ ){
-		 startSize = pack_depth(uniform_scale[i-1]) ;
-		 nextSize = pack_depth(uniform_scale[i]) ;
+	vec2 startA ;
+	vec2 startB ;
+    vec2 nextA ;
+    vec2 nextB ;
+    vec4 startSize = pack_depth(uniform_size[0]) ;
+	vec4 nextSize = pack_depth(uniform_size[1]) ;
+	
+	startA = startSize.xy ; 
+	startB = startSize.zw ;
+	nextA = nextSize.xy;
+	nextB = nextSize.zw;
+	 
+     for( int i = 0 ; i < 8 ; i++ ){
+	    // startSize = pack_depth(uniform_size[i*2]) ;
+	    // if( w <= startSize.x ){
+        //    nextSize = pack_depth(uniform_size[i*2+1]) ;
+        //    startA = startSize.xy ; 
+	 	//    startB = startSize.zw ;
+	 	//    nextA = nextSize.xy;
+	 	//    nextB = nextSize.zw;
+        // }else{
+        //    break;
+        // }
     } 
-    
-	//s.x = a.y 
-	//s.y = b.y 
-	//s.z = c.y
-	//s.w = d.y 
 	
-	//w.x = a.x 
-	//w.y = a.y
-	//w.z = a.z 
-	//w.w = a.w 
-    float len = nextSegment - startSegment ;
-    float ws = ( w - startSegment ) / len ;
+    float len = nextB.x - startA.x ;
+    float ws = ( w - startA.x ) / len ;  
 	
-	vec4 start = pack_depth(startSize) ;
-	vec4 end = pack_depth(nextSize) ;
-	
-	vec2 p = cubic_bezier( vec2(start.x,end.x) , vec2(start.y,end.y) , vec2(start.z,end.z) , vec2(start.w,end.w) , ws);
-    //vec4 size = mix(pack_depth(star()tSize),pack_depth(nextSize),ws) ;
-	localPosition.xyz *= p.y ;
+	// vec2 p = cubic_bezier( startA , startB , nextA , nextB , ws);
+	//localPosition.xyz *= pack_depth(uniform_size[1]).z ;
 }

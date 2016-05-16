@@ -168,8 +168,6 @@
             var shaderList: string[];
             for (var d: number = 0; d < this.methodList.length;d++ ) {
                 var method: MethodBase = this.methodList[d];
-                
-
                 for (shaderPhase in method.vsShaderList) {
                     shaderList = method.vsShaderList[shaderPhase];
                     for (var i: number = 0; i < shaderList.length; i++) {
