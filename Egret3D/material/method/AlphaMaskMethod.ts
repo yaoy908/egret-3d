@@ -6,6 +6,7 @@
     * 实现alpha遮罩渲染方法。
     * 该贴图的r通道被用于赋值到diffuse数据的alpha上面。
     * @see egret3d.MethodBase
+    * @includeExample material/method/AlphaMaskMethod.ts
     * @version Egret 3.0
     * @platform Web,Native
     */
