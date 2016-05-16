@@ -1,4 +1,4 @@
-float particle(  ){
+float particle( ParticleData emit ){
 	return 1.0 ;
 }
 void main(void) {

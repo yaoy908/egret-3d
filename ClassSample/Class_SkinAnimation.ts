@@ -50,7 +50,7 @@
             var mat: TextureMaterial = new TextureMaterial();
             mat.gloss = 10.0;
             mat.ambientColor = 0xf8f8f8;
-            mat.specularLevel = 0.0;
+            mat.specularLevel = 1.0;
             this.mat = mat;
             var ge: Geometry = e.loader.data;
             var mesh: Mesh = new Mesh(ge, mat);

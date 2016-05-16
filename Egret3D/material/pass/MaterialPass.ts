@@ -12,12 +12,32 @@
     * @platform Web,Native
     */
     export class MaterialPass {
-        protected _passUsage: PassUsage;
-        protected _materialData: MaterialData;
-        protected _passChange: boolean = true;
 
-        protected _vs_shader_methods: { [phaseType: number]: string[] } = {};
-        protected _fs_shader_methods: { [phaseType: number]: string[] } = {};
+         /**
+        * @private
+        */
+        public _passUsage: PassUsage;
+
+         /**
+        * @private
+        */
+        public _materialData: MaterialData;
+
+         /**
+        * @private
+        */
+        public _passChange: boolean = true;
+
+
+         /**
+        * @private
+        */
+        public _vs_shader_methods: { [phaseType: number]: string[] } = {};
+
+         /**
+        * @private
+        */
+        public _fs_shader_methods: { [phaseType: number]: string[] } = {};
 
         /**
         * @private
@@ -214,16 +234,16 @@
             var shaderList: string[];
             //---vs---shadering
             this.addMethodShaders(this._passUsage.vertexShader, ["base_vs"]);
-            //local
-            shaderList = this._vs_shader_methods[ShaderPhaseType.local_vertex];
-            if (shaderList && shaderList.length > 0)
-                this.addMethodShaders(this._passUsage.vertexShader, shaderList);
             //start Phase
             shaderList = this._vs_shader_methods[ShaderPhaseType.start_vertex];
             if (shaderList && shaderList.length > 0)
                 this.addMethodShaders(this._passUsage.vertexShader, shaderList);
             else
                 this.addMethodShaders(this._passUsage.vertexShader, ["diffuse_vertex"]);
+            //local
+            shaderList = this._vs_shader_methods[ShaderPhaseType.local_vertex];
+            if (shaderList && shaderList.length > 0)
+                this.addMethodShaders(this._passUsage.vertexShader, shaderList);
             //global
             shaderList = this._vs_shader_methods[ShaderPhaseType.global_vertex];
             if (shaderList && shaderList.length > 0)
@@ -273,6 +293,10 @@
                 this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
             //lighting
             shaderList = this._fs_shader_methods[ShaderPhaseType.lighting_fragment];
+            if (shaderList && shaderList.length > 0)
+                this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
+            //muilt_end_fragment
+            shaderList = this._fs_shader_methods[ShaderPhaseType.muilt_end_fragment];
             if (shaderList && shaderList.length > 0)
                 this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
             //end

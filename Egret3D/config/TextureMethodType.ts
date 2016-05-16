@@ -24,6 +24,7 @@
         specular_fragment,
         shadow_fragment,
         lighting_fragment,
+        muilt_end_fragment,
         end_fragment,
     }
 }

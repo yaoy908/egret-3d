@@ -45,8 +45,7 @@
 
             this.particleAnimation.emit = this;
 
-            //this.particleGeometryShape = geo ? geo : new CubeGeometry(100,100,100);
-            this.particleGeometryShape = geo ? geo : new PlaneGeometry(50.0, 50.0, 1, 1, 1, 1, Vector3D.Z_AXIS);
+            this.particleGeometryShape = geo ? geo : new PlaneGeometry(50.0, 50.0, 1, 1, 1, 1, Vector3D.Y_AXIS);
 
             this.geometry = new Geometry();
             this.geometry.buildDefaultSubGeometry();
@@ -229,11 +228,12 @@
             this.timeNode = new ParticleTime();
             (<ConstValueShape>this.timeNode.delay).value = 0;
 
-            this.timeNode.life = new ConstRandomValueShape();
-            (<ConstRandomValueShape>this.timeNode.life).min = 1.0;
-            (<ConstRandomValueShape>this.timeNode.life).max = 10.0;
+            this.timeNode.life = new ConstValueShape();
+            (<ConstValueShape>this.timeNode.life).value = 1.0;
+            //(<ConstRandomValueShape>this.timeNode.life).min = 1.0;
+            //(<ConstRandomValueShape>this.timeNode.life).max = 10.0;
 
-            (<ConstValueShape>this.timeNode.rate).value = 0.01;
+            (<ConstValueShape>this.timeNode.rate).value = 0.05;
 
             //position
             this.positionNode = new ParticlePosition();
@@ -258,10 +258,10 @@
             this._particleFollowNode = new ParticleFollowNode();
 
             this.particleAnimation.particleAnimationState.addNode(this.timeNode);
-            this.particleAnimation.particleAnimationState.addNode(this.positionNode);
-            this.particleAnimation.particleAnimationState.addNode(this.rotationNode);
-            this.particleAnimation.particleAnimationState.addNode(this.scaleNode);
-            this.particleAnimation.particleAnimationState.addNode(this._particleFollowNode);
+           //this.particleAnimation.particleAnimationState.addNode(this.positionNode);
+           //this.particleAnimation.particleAnimationState.addNode(this.rotationNode);
+           //this.particleAnimation.particleAnimationState.addNode(this.scaleNode);
+           //this.particleAnimation.particleAnimationState.addNode(this._particleFollowNode);
 
             //加入自定义节点
             for (var i: number = 0; i < this._particleAnimNodes.length; i++) {
@@ -293,7 +293,34 @@
         public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
             if (this._play){
                  if (this._isChangeBuild) this.initlize();
-                 super.renderDiffusePass(time, delay, context3DProxy, camera3D);
+                 //super.renderDiffusePass(time, delay, context3DProxy, camera3D);
+
+                 this._i = 0;
+                 this.geometry.update(time, delay, context3DProxy, camera3D);
+                 if (this.geometry.subGeometrys.length <= 0) {
+                     this.geometry.buildDefaultSubGeometry();
+                 }
+                 for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
+                     this._subGeometry = this.geometry.subGeometrys[this._i];
+                     this._matID = this._subGeometry.matID;
+                     if (this.muiltMaterial[this._matID]) {
+                         if (this.lightGroup) {
+                             this.muiltMaterial[this._matID].lightGroup = this.lightGroup;
+                         }
+                         this.muiltMaterial[this._matID].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+                     }
+                     else {
+
+                         if (this.lightGroup) {
+                             this.muiltMaterial[0].lightGroup = this.lightGroup;
+                         }
+                         this.muiltMaterial[0].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+                     }
+                     if (this.animation) {
+                         this.animation.update(time, delay, this.geometry, this.muiltMaterial[0].diffusePass._passUsage, context3DProxy);
+                     }
+                 }
+
             }
         }
 
@@ -302,5 +329,9 @@
             (<BoundBox>this.bound).fillBox(new Vector3D(-50, -50, -50), new Vector3D(50, 50, 50));
             this.initAABB();
         }
+
+
+
+
     }
 }

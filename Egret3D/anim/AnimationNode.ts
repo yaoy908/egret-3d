@@ -72,7 +72,13 @@
         /**
         * @private
         */
-        public update(time: number, delay: number, geometry:Geometry , context: Context3DProxy) {
+        public update(time: number, delay: number, geometry:Geometry , passUsage:PassUsage , context: Context3DProxy) {
+        }
+
+        /**
+        * @private
+        */
+        public upload() {
         }
     }
 } 

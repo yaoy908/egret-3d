@@ -5,7 +5,7 @@ varying vec2 varying_uv0;
 varying vec4 varying_ViewPose;
 varying vec4 varying_color;
 
-uniform vec3 uniform_eyepos ;
+//uniform vec3 uniform_eyepos ;
 uniform mat4 uniform_ViewMatrix ;
 //uniform mat4 uniform_ProjectionMatrix; 
 

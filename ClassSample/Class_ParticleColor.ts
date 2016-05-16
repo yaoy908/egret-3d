@@ -1,5 +1,5 @@
 ﻿module egret3d {
-    export class Class_Particle extends Class_View3D {
+    export class Class_ParticleColor extends Class_View3D {
 
         private plane: Mesh;
         protected view1: View3D;
@@ -33,34 +33,32 @@
 
             var mat: TextureMaterial = new TextureMaterial();
             mat.ambientColor = 0xffffff;
-            this.particle = new ParticleEmitter(null, mat, 2000 );
+            this.particle = new ParticleEmitter(null, mat, 1000 );
 
-            var acc: ParticleAccelerationSpeedNode = new ParticleAccelerationSpeedNode();
-            acc.speedShape = new Vec3ConstRandomValueShape();
-            (<Vec3ConstRandomValueShape>acc.speedShape).minX = -100;
-            (<Vec3ConstRandomValueShape>acc.speedShape).minY = 0;
-            (<Vec3ConstRandomValueShape>acc.speedShape).minZ = -100;
-            (<Vec3ConstRandomValueShape>acc.speedShape).maxX = 100;
-            (<Vec3ConstRandomValueShape>acc.speedShape).maxY = 100;
-            (<Vec3ConstRandomValueShape>acc.speedShape).maxZ = 100;
-            this.particle.addAnimNode(acc);
-
-            var uniformSpeed: ParticleUniformSpeedNode = new ParticleUniformSpeedNode();
-            uniformSpeed.speedShape = new Vec3ConstValueShape();
-            (<Vec3ConstValueShape>uniformSpeed.speedShape).minX = 0;
-            (<Vec3ConstValueShape>uniformSpeed.speedShape).minY = 100;
-            (<Vec3ConstValueShape>uniformSpeed.speedShape).minZ = 0;
-            this.particle.addAnimNode(uniformSpeed);
-
-            var particleRotationNode: ParticleRotationNode = new ParticleRotationNode();
-            particleRotationNode.rotation
-            this.particle.addAnimNode(particleRotationNode);
-
+            //var uniformSpeed: ParticleUniformSpeedNode = new ParticleUniformSpeedNode();
+            //uniformSpeed.speedShape = new Vec3ConstValueShape();
+            //(<Vec3ConstValueShape>uniformSpeed.speedShape).minX = 0;
+            //(<Vec3ConstValueShape>uniformSpeed.speedShape).minY = 100;
+            //(<Vec3ConstValueShape>uniformSpeed.speedShape).minZ = 0;
+            //this.particle.addAnimNode(uniformSpeed);
 
             var particleScaleByLifeNode: ParticleScaleByLifeNode = new ParticleScaleByLifeNode();
             (<ConstValueShape>particleScaleByLifeNode.start).value = 0.5;
             (<ConstValueShape>particleScaleByLifeNode.end).value = 2.5;
-            this.particle.addAnimNode(particleScaleByLifeNode);
+            //this.particle.addAnimNode(particleScaleByLifeNode);
+
+            var vel: ParticleAccelerationSpeedNode = new ParticleAccelerationSpeedNode();
+            vel.speedShape = new Vec3ConstRandomValueShape();
+            (<Vec3ConstRandomValueShape>vel.speedShape).minX = -100;
+            (<Vec3ConstRandomValueShape>vel.speedShape).minY = -100;
+            (<Vec3ConstRandomValueShape>vel.speedShape).minZ = -100;
+            (<Vec3ConstRandomValueShape>vel.speedShape).maxX = 100;
+            (<Vec3ConstRandomValueShape>vel.speedShape).maxY = 100;
+            (<Vec3ConstRandomValueShape>vel.speedShape).maxZ = 100;
+            this.particle.addAnimNode(vel);
+
+            var particleColor_global_Node: ParticleColorGlobalNode = new ParticleColorGlobalNode();
+            this.particle.addAnimNode(particleColor_global_Node);
 
             this.particle.play();
             this.view1.addChild3D(this.particle);
@@ -85,7 +83,7 @@
 
         protected obj: Object3D;
         protected onLoadTexture(e: LoaderEvent3D) {
-           // e.loader["mat"].diffuseTexture = e.loader.data;
+           e.loader["mat"].diffuseTexture = e.loader.data;
         }
 
         private angle: number = 0; 
