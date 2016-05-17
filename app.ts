@@ -1,6 +1,6 @@
 ﻿
 function jsOnload() {
-    var sample: egret3d.Class_Sky = new egret3d.Class_Sky();
+    var sample: egret3d.Class_Points = new egret3d.Class_Points();
 }
 
 function onTsconfig() {
@@ -9,6 +9,7 @@ function onTsconfig() {
     egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_SkinAnimation.js");
     egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_Sky.js");
     egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_Particle.js");
+    egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_Points.js");
 }
 
 window.onload = () => {

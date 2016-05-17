@@ -124,6 +124,7 @@
         "geometry/CylinderGeometry.ts",
         "geometry/PlaneGeometry.ts",
         "geometry/SphereGeometry.ts",
+        "geometry/GeometryUtil.ts",
 
         "input/input.ts",
         "input/OrientationController.ts",

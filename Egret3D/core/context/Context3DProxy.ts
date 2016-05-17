@@ -198,6 +198,18 @@
 
         /**
         * @language zh_CN
+        * 提交索引数据
+        * @param indexBuffer3D 索引buffer
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public uploadIndexBuffer(indexBuffer3D: IndexBuffer3D) {
+            Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ARRAY_BUFFER, indexBuffer3D.buffer);
+            Context3DProxy.gl.bufferData(Context3DProxy.gl.ARRAY_BUFFER, indexBuffer3D.arrayBuffer, Context3DProxy.gl.DYNAMIC_DRAW);
+        }
+
+        /**
+        * @language zh_CN
         * 创建 顶点数据流
         * @param vertexData
         * @version Egret 3.0
