@@ -6484,7 +6484,7 @@ var egret3d;
                 "} \n",
             "end_vs": "vec4 endPosition ; \n" +
                 "void main() { \n" +
-                "gl_PointSize = 50.0; \n" +
+                "gl_PointSize = 4.0; \n" +
                 "gl_Position = uniform_ProjectionMatrix * outPosition ; \n" +
                 "} \n" +
                 "                       \n",
@@ -23582,6 +23582,7 @@ var egret3d;
             if (color === void 0) { color = 0xcccccc; }
             _super.call(this);
             this.color = color;
+            this.diffuseTexture = egret3d.CheckerboardTexture.texture;
         }
         ColorMaterial.prototype.initPass = function () {
             this.diffusePass = new egret3d.ColorPass(this.materialData);
@@ -30094,10 +30095,10 @@ var egret3d;
         };
         /**
         * @language zh_CN
-        * �Ƿ���ĳ��λ�õȼ�
+        * �Ƿ��ĳ��λ�õȼ�
         * @param X   x����
         * @param Y   y����
-        * @return �Ƿ��ȼ�
+        * @return �Ƿ�ȼ�
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -30106,9 +30107,9 @@ var egret3d;
         };
         /**
         * @language zh_CN
-        * �Ƿ���ĳ��λ�õȼ�
+        * �Ƿ��ĳ��λ�õȼ�
         * @param pt   ��
-        * @return �Ƿ��ȼ�
+        * @return �Ƿ�ȼ�
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -30163,7 +30164,7 @@ var egret3d;
     * @language zh_CN
     * @class egret3d.Navi3DPoint
     * @classdesc
-    * �����ĵ�
+    * ����ĵ�
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -30200,10 +30201,10 @@ var egret3d;
         });
         /**
         * @language zh_CN
-        * �ж���������λ���Ƿ��ȼ�
+        * �ж���������λ���Ƿ�ȼ�
         * @param    p1   ����1
         * @param    p2   ����2
-        * @returns  boolean �Ƿ��ȼ�
+        * @returns  boolean �Ƿ�ȼ�
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -30212,7 +30213,7 @@ var egret3d;
         };
         /**
         * @language zh_CN
-        * ��������������֮���ľ���
+        * �������������֮��ľ���
         * @param    p1   ����1
         * @param    p2   ����2
         * @returns number   ����
@@ -33050,7 +33051,7 @@ var egret3d;
     * @language zh_CN
     * @class egret3d.MaterialSphereData
     * @classdesc
-    * ����������Ч����
+    * ���������Ч����
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -33094,7 +33095,7 @@ var egret3d;
             this.materialID = -1;
             /**
              * @language zh_CN
-             * �Ƿ����ù�����ģʽ
+             * �Ƿ����ù����ģʽ
              * @version Egret 3.0
              * @platform Web,Native
              */

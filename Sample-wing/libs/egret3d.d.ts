@@ -16123,7 +16123,7 @@ declare module egret3d {
     * @language zh_CN
     * @class egret3d.IQuadNode
     * @classdesc
-    * �Ĳ�����һ���ڵ��Ľӿ�
+    * �Ĳ�����һ���ڵ�Ľӿ�
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -16137,7 +16137,7 @@ declare module egret3d {
         initAABB(): void;
         /**
         * @language zh_CN
-        * �Ƿ��ýڵ���������
+        * �Ƿ�ýڵ���������
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -17041,19 +17041,19 @@ declare module egret3d {
         setTo(X: number, Y: number): void;
         /**
         * @language zh_CN
-        * �Ƿ���ĳ��λ�õȼ�
+        * �Ƿ��ĳ��λ�õȼ�
         * @param X   x����
         * @param Y   y����
-        * @return �Ƿ��ȼ�
+        * @return �Ƿ�ȼ�
         * @version Egret 3.0
         * @platform Web,Native
         */
         equals(X: number, Y: number): boolean;
         /**
         * @language zh_CN
-        * �Ƿ���ĳ��λ�õȼ�
+        * �Ƿ��ĳ��λ�õȼ�
         * @param pt   ��
-        * @return �Ƿ��ȼ�
+        * @return �Ƿ�ȼ�
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -17088,7 +17088,7 @@ declare module egret3d {
     * @language zh_CN
     * @class egret3d.Navi3DPoint
     * @classdesc
-    * �����ĵ�
+    * ����ĵ�
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -17150,17 +17150,17 @@ declare module egret3d {
         id: number;
         /**
         * @language zh_CN
-        * �ж���������λ���Ƿ��ȼ�
+        * �ж���������λ���Ƿ�ȼ�
         * @param    p1   ����1
         * @param    p2   ����2
-        * @returns  boolean �Ƿ��ȼ�
+        * @returns  boolean �Ƿ�ȼ�
         * @version Egret 3.0
         * @platform Web,Native
         */
         static equalPoint(p1: Vector3D, p2: Vector3D): boolean;
         /**
         * @language zh_CN
-        * ��������������֮���ľ���
+        * �������������֮��ľ���
         * @param    p1   ����1
         * @param    p2   ����2
         * @returns number   ����
@@ -18814,7 +18814,7 @@ declare module egret3d {
     * @language zh_CN
     * @class egret3d.MaterialSphereData
     * @classdesc
-    * ����������Ч����
+    * ���������Ч����
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -18905,14 +18905,14 @@ declare module egret3d {
         normalPower: number;
         /**
          * @language zh_CN
-         * �Ƿ�������Ӱ
+         * �Ƿ������Ӱ
          * @version Egret 3.0
          * @platform Web,Native
          */
         castShadow: boolean;
         /**
          * @language zh_CN
-         * �Ƿ�������Ӱ
+         * �Ƿ������Ӱ
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -18933,7 +18933,7 @@ declare module egret3d {
         repeat: boolean;
         /**
          * @language zh_CN
-         * �Ƿ�����˫����Ⱦ
+         * �Ƿ���˫����Ⱦ
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -18999,21 +18999,21 @@ declare module egret3d {
         materialID: number;
         /**
          * @language zh_CN
-         * ӵ�еĶ������������б�
+         * ӵ�еĶ�����������б�
          * @version Egret 3.0
          * @platform Web,Native
          */
         skinClips: Array<string>;
         /**
          * @language zh_CN
-         * ��������id��ȫ��Ψһ
+         * �������id��ȫ��Ψһ
          * @version Egret 3.0
          * @platform Web,Native
          */
         lightIds: Array<any>;
         /**
          * @language zh_CN
-         * �Ƿ����ù�����ģʽ
+         * �Ƿ����ù����ģʽ
          * @version Egret 3.0
          * @platform Web,Native
          */
