@@ -8,6 +8,7 @@
         constructor( color:number = 0xcccccc ) {
             super();
             this.color = color;
+            this.diffuseTexture = CheckerboardTexture.texture;
         }
 
         protected initPass() {
