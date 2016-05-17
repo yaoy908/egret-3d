@@ -137,7 +137,7 @@
 
                 this._pixelArray = new Uint8Array(this.width * this.height * 4);
 
-                var colors: Color[] = [Color.white(), Color.black()];
+                var colors: Color[] = [Color.black(), Color.white()];
 
                 var colorIndex = 0;
 
