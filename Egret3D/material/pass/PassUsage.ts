@@ -252,6 +252,16 @@
          * @language zh_CN
          */
         public uniform_materialSource: GLSL.Uniform;
+
+        public uniform_colorGradientsSource: GLSL.Uniform;
+         /**
+         * @language zh_CN
+         */
+        public uniform_colorTransformVec4: GLSL.Uniform;
+         /**
+         * @language zh_CN
+         */
+        public uniform_colorTransformM44: GLSL.Uniform;
         /**
          * @language zh_CN
          */

@@ -332,6 +332,8 @@
         */
         public cutAlpha: number = 0.7;
 
+       
+
         /**
         * @language zh_CN
         * 是否重复。
@@ -433,7 +435,7 @@
         * @platform Web,Native
         */
         public materialDataNeedChange: boolean = true;
-
+        
 
         /**
         * @language zh_CN
@@ -457,8 +459,19 @@
         /**
          * @language zh_CN
          */
-        public materialSourceData: Float32Array = new Float32Array(20);//12
-
+        public materialSourceData: Float32Array = new Float32Array(20);//20
+        /**
+         * @language zh_CN
+         */
+        public colorGradientsSource: Float32Array = new Float32Array(10);//10 xyz xyz rgba
+        /**
+        * @language zh_CN
+        * 颜色变化信息。
+        * @default false
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public colorTransform: ColorTransform = new ColorTransform();
         /**
          * @language zh_CN
          */
@@ -528,6 +541,8 @@
             data.textureChange = true;
 
             data.cullFrontOrBack = this.cullFrontOrBack;
+
+            data.colorTransform = this.colorTransform;
 
             //material state
             return data;

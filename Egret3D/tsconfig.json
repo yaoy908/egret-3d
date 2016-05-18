@@ -27,6 +27,7 @@
         "geom/Bound.ts",
         "data/HashMap.ts",
         "geom/BoundBox.ts",
+        "geom/ColorTransform.ts",
         "events/PickResult.ts",
         "events/IDispatchEvent.ts",
         "events/Event3D.ts",
@@ -153,6 +154,8 @@
         "material/method/UVSpriteSheetMethod.ts",
         "material/method/LightMapMethod.ts",
         "material/method/AlphaMaskMethod.ts",
+        "material/method/ColorTransformMethod.ts",
+        "material/method/ColorGradientsMethod.ts",
 
         "material/pass/PassUsage.ts",
         "material/MaterialData.ts",
