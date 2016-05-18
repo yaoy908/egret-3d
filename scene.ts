@@ -35,11 +35,12 @@ function playSound() {
 function onMyTsconfig() {
     egret3d.Egret3DEngine.addImportScript("./js/Feature/FeatureConfig.js");
     egret3d.Egret3DEngine.addImportScript("./js/Feature/ui/LoadingUI.js");
-
+    egret3d.Egret3DEngine.addImportScript("./js/Feature/ui/LogoUI.js");
     egret3d.Egret3DEngine.addImportScript("./js/Feature/utils/AxisMesh.js");
     egret3d.Egret3DEngine.addImportScript("./js/Feature/utils/FPSCounter.js");
 
     egret3d.Egret3DEngine.addImportScript("./js/Feature/controller/EgretCameraZoomController.js");
+    egret3d.Egret3DEngine.addImportScript("./js/Feature/controller/Shake.js");
     egret3d.Egret3DEngine.addImportScript("./js/Feature/EgretWorld.js");
 }
 
