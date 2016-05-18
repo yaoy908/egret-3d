@@ -9,6 +9,9 @@ void main(void){
 
 	diffuseColor.xyz = clamp(diffuseColor.xyz / diffuseColor.w,0.0,1.0); 
 	diffuseColor.xyz = diffuseColor.xyz * (1.0 - color.w) + color.xyz * color.w; 
+
+	
+
 }
 
 

@@ -18,8 +18,9 @@
         */
         constructor() {
             super();
-            this.methodType = TextureMethodType.diffuse;
-            this.fsShaderList.push("colorTransform_fs");
+
+            this.fsShaderList[ShaderPhaseType.muilt_end_fragment] = this.fsShaderList[ShaderPhaseType.muilt_end_fragment] || [];
+            this.fsShaderList[ShaderPhaseType.muilt_end_fragment].push("colorTransform_fs");
         }
 
         /**

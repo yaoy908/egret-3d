@@ -8,7 +8,11 @@ module egret3d {
  			"alphaMask_fs":
 			"uniform sampler2D maskTexture ; \n" +
 			"void main(void){ \n" +
-			"materialSource.alpha *= texture2D( maskTexture , uv_0 ).x; \n" +
+			"float maskAlpha = texture2D( maskTexture , uv_0 ).x; \n" +
+			"if(maskAlpha * diffuseColor.w < 0.001){ \n" +
+			"discard; \n" +
+			"} \n" +
+			"materialSource.alpha *= maskAlpha; \n" +
 			"} \n",
 
 			"AOMap_fs":
@@ -97,6 +101,27 @@ module egret3d {
 			"vec2 F = mix(B, C, t); \n" +
 			"vec2 G = mix(C, D, t); \n" +
 			"return quadratic_bezier(E, F, G, t); \n" +
+			"} \n",
+
+			"colorGradients_fs":
+			"varying vec4 varying_pos; \n" +
+			"uniform float uniform_colorGradientsSource[10] ; \n" +
+			"void main(void){ \n" +
+			"vec3 posStart = vec3(uniform_colorGradientsSource[0], uniform_colorGradientsSource[1], uniform_colorGradientsSource[2]); \n" +
+			"vec3 posEnd = vec3(uniform_colorGradientsSource[3], uniform_colorGradientsSource[4], uniform_colorGradientsSource[5]); \n" +
+			"vec4 color = vec4(uniform_colorGradientsSource[6], uniform_colorGradientsSource[7], uniform_colorGradientsSource[8], uniform_colorGradientsSource[9]); \n" +
+			"color.w = color.w * clamp((varying_pos.y - posStart.y) / (posEnd.y - posStart.y), 0.0, 1.0); \n" +
+			"diffuseColor.xyz = clamp(diffuseColor.xyz / diffuseColor.w,0.0,1.0); \n" +
+			"diffuseColor.xyz = diffuseColor.xyz * (1.0 - color.w) + color.xyz * color.w; \n" +
+			"} \n" +
+			"  \n",
+
+			"colorTransform_fs":
+			"uniform vec4 uniform_colorTransformVec4 ; \n" +
+			"uniform mat4 uniform_colorTransformM44 ; \n" +
+			"void main(){ \n" +
+			"diffuseColor = uniform_colorTransformM44 * diffuseColor; \n" +
+			"diffuseColor = diffuseColor + uniform_colorTransformVec4; \n" +
 			"} \n",
 
 			"cube_fragment":
@@ -206,8 +231,9 @@ module egret3d {
 
 			"end_vs":
 			"vec4 endPosition ; \n" +
+			"uniform float uniform_materialSource[20]; \n" +
 			"void main() { \n" +
-			"gl_PointSize = 50.0; \n" +
+			"gl_PointSize = uniform_materialSource[18]; \n" +
 			"gl_Position = uniform_ProjectionMatrix * outPosition ; \n" +
 			"} \n" +
 			"                       \n",
@@ -633,6 +659,7 @@ module egret3d {
 			"} \n",
 
 			"particle_vs":
+			"attribute vec3 attribute_offsetPosition; \n" +
 			"uniform mat4 uniform_cameraMatrix; \n" +
 			"const float PI = 3.1415926 ; \n" +
 			"float currentTime = 0.0; \n" +
@@ -691,6 +718,7 @@ module egret3d {
 			"mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); \n" +
 			"localPosition = outPosition = vec4(e_position, 1.0); \n" +
 			"globalPosition.xyz = vec3(0.0,0.0,0.0); \n" +
+			"globalPosition.xyz += attribute_offsetPosition; \n" +
 			"} \n",
 
 			"pointLight_fragment":

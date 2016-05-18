@@ -82,6 +82,7 @@
             var index: number = this.methodList.indexOf(method);
             if (index == -1) {
                 this.methodList.push(method);
+                method.materialData = this._materialData;
                 this._passChange = true;
             }
         }
