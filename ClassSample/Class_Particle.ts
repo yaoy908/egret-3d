@@ -26,25 +26,57 @@
             var loadtex1: URLLoader = new URLLoader("resource/floor/brick-diffuse.jpg");
             loadtex1.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
             loadtex1["mat"] = planemat;
-            //this.view1.addChild3D(new Mesh(new PlaneGeometry(1000, 1000), planemat));
+           // this.view1.addChild3D(new Mesh(new PlaneGeometry(1000, 1000), planemat));
 
             this.cube = new Mesh( new CubeGeometry(10,10,10) , null );
-            this.view1.addChild3D(this.cube);
+            //this.view1.addChild3D(this.cube);
 
             var mat: TextureMaterial = new TextureMaterial();
-            this.particle = new ParticleEmitter(null, mat, 1000 );
-            this.particle.play();
+            mat.ambientColor = 0xffffff;
+            this.particle = new ParticleEmitter(null, mat, 2000 );
 
+            var acc: ParticleAccelerationSpeedNode = new ParticleAccelerationSpeedNode();
+            acc.speedShape = new Vec3ConstRandomValueShape();
+            (<Vec3ConstRandomValueShape>acc.speedShape).minX = -100;
+            (<Vec3ConstRandomValueShape>acc.speedShape).minY = 0;
+            (<Vec3ConstRandomValueShape>acc.speedShape).minZ = -100;
+            (<Vec3ConstRandomValueShape>acc.speedShape).maxX = 100;
+            (<Vec3ConstRandomValueShape>acc.speedShape).maxY = 100;
+            (<Vec3ConstRandomValueShape>acc.speedShape).maxZ = 100;
+            this.particle.addAnimNode(acc);
+
+            var uniformSpeed: ParticleUniformSpeedNode = new ParticleUniformSpeedNode();
+            uniformSpeed.speedShape = new Vec3ConstValueShape();
+            (<Vec3ConstValueShape>uniformSpeed.speedShape).minX = 0;
+            (<Vec3ConstValueShape>uniformSpeed.speedShape).minY = 100;
+            (<Vec3ConstValueShape>uniformSpeed.speedShape).minZ = 0;
+            this.particle.addAnimNode(uniformSpeed);
+
+            var particleRotationNode: ParticleRotationNode = new ParticleRotationNode();
+            particleRotationNode.rotation
+            this.particle.addAnimNode(particleRotationNode);
+
+
+            var particleScaleByLifeNode: ParticleScaleByLifeNode = new ParticleScaleByLifeNode();
+            (<ConstValueShape>particleScaleByLifeNode.start).value = 0.5;
+            (<ConstValueShape>particleScaleByLifeNode.end).value = 2.5;
+            this.particle.addAnimNode(particleScaleByLifeNode);
+
+            this.particle.play();
             this.view1.addChild3D(this.particle);
            
             this.particle.followTarget = this.cube ;
 
-            var loadtex: URLLoader = new URLLoader("resource/effect/line_0025.png");
+            var loadtex: URLLoader = new URLLoader("resource/effect/ice_0001.png");
             loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
             loadtex["mat"] = mat;
 
-            var vv: HTMLInputElement = <HTMLInputElement>document.getElementById("rest");
+            var vv: HTMLInputElement = <HTMLInputElement>document.createElement("input");
+            vv.type = "submit";
+            vv.value = "rest";
+            document.body.appendChild(vv);
             vv.onmousedown = (e: MouseEvent) => this.mouseDown(e);
+            
         }
 
         protected mouseDown(e: MouseEvent) {
@@ -53,7 +85,7 @@
 
         protected obj: Object3D;
         protected onLoadTexture(e: LoaderEvent3D) {
-            e.loader["mat"].diffuseTexture = e.loader.data;
+           // e.loader["mat"].diffuseTexture = e.loader.data;
         }
 
         private angle: number = 0; 

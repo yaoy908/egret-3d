@@ -8,7 +8,10 @@
         constructor() {
             super();
             this.name = "ParticleEndNode"; 
-            this.vertex_ShaderName = "particle_end";
+
+            this.vertex_ShaderName[ShaderPhaseType.end_vertex] = this.vertex_ShaderName[ShaderPhaseType.end_vertex] || [];
+            this.vertex_ShaderName[ShaderPhaseType.end_vertex].push("particle_end");
+
         }
 
         public build(geometry: Geometry, count: number) {

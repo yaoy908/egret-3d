@@ -1,4 +1,4 @@
-float particle(  ){
+float particle( ParticleData emit ){
 	return 1.0 ;
 }
 void main(void) {
@@ -7,5 +7,6 @@ void main(void) {
 	outPosition.xyz += globalPosition.xyz;
 	outPosition = uniform_ModelMatrix * outPosition; 
 	outPosition = uniform_ViewMatrix * outPosition; 
+	gl_Position = uniform_ProjectionMatrix * outPosition ;
 }
 	

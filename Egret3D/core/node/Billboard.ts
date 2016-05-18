@@ -21,7 +21,7 @@
          */
         constructor(material: MaterialBase, geometry: Geometry = null, width: number = 100, height: number = 100) {
             if (geometry == null) {
-                geometry = new PlaneGeometry(width, height, 1, 1, 1, 1);
+                geometry = new PlaneGeometry(width, height, 1, 1, 1, 1, Vector3D.Z_AXIS);
             }
             super(geometry, material);
             if (!this.bound) {

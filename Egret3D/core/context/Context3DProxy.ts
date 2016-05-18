@@ -198,6 +198,18 @@
 
         /**
         * @language zh_CN
+        * 提交索引数据
+        * @param indexBuffer3D 索引buffer
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public uploadIndexBuffer(indexBuffer3D: IndexBuffer3D) {
+            Context3DProxy.gl.bindBuffer(Context3DProxy.gl.ARRAY_BUFFER, indexBuffer3D.buffer);
+            Context3DProxy.gl.bufferData(Context3DProxy.gl.ARRAY_BUFFER, indexBuffer3D.arrayBuffer, Context3DProxy.gl.DYNAMIC_DRAW);
+        }
+
+        /**
+        * @language zh_CN
         * 创建 顶点数据流
         * @param vertexData
         * @version Egret 3.0
@@ -271,8 +283,9 @@
         public upLoadTextureData(mipLevel: number, texture: Texture2D) {
             Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture.texture);
 
+            Context3DProxy.gl.pixelStorei(Context3DProxy.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
             if (texture.internalFormat == InternalFormat.ImageData) {
-                Context3DProxy.gl.pixelStorei(Context3DProxy.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
+                
                 Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, 0, Context3DProxy.gl.RGBA, Context3DProxy.gl.RGBA, Context3DProxy.gl.UNSIGNED_BYTE, texture.imageData);
             }
             else if (texture.internalFormat == InternalFormat.CompressData) {
@@ -282,7 +295,8 @@
             else if (texture.internalFormat == InternalFormat.PixelArray) {
                 Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, mipLevel, texture.colorFormat, texture.mimapData[mipLevel].width, texture.mimapData[mipLevel].height, texture.border, texture.colorFormat, Context3DProxy.gl.UNSIGNED_BYTE, texture.mimapData[mipLevel].data);
             }
-
+            //Context3DProxy.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL
+            //Context3DProxy.gl.pixelStorei(Context3DProxy.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
             if (texture.useMipmap)
                 Context3DProxy.gl.generateMipmap(Context3DProxy.gl.TEXTURE_2D);
 

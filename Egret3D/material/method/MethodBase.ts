@@ -1,5 +1,5 @@
 ﻿module egret3d {
-
+    
     /**
     * @class egret3d.MethodBase
     * @classdesc
@@ -13,26 +13,19 @@
         * @private
         * @language zh_CN
         */
-        public methodType: number = -1;
+        public vsShaderList: { [shaderPhaseType: number]: string[] } = [];
 
         /**
         * @private
         * @language zh_CN
         */
-        public vsShaderList: Array<string> = [] ;
-
-        /**
-        * @private
-        * @language zh_CN
-        */
-        public fsShaderList: Array<string> = [];
+        public fsShaderList: { [shaderPhaseType: number]: string[] } = [];
 
         /**
         * @private
         * @language zh_CN
         */
         public materialData: MaterialData;
-
 
         /**
         * @private

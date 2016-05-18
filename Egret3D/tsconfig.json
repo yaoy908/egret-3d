@@ -56,7 +56,6 @@
         "shader/register/Extension.ts",
         "shader/register/VaryingType.ts",
 
-        "shader/FragmentShader.ts",
         "shader/ShaderLib.ts",
         "shader/ShaderPool.ts",
         "shader/ShaderContent.ts",
@@ -126,6 +125,7 @@
         "geometry/CylinderGeometry.ts",
         "geometry/PlaneGeometry.ts",
         "geometry/SphereGeometry.ts",
+        "geometry/GeometryUtil.ts",
 
         "input/input.ts",
         "input/OrientationController.ts",
@@ -153,6 +153,7 @@
         "material/method/UVRollMethod.ts",
         "material/method/UVSpriteSheetMethod.ts",
         "material/method/LightMapMethod.ts",
+        "material/method/PlantDistortedMethod.ts",
         "material/method/AlphaMaskMethod.ts",
         "material/method/ColorTransformMethod.ts",
         "material/method/ColorGradientsMethod.ts",
@@ -186,7 +187,8 @@
         "particle/particleNode/ParticleAccelerationSpeedNode.ts",
         "particle/particleNode/ParticleScaleByLifeNode.ts",
         "particle/particleNode/ParticleRotationNode.ts",
-
+        "particle/particleNode/ParticleColorGlobalNode.ts",
+        "particle/particleNode/ParticleSizeGlobalNode.ts",
 
         "particle/particleAnimationState.ts",
         "particle/ParticleAnimation.ts",

@@ -6,8 +6,8 @@ void main(void){
    mat3 normalMatrix = transpose( inverse(mat3( modeViewMatrix )) ); 
    varying_eyeNormal = normalize(normalMatrix * -attribute_normal); 
    
-   outPosition = uniform_ViewMatrix * uniform_ModelMatrix * vec4(attribute_position, 1.0) ; 
-   varying_ViewPose = outPosition.xyz / outPosition.w;
+   outPosition = uniform_ViewMatrix * uniform_ModelMatrix * vec4(e_position, 1.0) ; 
+   varying_ViewPose = outPosition.xyzw;
    
    varying_color = attribute_color;
 }

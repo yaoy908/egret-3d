@@ -17,7 +17,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public follow: Object3D;
+        //public follow: Object3D;
         private attribute_followPosition: GLSL.VarRegister;
         private attribute_followRotation: GLSL.VarRegister;
 
@@ -27,7 +27,9 @@
         constructor() {
             super();
             this.name = "ParticleFollowNode";
-            this.vertex_ShaderName = "particle_follow_vs";
+
+            this.vertex_ShaderName[ShaderPhaseType.global_vertex] = this.vertex_ShaderName[ShaderPhaseType.global_vertex] || [];
+            this.vertex_ShaderName[ShaderPhaseType.global_vertex].push("particle_follow_vs");
 
             this.attribute_followPosition = new GLSL.VarRegister();
             this.attribute_followPosition.name = "attribute_followPosition";
@@ -60,9 +62,9 @@
         private timeIndex: number = 0;
         private currentTime: number = 0;
 
-        public update(time: number, delay: number, geometry: Geometry, context: Context3DProxy) {
+        public update(time: number, delay: number, geometry: Geometry, passUsage: PassUsage,context: Context3DProxy) {
 
-            if (!this.follow) return;
+            //if (!this.follow) return;
             var index: number = 0;
             var vertices: number = geometry.vertexCount / this.count;
 
@@ -80,29 +82,25 @@
                     this.tempTime = time * 0.001;
 
                     var numberSpace = this.id * this.space ;
-                    this.tempTime = Math.max(this.tempTime, 0.0);
+                    this.tempTime = Math.max(this.tempTime - numberSpace - this.delay , 0.0);
 
                     if (this.particleAnimationState.loop == 0.0) {
                         this.duration = this.particleAnimationState.duration;
                         if (numberSpace > this.duration )
                         {
-                            geometry.verticesData[index + 0] = this.follow.x;
-                            geometry.verticesData[index + 1] = this.follow.y;
-                            geometry.verticesData[index + 2] = this.follow.z;
+                            geometry.verticesData[index + 0] = this.particleAnimationState.followTarget.x;
+                            geometry.verticesData[index + 1] = this.particleAnimationState.followTarget.y;
+                            geometry.verticesData[index + 2] = this.particleAnimationState.followTarget.z;
                         }
                     } else {
-                        this.duration = this.particleAnimationState.totalTime ;
-                        this.tempTime =(this.tempTime - numberSpace);
+                        this.duration = this.particleAnimationState.totalTime + this.space;//- this.particleAnimationState.delayLife;
                         this.tempTime = this.tempTime % this.duration;
-
-                        //this.tempTime = (this.tempTime - Math.floor(this.tempTime));
-
-                        if (this.tempTime - delay * 0.001 <= numberSpace )
-                        {
-                            geometry.verticesData[index + 0] = this.follow.x;
-                            geometry.verticesData[index + 1] = this.follow.y;
-                            geometry.verticesData[index + 2] = this.follow.z;
-                        }
+                        //this.tempTime = Math.max(this.tempTime - numberSpace, 0.0);
+                        if (this.tempTime - delay * 0.001 >= this.life || this.tempTime - delay * 0.001 <= 0.0 ) {
+                            geometry.verticesData[index + 0] = this.particleAnimationState.followTarget.x;
+                            geometry.verticesData[index + 1] = this.particleAnimationState.followTarget.y;
+                            geometry.verticesData[index + 2] = this.particleAnimationState.followTarget.z;
+                        } 
                     }
                 }
             }

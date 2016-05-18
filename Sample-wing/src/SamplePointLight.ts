@@ -129,7 +129,7 @@ class SamplePointLight extends SampleBase {
 
         ///创建纹理材质
         this.mat = new egret3d.TextureMaterial();
-        this.mat.shininess = 20.0;
+  
         this.mat.ambientColor = 0xffffff;
         //this.mat.ambientPower = 0.5;///接口修改  等待修复
         ///创建模型基类

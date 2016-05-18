@@ -101,15 +101,15 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public update(time: number, delay: number , geometry:Geometry , context:Context3DProxy ) {
+        public update(time: number, delay: number, geometry: Geometry, passUsage: PassUsage,context:Context3DProxy ) {
             if (!this._play) {
                 return;
             }
+          
+            if (this.particleAnimationState)
+                this.particleAnimationState.update(this.time, this.delay, geometry, passUsage, context);
             this.delay = delay; 
             this.time += this.delay; 
-
-            if (this.particleAnimationState)
-                this.particleAnimationState.update(this.time , delay , geometry , context );
         }
 
         /**

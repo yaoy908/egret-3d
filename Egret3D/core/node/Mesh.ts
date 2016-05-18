@@ -28,7 +28,7 @@
         * @platform Web,Native
         */
         public geometry: Geometry;
-        private _aabbBox: QuadAABB;
+        protected _aabbBox: QuadAABB;
                         
         /**
         * @language zh_CN
@@ -39,9 +39,9 @@
         */
         public material: MaterialBase ;
 
-        private muiltMaterial: { [matID: number]: MaterialBase } = {};
+        protected muiltMaterial: { [matID: number]: MaterialBase } = {};
 
-        private _materialCount: number = 0;
+        protected _materialCount: number = 0;
 
         /**
         * @language zh_CN
@@ -272,9 +272,9 @@
             return bound;
         }
 
-        private _i: number; 
-        private _subGeometry: SubGeometry;
-        private _matID: number; 
+        protected _i: number; 
+        protected _subGeometry: SubGeometry;
+        protected _matID: number; 
         
         /**
         * @private
@@ -303,7 +303,7 @@
             }
 
             if (this.animation) {
-                this.animation.update(time, delay, this.geometry, context3DProxy );
+                this.animation.update(time, delay, this.geometry,null, context3DProxy);
             }
 
         }

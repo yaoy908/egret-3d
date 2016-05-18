@@ -7,9 +7,10 @@ void main() {
 
 	diffuseColor = texture2D(diffuseTexture , uv_0 );
     
-    if( diffuseColor.w == materialSource.cutAlpha ){
-		discard;
-	}
+    if( diffuseColor.w <= materialSource.cutAlpha ){
+			discard;
+		}else
+			diffuseColor.xyz *= diffuseColor.w ;
 }
 
 

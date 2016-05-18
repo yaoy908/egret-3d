@@ -9,7 +9,7 @@ uniform mat4 uniform_ModelMatrix ;
 uniform mat4 uniform_ViewMatrix ;
 uniform mat4 uniform_ProjectionMatrix ;
 
-varying vec3 varying_ViewPose;
+varying vec4 varying_ViewPose;
 varying vec3 varying_eyeNormal  ;
 varying vec2 varying_uv0;
 varying vec4 varying_color;

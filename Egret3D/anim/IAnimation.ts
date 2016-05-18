@@ -63,7 +63,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        update(time: number, delay: number, geometry: Geometry, context: Context3DProxy ): void;
+        update(time: number, delay: number, geometry: Geometry, passUsage: PassUsage, context: Context3DProxy ): void;
 
         /**
         * @language zh_CN

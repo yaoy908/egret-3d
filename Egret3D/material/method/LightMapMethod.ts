@@ -7,6 +7,7 @@
     * 在三维软件里实现打好光，然后渲染把场景各表面的光照输出到贴图上。
     * 然后使用模型的第2UV，渲染出Lightmap效果，lightmap贴图需要自己烘焙。
     * @see egret3d.MethodBase
+    * @includeExample material/method/LightmapMethod.ts
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -22,13 +23,16 @@
         */
         constructor( useSpecularPower:boolean = true ) {
             super();
-            this.methodType = TextureMethodType.diffuse; 
-            this.vsShaderList.push("secondaryUV_vs");
+
+            this.vsShaderList[ShaderPhaseType.local_vertex] = this.vsShaderList[ShaderPhaseType.local_vertex] || [];
+            this.vsShaderList[ShaderPhaseType.local_vertex].push("secondaryUV_vs");
 
             if (useSpecularPower){
-                this.fsShaderList.push("lightMapSpecularPower_fs");
+                this.fsShaderList[ShaderPhaseType.shadow_fragment] = this.fsShaderList[ShaderPhaseType.shadow_fragment] || [];
+                this.fsShaderList[ShaderPhaseType.shadow_fragment].push("lightMapSpecularPower_fs");
             } else {
-                this.fsShaderList.push("lightMap_fs");
+                this.fsShaderList[ShaderPhaseType.shadow_fragment] = this.fsShaderList[ShaderPhaseType.shadow_fragment] || [];
+                this.fsShaderList[ShaderPhaseType.shadow_fragment].push("lightMap_fs");
             }
         }
 

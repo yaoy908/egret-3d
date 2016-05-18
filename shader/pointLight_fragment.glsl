@@ -22,25 +22,21 @@ void calculatePointLight(MaterialSource materialSource){
 		pointLight.falloff = uniform_pointLightSource[i*12+11];
 
 		ambientColor.xyz += pointLight.diffuse.xyz * pointLight.ambient ;
-        vec4 lightVirePos = uniform_ViewMatrix * vec4(pointLight.position.xyz,1.0) ;
-        vec3 lightDir = varying_ViewPose.xyz - (lightVirePos.xyz/lightVirePos.w) ; 
-        lightDir = normalize(lightDir);
-        float distance = length( lightDir );
-   
-        float lambertTerm = pointLight.intensity / ( distance * distance )  ;
-  
-        float NdotL = dot( N, lightDir ); 
-        NdotL = clamp( NdotL ,0.0,1.0 ); 
-  
-        light.xyz += pointLight.diffuse * NdotL * lambertTerm ; 
-
-		if( lambertTerm> 0.0){
-			vec3 viewDir = normalize(varying_ViewPose); 
-			vec3 H = normalize( lightDir + viewDir ); 
+		
+		vec4 lightVirePos = uniform_ViewMatrix * vec4(pointLight.position.xyz,1.0) ; 
+        vec3 lightDir = varying_ViewPose.xyz - lightVirePos.xyz ; 
+	    float intensity = max(dot(N,normalize(lightDir)), 0.0);
+		float lightDist = length( lightDir ); 
+		float attenuation = pointLight.intensity / (3.0 + 0.001 * lightDist +  0.00009 * lightDist * lightDist);
+		light.xyz += pointLight.diffuse * intensity * attenuation ;
+		
+		if( attenuation> 0.0){ 
+			vec3 viewDir = normalize(varying_ViewPose.xyz/varying_ViewPose.w); 
+			vec3 H = normalize( normalize(lightDir) + viewDir ); 
 			float NdotH = dot( normal, H ); 
-			lambertTerm = pow( clamp( NdotH ,0.0,1.0),materialSource.shininess ); 
-			specularColor.xyz += lambertTerm * materialSource.specular * materialSource.specularScale ; 
-		}
+			float lambertTerm = pow( clamp( NdotH ,0.0,1.0),materialSource.shininess ); 
+			specularColor.xyz += pointLight.diffuse * lambertTerm * materialSource.specular * attenuation ; 
+		} 
 	};
 }
 

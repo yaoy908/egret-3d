@@ -26,7 +26,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public vertex_ShaderName: string = "";
+        public vertex_ShaderName: { [shaderPhase: number]: string[] } = {};
         
         /**
         * @language zh_CN
@@ -34,7 +34,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public frament_ShaderName: string = "" ;
+        public frament_ShaderName: { [shaderPhase: number]: string[] } = {};
                         
         /**
         * @private
@@ -72,7 +72,13 @@
         /**
         * @private
         */
-        public update(time: number, delay: number, geometry:Geometry , context: Context3DProxy) {
+        public update(time: number, delay: number, geometry:Geometry , passUsage:PassUsage , context: Context3DProxy) {
+        }
+
+        /**
+        * @private
+        */
+        public upload() {
         }
     }
 } 

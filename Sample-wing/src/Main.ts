@@ -2,6 +2,6 @@ class Main extends egret.DisplayObjectContainer {
 
     public constructor() {
         super();
-        var sample = new SamplePointLight ();
+        var sample = new SampleUvSpriteSheet ();
     }
 } 

@@ -19,7 +19,7 @@
         public initUseMethod(animation: IAnimation, geom: Geometry) {
             this._passChange = false;
 
-            this._materialData.textureMethodTypes.push(TextureMethodType.color);
+           // this._materialData.textureMethodTypes.push(TextureMethodType.color);
 
             var i: number = 0;
 
@@ -28,10 +28,10 @@
             this._passUsage.vertexShader.shaderType = Shader.vertex;
             this._passUsage.fragmentShader.shaderType = Shader.fragment;
 
-            if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.color) != -1) {
+            //if (this._materialData.textureMethodTypes.indexOf(TextureMethodType.color) != -1) {
                 this._passUsage.vertexShader.addUseShaderName("cube_vertex");
                 this._passUsage.fragmentShader.addUseShaderName("cube_fragment");
-            }
+           // }
         }
     }
 } 
