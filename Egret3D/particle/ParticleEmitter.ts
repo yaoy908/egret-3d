@@ -56,21 +56,21 @@
         }
 
         
-        /**
-          * @language zh_CN
-          * 粒子发射器的 发射量 = 1000ms * value 为1s中发射的量
-          */
-        public set rate(value: number) {
-            this._particleState.rate;
-        }
+        ///**
+        //  * @language zh_CN
+        //  * 粒子发射器的 发射量 = 1000ms * value 为1s中发射的量
+        //  */
+        //public set rate(value: number) {
+        //    this._particleState.rate = value ;
+        //}
 
-         /**
-          * @language zh_CN
-          * 粒子发射器的 发射量 = 1000ms * value 为1s中发射的量
-          */
-        public get rate(): number {
-            return this._particleState.rate;
-        }
+        // /**
+        //  * @language zh_CN
+        //  * 粒子发射器的 发射量 = 1000ms * value 为1s中发射的量
+        //  */
+        //public get rate(): number {
+        //    return this._particleState.rate;
+        //}
 
         /**
         * @language zh_CN
@@ -303,22 +303,24 @@
                  for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
                      this._subGeometry = this.geometry.subGeometrys[this._i];
                      this._matID = this._subGeometry.matID;
-                     if (this.muiltMaterial[this._matID]) {
+                     if (this.multiMaterial[this._matID]) {
                          if (this.lightGroup) {
-                             this.muiltMaterial[this._matID].lightGroup = this.lightGroup;
+                             this.multiMaterial[this._matID].lightGroup = this.lightGroup;
                          }
-                         this.muiltMaterial[this._matID].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+                         this.multiMaterial[this._matID].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
                      }
                      else {
                  
                          if (this.lightGroup) {
-                             this.muiltMaterial[0].lightGroup = this.lightGroup;
+                             this.multiMaterial[0].lightGroup = this.lightGroup;
                          }
-                         this.muiltMaterial[0].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+                         this.multiMaterial[0].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
                      }
-                     if (this.animation) {
-                         this.animation.update(time, delay, this.geometry, this.muiltMaterial[0].diffusePass._passUsage, context3DProxy);
-                     }
+                     
+                 }
+
+                 if (this.animation) {
+                     this.animation.update(time, delay, this.geometry, this.multiMaterial[0].diffusePass._passUsage, context3DProxy);
                  }
 
             }

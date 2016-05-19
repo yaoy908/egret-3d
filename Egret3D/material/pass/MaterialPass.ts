@@ -82,6 +82,7 @@
             var index: number = this.methodList.indexOf(method);
             if (index == -1) {
                 this.methodList.push(method);
+                method.materialData = this._materialData;
                 this._passChange = true;
             }
         }
@@ -168,6 +169,8 @@
             var shaderList: string[];
             for (var d: number = 0; d < this.methodList.length;d++ ) {
                 var method: MethodBase = this.methodList[d];
+                
+
                 for (shaderPhase in method.vsShaderList) {
                     shaderList = method.vsShaderList[shaderPhase];
                     for (var i: number = 0; i < shaderList.length; i++) {
@@ -398,7 +401,8 @@
                 this._materialData.materialSourceData[18] = this._materialData.specularLevel; //保留
                 this._materialData.materialSourceData[19] = this._materialData.normalScale; //保留
             }
-
+            
+            
             if (this._passChange) {
                 this.upload(time, delay, context3DProxy, modeltransform, camera3D, animtion, subGeometry.geometry);
             }
@@ -428,9 +432,20 @@
             context3DProxy.enable(ContextConfig.BLEND);
             context3DProxy.setBlendFactors(this._materialData.blend_src, this._materialData.blend_dest);
 
+            if (this._passUsage.uniform_colorTransformVec4) {
+                context3DProxy.uniform4fv(this._passUsage.uniform_colorTransformVec4.uniformIndex, this._materialData.colorTransform.vec4);
+            }
+            if (this._passUsage.uniform_colorTransformM44) {
+                context3DProxy.uniformMatrix4fv(this._passUsage.uniform_colorTransformM44.uniformIndex, false, this._materialData.colorTransform.m44.rawData);
+            }
+            if (this._passUsage.uniform_colorGradientsSource) {
+                context3DProxy.uniform1fv(this._passUsage.uniform_colorGradientsSource.uniformIndex, this._materialData.colorGradientsSource);
+            }
+            
             if (this._passUsage.uniform_materialSource) {
                 context3DProxy.uniform1fv(this._passUsage.uniform_materialSource.uniformIndex, this._materialData.materialSourceData);
             }
+
 
             if (this._materialData.textureChange) {
                 this.resetTexture(context3DProxy);
@@ -551,6 +566,8 @@
             if (this._materialData.alphaBlending)
                 Context3DProxy.gl.depthMask(true);
 
+
+            subGeometry.deactivePass(this._passUsage, context3DProxy);
         }
     }
 } 

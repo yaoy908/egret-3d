@@ -946,6 +946,17 @@
 
         /**
         * @language zh_CN
+        * 关闭顶点着色器变量索引
+        * @param index 变量索引
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public clearVaPointer(index: number): void {
+            Context3DProxy.gl.disableVertexAttribArray(index);
+        }
+
+        /**
+        * @language zh_CN
         * @private
         * 实时传入显卡顶点着色器变量数组数据
         * @param floats 

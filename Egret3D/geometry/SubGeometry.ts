@@ -247,17 +247,33 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public update(time: number, delay: number, passUsage: PassUsage, contextPorxy: Context3DProxy) {
+        public update(time: number, delay: number, passUsage: PassUsage, contextProxy: Context3DProxy) {
 
             if (this._attributeDiry)
-                this.upload(passUsage, contextPorxy);
+                this.upload(passUsage, contextProxy);
 
             for (var i: number = 0; i < this.attList.length; i++) {
                 if (this.attList[i].uniformIndex >= 0)
-                    contextPorxy.vertexAttribPointer(this.attList[i].uniformIndex, this.attList[i].size, this.attList[i].dataType, this.attList[i].normalized, this.attList[i].stride, this.attList[i].offsetBytes);
+                    contextProxy.vertexAttribPointer(this.attList[i].uniformIndex, this.attList[i].size, this.attList[i].dataType, this.attList[i].normalized, this.attList[i].stride, this.attList[i].offsetBytes);
             }
 
         }
+
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public deactivePass(passUsage: PassUsage, contextProxy: Context3DProxy): void {
+            for (var i: number = 0; i < this.attList.length; i++) {
+                if (this.attList[i].uniformIndex >= 0)
+                    contextProxy.clearVaPointer(this.attList[i].uniformIndex);
+            }
+        }
+
+
+
 
 
     }
