@@ -475,8 +475,9 @@
         }
                                 
         /**
-        * @private
         * @language zh_CN
+        * 提交顶点数据 如果顶点数据有变化的话,需要调用此函数重新提交
+        * @param context3DProxy 上下文设备
         * @version Egret 3.0
         * @platform Web,Native
         */

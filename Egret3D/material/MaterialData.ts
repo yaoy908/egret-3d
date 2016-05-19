@@ -312,7 +312,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public specularLevel: number = 20.0;
+        public specularLevel: number = 4.0;
 
         /**
         * @language zh_CN

@@ -69,5 +69,5 @@ void main() {
     float ws = ( w - startA.x ) / len ;  
 	
 	// vec2 p = cubic_bezier( startA , startB , nextA , nextB , ws);
-	//localPosition.xyz *= pack_depth(uniform_size[1]).z ;
+	localPosition.xyz *= pack_depth(uniform_size[1]).y ;
 }

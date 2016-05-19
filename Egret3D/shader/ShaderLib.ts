@@ -206,8 +206,13 @@ module egret3d {
 
 			"end_vs":
 			"vec4 endPosition ; \n" +
+			"uniform float uniform_materialSource[20]; \n" +
 			"void main() { \n" +
+<<<<<<< HEAD
 			"gl_PointSize = 4.0; \n" +
+=======
+			"gl_PointSize = uniform_materialSource[18]; \n" +
+>>>>>>> ba381dc4b86a5bd46f847e7cc730c3bad607bd9f
 			"gl_Position = uniform_ProjectionMatrix * outPosition ; \n" +
 			"} \n" +
 			"                       \n",

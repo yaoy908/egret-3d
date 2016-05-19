@@ -47,7 +47,7 @@
                 vb.push(width * i - width * col / 2, 0, -height * col / 2);
             }
 
-            for (var i: number = 0; i < vb.length; ++i) {
+            for (var i: number = 0; i < vb.length / 3; ++i) {
                 ib.push(i);
             }
 

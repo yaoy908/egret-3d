@@ -28,12 +28,11 @@
         * @platform Web,Native
         */
         public build(geometry: Geometry, count: number) {
-            this.colorSegment[0] = this.getGpuVec4(0.0,254,32,254 ) ;
-            //this.colorSegment[1] = this.getGpuVec4(254, 125, 125, 32);
-            this.colorSegment[1] = this.getGpuVec4(255, 255, 250,128);
-            this.colorSegment[2] = 0.0 ;
-            this.colorSegment[3] = 0.0 ;
-            this.colorSegment[4] = 0.0 ;
+            this.colorSegment[0] = this.getGpuVec4(0.0, 64.0, 128.0, 256.0);
+            this.colorSegment[1] = 0.0;
+            this.colorSegment[2] = 0.0;
+            this.colorSegment[3] = 0.0;
+            this.colorSegment[4] = 0.0;
             this.colorSegment[5] = 0.0;
             this.colorSegment[6] = 0.0;
             this.colorSegment[7] = 0.0;
@@ -57,7 +56,7 @@
 
         public getGpuVec4(r: number, g: number, b: number, a: number): number {
             //return Math.floor(px * 254) * 0x1000000 + Math.floor(py * 254) * 0x10000 + Math.floor(pcx * 254) * 0x100 + pcy;
-            return a * 0x1000000 + r * 0x10000 + g * 0x100 + b;
+            return a * 256*256*256 + r * 256*256 + g * 256 + b;
         }
     }
 } 

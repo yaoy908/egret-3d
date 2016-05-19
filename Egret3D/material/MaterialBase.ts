@@ -702,6 +702,18 @@
             }
         }
 
+        public set pointSize(value: number) {
+            if (value == this.materialData.specularLevel) {
+                return;
+            }
+            this.materialData.specularLevel = value;
+            this.materialData.materialDataNeedChange = true;
+        }
+
+        public get pointSize(): number {
+            return this.materialData.specularLevel;
+        }
+
         /**
          * @language zh_CN
          * @private
