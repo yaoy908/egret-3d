@@ -5,7 +5,8 @@
     */
     export class ParticleSizeGlobalNode extends AnimationNode {
 
-        public colorSegment: Float32Array = new Float32Array( 16 ); 
+        public colorSegment: Float32Array = new Float32Array(64); 
+        public points: Point[] = []; 
         constructor() {
 
             super();
@@ -17,8 +18,18 @@
             //this.frament_ShaderName[ShaderPhaseType.muilt_end_fragment] = this.frament_ShaderName[ShaderPhaseType.muilt_end_fragment] || [];
             //this.frament_ShaderName[ShaderPhaseType.muilt_end_fragment].push("particle_color_fs");
 
+            this.points.push(new Point(0, 0));
+            this.points.push(new Point(0, 1));
+            this.points.push(new Point(0.5, 2));
+            this.points.push(new Point(0.55, 2));
+
+            this.points.push(new Point(0.55, 2));
+            this.points.push(new Point(0.56, 2));
+            this.points.push(new Point(1.0, 0.2));
+            this.points.push(new Point(1.0, 0.2));
+            //|sa,sc ea,ec|  每个段的形式
         }
-        
+         
         /**
         * @language zh_CN
         * 填充顶点数据
@@ -28,35 +39,23 @@
         * @platform Web,Native
         */
         public build(geometry: Geometry, count: number) {
-            this.colorSegment[0] = this.getGpuVec4(0.0, 64.0, 128.0, 256.0);
-            this.colorSegment[1] = 0.0;
-            this.colorSegment[2] = 0.0;
-            this.colorSegment[3] = 0.0;
-            this.colorSegment[4] = 0.0;
-            this.colorSegment[5] = 0.0;
-            this.colorSegment[6] = 0.0;
-            this.colorSegment[7] = 0.0;
-            this.colorSegment[8] = 0.0;
-            this.colorSegment[9] = 0.0;
-            this.colorSegment[10] = 0.0;
-            this.colorSegment[11] = 0.0;
-
-            this.colorSegment[12] = 0.0;
-            this.colorSegment[13] = 0.0;
-            this.colorSegment[14] = 0.0;
-            this.colorSegment[15] = 0.0;
+            for (var i: number = 0; i < 32; i++){
+                if (this.points.length > i) {
+                    this.colorSegment[i * 2] = this.points[i].x;
+                    this.colorSegment[i * 2 + 1] = this.points[i].y;
+                }
+                else {
+                    this.colorSegment[i * 2] = 0 ;
+                    this.colorSegment[i * 2 + 1] = 0;
+                }
+            }
         }
 
         /**
         * @private
         */
         public update(time: number, delay: number, geometry: Geometry, passUsage: PassUsage, context: Context3DProxy) {
-            context.uniform1fv(passUsage["uniform_size"].uniformIndex, this.colorSegment);
-        }
-
-        public getGpuVec4(r: number, g: number, b: number, a: number): number {
-            //return Math.floor(px * 254) * 0x1000000 + Math.floor(py * 254) * 0x10000 + Math.floor(pcx * 254) * 0x100 + pcy;
-            return a * 256*256*256 + r * 256*256 + g * 256 + b;
+            context.uniform2fv(passUsage["uniform_size"].uniformIndex, this.colorSegment);
         }
     }
-} 
+}  
