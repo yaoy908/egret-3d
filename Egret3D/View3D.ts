@@ -36,6 +36,7 @@
 
         protected _renderTarget: RenderTargetTexture = new RenderTargetTexture();
 
+        protected _backImg: HUD;
         protected _huds: Array<HUD> = new Array<HUD>();
 
         //protected _testCamera: Camera3D = new Camera3D();
@@ -120,6 +121,21 @@
             return (this._backColor.w * 255 << 24) | (this._backColor.x * 255 << 16) | (this._backColor.y * 255 << 8) | (this._backColor.z * 255);
         }
 
+        public set backImage(tex: ITexture) {
+            if (tex) {
+                this._backImg = this._backImg || new HUD();
+                this._backImg.diffuseTexture = tex; 
+                this._backImg.x = this.x;
+                this._backImg.y = this.y;
+                this._backImg.width = this.width;
+                this._backImg.height = this.height;
+            }
+        }
+
+        public get backImage(): ITexture {
+            return this._backImg.diffuseTexture ;
+        }
+
         /**
         * @language zh_CN
         * 获取View3d中的渲染摄像机
@@ -162,6 +178,7 @@
         */
         public set scene(sc: Scene3D) {
             this._scene = sc;
+         
         }
                 
         /**
@@ -173,6 +190,9 @@
         */
         public set x(value: number) {
             this._viewPort.x = value;
+            if (this._backImg) {
+                this._backImg.x = value;
+            }
         }
                 
                 
@@ -196,6 +216,9 @@
         */
         public set y(value: number) {
             this._viewPort.y = value;
+            if (this._backImg) {
+                this._backImg.y = value;
+            }
         }
                 
                 
@@ -220,6 +243,9 @@
         public set width(value: number) {
             this._viewPort.width = value;
             this._camera.aspectRatio = this._viewPort.width / this._viewPort.height;
+            if (this._backImg) {
+                this._backImg.width = value;
+            }
         }
                 
         /**
@@ -243,6 +269,9 @@
         public set height(value: number) {
             this._viewPort.height = value;
             this._camera.aspectRatio = this._viewPort.width / this._viewPort.height;
+            if (this._backImg) {
+                this._backImg.height = value;
+            }
         }
                 
         /**
@@ -350,6 +379,8 @@
             this._camera.viewPort = this._viewPort ;
             this._entityCollect.update(this._camera);
 
+ 
+
             this._render.update(time, delay, this._entityCollect, this._camera);
 
             //if (this._renderTarget) {
@@ -364,12 +395,21 @@
             if (this._cleanParmerts & Context3DProxy.gl.COLOR_BUFFER_BIT) {
                 View3D._contex3DProxy.clearColor(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w);
             }
+
             View3D._contex3DProxy.clear(this._cleanParmerts);
+
+            if (this._backImg) {
+                this._backImg.draw(View3D._contex3DProxy);
+            }
+
             this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera);
+
 
             for (var i: number = 0; i < this._huds.length; ++i) {
                 this._huds[i].draw(View3D._contex3DProxy);
             }
+
+        
         }
 
 

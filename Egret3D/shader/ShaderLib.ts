@@ -529,7 +529,7 @@ module egret3d {
 			"} \n",
 
 			"particle_size_vs":
-			"uniform float uniform_size[16] ; \n" +
+			"uniform vec2 uniform_size[32] ; \n" +
 			"vec2 quadratic_bezier(vec2 A, vec2 B, vec2 C, float t) \n" +
 			"{ \n" +
 			"vec2 D = mix(A, B, t); \n" +
@@ -543,39 +543,25 @@ module egret3d {
 			"vec2 G = mix(C, D, t); \n" +
 			"return quadratic_bezier(E, F, G, t); \n" +
 			"} \n" +
-			"vec4 pack_depth(float depth) \n" +
-			"{ \n" +
-			"vec4 res ; \n" +
-			"float res1 = depth/256.0; \n" +
-			"res.z = fract( res1 ); \n" +
-			"res1 -= res.z; \n" +
-			"res1 = res1/256.0; \n" +
-			"res.y = fract( res1 ); \n" +
-			"res1 -= res.y; \n" +
-			"res1 = res1/256.0; \n" +
-			"res.x = fract( res1 ); \n" +
-			"res1 -= res.x; \n" +
-			"res1 = res1/256.0; \n" +
-			"res.w = res1; \n" +
-			"return res; \n" +
-			"} \n" +
 			"void main() { \n" +
 			"float w = currentTime/emit.life; \n" +
 			"vec2 startA ; \n" +
 			"vec2 startB ; \n" +
 			"vec2 nextA ; \n" +
 			"vec2 nextB ; \n" +
-			"vec4 startSize = pack_depth(uniform_size[0]) ; \n" +
-			"vec4 nextSize = pack_depth(uniform_size[1]) ; \n" +
-			"startA = startSize.xy ; \n" +
-			"startB = startSize.zw ; \n" +
-			"nextA = nextSize.xy; \n" +
-			"nextB = nextSize.zw; \n" +
 			"for( int i = 0 ; i < 8 ; i++ ){ \n" +
+			"if( w >= uniform_size[i*4].x && w <= uniform_size[i*4+3].x ){ \n" +
+			"startA = uniform_size[i*4] ; \n" +
+			"startB = uniform_size[i*4+1] ; \n" +
+			"nextA = uniform_size[i*4+2] ; \n" +
+			"nextB = uniform_size[i*4+3] ; \n" +
+			"break; \n" +
+			"} \n" +
 			"} \n" +
 			"float len = nextB.x - startA.x ; \n" +
 			"float ws = ( w - startA.x ) / len ; \n" +
-			"localPosition.xyz *= pack_depth(uniform_size[1]).y ; \n" +
+			"vec2 p = cubic_bezier( startA , startB , nextA , nextB , ws); \n" +
+			"localPosition.xyz *= p.y ; \n" +
 			"} \n",
 
 			"particle_time":
