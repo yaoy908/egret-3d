@@ -64,7 +64,9 @@
 
         public update(time: number, delay: number, geometry: Geometry, passUsage: PassUsage,context: Context3DProxy) {
 
-            if (!this.particleAnimationState.followTarget) return;
+            if (!this.particleAnimationState.followTarget) {
+                return;
+            }
             var index: number = 0;
             var vertices: number = geometry.vertexCount / this.count;
 

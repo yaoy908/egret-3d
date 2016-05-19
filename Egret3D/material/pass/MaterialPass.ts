@@ -566,6 +566,8 @@
             if (this._materialData.alphaBlending)
                 Context3DProxy.gl.depthMask(true);
 
+
+            subGeometry.deactivePass(this._passUsage, context3DProxy);
         }
     }
 } 

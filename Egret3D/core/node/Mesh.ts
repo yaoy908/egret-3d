@@ -39,7 +39,7 @@
         */
         public material: MaterialBase ;
 
-        protected muiltMaterial: { [matID: number]: MaterialBase } = {};
+        protected multiMaterial: { [matID: number]: MaterialBase } = {};
 
         protected _materialCount: number = 0;
 
@@ -143,10 +143,10 @@
         * @platform Web,Native
         */
         public addSubMaterial(id: number, material: MaterialBase) {
-            if (!this.muiltMaterial[id]) {
+            if (!this.multiMaterial[id]) {
                 this._materialCount++;
             }
-            this.muiltMaterial[id] = material;
+            this.multiMaterial[id] = material;
         }
                 
         /**
@@ -157,8 +157,8 @@
         * @platform Web,Native
         */
         public removeSubMaterial(id: number) {
-            if (this.muiltMaterial[id]) {
-                delete this.muiltMaterial[id];
+            if (this.multiMaterial[id]) {
+                delete this.multiMaterial[id];
                 this._materialCount--;
             }
         }
@@ -171,7 +171,7 @@
         * @platform Web,Native
         */
         public getMaterial(id: number): MaterialBase {
-            return this.muiltMaterial[id];
+            return this.multiMaterial[id];
         }
                         
         /**
@@ -198,7 +198,7 @@
                 ani = this.animation.clone();
             }
             var cloneMesh: Mesh = new Mesh(this.geometry, this.material, ani);
-            cloneMesh.muiltMaterial = this.muiltMaterial;
+            cloneMesh.multiMaterial = this.multiMaterial;
             return cloneMesh;
         }
                                 
@@ -288,17 +288,17 @@
             for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
                 this._subGeometry = this.geometry.subGeometrys[this._i];
                 this._matID = this._subGeometry.matID;
-                if (this.muiltMaterial[this._matID]) {
+                if (this.multiMaterial[this._matID]) {
                     if (this.lightGroup) {
-                        this.muiltMaterial[this._matID].lightGroup = this.lightGroup;
+                        this.multiMaterial[this._matID].lightGroup = this.lightGroup;
                     }
-                    this.muiltMaterial[this._matID].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+                    this.multiMaterial[this._matID].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
                 }
                 else {
                     if (this.lightGroup) {
-                        this.muiltMaterial[0].lightGroup = this.lightGroup;
+                        this.multiMaterial[0].lightGroup = this.lightGroup;
                     }
-                    this.muiltMaterial[0].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+                    this.multiMaterial[0].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
                 }
             }
 

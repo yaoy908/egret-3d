@@ -303,22 +303,24 @@
                  for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
                      this._subGeometry = this.geometry.subGeometrys[this._i];
                      this._matID = this._subGeometry.matID;
-                     if (this.muiltMaterial[this._matID]) {
+                     if (this.multiMaterial[this._matID]) {
                          if (this.lightGroup) {
-                             this.muiltMaterial[this._matID].lightGroup = this.lightGroup;
+                             this.multiMaterial[this._matID].lightGroup = this.lightGroup;
                          }
-                         this.muiltMaterial[this._matID].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+                         this.multiMaterial[this._matID].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
                      }
                      else {
                  
                          if (this.lightGroup) {
-                             this.muiltMaterial[0].lightGroup = this.lightGroup;
+                             this.multiMaterial[0].lightGroup = this.lightGroup;
                          }
-                         this.muiltMaterial[0].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+                         this.multiMaterial[0].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
                      }
-                     if (this.animation) {
-                         this.animation.update(time, delay, this.geometry, this.muiltMaterial[0].diffusePass._passUsage, context3DProxy);
-                     }
+                     
+                 }
+
+                 if (this.animation) {
+                     this.animation.update(time, delay, this.geometry, this.multiMaterial[0].diffusePass._passUsage, context3DProxy);
                  }
 
             }
