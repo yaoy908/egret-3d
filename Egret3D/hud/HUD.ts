@@ -28,10 +28,10 @@
         */
         public cullMode: number = ContextConfig.BACK;
         private static singleQuadData: Array<number> = [
-            -0.5, -0.5, 0.0, 0.0, 1.0,
-            0.5, -0.5, 0.0, 1.0, 1.0,
-            0.5, 0.5, 0.0, 1.0, 0.0,
-            -0.5, 0.5, 0.0, 0.0, 0.0
+            -1.0, -1.0, 0.0, 0.0, 1.0,
+            1.0, -1.0, 0.0, 1.0, 1.0,
+            1.0, 1.0, 0.0, 1.0, 0.0,
+            -1.0, 1.0, 0.0, 0.0, 0.0
         ];
 
         private static singleQuadIndex: Array<number> = [0, 1, 2, 0, 2, 3];
@@ -291,15 +291,17 @@
             }
             if (this._change) {
 
-                this._scale.x = this._rectangle.width / this._viewPort.width * 2.0;
-                this._scale.y = this._rectangle.height / this._viewPort.height * 2.0;
+                //this._scale.x = this._rectangle.width / this._viewPort.width * 2.0;
+                //this._scale.y = this._rectangle.height / this._viewPort.height * 2.0;
 
-                this._scale.z = 1;
+                //this._position.x = -(this._viewPort.width - (this._rectangle.x + this._viewPort.x + this._rectangle.width / 2) * 2.0) * (1 / this._viewPort.width);
+                //this._position.y = (this._viewPort.height - (this._rectangle.y + this._viewPort.y + this._rectangle.height / 2) * 2.0) * (1 / this._viewPort.height);;
+                this._scale.x = this._rectangle.width / this._viewPort.width;
+                this._scale.y = this._rectangle.height / this._viewPort.height;
 
-                this._position.x = -(this._viewPort.width - (this._rectangle.x + this._viewPort.x + this._rectangle.width / 2) * 2.0) * (1 / this._viewPort.width);
-                this._position.y = (this._viewPort.height - (this._rectangle.y + this._viewPort.y + this._rectangle.height / 2) * 2.0) * (1 / this._viewPort.height);;
-                this._position.z = 0;
-
+                this._position.x = MathUtil.ScreenToPosition(this._rectangle.x, this._rectangle.width, this._viewPort.width);
+                this._position.y = -MathUtil.ScreenToPosition(this._rectangle.y, this._rectangle.height, this._viewPort.height);
+                 
                 this._transformMatrix.recompose(this._transformComponents);
                 this._change = false;
             }
