@@ -1,15 +1,11 @@
 ﻿
 function jsOnload() {
-    var sample: egret3d.Class_ParticleColor = new egret3d.Class_ParticleColor();
+    var sample: egret3d.Class_LightAndNormal = new egret3d.Class_LightAndNormal();
 }
 
 function onTsconfig() {
     egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_View3D.js");
-    egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_Wireframe.js");
-    egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_SkinAnimation.js");
-    egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_Sky.js");
-    egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_ParticleColor.js");
-    //egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_Points.js");
+    egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_LightAndNormal.js");
 }
 
 window.onload = () => {

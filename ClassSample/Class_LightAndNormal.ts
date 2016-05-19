@@ -19,6 +19,10 @@
             this.ctl.tiltAngle = 60;
             this.ctl.distance = 1000; 
 
+            var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
+            var tex: ImageTexture = new ImageTexture(bgImg);
+            view1.backImage = tex;
+
             this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
 
