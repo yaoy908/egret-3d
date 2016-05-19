@@ -24,8 +24,10 @@
         
             this.matPlane.repeat = true;
             this.matPlane.blendMode = BlendMode.ADD; 
-            this.plane = new Mesh(new PlaneGeometry(1000,1000,10,10,1,1), this.matPlane);
+            this.plane = new Mesh(new PlaneGeometry(1000,1000,100,100,1,1), this.matPlane);
             this.view1.addChild3D(this.plane);
+
+            this.matPlane.materialData.drawMode = DrawMode.POINTS;
 
             var uvRollMethod: UVRollMethod = new UVRollMethod();
             this.matPlane.diffusePass.addMethod(uvRollMethod);

@@ -28,20 +28,20 @@
         * @platform Web,Native
         */
         public build(geometry: Geometry, count: number) {
-            this.colorSegment[0] = this.getGpuColor(1.0, 0.0, 0.0, 1.0);
-            this.colorSegment[1] = this.getGpuColor(0.0, 1.0, 0.0, 1.0);
-            this.colorSegment[2] = this.getGpuColor(0.0, 0.0, 1.0, 1.0);
-            this.colorSegment[3] = this.getGpuColor(0.0, 1.0, 1.0, 1.0);
-            this.colorSegment[4] = this.getGpuColor(1.0, 1.0, 1.0, 0.0);
+            this.colorSegment[0] = this.getGpuVec4(0.0, 64.0, 128.0, 256.0);
+            this.colorSegment[1] = 0.0;
+            this.colorSegment[2] = 0.0;
+            this.colorSegment[3] = 0.0;
+            this.colorSegment[4] = 0.0;
             this.colorSegment[5] = 0.0;
             this.colorSegment[6] = 0.0;
             this.colorSegment[7] = 0.0;
-
             this.colorSegment[8] = 0.0;
-            this.colorSegment[9] = 0.2;
-            this.colorSegment[10] = 0.5;
-            this.colorSegment[11] = 0.8;
-            this.colorSegment[12] = 1.0;
+            this.colorSegment[9] = 0.0;
+            this.colorSegment[10] = 0.0;
+            this.colorSegment[11] = 0.0;
+
+            this.colorSegment[12] = 0.0;
             this.colorSegment[13] = 0.0;
             this.colorSegment[14] = 0.0;
             this.colorSegment[15] = 0.0;
@@ -54,8 +54,9 @@
             context.uniform1fv(passUsage["uniform_size"].uniformIndex, this.colorSegment);
         }
 
-        public getGpuColor(r: number, g: number, b: number, a: number): number {
-            return a * 1000000.0 + r * 10000.0 + g * 100.0 + b;
+        public getGpuVec4(r: number, g: number, b: number, a: number): number {
+            //return Math.floor(px * 254) * 0x1000000 + Math.floor(py * 254) * 0x10000 + Math.floor(pcx * 254) * 0x100 + pcy;
+            return a * 256*256*256 + r * 256*256 + g * 256 + b;
         }
     }
 } 
