@@ -84,6 +84,17 @@
 
         /**
          * @language zh_CN
+         * 获取加载状态
+         * @returns number（0、1/2）
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public get status(): number {
+            return this._loadStatus;
+        }
+
+        /**
+         * @language zh_CN
          * 获取所有的灯光实例化信息
          * 加载完毕之后，会实例化所有的灯光，并且通过mesh中的lightIds自动分配到每个mesh的lightGroup中
          * @returns egret3d.DoubleArray

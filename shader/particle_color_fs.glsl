@@ -1,12 +1,22 @@
 uniform float uniform_colorTransform[16] ;
-const vec4 bit_mask  = vec4(0.0001, 0.01, 1.0, 0.000001 );
 vec4 pack_depth(float depth)
 {
     vec4 res ;
-    res.w =  floor(depth * bit_mask.w );
-    res.x =  floor((depth-res.w*1000000.0) * bit_mask.x ) ;
-    res.y =  floor((depth-res.w*1000000.0-res.x*10000.0) * bit_mask.y );
-    res.z =  floor(depth-res.w*1000000.0-res.x*10000.0-res.y*100.0) ;
+    
+    float res1 = depth/256.0;
+    res.z = fract( res1 );
+    res1 -= res.z;
+    
+    res1 = res1/256.0;
+    res.y = fract( res1 );
+    res1 -= res.y;
+    
+    res1 = res1/256.0;
+    res.x = fract( res1 );
+    res1 -= res.x;
+    
+    res1 = res1/256.0;
+    res.w = res1;
     return res;
 }
 

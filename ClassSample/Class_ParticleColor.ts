@@ -33,7 +33,7 @@
 
             var mat: TextureMaterial = new TextureMaterial();
             mat.ambientColor = 0xffffff;
-            this.particle = new ParticleEmitter(null, mat, 1000 );
+            this.particle = new ParticleEmitter(null, mat, 500 );
 
             //var uniformSpeed: ParticleUniformSpeedNode = new ParticleUniformSpeedNode();
             //uniformSpeed.speedShape = new Vec3ConstValueShape();
@@ -44,7 +44,7 @@
 
             var particleScaleByLifeNode: ParticleScaleByLifeNode = new ParticleScaleByLifeNode();
             (<ConstValueShape>particleScaleByLifeNode.start).value = 0.5;
-            (<ConstValueShape>particleScaleByLifeNode.end).value = 2.5;
+            (<ConstValueShape>particleScaleByLifeNode.end).value = 1.5;
             //this.particle.addAnimNode(particleScaleByLifeNode);
 
             var vel: ParticleAccelerationSpeedNode = new ParticleAccelerationSpeedNode();

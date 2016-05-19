@@ -8,7 +8,11 @@ module egret3d {
  			"alphaMask_fs":
 			"uniform sampler2D maskTexture ; \n" +
 			"void main(void){ \n" +
-			"materialSource.alpha *= texture2D( maskTexture , uv_0 ).x; \n" +
+			"float maskAlpha = texture2D( maskTexture , uv_0 ).x; \n" +
+			"if(maskAlpha * diffuseColor.w < 0.001){ \n" +
+			"discard; \n" +
+			"} \n" +
+			"materialSource.alpha *= maskAlpha; \n" +
 			"} \n",
 
 			"AOMap_fs":
@@ -97,6 +101,27 @@ module egret3d {
 			"vec2 F = mix(B, C, t); \n" +
 			"vec2 G = mix(C, D, t); \n" +
 			"return quadratic_bezier(E, F, G, t); \n" +
+			"} \n",
+
+			"colorGradients_fs":
+			"varying vec4 varying_pos; \n" +
+			"uniform float uniform_colorGradientsSource[10] ; \n" +
+			"void main(void){ \n" +
+			"vec3 posStart = vec3(uniform_colorGradientsSource[0], uniform_colorGradientsSource[1], uniform_colorGradientsSource[2]); \n" +
+			"vec3 posEnd = vec3(uniform_colorGradientsSource[3], uniform_colorGradientsSource[4], uniform_colorGradientsSource[5]); \n" +
+			"vec4 color = vec4(uniform_colorGradientsSource[6], uniform_colorGradientsSource[7], uniform_colorGradientsSource[8], uniform_colorGradientsSource[9]); \n" +
+			"color.w = color.w * clamp((varying_pos.y - posStart.y) / (posEnd.y - posStart.y), 0.0, 1.0); \n" +
+			"diffuseColor.xyz = clamp(diffuseColor.xyz / diffuseColor.w,0.0,1.0); \n" +
+			"diffuseColor.xyz = diffuseColor.xyz * (1.0 - color.w) + color.xyz * color.w; \n" +
+			"} \n" +
+			"  \n",
+
+			"colorTransform_fs":
+			"uniform vec4 uniform_colorTransformVec4 ; \n" +
+			"uniform mat4 uniform_colorTransformM44 ; \n" +
+			"void main(){ \n" +
+			"diffuseColor = uniform_colorTransformM44 * diffuseColor; \n" +
+			"diffuseColor = diffuseColor + uniform_colorTransformVec4; \n" +
 			"} \n",
 
 			"cube_fragment":
@@ -208,6 +233,7 @@ module egret3d {
 			"vec4 endPosition ; \n" +
 			"uniform float uniform_materialSource[20]; \n" +
 			"void main() { \n" +
+			"gl_PointSize = 50.0; \n" +
 			"gl_PointSize = uniform_materialSource[18]; \n" +
 			"gl_Position = uniform_ProjectionMatrix * outPosition ; \n" +
 			"} \n" +
@@ -432,14 +458,20 @@ module egret3d {
 
 			"particle_color_fs":
 			"uniform float uniform_colorTransform[16] ; \n" +
-			"const vec4 bit_mask  = vec4(0.0001, 0.01, 1.0, 0.000001 ); \n" +
 			"vec4 pack_depth(float depth) \n" +
 			"{ \n" +
 			"vec4 res ; \n" +
-			"res.w =  floor(depth * bit_mask.w ); \n" +
-			"res.x =  floor((depth-res.w*1000000.0) * bit_mask.x ) ; \n" +
-			"res.y =  floor((depth-res.w*1000000.0-res.x*10000.0) * bit_mask.y ); \n" +
-			"res.z =  floor(depth-res.w*1000000.0-res.x*10000.0-res.y*100.0) ; \n" +
+			"float res1 = depth/256.0; \n" +
+			"res.z = fract( res1 ); \n" +
+			"res1 -= res.z; \n" +
+			"res1 = res1/256.0; \n" +
+			"res.y = fract( res1 ); \n" +
+			"res1 -= res.y; \n" +
+			"res1 = res1/256.0; \n" +
+			"res.x = fract( res1 ); \n" +
+			"res1 -= res.x; \n" +
+			"res1 = res1/256.0; \n" +
+			"res.w = res1; \n" +
 			"return res; \n" +
 			"} \n" +
 			"void main() { \n" +
@@ -498,30 +530,52 @@ module egret3d {
 
 			"particle_size_vs":
 			"uniform float uniform_size[16] ; \n" +
-			"const vec4 bit_mask  = vec4(0.0001, 0.01, 1.0, 0.000001 ); \n" +
+			"vec2 quadratic_bezier(vec2 A, vec2 B, vec2 C, float t) \n" +
+			"{ \n" +
+			"vec2 D = mix(A, B, t); \n" +
+			"vec2 E = mix(B, C, t); \n" +
+			"return mix(D, E, t); \n" +
+			"} \n" +
+			"vec2 cubic_bezier(vec2 A, vec2 B, vec2 C, vec2 D, float t) \n" +
+			"{ \n" +
+			"vec2 E = mix(A, B, t); \n" +
+			"vec2 F = mix(B, C, t); \n" +
+			"vec2 G = mix(C, D, t); \n" +
+			"return quadratic_bezier(E, F, G, t); \n" +
+			"} \n" +
 			"vec4 pack_depth(float depth) \n" +
 			"{ \n" +
 			"vec4 res ; \n" +
-			"res.w =  floor(depth * bit_mask.w ); \n" +
-			"res.x =  floor((depth-res.w*1000000.0) * bit_mask.x ) ; \n" +
-			"res.y =  floor((depth-res.w*1000000.0-res.x*10000.0) * bit_mask.y ); \n" +
-			"res.z =  floor(depth-res.w*1000000.0-res.x*10000.0-res.y*100.0) ; \n" +
+			"float res1 = depth/256.0; \n" +
+			"res.z = fract( res1 ); \n" +
+			"res1 -= res.z; \n" +
+			"res1 = res1/256.0; \n" +
+			"res.y = fract( res1 ); \n" +
+			"res1 -= res.y; \n" +
+			"res1 = res1/256.0; \n" +
+			"res.x = fract( res1 ); \n" +
+			"res1 -= res.x; \n" +
+			"res1 = res1/256.0; \n" +
+			"res.w = res1; \n" +
 			"return res; \n" +
 			"} \n" +
-			"float particle(  ParticleData emit ){ \n" +
-			"float w = pt.w/pt.y; \n" +
-			"vec4 startSize ; \n" +
-			"vec4 nextSize ; \n" +
-			"for( int i = 1 ; i < 8 ; i++ ){ \n" +
-			"startSize = pack_depth(uniform_scale[i-1]) ; \n" +
-			"nextSize = pack_depth(uniform_scale[i]) ; \n" +
+			"void main() { \n" +
+			"float w = currentTime/emit.life; \n" +
+			"vec2 startA ; \n" +
+			"vec2 startB ; \n" +
+			"vec2 nextA ; \n" +
+			"vec2 nextB ; \n" +
+			"vec4 startSize = pack_depth(uniform_size[0]) ; \n" +
+			"vec4 nextSize = pack_depth(uniform_size[1]) ; \n" +
+			"startA = startSize.xy ; \n" +
+			"startB = startSize.zw ; \n" +
+			"nextA = nextSize.xy; \n" +
+			"nextB = nextSize.zw; \n" +
+			"for( int i = 0 ; i < 8 ; i++ ){ \n" +
 			"} \n" +
-			"float len = nextSegment - startSegment ; \n" +
-			"float ws = ( w - startSegment ) / len ; \n" +
-			"vec4 start = pack_depth(startSize) ; \n" +
-			"vec4 end = pack_depth(nextSize) ; \n" +
-			"vec2 p = cubic_bezier( vec2(start.x,end.x) , vec2(start.y,end.y) , vec2(start.z,end.z) , vec2(start.w,end.w) , ws); \n" +
-			"localPosition.xyz *= p.y ; \n" +
+			"float len = nextB.x - startA.x ; \n" +
+			"float ws = ( w - startA.x ) / len ; \n" +
+			"localPosition.xyz *= pack_depth(uniform_size[1]).y ; \n" +
 			"} \n",
 
 			"particle_time":
@@ -634,6 +688,7 @@ module egret3d {
 			"} \n",
 
 			"particle_vs":
+			"attribute vec3 attribute_offsetPosition; \n" +
 			"uniform mat4 uniform_cameraMatrix; \n" +
 			"const float PI = 3.1415926 ; \n" +
 			"float currentTime = 0.0; \n" +
@@ -692,6 +747,7 @@ module egret3d {
 			"mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); \n" +
 			"localPosition = outPosition = vec4(e_position, 1.0); \n" +
 			"globalPosition.xyz = vec3(0.0,0.0,0.0); \n" +
+			"globalPosition.xyz += attribute_offsetPosition; \n" +
 			"} \n",
 
 			"pointLight_fragment":

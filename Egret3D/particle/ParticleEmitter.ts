@@ -56,21 +56,21 @@
         }
 
         
-        /**
-          * @language zh_CN
-          * 粒子发射器的 发射量 = 1000ms * value 为1s中发射的量
-          */
-        public set rate(value: number) {
-            this._particleState.rate;
-        }
+        ///**
+        //  * @language zh_CN
+        //  * 粒子发射器的 发射量 = 1000ms * value 为1s中发射的量
+        //  */
+        //public set rate(value: number) {
+        //    this._particleState.rate = value ;
+        //}
 
-         /**
-          * @language zh_CN
-          * 粒子发射器的 发射量 = 1000ms * value 为1s中发射的量
-          */
-        public get rate(): number {
-            return this._particleState.rate;
-        }
+        // /**
+        //  * @language zh_CN
+        //  * 粒子发射器的 发射量 = 1000ms * value 为1s中发射的量
+        //  */
+        //public get rate(): number {
+        //    return this._particleState.rate;
+        //}
 
         /**
         * @language zh_CN
