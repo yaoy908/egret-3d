@@ -253,5 +253,19 @@
             }
             return value < min_inclusive ? min_inclusive : (value < max_inclusive ? value : max_inclusive);
         }
+
+        /**
+        * @private
+        */
+        public static ScreenToPosition(value: number, offset: number, max: number): number {
+            return (value + offset * 0.5) / max * 2 - 1;
+        }
+
+        /**
+        * @private
+        */
+        public static PositionToScreen(value: number, offset: number, max: number): number {
+            return (value + 1) * 0.5 * max - offset * 0.5;
+        }
     }
 } 
