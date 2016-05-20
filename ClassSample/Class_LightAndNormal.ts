@@ -29,21 +29,21 @@
             this._p = new PointLight( 0xffcccc );
             this._p.y = 100 ;
             this._p.intensity = 1;
-            //this._p.ambient = 0x6666cc;
-            //this._p.ambient = 0x32327D;
-           this.lights.addLight(this._p);
+            this._p.ambient = 0x6666cc;
+            this._p.ambient = 0x32327D;
+            this.lights.addLight(this._p);
 
             var d: DirectLight = new DirectLight(new Vector3D(0.0, 1.0, 0.0));
             d.ambient = 0x32327D;
-            // this.lights.addLight(d);
+             this.lights.addLight(d);
 
             this.matPlane = new TextureMaterial();
             this.matPlane.lightGroup = this.lights;
-            this.matPlane.specularLevel = 10.0 ;
-            this.matPlane.gloss = 10.0;
+            this.matPlane.specularLevel = 2.0 ;
+            this.matPlane.gloss = 100.0;
 
             this.matPlane.repeat = true;
-            this.matPlane.uvRectangle(0, 0, 2.0, 2.0);
+            this.matPlane.uvRectangle(0, 0, 1.0, 1.0);
 
             //this.plane = new Mesh(new SphereGeometry(300, 120, 120), this.matPlane);
             //this.plane = new Mesh(new CubeGeometry(150, 120, 120), this.matPlane);
@@ -52,15 +52,15 @@
 
            
 
-            var loadtex: URLLoader = new URLLoader("resource/floor/brick-diffuse.jpg");
+            var loadtex: URLLoader = new URLLoader("resource/normal/Metal_SciFiFuelCrate_1k_d.png");
             loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadDiffuse, this);
             loadtex["mat"] = this.matPlane;
 
-            var loadtex: URLLoader = new URLLoader("resource/floor/brick-normal.jpg");
+            var loadtex: URLLoader = new URLLoader("resource/normal/Metal_SciFiFuelCrate_1k_n.png");
             loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadNormal, this);
             loadtex["mat"] = this.matPlane;
 
-            var loadtex: URLLoader = new URLLoader("resource/floor/brick-specular.jpg");
+            var loadtex: URLLoader = new URLLoader("resource/normal/Metal_SciFiFuelCrate_1k_g.png");
             loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadSpecular, this);
             loadtex["mat"] = this.matPlane;
 

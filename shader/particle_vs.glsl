@@ -10,6 +10,8 @@ float totalTime = 0.0;
 vec4 localPosition;
 vec4 globalPosition;
 
+varying vec3 varyingViewDir ;
+
 mat4 buildRotMat4(vec3 rot)
 {
     mat4 ret = mat4(

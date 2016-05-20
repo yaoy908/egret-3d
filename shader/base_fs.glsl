@@ -4,6 +4,7 @@ varying vec3 varying_eyeNormal  ;
 varying vec2 varying_uv0;
 varying vec4 varying_ViewPose;
 varying vec4 varying_color;
+varying vec3 varying_ViewDir ;
 
 //uniform vec3 uniform_eyepos ;
 uniform mat4 uniform_ViewMatrix ;
@@ -35,5 +36,4 @@ void main() {
     
     normal = normalize(varying_eyeNormal) ;
 	uv_0 = varying_uv0;
-    
 }

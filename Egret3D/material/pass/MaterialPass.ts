@@ -238,9 +238,11 @@
                 this._passUsage.maxSpotLight = this.lightGroup.spotLightList.length;
                 this._passUsage.maxPointLight = this.lightGroup.pointLightList.length;
 
+                this._vs_shader_methods[ShaderPhaseType.local_vertex] = [];
                 this._fs_shader_methods[ShaderPhaseType.lighting_fragment] = [];
                 if (this.lightGroup.directLightList.length) {
                     this._passUsage.directLightData = new Float32Array(DirectLight.stride * this.lightGroup.directLightList.length);
+                    this._vs_shader_methods[ShaderPhaseType.local_vertex].push("varyingViewDir_vs");
                     this._fs_shader_methods[ShaderPhaseType.lighting_fragment].push("directLight_fragment");
                 }
                 if (this.lightGroup.spotLightList.length) {
@@ -304,10 +306,6 @@
                 this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
             //else
             //    this.addMethodShaders(this._passUsage.fragmentShader, ["normalMap_fragment"]);
-            //specular
-            shaderList = this._fs_shader_methods[ShaderPhaseType.specular_fragment];
-            if (shaderList && shaderList.length > 0)
-                this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
             //else
             //    this.addMethodShaders(this._passUsage.fragmentShader, ["specularMap_fragment"]);
             //shadow
@@ -316,6 +314,10 @@
                 this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
             //lighting
             shaderList = this._fs_shader_methods[ShaderPhaseType.lighting_fragment];
+            if (shaderList && shaderList.length > 0)
+                this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
+            //specular
+            shaderList = this._fs_shader_methods[ShaderPhaseType.specular_fragment];
             if (shaderList && shaderList.length > 0)
                 this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
             //muilt_end_fragment
