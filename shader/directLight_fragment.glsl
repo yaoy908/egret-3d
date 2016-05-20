@@ -1,7 +1,7 @@
 const int max_directLight = 0 ;
 uniform float uniform_directLightSource[11*max_directLight] ;
-varying mat3 varying_mat; 
 varying vec3 varying_ViewDir; 
+uniform mat4 uniform_NormalMatrix;
 struct DirectLight{
     vec3 direction;
 	vec3 diffuse;
@@ -22,7 +22,7 @@ void calculateDirectLight( MaterialSource materialSource ){
 		directLight.halfIntensity = uniform_directLightSource[i*11+10]; 
        
         ambientColor.xyz += directLight.ambient.xyz * directLight.diffuse ;
-        vec3 lightDir = normalize(varying_mat * directLight.direction);
+        vec3 lightDir = normalize(mat3(uniform_NormalMatrix) * directLight.direction);
         lambertTerm = max(dot(-lightDir,N), 0.0); 
         light.xyz += directLight.diffuse * lambertTerm * directLight.intensity ; 
         

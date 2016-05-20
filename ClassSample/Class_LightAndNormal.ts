@@ -45,6 +45,10 @@
             this.matPlane.repeat = true;
             this.matPlane.uvRectangle(0, 0, 1.0, 1.0);
 
+            var lightMethod: LightmapMethod = new LightmapMethod();
+            this.matPlane.diffusePass.addMethod(lightMethod);
+            lightMethod.lightTexture = CheckerboardTexture.texture;
+
             //this.plane = new Mesh(new SphereGeometry(300, 120, 120), this.matPlane);
             //this.plane = new Mesh(new CubeGeometry(150, 120, 120), this.matPlane);
             this.plane = new Mesh(new PlaneGeometry(500,500), this.matPlane);
@@ -78,6 +82,8 @@
 
         protected onLoadSpecular(e: LoaderEvent3D) {
             e.loader["mat"].specularTexture = e.loader.data;
+
+       
             //mat.normalTexture.useMipmap = false;
             //mat.normalTexture.smooth = false;
         }

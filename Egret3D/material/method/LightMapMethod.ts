@@ -45,8 +45,10 @@
         */
         public set lightTexture(texture: ITexture) {
             this.texture = texture;
-            this.materialData.lightTexture = this.texture;
-            this.materialData.textureChange = true;
+            if (this.materialData.lightTexture != this.texture) {
+                this.materialData.lightTexture = this.texture;
+                this.materialData.textureChange = true;
+            }
         }
 
         /**
@@ -62,7 +64,8 @@
         * @param modeltransform
         * @param camera3D
         */
-        public upload(time: number, delay: number, usage: PassUsage,geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+        public upload(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+            
         }
 
         /**

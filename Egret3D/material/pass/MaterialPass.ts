@@ -64,6 +64,8 @@
         */
         public lightGroup: LightGroup;
 
+        private _normalMatrix: Matrix4_4 = new Matrix4_4(); 
+
         /**
         * @private
         */
@@ -200,8 +202,10 @@
             var i: number = 0;
             this._passUsage = new PassUsage();
 
+            this._vs_shader_methods = {};
+            this._fs_shader_methods = {} ;
+
             //pre Phase ---------------------------------------------------
-            this.initOthreMethods();
             if (animation) {
                 // to add accept animation shader
                 if (animation.skeletonAnimationController) {
@@ -238,7 +242,7 @@
                 this._passUsage.maxSpotLight = this.lightGroup.spotLightList.length;
                 this._passUsage.maxPointLight = this.lightGroup.pointLightList.length;
 
-                this._vs_shader_methods[ShaderPhaseType.local_vertex] = [];
+                this._vs_shader_methods[ShaderPhaseType.local_vertex] = this._vs_shader_methods[ShaderPhaseType.local_vertex] || [];
                 this._fs_shader_methods[ShaderPhaseType.lighting_fragment] = [];
                 if (this.lightGroup.directLightList.length) {
                     this._passUsage.directLightData = new Float32Array(DirectLight.stride * this.lightGroup.directLightList.length);
@@ -254,8 +258,9 @@
                     this._fs_shader_methods[ShaderPhaseType.lighting_fragment].push("pointLight_fragment");
                 }
             }
-
+            this.initOthreMethods();
             //pre Phase end ---------------------------------------------------
+
             var shaderList: string[];
             //---vs---shadering
             this.addMethodShaders(this._passUsage.vertexShader, ["base_vs"]);
@@ -448,7 +453,6 @@
                 context3DProxy.uniform1fv(this._passUsage.uniform_materialSource.uniformIndex, this._materialData.materialSourceData);
             }
 
-
             if (this._materialData.textureChange) {
                 this.resetTexture(context3DProxy);
             }
@@ -514,6 +518,16 @@
 
             if (this._passUsage.uniform_ViewProjectionMatrix) {
                 context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ViewProjectionMatrix.uniformIndex, false, camera3D.viewProjectionMatrix.rawData);
+            }
+
+            if (this._passUsage.uniform_NormalMatrix) {
+                this._normalMatrix.identity();
+                this._normalMatrix.copyFrom(modeltransform);
+                this._normalMatrix.multiply(camera3D.viewMatrix);
+                this._normalMatrix.invert();
+                this._normalMatrix.transpose() ;
+
+                context3DProxy.uniformMatrix4fv(this._passUsage.uniform_NormalMatrix.uniformIndex, false, this._normalMatrix.rawData);
             }
 
             if (this._passUsage.uniform_ShadowMatrix) {
