@@ -56,9 +56,7 @@
             this._entityCollect = new EntityCollect();
             this._entityCollect.root = this._scene;
 
-            //this._render = new DefaultRender();
-            this._render = new ShadowRender();
-            this._render.renderToTexture(256, 256, FrameBufferFormat.UNSIGNED_BYTE_RGB);
+            this._render = new MultiRender(PassType.diffusePass);
 
             this._camera = camera || new Camera3D(CameraType.perspective);
 

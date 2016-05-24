@@ -235,17 +235,17 @@
                 //this._fs_shader_methods[ShaderPhaseType.shadow_fragment].push("particle_vs");
             }
 
-            if (this._materialData.shaderPhaseTypes[PassType.DiffusePass].indexOf(ShaderPhaseType.diffuse_fragment) != -1) {
+            if (this._materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.diffuse_fragment) != -1) {
                 this._fs_shader_methods[ShaderPhaseType.diffuse_fragment] = [];
                 this._fs_shader_methods[ShaderPhaseType.diffuse_fragment].push("diffuse_fragment");
             }
 
-            if (this._materialData.shaderPhaseTypes[PassType.DiffusePass].indexOf(ShaderPhaseType.normal_fragment) != -1 ) {
+            if (this._materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.normal_fragment) != -1 ) {
                 this._fs_shader_methods[ShaderPhaseType.normal_fragment] = [];
                 this._fs_shader_methods[ShaderPhaseType.normal_fragment].push("normalMap_fragment");
             }
 
-            if (this._materialData.shaderPhaseTypes[PassType.DiffusePass].indexOf(ShaderPhaseType.specular_fragment) != -1) {
+            if (this._materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.specular_fragment) != -1) {
                 this._fs_shader_methods[ShaderPhaseType.specular_fragment] = [];
                 this._fs_shader_methods[ShaderPhaseType.specular_fragment].push("specularMap_fragment");
             }

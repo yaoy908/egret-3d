@@ -165,6 +165,10 @@
         "material/pass/DiffusePass.ts",
         "material/pass/ShadowPass.ts",
         "material/pass/CubePass.ts",
+        "material/pass/MatCapPass.ts",
+        
+        "material/pass/PassUtil.ts",
+        
 
         "material/MaterialBase.ts",
 
@@ -173,7 +177,7 @@
         "material/CubeTextureMaterial.ts",
 
         "render/RenderBase.ts",
-        "render/DefaultRender.ts",
+        "render/MultiRender.ts",
         "render/ShadowRender.ts",
 
         "particle/Value.ts",
