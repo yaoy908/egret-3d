@@ -40,16 +40,17 @@
         * @param collect 渲染对象收集器
         * @param camera 渲染时的相机
         */
-        public draw(time: number, delay: number, context3D: Context3DProxy, collect: CollectBase, camera: Camera3D) {
+        public draw(time: number, delay: number, context3D: Context3DProxy, collect: CollectBase, camera: Camera3D, backViewPort:Rectangle = null ) {
             this.numEntity = collect.renderList.length;
 
             if (this.renderTexture) {
                 this.renderTexture.upload(context3D);
                 context3D.setRenderToTexture(this.renderTexture.texture2D, true, 0);
+
             }
             for (this._renderIndex = 0; this._renderIndex < this.numEntity; this._renderIndex++) {
                 this._renderItem = collect.renderList[this._renderIndex];
-
+                            
                 this._renderItem.geometry.update(time, delay, context3D, camera);
 
                 if (this._renderItem.animation) {
@@ -74,8 +75,12 @@
                 }
             }
 
-            if (this.renderTexture)
+            if (this.renderTexture) {
                 context3D.setRenderToBackBuffer();
+
+                context3D.viewPort(backViewPort.x, backViewPort.y, backViewPort.width, backViewPort.height);
+                context3D.setScissorRectangle(backViewPort.x, backViewPort.y, backViewPort.width, backViewPort.height);
+            }
         }
     }
 } 

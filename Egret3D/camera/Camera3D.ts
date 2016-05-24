@@ -152,8 +152,8 @@
             this._cameraType = cameraType;
             switch (cameraType) {
                 case CameraType.orthogonal:
-                    this.projectMatrix.ortho(this._viewPort.width, this._viewPort.height, this._near, this._far);
-                   // this.updataOrth();
+                     // this.projectMatrix.ortho(this._viewPort.width, this._viewPort.height, this._near, this._far);
+                    this.updataOrth();
                     break;
                 case CameraType.perspective:
                     this.projectMatrix.perspective(this._fovY, this._aspectRatio, this._near, this._far);

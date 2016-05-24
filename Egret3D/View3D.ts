@@ -56,11 +56,9 @@
             this._entityCollect = new EntityCollect();
             this._entityCollect.root = this._scene;
 
-            this._render = new DefaultRender();
-            //this._render = new ShadowRender();
-            //this._render.renderToTexture(256, 256, FrameBufferFormat.UNSIGNED_BYTE_RGB);
-
-
+            //this._render = new DefaultRender();
+            this._render = new ShadowRender();
+            this._render.renderToTexture(256, 256, FrameBufferFormat.UNSIGNED_BYTE_RGB);
 
             this._camera = camera || new Camera3D(CameraType.perspective);
 
@@ -388,8 +386,8 @@
             //this._render.update(time, delay, this._entityCollect, this._camera);
   
 
-            View3D._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
-            View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+            //View3D._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+           // View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
 
             if (this._cleanParmerts & Context3DProxy.gl.COLOR_BUFFER_BIT) {
                 View3D._contex3DProxy.clearColor(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w);
@@ -401,7 +399,7 @@
                 this._backImg.draw(View3D._contex3DProxy);
             }
 
-            this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera);
+            this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera, this._viewPort);
 
 
             for (var i: number = 0; i < this._huds.length; ++i) {

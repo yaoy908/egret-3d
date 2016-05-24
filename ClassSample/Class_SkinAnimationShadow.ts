@@ -13,7 +13,7 @@
             var view1: View3D = new View3D(0, 0, window.innerWidth, window.innerHeight);
             view1.camera3D.far = 1500 ;
             view1.camera3D.near = 500;
-            //view1.camera3D.cameraType = CameraType.orthogonal; 
+            view1.camera3D.cameraType = CameraType.orthogonal; 
             view1.camera3D.lookAt(new Vector3D(0, 1000, -1000), new Vector3D(0, 0, 0));
             view1.backColor = 0xffffffff;
 
