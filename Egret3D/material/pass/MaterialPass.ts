@@ -561,8 +561,8 @@
                             [animtion.time * 0.001,
                                 animtion.particleAnimationController.particleAnimationState.loop,
                                 animtion.particleAnimationController.particleAnimationState.duration,
-                                0.0,
-                                animtion.particleAnimationController.particleAnimationState.totalTime] );
+                                0.0,//animtion.particleAnimationController.particleAnimationState.rate,
+                                0.0/*animtion.particleAnimationController.particleAnimationState.totalTime*/] );
                     }
                 }
             }

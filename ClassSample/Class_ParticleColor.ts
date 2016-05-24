@@ -26,14 +26,18 @@
             var loadtex1: URLLoader = new URLLoader("resource/floor/brick-diffuse.jpg");
             loadtex1.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
             loadtex1["mat"] = planemat;
-           // this.view1.addChild3D(new Mesh(new PlaneGeometry(1000, 1000), planemat));
 
             this.cube = new Mesh( new CubeGeometry(10,10,10) , null );
-            //this.view1.addChild3D(this.cube);
 
             var mat: TextureMaterial = new TextureMaterial();
             mat.ambientColor = 0xffffff;
-            this.particle = new ParticleEmitter(null, mat, 500 );
+
+            var data: ParticleData = new ParticleData();
+            data.lifeMax = data.lifeMin = 2;
+            data.rate = 20;
+
+            this.particle = new ParticleEmitter(data, null, mat);
+            this.particle.loop = true;
 
             //var uniformSpeed: ParticleUniformSpeedNode = new ParticleUniformSpeedNode();
             //uniformSpeed.speedShape = new Vec3ConstValueShape();
@@ -42,23 +46,22 @@
             //(<Vec3ConstValueShape>uniformSpeed.speedShape).minZ = 0;
             //this.particle.addAnimNode(uniformSpeed);
 
-            var particleScaleByLifeNode: ParticleScaleByLifeNode = new ParticleScaleByLifeNode();
-            (<ConstValueShape>particleScaleByLifeNode.start).value = 0.5;
-            (<ConstValueShape>particleScaleByLifeNode.end).value = 1.5;
-            //this.particle.addAnimNode(particleScaleByLifeNode);
-
             var vel: ParticleAccelerationSpeedNode = new ParticleAccelerationSpeedNode();
             vel.speedShape = new Vec3ConstRandomValueShape();
-            (<Vec3ConstRandomValueShape>vel.speedShape).minX = -100;
-            (<Vec3ConstRandomValueShape>vel.speedShape).minY = -100;
-            (<Vec3ConstRandomValueShape>vel.speedShape).minZ = -100;
-            (<Vec3ConstRandomValueShape>vel.speedShape).maxX = 100;
-            (<Vec3ConstRandomValueShape>vel.speedShape).maxY = 100;
-            (<Vec3ConstRandomValueShape>vel.speedShape).maxZ = 100;
+            (<Vec3ConstRandomValueShape>vel.speedShape).minX = 0;//-100;
+            (<Vec3ConstRandomValueShape>vel.speedShape).minY = 0;//-100;
+            (<Vec3ConstRandomValueShape>vel.speedShape).minZ = 0;//-100;
+            (<Vec3ConstRandomValueShape>vel.speedShape).maxX = 0;//100;
+            (<Vec3ConstRandomValueShape>vel.speedShape).maxY = 0;//100;
+            (<Vec3ConstRandomValueShape>vel.speedShape).maxZ = 0;//100;
             this.particle.addAnimNode(vel);
 
-            var particleColor_global_Node: ParticleColorGlobalNode = new ParticleColorGlobalNode();
-            this.particle.addAnimNode(particleColor_global_Node);
+            //var particleColor_global_Node: ParticleColorGlobalNode = new ParticleColorGlobalNode();
+            //this.particle.addAnimNode(particleColor_global_Node);
+
+
+            //var particleSizeGlobalNode: ParticleSizeGlobalNode = new ParticleSizeGlobalNode();
+            //this.particle.addAnimNode(particleSizeGlobalNode);
 
             this.particle.play();
             this.view1.addChild3D(this.particle);
@@ -90,7 +93,7 @@
         public update(e: Event3D) {
             this.cameraCrl.update();
             //this.obj.rotationY++;
-            this.angle += 0.01;
+            this.angle += 0.02;
             this.cube.x = Math.cos(this.angle) * 300;
             this.cube.z = Math.sin(this.angle) * 300;
 

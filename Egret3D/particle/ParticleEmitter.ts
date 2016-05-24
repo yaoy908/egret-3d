@@ -10,7 +10,7 @@
    */
     export class ParticleEmitter extends Mesh {
 
-        public timeNode: ParticleTime;
+        private _timeNode: ParticleTime;
         public positionNode: ParticlePosition;
         public rotationNode: ParticleRotation;
         public scaleNode: ParticleScale;
@@ -20,57 +20,41 @@
 
         private _particleFollowNode: ParticleFollowNode; 
         private _particleState: ParticleAnimationState; 
-        private _isChangeBuild: boolean = true;
+        private _isEmitterDirty: boolean = true;
 
         private _particleAnimNodes: AnimationNode[] = [] ;
         private _play: boolean = false; 
+
+        private _data: ParticleData;
 
         /**
         * @language zh_CN
         * 构造函数 
         * @param geo 粒子的几何形状
         * @param material 粒子的材质
-        * @param maxParticles 粒子最大个数
+        * @param rate 1秒多少个粒子
+        * @param maxParticles 粒子最大个数(-1会自动分配)
         * @version Egret 3.0
         * @platform Web,Native 
         */
-        constructor(geo: Geometry = null, material: MaterialBase = null, maxParticles: number = 1000 ) {
+        constructor(data:ParticleData, geo: Geometry = null, material: MaterialBase = null) {
             super(null, material );
+            this._data = data;
             this.material.blendMode = BlendMode.ADD; 
 
             this.animation = this.particleAnimation = new ParticleAnimation();
             this.animation.particleAnimationController = this.particleAnimation;
             this._particleState = this.particleAnimation.particleAnimationState ;
-            this._particleState.maxParticles = maxParticles;
 
             this.particleAnimation.emit = this;
-
             this.particleGeometryShape = geo ? geo : new PlaneGeometry(50.0, 50.0, 1, 1, 1, 1, Vector3D.Z_AXIS);
 
-            this.geometry = new Geometry();
-            this.geometry.buildDefaultSubGeometry();
-            this.geometry.subGeometrys[0].count = this._particleState.maxParticles * this.particleGeometryShape.indexData.length ;
+            this.loop = data.loop;
+            this.duration = data.duration;
 
             this.initMainAnimNode();
-            this.buildBoudBox();
+            this.buildBoudBox(data.bounds);
         }
-
-        
-        ///**
-        //  * @language zh_CN
-        //  * 粒子发射器的 发射量 = 1000ms * value 为1s中发射的量
-        //  */
-        //public set rate(value: number) {
-        //    this._particleState.rate = value ;
-        //}
-
-        // /**
-        //  * @language zh_CN
-        //  * 粒子发射器的 发射量 = 1000ms * value 为1s中发射的量
-        //  */
-        //public get rate(): number {
-        //    return this._particleState.rate;
-        //}
 
         /**
         * @language zh_CN
@@ -84,10 +68,7 @@
         }
 
         public get loop(): boolean {
-            if (this._particleState.loop)
-                return true;
-            else
-                return false;
+            return this._particleState.loop == 1;
         }
 
         /**
@@ -140,7 +121,7 @@
             var index: number = this._particleAnimNodes.indexOf(node);
             if (index == -1) {
                 this._particleAnimNodes.push( node );
-                this._isChangeBuild = true;
+                this._isEmitterDirty = true;
             }
         }
                 
@@ -155,7 +136,7 @@
             var index: number = this._particleAnimNodes.indexOf(node);
             if (index != -1) {
                 this._particleAnimNodes.slice(index);
-                this._isChangeBuild = true;
+                this._isEmitterDirty = true;
             }
         }
                         
@@ -173,11 +154,25 @@
             } else {
                 this.animation.play();
             }
-            this._play = !this._play;
+            this._play = true;
         }
 
-        protected initlize() {
-            this._isChangeBuild = false;
+        protected initialize() {
+            this._isEmitterDirty = false;
+
+            var particlePerLife: number = (this._data.lifeMax + this._data.lifeMin) / 2;
+            var particleCount: number = Math.floor(particlePerLife * this._data.rate);//粒子的目标数量是这个的时候，可以达到循环
+
+            if (this._data.particleCount != -1) {
+                particleCount = Math.min(this._data.particleCount, particleCount);
+            }
+            this._particleState.maxCount = particleCount;
+
+            this.geometry = new Geometry();
+            this.geometry.buildDefaultSubGeometry();
+            this.geometry.subGeometrys[0].count = this._particleState.maxCount * this.particleGeometryShape.indexData.length;
+
+
             //根据 模型形状初始化 
             var vertexIndex: number = 0;
             var vertexArray: Array<number> = new Array<number>();  
@@ -189,7 +184,7 @@
             this.initOtherAnimNode();
             
             this.geometry.verticesData = new Array<number>();
-            for (var i: number = 0; i < this._particleState.maxParticles; ++i) {
+            for (var i: number = 0; i < this._particleState.maxCount; ++i) {
                 for (var j: number = 0; j < this.particleGeometryShape.vertexCount; ++j) {
 
                     for (var k: number = 0; k < this.geometry.vertexAttLength; ++k) {
@@ -208,33 +203,25 @@
             }
 
             this.geometry.indexData = new Array<number>();
-            for (var i: number = 0; i < this._particleState.maxParticles; ++i) {
+            for (var i: number = 0; i < this._particleState.maxCount; ++i) {
                 for (var j: number = 0; j < this.particleGeometryShape.indexData.length; ++j) {
                     this.geometry.indexData[i * this.particleGeometryShape.indexData.length + j] = this.particleGeometryShape.indexData[j] + i * this.particleGeometryShape.vertexCount;
                 }
             }
 
-            //this.buildBoundBox();
-
             //最后根据节点功能，填充模型
-            this.particleAnimation.particleAnimationState.fill(this.geometry, this._particleState.maxParticles);
+            this.particleAnimation.particleAnimationState.fill(this.geometry, this._particleState.maxCount);
         }
 
         private initMainAnimNode() {
+            this._data.validate();
             //clean
             this.particleAnimation.particleAnimationState.clean();
-
+            
             //time 
-            this.timeNode = new ParticleTime();
-            (<ConstValueShape>this.timeNode.delay).value = 0;
-
-            this.timeNode.life = new ConstValueShape();
-            (<ConstValueShape>this.timeNode.life).value = 1.0;
-            //(<ConstRandomValueShape>this.timeNode.life).min = 1.0;
-            //(<ConstRandomValueShape>this.timeNode.life).max = 10.0;
-
-            (<ConstValueShape>this.timeNode.rate).value = 0.04;
-
+            this._timeNode = new ParticleTime();
+            this._timeNode.init(this._data);
+           
             //position
             this.positionNode = new ParticlePosition();
             this.positionNode.positions = new Vec3ConstValueShape(); 
@@ -247,8 +234,7 @@
             this.scaleNode = new ParticleScale();
             this.scaleNode.scale = new ConstValueShape();
             (<ConstValueShape>this.scaleNode.scale).value = 0.4;
-            //(<ConstRandomValueShape>this.scaleNode.scale).min = 0.1;
-            //(<ConstRandomValueShape>this.scaleNode.scale).max = 1.0;
+            
         }
 
         private initOtherAnimNode() {
@@ -257,7 +243,7 @@
             var particleEndNode: ParticleEndNode = new ParticleEndNode();
             this._particleFollowNode = new ParticleFollowNode();
 
-            this.particleAnimation.particleAnimationState.addNode(this.timeNode);
+            this.particleAnimation.particleAnimationState.addNode(this._timeNode);
             this.particleAnimation.particleAnimationState.addNode(this.positionNode);
             this.particleAnimation.particleAnimationState.addNode(this.rotationNode);
             this.particleAnimation.particleAnimationState.addNode(this.scaleNode);
@@ -292,43 +278,45 @@
         */
         public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
             if (this._play){
-                 if (this._isChangeBuild) this.initlize();
-                // super.renderDiffusePass(time, delay, context3DProxy, camera3D);
-
-                 this._i = 0;
-                 this.geometry.update(time, delay, context3DProxy, camera3D);
-                 if (this.geometry.subGeometrys.length <= 0) {
-                     this.geometry.buildDefaultSubGeometry();
-                 }
-                 for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
-                     this._subGeometry = this.geometry.subGeometrys[this._i];
-                     this._matID = this._subGeometry.matID;
-                     if (this.multiMaterial[this._matID]) {
-                         if (this.lightGroup) {
-                             this.multiMaterial[this._matID].lightGroup = this.lightGroup;
-                         }
-                         this.multiMaterial[this._matID].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
-                     }
-                     else {
+                if (this._isEmitterDirty) {
+                    this.initialize();
+                }
+                this._i = 0;
+                this.geometry.update(time, delay, context3DProxy, camera3D);
+                if (this.geometry.subGeometrys.length <= 0) {
+                    this.geometry.buildDefaultSubGeometry();
+                }
+                for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
+                    this._subGeometry = this.geometry.subGeometrys[this._i];
+                    this._matID = this._subGeometry.matID;
+                    if (this.multiMaterial[this._matID]) {
+                        if (this.lightGroup) {
+                            this.multiMaterial[this._matID].lightGroup = this.lightGroup;
+                        }
+                        this.multiMaterial[this._matID].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+                    }
+                    else {
                  
-                         if (this.lightGroup) {
-                             this.multiMaterial[0].lightGroup = this.lightGroup;
-                         }
-                         this.multiMaterial[0].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
-                     }
+                        if (this.lightGroup) {
+                            this.multiMaterial[0].lightGroup = this.lightGroup;
+                        }
+                        this.multiMaterial[0].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
+                    }
                      
-                 }
+                }
 
-                 if (this.animation) {
-                     this.animation.update(time, delay, this.geometry, this.multiMaterial[0].diffusePass._passUsage, context3DProxy);
-                 }
+                if (this.animation) {
+                    this.animation.update(time, delay, this.geometry, this.multiMaterial[0].diffusePass._passUsage, context3DProxy);
+                }
 
             }
         }
 
-        private buildBoudBox() {
-            this.bound = new BoundBox(this);
-            (<BoundBox>this.bound).fillBox(new Vector3D(-50, -50, -50), new Vector3D(50, 50, 50));
+
+        public buildBoudBox(vector: Vector3D) {
+            var b: BoundBox = new BoundBox(this);
+            b.fillBox(new Vector3D(-vector.x / 2, -vector.y / 2, -vector.z / 2), new Vector3D(vector.x / 2, vector.y / 2, vector.z / 2));
+            this.bound = b;
             this.initAABB();
         }
 
