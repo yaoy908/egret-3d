@@ -295,7 +295,7 @@
                 } else if (nodeName == "mat") {
                     this.eachAttr(item, function (label: string, value: string): void {
                         if (label == "id") {
-                            data.materialID = Number(value);
+                            data.materialIDs = (value + "").split(",");
                         }
                     });
                 } else if (nodeName == "skinClip") {
@@ -330,7 +330,14 @@
             if (data.lightIds.indexOf(0) == -1) {
                 data.lightIds.push(0);//平行光默认被追加
             }
-            
+            //
+            if (data.materialIDs == null) {
+                data.materialIDs = [];
+            }
+            for (var i: number = 0; i < data.materialIDs.length; i++) {
+                data.materialIDs[i] = Number(data.materialIDs[i]);
+            }
+
 
             return data;
         }

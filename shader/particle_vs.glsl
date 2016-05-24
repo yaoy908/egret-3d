@@ -75,8 +75,8 @@ void main(void) {
 				uniform_cameraMatrix[2],
 				vec4(0.0, 0.0,1.0, 1.0));
 
-	mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; 
-	mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); 
+	mat4 modeViewMatrix = uniform_ModelViewMatrix ; 
+	mat3 normalMatrix = mat3(uniform_NormalMatrix);
 	
 	localPosition = outPosition = vec4(e_position, 1.0); 
 	globalPosition.xyz = vec3(0.0,0.0,0.0);

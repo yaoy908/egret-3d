@@ -1,6 +1,5 @@
 ﻿attribute vec4 attribute_boneIndex;
 attribute vec4 attribute_boneWeight;
-attribute vec3 attribute_normal;
 attribute vec4 attribute_color;
 
 vec4 e_boneIndex = vec4(0.0, 0.0, 0.0, 0.0);
@@ -8,7 +7,6 @@ vec4 e_boneWeight = vec4(0.0, 0.0, 0.0, 0.0);
 
 const int bonesNumber = 0;
 uniform vec4 uniform_PoseMatrix[bonesNumber];
-uniform mat4 uniform_ModelMatrix ;
 
 mat4 buildMat4(int index){
 
@@ -42,7 +40,6 @@ void main(void){
 	e_boneWeight = attribute_boneWeight;
 
 	vec4 temp_position = vec4(attribute_position, 1.0) ;
-	vec4 temp_normal = vec4(attribute_normal, 0.0) ;
 
 	mat4 m0 = buildMat4(int(e_boneIndex.x));
 	mat4 m1 = buildMat4(int(e_boneIndex.y));
@@ -54,18 +51,6 @@ void main(void){
 	outPosition += m2 * temp_position * e_boneWeight.z;
 	outPosition += m3 * temp_position * e_boneWeight.w;
 
-	e_position = outPosition.xyz;
-
-	vec4 temp_n ;
-	temp_n = m0 * temp_normal * e_boneWeight.x;
-	temp_n += m1 * temp_normal * e_boneWeight.y;
-	temp_n += m2 * temp_normal * e_boneWeight.z;
-	temp_n += m3 * temp_normal * e_boneWeight.w;
-
-    mat3 normalMatrix = mat3(uniform_NormalMatrix);
-    varying_eyeNormal = normalize(normalMatrix * -temp_n.xyz);
-   
 	outPosition = uniform_ModelViewMatrix * outPosition; 
-  	
-    varying_ViewPose = outPosition ;
+    
 }
