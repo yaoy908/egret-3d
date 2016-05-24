@@ -3,7 +3,7 @@
     /**
     * @private
     */
-    export class ShadowPass extends MaterialPass {
+    export class MatCapPass extends MaterialPass {
 
         constructor(materialData: MaterialData) {
             super(materialData);
@@ -31,20 +31,13 @@
                     this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
 
                     this._vs_shader_methods[ShaderPhaseType.start_vertex] = [];
-                    this._vs_shader_methods[ShaderPhaseType.start_vertex].push("skeletonShadowPass_vs");
-                }
-                else if (animation.particleAnimationController) {
-                    //this._vs_shader_methods[ShaderPhaseType.start_vertex] = [];
-                    //this._vs_shader_methods[ShaderPhaseType.start_vertex].push("particle_vs");
-                    ////to change importent
-                    //this.addShaderPhase(animation.particleAnimationController.particleAnimationState.vertex_shaders, this._vs_shader_methods);
-                    //this.addShaderPhase(animation.particleAnimationController.particleAnimationState.fragment_shaders, this._fs_shader_methods);
+                    this._vs_shader_methods[ShaderPhaseType.start_vertex].push("skeleton_vs");
                 }
             }
 
             if (this._materialData.shaderPhaseTypes[PassType.shadowPass].indexOf(ShaderPhaseType.diffuse_fragment) != -1) {
                 this._fs_shader_methods[ShaderPhaseType.diffuse_fragment] = [];
-                this._fs_shader_methods[ShaderPhaseType.diffuse_fragment].push("diffuseShadowPass_fs");
+                this._fs_shader_methods[ShaderPhaseType.diffuse_fragment].push("diffuse_fragment");
             }
 
             //this.initOthreMethods();
@@ -52,23 +45,26 @@
 
             var shaderList: string[];
             //---vs---shadering
-            this.addMethodShaders(this._passUsage.vertexShader, ["baseShadowPass_vs"]);
+            this.addMethodShaders(this._passUsage.vertexShader, ["base_vs"]);
+
             //start Phase
             shaderList = this._vs_shader_methods[ShaderPhaseType.start_vertex];
+
             if (shaderList && shaderList.length > 0)
                 this.addMethodShaders(this._passUsage.vertexShader, shaderList);
-            this.addMethodShaders(this._passUsage.vertexShader, ["endShadowPass_vs"]);
+            this.addMethodShaders(this._passUsage.vertexShader, ["end_vs"]);
+
             //---vs---shadering-------------------------------------------------
 
             //---fs---shadering
-            this.addMethodShaders(this._passUsage.fragmentShader, ["baseShadowPass_fs"]);
+            this.addMethodShaders(this._passUsage.fragmentShader, ["base_fs"]);
 
             //diffuse
             shaderList = this._fs_shader_methods[ShaderPhaseType.diffuse_fragment];
             if (shaderList && shaderList.length > 0)
                 this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
 
-            this.addMethodShaders(this._passUsage.fragmentShader, ["endShadowPass_fs"]);
+            this.addMethodShaders(this._passUsage.fragmentShader, ["end_fs"]);
             //---fs---shadering-------------------------------------------------
         }
     }

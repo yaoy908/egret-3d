@@ -15,7 +15,7 @@
         }
 
         public castShadowLight() {
-            this.shadowRender.push(new ShadowRender());
+            //this.shadowRender.push(new ShadowRender());
         }
     }
 }
