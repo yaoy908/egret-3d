@@ -17,6 +17,10 @@
             this._egret3DCanvas.addView3D(view1);
             this.view1 = view1;
 
+            var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
+            var tex: ImageTexture = new ImageTexture(bgImg);
+            view1.backImage = tex;
+
             var load: URLLoader = new URLLoader("resource/test/FOL_Foliage_04.esm");
             load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoad, this);
 

@@ -1,5 +1,5 @@
 ﻿module egret3d {
-    export class Class_SkinAnimation extends Class_View3D {
+    export class Class_SkinAnimationShadow extends Class_View3D {
 
         private laohu: Mesh;
         private view1: View3D;
@@ -11,15 +11,18 @@
             super();
 
             var view1: View3D = new View3D(0, 0, window.innerWidth, window.innerHeight);
+            view1.camera3D.far = 1500 ;
+            view1.camera3D.near = 500;
+            //view1.camera3D.cameraType = CameraType.orthogonal; 
             view1.camera3D.lookAt(new Vector3D(0, 1000, -1000), new Vector3D(0, 0, 0));
             view1.backColor = 0xffffffff;
 
-            this._egret3DCanvas.addView3D(view1);
-            this.view1 = view1;
-
             var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
             var tex: ImageTexture = new ImageTexture(bgImg);
-            this.view1.backImage = tex;
+            view1.backImage = tex;
+
+            this._egret3DCanvas.addView3D(view1);
+            this.view1 = view1;
 
             var load: URLLoader = new URLLoader("resource/laohu/Mon_04.esm");
             load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoad, this);
@@ -43,6 +46,12 @@
             this.cameraCtl.distance = 1000;
             this.cameraCtl.rotationX = 60;
 
+            //----------------debug---------------
+            var debugHUD: HUD = new HUD(0, 0, 512, 512);
+            this.view1.addHUD(debugHUD);
+            debugHUD.diffuseTexture = this.view1.render.renderTexture;
+            //----------------debug---------------
+
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
         }
 
@@ -62,6 +71,8 @@
             this.view1.addChild3D(mesh);
 
             mesh.material.lightGroup = this.lights;
+            mesh.material.castShadow = true;
+
             this.laohu = mesh;
 
             var loadtex: URLLoader = new URLLoader("resource/laohu/Mon_04.png");
@@ -71,6 +82,7 @@
             load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onAnimation, this);
             load["mesh"] = mesh;
             this.cameraCtl.lookAtObject = mesh;
+
         }
 
         protected onLoadTexture(e: LoaderEvent3D) {
