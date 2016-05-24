@@ -64,7 +64,10 @@
         */
         public lightGroup: LightGroup;
 
-        private _normalMatrix: Matrix4_4 = new Matrix4_4(); 
+        /**
+        * @private
+        */
+        private _helpMatrix: Matrix4_4 = new Matrix4_4(); 
 
         /**
         * @private
@@ -148,13 +151,13 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        private addMethodShaders(shaderBase: ShaderBase, shaders: string[]) {
+        protected addMethodShaders(shaderBase: ShaderBase, shaders: string[]) {
             for (var i: number = 0; i < shaders.length; i++) {
                 shaderBase.addUseShaderName(shaders[i]);
             }
         }
 
-        private addShaderPhase(sourcePhase: { [shaderPhase: number]: string[] }, targetPhase: { [shaderPhase: number]: string[] }) {
+        protected addShaderPhase(sourcePhase: { [shaderPhase: number]: string[] }, targetPhase: { [shaderPhase: number]: string[] }) {
             var names: string[];
             var phase: any;
             for (phase in sourcePhase) {
@@ -166,7 +169,7 @@
             }
         }
 
-        private initOthreMethods() {
+        protected initOthreMethods() {
             var shaderPhase: string;
             var shaderList: string[];
             for (var d: number = 0; d < this.methodList.length;d++ ) {
@@ -224,15 +227,25 @@
             }
 
             if (this._materialData.acceptShadow) {
-                // to add accept shadow maping shader
+                // to add accept shadow maping shader+
+                this._vs_shader_methods[ShaderPhaseType.global_vertex] = [];
+                //this._vs_shader_methods[ShaderPhaseType.global_vertex].push("particle_vs");
+
+                this._fs_shader_methods[ShaderPhaseType.shadow_fragment] = [];
+                //this._fs_shader_methods[ShaderPhaseType.shadow_fragment].push("particle_vs");
             }
 
-            if (this._materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.normal_fragment) != -1 ) {
+            if (this._materialData.shaderPhaseTypes[PassType.DiffusePass].indexOf(ShaderPhaseType.diffuse_fragment) != -1) {
+                this._fs_shader_methods[ShaderPhaseType.diffuse_fragment] = [];
+                this._fs_shader_methods[ShaderPhaseType.diffuse_fragment].push("diffuse_fragment");
+            }
+
+            if (this._materialData.shaderPhaseTypes[PassType.DiffusePass].indexOf(ShaderPhaseType.normal_fragment) != -1 ) {
                 this._fs_shader_methods[ShaderPhaseType.normal_fragment] = [];
                 this._fs_shader_methods[ShaderPhaseType.normal_fragment].push("normalMap_fragment");
             }
 
-            if (this._materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.specular_fragment) != -1) {
+            if (this._materialData.shaderPhaseTypes[PassType.DiffusePass].indexOf(ShaderPhaseType.specular_fragment) != -1) {
                 this._fs_shader_methods[ShaderPhaseType.specular_fragment] = [];
                 this._fs_shader_methods[ShaderPhaseType.specular_fragment].push("specularMap_fragment");
             }
@@ -244,7 +257,7 @@
 
                 this._vs_shader_methods[ShaderPhaseType.local_vertex] = this._vs_shader_methods[ShaderPhaseType.local_vertex] || [];
                 this._fs_shader_methods[ShaderPhaseType.lighting_fragment] = [];
-                if (this.lightGroup.directLightList.length) {
+                if (this.lightGroup.directLightList.length) { 
                     this._passUsage.directLightData = new Float32Array(DirectLight.stride * this.lightGroup.directLightList.length);
                     this._vs_shader_methods[ShaderPhaseType.local_vertex].push("varyingViewDir_vs");
                     this._fs_shader_methods[ShaderPhaseType.lighting_fragment].push("directLight_fragment");
@@ -269,7 +282,7 @@
             if (shaderList && shaderList.length > 0)
                 this.addMethodShaders(this._passUsage.vertexShader, shaderList);
             else
-                this.addMethodShaders(this._passUsage.vertexShader, ["diffuse_vertex"]);
+                this.addMethodShaders(this._passUsage.vertexShader, ["diffuse_vertex"]); 
             //local
             shaderList = this._vs_shader_methods[ShaderPhaseType.local_vertex];
             if (shaderList && shaderList.length > 0)
@@ -303,8 +316,8 @@
             shaderList = this._fs_shader_methods[ShaderPhaseType.diffuse_fragment];
             if (shaderList && shaderList.length > 0)
                 this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
-            else
-                this.addMethodShaders(this._passUsage.fragmentShader, ["gamma_fs", "diffuse_fragment"]);
+            //else
+            //    this.addMethodShaders(this._passUsage.fragmentShader, ["gamma_fs", "diffuse_fragment"]);
             //normal
             shaderList = this._fs_shader_methods[ShaderPhaseType.normal_fragment];
             if (shaderList && shaderList.length > 0)
@@ -516,18 +529,31 @@
                 context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.projectMatrix.rawData);
             }
 
+            if (this._passUsage.uniform_ShadowMatrix) {
+               // context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.projectMatrix.rawData);
+            }
+
+            if (this._passUsage.uniform_ModelViewMatrix) {
+
+                this._helpMatrix.identity();
+                this._helpMatrix.copyFrom(modeltransform);
+                this._helpMatrix.multiply(camera3D.viewMatrix);
+
+                context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ModelViewMatrix.uniformIndex, false, this._helpMatrix.rawData);
+            }
+
             if (this._passUsage.uniform_ViewProjectionMatrix) {
                 context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ViewProjectionMatrix.uniformIndex, false, camera3D.viewProjectionMatrix.rawData);
             }
 
             if (this._passUsage.uniform_NormalMatrix) {
-                this._normalMatrix.identity();
-                this._normalMatrix.copyFrom(modeltransform);
-                this._normalMatrix.multiply(camera3D.viewMatrix);
-                this._normalMatrix.invert();
-                this._normalMatrix.transpose() ;
+                this._helpMatrix.identity();
+                this._helpMatrix.copyFrom(modeltransform);
+                this._helpMatrix.multiply(camera3D.viewMatrix);
+                this._helpMatrix.invert();
+                this._helpMatrix.transpose() ;
 
-                context3DProxy.uniformMatrix4fv(this._passUsage.uniform_NormalMatrix.uniformIndex, false, this._normalMatrix.rawData);
+                context3DProxy.uniformMatrix4fv(this._passUsage.uniform_NormalMatrix.uniformIndex, false, this._helpMatrix.rawData);
             }
 
             if (this._passUsage.uniform_ShadowMatrix) {
@@ -584,6 +610,9 @@
 
 
             subGeometry.deactivePass(this._passUsage, context3DProxy);
+        }
+
+        public dispose() {
         }
     }
 } 

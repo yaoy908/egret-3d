@@ -39,6 +39,8 @@
         protected _backImg: HUD;
         protected _huds: Array<HUD> = new Array<HUD>();
 
+        protected _index: number; 
+        protected _numberEntity: number; 
         //protected _testCamera: Camera3D = new Camera3D();
 
         /**
@@ -65,7 +67,10 @@
         constructor(x: number, y: number, width: number, height: number, camera: Camera3D = null) {
             this._entityCollect = new EntityCollect();
             this._entityCollect.root = this._scene;
-            this._render = new DefaultRender();
+
+            //this._render = new DefaultRender();
+            this._render = new ShadowRender();
+
             this._camera = camera || new Camera3D(CameraType.perspective);
 
             this._viewPort.x = x;
@@ -379,10 +384,13 @@
             this._camera.viewPort = this._viewPort ;
             this._entityCollect.update(this._camera);
 
- 
-
-            this._render.update(time, delay, this._entityCollect, this._camera);
-
+            //------------------
+            this._numberEntity = this._entityCollect.renderList.length;
+            for (this._index = 0; this._index < this._numberEntity ; this._index++) {
+                this._entityCollect.renderList[this._index].update(time, delay, this._camera);
+            }
+            //------------------
+            //this._render.update(time, delay, this._entityCollect, this._camera);
             //if (this._renderTarget) {
             //    View3D._contex3DProxy.setRenderToTexture(this._renderTarget.texture2D, true, 0);
             //    this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._testCamera);
@@ -408,10 +416,8 @@
             for (var i: number = 0; i < this._huds.length; ++i) {
                 this._huds[i].draw(View3D._contex3DProxy);
             }
-
         
         }
-
 
         /**
         * @language zh_CN

@@ -164,6 +164,7 @@
         "material/pass/MaterialPass.ts",
         "material/pass/ColorPass.ts",
         "material/pass/DiffusePass.ts",
+        "material/pass/ShadowPass.ts",
         "material/pass/CubePass.ts",
 
         "material/MaterialBase.ts",
@@ -174,6 +175,7 @@
 
         "render/RenderBase.ts",
         "render/DefaultRender.ts",
+        "render/ShadowRender.ts",
 
         "particle/Value.ts",
         "particle/particleNode/ParticleEndNode.ts",

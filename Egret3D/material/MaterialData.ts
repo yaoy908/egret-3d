@@ -14,7 +14,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public shaderPhaseTypes: ShaderPhaseType[] = []; 
+        public shaderPhaseTypes: { [passID: number]: ShaderPhaseType[] } = {}; 
 
         /**
         * @language zh_CN

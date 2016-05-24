@@ -39,8 +39,18 @@
         */
         public material: MaterialBase ;
 
-        protected multiMaterial: { [matID: number]: MaterialBase } = {};
+        /**
+        * @private
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public multiMaterial: { [matID: number]: MaterialBase } = {};
 
+        /**
+        * @private
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         protected _materialCount: number = 0;
 
         /**
@@ -75,6 +85,15 @@
 
         /**
         * @language zh_CN
+        * 材质球收到光照影响的灯光组，如果需要动态添加删除灯光的，一定要注意时实性
+        * @private
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public lightGroup: LightGroup;
+
+        /**
+        * @language zh_CN
         * 构建一个Mesh对象
         * @param geometry 模型数据
         * @param material 模型材质
@@ -103,7 +122,7 @@
         }
 
 
-        public lightGroup: LightGroup;
+     
 
         public setMaterialByID() {
         }
@@ -276,37 +295,13 @@
         protected _subGeometry: SubGeometry;
         protected _matID: number; 
         
-        /**
-        * @private
-        */
-        public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
-            this._i = 0;
-            this.geometry.update(time, delay, context3DProxy, camera3D);
-            if (this.geometry.subGeometrys.length <= 0) {
-                this.geometry.buildDefaultSubGeometry();
-            }
-            for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
-                this._subGeometry = this.geometry.subGeometrys[this._i];
-                this._matID = this._subGeometry.matID;
-                if (this.multiMaterial[this._matID]) {
-                    if (this.lightGroup) {
-                        this.multiMaterial[this._matID].lightGroup = this.lightGroup;
-                    }
-                    this.multiMaterial[this._matID].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
-                }
-                else {
-                    if (this.lightGroup) {
-                        this.multiMaterial[0].lightGroup = this.lightGroup;
-                    }
-                    this.multiMaterial[0].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
-                }
-            }
+        ///**
+        //* @private
+        //*/
+        //public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
+            
 
-            if (this.animation) {
-                this.animation.update(time, delay, this.geometry,null, context3DProxy);
-            }
-
-        }
+        //}
 
 
        
