@@ -42,6 +42,11 @@
         */
         public draw(time: number, delay: number, context3D: Context3DProxy, collect: CollectBase, camera: Camera3D) {
             this.numEntity = collect.renderList.length;
+
+            if (this.renderTexture) {
+                this.renderTexture.upload(context3D);
+                context3D.setRenderToTexture(this.renderTexture.texture2D, true, 0);
+            }
             for (this._renderIndex = 0; this._renderIndex < this.numEntity; this._renderIndex++) {
                 this._renderItem = collect.renderList[this._renderIndex];
 
@@ -68,6 +73,9 @@
                     }
                 }
             }
+
+            if (this.renderTexture)
+                context3D.setRenderToBackBuffer();
         }
     }
 } 

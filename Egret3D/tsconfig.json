@@ -90,7 +90,6 @@
         "core/context/MipmapData.ts",
         "core/context/Program3D.ts",
         "core/context/Texture2D.ts",
-        "core/context/RenderTexture.ts",
         "core/context/Shader.ts",
         "core/context/Texture3D.ts",
 
@@ -207,7 +206,7 @@
         "texture/CubeTexture.ts",
         "texture/CheckerboardTexture.ts",
         "texture/VideoTexture.ts",
-        "texture/RenderTargetTexture.ts",
+        "texture/RenderTexture.ts",
 
         "Util/ByteArray.ts",
         "Util/Debug.ts",

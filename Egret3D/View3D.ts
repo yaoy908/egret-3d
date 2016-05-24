@@ -34,24 +34,12 @@
         protected _cleanParmerts: number = Context3DProxy.gl.COLOR_BUFFER_BIT | Context3DProxy.gl.DEPTH_BUFFER_BIT; 
         private _sizeDiry: boolean = false;
 
-        protected _renderTarget: RenderTargetTexture = new RenderTargetTexture();
-
         protected _backImg: HUD;
         protected _huds: Array<HUD> = new Array<HUD>();
 
         protected _index: number; 
         protected _numberEntity: number; 
         //protected _testCamera: Camera3D = new Camera3D();
-
-        /**
-        * @private
-        * @language zh_CN
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public get renderTarget(): RenderTargetTexture {
-            return this._renderTarget;
-        }
 
         /**
         * @language zh_CN
@@ -68,8 +56,11 @@
             this._entityCollect = new EntityCollect();
             this._entityCollect.root = this._scene;
 
-            //this._render = new DefaultRender();
-            this._render = new ShadowRender();
+            this._render = new DefaultRender();
+            //this._render = new ShadowRender();
+            //this._render.renderToTexture(256, 256, FrameBufferFormat.UNSIGNED_BYTE_RGB);
+
+
 
             this._camera = camera || new Camera3D(CameraType.perspective);
 
@@ -79,13 +70,17 @@
             this._viewPort.height = height;
             this._camera.aspectRatio = this._viewPort.width / this._viewPort.height;
 
-            this._renderTarget.width = 512;
-            this._renderTarget.height = 512;
-            this._renderTarget.upload(View3D._contex3DProxy);
-
             //this._testCamera.lookAt(new Vector3D(0, 500, -500), new Vector3D(0, 0, 0));
             //this._testCamera.name = "testCamera";
 
+        }
+
+        public get render(): RenderBase {
+            return this._render; 
+        }
+
+        public set render(render: RenderBase) {
+            this._render = render; 
         }
 
         /**
@@ -391,11 +386,7 @@
             }
             //------------------
             //this._render.update(time, delay, this._entityCollect, this._camera);
-            //if (this._renderTarget) {
-            //    View3D._contex3DProxy.setRenderToTexture(this._renderTarget.texture2D, true, 0);
-            //    this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._testCamera);
-            //    View3D._contex3DProxy.setRenderToBackBuffer();
-            //}
+  
 
             View3D._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
             View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);

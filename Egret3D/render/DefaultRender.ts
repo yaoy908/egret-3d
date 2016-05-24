@@ -23,14 +23,6 @@
             super();
         }
 
-        //public update(time: number, delay: number, collect: CollectBase, camera: Camera3D) {
-        //    this.numEntity = collect.renderList.length;
-        //    for (this._renderIndex = 0; this._renderIndex < this.numEntity; this._renderIndex++) {
-        //        this._renderItem = collect.renderList[this._renderIndex];
-        //        this._renderItem.update(time, delay, camera);
-        //    }
-        //}
-
         /**
         * @language zh_CN
         * 把所有需要渲染的对象，依次进行渲染
@@ -42,6 +34,11 @@
         */
         public draw(time: number, delay: number, context3D: Context3DProxy, collect: CollectBase, camera: Camera3D) {
             this.numEntity = collect.renderList.length;
+
+            if (this.renderTexture) {
+                this.renderTexture.upload(context3D);
+                context3D.setRenderToTexture(this.renderTexture.texture2D, true, 0);
+            }
 
             for (this._renderIndex = 0; this._renderIndex < this.numEntity; this._renderIndex++) {
                 this._renderItem = collect.renderList[this._renderIndex];
@@ -74,6 +71,9 @@
                     }
                 }
             }
+
+            if (this.renderTexture)
+                context3D.setRenderToBackBuffer();
         }
     }
 }
