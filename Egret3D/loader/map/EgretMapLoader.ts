@@ -289,7 +289,7 @@
             var lightGroup: LightGroup;
 
             for (data of this._parser.esmList) {
-                realMat = this._materialMap.getValueByKey(data.materialID);
+                realMat = this._materialMap.getValueByKey(data.materialIDs[0]);
                 realMat || (realMat = this._defaultMaterial);
 
                 geometry = this._sourceLib.getEsm(data.name);
@@ -299,6 +299,13 @@
                 } else {
                     mesh = new Mesh(geometry, realMat);
                 }
+
+                for (var i: number = 1, matCount: number = data.materialIDs[i]; i < matCount; i++) {
+                    realMat = this._materialMap.getValueByKey(data.materialIDs[i]);
+                    realMat || (realMat = this._defaultMaterial);
+                    mesh.addSubMaterial(i, realMat);
+                }
+
                 mesh.name = data.name;
 
                 mesh.x = data.x;
