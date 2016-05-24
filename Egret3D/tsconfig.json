@@ -156,6 +156,7 @@
         "material/method/AlphaMaskMethod.ts",
         "material/method/ColorTransformMethod.ts",
         "material/method/ColorGradientsMethod.ts",
+        "material/method/ShadowMethod.ts",
 
         "material/pass/PassUsage.ts",
         "material/MaterialData.ts",
