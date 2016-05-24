@@ -90,7 +90,6 @@
         "core/context/MipmapData.ts",
         "core/context/Program3D.ts",
         "core/context/Texture2D.ts",
-        "core/context/RenderTexture.ts",
         "core/context/Shader.ts",
         "core/context/Texture3D.ts",
 
@@ -157,6 +156,7 @@
         "material/method/AlphaMaskMethod.ts",
         "material/method/ColorTransformMethod.ts",
         "material/method/ColorGradientsMethod.ts",
+        "material/method/ShadowMethod.ts",
 
         "material/pass/PassUsage.ts",
         "material/MaterialData.ts",
@@ -164,6 +164,7 @@
         "material/pass/MaterialPass.ts",
         "material/pass/ColorPass.ts",
         "material/pass/DiffusePass.ts",
+        "material/pass/ShadowPass.ts",
         "material/pass/CubePass.ts",
 
         "material/MaterialBase.ts",
@@ -174,6 +175,7 @@
 
         "render/RenderBase.ts",
         "render/DefaultRender.ts",
+        "render/ShadowRender.ts",
 
         "particle/Value.ts",
         "particle/particleNode/ParticleEndNode.ts",
@@ -205,7 +207,7 @@
         "texture/CubeTexture.ts",
         "texture/CheckerboardTexture.ts",
         "texture/VideoTexture.ts",
-        "texture/RenderTargetTexture.ts",
+        "texture/RenderTexture.ts",
 
         "Util/ByteArray.ts",
         "Util/Debug.ts",

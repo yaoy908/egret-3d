@@ -23,6 +23,10 @@
             this.view.addChild3D(this.cube);
             this.view.addChild3D(this.cube2);
 
+            var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
+            var tex: ImageTexture = new ImageTexture(bgImg);
+            this.view.backImage = tex;
+
             this.cameraCtl = new LookAtController(this.view.camera3D, new Object3D());
             this.cameraCtl.distance = 1000;
             this.cameraCtl.rotationX = 60;

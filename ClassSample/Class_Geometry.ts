@@ -20,6 +20,10 @@
             this._egret3DCanvas.addView3D(view1);
             view1.addChild3D(this.cube);
 
+            var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
+            var tex: ImageTexture = new ImageTexture(bgImg);
+            view1.backImage = tex;
+
             var lights: LightGroup = new LightGroup();
             var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));
             dirLight.diffuse = 0xffffffff;

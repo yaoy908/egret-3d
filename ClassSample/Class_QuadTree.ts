@@ -19,6 +19,10 @@
             //this.cameraCtl.distance = 1000;
             //this.cameraCtl.rotationX = 60;
 
+            var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
+            var tex: ImageTexture = new ImageTexture(bgImg);
+            this.view1.backImage = tex;
+
             this.node.rotationX = 40;
             this.node.rotationY = -50;
             this.node.position = new Vector3D(400, -100, 200);

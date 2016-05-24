@@ -21,25 +21,34 @@
             var mat: ColorMaterial = new ColorMaterial(0xffffff);
             this.cube3 = new Mesh(geometery, mat);
 
+            var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
+            var tex: ImageTexture = new ImageTexture(bgImg);
+
             var view1: View3D = new View3D(0, 0, 200, 200);
             view1.camera3D.lookAt(new Vector3D(0, 0, -1000), new Vector3D(0, 0, 0));
             view1.backColor = 0xffff0000;
             this._egret3DCanvas.addView3D(view1);
+            view1.backImage = tex;
+
 
             var view2: View3D = new View3D(0, 200, 200, 200);
             view2.camera3D.lookAt(new Vector3D(0, 0, -1000), new Vector3D(0, 0, 0));
             view2.backColor = 0xff00ff00;
             this._egret3DCanvas.addView3D(view2);
+            view2.backImage = tex;
+
 
             var view3: View3D = new View3D(200, 0, 200, 200);
             view3.camera3D.lookAt(new Vector3D(0, 0, -1000), new Vector3D(0, 0, 0));
             view3.backColor = 0xff0000ff;
             this._egret3DCanvas.addView3D(view3);
+            view3.backImage = tex;
 
             var view4: View3D = new View3D(200, 200, 200, 200);
             view4.camera3D.lookAt(new Vector3D(0, 0, -1000), new Vector3D(0, 0, 0));
             view4.backColor = 0xffff00ff;
             this._egret3DCanvas.addView3D(view4);
+            view4.backImage = tex;
 
             view1.addChild3D(this.cube);
             view2.addChild3D(this.cube1);

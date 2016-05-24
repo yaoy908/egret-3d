@@ -5,8 +5,7 @@ attribute vec2 attribute_uv0;
 
 vec3 e_position = vec3(0.0, 0.0, 0.0);
 
-uniform mat4 uniform_ModelMatrix ;
-uniform mat4 uniform_ViewMatrix ;
+uniform mat4 uniform_ModelViewMatrix ;
 uniform mat4 uniform_ProjectionMatrix ;
 uniform vec3 uniform_eyepos ;
 

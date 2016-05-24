@@ -34,22 +34,12 @@
         protected _cleanParmerts: number = Context3DProxy.gl.COLOR_BUFFER_BIT | Context3DProxy.gl.DEPTH_BUFFER_BIT; 
         private _sizeDiry: boolean = false;
 
-        protected _renderTarget: RenderTargetTexture = new RenderTargetTexture();
-
         protected _backImg: HUD;
         protected _huds: Array<HUD> = new Array<HUD>();
 
+        protected _index: number; 
+        protected _numberEntity: number; 
         //protected _testCamera: Camera3D = new Camera3D();
-
-        /**
-        * @private
-        * @language zh_CN
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public get renderTarget(): RenderTargetTexture {
-            return this._renderTarget;
-        }
 
         /**
         * @language zh_CN
@@ -65,7 +55,11 @@
         constructor(x: number, y: number, width: number, height: number, camera: Camera3D = null) {
             this._entityCollect = new EntityCollect();
             this._entityCollect.root = this._scene;
-            this._render = new DefaultRender();
+
+            //this._render = new DefaultRender();
+            this._render = new ShadowRender();
+            this._render.renderToTexture(256, 256, FrameBufferFormat.UNSIGNED_BYTE_RGB);
+
             this._camera = camera || new Camera3D(CameraType.perspective);
 
             this._viewPort.x = x;
@@ -74,13 +68,17 @@
             this._viewPort.height = height;
             this._camera.aspectRatio = this._viewPort.width / this._viewPort.height;
 
-            this._renderTarget.width = 512;
-            this._renderTarget.height = 512;
-            this._renderTarget.upload(View3D._contex3DProxy);
-
             //this._testCamera.lookAt(new Vector3D(0, 500, -500), new Vector3D(0, 0, 0));
             //this._testCamera.name = "testCamera";
 
+        }
+
+        public get render(): RenderBase {
+            return this._render; 
+        }
+
+        public set render(render: RenderBase) {
+            this._render = render; 
         }
 
         /**
@@ -379,18 +377,17 @@
             this._camera.viewPort = this._viewPort ;
             this._entityCollect.update(this._camera);
 
- 
+            //------------------
+            this._numberEntity = this._entityCollect.renderList.length;
+            for (this._index = 0; this._index < this._numberEntity ; this._index++) {
+                this._entityCollect.renderList[this._index].update(time, delay, this._camera);
+            }
+            //------------------
+            //this._render.update(time, delay, this._entityCollect, this._camera);
+  
 
-            this._render.update(time, delay, this._entityCollect, this._camera);
-
-            //if (this._renderTarget) {
-            //    View3D._contex3DProxy.setRenderToTexture(this._renderTarget.texture2D, true, 0);
-            //    this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._testCamera);
-            //    View3D._contex3DProxy.setRenderToBackBuffer();
-            //}
-
-            View3D._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
-            View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+            //View3D._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+           // View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
 
             if (this._cleanParmerts & Context3DProxy.gl.COLOR_BUFFER_BIT) {
                 View3D._contex3DProxy.clearColor(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w);
@@ -402,16 +399,14 @@
                 this._backImg.draw(View3D._contex3DProxy);
             }
 
-            this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera);
+            this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera, this._viewPort);
 
 
             for (var i: number = 0; i < this._huds.length; ++i) {
                 this._huds[i].draw(View3D._contex3DProxy);
             }
-
         
         }
-
 
         /**
         * @language zh_CN

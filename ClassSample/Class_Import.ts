@@ -15,6 +15,10 @@
             this._egret3DCanvas.addView3D(view1);
             this.view1 = view1;
 
+            var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
+            var tex: ImageTexture = new ImageTexture(bgImg);
+            this.view1.backImage = tex;
+
 
             this.lights = new LightGroup();
             var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));

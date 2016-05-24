@@ -131,8 +131,24 @@
         */
         visible: boolean;
 
+        /**
+        * @language zh_CN
+        * 多维材质球支持
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        multiMaterial: { [matID: number]: MaterialBase };
+
+        /**
+        * @language zh_CN
+        * 材质球收到光照影响的灯光组，如果需要动态添加删除灯光的，一定要注意时实性
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        lightGroup: LightGroup;
+
         //upload(context3DProxy: Context3DProxy);
         update(time: number, delay: number, camera: Camera3D);
-        renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) 
+        //renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) 
     }
 }

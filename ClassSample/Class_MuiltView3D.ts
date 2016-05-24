@@ -20,6 +20,10 @@
             this._v2.backColor = 0x00ff0000;
             this._egret3DCanvas.addView3D(this._v2);
 
+            var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
+            var tex: ImageTexture = new ImageTexture(bgImg);
+            this._v1.backImage = tex;
+
 
             this._egret3DCanvas.start();
         }

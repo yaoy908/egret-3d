@@ -1,5 +1,6 @@
 ﻿module egret3d {
-    
+
+    export enum PassType{ DiffusePass , NormalPass ,ShadowPass , LightPass }
     /**
     * @language zh_CN
     * @class egret3d.MaterialBase
@@ -18,6 +19,7 @@
          * @platform Web,Native
          */
         public diffusePass: MaterialPass; 
+        public shadowPass: MaterialPass; 
                 
         /**
          * @language zh_CN
@@ -44,6 +46,10 @@
             }
             else
                 this.setData(materialData);
+
+            //default 
+            this.materialData.shaderPhaseTypes[PassType.DiffusePass] = [];
+            this.materialData.shaderPhaseTypes[PassType.ShadowPass] = [];
         }
                         
         /**
@@ -85,37 +91,37 @@
             this.diffusePass.lightGroup = group;
         }
 
-        /**
-         * @language zh_CN
-         * 设置材质 shadowMapTexture 。
-         * 设置材质球的阴影贴图。
-         * @param texture ITexture
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public set shadowMapTexture(texture: ITexture) {
-            if (texture) {
-                this.materialData.shadowMapTexture = texture;
-                this.materialData.textureChange = true;
+        ///**
+        // * @language zh_CN
+        // * 设置材质 shadowMapTexture 。
+        // * 设置材质球的阴影贴图。
+        // * @param texture ITexture
+        // * @version Egret 3.0
+        // * @platform Web,Native
+        // */
+        ////public set shadowMapTexture(texture: ITexture) {
+        ////    if (texture) {
+        ////        this.materialData.shadowMapTexture = texture;
+        ////        this.materialData.textureChange = true;
 
-                if (this.materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.shadow_fragment) == -1) {
-                    this.materialData.shaderPhaseTypes.push(ShaderPhaseType.shadow_fragment);
-                    this.diffusePass.passInvalid();
-                }
-            }
-        }
+        ////        //if (this.materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.shadow_fragment) == -1) {
+        ////        //    this.materialData.shaderPhaseTypes.push(ShaderPhaseType.shadow_fragment);
+        ////        //    this.diffusePass.passInvalid();
+        ////        //}
+        ////    }
+        ////}
 
-        /**
-        * @language zh_CN
-        * 返回材质 shadowMapTexture。
-        * 返回材质球的阴影贴图。
-        * @returns ITexture 阴影贴图
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public get shadowMapTexture(): ITexture {
-            return this.materialData.shadowMapTexture;
-        }
+        ///**
+        //* @language zh_CN
+        //* 返回材质 shadowMapTexture。
+        //* 返回材质球的阴影贴图。
+        //* @returns ITexture 阴影贴图
+        //* @version Egret 3.0
+        //* @platform Web,Native
+        //*/
+        ////public get shadowMapTexture(): ITexture {
+        ////    return this.materialData.shadowMapTexture;
+        ////}
 
         /**
          * @language zh_CN
@@ -130,10 +136,16 @@
                 this.materialData.diffuseTexture = texture;
                 this.materialData.textureChange = true;
 
-                if (this.materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.diffuse_fragment) == -1) {
-                    this.materialData.shaderPhaseTypes.push(ShaderPhaseType.diffuse_fragment);
-                    this.diffusePass.passInvalid();
+                if (this.materialData.shaderPhaseTypes[PassType.DiffusePass].indexOf(ShaderPhaseType.diffuse_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.DiffusePass].push(ShaderPhaseType.diffuse_fragment);
+                    //this.diffusePass.passInvalid();
                 }
+
+                if (this.materialData.shaderPhaseTypes[PassType.ShadowPass].indexOf(ShaderPhaseType.diffuse_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.ShadowPass].push(ShaderPhaseType.diffuse_fragment);
+                    //this.shadowPass.passInvalid();
+                }
+               
             }
         }
 
@@ -162,8 +174,8 @@
                 this.materialData.normalTexture = texture;
                 this.materialData.textureChange = true;
 
-                if (this.materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.normal_fragment) == -1) {
-                    this.materialData.shaderPhaseTypes.push(ShaderPhaseType.normal_fragment);
+                if (this.materialData.shaderPhaseTypes[PassType.DiffusePass].indexOf(ShaderPhaseType.normal_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.DiffusePass].push(ShaderPhaseType.normal_fragment);
                     this.diffusePass.passInvalid();
                 }
 
@@ -193,8 +205,8 @@
             if (texture) {
                 this.materialData.specularTexture = texture;
                 this.materialData.textureChange = true;
-                if (this.materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.specular_fragment) == -1) {
-                    this.materialData.shaderPhaseTypes.push(ShaderPhaseType.specular_fragment);
+                if (this.materialData.shaderPhaseTypes[PassType.DiffusePass].indexOf(ShaderPhaseType.specular_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.DiffusePass].push(ShaderPhaseType.specular_fragment);
                     this.diffusePass.passInvalid();
                 }
             }
@@ -520,17 +532,17 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        //public set castShadow(value: boolean) {
-        //    this.materialData.castShadow = value;
-        //    if (value) {
-        //        //if (!ShadowRender.frameBuffer) {
-        //        //    alert("要使用shadow view3D.useShadow = true ");
-        //        //} else {
-        //        //    if (!this.shadowPass)
-        //        //        this.shadowPass = new ShadowMapPass(this.materialData);
-        //        //}
-        //    }
-        //}
+        public set castShadow(value: boolean) {
+            this.materialData.castShadow = value;
+            if (value) {
+                this.shadowPass = this.shadowPass || new ShadowPass(this.materialData);
+            } else {
+                if (this.shadowPass) {
+                    this.shadowPass.dispose();
+                    this.shadowPass = null;
+                }
+            }
+        }
 
         /**
          * @language zh_CN
@@ -721,9 +733,9 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public renderDiffusePass(time: number, delay: number, matID: number , context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation) {
-            this.diffusePass.draw(time, delay, context3DProxy, modeltransform, camera3D, subGeometry, animtion);
-        }
+        //public renderDiffusePass(time: number, delay: number, matID: number , context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation) {
+        //    this.diffusePass.draw(time, delay, context3DProxy, modeltransform, camera3D, subGeometry, animtion);
+        //}
         
         /**
          * @language zh_CN
