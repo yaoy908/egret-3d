@@ -385,14 +385,6 @@
             for (this._index = 0; this._index < this._numberEntity; this._index++) {
                 this._renderItem = this._entityCollect.renderList[this._index];
                 this._renderItem.update(time, delay, this._camera);
-
-                if (this._renderItem.animation) {
-                    this._renderItem.animation.update(time, delay, this._renderItem.geometry);
-                }
-
-                if (this._renderItem.geometry.subGeometrys.length <= 0) {
-                    this._renderItem.geometry.buildDefaultSubGeometry();
-                }
             }
             //------------------
             //this._render.update(time, delay, this._entityCollect, this._camera);
