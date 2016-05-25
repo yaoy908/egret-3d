@@ -54,8 +54,8 @@
                             this._renderItem.multiMaterial[matID].passes[this._pass].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
                     }
                     else {
-                        if (this._renderItem.multiMaterial[matID].passes[this._pass])
-                            this._renderItem.multiMaterial[0][this._pass].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
+                        if (this._renderItem.multiMaterial[0].passes[this._pass])
+                            this._renderItem.multiMaterial[0].passes[this._pass].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
                     }
                 }
             }
