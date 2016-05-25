@@ -166,6 +166,10 @@
         "material/pass/DiffusePass.ts",
         "material/pass/ShadowPass.ts",
         "material/pass/CubePass.ts",
+        "material/pass/MatCapPass.ts",
+        
+        "material/pass/PassUtil.ts",
+        
 
         "material/MaterialBase.ts",
 
@@ -174,7 +178,7 @@
         "material/CubeTextureMaterial.ts",
 
         "render/RenderBase.ts",
-        "render/DefaultRender.ts",
+        "render/MultiRender.ts",
         "render/ShadowRender.ts",
 
         "particle/Value.ts",
@@ -187,13 +191,13 @@
         "particle/particleNode/ParticleFollowNode.ts",
         "particle/particleNode/ParticleUniformSpeedNode.ts",
         "particle/particleNode/ParticleAccelerationSpeedNode.ts",
-        "particle/particleNode/ParticleScaleByLifeNode.ts",
         "particle/particleNode/ParticleRotationNode.ts",
         "particle/particleNode/ParticleColorGlobalNode.ts",
         "particle/particleNode/ParticleSizeGlobalNode.ts",
 
         "particle/particleAnimationState.ts",
         "particle/ParticleAnimation.ts",
+        "particle/ParticleData.ts",
         "particle/ParticleEmitter.ts",
 
         "scene/Scene3D.ts",

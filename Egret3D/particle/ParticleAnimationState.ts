@@ -75,31 +75,14 @@
         public totalTime: number = 0;
                                                         
         /**
+        * @private
         * @language zh_CN
-        * 最大空间
+        * 最大粒子数量(初始化geometry用)
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public maxSpace: number = 0;
-                                        
-        /**
-        * @language zh_CN
-        * 最大粒子数量
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public maxParticles: number = 0;
+        public maxCount: number = 0;
 
-                                        
-        /**
-        * @language zh_CN
-        * 粒子速率
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public rate: number = 0;
-
-                                        
         /**
         * @language zh_CN
         * 粒子是否循环 1.0是循环 0.0是不循环
@@ -133,13 +116,18 @@
         public followTarget: Object3D = null;
 
         /**
-        * @language zh_CN
-        * 粒子循环周期中存在的间隔值，对开发者来说，无意义
-        * @version Egret 3.0
-        * @platform Web,Native
+        * @private
         */
-        public delayLife: number = 0; 
-                
+        public delayArray: Array<number>;
+        /**
+        * @private
+        */
+        public lifeArray: Array<number>;
+        /**
+        * @private
+        */
+        public rateArray: Array<number>;
+
         /**
         * @language zh_CN
         * 构造函数

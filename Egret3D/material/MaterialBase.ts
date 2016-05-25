@@ -1,6 +1,5 @@
 ﻿module egret3d {
 
-    export enum PassType{ DiffusePass , NormalPass ,ShadowPass , LightPass }
     /**
     * @language zh_CN
     * @class egret3d.MaterialBase
@@ -18,8 +17,10 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public diffusePass: MaterialPass; 
-        public shadowPass: MaterialPass; 
+        //public diffusePass: MaterialPass; 
+        //public shadowPass: MaterialPass; 
+
+        public passes: { [pass: number]: MaterialPass } = [];
                 
         /**
          * @language zh_CN
@@ -48,8 +49,8 @@
                 this.setData(materialData);
 
             //default 
-            this.materialData.shaderPhaseTypes[PassType.DiffusePass] = [];
-            this.materialData.shaderPhaseTypes[PassType.ShadowPass] = [];
+            this.materialData.shaderPhaseTypes[PassType.diffusePass] = [];
+            this.materialData.shaderPhaseTypes[PassType.shadowPass] = [];
         }
                         
         /**
@@ -75,7 +76,7 @@
         }
 
         protected initPass() {
-            this.diffusePass = new ColorPass(this.materialData);
+            this.passes[PassType.diffusePass] = new ColorPass(this.materialData);
         }
         
         /**
@@ -88,7 +89,7 @@
          */
         public set lightGroup(group: LightGroup) {
             this._lightGroup = group; 
-            this.diffusePass.lightGroup = group;
+            this.passes[PassType.diffusePass].lightGroup = group;
         }
 
         ///**
@@ -136,13 +137,13 @@
                 this.materialData.diffuseTexture = texture;
                 this.materialData.textureChange = true;
 
-                if (this.materialData.shaderPhaseTypes[PassType.DiffusePass].indexOf(ShaderPhaseType.diffuse_fragment) == -1) {
-                    this.materialData.shaderPhaseTypes[PassType.DiffusePass].push(ShaderPhaseType.diffuse_fragment);
+                if (this.materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.diffuse_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.diffusePass].push(ShaderPhaseType.diffuse_fragment);
                     //this.diffusePass.passInvalid();
                 }
 
-                if (this.materialData.shaderPhaseTypes[PassType.ShadowPass].indexOf(ShaderPhaseType.diffuse_fragment) == -1) {
-                    this.materialData.shaderPhaseTypes[PassType.ShadowPass].push(ShaderPhaseType.diffuse_fragment);
+                if (this.materialData.shaderPhaseTypes[PassType.shadowPass].indexOf(ShaderPhaseType.diffuse_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.shadowPass].push(ShaderPhaseType.diffuse_fragment);
                     //this.shadowPass.passInvalid();
                 }
                
@@ -174,9 +175,9 @@
                 this.materialData.normalTexture = texture;
                 this.materialData.textureChange = true;
 
-                if (this.materialData.shaderPhaseTypes[PassType.DiffusePass].indexOf(ShaderPhaseType.normal_fragment) == -1) {
-                    this.materialData.shaderPhaseTypes[PassType.DiffusePass].push(ShaderPhaseType.normal_fragment);
-                    this.diffusePass.passInvalid();
+                if (this.materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.normal_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.diffusePass].push(ShaderPhaseType.normal_fragment);
+                    this.passes[PassType.diffusePass].passInvalid();
                 }
 
             }
@@ -205,9 +206,9 @@
             if (texture) {
                 this.materialData.specularTexture = texture;
                 this.materialData.textureChange = true;
-                if (this.materialData.shaderPhaseTypes[PassType.DiffusePass].indexOf(ShaderPhaseType.specular_fragment) == -1) {
-                    this.materialData.shaderPhaseTypes[PassType.DiffusePass].push(ShaderPhaseType.specular_fragment);
-                    this.diffusePass.passInvalid();
+                if (this.materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.specular_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.diffusePass].push(ShaderPhaseType.specular_fragment);
+                    this.passes[PassType.diffusePass].passInvalid();
                 }
             }
         }
@@ -441,6 +442,19 @@
             this.materialData.materialDataNeedChange = true;
         }
 
+        /**
+         * @private
+         * @language zh_CN
+         * 设置材质 ambientPower 值。
+         * 设置材质 环境光颜色的强度 值。
+         * @param value {Number}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public get diffusePass(): DiffusePass {
+            return this.passes[PassType.diffusePass];
+        }
+
 
         /**
          * @language zh_CN
@@ -524,6 +538,18 @@
         //    return this.materialData.normalPower;
         //}
 
+         /**
+         * @language zh_CN
+         * 返回材质 normalPower 值。
+         * 返回材质 法线的强度 值。
+         * @returns {Number}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public addPass(pass: number) {
+            this.passes[pass] = this.passes[PassType.shadowPass] || PassUtil.CreatPass(pass, this.materialData);
+        }
+
         /**
          * @language zh_CN
          * 设置材质 castShadow 值。
@@ -535,11 +561,11 @@
         public set castShadow(value: boolean) {
             this.materialData.castShadow = value;
             if (value) {
-                this.shadowPass = this.shadowPass || new ShadowPass(this.materialData);
+                this.addPass(PassType.shadowPass);
             } else {
-                if (this.shadowPass) {
-                    this.shadowPass.dispose();
-                    this.shadowPass = null;
+                if (this.passes[PassType.shadowPass]) {
+                    this.passes[PassType.shadowPass].dispose();
+                    this.passes[PassType.shadowPass] = null;
                 }
             }
         }

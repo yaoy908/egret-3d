@@ -1,6 +1,6 @@
 
 // 按秒为单位
-//x : delay
+//x : bornTime
 //y : life
 //z : space
 //w : index
@@ -20,34 +20,31 @@ float currentTime = 0.0;
 varying vec4 particleTime;
 
 struct ParticleData{
-	float delay;
-	float life;
-	float rate;
-	float index;
-};
+	float bornTime;			//出生时间
+	float life;				//单次生命周期时间
+	float unitTotalLife;	//从0开始计数到循环到最后一次结束的总时间
+	float index;			//下标
+};                   
+
 
 float particle( ParticleData emit ){
 	float time = uniform_time[0] ; 
 	float loop = uniform_time[1]; 
-	float duration = uniform_time[2]; 
-	float delayLife = uniform_time[3]; 
-	float maxLife = uniform_time[4]; 
-	
-	float numberSpace = emit.index * emit.rate ; 
-	currentTime = max(time - numberSpace - emit.delay,0.0) ;
-	
-	if(loop==0.0){
-		if( numberSpace > duration )
-			return currentTime = 0.0 ;
-	}else{
-		duration = maxLife + emit.rate - delayLife ; 
-		currentTime = mod( currentTime , duration ); 
-			if( currentTime >= emit.life )
-				return currentTime = 0.0 ;
+
+	//还未出身
+	if(time <= emit.bornTime){
+		return currentTime = 0.0;
 	}
-  
+	//非循环的情况，发射器死亡的话就一直隐藏
+	if(loop == 0.0 && time >= emit.unitTotalLife){
+		return currentTime = 0.0;
+	}
+
+	currentTime = time - emit.bornTime;
+	//计算当前粒子在单次循环中的相对时间
+	currentTime = mod( currentTime, emit.life);
 	if( currentTime <= 0.0 ) 
-		return currentTime ; 
+		return currentTime = 0.0;
 }
 
 void e_discard(){
@@ -57,16 +54,16 @@ void e_discard(){
 void main(void) {
 	
 	ParticleData emit ;
-	emit.delay = attribute_time.x ; 
+	emit.bornTime = attribute_time.x ; 
 	emit.life = attribute_time.y ; 
-	emit.rate = attribute_time.z ; 
+	emit.unitTotalLife = attribute_time.z ; 
 	emit.index = attribute_time.w ; 
 	
 	float active = particle( emit ) ;
 	
 	particleTime.x = emit.index ;
 	particleTime.y = emit.life ;
-	particleTime.z = emit.delay ;
+	particleTime.z = emit.unitTotalLife ;
 	particleTime.w = currentTime ;
 	
 	if( active == 0.0 ){

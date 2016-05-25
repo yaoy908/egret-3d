@@ -42,7 +42,7 @@
                 }
             }
 
-            if (this._materialData.shaderPhaseTypes[PassType.ShadowPass].indexOf(ShaderPhaseType.diffuse_fragment) != -1) {
+            if (this._materialData.shaderPhaseTypes[PassType.shadowPass].indexOf(ShaderPhaseType.diffuse_fragment) != -1) {
                 this._fs_shader_methods[ShaderPhaseType.diffuse_fragment] = [];
                 this._fs_shader_methods[ShaderPhaseType.diffuse_fragment].push("diffuseShadowPass_fs");
             }
