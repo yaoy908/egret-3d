@@ -21,6 +21,12 @@
             var fileFormatBytes: ByteArray = new ByteArray();
             bytes.readBytes(fileFormatBytes, 0, 3);
             var version: number = bytes.readUnsignedInt();
+
+            if (!ESMVersion.versionDictionary[version]) {
+                console.log("egret3d engine not found " + version + " version");
+                return null;
+            }
+
             var geomtryData: GeometryData = new GeometryData();
             ESMVersion.versionDictionary[version](bytes, geomtryData);
             var geomtry: Geometry;

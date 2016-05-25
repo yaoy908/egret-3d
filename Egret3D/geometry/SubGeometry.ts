@@ -64,8 +64,6 @@
         public textureSpecular: string;
 
         public preAttList: Array<GLSL.Attribute> = new Array<GLSL.Attribute>();
-        private attList: Array<GLSL.Attribute> = new Array<GLSL.Attribute>();
-        private _attributeDiry: boolean = true;
 
         /**
         * @language zh_CN
@@ -80,9 +78,9 @@
         */
         public upload(passUsage: PassUsage, contextPorxy: Context3DProxy) {
 
-            this._attributeDiry = false;
+            passUsage.attributeDiry = false;
             var offsetBytes: number = 0;
-            this.attList.length = 0;
+            passUsage["attributeList"] = [];
             if (this.geometry.vertexFormat & VertexFormat.VF_POSITION) {
                 if (passUsage.attribute_position) {
                     if (!passUsage.attribute_position.uniformIndex) {
@@ -95,7 +93,7 @@
                     passUsage.attribute_position.stride = this.geometry.vertexSizeInBytes;
                     passUsage.attribute_position.offsetBytes = offsetBytes;
 
-                    this.attList.push(passUsage.attribute_position);
+                    passUsage["attributeList"].push(passUsage.attribute_position);
                 }
 
                 offsetBytes += Geometry.positionSize * Float32Array.BYTES_PER_ELEMENT;
@@ -113,7 +111,7 @@
                     passUsage.attribute_normal.stride = this.geometry.vertexSizeInBytes;
                     passUsage.attribute_normal.offsetBytes = offsetBytes;
 
-                    this.attList.push(passUsage.attribute_normal);
+                    passUsage["attributeList"].push(passUsage.attribute_normal);
                 }
 
                 offsetBytes += Geometry.normalSize * Float32Array.BYTES_PER_ELEMENT;
@@ -131,7 +129,7 @@
                     passUsage.attribute_tangent.stride = this.geometry.vertexSizeInBytes;
                     passUsage.attribute_tangent.offsetBytes = offsetBytes;
 
-                    this.attList.push(passUsage.attribute_tangent);
+                    passUsage["attributeList"].push(passUsage.attribute_tangent);
                 }
 
                 offsetBytes += Geometry.tangentSize * Float32Array.BYTES_PER_ELEMENT;
@@ -149,7 +147,7 @@
                     passUsage.attribute_color.stride = this.geometry.vertexSizeInBytes;
                     passUsage.attribute_color.offsetBytes = offsetBytes;
 
-                    this.attList.push(passUsage.attribute_color);
+                    passUsage["attributeList"].push(passUsage.attribute_color);
                 }
 
                 offsetBytes += Geometry.colorSize * Float32Array.BYTES_PER_ELEMENT;
@@ -167,7 +165,7 @@
                     passUsage.attribute_uv0.stride = this.geometry.vertexSizeInBytes;
                     passUsage.attribute_uv0.offsetBytes = offsetBytes;
 
-                    this.attList.push(passUsage.attribute_uv0);
+                    passUsage["attributeList"].push(passUsage.attribute_uv0);
                 }
 
                 offsetBytes += Geometry.uvSize * Float32Array.BYTES_PER_ELEMENT;
@@ -185,7 +183,7 @@
                     passUsage.attribute_uv1.stride = this.geometry.vertexSizeInBytes;
                     passUsage.attribute_uv1.offsetBytes = offsetBytes;
 
-                    this.attList.push(passUsage.attribute_uv1);
+                    passUsage["attributeList"].push(passUsage.attribute_uv1);
                 }
 
                 offsetBytes += Geometry.uv2Size * Float32Array.BYTES_PER_ELEMENT;
@@ -203,7 +201,7 @@
                     passUsage.attribute_boneIndex.stride = this.geometry.vertexSizeInBytes;
                     passUsage.attribute_boneIndex.offsetBytes = offsetBytes;
 
-                    this.attList.push(passUsage.attribute_boneIndex);
+                    passUsage["attributeList"].push(passUsage.attribute_boneIndex);
                 }
 
                 offsetBytes += Geometry.skinSize / 2 * Float32Array.BYTES_PER_ELEMENT;
@@ -217,7 +215,7 @@
                     passUsage.attribute_boneWeight.normalized = false;
                     passUsage.attribute_boneWeight.stride = this.geometry.vertexSizeInBytes;
                     passUsage.attribute_boneWeight.offsetBytes = offsetBytes;
-                    this.attList.push(passUsage.attribute_boneWeight);
+                    passUsage["attributeList"].push(passUsage.attribute_boneWeight);
                 }
 
                 offsetBytes += Geometry.skinSize / 2 * Float32Array.BYTES_PER_ELEMENT;
@@ -234,7 +232,7 @@
                         attribute.normalized = false;
                         attribute.stride = this.geometry.vertexSizeInBytes;
                         attribute.offsetBytes = offsetBytes;
-                        this.attList.push(attribute);
+                        passUsage["attributeList"].push(attribute);
                     }
                 }
                 offsetBytes += var0.size * Float32Array.BYTES_PER_ELEMENT;
@@ -249,12 +247,13 @@
         */
         public update(time: number, delay: number, passUsage: PassUsage, contextProxy: Context3DProxy) {
 
-            if (this._attributeDiry)
+            if (passUsage.attributeDiry)
                 this.upload(passUsage, contextProxy);
 
-            for (var i: number = 0; i < this.attList.length; i++) {
-                if (this.attList[i].uniformIndex >= 0)
-                    contextProxy.vertexAttribPointer(this.attList[i].uniformIndex, this.attList[i].size, this.attList[i].dataType, this.attList[i].normalized, this.attList[i].stride, this.attList[i].offsetBytes);
+            for (var i: number = 0; i < passUsage["attributeList"].length; i++) {
+                var attribute: GLSL.Attribute = passUsage["attributeList"][i]; 
+                if (attribute.uniformIndex >= 0)
+                    contextProxy.vertexAttribPointer(attribute.uniformIndex, attribute.size, attribute.dataType, attribute.normalized, attribute.stride, attribute.offsetBytes);
             }
 
         }
@@ -266,15 +265,11 @@
         * @platform Web,Native
         */
         public deactivePass(passUsage: PassUsage, contextProxy: Context3DProxy): void {
-            for (var i: number = 0; i < this.attList.length; i++) {
-                if (this.attList[i].uniformIndex >= 0)
-                    contextProxy.clearVaPointer(this.attList[i].uniformIndex);
+            for (var i: number = 0; i < passUsage["attributeList"].length; i++) {
+                var attribute: GLSL.Attribute = passUsage["attributeList"][i];
+                if (attribute.uniformIndex >= 0)
+                    contextProxy.clearVaPointer(attribute.uniformIndex);
             }
         }
-
-
-
-
-
     }
 } 

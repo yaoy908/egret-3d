@@ -21,6 +21,13 @@
             bytes.readBytes(fileFormatBytes, 0, 3);
 
             var version: number = bytes.readUnsignedInt();
+
+
+            if (!EAMVersion.versionDictionary[version]) {
+                console.log("egret3d engine not found " + version + " version");
+                return null;
+            }
+
             return EAMVersion.versionDictionary[version](bytes);
         }
     }

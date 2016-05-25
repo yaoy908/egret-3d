@@ -307,7 +307,9 @@
 
         public directLightData: Float32Array ;
         public spotLightData: Float32Array ;
-        public pointLightData: Float32Array ;
+        public pointLightData: Float32Array;
+
+        public attributeDiry: boolean = true;
 
         /**
          * @language zh_CN
