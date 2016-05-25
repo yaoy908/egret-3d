@@ -228,10 +228,10 @@
 
             if (this._materialData.acceptShadow) {
                 // to add accept shadow maping shader+
-                this._vs_shader_methods[ShaderPhaseType.global_vertex] = [];
+                this._vs_shader_methods[ShaderPhaseType.global_vertex] = this._vs_shader_methods[ShaderPhaseType.global_vertex] || [];
                 //this._vs_shader_methods[ShaderPhaseType.global_vertex].push("particle_vs");
 
-                this._fs_shader_methods[ShaderPhaseType.shadow_fragment] = [];
+                this._fs_shader_methods[ShaderPhaseType.shadow_fragment] = this._fs_shader_methods[ShaderPhaseType.shadow_fragment] || [];
                 //this._fs_shader_methods[ShaderPhaseType.shadow_fragment].push("particle_vs");
             }
 
@@ -389,7 +389,6 @@
             }
         }
 
-        private tmp: Matrix4_4 = new Matrix4_4(); 
         /**
         * @private
         */
@@ -428,7 +427,7 @@
             }
 
             context3DProxy.setProgram(this._passUsage.program3D);
-            subGeometry.update(time, delay, this._passUsage, context3DProxy);
+            subGeometry.activeState(time, delay, this._passUsage, context3DProxy);
 
             if (this._materialData.depthTest) {
                 context3DProxy.enable(ContextConfig.DEPTH_TEST);
@@ -541,11 +540,11 @@
             }
 
             if (animation) {
-                animation.activePass(time, delay, this._passUsage, subGeometry, context3DProxy, modeltransform, camera3D);
+                animation.activeState(time, delay, this._passUsage, subGeometry, context3DProxy, modeltransform, camera3D);
             }
             if (this.methodList) {
                 for (var i: number = 0; i < this.methodList.length; i++) {
-                    this.methodList[i].activePass(time, delay, this._passUsage, null, context3DProxy, modeltransform, camera3D);
+                    this.methodList[i].activeState(time, delay, this._passUsage, null, context3DProxy, modeltransform, camera3D);
                 }
             }
 
@@ -588,7 +587,7 @@
                 Context3DProxy.gl.depthMask(true);
 
 
-            subGeometry.deactivePass(this._passUsage, context3DProxy);
+            subGeometry.deactiveState(this._passUsage, context3DProxy);
         }
 
         public dispose() {

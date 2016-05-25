@@ -58,7 +58,7 @@
         }
 
         public activePass(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
-            context3DProxy.uniform2fv(usage["uniform_size"].uniformIndex, this.colorSegment);
+            context3DProxy.uniform2fv(usage["uniform_colorTransform"].uniformIndex, this.colorSegment);
         }
 
         public getGpuColor(r: number, g: number, b: number, a: number): number {

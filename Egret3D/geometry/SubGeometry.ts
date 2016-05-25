@@ -245,7 +245,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public update(time: number, delay: number, passUsage: PassUsage, contextProxy: Context3DProxy) {
+        public activeState(time: number, delay: number, passUsage: PassUsage, contextProxy: Context3DProxy) {
 
             if (passUsage.attributeDiry)
                 this.upload(passUsage, contextProxy);
@@ -264,7 +264,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public deactivePass(passUsage: PassUsage, contextProxy: Context3DProxy): void {
+        public deactiveState(passUsage: PassUsage, contextProxy: Context3DProxy): void {
             for (var i: number = 0; i < passUsage["attributeList"].length; i++) {
                 var attribute: GLSL.Attribute = passUsage["attributeList"][i];
                 if (attribute.uniformIndex >= 0)
