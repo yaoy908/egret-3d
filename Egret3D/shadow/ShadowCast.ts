@@ -1,4 +1,11 @@
 ﻿module egret3d {
+
+    /**
+    * @private
+    * @language zh_CN
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class ShadowCast {
         private static _enable: boolean = false; 
 

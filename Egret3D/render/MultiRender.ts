@@ -2,7 +2,7 @@
                             
     /**
     * @private
-    * @class egret3d.SphereSky
+    * @class egret3d.MultiRender
     * @classdesc
     * default render
     * 把所有需要渲染的对象，依次进行渲染

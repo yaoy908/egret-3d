@@ -464,6 +464,8 @@
             var sampler2D: GLSL.Sampler2D;
             for (var index in this._passUsage.sampler2DList) {
                 sampler2D = this._passUsage.sampler2DList[index];
+                sampler2D.texture = this._materialData[sampler2D.varName];
+
                 if (!sampler2D.texture) {
                     continue;
                 }
@@ -483,6 +485,8 @@
             var sampler3D: GLSL.Sampler3D;
             for (var index in this._passUsage.sampler3DList) {
                 sampler3D = this._passUsage.sampler3DList[index];
+                sampler3D.texture = this._materialData[sampler3D.varName];
+
                 sampler3D.texture.upload(context3DProxy);
                 context3DProxy.setCubeTextureAt(sampler3D.activeTextureIndex, sampler3D.uniformIndex, sampler3D.index, sampler3D.texture.texture3D);
             }
