@@ -63,8 +63,11 @@
         private timeIndex: number = 0;
         private currentTime: number = 0;
 
-        public update(time: number, delay: number, geometry: Geometry, passUsage: PassUsage,context: Context3DProxy) {
+        private geometryDirty: boolean;
 
+        public update(time: number, delay: number, geometry: Geometry) {
+
+            this.geometryDirty = false;
             if (!this.particleAnimationState.followTarget) {
                 return;
             }
@@ -98,7 +101,7 @@
                 //this.id = geometry.verticesData[this.timeIndex + 3];                //下标(i)
 
                 var curCircleIndex: number = -1;
-                var particleTime: number = time * 0.001;// - this.particleAnimationState.startTime;
+                var particleTime: number = time * 0.001;
                 if (particleTime >= this.bornTime) {
                     //粒子超时了，并且不需要继续循环
                     if (particleTime > this.unitTotalLife && !this.particleAnimationState.loop)
@@ -120,8 +123,18 @@
                 }
             }
 
-            if (changed) {
-                geometry.upload(context);
+            this.geometryDirty = changed;
+        }
+
+
+        public activePass(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
+            if (this.geometryDirty) {
+
+                geometry.geometry.upload(context3DProxy);
+                //geometry.upload(usage, context3DProxy);
+
+
+                this.geometryDirty = false;
             }
         }
     }

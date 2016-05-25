@@ -367,18 +367,32 @@
 
         /**
         * @private
+        */
+        private _renderItem: IRender;
+        /**
+        * @private
         * @language zh_CN
         * @version Egret 3.0
         * @platform Web,Native
         */
+
         public update(time: number, delay: number) {
             this._camera.viewPort = this._viewPort ;
             this._entityCollect.update(this._camera);
 
             //------------------
             this._numberEntity = this._entityCollect.renderList.length;
-            for (this._index = 0; this._index < this._numberEntity ; this._index++) {
-                this._entityCollect.renderList[this._index].update(time, delay, this._camera);
+            for (this._index = 0; this._index < this._numberEntity; this._index++) {
+                this._renderItem = this._entityCollect.renderList[this._index];
+                this._renderItem.update(time, delay, this._camera);
+
+                if (this._renderItem.animation) {
+                    this._renderItem.animation.update(time, delay, this._renderItem.geometry);
+                }
+
+                if (this._renderItem.geometry.subGeometrys.length <= 0) {
+                    this._renderItem.geometry.buildDefaultSubGeometry();
+                }
             }
             //------------------
             //this._render.update(time, delay, this._entityCollect, this._camera);

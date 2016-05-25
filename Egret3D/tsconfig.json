@@ -179,7 +179,6 @@
 
         "render/RenderBase.ts",
         "render/MultiRender.ts",
-        "render/ShadowRender.ts",
 
         "particle/Value.ts",
         "particle/particleNode/ParticleEndNode.ts",

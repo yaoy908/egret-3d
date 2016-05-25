@@ -101,7 +101,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public update(time: number, delay: number, geometry: Geometry, passUsage: PassUsage,context:Context3DProxy ) {
+        public update(time: number, delay: number, geometry: Geometry) {
             if (!this._play) {
                 return;
             }
@@ -109,7 +109,23 @@
             this.delay = delay; 
             this.time += this.delay;
             if (this.particleAnimationState)
-                this.particleAnimationState.update(this.time, this.delay, geometry, passUsage, context);
+                this.particleAnimationState.update(this.time, this.delay, geometry);
+        }
+
+        public activePass(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+            if (this.particleAnimationState) {
+                this.particleAnimationState.activePass(time, this.time, delay, this.delay, usage, geometry, context3DProxy);
+                if (usage.uniform_time) {
+                    context3DProxy.uniform1fv(usage.uniform_time.uniformIndex,
+                        [
+                            this.time * 0.001,
+                            this.particleAnimationState.loop,
+                            this.particleAnimationState.duration,
+                            0.0,
+                            0.0
+                        ]);
+                }
+            }
         }
 
         /**

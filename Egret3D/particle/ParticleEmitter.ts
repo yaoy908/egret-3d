@@ -268,47 +268,11 @@
         * @platform Web,Native
         */
         public update(time: number, delay: number, camera: Camera3D) {
+            if (this._isEmitterDirty) {
+                this.initialize();
+            }
             super.update(time, delay, camera);
         }
-        /**
-        * @private
-        */
-        //public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
-            
-        //    if (this._play){
-        //        if (this._isEmitterDirty) {
-        //            this.initialize();
-        //        }
-        //        this._i = 0;
-        //        this.geometry.update(time, delay, context3DProxy, camera3D);
-        //        if (this.geometry.subGeometrys.length <= 0) {
-        //            this.geometry.buildDefaultSubGeometry();
-        //        }
-        //        for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
-        //            this._subGeometry = this.geometry.subGeometrys[this._i];
-        //            this._matID = this._subGeometry.matID;
-        //            if (this.multiMaterial[this._matID]) {
-        //                if (this.lightGroup) {
-        //                    this.multiMaterial[this._matID].lightGroup = this.lightGroup;
-        //                }
-        //                this.multiMaterial[this._matID].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
-        //            }
-        //            else {
-                 
-        //                if (this.lightGroup) {
-        //                    this.multiMaterial[0].lightGroup = this.lightGroup;
-        //                }
-        //                this.multiMaterial[0].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
-        //            }
-                     
-        //        }
-
-        //        if (this.animation) {
-        //            this.animation.update(time, delay, this.geometry, this.multiMaterial[0].diffusePass._passUsage, context3DProxy);
-        //        }
-
-        //    }
-        //}
 
 
         public buildBoudBox(vector: Vector3D) {

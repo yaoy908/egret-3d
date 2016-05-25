@@ -56,10 +56,12 @@
         * @private
         * @language zh_CN
         */
-        public update(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+        public activePass(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
             this._time += delay;
-            this._windData[0] = this._time; 
+            this._windData[0] = this._time;
             context3DProxy.uniform1fv(usage["uniformTime"], this._windData);
         }
-    }
+
+
+      }
 }

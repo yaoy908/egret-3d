@@ -393,7 +393,7 @@
         /**
         * @private
         */
-        public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation) {
+        public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animation: IAnimation) {
             if (this._materialData.materialDataNeedChange) {
                 //this._materialData.materialDataNeedChange = false;
                 this._materialData.materialSourceData[0] = (this._materialData.diffuseColor >> 16 & 0xff) / 255.0;
@@ -424,7 +424,7 @@
             
             
             if (this._passChange) {
-                this.upload(time, delay, context3DProxy, modeltransform, camera3D, animtion, subGeometry.geometry);
+                this.upload(time, delay, context3DProxy, modeltransform, camera3D, animation, subGeometry.geometry);
             }
 
             context3DProxy.setProgram(this._passUsage.program3D);
@@ -536,6 +536,15 @@
                 context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ViewProjectionMatrix.uniformIndex, false, camera3D.viewProjectionMatrix.rawData);
             }
 
+            if (animation) {
+                animation.activePass(time, delay, this._passUsage, subGeometry, context3DProxy, modeltransform, camera3D);
+            }
+            if (this.methodList) {
+                for (var i: number = 0; i < this.methodList.length; i++) {
+                    this.methodList[i].activePass(time, delay, this._passUsage, null, context3DProxy, modeltransform, camera3D);
+                }
+            }
+
             if (this._passUsage.uniform_NormalMatrix) {
                 this._helpMatrix.identity();
                 this._helpMatrix.copyFrom(modeltransform);
@@ -558,11 +567,7 @@
                 //context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ShadowMatrix.uniformIndex, false, mat.rawData);
             }
 
-            if (this.methodList) {
-                for (var i: number = 0; i < this.methodList.length; i++) {
-                    this.methodList[i].update(time, delay, this._passUsage, null, context3DProxy, modeltransform, camera3D);
-                }
-            }
+
 
             if (this._passUsage.uniform_eyepos) {
                 context3DProxy.uniform3f(this._passUsage.uniform_eyepos.uniformIndex, camera3D.x, camera3D.y, camera3D.z);
@@ -572,27 +577,7 @@
                 context3DProxy.uniformMatrix4fv(this._passUsage.uniform_cameraMatrix.uniformIndex, false, camera3D.modelMatrix.rawData);
             }
 
-            if (animtion) {
-
-                if (animtion.skeletonAnimationController) {
-                    if (this._passUsage.uniform_time) {
-                        context3DProxy.uniform1f(this._passUsage.uniform_time.uniformIndex, animtion.time);
-                    }
-                    context3DProxy.uniform4fv(this._passUsage.uniform_PoseMatrix.uniformIndex, animtion.skeletonAnimationController.currentSkeletonMatrixData);
-                }
-
-                if (animtion.particleAnimationController) {
-                    if (this._passUsage.uniform_time) {
-                        context3DProxy.uniform1fv(this._passUsage.uniform_time.uniformIndex,
-                            [animtion.time * 0.001,
-                                animtion.particleAnimationController.particleAnimationState.loop,
-                                animtion.particleAnimationController.particleAnimationState.duration,
-                                0.0,//animtion.particleAnimationController.particleAnimationState.rate,
-                                0.0/*animtion.particleAnimationController.particleAnimationState.totalTime*/] );
-                    }
-                }
-            }
-
+           
             context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count);
 
             if (this._materialData.alphaBlending)

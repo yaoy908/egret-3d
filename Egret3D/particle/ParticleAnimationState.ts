@@ -243,10 +243,19 @@
         * @language zh_CN
         * @private 
         */
-        public update(time: number, delay: number, geometry: Geometry, passUsage: PassUsage,context: Context3DProxy) {
+        public update(time: number, delay: number, geometry: Geometry) {
             for (var i: number = 0; i < this.animNodes.length; i++) {
-                this.animNodes[i].update(time, delay, geometry, passUsage, context);
+                this.animNodes[i].update(time, delay, geometry);
             }
         }
+
+
+        public activePass(time: number, animTime:number, delay: number, animDelay:number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
+            for (var i: number = 0; i < this.animNodes.length; i++) {
+                this.animNodes[i].activePass(time, animTime, delay, animDelay, usage, geometry, context3DProxy);
+            }
+        }
+
+
     }
 }

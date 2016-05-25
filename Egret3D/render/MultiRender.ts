@@ -44,17 +44,8 @@
             }
             for (this._renderIndex = 0; this._renderIndex < this.numEntity; this._renderIndex++) {
                 this._renderItem = collect.renderList[this._renderIndex];
-                            
-                this._renderItem.geometry.update(time, delay, context3D, camera);
 
-                if (this._renderItem.animation) {
-                    this._renderItem.animation.update(time, delay, this._renderItem.geometry, null, context3D);
-                }
-
-                if (this._renderItem.geometry.subGeometrys.length <= 0) {
-                    this._renderItem.geometry.buildDefaultSubGeometry();
-                }
-
+                this._renderItem.geometry.update(time, delay, View3D._contex3DProxy, camera);
                 for (this._i = 0; this._i < this._renderItem.geometry.subGeometrys.length; this._i++) {
                     var subGeometry = this._renderItem.geometry.subGeometrys[this._i];
                     var matID = subGeometry.matID;
