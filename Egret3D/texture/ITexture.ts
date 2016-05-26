@@ -58,8 +58,9 @@
         public texture3D: Texture3D;
 
         /**
-        * @private
         * @language zh_CN
+        * 上传贴图数据给GPU
+        * @param context3D
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -67,8 +68,10 @@
         }
 
         /**
-        * @private
         * @language zh_CN
+        * 强制上传贴图数据给GPU，强制要求贴图更新。
+        * 在video 贴图类型需要立即改变显卡中的贴图内存
+        * @param context3D
         * @version Egret 3.0
         * @platform Web,Native
         */

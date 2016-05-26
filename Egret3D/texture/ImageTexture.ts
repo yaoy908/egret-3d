@@ -30,20 +30,24 @@
 
 
         /**
-         * @language zh_CN
-         * 构造函数
-         * @param img HTMLImageElement（网页图像元素）
-         */
+        * @language zh_CN
+        * 构造函数
+        * @param img HTMLImageElement（网页图像元素）
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         constructor(img: HTMLImageElement) {
             super();
             this.imageData = img;
         }
 
         /**
-         * @language zh_CN
-         * 上传贴图数据给GPU
-         * @param context3D 
-         */
+        * @language zh_CN
+        * 上传贴图数据给GPU
+        * @param context3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public upload(context3D: Context3DProxy) {
             if (!this.texture2D) {
                 this.texture2D = context3D.creatTexture2D();
@@ -57,11 +61,13 @@
         }
 
         /**
-         * @language zh_CN
-         * 强制上传贴图数据给GPU，强制要求贴图更新。
-         * 在video 贴图类型需要立即改变显卡中的贴图内存
-         * @param context3D 
-         */
+        * @language zh_CN
+        * 强制上传贴图数据给GPU，强制要求贴图更新。
+        * 在video 贴图类型需要立即改变显卡中的贴图内存
+        * @param context3D
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public uploadForcing(context3D: Context3DProxy) {
             context3D.upLoadTextureData(0, this.texture2D);
         }

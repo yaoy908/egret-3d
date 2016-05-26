@@ -47,7 +47,10 @@
             for (this._renderIndex = 0; this._renderIndex < this.numEntity; this._renderIndex++) {
                 this._renderItem = collect.renderList[this._renderIndex];
                 if (shadow) {
-                    ShadowCast.instance.calculateCamera(<Mesh>(this._renderItem), camera);
+                    if (!this._renderItem.material.castShadow) {
+                        continue;
+                    }
+                    ShadowCast.instance.calculateCamera(this._renderItem, camera);
                 }
 
                 this._renderItem.geometry.activeState(time, delay, View3D._contex3DProxy, camera);

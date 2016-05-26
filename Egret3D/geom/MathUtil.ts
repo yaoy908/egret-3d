@@ -44,6 +44,11 @@
         public static CALCULATION_QUATERNION: Quaternion = new Quaternion();
 
         /**
+        * @private
+        */
+        public static CALCULATION_VECTOR3D: Vector3D = new Vector3D();
+
+        /**
         * @language zh_CN
         * 四元数转矩阵
         * @param quarternion 源四元数

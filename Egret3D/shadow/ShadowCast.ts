@@ -13,7 +13,7 @@
         public shadowRender: RenderBase[]; 
         public shadowCamera: Camera3D;
 
-        public dis: number = 1000;
+        public distance: number = 2000;
         public dir: Vector3D = new Vector3D(0, -1, -1);
 
 
@@ -47,8 +47,11 @@
         }
 
         public calculateCamera(object3d: Object3D, camera: Camera3D) {
-
-
+            MathUtil.CALCULATION_VECTOR3D.copyFrom(this.dir);
+            MathUtil.CALCULATION_VECTOR3D.normalize();
+            MathUtil.CALCULATION_VECTOR3D.negate();
+            MathUtil.CALCULATION_VECTOR3D.scaleBy(this.distance);
+            camera.lookAt(MathUtil.CALCULATION_VECTOR3D, object3d.position);
         }
     }
 }

@@ -378,7 +378,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-
+        public a: number = 0;
         public update(time: number, delay: number) {
             this._camera.viewPort = this._viewPort;
             this._entityCollect.update(this._camera);
@@ -396,6 +396,11 @@
             // View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
 
             if (ShadowCast.instance.shadowRender[0]) {
+
+                MathUtil.CALCULATION_QUATERNION.fromEulerAngles(0, this.a++, 0);
+                var v = new Vector3D(0, -1, -1);
+                MathUtil.CALCULATION_QUATERNION.transformVector(v, ShadowCast.instance.dir);
+
                 ShadowCast.instance.shadowRender[0].draw(time, delay, View3D._contex3DProxy, this._entityCollect, ShadowCast.instance.shadowCamera, this._viewPort, true);
             }
 
