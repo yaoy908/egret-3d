@@ -18,51 +18,16 @@
      * @version Egret 3.0
      * @platform Web,Native
      */
-    export class ImageTexture implements ITexture {
+    export class ImageTexture extends ITexture {
 
         /**
-         * @language zh_CN
-         * 贴图数据
-         *  
-         */
+        * @language zh_CN
+        * 贴图数据
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public imageData: HTMLImageElement;
 
-        /**
-        * @language zh_CN
-        * 贴图的宽度
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public width: number;
-
-        /**
-        * @language zh_CN
-        * 贴图的高度
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public height: number;
-        /**
-        * @language zh_CN
-        * Texture2D 对象
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public texture2D: Texture2D;
-
-        /**
-        * @language zh_CN
-        * Texture3D 对象
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public texture3D: Texture3D;
-
-         /**
-        需要缓存这个值，看看是否优化
-         */
-        private _useMipmap: boolean = true;
-        private _smooth: boolean = true;
 
         /**
          * @language zh_CN
@@ -70,45 +35,8 @@
          * @param img HTMLImageElement（网页图像元素）
          */
         constructor(img: HTMLImageElement) {
+            super();
             this.imageData = img;
-        }
-
-        /**
-         * @language zh_CN
-         * 设置贴图是否使用 mipmap , mipmap为一个贴图的LOD层级贴图。例如（1024*1024的贴图，往下就会自动生成 512*512,256*256,128*128,64*64,32*32,16*16,8*8,4*4,2*2,1*1）
-         * @param img HTMLImageElement（网页图像元素）
-         */
-        public set useMipmap( flag:boolean ) {
-            this._useMipmap = flag;
-        }
-
-
-        /**
-         * @language zh_CN
-         * 获取贴图是否使用 mipmap , mipmap为一个贴图的LOD层级贴图。例如（1024*1024的贴图，往下就会自动生成 512*512,256*256,128*128,64*64,32*32,16*16,8*8,4*4,2*2,1*1）
-         * @param img HTMLImageElement（网页图像元素）
-         */
-        public get useMipmap():boolean {
-            return this._useMipmap;
-        }
-
-        /**
-         * @language zh_CN
-         * 设置贴图是否使用 smooth 
-         * @param img HTMLImageElement（网页图像元素）
-         */
-        public set smooth(flag: boolean) {
-            this._smooth = flag;
-        }
-
-
-        /**
-         * @language zh_CN
-         * 获取贴图是否使用 smooth
-         * @param img HTMLImageElement（网页图像元素）
-         */
-        public get smooth(): boolean {
-            return this._smooth;
         }
 
         /**
@@ -121,8 +49,8 @@
                 this.texture2D = context3D.creatTexture2D();
                 this.texture2D.internalFormat = InternalFormat.ImageData;
                 this.texture2D.imageData = this.imageData;
-                this.texture2D.useMipmap = this._useMipmap;
-                this.texture2D.smooth = this._smooth;
+                this.texture2D.useMipmap = this.useMipmap;
+                this.texture2D.smooth = this.smooth;
                 this.texture2D.colorFormat = ContextConfig.ColorFormat_RGBA8888;
                 context3D.upLoadTextureData(0, this.texture2D);
             }

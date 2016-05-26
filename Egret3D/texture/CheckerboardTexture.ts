@@ -17,7 +17,7 @@
      * @platform Web,Native
      * @includeExample texture/CheckerboardTexture.ts
      */
-    export class CheckerboardTexture implements ITexture {
+    export class CheckerboardTexture extends ITexture {
 
         /**
         * @language zh_CN
@@ -31,87 +31,17 @@
 
         /**
         * @language zh_CN
-        * 贴图的宽度
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public width: number = 32;
-
-        /**
-        * @language zh_CN
-        * 贴图的高度
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public height: number = 32;
-
-        /**
-        * @language zh_CN
-        * Texture2D 对象
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public texture2D: Texture2D;
-
-        /**
-        * @language zh_CN
-        * Texture3D 对象
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public texture3D: Texture3D;
-
-        private _smooth: boolean = true;
-        private _useMipmap: boolean = true;
-
-        /**
-        * @language zh_CN
         * 构造函数
         * @version Egret 3.0
         * @platform Web,Native
         */
         constructor() {
+            super();
+            this.width = 32;
+            this.height = 32;
             this.buildCheckerboard();
         }
 
-        /**
-        * @language zh_CN
-        * 设置贴图是否使用 mipmap , mipmap为一个贴图的LOD层级贴图。例如（1024*1024的贴图，往下就会自动生成 512*512,256*256,128*128,64*64,32*32,16*16,8*8,4*4,2*2,1*1）
-        * @param img HTMLImageElement（网页图像元素）
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public set useMipmap(flag: boolean) {
-            this._useMipmap = flag;
-        }
-
-        /**
-         * @language zh_CN
-         * 获取贴图是否使用 mipmap , mipmap为一个贴图的LOD层级贴图。例如（1024*1024的贴图，往下就会自动生成 512*512,256*256,128*128,64*64,32*32,16*16,8*8,4*4,2*2,1*1）
-         * @param img HTMLImageElement（网页图像元素）
-         */
-        public get useMipmap(): boolean {
-            return this._useMipmap;
-        }
-        
-        /**
-          * @language zh_CN
-          * 设置贴图是否使用 smooth 
-          * @param img HTMLImageElement（网页图像元素）
-          */
-        public set smooth(flag: boolean) {
-            this._smooth = flag;
-        }
-
-
-        /**
-         * @language zh_CN
-         * 获取贴图是否使用 smooth
-         * @param img HTMLImageElement（网页图像元素）
-         */
-        public get smooth(): boolean {
-            return this._smooth;
-        }
         /**
          * @language zh_CN
          * 上传贴图数据给GPU
@@ -123,8 +53,8 @@
                 this.texture2D.border = 0; 
                 this.texture2D.internalFormat = InternalFormat.PixelArray;
                 this.texture2D.colorFormat = ContextConfig.ColorFormat_RGBA8888;
-                this.texture2D.smooth = this._smooth; 
-                this.texture2D.useMipmap = this._useMipmap; 
+                this.texture2D.smooth = this.smooth; 
+                this.texture2D.useMipmap = this.useMipmap; 
                 this.texture2D.mimapData = new Array<MipmapData>();
                 this.texture2D.mimapData.push(new MipmapData(this._pixelArray, this.width, this.height));
                 this.texture2D.useMipmap = false;
