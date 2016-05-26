@@ -42,6 +42,8 @@
                 context3D.setRenderToTexture(this.renderTexture.texture2D, true, 0);
 
             }
+            var material: MaterialBase;
+            var lastLightGroup: LightGroup;
             for (this._renderIndex = 0; this._renderIndex < this.numEntity; this._renderIndex++) {
                 this._renderItem = collect.renderList[this._renderIndex];
 
@@ -49,14 +51,15 @@
                 for (this._i = 0; this._i < this._renderItem.geometry.subGeometrys.length; this._i++) {
                     var subGeometry = this._renderItem.geometry.subGeometrys[this._i];
                     var matID = subGeometry.matID;
-                    if (this._renderItem.multiMaterial[matID]) {
-                        if (this._renderItem.multiMaterial[matID].passes[this._pass])
-                            this._renderItem.multiMaterial[matID].passes[this._pass].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
-                    }
-                    else {
-                        if (this._renderItem.multiMaterial[0].passes[this._pass])
-                            this._renderItem.multiMaterial[0].passes[this._pass].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
-                    }
+                    material = this._renderItem.multiMaterial[matID] || this._renderItem.multiMaterial[0];
+                    if (material == null)
+                        continue;
+
+                    lastLightGroup = material.lightGroup;
+                    material.lightGroup = this._renderItem.lightGroup ? this._renderItem.lightGroup : material.lightGroup;
+
+                    material.passes[this._pass].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
+                    material.lightGroup = lastLightGroup;
                 }
             }
 
