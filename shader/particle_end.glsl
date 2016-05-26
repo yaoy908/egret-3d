@@ -5,8 +5,7 @@ void main(void) {
 	outPosition.xyz = localPosition.xyz  ;
 	outPosition = billboardMatrix * outPosition;
 	outPosition.xyz += globalPosition.xyz;
-	outPosition = uniform_ModelMatrix * outPosition; 
-	outPosition = uniform_ViewMatrix * outPosition; 
+	outPosition = modeViewMatrix * outPosition; 
 	gl_Position = uniform_ProjectionMatrix * outPosition ;
 }
 	

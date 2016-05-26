@@ -429,6 +429,12 @@
             context.setBlendFactors(ContextConfig.SRC_ALPHA, ContextConfig.ONE_MINUS_SRC_ALPHA);
             context.drawElement(DrawMode.TRIANGLES, 0, 6);
             context.clear(ContextConfig.DEPTH_BUFFER_BIT);
+
+
+            for (var i: number = 0; i < this._attList.length; ++i) {
+                if (this._attList[i].uniformIndex >= 0)
+                    context.clearVaPointer(this._attList[i].uniformIndex);
+            }
         }
     }
 }

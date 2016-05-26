@@ -54,8 +54,11 @@
         /**
         * @private
         */
-        public update(time: number, delay: number, geometry: Geometry, passUsage: PassUsage, context: Context3DProxy) {
-            context.uniform1fv(passUsage["uniform_colorTransform"].uniformIndex, this.colorSegment);
+        public update(time: number, delay: number, geometry: Geometry) {
+        }
+
+        public activePass(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
+            context3DProxy.uniform2fv(usage["uniform_colorTransform"].uniformIndex, this.colorSegment);
         }
 
         public getGpuColor(r: number, g: number, b: number, a: number): number {

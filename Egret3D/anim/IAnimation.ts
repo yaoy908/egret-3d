@@ -60,11 +60,14 @@
         * 更新调度
         * @param time 总时间
         * @param delay 帧间隔时间
+        * @param geometry 几何数据
         * @version Egret 3.0
         * @platform Web,Native
         */
-        update(time: number, delay: number, geometry: Geometry, passUsage: PassUsage, context: Context3DProxy ): void;
+        update(time: number, delay: number, geometry:Geometry): void;
 
+
+        activeState(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D);
         /**
         * @language zh_CN
         * 播放动画

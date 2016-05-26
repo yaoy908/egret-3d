@@ -228,10 +228,10 @@
 
             if (this._materialData.acceptShadow) {
                 // to add accept shadow maping shader+
-                this._vs_shader_methods[ShaderPhaseType.global_vertex] = [];
+                this._vs_shader_methods[ShaderPhaseType.global_vertex] = this._vs_shader_methods[ShaderPhaseType.global_vertex] || [];
                 //this._vs_shader_methods[ShaderPhaseType.global_vertex].push("particle_vs");
 
-                this._fs_shader_methods[ShaderPhaseType.shadow_fragment] = [];
+                this._fs_shader_methods[ShaderPhaseType.shadow_fragment] = this._fs_shader_methods[ShaderPhaseType.shadow_fragment] || [];
                 //this._fs_shader_methods[ShaderPhaseType.shadow_fragment].push("particle_vs");
             }
 
@@ -390,11 +390,10 @@
             }
         }
 
-        private tmp: Matrix4_4 = new Matrix4_4(); 
         /**
         * @private
         */
-        public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation) {
+        public draw(time: number, delay: number, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animation: IAnimation) {
             if (this._materialData.materialDataNeedChange) {
                 //this._materialData.materialDataNeedChange = false;
                 this._materialData.materialSourceData[0] = (this._materialData.diffuseColor >> 16 & 0xff) / 255.0;
@@ -425,11 +424,11 @@
             
             
             if (this._passChange) {
-                this.upload(time, delay, context3DProxy, modeltransform, camera3D, animtion, subGeometry.geometry);
+                this.upload(time, delay, context3DProxy, modeltransform, camera3D, animation, subGeometry.geometry);
             }
 
             context3DProxy.setProgram(this._passUsage.program3D);
-            subGeometry.update(time, delay, this._passUsage, context3DProxy);
+            subGeometry.activeState(time, delay, this._passUsage, context3DProxy);
 
             if (this._materialData.depthTest) {
                 context3DProxy.enable(ContextConfig.DEPTH_TEST);
@@ -465,6 +464,8 @@
             var sampler2D: GLSL.Sampler2D;
             for (var index in this._passUsage.sampler2DList) {
                 sampler2D = this._passUsage.sampler2DList[index];
+                sampler2D.texture = this._materialData[sampler2D.varName];
+
                 if (!sampler2D.texture) {
                     continue;
                 }
@@ -484,6 +485,8 @@
             var sampler3D: GLSL.Sampler3D;
             for (var index in this._passUsage.sampler3DList) {
                 sampler3D = this._passUsage.sampler3DList[index];
+                sampler3D.texture = this._materialData[sampler3D.varName];
+
                 sampler3D.texture.upload(context3DProxy);
                 context3DProxy.setCubeTextureAt(sampler3D.activeTextureIndex, sampler3D.uniformIndex, sampler3D.index, sampler3D.texture.texture3D);
             }
@@ -537,6 +540,15 @@
                 context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ViewProjectionMatrix.uniformIndex, false, camera3D.viewProjectionMatrix.rawData);
             }
 
+            if (animation) {
+                animation.activeState(time, delay, this._passUsage, subGeometry, context3DProxy, modeltransform, camera3D);
+            }
+            if (this.methodList) {
+                for (var i: number = 0; i < this.methodList.length; i++) {
+                    this.methodList[i].activeState(time, delay, this._passUsage, null, context3DProxy, modeltransform, camera3D);
+                }
+            }
+
             if (this._passUsage.uniform_NormalMatrix) {
                 this._helpMatrix.identity();
                 this._helpMatrix.copyFrom(modeltransform);
@@ -559,11 +571,7 @@
                 //context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ShadowMatrix.uniformIndex, false, mat.rawData);
             }
 
-            if (this.methodList) {
-                for (var i: number = 0; i < this.methodList.length; i++) {
-                    this.methodList[i].update(time, delay, this._passUsage, null, context3DProxy, modeltransform, camera3D);
-                }
-            }
+
 
             if (this._passUsage.uniform_eyepos) {
                 context3DProxy.uniform3f(this._passUsage.uniform_eyepos.uniformIndex, camera3D.x, camera3D.y, camera3D.z);
@@ -573,34 +581,14 @@
                 context3DProxy.uniformMatrix4fv(this._passUsage.uniform_cameraMatrix.uniformIndex, false, camera3D.modelMatrix.rawData);
             }
 
-            if (animtion) {
-
-                if (animtion.skeletonAnimationController) {
-                    if (this._passUsage.uniform_time) {
-                        context3DProxy.uniform1f(this._passUsage.uniform_time.uniformIndex, animtion.time);
-                    }
-                    context3DProxy.uniform4fv(this._passUsage.uniform_PoseMatrix.uniformIndex, animtion.skeletonAnimationController.currentSkeletonMatrixData);
-                }
-
-                if (animtion.particleAnimationController) {
-                    if (this._passUsage.uniform_time) {
-                        context3DProxy.uniform1fv(this._passUsage.uniform_time.uniformIndex,
-                            [animtion.time * 0.001,
-                                animtion.particleAnimationController.particleAnimationState.loop,
-                                animtion.particleAnimationController.particleAnimationState.duration,
-                                0.0,
-                                animtion.particleAnimationController.particleAnimationState.totalTime] );
-                    }
-                }
-            }
-
+           
             context3DProxy.drawElement(this._materialData.drawMode, subGeometry.start, subGeometry.count);
 
             if (this._materialData.alphaBlending)
                 Context3DProxy.gl.depthMask(true);
 
 
-            subGeometry.deactivePass(this._passUsage, context3DProxy);
+            subGeometry.deactiveState(this._passUsage, context3DProxy);
         }
 
         public dispose() {
