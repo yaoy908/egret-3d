@@ -24,6 +24,7 @@
         protected _camera: Camera3D;
         protected _scene: Scene3D = new Scene3D();
         protected _render: RenderBase;
+        public _shadowRender: RenderBase;
 
         protected _scissorRect: Rectangle = new Rectangle();
         protected _viewMatrix: Matrix4_4 = new Matrix4_4();
@@ -57,6 +58,8 @@
             this._entityCollect.root = this._scene;
 
             this._render = new MultiRender(PassType.diffusePass);
+            this._shadowRender = new MultiRender(PassType.shadowPass);
+            this._shadowRender.renderToTexture(512, 512);
 
             this._camera = camera || new Camera3D(CameraType.perspective);
 
@@ -65,6 +68,7 @@
             this._viewPort.width = width;
             this._viewPort.height = height;
             this._camera.aspectRatio = this._viewPort.width / this._viewPort.height;
+            this._camera.updateViewport(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
 
             //this._testCamera.lookAt(new Vector3D(0, 500, -500), new Vector3D(0, 0, 0));
             //this._testCamera.name = "testCamera";
@@ -186,6 +190,8 @@
         */
         public set x(value: number) {
             this._viewPort.x = value;
+            this._camera.updateViewport(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+
             if (this._backImg) {
                 this._backImg.x = value;
             }
@@ -212,6 +218,8 @@
         */
         public set y(value: number) {
             this._viewPort.y = value;
+            this._camera.updateViewport(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+
             if (this._backImg) {
                 this._backImg.y = value;
             }
@@ -239,6 +247,8 @@
         public set width(value: number) {
             this._viewPort.width = value;
             this._camera.aspectRatio = this._viewPort.width / this._viewPort.height;
+            this._camera.updateViewport(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+
             if (this._backImg) {
                 this._backImg.width = value;
             }
@@ -265,6 +275,7 @@
         public set height(value: number) {
             this._viewPort.height = value;
             this._camera.aspectRatio = this._viewPort.width / this._viewPort.height;
+            this._camera.updateViewport(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
             if (this._backImg) {
                 this._backImg.height = value;
             }
@@ -392,6 +403,9 @@
 
             //View3D._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
            // View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+
+            this._shadowRender.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera, this._viewPort);
+
 
             if (this._cleanParmerts & Context3DProxy.gl.COLOR_BUFFER_BIT) {
                 View3D._contex3DProxy.clearColor(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w);
