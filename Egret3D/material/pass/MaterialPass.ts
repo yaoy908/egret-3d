@@ -277,6 +277,7 @@
             var shaderList: string[];
             //---vs---shadering
             this.addMethodShaders(this._passUsage.vertexShader, ["base_vs"]);
+            
             //start Phase
             shaderList = this._vs_shader_methods[ShaderPhaseType.start_vertex];
             if (shaderList && shaderList.length > 0)

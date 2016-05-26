@@ -382,7 +382,6 @@
             }
             //------------------
             //this._render.update(time, delay, this._entityCollect, this._camera);
-  
 
             //View3D._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
            // View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);

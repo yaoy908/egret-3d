@@ -284,7 +284,6 @@
         */
         public update(time: number, delay: number, camera: Camera3D) {
             super.update(time, delay, camera);
-
         }
 
         ///**
