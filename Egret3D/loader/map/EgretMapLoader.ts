@@ -242,8 +242,7 @@
                 material.cullMode = 0x405;//materialData.cullMode;
 
                 material.blendMode = materialData.blendMode;
-
-               
+                material.cutAlpha = materialData.cutAlpha;
 
                 material.normalTexture = this._sourceLib.getImage(materialData.normalTextureName);
                 material.diffuseTexture = this._sourceLib.getImage(materialData.diffuseTextureName);

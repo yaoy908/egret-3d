@@ -194,7 +194,7 @@
          * @language zh_CN
          * @private
          */
-        public update(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+        public activeState(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
             context3DProxy.uniform1fv(usage["uniform_globalFog"], this.uniform_globalFog);
         }
 

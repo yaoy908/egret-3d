@@ -32,12 +32,14 @@
             loadtex1["mat"] = planemat;
            // this.view1.addChild3D(new Mesh(new PlaneGeometry(1000, 1000), planemat));
 
-            this.cube = new Mesh( new CubeGeometry(10,10,10) , null );
+            this.cube = new Mesh( new CubeGeometry(10,10,10), null );
             //this.view1.addChild3D(this.cube);
 
             var mat: TextureMaterial = new TextureMaterial();
             mat.ambientColor = 0xffffff;
-            this.particle = new ParticleEmitter(null, mat, 2000 );
+
+            var data: ParticleData = new ParticleData();
+            this.particle = new ParticleEmitter(data, null, mat);
 
             var acc: ParticleAccelerationSpeedNode = new ParticleAccelerationSpeedNode();
             acc.speedShape = new Vec3ConstRandomValueShape();
@@ -60,11 +62,6 @@
             particleRotationNode.rotation
             this.particle.addAnimNode(particleRotationNode);
 
-
-            var particleScaleByLifeNode: ParticleScaleByLifeNode = new ParticleScaleByLifeNode();
-            (<ConstValueShape>particleScaleByLifeNode.start).value = 0.5;
-            (<ConstValueShape>particleScaleByLifeNode.end).value = 2.5;
-            this.particle.addAnimNode(particleScaleByLifeNode);
 
             this.particle.play();
             this.view1.addChild3D(this.particle);

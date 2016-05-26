@@ -54,8 +54,14 @@
         /**
         * @private
         */
-        public update(time: number, delay: number, geometry: Geometry, passUsage: PassUsage, context: Context3DProxy) {
-            context.uniform2fv(passUsage["uniform_size"].uniformIndex, this.colorSegment);
+        public update(time: number, delay: number, geometry: Geometry) {
         }
+
+
+        public activePass(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
+            context3DProxy.uniform2fv(usage["uniform_size"].uniformIndex, this.colorSegment);
+        }
+
+
     }
 }  

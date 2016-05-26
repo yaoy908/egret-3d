@@ -2,7 +2,7 @@
                             
     /**
     * @private
-    * @class egret3d.SphereSky
+    * @class egret3d.MultiRender
     * @classdesc
     * default render
     * 把所有需要渲染的对象，依次进行渲染
@@ -42,30 +42,24 @@
                 context3D.setRenderToTexture(this.renderTexture.texture2D, true, 0);
 
             }
+            var material: MaterialBase;
+            var lastLightGroup: LightGroup;
             for (this._renderIndex = 0; this._renderIndex < this.numEntity; this._renderIndex++) {
                 this._renderItem = collect.renderList[this._renderIndex];
-                            
-                this._renderItem.geometry.update(time, delay, context3D, camera);
 
-                if (this._renderItem.animation) {
-                    this._renderItem.animation.update(time, delay, this._renderItem.geometry, null, context3D);
-                }
-
-                if (this._renderItem.geometry.subGeometrys.length <= 0) {
-                    this._renderItem.geometry.buildDefaultSubGeometry();
-                }
-
+                this._renderItem.geometry.activeState(time, delay, View3D._contex3DProxy, camera);
                 for (this._i = 0; this._i < this._renderItem.geometry.subGeometrys.length; this._i++) {
                     var subGeometry = this._renderItem.geometry.subGeometrys[this._i];
                     var matID = subGeometry.matID;
-                    if (this._renderItem.multiMaterial[matID]) {
-                        if (this._renderItem.multiMaterial[matID].passes[this._pass])
-                            this._renderItem.multiMaterial[matID].passes[this._pass].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
-                    }
-                    else {
-                        if (this._renderItem.multiMaterial[matID].passes[this._pass])
-                            this._renderItem.multiMaterial[0][this._pass].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
-                    }
+                    material = this._renderItem.multiMaterial[matID] || this._renderItem.multiMaterial[0];
+                    if (material == null)
+                        continue;
+
+                    lastLightGroup = material.lightGroup;
+                    material.lightGroup = this._renderItem.lightGroup ? this._renderItem.lightGroup : material.lightGroup;
+
+                    material.passes[this._pass].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
+                    material.lightGroup = lastLightGroup;
                 }
             }
 

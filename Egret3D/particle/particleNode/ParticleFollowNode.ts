@@ -23,7 +23,7 @@
 
         private count: number = 0;
         private particleAnimationState: ParticleAnimationState; 
-
+        private lifeCircles: Array<number>;
         constructor() {
             super();
             this.name = "ParticleFollowNode";
@@ -49,11 +49,12 @@
         public build(geometry: Geometry, count: number) {
             this.count = count;
             this.particleAnimationState = <ParticleAnimationState>this.state;
+            
         }
 
-        private delay: number = 0;
+        private bornTime: number = 0;
         private life: number = 0;
-        private space: number = 0;
+        private unitTotalLife: number = 0;
         private id: number = 0; 
         private duration: number = 0; 
 
@@ -62,52 +63,78 @@
         private timeIndex: number = 0;
         private currentTime: number = 0;
 
-        public update(time: number, delay: number, geometry: Geometry, passUsage: PassUsage,context: Context3DProxy) {
+        private geometryDirty: boolean;
 
+        public update(time: number, delay: number, geometry: Geometry) {
+
+            this.geometryDirty = false;
             if (!this.particleAnimationState.followTarget) {
                 return;
             }
+            //time += delay;
+
+            //先重置成-1，然后每帧检测每个粒子的上一帧的所属出身次数和下一帧的出身次数，判定是否要刷新他的初始位置
+            if (this.lifeCircles == null) {
+                this.lifeCircles = [];
+                for (var i: number = 0; i < this.count; i++) {
+                    this.lifeCircles[i] = -1;
+                }
+            }
+
+            var delayArray: Array<number> = this.particleAnimationState.delayArray;
+            var lifeArray: Array<number> = this.particleAnimationState.lifeArray;
+            var rateArray: Array<number> = this.particleAnimationState.rateArray;
+
+
             var index: number = 0;
             var vertices: number = geometry.vertexCount / this.count;
-
+            var particleIndex: number = 0;
+            var changed: boolean = false;
             for (var i: number = 0; i < this.count; ++i) {
-                for (var j: number = 0; j < vertices; ++j) {
-                    index = i * vertices + j;
-                    this.timeIndex = index * geometry.vertexAttLength + 5;
-                    index = index * geometry.vertexAttLength + this.attribute_followPosition.offsetIndex;
 
-                    this.delay = geometry.verticesData[this.timeIndex + 0];
-                    this.life = geometry.verticesData[this.timeIndex + 1] ;
-                    this.space = geometry.verticesData[this.timeIndex + 2];
-                    this.id = geometry.verticesData[this.timeIndex + 3];
+                particleIndex = i * vertices;
+                this.timeIndex = particleIndex * geometry.vertexAttLength + 5;
 
-                    this.tempTime = time * 0.001;
+                this.bornTime = geometry.verticesData[this.timeIndex + 0];          //出生时间
+                this.life = geometry.verticesData[this.timeIndex + 1];              //单次生命周期时间
+                this.unitTotalLife = geometry.verticesData[this.timeIndex + 2];     //从0开始计数到循环到最后一次结束的总时间
+                //this.id = geometry.verticesData[this.timeIndex + 3];                //下标(i)
 
-                    var numberSpace = this.id * this.space ;
-                    this.tempTime = Math.max(this.tempTime - numberSpace - this.delay , 0.0);
+                var curCircleIndex: number = -1;
+                var particleTime: number = time * 0.001;
+                if (particleTime >= this.bornTime) {
+                    //粒子超时了，并且不需要继续循环
+                    if (particleTime > this.unitTotalLife && !this.particleAnimationState.loop)
+                        continue;
 
-                    if (this.particleAnimationState.loop == 0.0) {
-                        this.duration = this.particleAnimationState.duration;
-                        if (numberSpace > this.duration )
-                        {
+                    curCircleIndex = Math.floor((particleTime - this.bornTime) / lifeArray[i]);
+                    if (curCircleIndex != this.lifeCircles[i]) {
+                        this.lifeCircles[i] = curCircleIndex;
+                        changed = true;
+                        for (var j: number = 0; j < vertices; ++j) {
+                            index = particleIndex + j;
+                            this.timeIndex = index * geometry.vertexAttLength + 5;
+                            index = index * geometry.vertexAttLength + this.attribute_followPosition.offsetIndex;
                             geometry.verticesData[index + 0] = this.particleAnimationState.followTarget.x;
                             geometry.verticesData[index + 1] = this.particleAnimationState.followTarget.y;
                             geometry.verticesData[index + 2] = this.particleAnimationState.followTarget.z;
                         }
-                    } else {
-                        this.duration = this.particleAnimationState.totalTime + this.space;//- this.particleAnimationState.delayLife;
-                        this.tempTime = this.tempTime % this.duration;
-                        //this.tempTime = Math.max(this.tempTime - numberSpace, 0.0);
-                        if (this.tempTime - delay * 0.001 >= this.life || this.tempTime - delay * 0.001 <= 0.0 ) {
-                            geometry.verticesData[index + 0] = this.particleAnimationState.followTarget.x;
-                            geometry.verticesData[index + 1] = this.particleAnimationState.followTarget.y;
-                            geometry.verticesData[index + 2] = this.particleAnimationState.followTarget.z;
-                        } 
                     }
                 }
             }
-            if (true) {
-                geometry.upload(context);
+
+            this.geometryDirty = changed;
+        }
+
+
+        public activePass(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
+            if (this.geometryDirty) {
+
+                geometry.geometry.upload(context3DProxy);
+                //geometry.upload(usage, context3DProxy);
+
+
+                this.geometryDirty = false;
             }
         }
     }

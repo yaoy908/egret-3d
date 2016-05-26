@@ -1,11 +1,11 @@
 ﻿
 function jsOnload() {
-    var sample: egret3d.Class_LightAndNormal = new egret3d.Class_LightAndNormal();
+    var sample: egret3d.Class_ParticleSize = new egret3d.Class_ParticleSize();
 }
 
 function onTsconfig() {
     egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_View3D.js");
-    egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_LightAndNormal.js");
+    egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_ParticleSize.js");
 }
 
 window.onload = () => {

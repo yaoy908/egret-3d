@@ -465,7 +465,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public update(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
+        public activeState(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
             if (this._bufferDiry) {
                 this._bufferDiry = false; 
                 this.upload(context3DProxy);

@@ -233,8 +233,14 @@
         public update(time: number, delay: number, camera: Camera3D) {
             if (this.isDisable)
                 return;
-
             super.update(time, delay, camera);
+
+            if (this.animation) {
+                this.animation.update(time, delay, this.geometry);
+            }
+            if (this.geometry.subGeometrys.length <= 0) {
+                this.geometry.buildDefaultSubGeometry();
+            }
         }
 
         /**

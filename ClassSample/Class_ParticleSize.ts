@@ -37,7 +37,8 @@
 
             var mat: TextureMaterial = new TextureMaterial();
             mat.ambientColor = 0xffffff;
-            this.particle = new ParticleEmitter(null, mat, 500 );
+            var data: ParticleData = new ParticleData();
+            this.particle = new ParticleEmitter(data, null, mat);
 
             //var uniformSpeed: ParticleUniformSpeedNode = new ParticleUniformSpeedNode();
             //uniformSpeed.speedShape = new Vec3ConstValueShape();
