@@ -408,6 +408,8 @@
                     data.cullMode = Number(item.textContent);
                 } else if (nodeName == "blendMode") {
                     data.blendMode = BlendMode[item.textContent];
+                } else if (nodeName == "cutAlpha") {
+                    data.cutAlpha = Number(item.textContent);
                 } else if (nodeName == "methods") {
                     data.methods = EgretMaterialMethodParser.parse(item);
                 }

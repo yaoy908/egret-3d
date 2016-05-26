@@ -168,8 +168,14 @@ module egret3d {
          * @platform Web,Native
          */
         public blendMode: number;
-
-
+        
+        /**
+         * @language zh_CN
+         * alpha裁切值
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public cutAlpha: number = 0.7;
         /**
          * @language zh_CN
          * 材质球拥有的特效
