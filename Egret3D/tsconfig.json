@@ -29,7 +29,6 @@
         "geom/BoundBox.ts",
         "geom/ColorTransform.ts",
         "events/PickResult.ts",
-        "events/IDispatchEvent.ts",
         "events/Event3D.ts",
         "events/MouseEvent3D.ts",
         "events/TouchEvent3D.ts",
