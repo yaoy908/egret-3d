@@ -523,10 +523,6 @@
                 context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.projectMatrix.rawData);
             }
 
-            if (this._passUsage.uniform_ShadowMatrix) {
-               // context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.projectMatrix.rawData);
-            }
-
             if (this._passUsage.uniform_ModelViewMatrix) {
 
                 this._helpMatrix.identity();

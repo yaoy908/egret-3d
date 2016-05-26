@@ -34,7 +34,7 @@
         * @param collect 渲染对象收集器
         * @param camera 渲染时的相机
         */
-        public draw(time: number, delay: number, context3D: Context3DProxy, collect: CollectBase, camera: Camera3D, backViewPort:Rectangle = null ) {
+        public draw(time: number, delay: number, context3D: Context3DProxy, collect: CollectBase, camera: Camera3D, backViewPort: Rectangle = null, shadow: boolean = false) {
             this.numEntity = collect.renderList.length;
 
             if (this.renderTexture) {
@@ -46,6 +46,9 @@
             var lastLightGroup: LightGroup;
             for (this._renderIndex = 0; this._renderIndex < this.numEntity; this._renderIndex++) {
                 this._renderItem = collect.renderList[this._renderIndex];
+                if (shadow) {
+                    ShadowCast.instance.calculateCamera(<Mesh>(this._renderItem), camera);
+                }
 
                 this._renderItem.geometry.activeState(time, delay, View3D._contex3DProxy, camera);
                 for (this._i = 0; this._i < this._renderItem.geometry.subGeometrys.length; this._i++) {
@@ -66,9 +69,10 @@
 
             if (this.renderTexture) {
                 context3D.setRenderToBackBuffer();
-
-                context3D.viewPort(backViewPort.x, backViewPort.y, backViewPort.width, backViewPort.height);
-                context3D.setScissorRectangle(backViewPort.x, backViewPort.y, backViewPort.width, backViewPort.height);
+                if (backViewPort) {
+                    context3D.viewPort(backViewPort.x, backViewPort.y, backViewPort.width, backViewPort.height);
+                    context3D.setScissorRectangle(backViewPort.x, backViewPort.y, backViewPort.width, backViewPort.height);
+                }
             }
         }
     }

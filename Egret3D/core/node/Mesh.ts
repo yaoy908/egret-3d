@@ -18,79 +18,10 @@
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class Mesh extends Object3D implements IRender,IQuadNode{
-
-        /**
-        * @language zh_CN
-        * 网格信息。</p>
-         * geometry 为渲染对象的网格信息 ，渲染对象需要 vertexBuffer  和 indexBuffer 信息 及顶点着色器shade。</p>
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public geometry: Geometry;
+    export class Mesh extends IRender implements IQuadNode{
         protected _aabbBox: QuadAABB;
-                        
-        /**
-        * @language zh_CN
-        * 材质信息。</p>
-        * 赋予对象节点可供渲染的材质球属性，让对象加入可渲染实体列表，及渲染对象与对象之间的混合，排序。</p>
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public material: MaterialBase ;
 
-        /**
-        * @private
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public multiMaterial: { [matID: number]: MaterialBase } = {};
 
-        /**
-        * @private
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        protected _materialCount: number = 0;
-
-        /**
-        * @language zh_CN
-        * 动作对象，控制骨骼动画。</p>
-        * 可拓展的动画功能属性，动画功能的驱动类总接口。</p>
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public animation: IAnimation = null;
-
-        /**
-        * @language zh_CN
-        * 鼠标拣选类型。</p>
-        * 设置鼠标的拣选类型，可通过 PickType来进行设置。</p>
-        * 快速拣选默认使用 正方形包围盒子。</p>
-        * 高精度型需要 PositionPick ， uv pick 等。</p>
-        * @see egret3d.PickType
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public pickType: PickType = PickType.BoundPick;
-
-        /**
-        * @language zh_CN
-        * 鼠标检测数据
-        * @private
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public pickResult: PickResult = new PickResult();
-
-        /**
-        * @language zh_CN
-        * 材质球收到光照影响的灯光组，如果需要动态添加删除灯光的，一定要注意时实性
-        * @private
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public lightGroup: LightGroup;
 
         /**
         * @language zh_CN
@@ -120,7 +51,6 @@
             
             this.bound = this.buildBoundBox();
         }
-
 
      
 
