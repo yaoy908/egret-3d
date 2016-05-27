@@ -7,9 +7,15 @@
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export interface ITexture {
-
-        useMipmap: boolean; 
+    export class ITexture {
+       
+        /**
+        * @language zh_CN
+        * 贴图是否使用 mipmap , mipmap为一个贴图的LOD层级贴图。例如（1024*1024的贴图，往下就会自动生成 512* 512,256*256,128*128,64*64,32*32,16*16,8*8,4*4,2*2,1*1）
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public useMipmap: boolean = true;
 
         /**
         * @language zh_CN
@@ -17,7 +23,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        smooth: boolean; 
+        public smooth: boolean = true; 
 
         /**
         * @language zh_CN
@@ -25,7 +31,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        width: number;
+        public width: number;
 
         /**
         * @language zh_CN
@@ -33,7 +39,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        height: number;
+        public height: number;
 
         /**
         * @language zh_CN
@@ -41,7 +47,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        texture2D: Texture2D;
+        public texture2D: Texture2D;
 
         /**
         * @language zh_CN
@@ -49,22 +55,28 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        texture3D: Texture3D;
+        public texture3D: Texture3D;
 
         /**
-        * @private
         * @language zh_CN
+        * 上传贴图数据给GPU
+        * @param context3D
         * @version Egret 3.0
         * @platform Web,Native
         */
-        upload(context3D: Context3DProxy)
+        public upload(context3D: Context3DProxy) {
+        }
 
         /**
-        * @private
         * @language zh_CN
+        * 强制上传贴图数据给GPU，强制要求贴图更新。
+        * 在video 贴图类型需要立即改变显卡中的贴图内存
+        * @param context3D
         * @version Egret 3.0
         * @platform Web,Native
         */
-        uploadForcing(context3D: Context3DProxy)
+        public uploadForcing(context3D: Context3DProxy) {
+
+        }
     }
 }

@@ -59,6 +59,7 @@
     * 相机数据处理，生成3D摄相机。</p>
     * 渲染场景从摄像机视点到缓冲区。</p>
     * 相机分为透视摄像机、正交摄像机、VR摄像机。</p>
+    * 默认相机朝向是(0, 0, 1) 头朝向是(0, 1, 0)
     *
     * @see egret3d.Matrix4_4
     * @see egret3d.Object3D
@@ -153,7 +154,7 @@
             switch (cameraType) {
                 case CameraType.orthogonal:
                       this.projectMatrix.ortho(this._viewPort.width, this._viewPort.height, this._near, this._far);
-                    //this.updataOrth();
+                        //this.updataOrth();
                     break;
                 case CameraType.perspective:
                     this.projectMatrix.perspective(this._fovY, this._aspectRatio, this._near, this._far);

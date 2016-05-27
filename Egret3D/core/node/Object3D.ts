@@ -76,14 +76,7 @@
         protected _vec: Vector3D = new Vector3D();
         protected _active: boolean = false;
         protected _isRoot: boolean = true;
-        /**
-        * @language zh_CN
-        * 对象模型包围盒。</p>
-        * 每个场景物件都需要有的 包围盒子，可以自定义包围盒形状大小，也可以根据模型本身生成。</p>
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public bound: Bound;
+
 
         /**
         * @language zh_CN
@@ -100,31 +93,6 @@
         * @platform Web,Native
         */
         public renderLayer: number = 0 ;
-
-        /**
-        * @language zh_CN
-        * 是否开启检测LOD盒子，每个物体的碰撞盒子中有一个小的盒子，当开启这个盒子后，
-        * 鼠标检测就是用的这个小盒子来进行检测
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public mouseChilder: boolean = false;
-
-        /**
-        * @language zh_CN
-        * @private
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public enableCulling: boolean = true ;
-
-        /**
-        * @language zh_CN
-        * 是否可见
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public visible: boolean = true;
 
         /**
         * @language zh_CN
@@ -158,15 +126,6 @@
         * @platform Web,Native
         */
         public tag: Tag; 
-
-        /**
-        * @language zh_CN
-        * 是否开启拣选检测。</p>
-        * 设定这个物件是否具有 鼠标交互能力的开关。</p>
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public enablePick: boolean = false;
 
         /**
         * @language zh_CN
@@ -213,18 +172,11 @@
 
         /**
         * @language zh_CN
-        * 对象模型当前使用包围盒。
-        * @see mouseChilder 根据这个值取不同的包围盒为true取大包围盒 false取子包围盒
-        * 
+        * 是否可见
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public get currentBound(): Bound {
-            if (this.mouseChilder) {
-                return this.bound.childBound;
-            }
-            return this.bound;
-        }
+        public visible: boolean = true;
 
         /**
         * @language zh_CN

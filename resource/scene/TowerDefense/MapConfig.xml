@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <version>1</version>
+  <cameraAnims/>
+  <mesh name="Tower/02.esm">
+    <pos x="0" y="0" z="0" />
+    <rot rx="0" ry="0" rz="0" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="0" />
+  </mesh>
+  <mesh name="Tower/01.esm">
+    <pos x="0" y="0" z="0" />
+    <rot rx="0" ry="0" rz="0" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="1" />
+  </mesh>
+  <mesh name="Tower/Tower_01a.esm">
+    <pos x="0" y="0" z="621.4" />
+    <rot rx="0" ry="0" rz="0" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="2" />
+  </mesh>
+  <mesh name="Tower/Tower_01b.esm">
+    <pos x="228.79" y="0" z="474.59" />
+    <rot rx="0" ry="0" rz="0" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="3" />
+  </mesh>
+  <mesh name="Tower/Tower_02a.esm">
+    <pos x="0" y="0" z="-621.4" />
+    <rot rx="0" ry="0" rz="0" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="4" />
+  </mesh>
+  <mesh name="Tower/Tower_02b.esm">
+    <pos x="228.79" y="0" z="-474.59" />
+    <rot rx="0" ry="0" rz="0" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="5" />
+  </mesh>
+  <mesh name="Tower/water.esm">
+    <pos x="0" y="0" z="0" />
+    <rot rx="0" ry="0" rz="0" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="6" />
+  </mesh>
+  <mat id="0">
+    <diffuseTextureName>Tower/Tower_02.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0xffffff</ambientColor>
+    <specularColor>0xffffff</specularColor>
+    <alpha>1</alpha>
+    <specularLevel>0</specularLevel>
+    <gloss>1</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+    <methods>
+      <lightmapMethod usePower="true" texture="Tower/222.png" />
+    </methods>
+  </mat>
+  <mat id="1">
+    <diffuseTextureName>Tower/Tower_01.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0xffffff</ambientColor>
+    <specularColor>0xffffff</specularColor>
+    <alpha>1</alpha>
+    <specularLevel>0</specularLevel>
+    <gloss>1</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+    <methods>
+      <lightmapMethod usePower="true" texture="Tower/111.png" />
+    </methods>
+  </mat>
+  <mat id="2">
+    <diffuseTextureName>Tower/Tower_01.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0xffffff</ambientColor>
+    <specularColor>0xffffff</specularColor>
+    <alpha>1</alpha>
+    <specularLevel>0</specularLevel>
+    <gloss>1</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+    <methods>
+      <lightmapMethod usePower="true" texture="Tower/111.png" />
+    </methods>
+  </mat>
+  <mat id="3">
+    <diffuseTextureName>Tower/Tower_01.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0xffffff</ambientColor>
+    <specularColor>0xffffff</specularColor>
+    <alpha>1</alpha>
+    <specularLevel>0</specularLevel>
+    <gloss>1</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+    <methods>
+      <lightmapMethod usePower="true" texture="Tower/111.png" />
+    </methods>
+  </mat>
+  <mat id="4">
+    <diffuseTextureName>Tower/Tower_01.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0xffffff</ambientColor>
+    <specularColor>0xffffff</specularColor>
+    <alpha>1</alpha>
+    <specularLevel>0</specularLevel>
+    <gloss>1</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+    <methods>
+      <lightmapMethod usePower="true" texture="Tower/111.png" />
+    </methods>
+  </mat>
+  <mat id="5">
+    <diffuseTextureName>Tower/Tower_01.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0xffffff</ambientColor>
+    <specularColor>0xffffff</specularColor>
+    <alpha>1</alpha>
+    <specularLevel>0</specularLevel>
+    <gloss>1</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+    <methods>
+      <lightmapMethod usePower="true" texture="Tower/111.png" />
+    </methods>
+  </mat>
+  <mat id="6">
+    <diffuseTextureName>Tower/water.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0xffffff</ambientColor>
+    <specularColor>0xffffff</specularColor>
+    <alpha>1</alpha>
+    <specularLevel>0</specularLevel>
+    <gloss>1</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+  </mat>
+  <env directLight="close" pointLight="close" />
+</scene>

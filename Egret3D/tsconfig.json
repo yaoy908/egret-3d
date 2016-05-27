@@ -29,7 +29,6 @@
         "geom/BoundBox.ts",
         "geom/ColorTransform.ts",
         "events/PickResult.ts",
-        "events/IDispatchEvent.ts",
         "events/Event3D.ts",
         "events/MouseEvent3D.ts",
         "events/TouchEvent3D.ts",
@@ -61,6 +60,8 @@
         "shader/ShaderContent.ts",
         "shader/ShaderUtil.ts",
 
+        "shadow/ShadowCast.ts",
+        
         "anim/AnimationNode.ts",
         "anim/AnimationCurve.ts",
         "anim/IAnimationState.ts",
@@ -93,8 +94,8 @@
         "core/context/Shader.ts",
         "core/context/Texture3D.ts",
 
-        "render/IRender.ts",
         "core/node/Object3D.ts",
+        "render/IRender.ts",
         "core/node/Entity.ts",
         "core/node/Mesh.ts",
         "core/node/BillBoard.ts",
