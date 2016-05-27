@@ -126,14 +126,12 @@
             this.geometryDirty = changed;
         }
 
-
+        /**
+        * @private
+        */
         public activePass(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
             if (this.geometryDirty) {
-
                 geometry.geometry.upload(context3DProxy);
-                //geometry.upload(usage, context3DProxy);
-
-
                 this.geometryDirty = false;
             }
         }

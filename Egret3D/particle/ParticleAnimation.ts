@@ -111,10 +111,23 @@
             if (this.particleAnimationState)
                 this.particleAnimationState.update(this.time, this.delay, geometry);
         }
-
+         /**
+        * @private
+        * @language zh_CN
+        * 将骨骼信息更新给GPU
+        * @param time 当前时间
+        * @param delay 当前帧时间
+        * @param usage PassUsage
+        * @param geometry 子几何信息
+        * @param context3DProxy 上下文信息
+        * @param modeltransform 模型矩阵
+        * @param camera3D 相机
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public activeState(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
             if (this.particleAnimationState) {
-                this.particleAnimationState.activePass(time, this.time, delay, this.delay, usage, geometry, context3DProxy);
+                this.particleAnimationState.activeState(time, this.time, delay, this.delay, usage, geometry, context3DProxy);
                 if (usage.uniform_time) {
                     context3DProxy.uniform1fv(usage.uniform_time.uniformIndex,
                         [
