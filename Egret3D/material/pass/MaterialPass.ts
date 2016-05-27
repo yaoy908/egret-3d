@@ -277,6 +277,7 @@
             var shaderList: string[];
             //---vs---shadering
             this.addMethodShaders(this._passUsage.vertexShader, ["base_vs"]);
+            
             //start Phase
             shaderList = this._vs_shader_methods[ShaderPhaseType.start_vertex];
             if (shaderList && shaderList.length > 0)
@@ -520,10 +521,6 @@
 
             if (this._passUsage.uniform_ProjectionMatrix) {
                 context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.projectMatrix.rawData);
-            }
-
-            if (this._passUsage.uniform_ShadowMatrix) {
-               // context3DProxy.uniformMatrix4fv(this._passUsage.uniform_ProjectionMatrix.uniformIndex, false, camera3D.projectMatrix.rawData);
             }
 
             if (this._passUsage.uniform_ModelViewMatrix) {

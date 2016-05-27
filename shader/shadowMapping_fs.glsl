@@ -1,6 +1,6 @@
 uniform sampler2D shadowMapTexture;
 
-varying vec2 varying_ShadowCoord;
+varying vec4 varying_ShadowCoord;
 
 float unpackDepth(vec4 rgbaDepth){
     vec4 bitShift = vec4( 1.0 , 1.0/256.0 , 1.0/(256.0*256.0) , 1.0/(256.0*256.0*256.0) );

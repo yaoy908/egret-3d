@@ -24,7 +24,6 @@
         protected _camera: Camera3D;
         protected _scene: Scene3D = new Scene3D();
         protected _render: RenderBase;
-        public _shadowRender: RenderBase;
 
         protected _scissorRect: Rectangle = new Rectangle();
         protected _viewMatrix: Matrix4_4 = new Matrix4_4();
@@ -40,7 +39,6 @@
 
         protected _index: number; 
         protected _numberEntity: number; 
-        //protected _testCamera: Camera3D = new Camera3D();
 
         /**
         * @language zh_CN
@@ -58,8 +56,6 @@
             this._entityCollect.root = this._scene;
 
             this._render = new MultiRender(PassType.diffusePass);
-            this._shadowRender = new MultiRender(PassType.shadowPass);
-            this._shadowRender.renderToTexture(512, 512);
 
             this._camera = camera || new Camera3D(CameraType.perspective);
 
@@ -69,10 +65,6 @@
             this._viewPort.height = height;
             this._camera.aspectRatio = this._viewPort.width / this._viewPort.height;
             this._camera.updateViewport(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
-
-            //this._testCamera.lookAt(new Vector3D(0, 500, -500), new Vector3D(0, 0, 0));
-            //this._testCamera.name = "testCamera";
-
         }
 
         public get render(): RenderBase {
@@ -386,9 +378,9 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-
+        public a: number = 0;
         public update(time: number, delay: number) {
-            this._camera.viewPort = this._viewPort ;
+            this._camera.viewPort = this._viewPort;
             this._entityCollect.update(this._camera);
 
             //------------------
@@ -399,13 +391,18 @@
             }
             //------------------
             //this._render.update(time, delay, this._entityCollect, this._camera);
-  
 
             //View3D._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
-           // View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+            // View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
 
-            this._shadowRender.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera, this._viewPort);
+            if (ShadowCast.instance.shadowRender[0]) {
 
+                MathUtil.CALCULATION_QUATERNION.fromEulerAngles(0, this.a++, 0);
+                var v = new Vector3D(0, -1, -1);
+                MathUtil.CALCULATION_QUATERNION.transformVector(v, ShadowCast.instance.dir);
+
+                ShadowCast.instance.shadowRender[0].draw(time, delay, View3D._contex3DProxy, this._entityCollect, ShadowCast.instance.shadowCamera, this._viewPort, true);
+            }
 
             if (this._cleanParmerts & Context3DProxy.gl.COLOR_BUFFER_BIT) {
                 View3D._contex3DProxy.clearColor(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w);

@@ -37,21 +37,30 @@
 
             if (this._materialData.shaderPhaseTypes[PassType.shadowPass].indexOf(ShaderPhaseType.diffuse_fragment) != -1) {
                 this._fs_shader_methods[ShaderPhaseType.diffuse_fragment] = [];
-                this._fs_shader_methods[ShaderPhaseType.diffuse_fragment].push("diffuse_fragment");
+                this._fs_shader_methods[ShaderPhaseType.diffuse_fragment].push("matCapPass_fs");
             }
+
+            if (this._materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.normal_fragment) != -1) {
+                this._fs_shader_methods[ShaderPhaseType.normal_fragment] = [];
+                this._fs_shader_methods[ShaderPhaseType.normal_fragment].push("normalMap_fragment");
+            }
+            //------pre----
+            //this._fs_shader_methods[ShaderPhaseType.diffuse_fragment].push("matCapPass_fs");
 
             //this.initOthreMethods();
             //pre Phase end ---------------------------------------------------
 
             var shaderList: string[];
             //---vs---shadering
-            this.addMethodShaders(this._passUsage.vertexShader, ["base_vs"]);
+            this.addMethodShaders(this._passUsage.vertexShader, ["base_vs", "tangent_vs"]);
 
             //start Phase
             shaderList = this._vs_shader_methods[ShaderPhaseType.start_vertex];
-
             if (shaderList && shaderList.length > 0)
                 this.addMethodShaders(this._passUsage.vertexShader, shaderList);
+            else
+                this.addMethodShaders(this._passUsage.vertexShader, ["diffuse_vertex"]); 
+
             this.addMethodShaders(this._passUsage.vertexShader, ["end_vs"]);
 
             //---vs---shadering-------------------------------------------------
@@ -59,8 +68,20 @@
             //---fs---shadering
             this.addMethodShaders(this._passUsage.fragmentShader, ["base_fs"]);
 
+            //materialsource
+            shaderList = this._fs_shader_methods[ShaderPhaseType.materialsource_fragment];
+            if (shaderList && shaderList.length > 0)
+                this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
+            else
+                this.addMethodShaders(this._passUsage.fragmentShader, ["materialSource_fs"]);
+
             //diffuse
             shaderList = this._fs_shader_methods[ShaderPhaseType.diffuse_fragment];
+            if (shaderList && shaderList.length > 0)
+                this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
+
+            //normal
+            shaderList = this._fs_shader_methods[ShaderPhaseType.normal_fragment];
             if (shaderList && shaderList.length > 0)
                 this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
 

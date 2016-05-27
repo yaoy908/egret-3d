@@ -1,14 +1,17 @@
 ﻿module egret3d {
-    export class RenderTexture implements ITexture{
-        public useMipmap: boolean = false ;
-        public smooth: boolean = true;
-        public width: number;
-        public height: number;
-        public texture2D: Texture2D;
-        public texture3D: Texture3D;
+
+    /**
+    * @private
+    * @language zh_CN
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export class RenderTexture extends ITexture{
         public frameBufferFormat: FrameBufferFormat = FrameBufferFormat.UNSIGNED_BYTE_RGB;
 
         constructor(width: number = 512, height: number = 512, frameBufferFormat: FrameBufferFormat = FrameBufferFormat.UNSIGNED_BYTE_RGB) {
+            super();
+            this.useMipmap = false;
             this.width = width;
             this.height = height;
             this.frameBufferFormat = frameBufferFormat;
