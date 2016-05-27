@@ -607,6 +607,34 @@
         }
 
         /**
+        * @language zh_CN
+        * 设置 阴影颜色
+        * @param color 0xffffff
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set shadowColor(color: number) {
+            this.materialData.shadowColor[0] = color >> 16 & 0xff / 255.0;
+            this.materialData.shadowColor[1] = color >> 8 & 0xff / 255.0;
+            this.materialData.shadowColor[2] = color & 0xff / 255.0;
+        }
+
+        /**
+        * @language zh_CN
+        * 返回材质 阴影颜色
+        * @returns number 阴影颜色
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get shadowColor(): number {
+            var color: number = 0;
+            color |= this.materialData.shadowColor[0] * 255.0 << 16;
+            color |= this.materialData.shadowColor[1] * 255.0 << 8;
+            color |= this.materialData.shadowColor[2] * 255.0;
+            return color;
+        }
+
+        /**
          * @language zh_CN
          * 设置材质 smooth 值。
          * 材质纹理的采样方式，是否抗锯齿，是否精细显示。

@@ -28,6 +28,7 @@
         /**
         * @language zh_CN
         * 传入数据流对象，解析出相应的数据对象.
+        * 解析dds tga jpg png esm eam eca
         * @param buffer 需要解析的数据流
         * @returns 是否解析成功
         */

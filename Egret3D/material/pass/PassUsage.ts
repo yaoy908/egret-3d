@@ -279,6 +279,8 @@
          */
         public uniform_skyLightSource: GLSL.Uniform;
 
+        public uniform_ShadowColor: GLSL.Uniform;
+
         //----------------------------------------------
         //----------------------------------------------
         /**
