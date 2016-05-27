@@ -41,6 +41,10 @@
                     //this.addShaderPhase(animation.particleAnimationController.particleAnimationState.fragment_shaders, this._fs_shader_methods);
                 }
             }
+            else {
+                this._vs_shader_methods[ShaderPhaseType.start_vertex] = [];
+                this._vs_shader_methods[ShaderPhaseType.start_vertex].push("staticShadowPass_vs");
+            }
 
             if (this._materialData.shaderPhaseTypes[PassType.shadowPass].indexOf(ShaderPhaseType.diffuse_fragment) != -1) {
                 this._fs_shader_methods[ShaderPhaseType.diffuse_fragment] = [];

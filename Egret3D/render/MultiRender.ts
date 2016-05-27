@@ -50,7 +50,7 @@
                     if (!this._renderItem.material.castShadow) {
                         continue;
                     }
-                    ShadowCast.instance.calculateCamera(this._renderItem, camera);
+                    //ShadowCast.instance.calculateCamera(this._renderItem, camera);
                 }
 
                 this._renderItem.geometry.activeState(time, delay, View3D._contex3DProxy, camera);
