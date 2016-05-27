@@ -3,6 +3,7 @@
 
         protected view1: View3D;
         private _mapLoader: EgretMapLoader;
+        protected cameraCrl: LookAtController;
         constructor() {
             super();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
@@ -13,7 +14,8 @@
             view1.camera3D.lookAt(new Vector3D(0, 500, -500), new Vector3D(0, 0, 0));
             view1.backColor = 0xff000000;
             this._egret3DCanvas.addView3D(view1);
-
+            this.cameraCrl = new LookAtController(this.view1.camera3D, new Object3D());
+            this.cameraCrl.distance = 1000;
 
             //加载地图
             this._mapLoader = new EgretMapLoader();
@@ -30,6 +32,7 @@
         //获取进度信息
         private update(e: Event3D) {
             console.log("加载：" + this._mapLoader.calcProgress);
+            this.cameraCrl.update();
         }
 
     }

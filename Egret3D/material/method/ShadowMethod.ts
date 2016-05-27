@@ -11,8 +11,9 @@
     */
     export class ShadowMethod extends MethodBase {
 
-        constructor() {
+        constructor(material: MaterialBase) {
             super();
+            this.materialData = material.materialData;
 
             this.vsShaderList[ShaderPhaseType.local_vertex] = this.vsShaderList[ShaderPhaseType.local_vertex] || [];
             this.vsShaderList[ShaderPhaseType.local_vertex].push("shadowMapping_vs");
@@ -61,6 +62,8 @@
             if (ShadowCast.instance.shadowCamera) {
                 context3DProxy.uniformMatrix4fv(usage.uniform_ShadowMatrix.uniformIndex, false, ShadowCast.instance.shadowCamera.viewProjectionMatrix.rawData);
             }
+
+            context3DProxy.uniform3fv(usage.uniform_ShadowColor.uniformIndex, this.materialData.shadowColor);
         }
     }
 }

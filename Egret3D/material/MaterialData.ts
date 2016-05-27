@@ -235,6 +235,15 @@
         */
         public acceptShadow: boolean = true;
 
+
+        /**
+        * @language zh_CN
+        * 阴影颜色
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public shadowColor: Float32Array = new Float32Array([0.5, 0.5, 0.6]);
+
         /**
         * @language zh_CN
         * 深度测试 。
@@ -520,6 +529,10 @@
             //data.lightMapTex = this.lightMapTex;
             //data.environmentMapTex = this.environmentMapTex;
             data.shadowMapTexture = this.shadowMapTexture;
+
+            for (var i: number = 0; i < 3; ++i) {
+                data.shadowColor[i] = this.shadowColor[i];
+            }
             //data.splat_0Tex = this.splat_0Tex;
             //data.splat_1Tex = this.splat_1Tex;
             //data.splat_2Tex = this.splat_2Tex;
