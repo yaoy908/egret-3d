@@ -13,6 +13,13 @@
     */
     export class IRender extends Object3D{
 
+
+        /**
+        * @language zh_CN
+        * 构造函数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         constructor() {
             super();
         }
@@ -20,7 +27,7 @@
         /**
         * @language zh_CN
         * 网格信息。</p>
-         * geometry 为渲染对象的网格信息 ，渲染对象需要 vertexBuffer  和 indexBuffer 信息 及顶点着色器shade。</p>
+        * geometry 为渲染对象的网格信息 ，渲染对象需要 vertexBuffer  和 indexBuffer 信息 及顶点着色器shade。</p>
         * @version Egret 3.0
         * @platform Web,Native
         */

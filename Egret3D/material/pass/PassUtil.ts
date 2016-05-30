@@ -1,7 +1,12 @@
 ﻿module egret3d {
 
+    /*
+    * @private
+    */
     export enum PassType { diffusePass,colorPass, normalPass, shadowPass, lightPass , matCapPass }
-
+        /*
+    * @private
+    */
     export class PassUtil{
         public static CreatPass(pass: PassType,materialData:MaterialData):MaterialPass {
             switch (pass) {
