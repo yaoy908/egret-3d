@@ -12,6 +12,11 @@ vec4 globalPosition;
 
 varying vec3 varyingViewDir ;
 
+float discard_particle = 0.0;
+
+void e_discard(){
+	discard_particle = 1.0;
+}
 mat4 buildRotMat4(vec3 rot)
 {
     mat4 ret = mat4(
@@ -80,5 +85,6 @@ void main(void) {
 	
 	localPosition = outPosition = vec4(e_position, 1.0); 
 	globalPosition.xyz = vec3(0.0,0.0,0.0);
-	globalPosition.xyz += attribute_offsetPosition; 
+	globalPosition.xyz += attribute_offsetPosition;
+
 }
