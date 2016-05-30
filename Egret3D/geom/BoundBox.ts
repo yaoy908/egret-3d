@@ -140,7 +140,7 @@
         * 检测两个包围盒是否相交
         * 功能和 intersect 一样 为版本兼容没有删除此API
         * @param box2 其中一个包围盒 
-        * @param boxIntersect 相交的包围盒 默认为空
+        * @param boxIntersect  默认参数为null 相交的包围盒 可以为null
         * @returns boolean 成功返回true
         * @version Egret 3.0
         * @platform Web,Native
@@ -186,8 +186,9 @@
         /**
         * @language zh_CN
         * 检测两个包围对象是否相交
-        * @param 检测的目标
-        * @param 相交的结果 可以为null
+        * 注意：target 和 intersect 必须为BoundBox对象
+        * @param target 检测的目标
+        * @param intersect 默认参数为null 相交的结果 可以为null
         * @returns boolean 成功返回true
         * @version Egret 3.0
         * @platform Web,Native
