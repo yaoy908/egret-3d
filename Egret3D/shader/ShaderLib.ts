@@ -23,6 +23,33 @@ module egret3d {
 			"diffuseColor.xyz *= (ao * aoPower) ; \n" +
 			"} \n",
 
+			"baseShadowPass_fs":
+			"varying vec2 varying_uv0; \n" +
+			"varying vec4 varying_ViewPose; \n" +
+			"varying vec4 varying_color; \n" +
+			"vec4 outColor ; \n" +
+			"vec2 uv_0; \n" +
+			"void main() { \n" +
+			"uv_0 = varying_uv0; \n" +
+			"} \n",
+
+			"baseShadowPass_vs":
+			"attribute vec3 attribute_position; \n" +
+			"attribute vec2 attribute_uv0; \n" +
+			"attribute vec4 attribute_color; \n" +
+			"uniform mat4 uniform_ModelViewMatrix ; \n" +
+			"uniform mat4 uniform_ProjectionMatrix ; \n" +
+			"varying vec4 varying_ViewPose; \n" +
+			"varying vec2 varying_uv0; \n" +
+			"varying vec4 varying_color; \n" +
+			"vec3 e_position = vec3(0.0, 0.0, 0.0); \n" +
+			"vec4 outPosition ; \n" +
+			"void main(void){ \n" +
+			"e_position = attribute_position; \n" +
+			"varying_color = attribute_color; \n" +
+			"varying_uv0 = attribute_uv0; \n" +
+			"} \n",
+
 			"base_fs":
 			"#extension GL_OES_standard_derivatives : enable \n" +
 			"varying vec3 varying_eyeNormal  ; \n" +
@@ -58,8 +85,7 @@ module egret3d {
 			"attribute vec4 attribute_color; \n" +
 			"attribute vec2 attribute_uv0; \n" +
 			"vec3 e_position = vec3(0.0, 0.0, 0.0); \n" +
-			"uniform mat4 uniform_ModelMatrix ; \n" +
-			"uniform mat4 uniform_ViewMatrix ; \n" +
+			"uniform mat4 uniform_ModelViewMatrix ; \n" +
 			"uniform mat4 uniform_ProjectionMatrix ; \n" +
 			"uniform vec3 uniform_eyepos ; \n" +
 			"varying vec4 varying_ViewPose; \n" +
@@ -68,23 +94,6 @@ module egret3d {
 			"varying vec4 varying_color; \n" +
 			"varying vec3 varying_ViewDir ; \n" +
 			"vec4 outPosition ; \n" +
-			"mat3 transpose(mat3 m) { \n" +
-			"return mat3(m[0][0], m[1][0], m[2][0], \n" +
-			"m[0][1], m[1][1], m[2][1], \n" +
-			"m[0][2], m[1][2], m[2][2]); \n" +
-			"} \n" +
-			"mat3 inverse(mat3 m) { \n" +
-			"float a00 = m[0][0], a01 = m[0][1], a02 = m[0][2]; \n" +
-			"float a10 = m[1][0], a11 = m[1][1], a12 = m[1][2]; \n" +
-			"float a20 = m[2][0], a21 = m[2][1], a22 = m[2][2]; \n" +
-			"float b01 = a22 * a11 - a12 * a21; \n" +
-			"float b11 = -a22 * a10 + a12 * a20; \n" +
-			"float b21 = a21 * a10 - a11 * a20; \n" +
-			"float det = a00 * b01 + a01 * b11 + a02 * b21; \n" +
-			"return mat3(b01, (-a22 * a01 + a02 * a21), (a12 * a01 - a02 * a11), \n" +
-			"b11, (a22 * a00 - a02 * a20), (-a12 * a00 + a02 * a10), \n" +
-			"b21, (-a21 * a00 + a01 * a20), (a11 * a00 - a01 * a10)) / det; \n" +
-			"} \n" +
 			"void main(void){ \n" +
 			"e_position = attribute_position; \n" +
 			"varying_color = attribute_color; \n" +
@@ -157,6 +166,20 @@ module egret3d {
 			"e_position.xyz += curve.x * vec3(1.0,0.5,0.0) * ( attribute_color.xyz) ; \n" +
 			"} \n",
 
+			"diffuseShadowPass_fs":
+			"uniform sampler2D diffuseTexture; \n" +
+			"vec4 diffuseColor ; \n" +
+			"void main() { \n" +
+			"diffuseColor = varying_color ; \n" +
+			"if( diffuseColor.w == 0.0 ){ \n" +
+			"discard; \n" +
+			"} \n" +
+			"diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
+			"if( diffuseColor.w <= 0.3 ){ \n" +
+			"discard; \n" +
+			"} \n" +
+			"} \n",
+
 			"diffuse_fragment":
 			"uniform sampler2D diffuseTexture; \n" +
 			"vec4 diffuseColor ; \n" +
@@ -177,12 +200,11 @@ module egret3d {
 			"varying vec3 varying_ViewDir ; \n" +
 			"uniform mat4 uniform_NormalMatrix; \n" +
 			"void main(void){ \n" +
-			"mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
 			"mat3 normalMatrix = mat3(uniform_NormalMatrix); \n" +
 			"varying_eyeNormal = normalize(normalMatrix * -attribute_normal); \n" +
+			"varying_ViewPose = vec4(normalMatrix*e_position, 1.0) ; \n" +
 			"varying_ViewDir = normalize(normalMatrix * (uniform_eyepos.xyz - e_position)) ; \n" +
-			"outPosition = uniform_ViewMatrix * uniform_ModelMatrix * vec4(e_position, 1.0) ; \n" +
-			"varying_ViewPose = outPosition.xyzw; \n" +
+			"outPosition = uniform_ModelViewMatrix * vec4(e_position, 1.0) ; \n" +
 			"varying_color = attribute_color; \n" +
 			"} \n",
 
@@ -223,6 +245,24 @@ module egret3d {
 			"void main() { \n" +
 			"calculateDirectLight( materialSource ); \n" +
 			"} \n",
+
+			"endShadowPass_fs":
+			"void main() { \n" +
+			"if(varying_color.w<=0.0){ \n" +
+			"discard; \n" +
+			"} \n" +
+			"outColor.x =  outColor.y = outColor.z = varying_ViewPose.z/varying_ViewPose.w  ; \n" +
+			"outColor.w = 1.0 ; \n" +
+			"gl_FragColor = outColor ; \n" +
+			"} \n",
+
+			"endShadowPass_vs":
+			"void main() { \n" +
+			"outPosition = uniform_ProjectionMatrix * outPosition ; \n" +
+			"varying_ViewPose = outPosition ; \n" +
+			"gl_Position = outPosition ; \n" +
+			"} \n" +
+			"                       \n",
 
 			"end_fs":
 			"vec4 diffuseColor ; \n" +
@@ -392,6 +432,39 @@ module egret3d {
 			"diffuseColor.xyz = mix( fog.fogColor, diffuseColor.xyz, fogFactor ); \n" +
 			"} \n",
 
+			"matCapPass_vs":
+			"varying vec2 capCoord ; \n" +
+			"void main(void){ \n" +
+			"capCoord.x = dot(normalMatrix[0].xyz,normal); \n" +
+			"capCoord.y = dot(normalMatrix[1].xyz,normal); \n" +
+			"capCoord = capCoord * 0.5 + 0.5; \n" +
+			"ambientColor.xyz +=  + capCoord.xyz * 2.0 - 1.0 ; \n" +
+			"} \n",
+
+			"matCap_TextureAdd_fs":
+			"uniform sampler2D matcapTexture; \n" +
+			"uniform mat4 uniform_NormalMatrix; \n" +
+			"void main() { \n" +
+			"vec4 capCoord ; \n" +
+			"capCoord.x = -normal.x; \n" +
+			"capCoord.y = normal.y; \n" +
+			"capCoord.xy = capCoord.xy * 0.5 + 0.5; \n" +
+			"capCoord = texture2D(matcapTexture , capCoord.xy ) * 2.0 - 1.0 ; \n" +
+			"ambientColor.xyz += capCoord.xyz ; \n" +
+			"} \n",
+
+			"matCap_TextureMult_fs":
+			"uniform sampler2D matcapTexture; \n" +
+			"uniform mat4 uniform_NormalMatrix; \n" +
+			"void main() { \n" +
+			"vec4 capCoord ; \n" +
+			"capCoord.x = -normal.x; \n" +
+			"capCoord.y = normal.y; \n" +
+			"capCoord.xy = capCoord.xy * 0.5 + 0.5; \n" +
+			"capCoord = texture2D(matcapTexture , capCoord.xy ) ; \n" +
+			"diffuseColor.xyz *= capCoord.xyz * 2.0 ; \n" +
+			"} \n",
+
 			"materialSource_fs":
 			"struct MaterialSource{ \n" +
 			"vec3 diffuse; \n" +
@@ -515,8 +588,7 @@ module egret3d {
 			"outPosition.xyz = localPosition.xyz  ; \n" +
 			"outPosition = billboardMatrix * outPosition; \n" +
 			"outPosition.xyz += globalPosition.xyz; \n" +
-			"outPosition = uniform_ModelMatrix * outPosition; \n" +
-			"outPosition = uniform_ViewMatrix * outPosition; \n" +
+			"outPosition = modeViewMatrix * outPosition; \n" +
 			"gl_Position = uniform_ProjectionMatrix * outPosition ; \n" +
 			"} \n" +
 			"	 \n",
@@ -571,52 +643,6 @@ module egret3d {
 			"localPosition.xyz *= p.y ; \n" +
 			"} \n",
 
-			"particle_time":
-			"attribute vec4 attribute_time ; \n" +
-			"uniform float uniform_time[5] ; \n" +
-			"float currentTime = 0.0; \n" +
-			"struct ParticleData{ \n" +
-			"float delay; \n" +
-			"float life; \n" +
-			"float rate; \n" +
-			"float index; \n" +
-			"}; \n" +
-			"float particle(  ){ \n" +
-			"ParticleData emit ; \n" +
-			"emit.delay = attribute_time.x ; \n" +
-			"emit.life = attribute_time.y ; \n" +
-			"emit.rate = attribute_time.z ; \n" +
-			"emit.index = attribute_time.w ; \n" +
-			"float time = uniform_time[0] ; \n" +
-			"float loop = uniform_time[1]; \n" +
-			"float duration = uniform_time[2]; \n" +
-			"float delayLife = uniform_time[3]; \n" +
-			"float maxLife = uniform_time[4]; \n" +
-			"float numberSpace = emit.index * emit.rate ; \n" +
-			"currentTime = max(time - numberSpace - emit.delay,0.0) ; \n" +
-			"if(loop==0.0){ \n" +
-			"if( numberSpace > duration ) \n" +
-			"return currentTime = 0.0 ; \n" +
-			"}else{ \n" +
-			"duration = maxLife + emit.rate - delayLife ; \n" +
-			"currentTime = mod( currentTime , duration ); \n" +
-			"if( currentTime >= emit.life ) \n" +
-			"return currentTime = 0.0 ; \n" +
-			"} \n" +
-			"if( currentTime <= 0.0 ) \n" +
-			"return currentTime ; \n" +
-			"} \n" +
-			"void e_discard(){ \n" +
-			"varying_color.w = 0.0 ; \n" +
-			"} \n" +
-			"void main(void) { \n" +
-			"float active = particle(  ) ; \n" +
-			"if( active == 0.0 ){ \n" +
-			"e_discard(); \n" +
-			"}else{ \n" +
-			"} \n" +
-			"} \n",
-
 			"particle_time_fs":
 			"varying vec4 particleTime; \n" +
 			"void main(void) { \n" +
@@ -629,44 +655,38 @@ module egret3d {
 			"float currentTime = 0.0; \n" +
 			"varying vec4 particleTime; \n" +
 			"struct ParticleData{ \n" +
-			"float delay; \n" +
+			"float bornTime; \n" +
 			"float life; \n" +
-			"float rate; \n" +
+			"float unitTotalLife; \n" +
 			"float index; \n" +
 			"}; \n" +
 			"float particle( ParticleData emit ){ \n" +
 			"float time = uniform_time[0] ; \n" +
 			"float loop = uniform_time[1]; \n" +
-			"float duration = uniform_time[2]; \n" +
-			"float delayLife = uniform_time[3]; \n" +
-			"float maxLife = uniform_time[4]; \n" +
-			"float numberSpace = emit.index * emit.rate ; \n" +
-			"currentTime = max(time - numberSpace - emit.delay,0.0) ; \n" +
-			"if(loop==0.0){ \n" +
-			"if( numberSpace > duration ) \n" +
-			"return currentTime = 0.0 ; \n" +
-			"}else{ \n" +
-			"duration = maxLife + emit.rate - delayLife ; \n" +
-			"currentTime = mod( currentTime , duration ); \n" +
-			"if( currentTime >= emit.life ) \n" +
-			"return currentTime = 0.0 ; \n" +
+			"if(time <= emit.bornTime){ \n" +
+			"return currentTime = 0.0; \n" +
 			"} \n" +
+			"if(loop == 0.0 && time >= emit.unitTotalLife){ \n" +
+			"return currentTime = 0.0; \n" +
+			"} \n" +
+			"currentTime = time - emit.bornTime; \n" +
+			"currentTime = mod( currentTime, emit.life); \n" +
 			"if( currentTime <= 0.0 ) \n" +
-			"return currentTime ; \n" +
+			"return currentTime = 0.0; \n" +
 			"} \n" +
 			"void e_discard(){ \n" +
 			"varying_color.w = 0.0 ; \n" +
 			"} \n" +
 			"void main(void) { \n" +
 			"ParticleData emit ; \n" +
-			"emit.delay = attribute_time.x ; \n" +
+			"emit.bornTime = attribute_time.x ; \n" +
 			"emit.life = attribute_time.y ; \n" +
-			"emit.rate = attribute_time.z ; \n" +
+			"emit.unitTotalLife = attribute_time.z ; \n" +
 			"emit.index = attribute_time.w ; \n" +
 			"float active = particle( emit ) ; \n" +
 			"particleTime.x = emit.index ; \n" +
 			"particleTime.y = emit.life ; \n" +
-			"particleTime.z = emit.delay ; \n" +
+			"particleTime.z = emit.unitTotalLife ; \n" +
 			"particleTime.w = currentTime ; \n" +
 			"if( active == 0.0 ){ \n" +
 			"e_discard(); \n" +
@@ -737,8 +757,7 @@ module egret3d {
 			"uniform_cameraMatrix[1], \n" +
 			"uniform_cameraMatrix[2], \n" +
 			"vec4(0.0, 0.0,1.0, 1.0)); \n" +
-			"mat4 modeViewMatrix = uniform_ViewMatrix * uniform_ModelMatrix; \n" +
-			"mat3 normalMatrix = transpose(inverse(mat3( modeViewMatrix ))); \n" +
+			"mat4 modeViewMatrix = uniform_ModelViewMatrix ; \n" +
 			"localPosition = outPosition = vec4(e_position, 1.0); \n" +
 			"globalPosition.xyz = vec3(0.0,0.0,0.0); \n" +
 			"globalPosition.xyz += attribute_offsetPosition; \n" +
@@ -792,6 +811,34 @@ module egret3d {
 			"varying_uv1 = attribute_uv1 ; \n" +
 			"} \n",
 
+			"shadowMapping_fs":
+			"uniform sampler2D shadowMapTexture; \n" +
+			"varying vec2 varying_ShadowCoord; \n" +
+			"float unpackDepth(vec4 rgbaDepth){ \n" +
+			"vec4 bitShift = vec4( 1.0 , 1.0/256.0 , 1.0/(256.0*256.0) , 1.0/(256.0*256.0*256.0) ); \n" +
+			"float depth = dot(rgbaDepth,bitShift); \n" +
+			"return depth ; \n" +
+			"} \n" +
+			"void main() { \n" +
+			"vec3 shadowColor = vec3(1.0,1.0,1.0); \n" +
+			"float shadow = 0.0; \n" +
+			"if (varying_ShadowCoord.w > 0.0) { \n" +
+			"vec3 shadowDepth = varying_ShadowCoord.xyz / varying_ShadowCoord.w * 0.5 + 0.5; \n" +
+			"vec2 sample = clamp(shadowDepth.xy,0.0,1.0); \n" +
+			"float sampleDepth = unpackDepth(texture2D(shadowMapTexture, sample)); \n" +
+			"if(sampleDepth < shadowDepth.z-0.002) \n" +
+			"shadowColor = vec3(0.5,0.5,0.6)  ; \n" +
+			"} \n" +
+			"diffuseColor.xyz = diffuseColor.xyz * shadowColor; \n" +
+			"} \n",
+
+			"shadowMapping_vs":
+			"uniform mat4 uniform_ShadowMatrix; \n" +
+			"varying vec4 varying_ShadowCoord; \n" +
+			"void main() { \n" +
+			"varying_ShadowCoord = uniform_ShadowMatrix * vec4(attribute_position, 1.0); \n" +
+			"} \n",
+
 			"shadow_fs":
 			"uniform sampler2D shadowMapTexture; \n" +
 			"varying vec4 varying_ShadowCoord; \n" +
@@ -814,16 +861,14 @@ module egret3d {
 			"varying_ShadowCoord = uniform_ShadowMatrix * vec4(e_position, 1.0); \n" +
 			"} \n",
 
-			"skeleton_vs":
+			"skeletonShadowPass_vs":
 			"attribute vec4 attribute_boneIndex; \n" +
 			"attribute vec4 attribute_boneWeight; \n" +
-			"attribute vec3 attribute_normal; \n" +
 			"attribute vec4 attribute_color; \n" +
 			"vec4 e_boneIndex = vec4(0.0, 0.0, 0.0, 0.0); \n" +
 			"vec4 e_boneWeight = vec4(0.0, 0.0, 0.0, 0.0); \n" +
 			"const int bonesNumber = 0; \n" +
 			"uniform vec4 uniform_PoseMatrix[bonesNumber]; \n" +
-			"uniform mat4 uniform_ModelMatrix ; \n" +
 			"mat4 buildMat4(int index){ \n" +
 			"vec4 quat = uniform_PoseMatrix[index * 2 + 0]; \n" +
 			"vec4 translation = uniform_PoseMatrix[index * 2 + 1]; \n" +
@@ -848,6 +893,50 @@ module egret3d {
 			"e_boneIndex = attribute_boneIndex; \n" +
 			"e_boneWeight = attribute_boneWeight; \n" +
 			"vec4 temp_position = vec4(attribute_position, 1.0) ; \n" +
+			"mat4 m0 = buildMat4(int(e_boneIndex.x)); \n" +
+			"mat4 m1 = buildMat4(int(e_boneIndex.y)); \n" +
+			"mat4 m2 = buildMat4(int(e_boneIndex.z)); \n" +
+			"mat4 m3 = buildMat4(int(e_boneIndex.w)); \n" +
+			"outPosition = m0 * temp_position * e_boneWeight.x; \n" +
+			"outPosition += m1 * temp_position * e_boneWeight.y; \n" +
+			"outPosition += m2 * temp_position * e_boneWeight.z; \n" +
+			"outPosition += m3 * temp_position * e_boneWeight.w; \n" +
+			"outPosition = uniform_ModelViewMatrix * outPosition; \n" +
+			"} \n",
+
+			"skeleton_vs":
+			"attribute vec4 attribute_boneIndex; \n" +
+			"attribute vec4 attribute_boneWeight; \n" +
+			"attribute vec3 attribute_normal; \n" +
+			"attribute vec4 attribute_color; \n" +
+			"vec4 e_boneIndex = vec4(0.0, 0.0, 0.0, 0.0); \n" +
+			"vec4 e_boneWeight = vec4(0.0, 0.0, 0.0, 0.0); \n" +
+			"const int bonesNumber = 0; \n" +
+			"uniform vec4 uniform_PoseMatrix[bonesNumber]; \n" +
+			"uniform mat4 uniform_NormalMatrix ; \n" +
+			"mat4 buildMat4(int index){ \n" +
+			"vec4 quat = uniform_PoseMatrix[index * 2 + 0]; \n" +
+			"vec4 translation = uniform_PoseMatrix[index * 2 + 1]; \n" +
+			"float xx = quat.x * quat.x; \n" +
+			"float xy = quat.x * quat.y; \n" +
+			"float xz = quat.x * quat.z; \n" +
+			"float xw = quat.x * quat.w; \n" +
+			"float yy = quat.y * quat.y; \n" +
+			"float yz = quat.y * quat.z; \n" +
+			"float yw = quat.y * quat.w; \n" +
+			"float zz = quat.z * quat.z; \n" +
+			"float zw = quat.z * quat.w; \n" +
+			"return mat4( \n" +
+			"1.0 - 2.0 * (yy + zz),		2.0 * (xy + zw),		2.0 * (xz - yw),		0, \n" +
+			"2.0 * (xy - zw),				1.0 - 2.0 * (xx + zz),	2.0 * (yz + xw),		0, \n" +
+			"2.0 * (xz + yw),				2.0 * (yz - xw),		1.0 - 2.0 * (xx + yy),	0, \n" +
+			"translation.x,				translation.y,			translation.z,			1 \n" +
+			"); \n" +
+			"} \n" +
+			"void main(void){ \n" +
+			"e_boneIndex = attribute_boneIndex; \n" +
+			"e_boneWeight = attribute_boneWeight; \n" +
+			"vec4 temp_position = vec4(attribute_position, 1.0) ; \n" +
 			"vec4 temp_normal = vec4(attribute_normal, 0.0) ; \n" +
 			"mat4 m0 = buildMat4(int(e_boneIndex.x)); \n" +
 			"mat4 m1 = buildMat4(int(e_boneIndex.y)); \n" +
@@ -863,10 +952,10 @@ module egret3d {
 			"temp_n += m1 * temp_normal * e_boneWeight.y; \n" +
 			"temp_n += m2 * temp_normal * e_boneWeight.z; \n" +
 			"temp_n += m3 * temp_normal * e_boneWeight.w; \n" +
-			"mat3 normalMatrix = transpose( inverse(mat3(uniform_ProjectionMatrix * uniform_ViewMatrix))); \n" +
+			"mat3 normalMatrix = mat3(uniform_NormalMatrix); \n" +
 			"varying_eyeNormal = normalize(normalMatrix * -temp_n.xyz); \n" +
-			"outPosition = uniform_ViewMatrix * uniform_ModelMatrix * outPosition; \n" +
-			"varying_ViewPose = outPosition ; \n" +
+			"varying_ViewPose = vec4(normalMatrix*outPosition.xyz, 1.0) ; \n" +
+			"outPosition = uniform_ModelViewMatrix * outPosition; \n" +
 			"} \n",
 
 			"specularMap_fragment":
@@ -874,6 +963,11 @@ module egret3d {
 			"void main(void){ \n" +
 			"specularColor.xyz *= texture2D( specularTexture , uv_0 ).xyz ; \n" +
 			"} \n",
+
+			"tangent_vs":
+			"attribute vec3 attribute_tangent; \n" +
+			"void main(void){ \n" +
+			"}  \n",
 
 			"terrainRGBA_fragment":
 			"uniform sampler2D blendMaskTexture ; \n" +
@@ -924,7 +1018,7 @@ module egret3d {
 			"vertexPos_vs":
 			"varying vec4 varying_pos; \n" +
 			"void main() { \n" +
-			"varying_pos = uniform_ModelMatrix * vec4(e_position, 1.0) ; \n" +
+			"varying_pos = uniform_ModelViewMatrix * vec4(e_position, 1.0) ; \n" +
 			"} \n" +
 			"                       \n",
 

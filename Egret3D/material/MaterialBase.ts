@@ -1,5 +1,5 @@
 ﻿module egret3d {
-    
+
     /**
     * @language zh_CN
     * @class egret3d.MaterialBase
@@ -17,7 +17,10 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public diffusePass: MaterialPass; 
+        //public diffusePass: MaterialPass; 
+        //public shadowPass: MaterialPass; 
+
+        public passes: { [pass: number]: MaterialPass } = [];
                 
         /**
          * @language zh_CN
@@ -69,7 +72,8 @@
         }
 
         protected initPass() {
-            this.diffusePass = new ColorPass(this.materialData);
+            //this.passes[PassType.diffusePass] = new ColorPass(this.materialData);
+            this.addPass(PassType.colorPass);
         }
         
         /**
@@ -82,40 +86,42 @@
          */
         public set lightGroup(group: LightGroup) {
             this._lightGroup = group; 
-            this.diffusePass.lightGroup = group;
+
+            if (this.passes[PassType.diffusePass])
+                this.passes[PassType.diffusePass].lightGroup = group;
         }
 
-        /**
-         * @language zh_CN
-         * 设置材质 shadowMapTexture 。
-         * 设置材质球的阴影贴图。
-         * @param texture ITexture
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public set shadowMapTexture(texture: ITexture) {
-            if (texture) {
-                this.materialData.shadowMapTexture = texture;
-                this.materialData.textureChange = true;
+        ///**
+        // * @language zh_CN
+        // * 设置材质 shadowMapTexture 。
+        // * 设置材质球的阴影贴图。
+        // * @param texture ITexture
+        // * @version Egret 3.0
+        // * @platform Web,Native
+        // */
+        ////public set shadowMapTexture(texture: ITexture) {
+        ////    if (texture) {
+        ////        this.materialData.shadowMapTexture = texture;
+        ////        this.materialData.textureChange = true;
 
-                if (this.materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.shadow_fragment) == -1) {
-                    this.materialData.shaderPhaseTypes.push(ShaderPhaseType.shadow_fragment);
-                    this.diffusePass.passInvalid();
-                }
-            }
-        }
+        ////        //if (this.materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.shadow_fragment) == -1) {
+        ////        //    this.materialData.shaderPhaseTypes.push(ShaderPhaseType.shadow_fragment);
+        ////        //    this.diffusePass.passInvalid();
+        ////        //}
+        ////    }
+        ////}
 
-        /**
-        * @language zh_CN
-        * 返回材质 shadowMapTexture。
-        * 返回材质球的阴影贴图。
-        * @returns ITexture 阴影贴图
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public get shadowMapTexture(): ITexture {
-            return this.materialData.shadowMapTexture;
-        }
+        ///**
+        //* @language zh_CN
+        //* 返回材质 shadowMapTexture。
+        //* 返回材质球的阴影贴图。
+        //* @returns ITexture 阴影贴图
+        //* @version Egret 3.0
+        //* @platform Web,Native
+        //*/
+        ////public get shadowMapTexture(): ITexture {
+        ////    return this.materialData.shadowMapTexture;
+        ////}
 
         /**
          * @language zh_CN
@@ -130,10 +136,15 @@
                 this.materialData.diffuseTexture = texture;
                 this.materialData.textureChange = true;
 
-                if (this.materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.diffuse_fragment) == -1) {
-                    this.materialData.shaderPhaseTypes.push(ShaderPhaseType.diffuse_fragment);
-                    this.diffusePass.passInvalid();
+                if (this.materialData.shaderPhaseTypes[PassType.diffusePass]&&this.materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.diffuse_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.diffusePass].push(ShaderPhaseType.diffuse_fragment);
                 }
+
+                if (this.materialData.shaderPhaseTypes[PassType.shadowPass] && this.materialData.shaderPhaseTypes[PassType.shadowPass].indexOf(ShaderPhaseType.diffuse_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.shadowPass].push(ShaderPhaseType.diffuse_fragment);
+                    //this.passes[PassType.shadowPass].passInvalid();
+                }
+               
             }
         }
 
@@ -162,12 +173,55 @@
                 this.materialData.normalTexture = texture;
                 this.materialData.textureChange = true;
 
-                if (this.materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.normal_fragment) == -1) {
-                    this.materialData.shaderPhaseTypes.push(ShaderPhaseType.normal_fragment);
-                    this.diffusePass.passInvalid();
+                if (this.materialData.shaderPhaseTypes[PassType.diffusePass] &&this.materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.normal_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.diffusePass].push(ShaderPhaseType.normal_fragment);
+                    this.passes[PassType.diffusePass].passInvalid();
+                }
+
+                if (this.materialData.shaderPhaseTypes[PassType.matCapPass] &&this.materialData.shaderPhaseTypes[PassType.matCapPass].indexOf(ShaderPhaseType.normal_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.matCapPass].push(ShaderPhaseType.normal_fragment);
+                    //this.passes[PassType.matCapPass].passInvalid();
                 }
 
             }
+        }
+        
+
+        /**
+          * @language zh_CN
+          * 设置材质 matcapTexture 。
+          * 设置材质球特殊光效算法。
+          * @param texture {TextureBase}
+          * @version Egret 3.0
+          * @platform Web,Native
+          */
+        public set matcapTexture(texture: ITexture) {
+            if (texture) {
+                this.materialData.matcapTexture = texture;
+                this.materialData.textureChange = true;
+
+                if (this.materialData.shaderPhaseTypes[PassType.diffusePass] && this.materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.matCap_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.diffusePass].push(ShaderPhaseType.matCap_fragment);
+                    this.passes[PassType.diffusePass].passInvalid();
+                }
+
+                if (this.materialData.shaderPhaseTypes[PassType.matCapPass] && this.materialData.shaderPhaseTypes[PassType.matCapPass].indexOf(ShaderPhaseType.matCap_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.matCapPass].push(ShaderPhaseType.matCap_fragment);
+                    //this.passes[PassType.matCapPass].passInvalid();
+                }
+
+            }
+        }
+
+        /**
+        * @language zh_CN
+        * 得到材质球特殊光效贴图。
+        * @returns ITexture 
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get matcapTexture(): ITexture { 
+            return this.materialData.normalTexture;
         }
         
         /**
@@ -193,9 +247,9 @@
             if (texture) {
                 this.materialData.specularTexture = texture;
                 this.materialData.textureChange = true;
-                if (this.materialData.shaderPhaseTypes.indexOf(ShaderPhaseType.specular_fragment) == -1) {
-                    this.materialData.shaderPhaseTypes.push(ShaderPhaseType.specular_fragment);
-                    this.diffusePass.passInvalid();
+                if (this.materialData.shaderPhaseTypes[PassType.diffusePass]&&this.materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.specular_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.diffusePass].push(ShaderPhaseType.specular_fragment);
+                    //this.passes[PassType.diffusePass].passInvalid();
                 }
             }
         }
@@ -413,20 +467,41 @@
 
          /**
          * @language zh_CN
-         * 映射贴图UV坐标，设置此材质要显示使用贴图的区域，用uvRectangl 的方式映射
-         * @param x {Number}
-         * @param y {Number}
-         * @param width {Number}
-         * @param height {Number}
+         * 映射贴图UV坐标，设置此材质要显示使用贴图的区域，用uvRectangle 的方式映射
+         * @param rect Rectangle
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public uvRectangle(x: number, y: number, width: number, height: number) {
-            this.materialData.uvRectangle.x = x; 
-            this.materialData.uvRectangle.y = y; 
-            this.materialData.uvRectangle.width = width; 
-            this.materialData.uvRectangle.height = height; 
+        public set uvRectangle(rect:Rectangle) {
+            this.materialData.uvRectangle.x = rect.x;
+            this.materialData.uvRectangle.y = rect.y;
+            this.materialData.uvRectangle.width = rect.width;
+            this.materialData.uvRectangle.height = rect.height;
             this.materialData.materialDataNeedChange = true;
+        }
+
+         /**
+         * @language zh_CN
+         * 获取映射贴图UV坐标，区域，用uvRectangle 的方式映射
+         * @return rect Rectangle
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public get uvRectangle(): Rectangle {
+            return this.materialData.uvRectangle;
+        }
+
+        /**
+         * @private
+         * @language zh_CN
+         * 设置材质 ambientPower 值。
+         * 设置材质 环境光颜色的强度 值。
+         * @param value {Number}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public get diffusePass(): DiffusePass {
+            return this.passes[PassType.diffusePass];
         }
 
 
@@ -512,6 +587,18 @@
         //    return this.materialData.normalPower;
         //}
 
+         /**
+         * @language zh_CN
+         * 返回材质 normalPower 值。
+         * 返回材质 法线的强度 值。
+         * @returns {Number}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public addPass(pass: number) {
+            this.passes[pass] = this.passes[PassType.shadowPass] || PassUtil.CreatPass(pass, this.materialData);
+        }
+
         /**
          * @language zh_CN
          * 设置材质 castShadow 值。
@@ -520,17 +607,17 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        //public set castShadow(value: boolean) {
-        //    this.materialData.castShadow = value;
-        //    if (value) {
-        //        //if (!ShadowRender.frameBuffer) {
-        //        //    alert("要使用shadow view3D.useShadow = true ");
-        //        //} else {
-        //        //    if (!this.shadowPass)
-        //        //        this.shadowPass = new ShadowMapPass(this.materialData);
-        //        //}
-        //    }
-        //}
+        public set castShadow(value: boolean) {
+            this.materialData.castShadow = value;
+            if (value) {
+                this.addPass(PassType.shadowPass);
+            } else {
+                if (this.passes[PassType.shadowPass]) {
+                    this.passes[PassType.shadowPass].dispose();
+                    this.passes[PassType.shadowPass] = null;
+                }
+            }
+        }
 
         /**
          * @language zh_CN
@@ -566,6 +653,34 @@
         */
         public get acceptShadow(): boolean {
             return this.materialData.acceptShadow;
+        }
+
+        /**
+        * @language zh_CN
+        * 设置 阴影颜色
+        * @param color 0xffffff
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set shadowColor(color: number) {
+            this.materialData.shadowColor[0] = color >> 16 & 0xff / 255.0;
+            this.materialData.shadowColor[1] = color >> 8 & 0xff / 255.0;
+            this.materialData.shadowColor[2] = color & 0xff / 255.0;
+        }
+
+        /**
+        * @language zh_CN
+        * 返回材质 阴影颜色
+        * @returns number 阴影颜色
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get shadowColor(): number {
+            var color: number = 0;
+            color |= this.materialData.shadowColor[0] * 255.0 << 16;
+            color |= this.materialData.shadowColor[1] * 255.0 << 8;
+            color |= this.materialData.shadowColor[2] * 255.0;
+            return color;
         }
 
         /**
@@ -721,9 +836,9 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public renderDiffusePass(time: number, delay: number, matID: number , context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation) {
-            this.diffusePass.draw(time, delay, context3DProxy, modeltransform, camera3D, subGeometry, animtion);
-        }
+        //public renderDiffusePass(time: number, delay: number, matID: number , context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D, subGeometry: SubGeometry, animtion: IAnimation) {
+        //    this.diffusePass.draw(time, delay, context3DProxy, modeltransform, camera3D, subGeometry, animtion);
+        //}
         
         /**
          * @language zh_CN

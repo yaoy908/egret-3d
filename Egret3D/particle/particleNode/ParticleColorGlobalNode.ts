@@ -54,10 +54,18 @@
         /**
         * @private
         */
-        public update(time: number, delay: number, geometry: Geometry, passUsage: PassUsage, context: Context3DProxy) {
-            context.uniform1fv(passUsage["uniform_colorTransform"].uniformIndex, this.colorSegment);
+        public update(time: number, delay: number, geometry: Geometry) {
         }
 
+         /**
+        * @private
+        */
+        public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
+            context3DProxy.uniform2fv(usage["uniform_colorTransform"].uniformIndex, this.colorSegment);
+        }
+        /**
+        * @压缩一个颜色值到一个float中
+        */
         public getGpuColor(r: number, g: number, b: number, a: number): number {
             return a * 0x1000000 + r * 0x10000 + g * 0x100 + b;
         }

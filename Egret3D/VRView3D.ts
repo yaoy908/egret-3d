@@ -103,7 +103,14 @@
         */
         public update(time: number, delay: number) {
             this._entityCollect.update(this._camera);
-            this._render.update(time, delay, this._entityCollect, this._camera);
+          //  this._render.update(time, delay, this._entityCollect, this._camera);
+
+            //------------------
+            this._numberEntity = this._entityCollect.renderList.length;
+            for (this._index = 0; this._index < this._numberEntity; this._index++) {
+                this._entityCollect.renderList[this._index].update(time, delay, this._camera);
+            }
+            //------------------
 
             var viewPort: Rectangle = this.leftViewPort;
             this._camera.viewPort = viewPort;

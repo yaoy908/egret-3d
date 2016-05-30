@@ -19,6 +19,10 @@
             this.ctl.tiltAngle = 60;
             this.ctl.distance = 1000;
 
+            var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
+            var tex: ImageTexture = new ImageTexture(bgImg);
+            this.view1.backImage = tex;
+
             this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
 
@@ -39,7 +43,7 @@
             this.matPlane.gloss = 1.0;
 
             this.matPlane.repeat = true;
-            this.matPlane.uvRectangle(0, 0, 2.0, 2.0);
+            this.matPlane.uvRectangle = new Rectangle(0, 0, 2.0, 2.0);
 
             //this.plane = new Mesh(new SphereGeometry(300, 120, 120), this.matPlane);
             //this.plane = new Mesh(new CubeGeometry(150, 120, 120), this.matPlane);

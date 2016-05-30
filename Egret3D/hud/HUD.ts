@@ -19,7 +19,7 @@
         * @platform Web,Native
         */
         public bothside: boolean = false;
-        
+
         /**
         * @language zh_CN
         * cull模式。 正面可见ContextConfig.BACK 背面可见ContextConfig.FRONT
@@ -72,7 +72,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(x:number = 0, y :number = 0, width:number = 100, height:number = 100) {
+        constructor(x: number = 0, y: number = 0, width: number = 100, height: number = 100) {
             this._transformComponents.push(this._position);
             this._transformComponents.push(this._rotation);
             this._transformComponents.push(this._scale);
@@ -81,7 +81,7 @@
             this.width = width;
             this.height = height;
         }
-        
+
         /**
         * @language zh_CN
         * 返回HUD的漫反射贴图。
@@ -92,7 +92,7 @@
         public get diffuseTexture(): ITexture {
             return this._diffuseTexture;
         }
-        
+
         /**
          * @language zh_CN
          * 设置HUD的漫反射贴图。
@@ -198,7 +198,7 @@
 
             return this._rectangle.height;
         }
-        
+
         /**
         * @language zh_CN
         * 返回x旋转
@@ -209,7 +209,7 @@
         public get rotationX(): number {
             return this._rotation.x;
         }
-        
+
         /**
         * @language zh_CN
         * 返回y旋转
@@ -220,7 +220,7 @@
         public get rotationY(): number {
             return this._rotation.y;
         }
-                
+
         /**
         * @language zh_CN
         * 返回z旋转
@@ -245,7 +245,7 @@
                 return;
             this._rotation.x = value;
         }
-                        
+
         /**
         * @language zh_CN
         * 设置y轴旋转。</p>
@@ -259,7 +259,7 @@
                 return;
             this._rotation.y = value;
         }
-                        
+
         /**
         * @language zh_CN
         * 设置z轴旋转。</p>
@@ -274,14 +274,14 @@
 
             this._rotation.z = value;
         }
-                                
+
         /**
         * @private
         */
         public set viewPort(viewPort: Rectangle) {
             this._viewPort = viewPort;
         }
-                                        
+
         /**
         * @private
         */
@@ -301,13 +301,13 @@
 
                 this._position.x = MathUtil.ScreenToPosition(this._rectangle.x, this._rectangle.width, this._viewPort.width);
                 this._position.y = -MathUtil.ScreenToPosition(this._rectangle.y, this._rectangle.height, this._viewPort.height);
-                 
+
                 this._transformMatrix.recompose(this._transformComponents);
                 this._change = false;
             }
             return this._transformMatrix;
         }
-        
+
         protected updateTexture(context: Context3DProxy) {
             var sampler2D: GLSL.Sampler2D;
             for (var index in this._passUsage.sampler2DList) {
@@ -316,8 +316,8 @@
                 sampler2D.texture = this[sampler2D.varName];
             }
             this._changeTexture = false;
-        }     
-                                   
+        }
+
         /**
         * @private
         */
@@ -383,7 +383,7 @@
                 offset += Geometry.uvSize * Float32Array.BYTES_PER_ELEMENT;
             }
         }
-                                        
+
         /**
         * @private
         */
@@ -429,6 +429,12 @@
             context.setBlendFactors(ContextConfig.SRC_ALPHA, ContextConfig.ONE_MINUS_SRC_ALPHA);
             context.drawElement(DrawMode.TRIANGLES, 0, 6);
             context.clear(ContextConfig.DEPTH_BUFFER_BIT);
+
+
+            for (var i: number = 0; i < this._attList.length; ++i) {
+                if (this._attList[i].uniformIndex >= 0)
+                    context.clearVaPointer(this._attList[i].uniformIndex);
+            }
         }
     }
 }

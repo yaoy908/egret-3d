@@ -253,15 +253,6 @@
          */
         public uniform_materialSource: GLSL.Uniform;
 
-        public uniform_colorGradientsSource: GLSL.Uniform;
-         /**
-         * @language zh_CN
-         */
-        public uniform_colorTransformVec4: GLSL.Uniform;
-         /**
-         * @language zh_CN
-         */
-        public uniform_colorTransformM44: GLSL.Uniform;
         /**
          * @language zh_CN
          */
@@ -287,6 +278,8 @@
          * @language zh_CN
          */
         public uniform_skyLightSource: GLSL.Uniform;
+
+        public uniform_ShadowColor: GLSL.Uniform;
 
         //----------------------------------------------
         //----------------------------------------------
@@ -316,7 +309,9 @@
 
         public directLightData: Float32Array ;
         public spotLightData: Float32Array ;
-        public pointLightData: Float32Array ;
+        public pointLightData: Float32Array;
+
+        public attributeDiry: boolean = true;
 
         /**
          * @language zh_CN

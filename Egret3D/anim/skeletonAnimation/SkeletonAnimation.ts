@@ -267,6 +267,26 @@
             return animationState;
         }
 
+         /**
+        * @private
+        * @language zh_CN
+        * 将骨骼信息更新给GPU
+        * @param time 当前时间
+        * @param delay 当前帧时间
+        * @param usage PassUsage
+        * @param geometry 子几何信息
+        * @param context3DProxy 上下文信息
+        * @param modeltransform 模型矩阵
+        * @param camera3D 相机
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public activeState(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+            if (usage.uniform_time) {
+                context3DProxy.uniform1f(usage.uniform_time.uniformIndex, this.time);
+            }
+            context3DProxy.uniform4fv(usage.uniform_PoseMatrix.uniformIndex, this.currentSkeletonMatrixData);
+        }
         /**
         * @private
         * @language zh_CN
@@ -276,7 +296,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public update(time: number, delay: number): void {
+        public update(time: number, delay: number, geometry: Geometry): void{
 
             if (!this._playing) {
                 return;

@@ -15,6 +15,10 @@
             view1.backColor = 0xff000000;
             this._egret3DCanvas.addView3D(view1);
 
+            var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
+            var tex: ImageTexture = new ImageTexture(bgImg);
+            view1.backImage = tex;
+
             this.view1 = view1;
             var texLoad: URLLoader = new URLLoader("resource/chahu/Plane001.esm");
             texLoad.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.ontextload, this);

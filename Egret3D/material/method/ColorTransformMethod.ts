@@ -52,13 +52,17 @@
         * @param camera3D
         */
         public upload(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+            usage["uniform_colorTransformVec4"] = context3DProxy.getUniformLocation(usage.program3D, "uniform_colorTransformVec4");
+            usage["uniform_colorTransformM44"] = context3DProxy.getUniformLocation(usage.program3D, "uniform_colorTransformM44");
         }
 
         /**
         * @private
         * @language zh_CN
         */
-        public active(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+        public activeState(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
+            context3DProxy.uniform4fv(usage["uniform_colorTransformVec4"], this.colorTransform.vec4);
+            context3DProxy.uniformMatrix4fv(usage["uniform_colorTransformM44"], false, this.colorTransform.m44.rawData);
         }
 
 

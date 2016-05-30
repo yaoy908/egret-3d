@@ -303,9 +303,11 @@
                 }
             }
 
-            GeometryData.updateFaceTangents(target);
+       
             target.calculateVertexFormat();
-            
+
+           // GeometryData.updateFaceTangents(target);
+
             for (var i: number = 0; i < source.matCount; ++i) {
                 var subGeometry: SubGeometry = new SubGeometry();
                 subGeometry.matID = i;
@@ -654,80 +656,99 @@
             var dx1: number, dy1: number, dz1: number;
             var dx2: number, dy2: number, dz2: number;
             var cx: number, cy: number, cz: number;
-            var vertices: Array<number> = geometry.source_positionData;
-            var uvs: Array<number> = geometry.source_uvData;
+            var vertices: Array<number> = geometry.verticesData;
+         //   var uvs: Array<number> = geometry.source_uvData;
 
-            var posStride: number = 3;
+            var posStride: number = geometry.vertexAttLength ;
             var posOffset: number = 0;
-            var texStride: number = 2;
+            var texStride: number = geometry.vertexAttLength;
             var texOffset: number = 0;
+
+            if (geometry.vertexFormat & VertexFormat.VF_TANGENT)
+                texOffset += Geometry.positionSize + Geometry.normalSize + Geometry.tangentSize;
+            if (geometry.vertexFormat & VertexFormat.VF_COLOR)
+                texOffset += Geometry.colorSize ;
 
             while (i < len) {
                 index1 = geometry.indexData[i];
                 index2 = geometry.indexData[i + 1];
                 index3 = geometry.indexData[i + 2];
 
-                ui = index1 * 2;
-                v0 = uvs[ui + 1];
-                ui = index2 * 2;
-                dv1 = uvs[ui + 1] - v0;
-                ui = index3 * 2;
-                dv2 = uvs[ui + 1] - v0;
+                ui = texOffset + index1 * texStride ;
+                v0 = vertices[ui];                  
+                                                    
+                ui = texOffset + index2 * texStride ;
+                dv1 = vertices[ui] - v0;            
+                                                    
+                ui = texOffset + index3 * texStride ;
+                dv2 = vertices[ui] - v0;
 
-                vi = index1 * 3;
+                vi = posOffset + index1 * posStride;
                 x0 = vertices[vi];
-                y0 = vertices[vi + 1];
-                z0 = vertices[vi + 2];
+                y0 = vertices[(vi + 1)];
+                z0 = vertices[(vi + 2)];
 
-                vi = index2 * 3;
-                dx1 = vertices[vi] - x0;
-                dy1 = vertices[vi + 1] - y0;
-                dz1 = vertices[vi + 2] - z0;
-                vi = index3 * 3;
-                dx2 = vertices[vi] - x0;
-                dy2 = vertices[vi + 1] - y0;
-                dz2 = vertices[vi + 2] - z0;
+                vi = posOffset + index2 * posStride;
+                dx1 = vertices[(vi)] - x0;
+                dy1 = vertices[(vi + 1)] - y0;
+                dz1 = vertices[(vi + 2)] - z0;
+
+                vi = posOffset + index3 * posStride;
+                dx2 = vertices[(vi)] - x0;
+                dy2 = vertices[(vi + 1)] - y0;
+                dz2 = vertices[(vi + 2)] - z0;
 
                 cx = dv2 * dx1 - dv1 * dx2;
                 cy = dv2 * dy1 - dv1 * dy2;
                 cz = dv2 * dz1 - dv1 * dz2;
                 denom = 1 / Math.sqrt(cx * cx + cy * cy + cz * cz);
+
                 geometry.source_tangentData[i++] = denom * cx;
                 geometry.source_tangentData[i++] = denom * cy;
                 geometry.source_tangentData[i++] = denom * cz;
             }
 
             var k: number;
-            var index: number = 0;
+            var lenI: number = geometry.indexData.length;
+            var index: number;
             var weight: number;
             var f1: number = 0, f2: number = 1, f3: number = 2;
+            var tangentOffset: number = Geometry.positionSize + Geometry.normalSize; 
+            var tangentStride: number = geometry.vertexAttLength;
 
-            var i: number = 0;
-           
-            for (var i: number = 0; i < geometry.indexData.length / 3; ++i) {
-                index = i * 3 * 3;
-                geometry.source_tangentData[index + 0] = - geometry.source_tangentData[index + 0];
-                geometry.source_tangentData[index + 1] = geometry.source_tangentData[index + 1];
-                geometry.source_tangentData[index + 2] = geometry.source_tangentData[index + 2];
-                index += 3;
-                geometry.source_tangentData[index + 0] = - geometry.source_tangentData[index + 0];
-                geometry.source_tangentData[index + 1] = geometry.source_tangentData[index + 1];
-                geometry.source_tangentData[index + 2] = geometry.source_tangentData[index + 2];
-                index += 3;
-                geometry.source_tangentData[index + 0] = - geometry.source_tangentData[index + 0];
-                geometry.source_tangentData[index + 1] = geometry.source_tangentData[index + 1];
-                geometry.source_tangentData[index + 2] = geometry.source_tangentData[index + 2];
-            } 
 
-            for (var i: number = 0; i < geometry.source_tangentData.length / 3; ++i) {
-                var vx: number = geometry.source_tangentData[i * 3];
-                var vy: number = geometry.source_tangentData[i * 3 + 1];
-                var vz: number = geometry.source_tangentData[i * 3 + 2];
+            i = 0;
+
+            while (i < lenI) {
+                weight = 1;
+                index = tangentOffset + geometry.indexData[i++] * tangentStride;
+                geometry.verticesData[index++] += geometry.source_tangentData[f1] * weight;
+                geometry.verticesData[index++] += geometry.source_tangentData[f2] * weight;
+                geometry.verticesData[index] += geometry.source_tangentData[f3] * weight;
+                index = tangentOffset + geometry.indexData[i++] * tangentStride;
+                geometry.verticesData[index++] += geometry.source_tangentData[f1] * weight;
+                geometry.verticesData[index++] += geometry.source_tangentData[f2] * weight;
+                geometry.verticesData[index] += geometry.source_tangentData[f3] * weight;
+                index = tangentOffset + geometry.indexData[i++] * tangentStride;
+                geometry.verticesData[index++] += geometry.source_tangentData[f1] * weight;
+                geometry.verticesData[index++] += geometry.source_tangentData[f2] * weight;
+                geometry.verticesData[index] += geometry.source_tangentData[f3] * weight;
+                f1 += 3;
+                f2 += 3;
+                f3 += 3;
+            }
+
+            var lenV: number = geometry.verticesData.length ;
+            i = tangentOffset;
+            while (i < lenV) {
+                var vx: number = geometry.verticesData[i];
+                var vy: number = geometry.verticesData[i + 1];
+                var vz: number = geometry.verticesData[i + 2];
                 var d: number = 1.0 / Math.sqrt(vx * vx + vy * vy + vz * vz);
-
-                geometry.source_tangentData[i * 3] = vx * d;
-                geometry.source_tangentData[i * 3 + 1] = vy * d;
-                geometry.source_tangentData[i * 3 + 2] = vz * d;
+                geometry.verticesData[i] = vx * d;
+                geometry.verticesData[i + 1] = vy * d;
+                geometry.verticesData[i + 2] = vz * d;
+                i += geometry.vertexAttLength;
             }
         }
     }

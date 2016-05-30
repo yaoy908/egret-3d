@@ -29,7 +29,6 @@
         "geom/BoundBox.ts",
         "geom/ColorTransform.ts",
         "events/PickResult.ts",
-        "events/IDispatchEvent.ts",
         "events/Event3D.ts",
         "events/MouseEvent3D.ts",
         "events/TouchEvent3D.ts",
@@ -61,6 +60,8 @@
         "shader/ShaderContent.ts",
         "shader/ShaderUtil.ts",
 
+        "shadow/ShadowCast.ts",
+        
         "anim/AnimationNode.ts",
         "anim/AnimationCurve.ts",
         "anim/IAnimationState.ts",
@@ -90,12 +91,11 @@
         "core/context/MipmapData.ts",
         "core/context/Program3D.ts",
         "core/context/Texture2D.ts",
-        "core/context/RenderTexture.ts",
         "core/context/Shader.ts",
         "core/context/Texture3D.ts",
 
-        "render/IRender.ts",
         "core/node/Object3D.ts",
+        "render/IRender.ts",
         "core/node/Entity.ts",
         "core/node/Mesh.ts",
         "core/node/BillBoard.ts",
@@ -157,6 +157,7 @@
         "material/method/AlphaMaskMethod.ts",
         "material/method/ColorTransformMethod.ts",
         "material/method/ColorGradientsMethod.ts",
+        "material/method/ShadowMethod.ts",
 
         "material/pass/PassUsage.ts",
         "material/MaterialData.ts",
@@ -164,7 +165,12 @@
         "material/pass/MaterialPass.ts",
         "material/pass/ColorPass.ts",
         "material/pass/DiffusePass.ts",
+        "material/pass/ShadowPass.ts",
         "material/pass/CubePass.ts",
+        "material/pass/MatCapPass.ts",
+        
+        "material/pass/PassUtil.ts",
+        
 
         "material/MaterialBase.ts",
 
@@ -173,7 +179,7 @@
         "material/CubeTextureMaterial.ts",
 
         "render/RenderBase.ts",
-        "render/DefaultRender.ts",
+        "render/MultiRender.ts",
 
         "particle/Value.ts",
         "particle/particleNode/ParticleEndNode.ts",
@@ -185,13 +191,13 @@
         "particle/particleNode/ParticleFollowNode.ts",
         "particle/particleNode/ParticleUniformSpeedNode.ts",
         "particle/particleNode/ParticleAccelerationSpeedNode.ts",
-        "particle/particleNode/ParticleScaleByLifeNode.ts",
         "particle/particleNode/ParticleRotationNode.ts",
         "particle/particleNode/ParticleColorGlobalNode.ts",
         "particle/particleNode/ParticleSizeGlobalNode.ts",
 
         "particle/particleAnimationState.ts",
         "particle/ParticleAnimation.ts",
+        "particle/ParticleData.ts",
         "particle/ParticleEmitter.ts",
 
         "scene/Scene3D.ts",
@@ -205,7 +211,7 @@
         "texture/CubeTexture.ts",
         "texture/CheckerboardTexture.ts",
         "texture/VideoTexture.ts",
-        "texture/RenderTargetTexture.ts",
+        "texture/RenderTexture.ts",
 
         "Util/ByteArray.ts",
         "Util/Debug.ts",

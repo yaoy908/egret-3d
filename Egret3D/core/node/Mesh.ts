@@ -18,60 +18,10 @@
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class Mesh extends Object3D implements IRender,IQuadNode{
-
-        /**
-        * @language zh_CN
-        * 网格信息。</p>
-         * geometry 为渲染对象的网格信息 ，渲染对象需要 vertexBuffer  和 indexBuffer 信息 及顶点着色器shade。</p>
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public geometry: Geometry;
+    export class Mesh extends IRender implements IQuadNode{
         protected _aabbBox: QuadAABB;
-                        
-        /**
-        * @language zh_CN
-        * 材质信息。</p>
-        * 赋予对象节点可供渲染的材质球属性，让对象加入可渲染实体列表，及渲染对象与对象之间的混合，排序。</p>
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public material: MaterialBase ;
 
-        protected multiMaterial: { [matID: number]: MaterialBase } = {};
 
-        protected _materialCount: number = 0;
-
-        /**
-        * @language zh_CN
-        * 动作对象，控制骨骼动画。</p>
-        * 可拓展的动画功能属性，动画功能的驱动类总接口。</p>
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public animation: IAnimation = null;
-
-        /**
-        * @language zh_CN
-        * 鼠标拣选类型。</p>
-        * 设置鼠标的拣选类型，可通过 PickType来进行设置。</p>
-        * 快速拣选默认使用 正方形包围盒子。</p>
-        * 高精度型需要 PositionPick ， uv pick 等。</p>
-        * @see egret3d.PickType
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public pickType: PickType = PickType.BoundPick;
-
-        /**
-        * @language zh_CN
-        * 鼠标检测数据
-        * @private
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public pickResult: PickResult = new PickResult();
 
         /**
         * @language zh_CN
@@ -102,8 +52,7 @@
             this.bound = this.buildBoundBox();
         }
 
-
-        public lightGroup: LightGroup;
+     
 
         public setMaterialByID() {
         }
@@ -214,8 +163,14 @@
         public update(time: number, delay: number, camera: Camera3D) {
             if (this.isDisable)
                 return;
-
             super.update(time, delay, camera);
+
+            if (this.animation) {
+                this.animation.update(time, delay, this.geometry);
+            }
+            if (this.geometry.subGeometrys.length <= 0) {
+                this.geometry.buildDefaultSubGeometry();
+            }
         }
 
         /**
@@ -276,37 +231,13 @@
         protected _subGeometry: SubGeometry;
         protected _matID: number; 
         
-        /**
-        * @private
-        */
-        public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
-            this._i = 0;
-            this.geometry.update(time, delay, context3DProxy, camera3D);
-            if (this.geometry.subGeometrys.length <= 0) {
-                this.geometry.buildDefaultSubGeometry();
-            }
-            for (this._i = 0; this._i < this.geometry.subGeometrys.length; this._i++) {
-                this._subGeometry = this.geometry.subGeometrys[this._i];
-                this._matID = this._subGeometry.matID;
-                if (this.multiMaterial[this._matID]) {
-                    if (this.lightGroup) {
-                        this.multiMaterial[this._matID].lightGroup = this.lightGroup;
-                    }
-                    this.multiMaterial[this._matID].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
-                }
-                else {
-                    if (this.lightGroup) {
-                        this.multiMaterial[0].lightGroup = this.lightGroup;
-                    }
-                    this.multiMaterial[0].renderDiffusePass(time, delay, this._matID, context3DProxy, this.modelMatrix, camera3D, this._subGeometry, this.animation);
-                }
-            }
+        ///**
+        //* @private
+        //*/
+        //public renderDiffusePass(time: number, delay: number, context3DProxy: Context3DProxy, camera3D: Camera3D) {
+            
 
-            if (this.animation) {
-                this.animation.update(time, delay, this.geometry,null, context3DProxy);
-            }
-
-        }
+        //}
 
 
        

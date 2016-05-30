@@ -19,6 +19,11 @@
             var fileFormatBytes: ByteArray = new ByteArray();
             bytes.readBytes(fileFormatBytes, 0, 3);
             var version: number = bytes.readUnsignedInt();
+
+            if (!ECAVersion.versionDictionary[version]) {
+                console.log("egret3d engine not found " + version + " version");
+                return null;
+            }
             return ECAVersion.versionDictionary[version](bytes);
         }
     }

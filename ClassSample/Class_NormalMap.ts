@@ -14,6 +14,11 @@
             view1.backColor = 0xff000000;
             this._egret3DCanvas.addView3D(view1);
             this.view1 = view1;
+
+            var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
+            var tex: ImageTexture = new ImageTexture(bgImg);
+            this.view1.backImage = tex;
+
             this.ctl = new HoverController(view1.camera3D);
             this.ctl.tiltAngle = 60;
             this.ctl.distance = 1000;

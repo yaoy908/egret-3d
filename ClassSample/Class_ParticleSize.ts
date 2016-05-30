@@ -19,6 +19,10 @@
             view1.backColor = 0xff000000;
             this._egret3DCanvas.addView3D(view1);
 
+            var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
+            var tex: ImageTexture = new ImageTexture(bgImg);
+            view1.backImage = tex;
+
             this.cameraCrl = new LookAtController(this.view1.camera3D, new Object3D());
             this.cameraCrl.distance = 1000;
 
@@ -33,7 +37,8 @@
 
             var mat: TextureMaterial = new TextureMaterial();
             mat.ambientColor = 0xffffff;
-            this.particle = new ParticleEmitter(null, mat, 500 );
+            var data: ParticleData = new ParticleData();
+            this.particle = new ParticleEmitter(data, null, mat);
 
             //var uniformSpeed: ParticleUniformSpeedNode = new ParticleUniformSpeedNode();
             //uniformSpeed.speedShape = new Vec3ConstValueShape();

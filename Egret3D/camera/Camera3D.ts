@@ -59,6 +59,7 @@
     * 相机数据处理，生成3D摄相机。</p>
     * 渲染场景从摄像机视点到缓冲区。</p>
     * 相机分为透视摄像机、正交摄像机、VR摄像机。</p>
+    * 默认相机朝向是(0, 0, 1) 头朝向是(0, 1, 0)
     *
     * @see egret3d.Matrix4_4
     * @see egret3d.Object3D
@@ -152,8 +153,8 @@
             this._cameraType = cameraType;
             switch (cameraType) {
                 case CameraType.orthogonal:
-                    this.projectMatrix.ortho(this._viewPort.width, this._viewPort.height, this._near, this._far);
-                    //this.updataOrth();
+                      this.projectMatrix.ortho(this._viewPort.width, this._viewPort.height, this._near, this._far);
+                        //this.updataOrth();
                     break;
                 case CameraType.perspective:
                     this.projectMatrix.perspective(this._fovY, this._aspectRatio, this._near, this._far);
@@ -410,6 +411,7 @@
             return this._lookAtPosition;
         }
 
+        private raw: Float32Array = new Float32Array(16);
         /**
         * @private
         * @language zh_CN
@@ -418,8 +420,7 @@
         * @platform Web,Native
         */
         public updataOrth() {
-            var _projectionHeight: number = 800;
-            var raw: Float32Array = new Float32Array(16);
+            var _projectionHeight: number = 2000;
             var _yMax:number = _projectionHeight * .5;
             var _xMax:number = _yMax * this._aspectRatio ;
 
@@ -432,14 +433,14 @@
                 top = -_yMax;
                 bottom = _yMax;
 
-                raw[0] = 2 / (_projectionHeight * this._aspectRatio);
-                raw[5] = 2 / _projectionHeight;
-                raw[10] = 1 / (this._far - this._near);
-                raw[14] = this._near / (this._near - this._far);
-                raw[1] = raw[2] = raw[3] = raw[4] =
-                raw[6] = raw[7] = raw[8] = raw[9] =
-                raw[11] = raw[12] = raw[13] = 0;
-                raw[15] = 1;
+                this.raw[0] = 2 / (_projectionHeight * this._aspectRatio);
+                this.raw[5] = 2 / _projectionHeight;
+                this.raw[10] = 1 / (this._far - this._near);
+                this.raw[14] = this._near / (this._near - this._far);
+                this.raw[1] = this.raw[2] = this.raw[3] = this.raw[4] =
+                this.raw[6] = this.raw[7] = this.raw[8] = this.raw[9] =
+                this.raw[11] = this.raw[12] = this.raw[13] = 0;
+                this.raw[15] = 1;
 
             } else {
 
@@ -453,20 +454,20 @@
                 top = middle - yHgt;
                 bottom = middle + yHgt;
 
-                raw[0] = 2 * 1 / (right - left);
-                raw[5] = -2 * 1 / (top - bottom);
-                raw[10] = 1 / (this._far - this._near);
+                this.raw[0] = 2 * 1 / (right - left);
+                this.raw[5] = -2 * 1 / (top - bottom);
+                this.raw[10] = 1 / (this._far - this._near);
 
-                raw[12] = (right + left) / (right - left);
-                raw[13] = (bottom + top) / (bottom - top);
-                raw[14] = this._near / (this.near - this.far);
+                this.raw[12] = (right + left) / (right - left);
+                this.raw[13] = (bottom + top) / (bottom - top);
+                this.raw[14] = this._near / (this.near - this.far);
 
-                raw[1] = raw[2] = raw[3] = raw[4] =
-                raw[6] = raw[7] = raw[8] = raw[9] = raw[11] = 0;
-                raw[15] = 1;
+                this.raw[1] = this.raw[2] = this.raw[3] = this.raw[4] =
+                this.raw[6] = this.raw[7] = this.raw[8] = this.raw[9] = this.raw[11] = 0;
+                this.raw[15] = 1;
             }
 
-            this.projectMatrix.copyRawDataFrom(raw)
+            this.projectMatrix.copyRawDataFrom(this.raw);
         }
 
         /**

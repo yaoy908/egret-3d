@@ -17,7 +17,11 @@
             this._egret3DCanvas.addView3D(view1);
             this.view1 = view1;
 
-            var load: URLLoader = new URLLoader("resource/laohu/Mon_04.esm");
+            var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
+            var tex: ImageTexture = new ImageTexture(bgImg);
+            this.view1.backImage = tex;
+
+            var load: URLLoader = new URLLoader("resource/basier/3191b290.obj.esm");
             load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoad, this);
 
 
@@ -44,8 +48,6 @@
 
         protected mat: TextureMaterial;
         protected onLoad(e:LoaderEvent3D) {
-            var img: HTMLImageElement = <HTMLImageElement>document.getElementById("mon");
-            var tex: ImageTexture = new ImageTexture(img);
 
             var mat: TextureMaterial = new TextureMaterial();
             mat.gloss = 10.0;
@@ -57,16 +59,28 @@
 
             this.view1.addChild3D(mesh);
 
-            mesh.material.lightGroup = this.lights;
             this.laohu = mesh;
 
-            var loadtex: URLLoader = new URLLoader("resource/laohu/Mon_04.png");
-            loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
-            loadtex["mat"] = mat;
-            var load: URLLoader = new URLLoader("resource/laohu/Bonezero.eam");
-            load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onAnimation, this);
-            load["mesh"] = mesh;
-            this.cameraCtl.lookAtObject = mesh;
+            for (var i: number = 0; i < ge.subGeometrys.length; ++i) {
+
+                var sub: SubGeometry = ge.subGeometrys[i];
+
+                mat = <TextureMaterial>mesh.getMaterial(i);
+                if (!mat) {
+                    mat = new TextureMaterial();
+                    mesh.addSubMaterial(i, mat);
+                }
+
+                var loadtex: URLLoader = new URLLoader("resource/basier/" + sub.textureDiffuse);
+                loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
+                loadtex["mat"] = mat;
+                mat.ambientColor = 0xffffff;
+            }
+
+            //var load: URLLoader = new URLLoader("resource/laohu/Bonezero.eam");
+            //load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onAnimation, this);
+            //load["mesh"] = mesh;
+            //this.cameraCtl.lookAtObject = mesh;
         }
 
         protected onLoadTexture(e: LoaderEvent3D) {

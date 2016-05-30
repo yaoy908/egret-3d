@@ -6,27 +6,25 @@
     export class ParticleTime extends AnimationNode {
 
         /**
-        * 发射器的生命周期 粒子发射器的持续时间
-        */
-        public duration: number = 1.0;
-
-        /**
         * 所有单位粒子出生延迟时间
         */
-        public delay: ValueShape = new ConstValueShape();
+        private _delay: ValueShape;
 
         /**
         * 所有单位粒子的生命周期
         */
-        public life: ValueShape = new ConstValueShape();
+        private _life: ValueShape;
 
         /**
-        * 所有单位粒子的生命周期
+        * 所有单位粒子的发射间隔
         */
-        public rate: ValueShape = new ConstValueShape();
+        private _rate: ValueShape;
 
         private attribute_time: GLSL.VarRegister;
         private particleAnimationState: ParticleAnimationState;
+
+       
+
         constructor() {
             super();
 
@@ -56,39 +54,55 @@
 
             this.particleAnimationState = <ParticleAnimationState>this.state;
 
-            var startArray: number[] = this.delay.calculate(count);
-            var lifeArray: number[] = this.life.calculate(count);
-            var speaceArray: number[] = this.rate.calculate(count);
+            var delayArray:Array<number> = this.particleAnimationState.delayArray = this._delay.calculate(count);
+            var lifeArray: Array<number> = this.particleAnimationState.lifeArray = this._life.calculate(count);
+            var rateArray: Array<number> = this.particleAnimationState.rateArray = this._rate.calculate(count);
 
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
 
+            var currentPeace: number = 0;           //当前累加的间隔时间
+            var unitTotalLife: number = 0;          //每个粒子单元从0开始到最后一个循环结束的时间
             for (var i: number = 0; i < count; ++i) {
 
-                var delayTime: number = startArray[i];
+                var delayTime: number = delayArray[i];
                 var lifeTime: number = lifeArray[i];
-                var rateTime: number = speaceArray[i];
-                var id: number = i;
-                var maxSpace: number = rateTime * i;
-                var maxCycle: number = maxSpace + lifeTime;
+                currentPeace += rateArray[i];
 
-                this.particleAnimationState.maxSpace = Math.max(this.particleAnimationState.maxSpace, maxSpace);
-                if (this.particleAnimationState.totalTime < maxCycle) {
-                    this.particleAnimationState.totalTime = maxCycle;
-                    this.particleAnimationState.delayLife = lifeTime; 
-                }
-
+                unitTotalLife = this.particleAnimationState.duration + delayTime + lifeTime;
+                var lifeCount: number = Math.floor((unitTotalLife - delayTime - currentPeace)  / lifeTime);
+                unitTotalLife = lifeCount * lifeTime + currentPeace + delayTime;
                 for (var j: number = 0; j < vertices; ++j) {
                     index = i * vertices + j;
                     index = index * geometry.vertexAttLength + this.attribute_time.offsetIndex;
 
-                    geometry.verticesData[index + 0] = delayTime;
-                    geometry.verticesData[index + 1] = lifeTime;
-                    geometry.verticesData[index + 2] = rateTime ;
-                    geometry.verticesData[index + 3] = i;
+                    geometry.verticesData[index + 0] = currentPeace + delayTime;//出生时间
+                    geometry.verticesData[index + 1] = lifeTime;                //单次生命周期时间
+                    geometry.verticesData[index + 2] = unitTotalLife ;          //从0开始计数到循环到最后一次结束的总时间
+                    geometry.verticesData[index + 3] = i;                       //下标
                 }
             }
+            //粒子一个完整的周期为最后一个粒子走完周期
+            this.particleAnimationState.totalTime = unitTotalLife;
 
+        }
+
+
+        public init(data:ParticleData): void {
+            //delay
+            var delayValue: ConstRandomValueShape = new ConstRandomValueShape();
+            delayValue.max = data.delayMax;
+            delayValue.min = data.delayMin;
+            this._delay = delayValue;
+            //life
+            var lifeValue: ConstRandomValueShape = new ConstRandomValueShape();
+            lifeValue.max = data.lifeMax;
+            lifeValue.min = data.lifeMin;
+            this._life = lifeValue;
+            //rate
+            var rateValue: ConstValueShape = new ConstValueShape();
+            rateValue.value = 1 / data.rate;
+            this._rate = rateValue;
         }
     }
 } 

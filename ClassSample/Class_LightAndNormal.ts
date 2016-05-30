@@ -18,6 +18,7 @@
             this.ctl = new HoverController(view1.camera3D);
             this.ctl.tiltAngle = 60;
             this.ctl.distance = 1000; 
+            //view1.render = new MultiRender(PassType.matCapPass);
 
             var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
             var tex: ImageTexture = new ImageTexture(bgImg);
@@ -43,11 +44,13 @@
             this.matPlane.gloss = 100.0;
 
             this.matPlane.repeat = true;
-            this.matPlane.uvRectangle(0, 0, 1.0, 1.0);
+            this.matPlane.uvRectangle = new Rectangle(0, 0, 1.0, 1.0);
 
             var lightMethod: LightmapMethod = new LightmapMethod();
             this.matPlane.diffusePass.addMethod(lightMethod);
             lightMethod.lightTexture = CheckerboardTexture.texture;
+
+
 
             //this.plane = new Mesh(new SphereGeometry(300, 120, 120), this.matPlane);
             //this.plane = new Mesh(new CubeGeometry(150, 120, 120), this.matPlane);
@@ -67,6 +70,8 @@
             var loadtex: URLLoader = new URLLoader("resource/normal/Metal_SciFiFuelCrate_1k_g.png");
             loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadSpecular, this);
             loadtex["mat"] = this.matPlane;
+
+            //this.matPlane.addPass(PassType.matCapPass);
 
         }
 

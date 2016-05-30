@@ -18,6 +18,10 @@
             view1.backColor = 0xff000000;
             this._egret3DCanvas.addView3D(view1);
 
+            var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
+            var tex: ImageTexture = new ImageTexture(bgImg);
+            view1.backImage = tex;
+
             this.cameraCtl = new LookAtController(view1.camera3D, new Object3D());
             this.cameraCtl.distance = 1000;
             this.cameraCtl.rotationX = 60;

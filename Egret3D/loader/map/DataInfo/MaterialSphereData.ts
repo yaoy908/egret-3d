@@ -168,7 +168,14 @@ module egret3d {
          * @platform Web,Native
          */
         public blendMode: number;
-
+        
+        /**
+         * @language zh_CN
+         * alpha≤√«–÷µ
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public cutAlpha: number = 0.7;
 
         /**
          * @language zh_CN
@@ -178,7 +185,13 @@ module egret3d {
          */
         public methods: Array<MaterialMethodData>;
        
-        
+        /**
+         * @language zh_CN
+         * ≤ƒ÷ «Úuv«¯”Ú
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public uvRectangle: Rectangle = new Rectangle(0, 0, 1, 1);
         /**
         * @language zh_CN
         * constructor 
