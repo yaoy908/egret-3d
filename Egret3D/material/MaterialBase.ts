@@ -47,10 +47,6 @@
             }
             else
                 this.setData(materialData);
-
-            //default 
-            this.materialData.shaderPhaseTypes[PassType.diffusePass] = [];
-            this.materialData.shaderPhaseTypes[PassType.shadowPass] = [];
         }
                         
         /**
@@ -76,7 +72,8 @@
         }
 
         protected initPass() {
-            this.passes[PassType.diffusePass] = new ColorPass(this.materialData);
+            //this.passes[PassType.diffusePass] = new ColorPass(this.materialData);
+            this.addPass(PassType.colorPass);
         }
         
         /**
@@ -89,7 +86,9 @@
          */
         public set lightGroup(group: LightGroup) {
             this._lightGroup = group; 
-            this.passes[PassType.diffusePass].lightGroup = group;
+
+            if (this.passes[PassType.diffusePass])
+                this.passes[PassType.diffusePass].lightGroup = group;
         }
 
         ///**
@@ -137,14 +136,13 @@
                 this.materialData.diffuseTexture = texture;
                 this.materialData.textureChange = true;
 
-                if (this.materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.diffuse_fragment) == -1) {
+                if (this.materialData.shaderPhaseTypes[PassType.diffusePass]&&this.materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.diffuse_fragment) == -1) {
                     this.materialData.shaderPhaseTypes[PassType.diffusePass].push(ShaderPhaseType.diffuse_fragment);
-                    //this.diffusePass.passInvalid();
                 }
 
-                if (this.materialData.shaderPhaseTypes[PassType.shadowPass].indexOf(ShaderPhaseType.diffuse_fragment) == -1) {
+                if (this.materialData.shaderPhaseTypes[PassType.shadowPass] && this.materialData.shaderPhaseTypes[PassType.shadowPass].indexOf(ShaderPhaseType.diffuse_fragment) == -1) {
                     this.materialData.shaderPhaseTypes[PassType.shadowPass].push(ShaderPhaseType.diffuse_fragment);
-                    //this.shadowPass.passInvalid();
+                    //this.passes[PassType.shadowPass].passInvalid();
                 }
                
             }
@@ -175,9 +173,41 @@
                 this.materialData.normalTexture = texture;
                 this.materialData.textureChange = true;
 
-                if (this.materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.normal_fragment) == -1) {
+                if (this.materialData.shaderPhaseTypes[PassType.diffusePass] &&this.materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.normal_fragment) == -1) {
                     this.materialData.shaderPhaseTypes[PassType.diffusePass].push(ShaderPhaseType.normal_fragment);
                     this.passes[PassType.diffusePass].passInvalid();
+                }
+
+                if (this.materialData.shaderPhaseTypes[PassType.matCapPass] &&this.materialData.shaderPhaseTypes[PassType.matCapPass].indexOf(ShaderPhaseType.normal_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.matCapPass].push(ShaderPhaseType.normal_fragment);
+                    //this.passes[PassType.matCapPass].passInvalid();
+                }
+
+            }
+        }
+        
+
+        /**
+          * @language zh_CN
+          * 设置材质 matcapTexture 。
+          * 设置材质球特殊光效算法。
+          * @param texture {TextureBase}
+          * @version Egret 3.0
+          * @platform Web,Native
+          */
+        public set matcapTexture(texture: ITexture) {
+            if (texture) {
+                this.materialData.matcapTexture = texture;
+                this.materialData.textureChange = true;
+
+                if (this.materialData.shaderPhaseTypes[PassType.diffusePass] && this.materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.matCap_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.diffusePass].push(ShaderPhaseType.matCap_fragment);
+                    this.passes[PassType.diffusePass].passInvalid();
+                }
+
+                if (this.materialData.shaderPhaseTypes[PassType.matCapPass] && this.materialData.shaderPhaseTypes[PassType.matCapPass].indexOf(ShaderPhaseType.matCap_fragment) == -1) {
+                    this.materialData.shaderPhaseTypes[PassType.matCapPass].push(ShaderPhaseType.matCap_fragment);
+                    //this.passes[PassType.matCapPass].passInvalid();
                 }
 
             }
@@ -206,9 +236,9 @@
             if (texture) {
                 this.materialData.specularTexture = texture;
                 this.materialData.textureChange = true;
-                if (this.materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.specular_fragment) == -1) {
+                if (this.materialData.shaderPhaseTypes[PassType.diffusePass]&&this.materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.specular_fragment) == -1) {
                     this.materialData.shaderPhaseTypes[PassType.diffusePass].push(ShaderPhaseType.specular_fragment);
-                    this.passes[PassType.diffusePass].passInvalid();
+                    //this.passes[PassType.diffusePass].passInvalid();
                 }
             }
         }

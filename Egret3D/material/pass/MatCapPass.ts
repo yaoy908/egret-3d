@@ -35,12 +35,22 @@
                 }
             }
 
-            if (this._materialData.shaderPhaseTypes[PassType.shadowPass].indexOf(ShaderPhaseType.diffuse_fragment) != -1) {
-                this._fs_shader_methods[ShaderPhaseType.diffuse_fragment] = [];
-                this._fs_shader_methods[ShaderPhaseType.diffuse_fragment].push("matCapPass_fs");
-            }
+           // if (this._materialData.shaderPhaseTypes[PassType.matCapPass] && this._materialData.shaderPhaseTypes[PassType.matCapPass].indexOf(ShaderPhaseType.local_vertex) != -1) {
+                //this._vs_shader_methods[ShaderPhaseType.local_vertex] = [];
+                //this._vs_shader_methods[ShaderPhaseType.local_vertex].push("matCapPass_vs");
+           // }
 
-            if (this._materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.normal_fragment) != -1) {
+           // if (this._materialData.shaderPhaseTypes[PassType.matCapPass] && this._materialData.shaderPhaseTypes[PassType.matCapPass].indexOf(ShaderPhaseType.diffuse_fragment) != -1) {
+
+            this._fs_shader_methods[ShaderPhaseType.diffuse_fragment] = [];
+            this._fs_shader_methods[ShaderPhaseType.diffuse_fragment].push("diffuse_fragment");
+
+
+                this._fs_shader_methods[ShaderPhaseType.matCap_fragment] = [];
+                this._fs_shader_methods[ShaderPhaseType.matCap_fragment].push("matCap_TextureAdd_fs");
+          //  }
+
+            if (this._materialData.shaderPhaseTypes[PassType.matCapPass] &&this._materialData.shaderPhaseTypes[PassType.matCapPass].indexOf(ShaderPhaseType.normal_fragment) != -1) {
                 this._fs_shader_methods[ShaderPhaseType.normal_fragment] = [];
                 this._fs_shader_methods[ShaderPhaseType.normal_fragment].push("normalMap_fragment");
             }
@@ -60,6 +70,11 @@
                 this.addMethodShaders(this._passUsage.vertexShader, shaderList);
             else
                 this.addMethodShaders(this._passUsage.vertexShader, ["diffuse_vertex"]); 
+
+            //local
+            shaderList = this._vs_shader_methods[ShaderPhaseType.local_vertex];
+            if (shaderList && shaderList.length > 0)
+                this.addMethodShaders(this._passUsage.vertexShader, shaderList);
 
             this.addMethodShaders(this._passUsage.vertexShader, ["end_vs"]);
 
@@ -82,6 +97,11 @@
 
             //normal
             shaderList = this._fs_shader_methods[ShaderPhaseType.normal_fragment];
+            if (shaderList && shaderList.length > 0)
+                this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
+
+            //matCap
+            shaderList = this._fs_shader_methods[ShaderPhaseType.matCap_fragment];
             if (shaderList && shaderList.length > 0)
                 this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
 

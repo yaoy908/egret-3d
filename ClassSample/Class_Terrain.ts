@@ -33,7 +33,7 @@
             this.matPlane.gloss = 1.0;
 
             this.matPlane.repeat = true;
-            this.matPlane.uvRectangle(0, 0, 2.0, 2.0);
+            this.matPlane.uvRectangle = new  Rectangle(0, 0, 2.0, 2.0);
        
 
             this.plane = new Mesh(new PlaneGeometry(500,500), this.matPlane);

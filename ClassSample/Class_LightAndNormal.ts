@@ -44,7 +44,7 @@
             this.matPlane.gloss = 100.0;
 
             this.matPlane.repeat = true;
-            this.matPlane.uvRectangle(0, 0, 1.0, 1.0);
+            this.matPlane.uvRectangle = new Rectangle(0, 0, 1.0, 1.0);
 
             var lightMethod: LightmapMethod = new LightmapMethod();
             this.matPlane.diffusePass.addMethod(lightMethod);
