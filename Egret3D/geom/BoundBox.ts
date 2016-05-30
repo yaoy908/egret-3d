@@ -138,6 +138,7 @@
         /**
         * @language zh_CN
         * 检测两个包围盒是否相交
+        * 功能和 intersect 一样 为版本兼容没有删除此API
         * @param box2 其中一个包围盒 
         * @param boxIntersect 相交的包围盒 默认为空
         * @returns boolean 成功返回true
