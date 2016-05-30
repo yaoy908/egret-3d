@@ -66,7 +66,13 @@
         */
         update(time: number, delay: number, geometry:Geometry): void;
 
-
+        /**
+        * @private
+        * @language zh_CN
+        * GPU传值调度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         activeState(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D);
         /**
         * @language zh_CN

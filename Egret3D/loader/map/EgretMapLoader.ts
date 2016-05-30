@@ -271,6 +271,7 @@
                 material.normalTexture = this._sourceLib.getImage(materialData.normalTextureName);
                 material.diffuseTexture = this._sourceLib.getImage(materialData.diffuseTextureName);
                 material.specularTexture = this._sourceLib.getImage(materialData.specularTextureName);
+                material.uvRectangle = materialData.uvRectangle;
 
                 var method: MaterialMethodData;
                 for (method of materialData.methods) {
