@@ -24,6 +24,7 @@
         private _defaultMaterial: TextureMaterial;
         private _materialMap: DoubleArray;
         private _lightHashMap: DoubleArray;
+        private _meshMap: DoubleArray;
 
         private _sourceLib: EgretMapSourceLib;
         private _parser: EgretMapXmlParser;
@@ -44,6 +45,7 @@
             this._sourceLib = new EgretMapSourceLib();
             this._materialMap = new DoubleArray();
             this._lightHashMap = new DoubleArray();
+            this._meshMap = new DoubleArray();
         }
 
 
@@ -103,6 +105,28 @@
          */
         public get lightHashMap(): DoubleArray {
             return this._lightHashMap;
+        }
+
+        /**
+         * @language zh_CN
+         * 获取所有的Mesh实例化对象
+         * @returns egret3d.DoubleArray
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public get meshMap(): DoubleArray {
+            return this._meshMap;
+        }
+
+        /**
+         * @language zh_CN
+         * 获取所有的Material实例化对象
+         * @returns egret3d.DoubleArray
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public get materialMap(): DoubleArray {
+            return this._materialMap;
         }
 
          /**
@@ -247,6 +271,7 @@
                 material.normalTexture = this._sourceLib.getImage(materialData.normalTextureName);
                 material.diffuseTexture = this._sourceLib.getImage(materialData.diffuseTextureName);
                 material.specularTexture = this._sourceLib.getImage(materialData.specularTextureName);
+                material.uvRectangle = materialData.uvRectangle;
 
                 var method: MaterialMethodData;
                 for (method of materialData.methods) {
@@ -299,7 +324,7 @@
                     mesh = new Mesh(geometry, realMat);
                 }
 
-                for (var i: number = 1, matCount: number = data.materialIDs[i]; i < matCount; i++) {
+                for (var i: number = 1, matCount: number = data.materialIDs.length; i < matCount; i++) {
                     realMat = this._materialMap.getValueByKey(data.materialIDs[i]);
                     realMat || (realMat = this._defaultMaterial);
                     mesh.addSubMaterial(i, realMat);
@@ -338,6 +363,7 @@
                 mesh.lightGroup = lightGroup;
 
 
+                this._meshMap.put(data, mesh);
                 this._container.addChild(mesh);
             }
         }

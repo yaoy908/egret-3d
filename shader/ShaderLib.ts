@@ -432,12 +432,37 @@ module egret3d {
 			"diffuseColor.xyz = mix( fog.fogColor, diffuseColor.xyz, fogFactor ); \n" +
 			"} \n",
 
-			"matCapPass_fs":
-			"uniform sampler2D diffuseTexture; \n" +
-			"vec4 diffuseColor ; \n" +
+			"matCapPass_vs":
+			"varying vec2 capCoord ; \n" +
+			"void main(void){ \n" +
+			"capCoord.x = dot(normalMatrix[0].xyz,normal); \n" +
+			"capCoord.y = dot(normalMatrix[1].xyz,normal); \n" +
+			"capCoord = capCoord * 0.5 + 0.5; \n" +
+			"ambientColor.xyz +=  + capCoord.xyz * 2.0 - 1.0 ; \n" +
+			"} \n",
+
+			"matCap_TextureAdd_fs":
+			"uniform sampler2D matcapTexture; \n" +
+			"uniform mat4 uniform_NormalMatrix; \n" +
 			"void main() { \n" +
-			"diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
-			"diffuseColor.xyz = varying_eyeNormal.xyz ; \n" +
+			"vec4 capCoord ; \n" +
+			"capCoord.x = -normal.x; \n" +
+			"capCoord.y = normal.y; \n" +
+			"capCoord.xy = capCoord.xy * 0.5 + 0.5; \n" +
+			"capCoord = texture2D(matcapTexture , capCoord.xy ) * 2.0 - 1.0 ; \n" +
+			"ambientColor.xyz += capCoord.xyz ; \n" +
+			"} \n",
+
+			"matCap_TextureMult_fs":
+			"uniform sampler2D matcapTexture; \n" +
+			"uniform mat4 uniform_NormalMatrix; \n" +
+			"void main() { \n" +
+			"vec4 capCoord ; \n" +
+			"capCoord.x = -normal.x; \n" +
+			"capCoord.y = normal.y; \n" +
+			"capCoord.xy = capCoord.xy * 0.5 + 0.5; \n" +
+			"capCoord = texture2D(matcapTexture , capCoord.xy ) ; \n" +
+			"diffuseColor.xyz *= capCoord.xyz * 2.0 ; \n" +
 			"} \n",
 
 			"materialSource_fs":
@@ -563,8 +588,7 @@ module egret3d {
 			"outPosition.xyz = localPosition.xyz  ; \n" +
 			"outPosition = billboardMatrix * outPosition; \n" +
 			"outPosition.xyz += globalPosition.xyz; \n" +
-			"outPosition = uniform_ModelMatrix * outPosition; \n" +
-			"outPosition = uniform_ViewMatrix * outPosition; \n" +
+			"outPosition = modeViewMatrix * outPosition; \n" +
 			"gl_Position = uniform_ProjectionMatrix * outPosition ; \n" +
 			"} \n" +
 			"	 \n",
@@ -619,52 +643,6 @@ module egret3d {
 			"localPosition.xyz *= p.y ; \n" +
 			"} \n",
 
-			"particle_time":
-			"attribute vec4 attribute_time ; \n" +
-			"uniform float uniform_time[5] ; \n" +
-			"float currentTime = 0.0; \n" +
-			"struct ParticleData{ \n" +
-			"float delay; \n" +
-			"float life; \n" +
-			"float rate; \n" +
-			"float index; \n" +
-			"}; \n" +
-			"float particle(  ){ \n" +
-			"ParticleData emit ; \n" +
-			"emit.delay = attribute_time.x ; \n" +
-			"emit.life = attribute_time.y ; \n" +
-			"emit.rate = attribute_time.z ; \n" +
-			"emit.index = attribute_time.w ; \n" +
-			"float time = uniform_time[0] ; \n" +
-			"float loop = uniform_time[1]; \n" +
-			"float duration = uniform_time[2]; \n" +
-			"float delayLife = uniform_time[3]; \n" +
-			"float maxLife = uniform_time[4]; \n" +
-			"float numberSpace = emit.index * emit.rate ; \n" +
-			"currentTime = max(time - numberSpace - emit.delay,0.0) ; \n" +
-			"if(loop==0.0){ \n" +
-			"if( numberSpace > duration ) \n" +
-			"return currentTime = 0.0 ; \n" +
-			"}else{ \n" +
-			"duration = maxLife + emit.rate - delayLife ; \n" +
-			"currentTime = mod( currentTime , duration ); \n" +
-			"if( currentTime >= emit.life ) \n" +
-			"return currentTime = 0.0 ; \n" +
-			"} \n" +
-			"if( currentTime <= 0.0 ) \n" +
-			"return currentTime ; \n" +
-			"} \n" +
-			"void e_discard(){ \n" +
-			"varying_color.w = 0.0 ; \n" +
-			"} \n" +
-			"void main(void) { \n" +
-			"float active = particle(  ) ; \n" +
-			"if( active == 0.0 ){ \n" +
-			"e_discard(); \n" +
-			"}else{ \n" +
-			"} \n" +
-			"} \n",
-
 			"particle_time_fs":
 			"varying vec4 particleTime; \n" +
 			"void main(void) { \n" +
@@ -677,44 +655,38 @@ module egret3d {
 			"float currentTime = 0.0; \n" +
 			"varying vec4 particleTime; \n" +
 			"struct ParticleData{ \n" +
-			"float delay; \n" +
+			"float bornTime; \n" +
 			"float life; \n" +
-			"float rate; \n" +
+			"float unitTotalLife; \n" +
 			"float index; \n" +
 			"}; \n" +
 			"float particle( ParticleData emit ){ \n" +
 			"float time = uniform_time[0] ; \n" +
 			"float loop = uniform_time[1]; \n" +
-			"float duration = uniform_time[2]; \n" +
-			"float delayLife = uniform_time[3]; \n" +
-			"float maxLife = uniform_time[4]; \n" +
-			"float numberSpace = emit.index * emit.rate ; \n" +
-			"currentTime = max(time - numberSpace - emit.delay,0.0) ; \n" +
-			"if(loop==0.0){ \n" +
-			"if( numberSpace > duration ) \n" +
-			"return currentTime = 0.0 ; \n" +
-			"}else{ \n" +
-			"duration = maxLife + emit.rate - delayLife ; \n" +
-			"currentTime = mod( currentTime , duration ); \n" +
-			"if( currentTime >= emit.life ) \n" +
-			"return currentTime = 0.0 ; \n" +
+			"if(time <= emit.bornTime){ \n" +
+			"return currentTime = 0.0; \n" +
 			"} \n" +
+			"if(loop == 0.0 && time >= emit.unitTotalLife){ \n" +
+			"return currentTime = 0.0; \n" +
+			"} \n" +
+			"currentTime = time - emit.bornTime; \n" +
+			"currentTime = mod( currentTime, emit.life); \n" +
 			"if( currentTime <= 0.0 ) \n" +
-			"return currentTime ; \n" +
+			"return currentTime = 0.0; \n" +
 			"} \n" +
 			"void e_discard(){ \n" +
 			"varying_color.w = 0.0 ; \n" +
 			"} \n" +
 			"void main(void) { \n" +
 			"ParticleData emit ; \n" +
-			"emit.delay = attribute_time.x ; \n" +
+			"emit.bornTime = attribute_time.x ; \n" +
 			"emit.life = attribute_time.y ; \n" +
-			"emit.rate = attribute_time.z ; \n" +
+			"emit.unitTotalLife = attribute_time.z ; \n" +
 			"emit.index = attribute_time.w ; \n" +
 			"float active = particle( emit ) ; \n" +
 			"particleTime.x = emit.index ; \n" +
 			"particleTime.y = emit.life ; \n" +
-			"particleTime.z = emit.delay ; \n" +
+			"particleTime.z = emit.unitTotalLife ; \n" +
 			"particleTime.w = currentTime ; \n" +
 			"if( active == 0.0 ){ \n" +
 			"e_discard(); \n" +
@@ -786,7 +758,6 @@ module egret3d {
 			"uniform_cameraMatrix[2], \n" +
 			"vec4(0.0, 0.0,1.0, 1.0)); \n" +
 			"mat4 modeViewMatrix = uniform_ModelViewMatrix ; \n" +
-			"mat3 normalMatrix = mat3(uniform_NormalMatrix); \n" +
 			"localPosition = outPosition = vec4(e_position, 1.0); \n" +
 			"globalPosition.xyz = vec3(0.0,0.0,0.0); \n" +
 			"globalPosition.xyz += attribute_offsetPosition; \n" +
@@ -996,7 +967,6 @@ module egret3d {
 			"tangent_vs":
 			"attribute vec3 attribute_tangent; \n" +
 			"void main(void){ \n" +
-			"varying_color.xyz = attribute_tangent.xyz ; \n" +
 			"}  \n",
 
 			"terrainRGBA_fragment":
@@ -1048,7 +1018,7 @@ module egret3d {
 			"vertexPos_vs":
 			"varying vec4 varying_pos; \n" +
 			"void main() { \n" +
-			"varying_pos = uniform_ModelMatrix * vec4(e_position, 1.0) ; \n" +
+			"varying_pos = uniform_ModelViewMatrix * vec4(e_position, 1.0) ; \n" +
 			"} \n" +
 			"                       \n",
 

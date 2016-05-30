@@ -306,7 +306,7 @@
        
             target.calculateVertexFormat();
 
-            GeometryData.updateFaceTangents(target);
+           // GeometryData.updateFaceTangents(target);
 
             for (var i: number = 0; i < source.matCount; ++i) {
                 var subGeometry: SubGeometry = new SubGeometry();

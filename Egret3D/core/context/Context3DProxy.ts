@@ -993,7 +993,7 @@
             Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture.texture);
             Context3DProxy.gl.uniform1i(uniLocation, index);
         }
-        
+
         /**
         * @language zh_CN
         * 设置贴图采样 第一个参数并不是类型

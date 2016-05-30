@@ -412,6 +412,18 @@
                     data.cutAlpha = Number(item.textContent);
                 } else if (nodeName == "methods") {
                     data.methods = EgretMaterialMethodParser.parse(item);
+                } else if (nodeName == "uvRectangle") {
+                    this.eachAttr(item, function (label: string, value: string): void {
+                        if (label == "x") {
+                            data.uvRectangle.x = Number(value);
+                        } else if (label == "y") {
+                            data.uvRectangle.y = Number(value);
+                        } else if (label == "width") {
+                            data.uvRectangle.width = Number(value);
+                        } else if (label == "height") {
+                            data.uvRectangle.height = Number(value);
+                        }
+                    });
                 }
 
             }

@@ -109,6 +109,15 @@
 
         /**
         * @language zh_CN
+        * matCapTexture。
+        * @default CheckerboardTexture.texture
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public matcapTexture: ITexture = CheckerboardTexture.texture;
+
+        /**
+        * @language zh_CN
         * 特效贴图。
         * @default CheckerboardTexture.texture
         * @version Egret 3.0

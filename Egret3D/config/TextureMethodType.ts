@@ -21,6 +21,7 @@
         materialsource_fragment,
         diffuse_fragment,
         normal_fragment,
+        matCap_fragment,
         specular_fragment,
         shadow_fragment,
         lighting_fragment,

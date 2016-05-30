@@ -43,7 +43,7 @@
             this.matPlane.gloss = 1.0;
 
             this.matPlane.repeat = true;
-            this.matPlane.uvRectangle(0, 0, 2.0, 2.0);
+            this.matPlane.uvRectangle = new Rectangle(0, 0, 2.0, 2.0);
 
             //this.plane = new Mesh(new SphereGeometry(300, 120, 120), this.matPlane);
             //this.plane = new Mesh(new CubeGeometry(150, 120, 120), this.matPlane);

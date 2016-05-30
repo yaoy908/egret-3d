@@ -249,10 +249,13 @@
             }
         }
 
-
-        public activePass(time: number, animTime:number, delay: number, animDelay:number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
+         /**
+        * @language zh_CN
+        * @private 
+        */
+        public activeState(time: number, animTime:number, delay: number, animDelay:number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
             for (var i: number = 0; i < this.animNodes.length; i++) {
-                this.animNodes[i].activePass(time, animTime, delay, animDelay, usage, geometry, context3DProxy);
+                this.animNodes[i].activeState(time, animTime, delay, animDelay, usage, geometry, context3DProxy);
             }
         }
 
