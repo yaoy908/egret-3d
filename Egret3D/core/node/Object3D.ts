@@ -1315,6 +1315,48 @@
             return new Vector3D();
         }
 
+        /**
+        * @language zh_CN
+        * 以Object3D name 来查找Object3D
+        * @prame name Object3D名字
+        * @returns Object3D 
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public findObject3D(name: string): Object3D {
+            var object3d: Object3D = null;
+            for (var i: number = 0; this.childs.length; ++i) {
+                if (this.childs[i].name == name) {
+                    object3d = this.childs[i];
+                    break; 
+                }
+                object3d = this.childs[i].findObject3D(name);
+            }
+
+            return object3d;
+        }
+
+        /**
+        * @language zh_CN
+        * 以Object3D id 来查找Object3D
+        * @prame id Object3D id
+        * @returns Object3D 
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public findObject3DToID(id: number): Object3D {
+            var object3d: Object3D = null;
+            for (var i: number = 0; this.childs.length; ++i) {
+                if (this.childs[i].id == id) {
+                    object3d = this.childs[i];
+                    break;
+                }
+                object3d = this.childs[i].findObject3DToID(id);
+            }
+
+            return object3d;
+        }
+
         protected updateTransformChange(change: boolean) {
             this._transformChange = change;
             ///Octree.getInstance().checkObject3D(obj);
