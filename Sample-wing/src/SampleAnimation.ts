@@ -269,7 +269,7 @@ class SampleAnimation extends SampleBase {
         ///播放动画
         this.PlayAni(this.idle);
         ///注销回调
-        this.model.removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onAnimationIdle,this);
+        e.loader.removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onAnimationIdle,this);
 
 
     }
@@ -291,7 +291,7 @@ class SampleAnimation extends SampleBase {
         ///添加clip
         this.model.animation.skeletonAnimationController.addSkeletonAnimationClip(this.run);
         ///注销回调
-        this.model.removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onAnimationRun,this);
+        e.loader.removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onAnimationRun,this);
 
     }
 
@@ -312,7 +312,7 @@ class SampleAnimation extends SampleBase {
         ///添加clip
         this.model.animation.skeletonAnimationController.addSkeletonAnimationClip(this.attack);
         ///注销回调
-        this.model.removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onAnimationattack,this);
+        e.loader.removeEventListener(egret3d.LoaderEvent3D.LOADER_COMPLETE,this.onAnimationattack,this);
 
     }
 
