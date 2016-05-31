@@ -23,12 +23,12 @@
             this.cameraCtl.rotationX = 60;
 
             var vi: VideoTexture = new VideoTexture();
-            vi.source = "resource/Comp.mp4";
+            vi.source = "http://localhost/resource/video/Comp.mp4";
+            //warning chrom need use url = http://127.0.0.1/resource/video/xxx.mp4 
             vi.play();
 
             var hud: HUD = new HUD(0, 0, 512, 512);
             this.view1.addHUD(hud);
-
             hud.diffuseTexture = vi;
         }
       

@@ -43,6 +43,8 @@
             this.video.controls = false;
             this.video.autoplay = true;
 
+            document.body.appendChild(this.video);
+
             this.video.addEventListener("canplaythrough", () => this.loadReady(), true);
             this.tmpCanvas.hidden = true;
         }
@@ -51,10 +53,11 @@
             this.canUpdataTexture = true; 
         }
 
-        /**
+        /*
         * @language zh_CN
         * 设置 视频链接
-        * 设置 视频的链接地址，只要是h5 支持的格式都支持， 例如:ogv,mp4,avi
+        * 设置 视频的链接地址，只要是h5 支持的格式都支持， 例如: ogv,mp4,avi
+        * warning chrom need use url = http://127.0.0.1/resource/video/xxx.mp4
         * @param src 视频格式的链接地址
         * @version Egret 3.0
         * @platform Web,Native
@@ -67,6 +70,7 @@
         * @language zh_CN
         * 返回 视频链接
         * 视频的链接地址，只要是h5 支持的格式都支持， 例如:ogv,mp4,avi
+        * warning chrom need use url = http://127.0.0.1/resource/video/xxx.mp4
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -84,7 +88,6 @@
         public play() {
             this.video.play();
         }
-
         
         /**
         * @language zh_CN
@@ -108,7 +111,11 @@
 
             if (!this.texture2D) {
                 this.texture2D = context3D.creatTexture2D();
+
+                this.context.drawImage(this.video, 0, 0, this.width, this.height);
+                Context3DProxy.gl.pixelStorei(Context3DProxy.gl.UNPACK_ALIGNMENT, 1)
                 Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, this.texture2D.texture);
+                Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, 0, Context3DProxy.gl.RGB, Context3DProxy.gl.RGB, Context3DProxy.gl.UNSIGNED_BYTE, this.tmpCanvas );
 
                 Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, Context3DProxy.gl.LINEAR);
                 Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MAG_FILTER, Context3DProxy.gl.LINEAR);
@@ -119,6 +126,7 @@
 
             if (this.canUpdataTexture) {
                 this.context.drawImage(this.video, 0, 0, this.width, this.height);
+
                 Context3DProxy.gl.pixelStorei(Context3DProxy.gl.UNPACK_ALIGNMENT, 1)
                 Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, this.texture2D.texture);
                 Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, 0, Context3DProxy.gl.RGB, Context3DProxy.gl.RGB, Context3DProxy.gl.UNSIGNED_BYTE, this.tmpCanvas);
@@ -134,6 +142,7 @@
         * @private
         */
         public uploadForcing(context3D: Context3DProxy) {
+
         }
     }
 } 
