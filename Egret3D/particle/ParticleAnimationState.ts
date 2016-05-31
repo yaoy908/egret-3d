@@ -129,17 +129,34 @@
         public rateArray: Array<number>;
 
         /**
+        * @private
+        */
+        private _emitter: ParticleEmitter;
+
+        /**
         * @language zh_CN
         * 构造函数
         * @param name 粒子动画状态名
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(name: string) {
+        constructor(name: string, emitter:ParticleEmitter) {
+            this._emitter = emitter;
             this.name = name;
 
             this.animNodes = [];
             this.keyFrames = [];
+        }
+
+         /**
+        * @language zh_CN
+        * 获取发射器
+        * @return ParticleEmitter
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get emitter(): ParticleEmitter {
+            return this._emitter;
         }
 
         /**

@@ -56,13 +56,14 @@
         private life: number = 0;
         private unitTotalLife: number = 0;
         private id: number = 0; 
-        private duration: number = 0; 
-
-        private tempTime: number = 0; 
-        private numSpace: number = 0; 
         private timeIndex: number = 0;
-        private currentTime: number = 0;
 
+        /**
+        * @language zh_CN
+        * 顶点数据是否需要重新upload
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         private geometryDirty: boolean;
 
         public update(time: number, delay: number, geometry: Geometry) {
@@ -90,10 +91,12 @@
             var vertices: number = geometry.vertexCount / this.count;
             var particleIndex: number = 0;
             var changed: boolean = false;
+
+            var timeOffsetIndex: number = this.particleAnimationState.emitter.timeNode.offsetIndex;
             for (var i: number = 0; i < this.count; ++i) {
 
                 particleIndex = i * vertices;
-                this.timeIndex = particleIndex * geometry.vertexAttLength + 5;
+                this.timeIndex = particleIndex * geometry.vertexAttLength + timeOffsetIndex;
 
                 this.bornTime = geometry.verticesData[this.timeIndex + 0];          //出生时间
                 this.life = geometry.verticesData[this.timeIndex + 1];              //单次生命周期时间

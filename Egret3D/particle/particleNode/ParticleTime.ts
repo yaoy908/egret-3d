@@ -87,7 +87,13 @@
 
         }
 
-
+        /**
+        * @language zh_CN
+        * 填充粒子生命周期数据
+        * @param data ParticleData 粒子数据来源
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public init(data:ParticleData): void {
             //delay
             var delayValue: ConstRandomValueShape = new ConstRandomValueShape();
@@ -104,5 +110,17 @@
             rateValue.value = 1 / data.rate;
             this._rate = rateValue;
         }
+
+         /**
+        * @language zh_CN
+        * 获取时间节点在geometry的顶点数据中偏移量
+        * @return number
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get offsetIndex(): number {
+            return this.attribute_time.offsetIndex;
+        }
+
     }
 } 

@@ -47,9 +47,6 @@ float particle( ParticleData emit ){
 		return currentTime = 0.0;
 }
 
-void e_discard(){
-	varying_color.w = 0.0 ;
-}
 
 void main(void) {
 	
