@@ -4,7 +4,7 @@
     * @language zh_CN
     * @class egret3d.ParticlePosition
     * @classdesc
-    * 粒子位置效果节点
+    * 粒子位置效果节点，刚出生相对于(0,0,0)位置的偏移量
     * @see egret3d.AnimationNode
     * @version Egret 3.0
     * @platform Web,Native
@@ -14,8 +14,7 @@
         /**
         * @private
         */
-        public positions: ValueShape = new Vec3ConstValueShape();
-
+        private _positions: ValueShape;
         private particleAnimationState: ParticleAnimationState;
         private attribute_offsetPosition: GLSL.VarRegister;
         constructor() {
@@ -26,6 +25,29 @@
             this.attribute_offsetPosition.name = "attribute_offsetPosition";
             this.attribute_offsetPosition.size = 3;
             this.attributes.push(this.attribute_offsetPosition);
+        }
+
+
+        /**
+        * @private
+        * 装载初始化的粒子分布数据
+        */
+        public initNode(data: ParticleData): void {
+            if (data.distributeType == ParticleDistributeType.Point) {
+                var pointShape: Vec3ConstValueShape = new Vec3ConstValueShape();
+                pointShape.minX = data.dstbPoint.x;
+                pointShape.minY = data.dstbPoint.y;
+                pointShape.minZ = data.dstbPoint.z;
+                this._positions = pointShape;
+            }
+            else if (data.distributeType == ParticleDistributeType.CUBE) {
+                var cubeShape: CubeVector3DValueShape = new CubeVector3DValueShape();
+                cubeShape.width = data.dstbCubeW;
+                cubeShape.height = data.dstbCubeH;
+                cubeShape.depth = data.dstbCubeD;
+                this._positions = cubeShape;
+            }
+
         }
         
         /**
@@ -38,7 +60,7 @@
         */
         public build(geometry: Geometry, count: number) {
             this.particleAnimationState = <ParticleAnimationState>this.state;
-            var posArray: Vector3D[] = this.positions.calculate(count);
+            var posArray: Vector3D[] = this._positions.calculate(count);
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
             for (var i: number = 0; i < count; ++i) {
@@ -47,9 +69,9 @@
                     index = i * vertices + j;
                     index = index * geometry.vertexAttLength + this.attribute_offsetPosition.offsetIndex;
 
-                    geometry.verticesData[index + 0] += pos.x;
-                    geometry.verticesData[index + 1] += pos.y;
-                    geometry.verticesData[index + 2] += pos.z;
+                    geometry.verticesData[index + 0] = pos.x;
+                    geometry.verticesData[index + 1] = pos.y;
+                    geometry.verticesData[index + 2] = pos.z;
                 }
             }
 

@@ -68,7 +68,13 @@
         public build(geometry: Geometry, count: number) {
         
         }
-                                
+
+        /**
+        * @private
+        */
+        public initNode(data: ParticleData): void {
+
+        }
         /**
         * @private
         */
