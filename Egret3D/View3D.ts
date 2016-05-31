@@ -40,6 +40,9 @@
         protected _index: number; 
         protected _numberEntity: number; 
 
+        protected _postList: any[] = []; 
+        protected _postHUD: HUD ; 
+        protected _postProcessing: PostProcessing; 
         /**
         * @language zh_CN
         * 构建一个view3d对象
@@ -73,6 +76,14 @@
 
         public set render(render: RenderBase) {
             this._render = render; 
+        }
+
+        public set post( list:any[] ) {
+            this._postList = list; 
+            if (list.length > 0) {
+                this._postProcessing = this._postProcessing || new PostProcessing();
+                this._postHUD = this._postHUD || new HUD();
+            }
         }
 
         /**
@@ -414,8 +425,13 @@
                 this._backImg.draw(View3D._contex3DProxy);
             }
 
-            this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera, this._viewPort);
-
+            if (this._postList.length>0) {
+                this._postProcessing.drawFrameBuffer(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera, this._viewPort);
+                this._postHUD.diffuseTexture = this._postProcessing.endTexture;
+                this._postHUD.draw(View3D._contex3DProxy);
+            } else {
+                this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera, this._viewPort);
+            }
 
             for (var i: number = 0; i < this._huds.length; ++i) {
                 this._huds[i].draw(View3D._contex3DProxy);

@@ -13,8 +13,6 @@
         public renderTexture: RenderTexture; 
         public numEntity: number = 0; 
 
-
-                        
         /**
         * @language zh_CN
         * constructor
@@ -23,7 +21,7 @@
             ///this.camera3D = camera3D;
         }
                
-        public renderToTexture(width: number, height: number, format: FrameBufferFormat= FrameBufferFormat.UNSIGNED_BYTE_RGB) {
+        public setRenderToTexture(width: number, height: number, format: FrameBufferFormat= FrameBufferFormat.UNSIGNED_BYTE_RGB) {
             this.renderTexture = new RenderTexture(width, height, format);
             //this.renderTexture.
 

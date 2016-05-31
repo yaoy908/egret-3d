@@ -16,6 +16,7 @@
         private _i: number = 0;
 
         private _pass: number; 
+
         /**
         * @language zh_CN
         * constructor
@@ -43,7 +44,6 @@
 
             }
             var material: MaterialBase;
-            var lastLightGroup: LightGroup;
             for (this._renderIndex = 0; this._renderIndex < this.numEntity; this._renderIndex++) {
                 this._renderItem = collect.renderList[this._renderIndex];
                 if (shadow) {
@@ -61,12 +61,12 @@
                     if (material == null)
                         continue;
 
-                    lastLightGroup = material.lightGroup;
-                    material.lightGroup = this._renderItem.lightGroup ? this._renderItem.lightGroup : material.lightGroup;
-
                     if (material.passes[this._pass])
                         material.passes[this._pass].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
-                    material.lightGroup = lastLightGroup;
+                    else if (PassUtil.PassAuto[this._pass]) {
+                        material.passes[this._pass] = PassUtil.CreatPass(this._pass, material.materialData);
+                        material.passes[this._pass].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
+                    }
                 }
             }
 
