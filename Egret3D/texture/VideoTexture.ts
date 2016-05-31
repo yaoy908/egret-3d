@@ -1,7 +1,6 @@
 ﻿module egret3d {
    
     /**
-     * @private
      * @class egret3d.VideoTexture
      * @classdesc
      * VideoTexture 使用 Video 标签采集 video 视频 </p>
@@ -16,6 +15,14 @@
         private context: CanvasRenderingContext2D;
         private tmpCanvas: HTMLCanvasElement;
 
+        /**
+        * @language zh_CN
+        * 构造函数
+        * @param width 贴图宽度 默认参数 256
+        * @param height 贴图高度 默认参数 256
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         constructor( width:number = 256 , height:number = 256 ) {
             super();
             this.width = width;
@@ -45,48 +52,57 @@
         }
 
         /**
-         * @language zh_CN
-         * 设置 视频链接
-         * 设置 视频的链接地址，只要是h5 支持的格式都支持， 例如:ogv,mp4,avi
-         * @param src 视频格式的链接地址
-         */
+        * @language zh_CN
+        * 设置 视频链接
+        * 设置 视频的链接地址，只要是h5 支持的格式都支持， 例如:ogv,mp4,avi
+        * @param src 视频格式的链接地址
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set source(src:string) {
             this.video.src = src;
         }
 
-         /**
-         * @language zh_CN
-         * 返回 视频链接
-         * 视频的链接地址，只要是h5 支持的格式都支持， 例如:ogv,mp4,avi
-         */
+        /**
+        * @language zh_CN
+        * 返回 视频链接
+        * 视频的链接地址，只要是h5 支持的格式都支持， 例如:ogv,mp4,avi
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get source(): string {
             return this.video.src;
         }
 
-         /**
-         * @language zh_CN
-         * 播放视频
-         * 当视频缓冲好之后才能正常播放视频
-         */
+        /**
+        * @language zh_CN
+        * 播放视频
+        * 当视频缓冲好之后才能正常播放视频
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public play() {
             this.video.play();
         }
 
         
-         /**
-         * @language zh_CN
-         * 暂停视频
-         * 控制视频的播放暂停状态
-         */
+        /**
+        * @language zh_CN
+        * 暂停视频
+        * 控制视频的播放暂停状态
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public pause() {
             this.video.pause();
         }
 
         /**
-         * @language zh_CN
-         * 上传贴图数据给GPU
-         * 将video的视频数据实时传输到GPU上
-         * @param context3D 
+        * @private
+        * @language zh_CN
+        * 上传贴图数据给GPU
+        * 将video的视频数据实时传输到GPU上
+        * @param context3D 
         */
         public upload(context3D: Context3DProxy) {
 
@@ -114,6 +130,9 @@
             }
         }
 
+        /**
+        * @private
+        */
         public uploadForcing(context3D: Context3DProxy) {
         }
     }
