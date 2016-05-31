@@ -245,6 +245,10 @@
         "VRView3D.ts",
         "Egret3DCanvas.ts",
 
+        "post/IPost.ts",
+        "post/postPass/BloomPass.ts",
+        "post/PostProcessing.ts",
+
         "loader/map/DataInfo/SourceDataBase.ts",
         "loader/map/DataInfo/MaterialMethodData.ts",
         "loader/map/DataInfo/MaterialSphereData.ts",

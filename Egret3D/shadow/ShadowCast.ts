@@ -45,7 +45,7 @@
             //this.shadowCamera.near = 500;
             //this.shadowCamera.far = 1500;
             this.shadowCamera.lookAt(new Vector3D(0, 1000, -1000), new Vector3D(0, 0, 0));
-            this.shadowRender[this.shadowRender.length - 1].renderToTexture(512, 512);
+            this.shadowRender[this.shadowRender.length - 1].setRenderToTexture(512, 512);
         }
 
         public calculateCamera(object3d: Object3D, camera: Camera3D) {
