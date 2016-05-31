@@ -89,8 +89,8 @@
         /**
         * @language zh_CN
         * 检测两个包围对象是否相交
-        * @param 检测的目标
-        * @param 相交的结果 可以为null
+        * @param target 检测的目标
+        * @param intersect 默认参数为null 相交的结果 可以为null
         * @returns  成功返回true
         */
         public intersect(target: Bound, intersect: Bound = null): boolean {

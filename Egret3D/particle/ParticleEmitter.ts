@@ -41,7 +41,7 @@
             this._data = data;
             this.material.blendMode = BlendMode.ADD; 
 
-            this.animation = this.particleAnimation = new ParticleAnimation();
+            this.animation = this.particleAnimation = new ParticleAnimation(this);
             this.animation.particleAnimationController = this.particleAnimation;
             this._particleState = this.particleAnimation.particleAnimationState ;
 
@@ -53,6 +53,16 @@
 
             this.initMainAnimNode();
             this.buildBoudBox(data.bounds);
+        }
+
+        /**
+        * @language zh_CN
+        * 获取时间节点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get timeNode(): ParticleTime {
+            return this._timeNode;
         }
 
         /**
@@ -177,7 +187,7 @@
             var vertexArray: Array<number> = new Array<number>();
 
             //根据 动画功能节点初始化 着色器 并初始化粒子顶点结构
-            this.geometry.vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_UV0;
+            this.geometry.vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_UV0 | VertexFormat.VF_COLOR;
 
             //根据动画节点，预计算顶点信息，长度，字节总量
             this.initOtherAnimNode();

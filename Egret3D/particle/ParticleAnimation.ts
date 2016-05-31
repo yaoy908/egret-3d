@@ -77,21 +77,22 @@
         private _play: boolean = false;
 
        
-        
+
+
         /**
         * @language zh_CN
         * 构造函数
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor() {
+        constructor(emitter:ParticleEmitter) {
             super();
-
             this.animStates = [];
-            this.particleAnimationState = new ParticleAnimationState("particle");
+            this.particleAnimationState = new ParticleAnimationState("particle", emitter);
             this.addAnimState(this.particleAnimationState);
         }
 
+       
         /**
         * @private
         * @language zh_CN

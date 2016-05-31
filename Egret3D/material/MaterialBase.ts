@@ -212,6 +212,17 @@
 
             }
         }
+
+        /**
+        * @language zh_CN
+        * 得到材质球特殊光效贴图。
+        * @returns ITexture 
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get matcapTexture(): ITexture { 
+            return this.materialData.normalTexture;
+        }
         
         /**
          * @language zh_CN

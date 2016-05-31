@@ -25,7 +25,7 @@
             this.tmpCanvas.width = width;
             this.tmpCanvas.height = height;
 
-            this.context = this.tmpCanvas .getContext('2d');
+            this.context = this.tmpCanvas.getContext('2d');
 
             this.video = document.createElement("video");
             this.video.msZoom = true;
@@ -35,6 +35,8 @@
             this.video.videoHeight = height;
             this.video.controls = false;
             this.video.autoplay = true;
+
+            document.body.appendChild(this.video);
 
             this.video.addEventListener("canplaythrough", () => this.loadReady(), true);
             this.tmpCanvas.hidden = true;
@@ -48,6 +50,7 @@
          * @language zh_CN
          * 设置 视频链接
          * 设置 视频的链接地址，只要是h5 支持的格式都支持， 例如:ogv,mp4,avi
+         * warning chrom need use url = http://127.0.0.1/resource/video/xxx.mp4
          * @param src 视频格式的链接地址
          */
         public set source(src:string) {
@@ -58,6 +61,7 @@
          * @language zh_CN
          * 返回 视频链接
          * 视频的链接地址，只要是h5 支持的格式都支持， 例如:ogv,mp4,avi
+         * warning chrom need use url = http://127.0.0.1/resource/video/xxx.mp4
          */
         public get source(): string {
             return this.video.src;
@@ -89,23 +93,38 @@
          * @param context3D 
         */
         public upload(context3D: Context3DProxy) {
+
             if (!this.texture2D) {
                 this.texture2D = context3D.creatTexture2D();
-                Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, this.texture2D.texture);
-                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MAG_FILTER, Context3DProxy.gl.LINEAR);
-                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, Context3DProxy.gl.NEAREST);
-            }
 
-            if (this.canUpdataTexture) {
                 this.context.drawImage(this.video, 0, 0, this.width, this.height);
                 Context3DProxy.gl.pixelStorei(Context3DProxy.gl.UNPACK_ALIGNMENT, 1)
                 Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, this.texture2D.texture);
                 Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, 0, Context3DProxy.gl.RGB, Context3DProxy.gl.RGB, Context3DProxy.gl.UNSIGNED_BYTE, this.tmpCanvas );
+
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, Context3DProxy.gl.LINEAR);
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MAG_FILTER, Context3DProxy.gl.LINEAR);
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_S, Context3DProxy.gl.CLAMP_TO_EDGE);
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_T, Context3DProxy.gl.CLAMP_TO_EDGE);
+
             }
-           
+
+            if (this.canUpdataTexture) {
+                this.context.drawImage(this.video, 0, 0, this.width, this.height);
+
+                Context3DProxy.gl.pixelStorei(Context3DProxy.gl.UNPACK_ALIGNMENT, 1)
+                Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, this.texture2D.texture);
+                Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, 0, Context3DProxy.gl.RGB, Context3DProxy.gl.RGB, Context3DProxy.gl.UNSIGNED_BYTE, this.tmpCanvas);
+
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, Context3DProxy.gl.LINEAR);
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MAG_FILTER, Context3DProxy.gl.LINEAR);
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_S, Context3DProxy.gl.CLAMP_TO_EDGE );
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_T, Context3DProxy.gl.CLAMP_TO_EDGE );
+            }
         }
 
         public uploadForcing(context3D: Context3DProxy) {
+
         }
     }
 } 
