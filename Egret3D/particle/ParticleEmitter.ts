@@ -11,9 +11,9 @@
     export class ParticleEmitter extends Mesh {
 
         private _timeNode: ParticleTime;
-        public positionNode: ParticlePosition;
-        public rotationNode: ParticleRotation;
-        public scaleNode: ParticleScale;
+        private _rotationNode: ParticleRotation;
+        private _positionNode: ParticlePosition;
+        private _scaleNode: ParticleScale;
 
         private particleGeometryShape: Geometry;
         private particleAnimation: ParticleAnimation;
@@ -46,13 +46,36 @@
             this._particleState = this.particleAnimation.particleAnimationState ;
 
             this.particleAnimation.emit = this;
-            this.particleGeometryShape = geo ? geo : new PlaneGeometry(50.0, 50.0, 1, 1, 1, 1, Vector3D.Z_AXIS);
-
+            if (geo == null) {
+                this.particleGeometryShape = this.createShape();
+            } else {
+                this.particleGeometryShape = geo;
+            }
+            
             this.loop = data.loop;
             this.duration = data.duration;
 
             this.initMainAnimNode();
             this.buildBoudBox(data.bounds);
+        }
+
+         /**
+        * @language zh_CN
+        * 根据粒子的配置信息，生成geometry
+        * @return Geometry
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private createShape(): Geometry {
+            var geo: Geometry;
+            if (this._data.geometryType == ParticleGeometryType.PLANE) {
+                geo = new PlaneGeometry(this._data.geomPlaneW, this._data.geomPlaneH, 1, 1, 1, 1, Vector3D.Z_AXIS);
+            } else if (this._data.geometryType == ParticleGeometryType.CUBE) {
+                geo = new CubeGeometry(this._data.geomCubeW, this._data.geomCubeH, this._data.geomCubeD);
+            } else if (this._data.geometryType == ParticleGeometryType.SPHERE) {
+                geo = new SphereGeometry(this._data.geomSphereRadius, this._data.geomSphereSegW, this._data.geomSphereSegH);
+            }
+            return geo;
         }
 
         /**
@@ -229,33 +252,32 @@
             
             //time 
             this._timeNode = new ParticleTime();
-            this._timeNode.init(this._data);
+            this._timeNode.initNode(this._data);
            
             //position
-            this.positionNode = new ParticlePosition();
-            this.positionNode.positions = new Vec3ConstValueShape();
+            this._positionNode = new ParticlePosition();
+            this._positionNode.initNode(this._data);
 
             //rotation
-            this.rotationNode = new ParticleRotation();
-            this.rotationNode.rotations = new Vec3ConstValueShape();
-
+            this._rotationNode = new ParticleRotation();
+            this._rotationNode.initNode(this._data);
+            
             //scale
-            this.scaleNode = new ParticleScale();
-            this.scaleNode.scale = new ConstValueShape();
-            (<ConstValueShape>this.scaleNode.scale).value = 0.4;
+            this._scaleNode = new ParticleScale();
+            this._scaleNode.initNode(this._data);
+
+            //follow
+            this._particleFollowNode = new ParticleFollowNode();
+            this._particleFollowNode.initNode(this._data);
             
         }
 
         private initOtherAnimNode() {
 
-            //end
-            var particleEndNode: ParticleEndNode = new ParticleEndNode();
-            this._particleFollowNode = new ParticleFollowNode();
-
             this.particleAnimation.particleAnimationState.addNode(this._timeNode);
-            this.particleAnimation.particleAnimationState.addNode(this.positionNode);
-            this.particleAnimation.particleAnimationState.addNode(this.rotationNode);
-            this.particleAnimation.particleAnimationState.addNode(this.scaleNode);
+            this.particleAnimation.particleAnimationState.addNode(this._positionNode);
+            this.particleAnimation.particleAnimationState.addNode(this._rotationNode);
+            this.particleAnimation.particleAnimationState.addNode(this._scaleNode);
             this.particleAnimation.particleAnimationState.addNode(this._particleFollowNode);
 
             //加入自定义节点
@@ -264,6 +286,7 @@
             }
 
             //永远是最后一个加入
+            var particleEndNode: ParticleEndNode = new ParticleEndNode();
             this.particleAnimation.particleAnimationState.addNode(particleEndNode);
             //计算加入动画后，会获取的节点信息，重新计算 geometry 结构
             this.particleAnimation.particleAnimationState.calculate(this.geometry);

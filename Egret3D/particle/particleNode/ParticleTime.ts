@@ -94,7 +94,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public init(data:ParticleData): void {
+        public initNode(data:ParticleData): void {
             //delay
             var delayValue: ConstRandomValueShape = new ConstRandomValueShape();
             delayValue.max = data.delayMax;
