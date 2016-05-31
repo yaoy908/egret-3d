@@ -155,5 +155,19 @@
             this.g = t * (c1.g - c0.g) + c0.g;
             this.b = t * (c1.b - c0.b) + c0.b;
         }
+
+        /**
+         * @language zh_CN
+         * 拷贝颜色值
+         * @param src Color 被拷贝对象颜色
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public copyFrom(src: Color): void {
+            this.a = src.a;
+            this.r = src.r;
+            this.g = src.g;
+            this.b = src.b;
+        }
     }
 } 
