@@ -25,7 +25,7 @@
             this.tmpCanvas.width = width;
             this.tmpCanvas.height = height;
 
-            this.context = this.tmpCanvas .getContext('2d');
+            this.context = this.tmpCanvas.getContext('2d');
 
             this.video = document.createElement("video");
             this.video.msZoom = true;
@@ -89,20 +89,29 @@
          * @param context3D 
         */
         public upload(context3D: Context3DProxy) {
+
             if (!this.texture2D) {
                 this.texture2D = context3D.creatTexture2D();
                 Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, this.texture2D.texture);
+
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, Context3DProxy.gl.LINEAR);
                 Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MAG_FILTER, Context3DProxy.gl.LINEAR);
-                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, Context3DProxy.gl.NEAREST);
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_S, Context3DProxy.gl.CLAMP_TO_EDGE);
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_T, Context3DProxy.gl.CLAMP_TO_EDGE);
+
             }
 
             if (this.canUpdataTexture) {
                 this.context.drawImage(this.video, 0, 0, this.width, this.height);
                 Context3DProxy.gl.pixelStorei(Context3DProxy.gl.UNPACK_ALIGNMENT, 1)
                 Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, this.texture2D.texture);
-                Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, 0, Context3DProxy.gl.RGB, Context3DProxy.gl.RGB, Context3DProxy.gl.UNSIGNED_BYTE, this.tmpCanvas );
+                Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, 0, Context3DProxy.gl.RGB, Context3DProxy.gl.RGB, Context3DProxy.gl.UNSIGNED_BYTE, this.tmpCanvas);
+
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, Context3DProxy.gl.LINEAR);
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MAG_FILTER, Context3DProxy.gl.LINEAR);
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_S, Context3DProxy.gl.CLAMP_TO_EDGE );
+                Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_T, Context3DProxy.gl.CLAMP_TO_EDGE );
             }
-           
         }
 
         public uploadForcing(context3D: Context3DProxy) {
