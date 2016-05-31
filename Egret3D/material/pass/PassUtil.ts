@@ -1,8 +1,9 @@
 ﻿module egret3d {
 
-    export enum PassType { diffusePass,colorPass, normalPass, shadowPass, lightPass , matCapPass }
+    export enum PassType { diffusePass, colorPass, normalPass, shadowPass, lightPass, matCapPass, depthPass_8, depthPass_32 }
 
     export class PassUtil{
+        public static PassAuto : boolean[] = [true,true,true,false,false,true,true,true];
         public static CreatPass(pass: PassType,materialData:MaterialData):MaterialPass {
             switch (pass) {
                 case PassType.colorPass:

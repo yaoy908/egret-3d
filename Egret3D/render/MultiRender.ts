@@ -16,6 +16,7 @@
         private _i: number = 0;
 
         private _pass: number; 
+
         /**
         * @language zh_CN
         * constructor
@@ -66,6 +67,11 @@
 
                     if (material.passes[this._pass])
                         material.passes[this._pass].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
+                    else if (PassUtil.PassAuto[this._pass]) {
+                        material.passes[this._pass] = PassUtil.CreatPass(this._pass, material.materialData);
+                        material.passes[this._pass].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
+                    }
+
                     material.lightGroup = lastLightGroup;
                 }
             }

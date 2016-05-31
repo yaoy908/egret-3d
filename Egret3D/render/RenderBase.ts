@@ -13,8 +13,6 @@
         public renderTexture: RenderTexture; 
         public numEntity: number = 0; 
 
-
-                        
         /**
         * @language zh_CN
         * constructor

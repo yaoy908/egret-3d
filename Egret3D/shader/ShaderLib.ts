@@ -813,7 +813,8 @@ module egret3d {
 
 			"shadowMapping_fs":
 			"uniform sampler2D shadowMapTexture; \n" +
-			"varying vec2 varying_ShadowCoord; \n" +
+			"uniform vec3 uniform_ShadowColor; \n" +
+			"varying vec4 varying_ShadowCoord; \n" +
 			"float unpackDepth(vec4 rgbaDepth){ \n" +
 			"vec4 bitShift = vec4( 1.0 , 1.0/256.0 , 1.0/(256.0*256.0) , 1.0/(256.0*256.0*256.0) ); \n" +
 			"float depth = dot(rgbaDepth,bitShift); \n" +
@@ -825,40 +826,19 @@ module egret3d {
 			"if (varying_ShadowCoord.w > 0.0) { \n" +
 			"vec3 shadowDepth = varying_ShadowCoord.xyz / varying_ShadowCoord.w * 0.5 + 0.5; \n" +
 			"vec2 sample = clamp(shadowDepth.xy,0.0,1.0); \n" +
-			"float sampleDepth = unpackDepth(texture2D(shadowMapTexture, sample)); \n" +
-			"if(sampleDepth < shadowDepth.z-0.002) \n" +
-			"shadowColor = vec3(0.5,0.5,0.6)  ; \n" +
+			"float sampleDepth = texture2D(shadowMapTexture, sample).z; \n" +
+			"if(sampleDepth > shadowDepth.z) \n" +
+			"shadowColor = uniform_ShadowColor; \n" +
 			"} \n" +
 			"diffuseColor.xyz = diffuseColor.xyz * shadowColor; \n" +
 			"} \n",
 
 			"shadowMapping_vs":
 			"uniform mat4 uniform_ShadowMatrix; \n" +
+			"uniform mat4 uniform_ModelMatrix; \n" +
 			"varying vec4 varying_ShadowCoord; \n" +
 			"void main() { \n" +
-			"varying_ShadowCoord = uniform_ShadowMatrix * vec4(attribute_position, 1.0); \n" +
-			"} \n",
-
-			"shadow_fs":
-			"uniform sampler2D shadowMapTexture; \n" +
-			"varying vec4 varying_ShadowCoord; \n" +
-			"void main() { \n" +
-			"vec4 shadowCoordinateWdivide = varying_ShadowCoord / varying_ShadowCoord.w; \n" +
-			"shadowCoordinateWdivide.z += 0.0005; \n" +
-			"float distanceFromLight = texture2D(shadowMapTexture, shadowCoordinateWdivide.st).z; \n" +
-			"float shadow = 1.0; \n" +
-			"if (varying_ShadowCoord.w > 0.0) \n" +
-			"{ \n" +
-			"shadow = distanceFromLight < shadowCoordinateWdivide.z ? 0.5 : 1.0; \n" +
-			"} \n" +
-			"diffuseColor = diffuseColor * shadow; \n" +
-			"} \n",
-
-			"shadow_vs":
-			"uniform mat4 uniform_ShadowMatrix; \n" +
-			"varying vec4 varying_ShadowCoord; \n" +
-			"void main() { \n" +
-			"varying_ShadowCoord = uniform_ShadowMatrix * vec4(e_position, 1.0); \n" +
+			"varying_ShadowCoord = uniform_ShadowMatrix * uniform_ModelMatrix * vec4(e_position, 1.0); \n" +
 			"} \n",
 
 			"skeletonShadowPass_vs":
@@ -901,6 +881,7 @@ module egret3d {
 			"outPosition += m1 * temp_position * e_boneWeight.y; \n" +
 			"outPosition += m2 * temp_position * e_boneWeight.z; \n" +
 			"outPosition += m3 * temp_position * e_boneWeight.w; \n" +
+			"e_position = outPosition.xyz; \n" +
 			"outPosition = uniform_ModelViewMatrix * outPosition; \n" +
 			"} \n",
 
@@ -962,6 +943,17 @@ module egret3d {
 			"uniform sampler2D specularTexture; \n" +
 			"void main(void){ \n" +
 			"specularColor.xyz *= texture2D( specularTexture , uv_0 ).xyz ; \n" +
+			"} \n",
+
+			"staticShadowPass_vs":
+			"attribute vec4 attribute_color; \n" +
+			"vec4 e_boneIndex = vec4(0.0, 0.0, 0.0, 0.0); \n" +
+			"vec4 e_boneWeight = vec4(0.0, 0.0, 0.0, 0.0); \n" +
+			"void main(void){ \n" +
+			"varying_color = attribute_color; \n" +
+			"outPosition = vec4(attribute_position, 1.0) ; \n" +
+			"e_position = outPosition.xyz; \n" +
+			"outPosition = uniform_ModelViewMatrix * outPosition; \n" +
 			"} \n",
 
 			"tangent_vs":
