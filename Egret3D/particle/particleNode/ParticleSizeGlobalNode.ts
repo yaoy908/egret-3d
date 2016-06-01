@@ -5,7 +5,7 @@
     */
     export class ParticleSizeGlobalNode extends AnimationNode {
 
-        public colorSegment: Float32Array = new Float32Array(64); 
+        public sizeSegment: Float32Array = new Float32Array(64); 
         public points: Point[] = []; 
         constructor() {
 
@@ -15,8 +15,6 @@
             this.vertex_ShaderName[ShaderPhaseType.local_vertex] = this.vertex_ShaderName[ShaderPhaseType.local_vertex] || [];
             this.vertex_ShaderName[ShaderPhaseType.local_vertex].push("particle_size_vs");
             
-            //this.frament_ShaderName[ShaderPhaseType.muilt_end_fragment] = this.frament_ShaderName[ShaderPhaseType.muilt_end_fragment] || [];
-            //this.frament_ShaderName[ShaderPhaseType.muilt_end_fragment].push("particle_color_fs");
 
             this.points.push(new Point(0, 0));
             this.points.push(new Point(0, 1));
@@ -41,12 +39,12 @@
         public build(geometry: Geometry, count: number) {
             for (var i: number = 0; i < 32; i++){
                 if (this.points.length > i) {
-                    this.colorSegment[i * 2] = this.points[i].x;
-                    this.colorSegment[i * 2 + 1] = this.points[i].y;
+                    this.sizeSegment[i * 2] = this.points[i].x;
+                    this.sizeSegment[i * 2 + 1] = this.points[i].y;
                 }
                 else {
-                    this.colorSegment[i * 2] = 0 ;
-                    this.colorSegment[i * 2 + 1] = 0;
+                    this.sizeSegment[i * 2] = 0 ;
+                    this.sizeSegment[i * 2 + 1] = 0;
                 }
             }
         }
@@ -61,7 +59,7 @@
         * @private
         */
         public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
-            context3DProxy.uniform2fv(usage["uniform_size"].uniformIndex, this.colorSegment);
+            context3DProxy.uniform2fv(usage["uniform_size"].uniformIndex, this.sizeSegment);
         }
 
 

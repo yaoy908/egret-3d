@@ -23,6 +23,9 @@
         private count: number = 0;
         private particleAnimationState: ParticleAnimationState; 
         private lifeCircles: Array<number>;
+
+        private _followPosition: boolean = false;
+        private _followRotation: boolean = false;
         constructor() {
             super();
             this.name = "ParticleFollowNode";
@@ -35,6 +38,17 @@
             this.attribute_followPosition.size = 3;
             this.attributes.push(this.attribute_followPosition);
 
+            this.attribute_followRotation = new GLSL.VarRegister();
+            this.attribute_followRotation.name = "attribute_followRotation";
+            this.attribute_followRotation.size = 3;
+            this.attributes.push(this.attribute_followRotation);
+
+        }
+
+
+        public initNode(data:ParticleData): void {
+            this._followPosition = data.followPosition;
+            this._followRotation = data.followRotation;
         }
 
         /**
@@ -68,9 +82,10 @@
         public update(time: number, delay: number, geometry: Geometry) {
 
             this.geometryDirty = false;
-            if (!this.particleAnimationState.followTarget) {
+            if (!this.particleAnimationState.followTarget)
                 return;
-            }
+            if (!this._followPosition && !this._followRotation)
+                return;
             //time += delay;
 
             //先重置成-1，然后每帧检测每个粒子的上一帧的所属出身次数和下一帧的出身次数，判定是否要刷新他的初始位置
@@ -115,11 +130,21 @@
                         changed = true;
                         for (var j: number = 0; j < vertices; ++j) {
                             index = particleIndex + j;
-                            this.timeIndex = index * geometry.vertexAttLength + 5;
                             index = index * geometry.vertexAttLength + this.attribute_followPosition.offsetIndex;
-                            geometry.verticesData[index + 0] = this.particleAnimationState.followTarget.x;
-                            geometry.verticesData[index + 1] = this.particleAnimationState.followTarget.y;
-                            geometry.verticesData[index + 2] = this.particleAnimationState.followTarget.z;
+                            if (this._followPosition) {
+                                geometry.verticesData[index + 0] = this.particleAnimationState.followTarget.x;
+                                geometry.verticesData[index + 1] = this.particleAnimationState.followTarget.y;
+                                geometry.verticesData[index + 2] = this.particleAnimationState.followTarget.z;
+                            }
+
+                            index = particleIndex + j;
+                            index = index * geometry.vertexAttLength + this.attribute_followRotation.offsetIndex;
+                            if (this._followRotation) {
+                                geometry.verticesData[index + 0] = this.particleAnimationState.followTarget.rotationX * Math.PI / 180;
+                                geometry.verticesData[index + 1] = this.particleAnimationState.followTarget.rotationY * Math.PI / 180;
+                                geometry.verticesData[index + 2] = this.particleAnimationState.followTarget.rotationZ * Math.PI / 180;
+                            }
+                            
                         }
                     }
                 }
