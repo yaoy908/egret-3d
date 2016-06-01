@@ -27,6 +27,7 @@
 
         private _data: ParticleData;
 
+        private static IdentityMatrix: Matrix4_4 = new Matrix4_4();
         /**
         * @language zh_CN
         * 构造函数
@@ -59,7 +60,24 @@
             this.buildBoudBox(data.bounds);
         }
 
-         /**
+        /**
+        * @language zh_CN
+        * 如果是一个follow类型的粒子，则modelMatrix无效，直接返回标准化的matrix
+        * @return Geometry
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get modelMatrix(): Matrix4_4 {
+            if (this._transformChange) {
+                this.updateModelMatrix();
+            }
+            if (this._data.followPosition) {
+                return ParticleEmitter.IdentityMatrix;
+            }
+            return this._modelMatrix3D;
+        }
+
+        /**
         * @language zh_CN
         * 根据粒子的配置信息，生成geometry
         * @return Geometry
