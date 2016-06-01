@@ -33,8 +33,8 @@
             this.vertex_ShaderName[ShaderPhaseType.local_vertex] = this.vertex_ShaderName[ShaderPhaseType.local_vertex] || [];
             this.vertex_ShaderName[ShaderPhaseType.local_vertex].push("particle_time_vs");
 
-            this.frament_ShaderName[ShaderPhaseType.start_fragment] = this.frament_ShaderName[ShaderPhaseType.start_fragment] || [];
-            this.frament_ShaderName[ShaderPhaseType.start_fragment].push("particle_time_fs");
+            this.fragment_ShaderName[ShaderPhaseType.start_fragment] = this.fragment_ShaderName[ShaderPhaseType.start_fragment] || [];
+            this.fragment_ShaderName[ShaderPhaseType.start_fragment].push("particle_time_fs");
 
             this.attribute_time = new GLSL.VarRegister();
             this.attribute_time.name = "attribute_time";

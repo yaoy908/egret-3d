@@ -34,7 +34,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public frament_ShaderName: { [shaderPhase: number]: string[] } = {};
+        public fragment_ShaderName: { [shaderPhase: number]: string[] } = {};
                         
                         
         /**

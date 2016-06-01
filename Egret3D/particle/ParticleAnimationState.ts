@@ -231,7 +231,7 @@
             //this.fragment_shaders[ShaderPhaseType.diffuse_fragment] = [];
             for (var i: number = 0; i < this.animNodes.length; i++) {
                 this.addShaderPhase(this.animNodes[i].vertex_ShaderName, this.vertex_shaders);
-                this.addShaderPhase(this.animNodes[i].frament_ShaderName, this.fragment_shaders);
+                this.addShaderPhase(this.animNodes[i].fragment_ShaderName, this.fragment_shaders);
 
                 var offsetIndex: number = geometry.vertexAttLength;
                 for (var j: number = 0; j < this.animNodes[i].attributes.length; ++j) {

@@ -348,8 +348,8 @@
             shaderList = this._fs_shader_methods[ShaderPhaseType.matCap_fragment];
             if (shaderList && shaderList.length > 0)
                 this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
-            //muilt_end_fragment
-            shaderList = this._fs_shader_methods[ShaderPhaseType.muilt_end_fragment];
+            //multi_end_fragment
+            shaderList = this._fs_shader_methods[ShaderPhaseType.multi_end_fragment];
             if (shaderList && shaderList.length > 0)
                 this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
             //else 

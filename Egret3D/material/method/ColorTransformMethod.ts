@@ -19,8 +19,8 @@
         constructor() {
             super();
 
-            this.fsShaderList[ShaderPhaseType.muilt_end_fragment] = this.fsShaderList[ShaderPhaseType.muilt_end_fragment] || [];
-            this.fsShaderList[ShaderPhaseType.muilt_end_fragment].push("colorTransform_fs");
+            this.fsShaderList[ShaderPhaseType.multi_end_fragment] = this.fsShaderList[ShaderPhaseType.multi_end_fragment] || [];
+            this.fsShaderList[ShaderPhaseType.multi_end_fragment].push("colorTransform_fs");
         }
 
         /**
