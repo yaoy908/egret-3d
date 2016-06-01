@@ -6,10 +6,27 @@
      * Sound 类允许您在应用程序中使用声音。</p>
      * 使用 Sound 类可以创建 Sound 对象、将外部 MP3 文件加载到该对象并播放该文件、关闭声音流，以及访问有关声音的数据，如有关流中字节数和 ID3 元数据的信息。</p>
      * 可通过以下项对声音执行更精细的控制：声音源（声音的 Channel 和 Channel3d）用于控制向计算机扬声器输出声音的属性。  </p>
+     * @see egret3d.EventDispatcher
      * @version Egret 3.0
      * @platform Web,Native  
      */
-    export class Sound {
+    export class Sound extends EventDispatcher {
+
+        /**
+        * @language zh_CN
+        * Sound 加載成功事件
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public static SOUND_SUCCESS = "SoundSuccess";
+
+        /**
+        * @language zh_CN
+        * Sound 加載失敗事件
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public static SOUND_ERROR = "SoundError";
 
         private isLoaded: boolean;
         /**
@@ -37,6 +54,8 @@
         private _success: Function;
         private _error: Function;
 
+        private _event: Event3D = new Event3D();
+
 
         /**
         * @language zh_CN
@@ -48,7 +67,7 @@
         * @platform Web,Native
         */
         constructor(url: string, success: Function=null, error: Function=null) {
-
+            super();
             this._success = success;
             this._error = error;
 
@@ -57,6 +76,10 @@
             if (AudioManager.instance.hasAudioContext()) {
                 if (AudioManager.instance.isSupported(url, this.audio)) {
                     console.warn('Audio format not supported');
+
+                    this._event.eventType = Sound.SOUND_ERROR;
+                    this._event.target = this;
+                    this.dispatchEvent(this._event);
                     error(this);
                 }
                 else {
@@ -73,6 +96,11 @@
                 }
                 catch (e) {
                     console.warn("No support for Audio element");
+
+                    this._event.eventType = Sound.SOUND_ERROR;
+                    this._event.target = this;
+                    this.dispatchEvent(this._event);
+
                     if (error)
                         error(this);
                     return;
@@ -80,6 +108,11 @@
 
                 if (AudioManager.instance.isSupported(url, this.audio)) {
                     console.warn('Audio format not supported');
+
+                    this._event.eventType = Sound.SOUND_ERROR;
+                    this._event.target = this;
+                    this.dispatchEvent(this._event);
+
                     if (error)
                         error(this);
                 }
@@ -115,8 +148,15 @@
 
             this._buffer = buffer;
 
-            if (this._success)
+            this._event.eventType = Sound.SOUND_SUCCESS;
+            this._event.target = this;
+            this._event.data = buffer;
+            this.dispatchEvent(this._event);
+
+            if (this._success) {
                 this._success(this);
+            }
+
         }
 
         private onended(ev: Event): void {
@@ -128,8 +168,14 @@
             if (!this.isLoaded) {
                 this.isLoaded = true;
 
-                if (this._success)
+                this._event.eventType = Sound.SOUND_SUCCESS;
+                this._event.target = this;
+                this._event.data = ev;
+                this.dispatchEvent(this._event);
+
+                if (this._success) {
                     this._success(this);
+                }
             }
         }
     }
