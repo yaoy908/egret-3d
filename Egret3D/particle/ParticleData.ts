@@ -60,7 +60,11 @@
         public birthRotationMin: Vector3D = new Vector3D();
         //初始缩放值
         public birthSizeMax: Vector3D = new Vector3D(1,1,1);
-        public birthSizeMin: Vector3D = new Vector3D(1,1,1);
+        public birthSizeMin: Vector3D = new Vector3D(1, 1, 1);
+
+        //跟随
+        public followPosition: boolean = true;
+        public followRotation: boolean = true;
         /**
         * @language zh_CN
         * @version Egret 3.0
@@ -166,13 +170,13 @@
             if (this.birthRotationMin == null) {
                 this.birthRotationMin = new Vector3D();
             }
-            if (this.birthRotationMin.x < this.birthRotationMax.x) {
+            if (this.birthRotationMin.x > this.birthRotationMax.x) {
                 this.birthRotationMin.x = this.birthRotationMax.x;
             }
-            if (this.birthRotationMin.y < this.birthRotationMax.y) {
+            if (this.birthRotationMin.y > this.birthRotationMax.y) {
                 this.birthRotationMin.y = this.birthRotationMax.y;
             }
-            if (this.birthRotationMin.z < this.birthRotationMax.z) {
+            if (this.birthRotationMin.z > this.birthRotationMax.z) {
                 this.birthRotationMin.z = this.birthRotationMax.z;
             }
             //birth size
@@ -182,13 +186,13 @@
             if (this.birthSizeMin == null) {
                 this.birthSizeMin = new Vector3D(1,1,1);
             }
-            if (this.birthSizeMin.x < this.birthSizeMax.x) {
+            if (this.birthSizeMin.x > this.birthSizeMax.x) {
                 this.birthSizeMin.x = this.birthSizeMax.x;
             }
-            if (this.birthSizeMin.y < this.birthSizeMax.y) {
+            if (this.birthSizeMin.y > this.birthSizeMax.y) {
                 this.birthSizeMin.y = this.birthSizeMax.y;
             }
-            if (this.birthSizeMin.z < this.birthSizeMax.z) {
+            if (this.birthSizeMin.z > this.birthSizeMax.z) {
                 this.birthSizeMin.z = this.birthSizeMax.z;
             }
 
