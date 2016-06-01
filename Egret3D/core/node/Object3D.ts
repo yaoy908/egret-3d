@@ -670,7 +670,7 @@
         */
         public get modelMatrix(): Matrix4_4 {
             if (this._transformChange) {
-                this.updateModleMatrix();
+                this.updateModelMatrix();
             }
             return this._modelMatrix3D;
         }
@@ -684,7 +684,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        protected updateModleMatrix() {
+        protected updateModelMatrix() {
             
             if (this.parent != null) {
                 var parentOrientation: Quaternion = this.parent.globalOrientation;
