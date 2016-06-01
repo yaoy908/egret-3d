@@ -24,18 +24,22 @@
         }
 
         /**
-        * @private
-        * 装载初始化的旋转数据
+        * @language zh_CN
+        * 填充粒子初始旋转数据
+        * @param data ParticleDataNode 粒子数据来源
+        * @version Egret 3.0
+        * @platform Web,Native
         */
-        public initNode(data: ParticleData): void {
+        public initNode(data: ParticleDataNode): void {
+            var node: ParticleDataRotation = <ParticleDataRotation>data;
             this._rotations = new Vec3ConstRandomValueShape();
-            this._rotations.maxX = data.birthRotationMax.x;
-            this._rotations.maxY = data.birthRotationMax.y;
-            this._rotations.maxZ = data.birthRotationMax.z;
-
-            this._rotations.minX = data.birthRotationMin.x;
-            this._rotations.minY = data.birthRotationMin.y;
-            this._rotations.minZ = data.birthRotationMin.z;
+            this._rotations.maxX = node.birthRotationMax.x;
+            this._rotations.maxY = node.birthRotationMax.y;
+            this._rotations.maxZ = node.birthRotationMax.z;
+            
+            this._rotations.minX = node.birthRotationMin.x;
+            this._rotations.minY = node.birthRotationMin.y;
+            this._rotations.minZ = node.birthRotationMin.z;
         }
         /**
         * @language zh_CN

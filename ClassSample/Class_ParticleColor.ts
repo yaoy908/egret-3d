@@ -37,11 +37,15 @@
             mat.ambientColor = 0xffffff;
 
             var data: ParticleData = new ParticleData();
-            data.lifeMax = data.lifeMin = 2;
-            data.rate = 20;
+
+            var life: ParticleDataLife = data.life;
+            life.lifeMax = life.lifeMin = 2;
+            life.rate = 20;
+
+
+            var property: ParticleDataProperty = data.property;
 
             this.particle = new ParticleEmitter(data, null, mat);
-            this.particle.loop = true;
 
             //var uniformSpeed: ParticleUniformSpeedNode = new ParticleUniformSpeedNode();
             //uniformSpeed.speedShape = new Vec3ConstValueShape();

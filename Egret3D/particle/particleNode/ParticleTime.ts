@@ -90,24 +90,25 @@
         /**
         * @language zh_CN
         * 填充粒子生命周期数据
-        * @param data ParticleData 粒子数据来源
+        * @param data ParticleDataNode 粒子数据来源
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public initNode(data:ParticleData): void {
+        public initNode(data:ParticleDataNode): void {
+            var node: ParticleDataLife = <ParticleDataLife>data;
             //delay
             var delayValue: ConstRandomValueShape = new ConstRandomValueShape();
-            delayValue.max = data.delayMax;
-            delayValue.min = data.delayMin;
+            delayValue.max = node.delayMax;
+            delayValue.min = node.delayMin;
             this._delay = delayValue;
             //life
             var lifeValue: ConstRandomValueShape = new ConstRandomValueShape();
-            lifeValue.max = data.lifeMax;
-            lifeValue.min = data.lifeMin;
+            lifeValue.max = node.lifeMax;
+            lifeValue.min = node.lifeMin;
             this._life = lifeValue;
             //rate
             var rateValue: ConstValueShape = new ConstValueShape();
-            rateValue.value = 1 / data.rate;
+            rateValue.value = 1 / node.rate;
             this._rate = rateValue;
         }
 

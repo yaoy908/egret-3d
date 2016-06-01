@@ -29,22 +29,26 @@
 
 
         /**
-        * @private
-        * 装载初始化的粒子分布数据
+        * @language zh_CN
+        * 填充粒子发射器形状数据
+        * @param data ParticleDataNode 粒子数据来源
+        * @version Egret 3.0
+        * @platform Web,Native
         */
-        public initNode(data: ParticleData): void {
-            if (data.distributeType == ParticleDistributeType.Point) {
+        public initNode(data: ParticleDataNode): void {
+            var node: ParticleDataDistribute = <ParticleDataDistribute>data;
+            if (node.type == ParticleDataDistribute.Point) {
                 var pointShape: Vec3ConstValueShape = new Vec3ConstValueShape();
-                pointShape.minX = data.dstbPoint.x;
-                pointShape.minY = data.dstbPoint.y;
-                pointShape.minZ = data.dstbPoint.z;
+                pointShape.minX = node.point.x;
+                pointShape.minY = node.point.y;
+                pointShape.minZ = node.point.z;
                 this._positions = pointShape;
             }
-            else if (data.distributeType == ParticleDistributeType.CUBE) {
+            else if (node.type == ParticleDataDistribute.Cube) {
                 var cubeShape: CubeVector3DValueShape = new CubeVector3DValueShape();
-                cubeShape.width = data.dstbCubeW;
-                cubeShape.height = data.dstbCubeH;
-                cubeShape.depth = data.dstbCubeD;
+                cubeShape.width = node.cubeW;
+                cubeShape.height = node.cubeH;
+                cubeShape.depth = node.cubeD;
                 this._positions = cubeShape;
             }
 

@@ -53,11 +53,11 @@
                 this.particleGeometryShape = geo;
             }
             
-            this.loop = data.loop;
-            this.duration = data.duration;
+            this.loop = data.property.loop;
+            this.duration = data.life.duration;
 
             this.initMainAnimNode();
-            this.buildBoudBox(data.bounds);
+            this.buildBoudBox(data.property.bounds);
         }
 
         /**
@@ -71,7 +71,7 @@
             if (this._transformChange) {
                 this.updateModelMatrix();
             }
-            if (this._data.followPosition) {
+            if (this._data.property.followPosition) {
                 return ParticleEmitter.IdentityMatrix;
             }
             return this._modelMatrix3D;
@@ -86,12 +86,13 @@
         */
         private createShape(): Geometry {
             var geo: Geometry;
-            if (this._data.geometryType == ParticleGeometryType.PLANE) {
-                geo = new PlaneGeometry(this._data.geomPlaneW, this._data.geomPlaneH, 1, 1, 1, 1, Vector3D.Z_AXIS);
-            } else if (this._data.geometryType == ParticleGeometryType.CUBE) {
-                geo = new CubeGeometry(this._data.geomCubeW, this._data.geomCubeH, this._data.geomCubeD);
-            } else if (this._data.geometryType == ParticleGeometryType.SPHERE) {
-                geo = new SphereGeometry(this._data.geomSphereRadius, this._data.geomSphereSegW, this._data.geomSphereSegH);
+            var geomData: ParticleDataGeometry = this._data.geometry;
+            if (geomData.type == ParticleDataGeometry.Plane) {
+                geo = new PlaneGeometry(geomData.planeW, geomData.planeH, 1, 1, 1, 1, Vector3D.Z_AXIS);
+            } else if (geomData.type == ParticleDataGeometry.Cube) {
+                geo = new CubeGeometry(geomData.cubeW, geomData.cubeH, geomData.cubeD);
+            } else if (geomData.type == ParticleDataGeometry.Sphere) {
+                geo = new SphereGeometry(geomData.sphereRadius, geomData.sphereSegW, geomData.sphereSegH);
             }
             return geo;
         }
@@ -110,14 +111,14 @@
         * @language zh_CN
         * 粒子发射器的 发射，是否进行循环播放
         */
-        public set loop(flag: boolean) {
+        private set loop(flag: boolean) {
             if (flag)
                 this._particleState.loop = 1;
             else
                 this._particleState.loop = 0;
         }
 
-        public get loop(): boolean {
+        private get loop(): boolean {
             return this._particleState.loop == 1;
         }
 
@@ -125,7 +126,7 @@
         * @language zh_CN
         * 粒子发射器的 发射时间周期，如果loop 为true 这个值将会无效
         */
-        public set duration(value: number) {
+        private set duration(value: number) {
             this._particleState.duration = value;
         }
 
@@ -133,7 +134,7 @@
         * @language zh_CN
         * 粒子发射器的 发射时间周期，如果loop 为true 这个值将会无效
         */
-        public get duration(): number {
+        private get duration(): number {
             return this._particleState.duration;
         }
 
@@ -209,12 +210,15 @@
 
         protected initialize() {
             this._isEmitterDirty = false;
+            //clean
+            this.particleAnimation.particleAnimationState.clean();
 
-            var particlePerLife: number = (this._data.lifeMax + this._data.lifeMin) / 2;
-            var particleCount: number = Math.floor(particlePerLife * this._data.rate);//粒子的目标数量是这个的时候，可以达到循环
 
-            if (this._data.particleCount != -1) {
-                particleCount = Math.min(this._data.particleCount, particleCount);
+            var particlePerLife: number = (this._data.life.lifeMax + this._data.life.lifeMin) / 2;
+            var particleCount: number = Math.floor(particlePerLife * this._data.life.rate);//粒子的目标数量是这个的时候，可以达到循环
+
+            if (this._data.property.particleCount != -1) {
+                particleCount = Math.min(this._data.property.particleCount, particleCount);
             }
             this._particleState.maxCount = particleCount;
 
@@ -265,28 +269,26 @@
 
         private initMainAnimNode() {
             this._data.validate();
-            //clean
-            this.particleAnimation.particleAnimationState.clean();
-            
+
             //time 
             this._timeNode = new ParticleTime();
-            this._timeNode.initNode(this._data);
+            this._timeNode.initNode(this._data.life);
            
             //position
             this._positionNode = new ParticlePosition();
-            this._positionNode.initNode(this._data);
+            this._positionNode.initNode(this._data.distribute);
 
             //rotation
             this._rotationNode = new ParticleRotation();
-            this._rotationNode.initNode(this._data);
+            this._rotationNode.initNode(this._data.rotation);
             
             //scale
             this._scaleNode = new ParticleScale();
-            this._scaleNode.initNode(this._data);
+            this._scaleNode.initNode(this._data.scale);
 
             //follow
             this._particleFollowNode = new ParticleFollowNode();
-            this._particleFollowNode.initNode(this._data);
+            this._particleFollowNode.initNode(this._data.property);
             
         }
 
