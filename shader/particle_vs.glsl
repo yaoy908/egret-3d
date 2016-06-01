@@ -9,8 +9,8 @@ float totalTime = 0.0;
 
 vec4 localPosition;
 vec4 globalPosition;
-vec4 followRotation;
 
+mat4 followRotMatrix;
 varying vec3 varyingViewDir ;
 
 float discard_particle = 0.0;
@@ -86,7 +86,11 @@ void main(void) {
 	
 	localPosition = outPosition = vec4(e_position, 1.0); 
 	globalPosition.xyz = vec3(0.0,0.0,0.0);
-	followRotation.xyz = vec3(0.0,0.0,0.0);
+	followRotMatrix = mat4(
+						vec4(1.0, 0.0, 0.0, 0.0),
+						vec4(0.0, 1.0, 0.0, 0.0),
+						vec4(0.0, 0.0, 1.0, 0.0),
+						vec4(0.0, 0.0, 0.0, 1.0));
 	globalPosition.xyz += attribute_offsetPosition;
 
 }
