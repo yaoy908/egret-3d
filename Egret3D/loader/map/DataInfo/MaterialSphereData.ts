@@ -1,9 +1,9 @@
-module egret3d {
+ï»¿module egret3d {
     /**
     * @language zh_CN
     * @class egret3d.MaterialSphereData
     * @classdesc
-    * ²ÄÖÊÇòµÄÌØĞ§Êı¾İ
+    * æè´¨çƒçš„ç‰¹æ•ˆæ•°æ®
     * @version Egret 3.0
     * @platform Web,Native
     */
@@ -11,7 +11,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * diffuseÌùÍ¼µÄË÷Òı£¨name£©
+         * diffuseè´´å›¾çš„ç´¢å¼•ï¼ˆnameï¼‰
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -19,7 +19,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * normalÌùÍ¼µÄË÷Òı£¨name£©
+         * normalè´´å›¾çš„ç´¢å¼•ï¼ˆnameï¼‰
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -27,7 +27,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * specularÌùÍ¼µÄË÷Òı£¨name£©
+         * specularè´´å›¾çš„ç´¢å¼•ï¼ˆnameï¼‰
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -35,7 +35,7 @@ module egret3d {
         
         /**
          * @language zh_CN
-         * diffuseµÄÑÕÉ«£¬0xffffff¸ñÊ½
+         * diffuseçš„é¢œè‰²ï¼Œ0xffffffæ ¼å¼
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -43,7 +43,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * ambientµÄÑÕÉ«£¬0xffffff¸ñÊ½
+         * ambientçš„é¢œè‰²ï¼Œ0xffffffæ ¼å¼
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -51,7 +51,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * specularµÄÑÕÉ«£¬0xffffff¸ñÊ½
+         * specularçš„é¢œè‰²ï¼Œ0xffffffæ ¼å¼
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -59,7 +59,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * Í¸Ã÷¶È
+         * é€æ˜åº¦
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -67,7 +67,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * specularÔöÇ¿µÈ¼¶
+         * specularå¢å¼ºç­‰çº§
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -75,7 +75,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * ¹âÔóÏµÊı
+         * å…‰æ³½ç³»æ•°
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -83,7 +83,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * ambientµÄÇ¿¶È
+         * ambientçš„å¼ºåº¦
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -91,7 +91,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * diffuseµÄÇ¿¶È
+         * diffuseçš„å¼ºåº¦
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -99,7 +99,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * normalµÄÇ¿¶È
+         * normalçš„å¼ºåº¦
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -107,7 +107,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * ÊÇ·ñ²úÉúÒõÓ°
+         * æ˜¯å¦äº§ç”Ÿé˜´å½±
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -115,7 +115,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * ÊÇ·ñ½ÓÊÜÒõÓ°
+         * æ˜¯å¦æ¥å—é˜´å½±
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -123,7 +123,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * ÊÇ·ñÆ½»¬²ÉÑùÌùÍ¼
+         * æ˜¯å¦å¹³æ»‘é‡‡æ ·è´´å›¾
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -131,7 +131,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * ²ÉÑùÌùÍ¼µÄ±ßÔµÊÇ·ñÖØ¸´
+         * é‡‡æ ·è´´å›¾çš„è¾¹ç¼˜æ˜¯å¦é‡å¤
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -139,7 +139,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * ÊÇ·ñ¿ªÆôË«ÃæäÖÈ¾
+         * æ˜¯å¦å¼€å¯åŒé¢æ¸²æŸ“
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -147,7 +147,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * »æÖÆÄ£Ê½Éè¶¨
+         * ç»˜åˆ¶æ¨¡å¼è®¾å®š
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -155,7 +155,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * ÌŞ³ıÄ£Ê½Éè¶¨
+         * å‰”é™¤æ¨¡å¼è®¾å®š
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -163,7 +163,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * µş¼ÓÄ£Ê½
+         * å åŠ æ¨¡å¼
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -171,7 +171,7 @@ module egret3d {
         
         /**
          * @language zh_CN
-         * alpha²ÃÇĞÖµ
+         * alphaè£åˆ‡å€¼
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -179,7 +179,7 @@ module egret3d {
 
         /**
          * @language zh_CN
-         * ²ÄÖÊÇòÓµÓĞµÄÌØĞ§
+         * æè´¨çƒæ‹¥æœ‰çš„ç‰¹æ•ˆ
          * @version Egret 3.0
          * @platform Web,Native
          */
@@ -187,7 +187,7 @@ module egret3d {
        
         /**
          * @language zh_CN
-         * ²ÄÖÊÇòuvÇøÓò
+         * æè´¨çƒuvåŒºåŸŸ
          * @version Egret 3.0
          * @platform Web,Native
          */
