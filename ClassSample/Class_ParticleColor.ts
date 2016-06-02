@@ -44,14 +44,14 @@
             data.property.followRotation = true;
 
             var life: ParticleDataLife = data.life;
-            life.lifeMax = life.lifeMin = 2;
+            life.lifeMax = life.lifeMin = 4;
             life.rate = 20;
 
 
             var moveSpeed: ParticleDataMoveSpeed = new ParticleDataMoveSpeed();
             data.moveSpeed = moveSpeed;
-            moveSpeed.min.setTo(-20, 200, -20);
-            moveSpeed.max.setTo(20, 300, 20);
+            moveSpeed.min.setTo(-20, 100, -20);
+            moveSpeed.max.setTo(20, 200, 20);
 
             //var acceleration: ParticleDataAcceleration = new ParticleDataAcceleration();
             //data.acceleration = acceleration;
@@ -64,13 +64,13 @@
             colorOffset.colors.push(new Color(0.0, 255.0, 0.0, 255.0));
             colorOffset.colors.push(new Color(0.0, 0.0, 255.0, 255.0));
             colorOffset.colors.push(new Color(0.0, 255.0, 0.0, 255.0));
-            colorOffset.colors.push(new Color(255.0, 0.0, 0.0, 255.0));
+            colorOffset.colors.push(new Color(255.0, 0.0, 0.0, 128.0));
             colorOffset.colors.push(new Color(255.0, 0.0, 0.0, 0.0));
             colorOffset.times.push(0.0);
-            colorOffset.times.push(0.3);
-            colorOffset.times.push(0.5);
+            colorOffset.times.push(0.2);
+            colorOffset.times.push(0.4);
+            colorOffset.times.push(0.6);
             colorOffset.times.push(0.7);
-            colorOffset.times.push(0.85);
             colorOffset.times.push(1.0);
 
             var sizeBezier: ParticleDataScaleBezier = new ParticleDataScaleBezier();

@@ -46,8 +46,10 @@
             for (var i: number = 0; i < count; i++) {
                 color = node.colors[i];
                 if (color) {
-                    this._colorSegment[i] = this.getGpuColor(color.r, color.g, color.b, color.a);
-                    this._colorSegment[i + count] = node.times[i];
+                    //这里采用了压缩方法：rgb三个数值压缩到一个float，a和time压缩放到第二个float
+                    //然后在gpu中还原
+                    this._colorSegment[i] = this.getGpuColor(color.r, color.g, color.b);
+                    this._colorSegment[i + count] = this.getTimeAndAlpha(node.times[i], color.a);
                 }
                 else {
                     this._colorSegment[i] = 0;
@@ -85,8 +87,33 @@
         /**
         * @压缩一个颜色值到一个float中
         */
-        private getGpuColor(r: number, g: number, b: number, a: number): number {
-            return a * 0x1000000 + r * 0x10000 + g * 0x100 + b;
+        private getGpuColor(r: number, g: number, b: number): number {
+            r = this.normalizeChannel(r);
+            g = this.normalizeChannel(g);
+            b = this.normalizeChannel(b);
+
+            var value: number = r * 0x100 + g + b / 0x100;
+            return value;
+        }
+
+        private normalizeChannel(value: number): number {
+            if (value > 0xff) value = 0xff;
+            else if (value < 0) value = 0;
+            value = Math.floor(value);
+            return value;
+        }
+        private normalizeTime(value: number): number {
+            //注：value是一个0-1之间的数，而非真实的秒时间
+            //所以超过1将为无效会被设定成为一个接近1的数
+            if (value >= 1) value = 0.99999999;
+            else if (value < 0) value = 0;
+            return value;
+        }
+
+        private getTimeAndAlpha(time: number, a: number): number {
+            a = this.normalizeChannel(a);
+            time = this.normalizeTime(time);
+            return a + time;
         }
     }
 } 
