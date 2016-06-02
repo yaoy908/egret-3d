@@ -105,7 +105,7 @@
         private normalizeTime(value: number): number {
             //注：value是一个0-1之间的数，而非真实的秒时间
             //所以超过1将为无效会被设定成为一个接近1的数
-            if (value >= 1) value = 0.99999999;
+            if (value >= 1) value = 0.9999;
             else if (value < 0) value = 0;
             return value;
         }

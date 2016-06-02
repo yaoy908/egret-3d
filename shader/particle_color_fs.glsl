@@ -43,5 +43,5 @@ void main() {
     float ws = ( progress - startSegment ) / len ;
     vec4 color = mix(vec4(unpack_color(startColor).xyz,startAlpha / 256.0),vec4(unpack_color(nextColor).xyz, nextAlpha / 256.0),ws) ;
 
-    diffuseColor.xyzw *= color.xyzw;
+    diffuseColor *= color;
 }
