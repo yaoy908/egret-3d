@@ -22,17 +22,18 @@
         * @platform Web,Native
         */
         public initNode(data: ParticleDataNode): void {
-            var node: ParticleDataScale = <ParticleDataScale>data;
+            var node: ParticleDataScaleBirth = <ParticleDataScaleBirth>data;
 
             this._scale = new Vec3ConstRandomValueShape();
-            this._scale.maxX = node.birthSizeMax.x;
-            this._scale.maxY = node.birthSizeMax.y;
-            this._scale.maxZ = node.birthSizeMax.z;
+            this._scale.maxX = node.max.x;
+            this._scale.maxY = node.max.y;
+            this._scale.maxZ = node.max.z;
             
-            this._scale.minX = node.birthSizeMin.x;
-            this._scale.minY = node.birthSizeMin.y;
-            this._scale.minZ = node.birthSizeMin.z;
+            this._scale.minX = node.min.x;
+            this._scale.minY = node.min.x;
+            this._scale.minZ = node.min.x;
         }
+
 
         /**
         * @language zh_CN

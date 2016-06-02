@@ -217,6 +217,8 @@
         "Util/Debug.ts",
         "Util/StringUtil.ts",
 
+        "utils/AxisMesh.ts",
+
         "camera/CameraAnimationController.ts",
         "camera/CameraManager.ts",
         "camera/Camera3D.ts",

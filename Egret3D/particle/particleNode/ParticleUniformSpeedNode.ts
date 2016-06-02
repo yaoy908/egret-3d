@@ -5,7 +5,8 @@
     */
     export class ParticleUniformSpeedNode extends AnimationNode {
 
-        public speedShape: ValueShape = new Vec3ConstRandomValueShape();
+        private _speedShape: Vec3ConstRandomValueShape;
+        
         private attribute_uniformSpeed: GLSL.VarRegister
         constructor() {
             super();
@@ -19,7 +20,25 @@
             this.attribute_uniformSpeed.size = 3;
             this.attributes.push(this.attribute_uniformSpeed);
         }
-        
+
+        /**
+        * @language zh_CN
+        * 填充粒子移动速度数据
+        * @param data ParticleDataNode 粒子数据来源
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public initNode(data: ParticleDataNode): void {
+            var node: ParticleDataMoveSpeed = <ParticleDataMoveSpeed>data;
+            this._speedShape = new Vec3ConstRandomValueShape();
+            this._speedShape.maxX = node.max.x;
+            this._speedShape.maxY = node.max.y;
+            this._speedShape.maxZ = node.max.z;
+
+            this._speedShape.minX = node.min.x;
+            this._speedShape.minY = node.min.y;
+            this._speedShape.minZ = node.min.z;
+        }
         /**
         * @language zh_CN
         * 填充顶点数据
@@ -33,7 +52,7 @@
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
 
-            var data: any[] = this.speedShape.calculate(count);
+            var data: any[] = this._speedShape.calculate(count);
             for (var i: number = 0; i < count; ++i) {
                 var speed: Vector3D = data[i] ; 
                 for (var j: number = 0; j < vertices; ++j) {

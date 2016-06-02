@@ -31,15 +31,15 @@
         * @platform Web,Native
         */
         public initNode(data: ParticleDataNode): void {
-            var node: ParticleDataRotation = <ParticleDataRotation>data;
+            var node: ParticleDataRotationBirth = <ParticleDataRotationBirth>data;
             this._rotations = new Vec3ConstRandomValueShape();
-            this._rotations.maxX = node.birthRotationMax.x;
-            this._rotations.maxY = node.birthRotationMax.y;
-            this._rotations.maxZ = node.birthRotationMax.z;
+            this._rotations.maxX = node.max.x;
+            this._rotations.maxY = node.max.y;
+            this._rotations.maxZ = node.max.z;
             
-            this._rotations.minX = node.birthRotationMin.x;
-            this._rotations.minY = node.birthRotationMin.y;
-            this._rotations.minZ = node.birthRotationMin.z;
+            this._rotations.minX = node.min.x;
+            this._rotations.minY = node.min.y;
+            this._rotations.minZ = node.min.z;
         }
         /**
         * @language zh_CN

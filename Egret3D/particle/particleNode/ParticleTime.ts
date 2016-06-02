@@ -41,6 +41,33 @@
             this.attribute_time.size = 4;
             this.attributes.push(this.attribute_time);
         }
+
+
+        /**
+        * @language zh_CN
+        * 填充粒子生命周期数据
+        * @param data ParticleDataNode 粒子数据来源
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public initNode(data: ParticleDataNode): void {
+            var node: ParticleDataLife = <ParticleDataLife>data;
+            //delay
+            var delayValue: ConstRandomValueShape = new ConstRandomValueShape();
+            delayValue.max = node.delayMax;
+            delayValue.min = node.delayMin;
+            this._delay = delayValue;
+            //life
+            var lifeValue: ConstRandomValueShape = new ConstRandomValueShape();
+            lifeValue.max = node.lifeMax;
+            lifeValue.min = node.lifeMin;
+            this._life = lifeValue;
+            //rate
+            var rateValue: ConstValueShape = new ConstValueShape();
+            rateValue.value = 1 / node.rate;
+            this._rate = rateValue;
+        }
+
         
         /**
         * @language zh_CN
@@ -87,30 +114,7 @@
 
         }
 
-        /**
-        * @language zh_CN
-        * 填充粒子生命周期数据
-        * @param data ParticleDataNode 粒子数据来源
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public initNode(data:ParticleDataNode): void {
-            var node: ParticleDataLife = <ParticleDataLife>data;
-            //delay
-            var delayValue: ConstRandomValueShape = new ConstRandomValueShape();
-            delayValue.max = node.delayMax;
-            delayValue.min = node.delayMin;
-            this._delay = delayValue;
-            //life
-            var lifeValue: ConstRandomValueShape = new ConstRandomValueShape();
-            lifeValue.max = node.lifeMax;
-            lifeValue.min = node.lifeMin;
-            this._life = lifeValue;
-            //rate
-            var rateValue: ConstValueShape = new ConstValueShape();
-            rateValue.value = 1 / node.rate;
-            this._rate = rateValue;
-        }
+
 
          /**
         * @language zh_CN

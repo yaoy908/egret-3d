@@ -10,10 +10,15 @@
         Property,
         Life,
         Distribute,
-        Rotation,
-        Scale,
+        RotationBirth,
+        ScaleBirth,
         Geometry,
         //其他挂接节点
+        MoveSpeed,
+        Acceleration,
+        ScaleBezier,
+        RotationSpeed,
+        ColorOffset,
     }
 
     /**
@@ -25,10 +30,15 @@
         public property: ParticleDataProperty = new ParticleDataProperty();
         public life: ParticleDataLife = new ParticleDataLife();
         public distribute: ParticleDataDistribute = new ParticleDataDistribute();
-        public rotation: ParticleDataRotation = new ParticleDataRotation();
-        public scale: ParticleDataScale = new ParticleDataScale();
+        public rotationBirth: ParticleDataRotationBirth = new ParticleDataRotationBirth();
+        public scaleBirth: ParticleDataScaleBirth = new ParticleDataScaleBirth();
         public geometry: ParticleDataGeometry = new ParticleDataGeometry();
-       
+
+        public moveSpeed: ParticleDataMoveSpeed;
+        public acceleration: ParticleDataAcceleration;
+        public scaleBesizer: ParticleDataScaleBezier;
+        public rotationSpeed: ParticleDataRotationSpeed;
+        public colorOffset: ParticleDataColorOffset;
 
         /**
         * @language zh_CN
@@ -42,11 +52,25 @@
             this.property.validate();
             this.life.validate();
             this.distribute.validate();
-            this.rotation.validate();
-            this.scale.validate();
+            this.rotationBirth.validate();
+            this.scaleBirth.validate();
             this.geometry.validate();
 
-
+            if (this.moveSpeed) {
+                this.moveSpeed.validate();
+            }
+            if (this.acceleration) {
+                this.acceleration.validate();
+            }
+            if (this.scaleBesizer) {
+                this.scaleBesizer.validate();
+            }
+            if (this.rotationSpeed) {
+                this.rotationSpeed.validate();
+            }
+            if (this.colorOffset) {
+                this.colorOffset.validate();
+            }
         }
     }
 
@@ -174,57 +198,59 @@
     }
 
 
-    export class ParticleDataRotation extends ParticleDataNode {
+    export class ParticleDataRotationBirth extends ParticleDataNode {
         //初始角度
-        public birthRotationMax: Vector3D = new Vector3D();
-        public birthRotationMin: Vector3D = new Vector3D();
+        public max: Vector3D = new Vector3D();
+        public min: Vector3D = new Vector3D();
 
         constructor() {
-            super(ParticleDataNodeType.Rotation);
+            super(ParticleDataNodeType.RotationBirth);
         }
         public validate(): void {
-            if (this.birthRotationMax == null) {
-                this.birthRotationMax = new Vector3D();
+            if (this.max == null) {
+                this.max = new Vector3D();
             }
-            if (this.birthRotationMin == null) {
-                this.birthRotationMin = new Vector3D();
+            if (this.min == null) {
+                this.min = new Vector3D();
             }
-            if (this.birthRotationMin.x > this.birthRotationMax.x) {
-                this.birthRotationMin.x = this.birthRotationMax.x;
+            if (this.min.x > this.max.x) {
+                this.min.x = this.max.x;
             }
-            if (this.birthRotationMin.y > this.birthRotationMax.y) {
-                this.birthRotationMin.y = this.birthRotationMax.y;
+            if (this.min.y > this.max.y) {
+                this.min.y = this.max.y;
             }
-            if (this.birthRotationMin.z > this.birthRotationMax.z) {
-                this.birthRotationMin.z = this.birthRotationMax.z;
+            if (this.min.z > this.max.z) {
+                this.min.z = this.max.z;
             }
         }
     }
 
-    export class ParticleDataScale extends ParticleDataNode {
+
+
+    export class ParticleDataScaleBirth extends ParticleDataNode {
         //初始缩放值
-        public birthSizeMax: Vector3D = new Vector3D(1, 1, 1);
-        public birthSizeMin: Vector3D = new Vector3D(1, 1, 1);
+        public max: Vector3D = new Vector3D(1, 1, 1);
+        public min: Vector3D = new Vector3D(1, 1, 1);
 
         constructor() {
-            super(ParticleDataNodeType.Scale);
+            super(ParticleDataNodeType.ScaleBirth);
         }
         public validate(): void {
 
-            if (this.birthSizeMax == null) {
-                this.birthSizeMax = new Vector3D(1, 1, 1);
+            if (this.max == null) {
+                this.max = new Vector3D(1, 1, 1);
             }
-            if (this.birthSizeMin == null) {
-                this.birthSizeMin = new Vector3D(1, 1, 1);
+            if (this.min == null) {
+                this.min = new Vector3D(1, 1, 1);
             }
-            if (this.birthSizeMin.x > this.birthSizeMax.x) {
-                this.birthSizeMin.x = this.birthSizeMax.x;
+            if (this.min.x > this.max.x) {
+                this.min.x = this.max.x;
             }
-            if (this.birthSizeMin.y > this.birthSizeMax.y) {
-                this.birthSizeMin.y = this.birthSizeMax.y;
+            if (this.min.y > this.max.y) {
+                this.min.y = this.max.y;
             }
-            if (this.birthSizeMin.z > this.birthSizeMax.z) {
-                this.birthSizeMin.z = this.birthSizeMax.z;
+            if (this.min.z > this.max.z) {
+                this.min.z = this.max.z;
             }
 
         }
@@ -293,14 +319,126 @@
 
 
 
+    export class ParticleDataMoveSpeed extends ParticleDataNode {
+        //初始速度
+        public max: Vector3D = new Vector3D();
+        public min: Vector3D = new Vector3D();
+
+        constructor() {
+            super(ParticleDataNodeType.MoveSpeed);
+        }
+
+        public validate(): void {
+            if (this.max == null) {
+                this.max = new Vector3D();
+            }
+            if (this.min == null) {
+                this.min = new Vector3D();
+            }
+            if (this.min.x > this.max.x) {
+                this.min.x = this.max.x;
+            }
+            if (this.min.y > this.max.y) {
+                this.min.y = this.max.y;
+            }
+            if (this.min.z > this.max.z) {
+                this.min.z = this.max.z;
+            }
+        }
+    }
+
+    export class ParticleDataAcceleration extends ParticleDataNode {
+        //加速度
+        public max: Vector3D = new Vector3D();
+        public min: Vector3D = new Vector3D();
+
+        constructor() {
+            super(ParticleDataNodeType.Acceleration);
+        }
+
+        public validate(): void {
+            if (this.max == null) {
+                this.max = new Vector3D();
+            }
+            if (this.min == null) {
+                this.min = new Vector3D();
+            }
+            if (this.min.x > this.max.x) {
+                this.min.x = this.max.x;
+            }
+            if (this.min.y > this.max.y) {
+                this.min.y = this.max.y;
+            }
+            if (this.min.z > this.max.z) {
+                this.min.z = this.max.z;
+            }
+        }
+    }
+
+    export class ParticleDataScaleBezier extends ParticleDataNode {
+        //粒子缩放贝塞尔曲线
+        public posPoints: Array<Point> = [];
+        public ctrlPoints: Array<Point> = [];
+        constructor() {
+            super(ParticleDataNodeType.ScaleBezier);
+        }
+
+        public validate(): void {
+            if (this.posPoints == null) {
+                this.posPoints = [];
+            }
+            if (this.posPoints == null) {
+                this.ctrlPoints = [];
+            }
+        }
+    }
 
 
 
+    export class ParticleDataRotationSpeed extends ParticleDataNode {
+        //角速度
+        public max: Vector3D = new Vector3D();
+        public min: Vector3D = new Vector3D();
 
+        constructor() {
+            super(ParticleDataNodeType.RotationSpeed);
+        }
+        public validate(): void {
+            if (this.max == null) {
+                this.max = new Vector3D();
+            }
+            if (this.min == null) {
+                this.min = new Vector3D();
+            }
+            if (this.min.x > this.max.x) {
+                this.min.x = this.max.x;
+            }
+            if (this.min.y > this.max.y) {
+                this.min.y = this.max.y;
+            }
+            if (this.min.z > this.max.z) {
+                this.min.z = this.max.z;
+            }
+        }
+    }
 
+    export class ParticleDataColorOffset extends ParticleDataNode {
+        //粒子缩放贝塞尔曲线
+        public colors: Array<Color> = [];
+        public times: Array<number> = [];
+        constructor() {
+            super(ParticleDataNodeType.ColorOffset);
+        }
 
-
-
+        public validate(): void {
+            if (this.colors == null) {
+                this.colors = [];
+            }
+            if (this.times == null) {
+                this.times = [];
+            }
+        }
+    }
 
 
 
