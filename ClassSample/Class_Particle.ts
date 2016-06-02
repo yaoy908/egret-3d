@@ -39,30 +39,23 @@
             mat.ambientColor = 0xffffff;
 
             var data: ParticleData = new ParticleData();
+
+            var rotationSpeed: ParticleDataRotationSpeed = new ParticleDataRotationSpeed();
+            data.rotationSpeed = rotationSpeed;
+
+            var acceleration: ParticleDataAcceleration = new ParticleDataAcceleration();
+            acceleration.max.setTo(100, 100, 100);
+            acceleration.min.setTo(-100, 0, -100);
+            data.acceleration = acceleration;
+
+            var moveSpeed: ParticleDataMoveSpeed = new ParticleDataMoveSpeed();
+            moveSpeed.max.setTo(0, 100, 0);
+            moveSpeed.min.setTo(0, 0, 0);
+            data.moveSpeed = moveSpeed;
+
             this.particle = new ParticleEmitter(data, null, mat);
 
-            var acc: ParticleAccelerationSpeedNode = new ParticleAccelerationSpeedNode();
-            acc.speedShape = new Vec3ConstRandomValueShape();
-            (<Vec3ConstRandomValueShape>acc.speedShape).minX = -100;
-            (<Vec3ConstRandomValueShape>acc.speedShape).minY = 0;
-            (<Vec3ConstRandomValueShape>acc.speedShape).minZ = -100;
-            (<Vec3ConstRandomValueShape>acc.speedShape).maxX = 100;
-            (<Vec3ConstRandomValueShape>acc.speedShape).maxY = 100;
-            (<Vec3ConstRandomValueShape>acc.speedShape).maxZ = 100;
-            this.particle.addAnimNode(acc);
-
-            var uniformSpeed: ParticleUniformSpeedNode = new ParticleUniformSpeedNode();
-            uniformSpeed.speedShape = new Vec3ConstValueShape();
-            (<Vec3ConstValueShape>uniformSpeed.speedShape).minX = 0;
-            (<Vec3ConstValueShape>uniformSpeed.speedShape).minY = 100;
-            (<Vec3ConstValueShape>uniformSpeed.speedShape).minZ = 0;
-            this.particle.addAnimNode(uniformSpeed);
-
-            var particleRotationNode: ParticleRotationNode = new ParticleRotationNode();
-            particleRotationNode.rotation
-            this.particle.addAnimNode(particleRotationNode);
-
-
+            
             this.particle.play();
             this.view1.addChild3D(this.particle);
            

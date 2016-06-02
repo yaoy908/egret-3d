@@ -22,10 +22,10 @@
         private _particleState: ParticleAnimationState; 
         private _isEmitterDirty: boolean = true;
 
-        private _particleAnimNodes: AnimationNode[] = [];
-        private _play: boolean = false;
+        private _userNodes: AnimationNode[] = [];
 
         private _data: ParticleData;
+        private _externalGeometry: Geometry;
 
         private static IdentityMatrix: Matrix4_4 = new Matrix4_4();
         /**
@@ -40,6 +40,7 @@
         constructor(data:ParticleData, geo: Geometry = null, material: MaterialBase = null) {
             super(null, material );
             this._data = data;
+            this._externalGeometry = geo;
             this.material.blendMode = BlendMode.ADD; 
 
             this.animation = this.particleAnimation = new ParticleAnimation(this);
@@ -47,19 +48,36 @@
             this._particleState = this.particleAnimation.particleAnimationState ;
 
             this.particleAnimation.emit = this;
-            if (geo == null) {
-                this.particleGeometryShape = this.createShape();
-            } else {
-                this.particleGeometryShape = geo;
-            }
-            
-            this.loop = data.loop;
-            this.duration = data.duration;
 
-            this.initMainAnimNode();
-            this.buildBoudBox(data.bounds);
+            this.buildParticle();
         }
 
+        /**
+        * @language zh_CN
+        * @private
+        * 重新构建这个粒子
+        * @param geo Geometry 几何数据
+        * @param data ParticleData 生成粒子的数据来源
+        * @param material 粒子的材质
+        * @version Egret 3.0
+        * @platform Web,Native 
+        */
+        private buildParticle(): void {
+            this._data.validate();
+            if (this._externalGeometry == null) {
+                this.particleGeometryShape = this.createShape();
+            } else {
+                this.particleGeometryShape = this._externalGeometry;
+            }
+
+            this.loop = this._data.property.loop;
+            this.duration = this._data.life.duration;
+            this.initialize();
+
+            this.initBoudBox(this._data.property.bounds);
+
+            this._isEmitterDirty = false;
+        }
         /**
         * @language zh_CN
         * 如果是一个follow类型的粒子，则modelMatrix无效，直接返回标准化的matrix
@@ -71,7 +89,7 @@
             if (this._transformChange) {
                 this.updateModelMatrix();
             }
-            if (this._data.followPosition) {
+            if (this._data.property.followPosition) {
                 return ParticleEmitter.IdentityMatrix;
             }
             return this._modelMatrix3D;
@@ -86,12 +104,13 @@
         */
         private createShape(): Geometry {
             var geo: Geometry;
-            if (this._data.geometryType == ParticleGeometryType.PLANE) {
-                geo = new PlaneGeometry(this._data.geomPlaneW, this._data.geomPlaneH, 1, 1, 1, 1, Vector3D.Z_AXIS);
-            } else if (this._data.geometryType == ParticleGeometryType.CUBE) {
-                geo = new CubeGeometry(this._data.geomCubeW, this._data.geomCubeH, this._data.geomCubeD);
-            } else if (this._data.geometryType == ParticleGeometryType.SPHERE) {
-                geo = new SphereGeometry(this._data.geomSphereRadius, this._data.geomSphereSegW, this._data.geomSphereSegH);
+            var geomData: ParticleDataGeometry = this._data.geometry;
+            if (geomData.type == ParticleDataGeometry.Plane) {
+                geo = new PlaneGeometry(geomData.planeW, geomData.planeH, 1, 1, 1, 1, Vector3D.Z_AXIS);
+            } else if (geomData.type == ParticleDataGeometry.Cube) {
+                geo = new CubeGeometry(geomData.cubeW, geomData.cubeH, geomData.cubeD);
+            } else if (geomData.type == ParticleDataGeometry.Sphere) {
+                geo = new SphereGeometry(geomData.sphereRadius, geomData.sphereSegW, geomData.sphereSegH);
             }
             return geo;
         }
@@ -110,14 +129,14 @@
         * @language zh_CN
         * 粒子发射器的 发射，是否进行循环播放
         */
-        public set loop(flag: boolean) {
+        private set loop(flag: boolean) {
             if (flag)
                 this._particleState.loop = 1;
             else
                 this._particleState.loop = 0;
         }
 
-        public get loop(): boolean {
+        private get loop(): boolean {
             return this._particleState.loop == 1;
         }
 
@@ -125,7 +144,7 @@
         * @language zh_CN
         * 粒子发射器的 发射时间周期，如果loop 为true 这个值将会无效
         */
-        public set duration(value: number) {
+        private set duration(value: number) {
             this._particleState.duration = value;
         }
 
@@ -133,7 +152,7 @@
         * @language zh_CN
         * 粒子发射器的 发射时间周期，如果loop 为true 这个值将会无效
         */
-        public get duration(): number {
+        private get duration(): number {
             return this._particleState.duration;
         }
 
@@ -167,10 +186,10 @@
         * @version Egret 3.0
         * @platform Web,Native 
         */
-        public addAnimNode(node: AnimationNode) {
-            var index: number = this._particleAnimNodes.indexOf(node);
+        private addAnimNode(node: AnimationNode) {
+            var index: number = this._userNodes.indexOf(node);
             if (index == -1) {
-                this._particleAnimNodes.push( node );
+                this._userNodes.push( node );
                 this._isEmitterDirty = true;
             }
         }
@@ -182,10 +201,10 @@
         * @version Egret 3.0
         * @platform Web,Native 
         */
-        public removeAnimNode(node: AnimationNode) {
-            var index: number = this._particleAnimNodes.indexOf(node);
+        private removeAnimNode(node: AnimationNode) {
+            var index: number = this._userNodes.indexOf(node);
             if (index != -1) {
-                this._particleAnimNodes.slice(index);
+                this._userNodes.slice(index);
                 this._isEmitterDirty = true;
             }
         }
@@ -204,17 +223,20 @@
             } else {
                 this.animation.play();
             }
-            this._play = true;
         }
 
+        /**
+        * @private
+        */
         protected initialize() {
-            this._isEmitterDirty = false;
+            //clean
+            this.particleAnimation.particleAnimationState.clean();
 
-            var particlePerLife: number = (this._data.lifeMax + this._data.lifeMin) / 2;
-            var particleCount: number = Math.floor(particlePerLife * this._data.rate);//粒子的目标数量是这个的时候，可以达到循环
+            var particlePerLife: number = (this._data.life.lifeMax + this._data.life.lifeMin) / 2;
+            var particleCount: number = Math.floor(particlePerLife * this._data.life.rate);//粒子的目标数量是这个的时候，可以达到循环
 
-            if (this._data.particleCount != -1) {
-                particleCount = Math.min(this._data.particleCount, particleCount);
+            if (this._data.property.particleCount != -1) {
+                particleCount = Math.min(this._data.property.particleCount, particleCount);
             }
             this._particleState.maxCount = particleCount;
 
@@ -231,7 +253,9 @@
             this.geometry.vertexFormat = VertexFormat.VF_POSITION | VertexFormat.VF_UV0 | VertexFormat.VF_COLOR;
 
             //根据动画节点，预计算顶点信息，长度，字节总量
-            this.initOtherAnimNode();
+            this.initMainAnimNode();
+            this.initUserAnimNode();
+            this.initEndNode();
 
             this.geometry.verticesData = new Array<number>();
             for (var i: number = 0; i < this._particleState.maxCount; ++i) {
@@ -263,53 +287,103 @@
             this.particleAnimation.particleAnimationState.fill(this.geometry, this._particleState.maxCount);
         }
 
+        /**
+        * @private
+        * 根据ParticleData中的数据初始化
+        */
         private initMainAnimNode() {
-            this._data.validate();
-            //clean
-            this.particleAnimation.particleAnimationState.clean();
-            
+            var nodes: Array<AnimationNode> = [];
             //time 
             this._timeNode = new ParticleTime();
-            this._timeNode.initNode(this._data);
+            this._timeNode.initNode(this._data.life);
+            nodes.push(this._timeNode);
+
            
             //position
             this._positionNode = new ParticlePosition();
-            this._positionNode.initNode(this._data);
+            this._positionNode.initNode(this._data.distribute);
+            nodes.push(this._positionNode);
 
             //rotation
             this._rotationNode = new ParticleRotation();
-            this._rotationNode.initNode(this._data);
+            this._rotationNode.initNode(this._data.rotationBirth);
+            nodes.push(this._rotationNode);
             
             //scale
             this._scaleNode = new ParticleScale();
-            this._scaleNode.initNode(this._data);
+            this._scaleNode.initNode(this._data.scaleBirth);
+            nodes.push(this._scaleNode);
 
             //follow
-            this._particleFollowNode = new ParticleFollowNode();
-            this._particleFollowNode.initNode(this._data);
+            if (this._data.property.followPosition) {
+                this._particleFollowNode = new ParticleFollowNode();
+                this._particleFollowNode.initNode(this._data.property);
+                nodes.push(this._particleFollowNode);
+            }
+            
+            //
+            if (this._data.moveSpeed) {
+                var speedNode: ParticleUniformSpeedNode = new ParticleUniformSpeedNode();
+                speedNode.initNode(this._data.moveSpeed);
+                nodes.push(speedNode);
+            }
+            if (this._data.acceleration) {
+                var acceleration: ParticleAccelerationSpeedNode = new ParticleAccelerationSpeedNode();
+                acceleration.initNode(this._data.acceleration);
+                nodes.push(acceleration);
+            }
+
+            if (this._data.scaleBesizer) {
+                var scaleBesizer: ParticleSizeGlobalNode = new ParticleSizeGlobalNode();
+                scaleBesizer.initNode(this._data.scaleBesizer);
+                nodes.push(scaleBesizer);
+            }
+
+            if (this._data.rotationSpeed) {
+                var rotationSpeed: ParticleRotationNode = new ParticleRotationNode();
+                rotationSpeed.initNode(this._data.rotationSpeed);
+                nodes.push(rotationSpeed);
+            }
+
+            if (this._data.colorOffset) {
+                var colorOffset: ParticleColorGlobalNode = new ParticleColorGlobalNode();
+                colorOffset.initNode(this._data.colorOffset);
+                nodes.push(colorOffset);
+            }
+
+            for (var i: number = 0, count: number = nodes.length; i < count; i++) {
+                this.particleAnimation.particleAnimationState.addNode(nodes[i]);
+            }
             
         }
 
-        private initOtherAnimNode() {
-
-            this.particleAnimation.particleAnimationState.addNode(this._timeNode);
-            this.particleAnimation.particleAnimationState.addNode(this._positionNode);
-            this.particleAnimation.particleAnimationState.addNode(this._rotationNode);
-            this.particleAnimation.particleAnimationState.addNode(this._scaleNode);
-            this.particleAnimation.particleAnimationState.addNode(this._particleFollowNode);
-
+        private initUserAnimNode() {
             //加入自定义节点
-            for (var i: number = 0; i < this._particleAnimNodes.length; i++) {
-                this.particleAnimation.particleAnimationState.addNode(this._particleAnimNodes[i]);
+            for (var i: number = 0; i < this._userNodes.length; i++) {
+                this.particleAnimation.particleAnimationState.addNode(this._userNodes[i]);
             }
+        }
 
+        private initEndNode(): void {
             //永远是最后一个加入
-            var particleEndNode: ParticleEndNode = new ParticleEndNode();
-            this.particleAnimation.particleAnimationState.addNode(particleEndNode);
+            var endNode: ParticleEndNode = new ParticleEndNode();
+            this.particleAnimation.particleAnimationState.addNode(endNode);
             //计算加入动画后，会获取的节点信息，重新计算 geometry 结构
             this.particleAnimation.particleAnimationState.calculate(this.geometry);
+        }
 
-
+        /**
+        * @language zh_CN
+        * @private
+        * 构建包围盒
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        private initBoudBox(vector: Vector3D) {
+            var b: BoundBox = new BoundBox(this);
+            b.fillBox(new Vector3D(-vector.x / 2, -vector.y / 2, -vector.z / 2), new Vector3D(vector.x / 2, vector.y / 2, vector.z / 2));
+            this.bound = b;
+            this.initAABB();
         }
 
         /**
@@ -320,18 +394,12 @@
         */
         public update(time: number, delay: number, camera: Camera3D) {
             if (this._isEmitterDirty) {
-                this.initialize();
+                this.buildParticle();
             }
             super.update(time, delay, camera);
         }
 
 
-        public buildBoudBox(vector: Vector3D) {
-            var b: BoundBox = new BoundBox(this);
-            b.fillBox(new Vector3D(-vector.x / 2, -vector.y / 2, -vector.z / 2), new Vector3D(vector.x / 2, vector.y / 2, vector.z / 2));
-            this.bound = b;
-            this.initAABB();
-        }
 
 
 

@@ -45,10 +45,17 @@
 
         }
 
-
-        public initNode(data:ParticleData): void {
-            this._followPosition = data.followPosition;
-            this._followRotation = data.followRotation;
+        /**
+        * @language zh_CN
+        * 填充粒子跟随属性
+        * @param data ParticleDataNode 粒子数据来源
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public initNode(data: ParticleDataNode): void {
+            var node: ParticleDataProperty = <ParticleDataProperty>data;
+            this._followPosition = node.followPosition;
+            this._followRotation = node.followRotation;
         }
 
         /**
