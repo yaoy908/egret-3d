@@ -209,12 +209,14 @@
 
         protected createSource(){
 
-            this.source = this.context.createBufferSource();
-            this.source.buffer = this.sound.buffer;
-            // Connect up the nodes
-            this.source.connect(this._panner);
-            this._panner.connect(this.gain);
-            this.gain.connect(this.context.destination);
+            if (this.sound.buffer) {
+                this.source = this.context.createBufferSource();
+                this.source.buffer = this.sound.buffer;
+                // Connect up the nodes
+                this.source.connect(this._panner);
+                this._panner.connect(this.gain);
+                this.gain.connect(this.context.destination);
+            }
         }
 
 
