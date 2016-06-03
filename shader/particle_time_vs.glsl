@@ -9,10 +9,7 @@ attribute vec4 attribute_time ;
 // 按秒为单位
 //x: time second
 //y: duration second
-//z: loop 1.0:0.0
-//w: +/-
-uniform float uniform_time[5] ;
-
+uniform float uniform_particleProperty[6] ;
 //按秒为单位
 //当前时间
 float currentTime = 0.0;
@@ -28,8 +25,8 @@ struct ParticleData{
 
 
 float particle( ParticleData emit ){
-	float time = uniform_time[0] ; 
-	float loop = uniform_time[1]; 
+	float time = uniform_particleProperty[0] ; 
+	float loop = uniform_particleProperty[1]; 
 
 	//还未出身
 	if(time <= emit.bornTime){

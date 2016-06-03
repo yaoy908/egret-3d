@@ -3,14 +3,18 @@
 attribute vec3 attribute_offsetPosition;
 
 uniform mat4 uniform_cameraMatrix;
+
+uniform mat4 uniform_ModelMatrix;
+uniform mat4 uniform_ViewMatrix;
+
 const float PI = 3.1415926 ;
 float currentTime = 0.0;
 float totalTime = 0.0;
 
-vec4 localPosition;
-vec4 globalPosition;
+vec4 localPosition = vec4(0.0,0.0,0.0,1.0);
+vec4 globalPosition = vec4(0.0,0.0,0.0,1.0);
 
-mat4 followRotMatrix;
+mat4 followTargetMatrix;
 varying vec3 varyingViewDir ;
 
 float discard_particle = 0.0;
@@ -65,9 +69,7 @@ mat4 buildRotMat4(vec3 rot)
 
 void main(void) {
 	varying_color = vec4(1.0, 1.0, 1.0, 1.0);
-
-
-
+				
 	mat4 billboardMatrix = mat4(
 						vec4(1.0, 0.0, 0.0, 0.0),
 						vec4(0.0, 1.0, 0.0, 0.0),
@@ -84,9 +86,9 @@ void main(void) {
 	mat4 modeViewMatrix = uniform_ModelViewMatrix ; 
 	//mat3 normalMatrix = mat3(uniform_NormalMatrix);
 	
-	localPosition = outPosition = vec4(e_position, 1.0); 
+	outPosition = localPosition = vec4(e_position, 1.0); 
 	globalPosition.xyz = vec3(0.0,0.0,0.0);
-	followRotMatrix = mat4(
+	followTargetMatrix = mat4(
 						vec4(1.0, 0.0, 0.0, 0.0),
 						vec4(0.0, 1.0, 0.0, 0.0),
 						vec4(0.0, 0.0, 1.0, 0.0),

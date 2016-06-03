@@ -19,13 +19,14 @@
         */
         private attribute_followPosition: GLSL.VarRegister;
         private attribute_followRotation: GLSL.VarRegister;
+        private attribute_followScale: GLSL.VarRegister;
 
         private count: number = 0;
         private particleAnimationState: ParticleAnimationState; 
         private lifeCircles: Array<number>;
 
-        private _followPosition: boolean = false;
         private _followRotation: boolean = false;
+        private _followScale: boolean = false;
         constructor() {
             super();
             this.name = "ParticleFollowNode";
@@ -43,6 +44,11 @@
             this.attribute_followRotation.size = 3;
             this.attributes.push(this.attribute_followRotation);
 
+            this.attribute_followScale = new GLSL.VarRegister();
+            this.attribute_followScale.name = "attribute_followScale";
+            this.attribute_followScale.size = 3;
+            this.attributes.push(this.attribute_followScale);
+
         }
 
         /**
@@ -53,8 +59,8 @@
         * @platform Web,Native
         */
         public initNode(data: ParticleDataNode): void {
-            var node: ParticleDataProperty = <ParticleDataProperty>data;
-            this._followPosition = node.followPosition;
+            var node: ParticleDataFollowTarget = <ParticleDataFollowTarget>data;
+            this._followScale = node.followScale;
             this._followRotation = node.followRotation;
         }
 
@@ -86,12 +92,16 @@
         */
         private geometryDirty: boolean;
 
+        /**
+        * @language zh_CN
+        * 顶点数据是否需要重新upload
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public update(time: number, delay: number, geometry: Geometry) {
 
             this.geometryDirty = false;
             if (!this.particleAnimationState.followTarget)
-                return;
-            if (!this._followPosition && !this._followRotation)
                 return;
             //time += delay;
 
@@ -136,22 +146,39 @@
                         this.lifeCircles[i] = curCircleIndex;
                         changed = true;
                         for (var j: number = 0; j < vertices; ++j) {
+                            //position
                             index = particleIndex + j;
                             index = index * geometry.vertexAttLength + this.attribute_followPosition.offsetIndex;
-                            if (this._followPosition) {
-                                geometry.verticesData[index + 0] = this.particleAnimationState.followTarget.x;
-                                geometry.verticesData[index + 1] = this.particleAnimationState.followTarget.y;
-                                geometry.verticesData[index + 2] = this.particleAnimationState.followTarget.z;
+                            if (true) {
+                                geometry.verticesData[index + 0] = this.particleAnimationState.followTarget.globalPosition.x;
+                                geometry.verticesData[index + 1] = this.particleAnimationState.followTarget.globalPosition.y;
+                                geometry.verticesData[index + 2] = this.particleAnimationState.followTarget.globalPosition.z;
                             }
-
+                            //rotation
                             index = particleIndex + j;
                             index = index * geometry.vertexAttLength + this.attribute_followRotation.offsetIndex;
                             if (this._followRotation) {
-                                geometry.verticesData[index + 0] = this.particleAnimationState.followTarget.rotationX * Math.PI / 180;
-                                geometry.verticesData[index + 1] = this.particleAnimationState.followTarget.rotationY * Math.PI / 180;
-                                geometry.verticesData[index + 2] = this.particleAnimationState.followTarget.rotationZ * Math.PI / 180;
+                                geometry.verticesData[index + 0] = this.particleAnimationState.followTarget.globalRotationX * MathUtil.DEGREES_TO_RADIANS;
+                                geometry.verticesData[index + 1] = this.particleAnimationState.followTarget.globalRotationY * MathUtil.DEGREES_TO_RADIANS;
+                                geometry.verticesData[index + 2] = this.particleAnimationState.followTarget.globalRotationZ * MathUtil.DEGREES_TO_RADIANS;
+                            } else {
+                                geometry.verticesData[index + 0] = 0;
+                                geometry.verticesData[index + 1] = 0;
+                                geometry.verticesData[index + 2] = 0;
                             }
-                            
+                            //scale
+                            index = particleIndex + j;
+                            index = index * geometry.vertexAttLength + this.attribute_followScale.offsetIndex;
+                            if (this._followScale) {
+                                geometry.verticesData[index + 0] = this.particleAnimationState.followTarget.globalScaleX;
+                                geometry.verticesData[index + 1] = this.particleAnimationState.followTarget.globalScaleY;
+                                geometry.verticesData[index + 2] = this.particleAnimationState.followTarget.globalScaleZ;
+                            } else {
+                                geometry.verticesData[index + 0] = 0;
+                                geometry.verticesData[index + 1] = 0;
+                                geometry.verticesData[index + 2] = 0;
+                            }
+
                         }
                     }
                 }

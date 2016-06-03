@@ -3,15 +3,19 @@ float particle( ParticleData emit ){
 }
 void main(void) {
 
-	if(discard_particle == 1.0){
-		outPosition = vec4(0.0,0.0,0.0,0.0);
+	if(discard_particle == 1.0){ 
+		outPosition = vec4(0.0,0.0,0.0,0.0); 
 	}else{
-		outPosition.xyz = localPosition.xyz  ;
-		outPosition = billboardMatrix * outPosition;
+		if(uniform_particleProperty[2] == 1.0){
+		  globalPosition = followTargetMatrix * globalPosition;
+		}else{
+		  globalPosition = uniform_ModelMatrix * globalPosition; 
+		}
+		localPosition.xyz *= vec3(uniform_particleProperty[3], uniform_particleProperty[4], uniform_particleProperty[5]);
+		outPosition = billboardMatrix * localPosition;
 		outPosition.xyz += globalPosition.xyz;
-		outPosition = modeViewMatrix * outPosition; 
-	}
-
-	gl_Position = uniform_ProjectionMatrix * outPosition ;
+		outPosition = uniform_ViewMatrix * outPosition;
+	} 
+	gl_Position = uniform_ProjectionMatrix * outPosition ; 
 }
 	

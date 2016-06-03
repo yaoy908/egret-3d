@@ -78,22 +78,6 @@
 
             this._isEmitterDirty = false;
         }
-        /**
-        * @language zh_CN
-        * 如果是一个follow类型的粒子，则modelMatrix无效，直接返回标准化的matrix
-        * @return Geometry
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public get modelMatrix(): Matrix4_4 {
-            if (this._transformChange) {
-                this.updateModelMatrix();
-            }
-            if (this._data.property.followPosition) {
-                return ParticleEmitter.IdentityMatrix;
-            }
-            return this._modelMatrix3D;
-        }
 
         /**
         * @language zh_CN
@@ -113,6 +97,16 @@
                 geo = new SphereGeometry(geomData.sphereRadius, geomData.sphereSegW, geomData.sphereSegH);
             }
             return geo;
+        }
+
+        /**
+        * @language zh_CN
+        * 获取是否为follow类型
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get isFollowParticle(): boolean {
+            return this._data.followTarget != null;
         }
 
         /**
@@ -315,9 +309,9 @@
             nodes.push(this._scaleNode);
 
             //follow
-            if (this._data.property.followPosition) {
+            if (this._data.followTarget) {
                 this._particleFollowNode = new ParticleFollowNode();
-                this._particleFollowNode.initNode(this._data.property);
+                this._particleFollowNode.initNode(this._data.followTarget);
                 nodes.push(this._particleFollowNode);
             }
             
