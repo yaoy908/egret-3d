@@ -10,6 +10,7 @@ float totalTime = 0.0;
 vec4 localPosition;
 vec4 globalPosition;
 
+mat4 followRotMatrix;
 varying vec3 varyingViewDir ;
 
 float discard_particle = 0.0;
@@ -32,32 +33,32 @@ mat4 buildRotMat4(vec3 rot)
 	s = sin(rot.x);
 	c = cos(rot.x);
 	
-	ret *= mat4(
+	ret = mat4(
 	vec4(1.0, 0.0, 0.0, 0.0),
 	vec4(0.0, c, s, 0.0),
 	vec4(0.0, -s, c, 0.0),
 	vec4(0.0, 0.0, 0.0, 1.0)
-	);
+	) * ret;
 	
 	s = sin(rot.y);
 	c = cos(rot.y);
 	
-	ret *= mat4(
+	ret = mat4(
 	vec4(c, 0.0, -s, 0.0),
 	vec4(0.0, 1.0, 0.0, 0.0),
 	vec4(s, 0.0, c, 0.0),
 	vec4(0.0, 0.0, 0.0, 1.0)
-	);
+	) * ret;
 
 	s = sin(rot.z);
 	c = cos(rot.z);
 
-	ret *= mat4(
+	ret = mat4(
 	vec4(c, s, 0.0, 0.0),
 	vec4(-s, c, 0.0, 0.0),
 	vec4(0.0, 0.0, 1.0, 0.0),
 	vec4(0.0, 0.0, 0.0, 1.0)
-	);
+	) * ret;
 
 	return ret;
 }
@@ -85,6 +86,11 @@ void main(void) {
 	
 	localPosition = outPosition = vec4(e_position, 1.0); 
 	globalPosition.xyz = vec3(0.0,0.0,0.0);
+	followRotMatrix = mat4(
+						vec4(1.0, 0.0, 0.0, 0.0),
+						vec4(0.0, 1.0, 0.0, 0.0),
+						vec4(0.0, 0.0, 1.0, 0.0),
+						vec4(0.0, 0.0, 0.0, 1.0));
 	globalPosition.xyz += attribute_offsetPosition;
 
 }

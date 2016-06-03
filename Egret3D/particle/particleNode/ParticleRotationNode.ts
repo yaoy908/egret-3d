@@ -2,11 +2,11 @@
         
     /**
     * @private
+    * 粒子的旋转角速度，当前实现为Z轴的速度（todo：模型粒子或许需要同时有x/y/z三个方向的角速度）
     */
     export class ParticleRotationNode extends AnimationNode {
 
-        public rotation: ValueShape = new ConstRandomValueShape();
-
+        private _rotation: ConstRandomValueShape;
         private attribute_Rotation: GLSL.VarRegister
         constructor() {
 
@@ -20,12 +20,24 @@
             this.attribute_Rotation.name = "attribute_Rotation";
             this.attribute_Rotation.size = 1;
             this.attributes.push(this.attribute_Rotation);
-
-            (<ConstRandomValueShape>this.rotation).min = -180;
-            (<ConstRandomValueShape>this.rotation).max = 180;
-
         }
-        
+
+
+
+        /**
+        * @language zh_CN
+        * 填充粒子过程旋转数据
+        * @param data ParticleDataNode 粒子数据来源
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public initNode(data: ParticleDataNode): void {
+            var node: ParticleDataRotationSpeed = <ParticleDataRotationSpeed>data;
+            this._rotation = new ConstRandomValueShape();
+            this._rotation.max = node.max.x;
+            this._rotation.min = node.min.x;
+        }
+
         /**
         * @language zh_CN
         * 填充顶点数据
@@ -37,7 +49,7 @@
         public build(geometry: Geometry, count: number) {
             var index: number = 0;
             var vertices: number = geometry.vertexCount / count;
-            var data: any[] = this.rotation.calculate(count);
+            var data: any[] = this._rotation.calculate(count);
         
             for (var i: number = 0; i < count; ++i) {
                 var rot: number = data[i] ; 

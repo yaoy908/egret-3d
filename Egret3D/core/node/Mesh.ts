@@ -208,19 +208,7 @@
             }
 
             bound.fillBox(bound.min, bound.max);
-            bound.childBound = new BoundBox(this);
-            var max: Vector3D = new Vector3D();
-            var min: Vector3D = new Vector3D();
-
-            max.x = bound.center.x + bound.width / 4;
-            max.y = bound.center.y + bound.heigth / 4;
-            max.z = bound.center.z + bound.depth / 4;
-
-            min.x = bound.center.x - bound.width / 4;
-            min.y = bound.center.y - bound.heigth / 4;
-            min.z = bound.center.z - bound.depth / 4;
-
-            (<BoundBox>bound.childBound).fillBox(min, max);
+            bound.createChild();
 
             this.bound = bound;
             this.initAABB();

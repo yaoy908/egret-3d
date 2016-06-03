@@ -5,8 +5,9 @@
     */
     export class ParticleSizeGlobalNode extends AnimationNode {
 
-        public colorSegment: Float32Array = new Float32Array(64); 
-        public points: Point[] = []; 
+        private static pointsCount: number = 32;
+        private _floatData: Float32Array = new Float32Array(ParticleSizeGlobalNode.pointsCount * 2); 
+        private _node: ParticleDataScaleBezier;
         constructor() {
 
             super();
@@ -14,20 +15,42 @@
 
             this.vertex_ShaderName[ShaderPhaseType.local_vertex] = this.vertex_ShaderName[ShaderPhaseType.local_vertex] || [];
             this.vertex_ShaderName[ShaderPhaseType.local_vertex].push("particle_size_vs");
-            
-            //this.frament_ShaderName[ShaderPhaseType.muilt_end_fragment] = this.frament_ShaderName[ShaderPhaseType.muilt_end_fragment] || [];
-            //this.frament_ShaderName[ShaderPhaseType.muilt_end_fragment].push("particle_color_fs");
-
-            this.points.push(new Point(0, 0));
-            this.points.push(new Point(0, 1));
-            this.points.push(new Point(0.5, 2));
-            this.points.push(new Point(0.55, 2));
-
-            this.points.push(new Point(0.55, 2));
-            this.points.push(new Point(0.56, 2));
-            this.points.push(new Point(1.0, 0.2));
-            this.points.push(new Point(1.0, 0.2));
             //|sa,sc ea,ec|  每个段的形式
+        }
+
+        /**
+        * @language zh_CN
+        * 填充粒子初始旋转数据
+        * @param data ParticleDataNode 粒子数据来源
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public initNode(data: ParticleDataNode): void {
+
+            this._node = <ParticleDataScaleBezier>data;
+            var count: number = ParticleSizeGlobalNode.pointsCount;
+            this._node.ctrlPoints.length = this._node.posPoints.length = count;
+
+            var posPt: Point;
+            var ctrlPt: Point;
+
+            for (var i: number = 0; i < count; i++) {
+                posPt = this._node.posPoints[i];
+                ctrlPt = this._node.ctrlPoints[i];
+                if (posPt && ctrlPt) {
+                    this._floatData[i * 2 + 0] = posPt.x;
+                    this._floatData[i * 2 + 1] = posPt.y;
+                    this._floatData[i * 2 + 2] = ctrlPt.x;
+                    this._floatData[i * 2 + 3] = ctrlPt.y;
+                }
+                else {
+                    this._floatData[i * 2 + 0] = 0;
+                    this._floatData[i * 2 + 1] = 0;
+                    this._floatData[i * 2 + 2] = 0;
+                    this._floatData[i * 2 + 3] = 0;
+                }
+
+            }
         }
          
         /**
@@ -39,16 +62,7 @@
         * @platform Web,Native
         */
         public build(geometry: Geometry, count: number) {
-            for (var i: number = 0; i < 32; i++){
-                if (this.points.length > i) {
-                    this.colorSegment[i * 2] = this.points[i].x;
-                    this.colorSegment[i * 2 + 1] = this.points[i].y;
-                }
-                else {
-                    this.colorSegment[i * 2] = 0 ;
-                    this.colorSegment[i * 2 + 1] = 0;
-                }
-            }
+           
         }
 
         /**
@@ -61,7 +75,7 @@
         * @private
         */
         public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
-            context3DProxy.uniform2fv(usage["uniform_size"].uniformIndex, this.colorSegment);
+            context3DProxy.uniform2fv(usage["uniform_size"].uniformIndex, this._floatData);
         }
 
 

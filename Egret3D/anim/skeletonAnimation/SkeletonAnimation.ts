@@ -566,6 +566,7 @@
         /**
         * @language zh_CN
         * 设置动画播放速度
+        * 1.0是正常速度 0.0 - 1.0 会变慢 大于1会变快 负数会反着播
         * @param speed 播放速度
         * @version Egret 3.0
         * @platform Web,Native

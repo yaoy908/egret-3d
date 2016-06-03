@@ -1,22 +1,16 @@
-uniform float uniform_colorTransform[16] ;
-vec4 pack_depth(float depth)
+uniform float uniform_colorTransform[16];
+//压缩过的颜色,rg.b的格式
+vec3 unpack_color(float rgb_data)
 {
-    vec4 res ;
+    vec3 res;
+    res.z = fract( rgb_data );
+    rgb_data -= res.z;
     
-    float res1 = depth/256.0;
-    res.z = fract( res1 );
-    res1 -= res.z;
+    rgb_data = rgb_data/256.0;
+    res.y = fract( rgb_data );
+    rgb_data -= res.y;
     
-    res1 = res1/256.0;
-    res.y = fract( res1 );
-    res1 -= res.y;
-    
-    res1 = res1/256.0;
-    res.x = fract( res1 );
-    res1 -= res.x;
-    
-    res1 = res1/256.0;
-    res.w = res1;
+    res.x = rgb_data/256.0;
     return res;
 }
 
@@ -26,21 +20,28 @@ void main() {
     
     float nextColor ;
     float nextSegment ;
-    
-    float w = pt.w/pt.y;
+
+    float startAlpha;
+	float nextAlpha;
+
+    float progress = pt.w/pt.y;
     for( int i = 1 ; i < 8 ; i++ ){
-       if( w >= uniform_colorTransform[i+8-1] ){
+       if( progress >= fract(uniform_colorTransform[i+8-1]) ){
           startColor = uniform_colorTransform[i-1] ;
-          startSegment = uniform_colorTransform[i+8-1] ;
+          startSegment = fract(uniform_colorTransform[i+8-1]) ;
           nextColor = uniform_colorTransform[i];
-          nextSegment = uniform_colorTransform[i+8] ;
+          nextSegment = fract(uniform_colorTransform[i+8]) ;
+
+		  startAlpha = uniform_colorTransform[i+8-1] - startSegment;
+		  nextAlpha = uniform_colorTransform[i+8] - nextSegment;
        }else{
           break;
        }
     } 
     
     float len = nextSegment - startSegment ;
-    float ws = ( w - startSegment ) / len ;
-    vec4 color = mix(pack_depth(startColor),pack_depth(nextColor),ws) ;
-    diffuseColor.xyzw *= color.xyzw ;
+    float ws = ( progress - startSegment ) / len ;
+    vec4 color = mix(vec4(unpack_color(startColor).xyz,startAlpha / 256.0),vec4(unpack_color(nextColor).xyz, nextAlpha / 256.0),ws) ;
+
+    diffuseColor *= color;
 }

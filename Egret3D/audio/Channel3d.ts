@@ -34,6 +34,14 @@
         */
         public set listener(value: Vector3D) {
             this._listener.copyFrom(value);
+
+            if (AudioManager.instance.hasAudio()) {
+                if (this.source) {
+
+                    var factor: number = this.fallOff(this._listener, this.position, this.minDistance, this.maxDistance, this.rollOffFactor);
+                    this.source.volume = this.volume * factor;
+                }
+            }
         }
         /**
         * @language zh_CN
@@ -201,12 +209,14 @@
 
         protected createSource(){
 
-            this.source = this.context.createBufferSource();
-            this.source.buffer = this.sound.buffer;
-            // Connect up the nodes
-            this.source.connect(this._panner);
-            this._panner.connect(this.gain);
-            this.gain.connect(this.context.destination);
+            if (this.sound.buffer) {
+                this.source = this.context.createBufferSource();
+                this.source.buffer = this.sound.buffer;
+                // Connect up the nodes
+                this.source.connect(this._panner);
+                this._panner.connect(this.gain);
+                this.gain.connect(this.context.destination);
+            }
         }
 
 
@@ -222,12 +232,14 @@
             } else if (distance > maxDistance) {
                 return 0;
             } else {
-                var numerator = refDistance + (rolloffFactor * (distance - refDistance));
-                if (numerator !== 0) {
-                    return refDistance / numerator;
-                } else {
-                    return 1;
-                }
+                //var numerator = refDistance + (rolloffFactor * (distance - refDistance));
+                //if (numerator !== 0) {
+                //    return refDistance / numerator;
+                //} else {
+                //    return 1;
+                //}
+
+                return 1 - distance / (maxDistance - refDistance);
             }
         }
     }

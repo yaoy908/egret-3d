@@ -39,16 +39,16 @@
         * @language zh_CN
         * @param targetObject 控制的目标相机，目标对象
         * @param lookAtObject 相机看向的对象
-        * @param panAngle 相机看向的对象
-        * @param tiltAngle 相机看向的对象
-        * @param distance 相机看向的对象
-        * @param minTiltAngle 相机看向的对象
-        * @param maxTiltAngle 相机看向的对象
-        * @param minPanAngle 相机看向的对象
-        * @param maxPanAngle 相机看向的对象
-        * @param steps 相机看向的对象
-        * @param yFactor 相机看向的对象
-        * @param wrapPanAngle 相机看向的对象
+        * @param panAngle y轴旋转
+        * @param tiltAngle x轴旋转
+        * @param distance 相机距离
+        * @param minTiltAngle 最小x轴旋转
+        * @param maxTiltAngle 最大x轴旋转
+        * @param minPanAngle 最小y轴旋转
+        * @param maxPanAngle 最大y轴旋转
+        * @param steps 平滑时分为几步
+        * @param yFactor 旋转时Y轴的一个相对变化值
+        * @param wrapPanAngle 是否开启 PanAngle 角度限制
         * @version Egret 3.0
         * @platform Web,Native
         */

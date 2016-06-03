@@ -4,7 +4,7 @@
     * @language zh_CN
     * @class egret3d.ParticleRotation
     * @classdesc
-    * 粒子旋转效果节点
+    * 粒子旋转效果节点(初始角度，直接加成到了顶点位置上，不会在shader上反映出)
     * @see egret3d.AnimationNode
     * @version Egret 3.0
     * @platform Web,Native
@@ -14,8 +14,7 @@
         /**
         * @private
         */
-        public rotations: ValueShape = new Vec3ConstValueShape();
-        private attribute_time: GLSL.VarRegister;
+        private _rotations: Vec3ConstRandomValueShape;
         private particleAnimationState: ParticleAnimationState;
         private rotationMat: Matrix4_4 = new Matrix4_4();
         constructor() {
@@ -23,7 +22,25 @@
 
             this.name = "ParticleRotation";
         }
-        
+
+        /**
+        * @language zh_CN
+        * 填充粒子初始旋转数据
+        * @param data ParticleDataNode 粒子数据来源
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public initNode(data: ParticleDataNode): void {
+            var node: ParticleDataRotationBirth = <ParticleDataRotationBirth>data;
+            this._rotations = new Vec3ConstRandomValueShape();
+            this._rotations.maxX = node.max.x;
+            this._rotations.maxY = node.max.y;
+            this._rotations.maxZ = node.max.z;
+            
+            this._rotations.minX = node.min.x;
+            this._rotations.minY = node.min.y;
+            this._rotations.minZ = node.min.z;
+        }
         /**
         * @language zh_CN
         * 填充顶点数据
@@ -35,7 +52,7 @@
         public build(geometry: Geometry, count: number) {
 
             this.particleAnimationState = <ParticleAnimationState>this.state;
-            var rotationArray: Vector3D[] = this.rotations.calculate(count);
+            var rotationArray: Vector3D[] = this._rotations.calculate(count);
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
             var pos: Vector3D = new Vector3D();

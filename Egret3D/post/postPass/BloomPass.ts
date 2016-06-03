@@ -30,7 +30,7 @@
             posList["bloomPass"] = this.postRender.renderTexture;
             posList["end"] = posList["colorTexture"] ;
 
-           // this.gaussPass.drawTexture( time, delay , context3D , collect , camera , backViewPort , posList );
+            this.gaussPass.drawTexture( time, delay , context3D , collect , camera , backViewPort , posList );
         }
     }
 }

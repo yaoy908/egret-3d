@@ -34,17 +34,8 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public frament_ShaderName: { [shaderPhase: number]: string[] } = {};
+        public fragment_ShaderName: { [shaderPhase: number]: string[] } = {};
                         
-        /**
-        * @private
-        */
-        public vertex_data: Float32Array;
-                        
-        /**
-        * @private
-        */
-        public frament_data: Float32Array;
                         
         /**
         * @language zh_CN
@@ -68,7 +59,13 @@
         public build(geometry: Geometry, count: number) {
         
         }
-                                
+
+        /**
+        * @private
+        */
+        public initNode(data: ParticleDataNode): void {
+
+        }
         /**
         * @private
         */

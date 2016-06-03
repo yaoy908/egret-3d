@@ -24,8 +24,8 @@
         constructor() {
             super();
 
-            this.fsShaderList[ShaderPhaseType.muilt_end_fragment] = this.fsShaderList[ShaderPhaseType.muilt_end_fragment] || [];
-            this.fsShaderList[ShaderPhaseType.muilt_end_fragment].push("colorGradients_fs");
+            this.fsShaderList[ShaderPhaseType.multi_end_fragment] = this.fsShaderList[ShaderPhaseType.multi_end_fragment] || [];
+            this.fsShaderList[ShaderPhaseType.multi_end_fragment].push("colorGradients_fs");
 
             this.vsShaderList[ShaderPhaseType.local_vertex] = this.vsShaderList[ShaderPhaseType.local_vertex] || [];
             this.vsShaderList[ShaderPhaseType.local_vertex].push("vertexPos_vs");

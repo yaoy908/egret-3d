@@ -37,28 +37,36 @@
 
             var mat: TextureMaterial = new TextureMaterial();
             mat.ambientColor = 0xffffff;
+
+
             var data: ParticleData = new ParticleData();
+
+            var moveSpeed: ParticleDataMoveSpeed = new ParticleDataMoveSpeed();
+            moveSpeed.min.setTo(0, 80, 0);
+            moveSpeed.max.setTo(0, 100, 0);
+            data.moveSpeed = moveSpeed;
+
+            var acceleration: ParticleDataAcceleration = new ParticleDataAcceleration();
+            acceleration.min.setTo(-100, -100, -100);
+            acceleration.max.setTo(100, 100, 100);
+            data.acceleration = acceleration;
+
+            var sizeBezier: ParticleDataScaleBezier = new ParticleDataScaleBezier();
+            sizeBezier.posPoints.push(new Point(0, 0));
+            sizeBezier.posPoints.push(new Point(0.5, 2));
+            sizeBezier.posPoints.push(new Point(0.55, 2));
+            sizeBezier.posPoints.push(new Point(1.0, 0.2));
+            
+            sizeBezier.ctrlPoints.push(new Point(0, 1));
+            sizeBezier.ctrlPoints.push(new Point(0.55, 2));
+            sizeBezier.ctrlPoints.push(new Point(0.56, 2));
+            sizeBezier.ctrlPoints.push(new Point(1.0, 0.2));
+            data.scaleBesizer = sizeBezier;
+
             this.particle = new ParticleEmitter(data, null, mat);
 
-            //var uniformSpeed: ParticleUniformSpeedNode = new ParticleUniformSpeedNode();
-            //uniformSpeed.speedShape = new Vec3ConstValueShape();
-            //(<Vec3ConstValueShape>uniformSpeed.speedShape).minX = 0;
-            //(<Vec3ConstValueShape>uniformSpeed.speedShape).minY = 100;
-            //(<Vec3ConstValueShape>uniformSpeed.speedShape).minZ = 0;
-            //this.particle.addAnimNode(uniformSpeed);
+            
 
-            var vel: ParticleAccelerationSpeedNode = new ParticleAccelerationSpeedNode();
-            vel.speedShape = new Vec3ConstRandomValueShape();
-            (<Vec3ConstRandomValueShape>vel.speedShape).minX = -100;
-            (<Vec3ConstRandomValueShape>vel.speedShape).minY = -100;
-            (<Vec3ConstRandomValueShape>vel.speedShape).minZ = -100;
-            (<Vec3ConstRandomValueShape>vel.speedShape).maxX = 100;
-            (<Vec3ConstRandomValueShape>vel.speedShape).maxY = 100;
-            (<Vec3ConstRandomValueShape>vel.speedShape).maxZ = 100;
-            this.particle.addAnimNode(vel);
-
-            var particleSizeGlobalNode: ParticleSizeGlobalNode = new ParticleSizeGlobalNode();
-            this.particle.addAnimNode(particleSizeGlobalNode);
 
             this.particle.play();
             this.view1.addChild3D(this.particle);

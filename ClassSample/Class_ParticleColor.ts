@@ -27,52 +27,73 @@
             this.cameraCrl.distance = 1000;
 
             var planemat: TextureMaterial = new TextureMaterial();
-            var loadtex1: URLLoader = new URLLoader("resource/floor/brick-diffuse.jpg");
+            var loadtex1: URLLoader = new URLLoader("resource/effect/brick-diffuse.jpg");
             loadtex1.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
             loadtex1["mat"] = planemat;
 
-            this.cube = new Mesh( new CubeGeometry(10,10,10) , null );
+            this.cube = new Mesh(new CubeGeometry(10, 40, 10), null);
+            this.view1.addChild3D(this.cube);
 
             var mat: TextureMaterial = new TextureMaterial();
+            mat.bothside = true;
             mat.ambientColor = 0xffffff;
 
             var data: ParticleData = new ParticleData();
-            data.lifeMax = data.lifeMin = 2;
-            data.rate = 20;
+            data.geometry.planeW = data.geometry.planeH = 30;
+            data.property.followPosition = true;
+            data.property.followRotation = true;
+
+            var life: ParticleDataLife = data.life;
+            life.lifeMax = life.lifeMin = 4;
+            life.rate = 20;
+
+
+            var moveSpeed: ParticleDataMoveSpeed = new ParticleDataMoveSpeed();
+            data.moveSpeed = moveSpeed;
+            moveSpeed.min.setTo(-20, 100, -20);
+            moveSpeed.max.setTo(20, 200, 20);
+
+            //var acceleration: ParticleDataAcceleration = new ParticleDataAcceleration();
+            //data.acceleration = acceleration;
+            //acceleration.min.setTo(0, 40, 0);
+            //acceleration.max.setTo(0, 80, 0);
+
+            var colorOffset: ParticleDataColorOffset = new ParticleDataColorOffset();
+            data.colorOffset = colorOffset;
+            colorOffset.colors.push(new Color(255.0, 0.0, 0.0, 255.0));
+            colorOffset.colors.push(new Color(0.0, 255.0, 0.0, 255.0));
+            colorOffset.colors.push(new Color(0.0, 0.0, 255.0, 255.0));
+            colorOffset.colors.push(new Color(0.0, 255.0, 0.0, 255.0));
+            colorOffset.colors.push(new Color(255.0, 0.0, 0.0, 128.0));
+            colorOffset.colors.push(new Color(255.0, 0.0, 0.0, 0.0));
+            colorOffset.times.push(0.0);
+            colorOffset.times.push(0.2);
+            colorOffset.times.push(0.4);
+            colorOffset.times.push(0.6);
+            colorOffset.times.push(0.7);
+            colorOffset.times.push(1.0);
+
+            var sizeBezier: ParticleDataScaleBezier = new ParticleDataScaleBezier();
+            data.scaleBesizer = sizeBezier;
+            sizeBezier.posPoints.push(new Point(0, 0));
+            sizeBezier.posPoints.push(new Point(0.5, 1.5));
+            sizeBezier.posPoints.push(new Point(0.55, 1.2));
+            sizeBezier.posPoints.push(new Point(1.0, 0.2));
+            sizeBezier.ctrlPoints.push(new Point(0, 1));
+            sizeBezier.ctrlPoints.push(new Point(0.55, 2));
+            sizeBezier.ctrlPoints.push(new Point(0.56, 2));
+            sizeBezier.ctrlPoints.push(new Point(1.0, 0.2));
 
             this.particle = new ParticleEmitter(data, null, mat);
-            this.particle.loop = true;
 
-            //var uniformSpeed: ParticleUniformSpeedNode = new ParticleUniformSpeedNode();
-            //uniformSpeed.speedShape = new Vec3ConstValueShape();
-            //(<Vec3ConstValueShape>uniformSpeed.speedShape).minX = 0;
-            //(<Vec3ConstValueShape>uniformSpeed.speedShape).minY = 100;
-            //(<Vec3ConstValueShape>uniformSpeed.speedShape).minZ = 0;
-            //this.particle.addAnimNode(uniformSpeed);
-
-            var vel: ParticleAccelerationSpeedNode = new ParticleAccelerationSpeedNode();
-            vel.speedShape = new Vec3ConstRandomValueShape();
-            (<Vec3ConstRandomValueShape>vel.speedShape).minX = 0;//-100;
-            (<Vec3ConstRandomValueShape>vel.speedShape).minY = 0;//-100;
-            (<Vec3ConstRandomValueShape>vel.speedShape).minZ = 0;//-100;
-            (<Vec3ConstRandomValueShape>vel.speedShape).maxX = 0;//100;
-            (<Vec3ConstRandomValueShape>vel.speedShape).maxY = 0;//100;
-            (<Vec3ConstRandomValueShape>vel.speedShape).maxZ = 0;//100;
-            this.particle.addAnimNode(vel);
-
-            //var particleColor_global_Node: ParticleColorGlobalNode = new ParticleColorGlobalNode();
-            //this.particle.addAnimNode(particleColor_global_Node);
-
-
-            //var particleSizeGlobalNode: ParticleSizeGlobalNode = new ParticleSizeGlobalNode();
-            //this.particle.addAnimNode(particleSizeGlobalNode);
+            this.view1.addChild3D(new AxisMesh(200));
 
             this.particle.play();
             this.view1.addChild3D(this.particle);
            
             this.particle.followTarget = this.cube ;
 
-            var loadtex: URLLoader = new URLLoader("resource/effect/ice_0001.png");
+            var loadtex: URLLoader = new URLLoader("resource/effect/rect.png");
             loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
             loadtex["mat"] = mat;
 
@@ -96,10 +117,12 @@
         private angle: number = 0; 
         public update(e: Event3D) {
             this.cameraCrl.update();
-            //this.obj.rotationY++;
-            this.angle += 0.02;
-            this.cube.x = Math.cos(this.angle) * 300;
-            this.cube.z = Math.sin(this.angle) * 300;
+            this.angle += 0.01;
+            this.cube.x = Math.cos(this.angle * 0.4) * 300;
+            this.cube.z = Math.sin(this.angle * 0.4) * 300;
+
+            //this.cube.rotationX = this.angle * 10;
+            this.cube.rotationZ = this.angle * 20;
 
         }
 

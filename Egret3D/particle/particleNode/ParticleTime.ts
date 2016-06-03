@@ -33,14 +33,41 @@
             this.vertex_ShaderName[ShaderPhaseType.local_vertex] = this.vertex_ShaderName[ShaderPhaseType.local_vertex] || [];
             this.vertex_ShaderName[ShaderPhaseType.local_vertex].push("particle_time_vs");
 
-            this.frament_ShaderName[ShaderPhaseType.start_fragment] = this.frament_ShaderName[ShaderPhaseType.start_fragment] || [];
-            this.frament_ShaderName[ShaderPhaseType.start_fragment].push("particle_time_fs");
+            this.fragment_ShaderName[ShaderPhaseType.start_fragment] = this.fragment_ShaderName[ShaderPhaseType.start_fragment] || [];
+            this.fragment_ShaderName[ShaderPhaseType.start_fragment].push("particle_time_fs");
 
             this.attribute_time = new GLSL.VarRegister();
             this.attribute_time.name = "attribute_time";
             this.attribute_time.size = 4;
             this.attributes.push(this.attribute_time);
         }
+
+
+        /**
+        * @language zh_CN
+        * 填充粒子生命周期数据
+        * @param data ParticleDataNode 粒子数据来源
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public initNode(data: ParticleDataNode): void {
+            var node: ParticleDataLife = <ParticleDataLife>data;
+            //delay
+            var delayValue: ConstRandomValueShape = new ConstRandomValueShape();
+            delayValue.max = node.delayMax;
+            delayValue.min = node.delayMin;
+            this._delay = delayValue;
+            //life
+            var lifeValue: ConstRandomValueShape = new ConstRandomValueShape();
+            lifeValue.max = node.lifeMax;
+            lifeValue.min = node.lifeMin;
+            this._life = lifeValue;
+            //rate
+            var rateValue: ConstValueShape = new ConstValueShape();
+            rateValue.value = 1 / node.rate;
+            this._rate = rateValue;
+        }
+
         
         /**
         * @language zh_CN
@@ -87,29 +114,7 @@
 
         }
 
-        /**
-        * @language zh_CN
-        * 填充粒子生命周期数据
-        * @param data ParticleData 粒子数据来源
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public init(data:ParticleData): void {
-            //delay
-            var delayValue: ConstRandomValueShape = new ConstRandomValueShape();
-            delayValue.max = data.delayMax;
-            delayValue.min = data.delayMin;
-            this._delay = delayValue;
-            //life
-            var lifeValue: ConstRandomValueShape = new ConstRandomValueShape();
-            lifeValue.max = data.lifeMax;
-            lifeValue.min = data.lifeMin;
-            this._life = lifeValue;
-            //rate
-            var rateValue: ConstValueShape = new ConstValueShape();
-            rateValue.value = 1 / data.rate;
-            this._rate = rateValue;
-        }
+
 
          /**
         * @language zh_CN
