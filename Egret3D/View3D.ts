@@ -40,7 +40,7 @@
         protected _index: number; 
         protected _numberEntity: number; 
 
-        protected _postList: any[] = []; 
+        protected _postList: IPost[] = []; 
         protected _postHUD: HUD ; 
         protected _postProcessing: PostProcessing; 
         /**
@@ -82,7 +82,8 @@
             this._postList = list; 
             if (list.length > 0) {
                 this._postProcessing = this._postProcessing || new PostProcessing();
-                this._postHUD = this._postHUD || new HUD();
+                this._postHUD = this._postHUD || new HUD(0,0,512,512);
+                this._postHUD.fsShader = "hud_H_fs";
             }
         }
 
@@ -425,9 +426,11 @@
                 this._backImg.draw(View3D._contex3DProxy);
             }
 
-            if (this._postList.length>0) {
+            if (this._postList.length > 0){
+                this._postProcessing.postItem = this._postList; 
                 this._postProcessing.drawFrameBuffer(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera, this._viewPort);
                 this._postHUD.diffuseTexture = this._postProcessing.endTexture;
+                //this._postHUD.viewPort = this._viewPort ;
                 this._postHUD.draw(View3D._contex3DProxy);
             } else {
                 this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera, this._viewPort);

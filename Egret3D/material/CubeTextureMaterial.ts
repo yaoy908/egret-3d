@@ -26,7 +26,7 @@
         }
 
         protected initMatPass() {
-            this.diffusePass = new CubePass(this.materialData);
+            this.addPass(PassType.CubePass);
         }
 
         /**

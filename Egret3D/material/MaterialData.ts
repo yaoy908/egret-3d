@@ -4,7 +4,7 @@
      * @private
      * @class egret3d.MaterialData
      */
-    export class MaterialData {
+    export class MaterialData extends Object {
         /**
         * @private
         * @language zh_CN

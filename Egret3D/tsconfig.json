@@ -157,6 +157,8 @@
         "material/method/AlphaMaskMethod.ts",
         "material/method/ColorTransformMethod.ts",
         "material/method/ColorGradientsMethod.ts",
+        "material/method/StreamerMethod.ts",
+        
         "material/method/ShadowMethod.ts",
 
         "material/pass/PassUsage.ts",
@@ -180,6 +182,7 @@
 
         "render/RenderBase.ts",
         "render/MultiRender.ts",
+        "render/PostRender.ts",
 
         "particle/Value.ts",
         "particle/particleNode/ParticleEndNode.ts",
@@ -244,9 +247,12 @@
         "View3D.ts",
         "VRView3D.ts",
         "Egret3DCanvas.ts",
-
+        
         "post/IPost.ts",
+        "post/postPass/MainPass.ts",
         "post/postPass/BloomPass.ts",
+        "post/postPass/GaussPass.ts",
+        
         "post/PostProcessing.ts",
 
         "loader/map/DataInfo/SourceDataBase.ts",
