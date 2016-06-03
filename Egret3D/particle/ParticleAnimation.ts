@@ -129,16 +129,6 @@
         public activeState(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
             if (this.particleAnimationState) {
                 this.particleAnimationState.activeState(time, this.time, delay, this.delay, usage, geometry, context3DProxy);
-                if (usage.uniform_time) {
-                    context3DProxy.uniform1fv(usage.uniform_time.uniformIndex,
-                        [
-                            this.time * 0.001,
-                            this.particleAnimationState.loop,
-                            this.particleAnimationState.duration,
-                            0.0,
-                            0.0
-                        ]);
-                }
             }
         }
 

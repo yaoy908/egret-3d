@@ -14,6 +14,7 @@
         ScaleBirth,
         Geometry,
         //其他挂接节点
+        FollowTarget,
         MoveSpeed,
         Acceleration,
         ScaleBezier,
@@ -34,6 +35,7 @@
         public scaleBirth: ParticleDataScaleBirth = new ParticleDataScaleBirth();
         public geometry: ParticleDataGeometry = new ParticleDataGeometry();
 
+        public followTarget: ParticleDataFollowTarget;
         public moveSpeed: ParticleDataMoveSpeed;
         public acceleration: ParticleDataAcceleration;
         public scaleBesizer: ParticleDataScaleBezier;
@@ -71,6 +73,9 @@
             if (this.colorOffset) {
                 this.colorOffset.validate();
             }
+            if (this.followTarget) {
+                this.followTarget.validate();
+            }
         }
     }
 
@@ -95,9 +100,7 @@
         public particleCount: number = -1;
         public loop: boolean = true;
         public bounds: Vector3D = new Vector3D(10, 10, 10);
-        //跟随
-        public followPosition: boolean = false;
-        public followRotation: boolean = false;
+       
 
         constructor() {
             super(ParticleDataNodeType.Property);
@@ -439,6 +442,23 @@
             }
         }
     }
+
+    export class ParticleDataFollowTarget extends ParticleDataNode {
+        //跟随
+        public followRotation: boolean = true;
+        public followScale: boolean = true;
+
+        constructor() {
+            super(ParticleDataNodeType.FollowTarget);
+        }
+
+        public validate(): void {
+           
+        }
+    }
+
+
+
 
 
 
