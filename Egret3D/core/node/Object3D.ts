@@ -76,7 +76,7 @@
         protected _vec: Vector3D = new Vector3D();
         protected _active: boolean = false;
         protected _isRoot: boolean = true;
-
+        protected _bound: Bound;
 
         /**
         * @language zh_CN
@@ -192,12 +192,25 @@
 
         /**
         * @language zh_CN
-        * 对象模型包围盒。</p>
+        * 獲取对象模型包围盒。</p>
         * 每个场景物件都需要有的 包围盒子，可以自定义包围盒形状大小，也可以根据模型本身生成。</p>
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public bound: Bound;
+        public get bound(): Bound {
+            return this._bound;
+        }
+
+        /**
+        * @language zh_CN
+        * 設置对象模型包围盒。</p>
+        * 每个场景物件都需要有的 包围盒子，可以自定义包围盒形状大小，也可以根据模型本身生成。</p>
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set bound(bound: Bound) {
+            this._bound = bound;
+        }
 
         /**
         * @language zh_CN
@@ -706,9 +719,8 @@
                 this._globalRot.copyFrom(this._rot);
             }
             this._modelMatrix3D.makeTransform(this._globalPos, this._globalSca, this._globalOrientation);
-            this._transformChange = false;
-
             this.onUpdateTransform();
+            this._transformChange = false;
         }
 
         protected onUpdateTransform() {

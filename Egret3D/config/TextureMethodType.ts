@@ -11,6 +11,9 @@
         shadow
     }
 
+    /**
+    * @private
+    */
     export enum ShaderPhaseType {
         start_vertex,
         local_vertex,

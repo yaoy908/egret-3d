@@ -1,15 +1,15 @@
 ﻿module egret3d {
     export class PostProcessing {
 
-        public postItem: IPost[];
-        public posTex: any;
+        public postItem: IPost[] ;
+        public posTex: any = {} ;
         public endTexture: ITexture;
 
         public postRender: MultiRender;
         constructor() {
             this.postItem = []; 
             this.postRender = new MultiRender(PassType.diffusePass);
-            this.postRender.setRenderToTexture(512, 512, FrameBufferFormat.FLOAT_RGBA);
+            this.postRender.setRenderToTexture(1024, 1024, FrameBufferFormat.FLOAT_RGB);
             this.endTexture = this.posTex["end"] = this.postRender.renderTexture ;
         }
 

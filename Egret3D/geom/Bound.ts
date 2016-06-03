@@ -52,6 +52,7 @@
         public owner: Object3D;
 
         protected matrix: Matrix4_4 = new Matrix4_4();
+        protected temp: Vector3D = new Vector3D();
 
         /**
         * @language zh_CN
@@ -95,6 +96,51 @@
         */
         public intersect(target: Bound, intersect: Bound = null): boolean {
             return true;
+        }
+
+        /**
+        * @language zh_CN
+        * 克隆一個包圍對象
+        * @returns Bound 包圍對象
+        */
+        public clone(): Bound {
+            var bound: Bound = new Bound(this.owner);
+            bound.copyVertex(this);
+            return bound;
+        }
+
+        /**
+        * @private
+        */
+        protected calculateTransform() {
+
+            for (var j: number = 0; j < this.vexData.length; j += 3) {
+                this.temp.setTo(this.vexData[j], this.vexData[j + 1], this.vexData[j + 2]);
+                this.transform.transformVector(this.temp, this.temp);
+                this.vexData[j + 0] = this.temp.x;
+                this.vexData[j + 1] = this.temp.y;
+                this.vexData[j + 2] = this.temp.z;
+            }
+        }
+
+        /**
+        * @private
+        */
+        public copyVertex(bound: Bound) {
+            for (var i: number = 0; i < bound.vexData.length; ++i) {
+                this.vexData[i] = bound.vexData[i];
+            }
+
+            for (var i: number = 0; i < bound.indexData.length; ++i) {
+                this.indexData[i] = bound.indexData[i];
+            }
+            this.vexLength = bound.vexLength;
+        }
+        /**
+        * @private
+        */
+        protected createChild() {
+            this.childBound = new Bound(this.owner);
         }
                                                 
         /**

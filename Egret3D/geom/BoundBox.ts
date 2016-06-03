@@ -75,6 +75,9 @@
         */
         public radius: number = 0;
 
+        private _box0: BoundBox;
+        private _box1: BoundBox;
+
         /**
         * @language zh_CN
         * 创建一个包围
@@ -182,7 +185,6 @@
             return true;
         }
                
-
         /**
         * @language zh_CN
         * 检测两个包围对象是否相交
@@ -194,7 +196,26 @@
         * @platform Web,Native
         */
         public intersect(target: Bound, intersect: Bound = null): boolean {
-            return this.intersectAABBs(<BoundBox>target, <BoundBox>intersect);
+            if (!this._box0) {
+                this._box0 = <BoundBox>this.clone();
+            }
+            else {
+                this._box0.copyVertex(this);
+            }
+
+            this._box0.calculateTransform();
+            this._box0.updateAABB();
+
+            if (!this._box1) {
+                this._box1 = <BoundBox>target.clone();
+            }
+            else {
+                this._box1.copyVertex(this);
+            }
+            this._box1.calculateTransform();
+            this._box1.updateAABB();
+
+            return this._box0.intersectAABBs(this._box1, <BoundBox>intersect);
         }
                                                                 
         /**
@@ -290,7 +311,7 @@
 
         protected updateAABB() {
             this.min.copyFrom(new Vector3D(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE));
-            this.max.copyFrom(new Vector3D(Number.MIN_VALUE, Number.MIN_VALUE, Number.MIN_VALUE));
+            this.max.copyFrom(new Vector3D(-Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE));
             for (var i: number = 0; i < this.vexData.length; i += this.vexLength) {
                 if (this.max.x < this.vexData[i]) {
                     this.max.x = this.vexData[i];
@@ -312,6 +333,45 @@
                     this.min.z = this.vexData[i + 2];
                 }
             }
+        }
+
+
+        /**
+        * @private
+        */
+        public createChild() {
+            this.childBound = new BoundBox(this.owner);
+            var max: Vector3D = new Vector3D();
+            var min: Vector3D = new Vector3D();
+
+            max.x = this.center.x + this.width / 4;
+            max.y = this.center.y + this.heigth / 4;
+            max.z = this.center.z + this.depth / 4;
+
+            min.x = this.center.x - this.width / 4;
+            min.y = this.center.y - this.heigth / 4;
+            min.z = this.center.z - this.depth / 4;
+
+            (<BoundBox>this.childBound).fillBox(min, max);
+        }
+
+        /**
+        * @language zh_CN
+        * 克隆一個包圍對象
+        * @returns Bound 包圍對象
+        */
+        public clone(): Bound {
+            var bound: BoundBox = new BoundBox(this.owner);
+            bound.copyVertex(this);
+            bound.width = this.width;
+            bound.heigth = this.heigth;
+            bound.depth = this.depth;
+            bound.min.copyFrom(this.min);
+            bound.max.copyFrom(this.max);
+            bound.volume = this.volume;
+            bound.center.copyFrom(this.center);
+            bound.radius = this.radius;
+            return bound;
         }
     }
 }

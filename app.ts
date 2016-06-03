@@ -1,12 +1,11 @@
 ﻿
 function jsOnload() {
-    var sample: egret3d.Class_ParticleColor = new egret3d.Class_ParticleColor();
+    var sample = new egret3d.Class_Post();
 }
 
 function onTsconfig() {
-    egret3d.Egret3DEngine.addImportScript("./js/Feature/utils/AxisMesh.js");
     egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_View3D.js");
-    egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_ParticleColor.js");
+    egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_Post.js");
 }
 
 window.onload = () => {
@@ -15,3 +14,4 @@ window.onload = () => {
     egret3d.Egret3DEngine.preload(() => jsOnload());
 }
 
+ 

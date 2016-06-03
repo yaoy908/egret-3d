@@ -41,7 +41,6 @@
             if (this.renderTexture) {
                 this.renderTexture.upload(context3D);
                 context3D.setRenderToTexture(this.renderTexture.texture2D, true, 0);
-
             }
             var material: MaterialBase;
             for (this._renderIndex = 0; this._renderIndex < this.numEntity; this._renderIndex++) {
@@ -57,7 +56,7 @@
                 for (this._i = 0; this._i < this._renderItem.geometry.subGeometrys.length; this._i++) {
                     var subGeometry = this._renderItem.geometry.subGeometrys[this._i];
                     var matID = subGeometry.matID;
-                    material = this._renderItem.multiMaterial[matID] || this._renderItem.multiMaterial[0];
+                    material = this._renderItem.multiMaterial[matID] ;
                     if (material == null)
                         continue;
 

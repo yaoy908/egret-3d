@@ -12,6 +12,30 @@
     */
     export class HUD {
 
+        private static singleQuadData: Array<number> = [
+            -1.0, -1.0, 0.0, 0.0, 1.0,
+            1.0, -1.0, 0.0, 1.0, 1.0,
+            1.0, 1.0, 0.0, 1.0, 0.0,
+            -1.0, 1.0, 0.0, 0.0, 0.0
+        ];
+
+        private static singleQuadIndex: Array<number> = [0, 1, 2, 0, 2, 3];
+        private static vertexBytes: number = 20;
+
+        protected _diffuseTexture: ITexture;
+        protected _viewPort: Rectangle;
+        protected _rectangle: Rectangle = new Rectangle();
+        protected _transformMatrix: Matrix4_4 = new Matrix4_4();
+        protected _change: boolean = false;
+        protected _rotation: Vector3D = new Vector3D();
+        protected _scale: Vector3D = new Vector3D(1, 1, 1);
+        protected _position: Vector3D = new Vector3D();
+        protected _transformComponents: Vector3D[] = [];
+
+        private _indexBuffer3D: IndexBuffer3D;
+        private _vertexBuffer3D: VertexBuffer3D;
+        private _changeTexture: boolean = false;
+
         /**
         * @language zh_CN
         * 显示双面的开关。
@@ -27,40 +51,14 @@
         * @platform Web,Native
         */
         public cullMode: number = ContextConfig.BACK;
-        private static singleQuadData: Array<number> = [
-            -1.0, -1.0, 0.0, 0.0, 1.0,
-            1.0, -1.0, 0.0, 1.0, 1.0,
-            1.0, 1.0, 0.0, 1.0, 0.0,
-            -1.0, 1.0, 0.0, 0.0, 0.0
-        ];
 
-        private static singleQuadIndex: Array<number> = [0, 1, 2, 0, 2, 3];
-
-        private static vertexBytes: number = 20;
-
-        protected _diffuseTexture: ITexture;
-
-
-
-        protected _viewPort: Rectangle;
-        protected _rectangle: Rectangle = new Rectangle();
-
-        protected _transformMatrix: Matrix4_4 = new Matrix4_4();
-        protected _change: boolean = false;
-
-        protected _rotation: Vector3D = new Vector3D();
-        protected _scale: Vector3D = new Vector3D(1, 1, 1);
-        protected _position: Vector3D = new Vector3D();
-
-        protected _transformComponents: Vector3D[] = [];
-
-        private _indexBuffer3D: IndexBuffer3D;
-        private _vertexBuffer3D: VertexBuffer3D;
-        private _changeTexture: boolean = false;
+        public vsShader: string = "hud_vs" ; 
+        public fsShader: string = "hud_V_fs" ;
 
         protected _passUsage: PassUsage = new PassUsage();
 
         protected _attList: Array<GLSL.Attribute> = new Array<GLSL.Attribute>();
+
 
         /**
         * @language zh_CN
@@ -334,8 +332,11 @@
             this._passUsage.vertexShader.shaderType = Shader.vertex;
             this._passUsage.fragmentShader.shaderType = Shader.fragment;
 
-            this._passUsage.vertexShader.addUseShaderName("hud_vs");
-            this._passUsage.fragmentShader.addUseShaderName("hud_fs");
+            this._passUsage.vertexShader.addUseShaderName(this.vsShader);
+            this._passUsage.fragmentShader.addUseShaderName(this.fsShader);
+
+            //this._passUsage.vertexShader.addUseShaderName("hud_vs");
+            //this._passUsage.fragmentShader.addUseShaderName("hud_fs");
 
             this._passUsage.vertexShader.shader = this._passUsage.vertexShader.getShader(this._passUsage);
             this._passUsage.fragmentShader.shader = this._passUsage.fragmentShader.getShader(this._passUsage);
@@ -429,7 +430,6 @@
             context.setBlendFactors(ContextConfig.SRC_ALPHA, ContextConfig.ONE_MINUS_SRC_ALPHA);
             context.drawElement(DrawMode.TRIANGLES, 0, 6);
             context.clear(ContextConfig.DEPTH_BUFFER_BIT);
-
 
             for (var i: number = 0; i < this._attList.length; ++i) {
                 if (this._attList[i].uniformIndex >= 0)
