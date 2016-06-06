@@ -131,7 +131,7 @@
                     jointPose.parent = parentBoneNameArray[j];
 
                     jointPose.setLocalTransform(
-                        new Quaternion(bytes.readFloat(), bytes.readFloat(), bytes.readFloat()),
+                        new Quaternion(bytes.readFloat(), bytes.readFloat(), bytes.readFloat(), bytes.readFloat()),
                         new Vector3D(bytes.readFloat(), bytes.readFloat(), bytes.readFloat()),
                         new Vector3D(bytes.readFloat(), bytes.readFloat(), bytes.readFloat())
                     );
