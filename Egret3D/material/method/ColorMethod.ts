@@ -2,15 +2,14 @@
 
     /**
     * @private
-    * @class egret3d.CubeMethod
+    * @class egret3d.ColorMethod
     * @classdesc
     * @see egret3d.MethodBase
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class CubeMethod extends MethodBase {
+    export class ColorMethod extends MethodBase {
 
-        private texture: ITexture;
         /**
         * @language zh_CN
         * @version Egret 3.0
@@ -19,12 +18,8 @@
         constructor() {
             super();
 
-
-            this.vsShaderList[ShaderPhaseType.global_vertex] = this.fsShaderList[ShaderPhaseType.global_vertex] || [];
-            this.vsShaderList[ShaderPhaseType.global_vertex].push("cube_vertex");
-
             this.fsShaderList[ShaderPhaseType.diffuse_fragment] = this.fsShaderList[ShaderPhaseType.diffuse_fragment] || [];
-            this.fsShaderList[ShaderPhaseType.diffuse_fragment].push("cube_fragment");
+            this.fsShaderList[ShaderPhaseType.diffuse_fragment].push("color_fragment");
         }
 
         /**

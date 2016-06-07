@@ -160,6 +160,7 @@
         "material/method/StreamerMethod.ts",
         "material/method/ShadowMethod.ts",
         "material/method/CubeMethod.ts",
+        "material/method/ColorMethod.ts",
 
         "material/pass/PassUsage.ts",
         "material/MaterialData.ts",
