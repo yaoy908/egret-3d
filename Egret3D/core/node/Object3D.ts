@@ -690,6 +690,24 @@
 
         /**
         * @language zh_CN
+        * 设置 object 世界渲染矩阵
+        * @param matrix 世界矩阵
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set modelMatrix(matrix: Matrix4_4)  {
+            var tas: Vector3D[] = matrix.decompose(Orientation3D.QUATERNION);
+            this.globalPosition = tas[0];
+            MathUtil.CALCULATION_QUATERNION.x = tas[1].x;
+            MathUtil.CALCULATION_QUATERNION.y = tas[1].y;
+            MathUtil.CALCULATION_QUATERNION.z = tas[1].z;
+            MathUtil.CALCULATION_QUATERNION.w = tas[1].w;
+            this.globalOrientation = MathUtil.CALCULATION_QUATERNION;
+            this.globalScale = tas[2];
+        }
+
+        /**
+        * @language zh_CN
         * 返回 object 世界渲染矩阵
         * 如果有父亲节点对象的话，要乘以父对象的变换.
         * @private
