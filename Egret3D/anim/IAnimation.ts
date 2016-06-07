@@ -36,7 +36,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        time: number;
+        animTime: number;
 
         /**
         * @language zh_CN

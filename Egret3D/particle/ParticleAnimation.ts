@@ -32,7 +32,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public time: number = 0;
+        public animTime: number = 0;
 
         /**
         * @language zh_CN
@@ -108,9 +108,9 @@
             }
           
             this.delay = delay; 
-            this.time += this.delay;
+            this.animTime += this.delay;
             if (this.particleAnimationState)
-                this.particleAnimationState.update(this.time, this.delay, geometry);
+                this.particleAnimationState.update(this.animTime, this.delay, geometry);
         }
          /**
         * @private
@@ -128,7 +128,7 @@
         */
         public activeState(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
             if (this.particleAnimationState) {
-                this.particleAnimationState.activeState(time, this.time, delay, this.delay, usage, geometry, context3DProxy);
+                this.particleAnimationState.activeState(time, this.animTime, delay, this.delay, usage, geometry, context3DProxy);
             }
         }
 
@@ -140,10 +140,10 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public play(animName?: string, speed?: number,reset:boolean = true ) {
+        public play(animName?: string, speed?: number, prewarm:boolean = true ) {
             this._play = true;
-            if (reset){
-                this.time = 0;
+            if (prewarm){
+                this.animTime = this.particleAnimationState.loopTime;
             }
             this.delay = 0;
         }

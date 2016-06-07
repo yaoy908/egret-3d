@@ -190,6 +190,7 @@
         "particle/particleNode/ParticlePosition.ts",
         "particle/particleNode/ParticleRotation.ts",
         "particle/particleNode/ParticleScale.ts",
+        "particle/particleNode/ParticleStartColor.ts",
         
         "particle/particleNode/ParticleFollowNode.ts",
         "particle/particleNode/ParticleUniformSpeedNode.ts",

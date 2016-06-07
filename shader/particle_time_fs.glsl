@@ -1,5 +1,4 @@
-varying vec4 particleTime;
+varying vec3 varying_particleData;
 void main(void) {
-	vec4 pt = particleTime ; 
-	//diffuseColor.xyz *=  pt.xyz ;
+	vec3 particleVertex = varying_particleData ; 
 }

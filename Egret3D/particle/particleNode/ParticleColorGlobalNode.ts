@@ -74,7 +74,7 @@
         /**
         * @private
         */
-        public update(time: number, delay: number, geometry: Geometry) {
+        public update(animTime: number, delay: number, geometry: Geometry) {
         }
 
         /**

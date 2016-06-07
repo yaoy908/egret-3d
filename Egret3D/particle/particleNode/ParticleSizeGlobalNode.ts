@@ -68,12 +68,6 @@
         /**
         * @private
         */
-        public update(time: number, delay: number, geometry: Geometry) {
-        }
-
-        /**
-        * @private
-        */
         public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
             context3DProxy.uniform2fv(usage["uniform_size"].uniformIndex, this._floatData);
         }

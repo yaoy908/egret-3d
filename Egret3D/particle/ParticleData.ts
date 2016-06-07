@@ -97,10 +97,14 @@
     * @platform Web,Native
     */
     export class ParticleDataProperty extends ParticleDataNode {
-        public particleCount: number = -1;
-        public loop: boolean = true;
+        public particleCount: number = 10;
+
         public bounds: Vector3D = new Vector3D(10, 10, 10);
-       
+        public blendMode: BlendMode = BlendMode.ADD;
+        
+        public startColorFrom: Color = new Color(255, 255, 255, 255);
+        public startColorTo: Color = new Color(255, 255, 255, 255);
+        public gravity: number = 0;
 
         constructor() {
             super(ParticleDataNodeType.Property);
@@ -119,6 +123,15 @@
             if (this.bounds.z < 0) {
                 this.bounds.z = 1;
             }
+            if (this.particleCount < 0) {
+                this.particleCount = 10;
+            }
+            if (this.startColorFrom == null) {
+                this.startColorFrom = new Color(255, 255, 255, 255);
+            }
+            if (this.startColorTo == null) {
+                this.startColorTo = new Color(255, 255, 255, 255);
+            }
         }
     } 
 
@@ -128,9 +141,8 @@
         public duration: number = 5;
         public lifeMax: number = 2;
         public lifeMin: number = 2;
-        public delayMax: number = 0;
-        public delayMin: number = 0;
-
+        public delay: number = 0;
+        public loop: boolean = true;
         constructor() {
             super(ParticleDataNodeType.Life);
         }
@@ -146,14 +158,8 @@
                 this.lifeMin = this.lifeMax = 1;
             }
             //delay
-            if (this.delayMin < 0) {
-                this.delayMin = 0;
-            }
-            if (this.delayMax < this.delayMin) {
-                this.delayMax = this.delayMin;
-            }
-            if (this.delayMax < 0) {
-                this.delayMin = this.delayMax = 1;
+            if (this.delay < 0) {
+                this.delay = 0;
             }
             //rate
             if (this.rate < 0) {
@@ -354,6 +360,7 @@
         //加速度
         public max: Vector3D = new Vector3D();
         public min: Vector3D = new Vector3D();
+        public accelerationWorld: boolean = false;
 
         constructor() {
             super(ParticleDataNodeType.Acceleration);

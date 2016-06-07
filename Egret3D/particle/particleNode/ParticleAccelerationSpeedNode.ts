@@ -2,7 +2,7 @@
 
     /**
     * @language zh_CN
-    * @class egret3d.ParticleAccelerationSpeedNode
+    * @class egret3d.ParticleAccelerationSpeedNode(Unity中force)
     * @classdesc
     * 粒子加速度效果节点
     * @see egret3d.AnimationNode

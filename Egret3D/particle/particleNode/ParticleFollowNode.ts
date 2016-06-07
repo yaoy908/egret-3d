@@ -75,12 +75,15 @@
         public build(geometry: Geometry, count: number) {
             this.count = count;
             this.particleAnimationState = <ParticleAnimationState>this.state;
-            
+            //先重置成-1，然后每帧检测每个粒子的上一帧的所属出身次数和下一帧的出身次数，判定是否要刷新他的初始位置
+            this.lifeCircles = [];
+            for (var i: number = 0; i < this.count; i++) {
+                this.lifeCircles[i] = -1;
+            }
         }
 
         private bornTime: number = 0;
         private life: number = 0;
-        private unitTotalLife: number = 0;
         private id: number = 0; 
         private timeIndex: number = 0;
 
@@ -90,33 +93,30 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        private geometryDirty: boolean;
+        private geometryDirty: boolean = false;
 
         /**
         * @language zh_CN
+        * @param animTime 动画当前时间（单位为ms）
+        * @param delay  这一帧的时间跨度
+        * @param geometry 几何对象
         * 顶点数据是否需要重新upload
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public update(time: number, delay: number, geometry: Geometry) {
-
-            this.geometryDirty = false;
-            if (!this.particleAnimationState.followTarget)
+        public update(animTime: number, delay: number, geometry: Geometry) {
+            //保留原来的geometryDirty为true的属性
+            this.geometryDirty = this.geometryDirty;
+            //非循环的粒子生命周期达上限
+            var loop: boolean = this.particleAnimationState.emitter.data.life.loop;
+            var maxLife: number = this.particleAnimationState.loopTime + this.particleAnimationState.emitter.data.life.duration;
+            if (!loop && (animTime * 0.001 >= maxLife)) {
                 return;
-            //time += delay;
-
-            //先重置成-1，然后每帧检测每个粒子的上一帧的所属出身次数和下一帧的出身次数，判定是否要刷新他的初始位置
-            if (this.lifeCircles == null) {
-                this.lifeCircles = [];
-                for (var i: number = 0; i < this.count; i++) {
-                    this.lifeCircles[i] = -1;
-                }
             }
 
-            var delayArray: Array<number> = this.particleAnimationState.delayArray;
-            var lifeArray: Array<number> = this.particleAnimationState.lifeArray;
-            var rateArray: Array<number> = this.particleAnimationState.rateArray;
+            //animTime += delay;
 
+           
 
             var index: number = 0;
             var vertices: number = geometry.vertexCount / this.count;
@@ -124,6 +124,10 @@
             var changed: boolean = false;
 
             var timeOffsetIndex: number = this.particleAnimationState.emitter.timeNode.offsetIndex;
+            var particleTime: number = animTime * 0.001 - this.particleAnimationState.emitter.data.life.delay;
+            
+            //没有跟随对象，使用自己
+            var followTarget: Object3D = this.particleAnimationState.followTarget || this.particleAnimationState.emitter;
             for (var i: number = 0; i < this.count; ++i) {
 
                 particleIndex = i * vertices;
@@ -131,17 +135,16 @@
 
                 this.bornTime = geometry.verticesData[this.timeIndex + 0];          //出生时间
                 this.life = geometry.verticesData[this.timeIndex + 1];              //单次生命周期时间
-                this.unitTotalLife = geometry.verticesData[this.timeIndex + 2];     //从0开始计数到循环到最后一次结束的总时间
-                //this.id = geometry.verticesData[this.timeIndex + 3];                //下标(i)
+                //this.id = geometry.verticesData[this.timeIndex + 2];                //下标(i)
 
                 var curCircleIndex: number = -1;
-                var particleTime: number = time * 0.001;
+                
                 if (particleTime >= this.bornTime) {
                     //粒子超时了，并且不需要继续循环
-                    if (particleTime > this.unitTotalLife && !this.particleAnimationState.loop)
+                    if (particleTime > (this.bornTime + this.life) && !loop)
                         continue;
 
-                    curCircleIndex = Math.floor((particleTime - this.bornTime) / lifeArray[i]);
+                    curCircleIndex = Math.floor((particleTime - this.bornTime) / this.particleAnimationState.loopTime);
                     if (curCircleIndex != this.lifeCircles[i]) {
                         this.lifeCircles[i] = curCircleIndex;
                         changed = true;
@@ -150,17 +153,17 @@
                             index = particleIndex + j;
                             index = index * geometry.vertexAttLength + this.attribute_followPosition.offsetIndex;
                             if (true) {
-                                geometry.verticesData[index + 0] = this.particleAnimationState.followTarget.globalPosition.x;
-                                geometry.verticesData[index + 1] = this.particleAnimationState.followTarget.globalPosition.y;
-                                geometry.verticesData[index + 2] = this.particleAnimationState.followTarget.globalPosition.z;
+                                geometry.verticesData[index + 0] = followTarget.globalPosition.x;
+                                geometry.verticesData[index + 1] = followTarget.globalPosition.y;
+                                geometry.verticesData[index + 2] = followTarget.globalPosition.z;
                             }
                             //rotation
                             index = particleIndex + j;
                             index = index * geometry.vertexAttLength + this.attribute_followRotation.offsetIndex;
                             if (this._followRotation) {
-                                geometry.verticesData[index + 0] = this.particleAnimationState.followTarget.globalRotationX * MathUtil.DEGREES_TO_RADIANS;
-                                geometry.verticesData[index + 1] = this.particleAnimationState.followTarget.globalRotationY * MathUtil.DEGREES_TO_RADIANS;
-                                geometry.verticesData[index + 2] = this.particleAnimationState.followTarget.globalRotationZ * MathUtil.DEGREES_TO_RADIANS;
+                                geometry.verticesData[index + 0] = followTarget.globalRotationX * MathUtil.DEGREES_TO_RADIANS;
+                                geometry.verticesData[index + 1] = followTarget.globalRotationY * MathUtil.DEGREES_TO_RADIANS;
+                                geometry.verticesData[index + 2] = followTarget.globalRotationZ * MathUtil.DEGREES_TO_RADIANS;
                             } else {
                                 geometry.verticesData[index + 0] = 0;
                                 geometry.verticesData[index + 1] = 0;
@@ -170,9 +173,9 @@
                             index = particleIndex + j;
                             index = index * geometry.vertexAttLength + this.attribute_followScale.offsetIndex;
                             if (this._followScale) {
-                                geometry.verticesData[index + 0] = this.particleAnimationState.followTarget.globalScaleX;
-                                geometry.verticesData[index + 1] = this.particleAnimationState.followTarget.globalScaleY;
-                                geometry.verticesData[index + 2] = this.particleAnimationState.followTarget.globalScaleZ;
+                                geometry.verticesData[index + 0] = followTarget.globalScaleX;
+                                geometry.verticesData[index + 1] = followTarget.globalScaleY;
+                                geometry.verticesData[index + 2] = followTarget.globalScaleZ;
                             } else {
                                 geometry.verticesData[index + 0] = 0;
                                 geometry.verticesData[index + 1] = 0;
