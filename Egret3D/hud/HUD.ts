@@ -435,6 +435,14 @@
                 if (this._attList[i].uniformIndex >= 0)
                     context.clearVaPointer(this._attList[i].uniformIndex);
             }
+
+            //for (var index in this._passUsage.sampler2DList) {
+            //    sampler2D = this._passUsage.sampler2DList[index];
+            //    if (!sampler2D.texture) {
+            //        continue;
+            //    }
+            //    context.disableTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index );
+            //}
         }
     }
 }

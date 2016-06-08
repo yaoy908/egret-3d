@@ -4,23 +4,23 @@
 
     export class PassUtil{
         public static PassAuto : boolean[] = [true,true,true,false,false,true,true,true];
-        public static CreatPass(pass: PassType,materialData:MaterialData):MaterialPass {
+        public static CreatPass(pass: PassType,materialData:MaterialData):MaterialPass[] {
             switch (pass) {
                 case PassType.colorPass:
                     materialData.shaderPhaseTypes[PassType.colorPass] = []; 
-                    return new ColorPass(materialData);
+                    return [new ColorPass(materialData)];
                 case PassType.diffusePass:
                     materialData.shaderPhaseTypes[PassType.diffusePass] = []; 
-                    return new DiffusePass(materialData);
+                    return [new DiffusePass(materialData)];
                 case PassType.shadowPass:
                     materialData.shaderPhaseTypes[PassType.shadowPass] = []; 
-                    return new ShadowPass(materialData);
+                    return [new ShadowPass(materialData)];
                 case PassType.matCapPass:
                     materialData.shaderPhaseTypes[PassType.matCapPass] = []; 
-                    return new MatCapPass(materialData);
+                    return [new MatCapPass(materialData)];
                 case PassType.CubePass:
                     materialData.shaderPhaseTypes[PassType.diffusePass] = [];
-                    return new CubePass(materialData);
+                    return [new CubePass(materialData)];
             }
             return null;
         }

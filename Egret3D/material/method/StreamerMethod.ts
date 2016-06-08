@@ -11,8 +11,8 @@
     export class StreamerMethod extends MethodBase {
 
         private _uvRoll: Float32Array = new Float32Array(3);
-        private _speedU: number = 0.00001;
-        private _speedV: number = 0.00001;
+        private _speedU: number = 0.0001;
+        private _speedV: number = 0.0001;
         private _intensity: number = 0.9;
         private _time: number = 0.0;
         private _start: boolean = false;

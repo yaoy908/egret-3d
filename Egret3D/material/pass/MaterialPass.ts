@@ -604,9 +604,12 @@
 
         public deactiveState(passUsage: PassUsage, context3DProxy: Context3DProxy) {
             var sampler2D: GLSL.Sampler2D;
-            for (var i: number = 0; i < 8; i++) {
-                Context3DProxy.gl.activeTexture(i);
-                Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, null );
+            for (var index in passUsage.sampler2DList) {
+                sampler2D = this._passUsage.sampler2DList[index];
+                if (!sampler2D.texture) {
+                    continue;
+                }
+                context3DProxy.disableTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index);
             }
         }
 
