@@ -14,6 +14,7 @@
         private _renderItem: IRender; 
 
         private _i: number = 0;
+        private _j: number = 0;
 
         private _pass: number; 
 
@@ -60,11 +61,15 @@
                     if (material == null)
                         continue;
 
-                    if (material.passes[this._pass])
-                        material.passes[this._pass].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
-                    else if (PassUtil.PassAuto[this._pass]) {
-                        material.passes[this._pass] = PassUtil.CreatPass(this._pass, material.materialData);
-                        material.passes[this._pass].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
+                    if (material.passes[this._pass]) {
+                        for (this._j = material.passes[this._pass].length - 1; this._j >=0 ; this._j--){
+                            material.passes[this._pass][this._j].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
+                        }
+                    } else if (PassUtil.PassAuto[this._pass]) {
+                        for (this._j = material.passes[this._pass].length - 1; this._j >= 0; this._j--) {
+                            material.passes[this._pass] = PassUtil.CreatPass(this._pass, material.materialData);
+                            material.passes[this._pass][this._j].draw(time, delay, context3D, this._renderItem.modelMatrix, camera, subGeometry, this._renderItem.animation);
+                        }
                     }
                 }
             }

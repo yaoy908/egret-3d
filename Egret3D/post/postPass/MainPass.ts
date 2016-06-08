@@ -1,4 +1,8 @@
 ﻿module egret3d {
+
+    /*
+    * @private
+    */
     export class MainPass implements IPost{
 
         public drawRectangle: Rectangle;
@@ -8,7 +12,7 @@
 
         constructor() {
             this.mainPassRender = new MultiRender(PassType.diffusePass);
-            this.mainPassRender.setRenderToTexture(1024, 1024, FrameBufferFormat.UNSIGNED_BYTE_RGBA);
+            this.mainPassRender.setRenderToTexture(2048, 2048, FrameBufferFormat.UNSIGNED_BYTE_RGB);
 
             this._debugHud.fsShader = "hud_H_fs";
             this._debugHud.x = 512;

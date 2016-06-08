@@ -20,7 +20,7 @@
         //public diffusePass: MaterialPass; 
         //public shadowPass: MaterialPass; 
 
-        public passes: { [pass: number]: MaterialPass } = [];
+        public passes: { [pass: number]: MaterialPass[] } = [];
                 
         /**
          * @language zh_CN
@@ -87,8 +87,12 @@
         public set lightGroup(group: LightGroup) {
             this._lightGroup = group; 
 
-            if (this.passes[PassType.diffusePass])
-                this.passes[PassType.diffusePass].lightGroup = group;
+            if (this.passes[PassType.diffusePass] && this.passes[PassType.diffusePass].length > 0) {
+                for (var i: number = 0; i < this.passes[PassType.diffusePass].length; i++ ){
+                    this.passes[PassType.diffusePass][i].lightGroup = group;
+                }
+            }
+              
         }
 
         ///**
@@ -175,7 +179,7 @@
 
                 if (this.materialData.shaderPhaseTypes[PassType.diffusePass] &&this.materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.normal_fragment) == -1) {
                     this.materialData.shaderPhaseTypes[PassType.diffusePass].push(ShaderPhaseType.normal_fragment);
-                    this.passes[PassType.diffusePass].passInvalid();
+                    this.passInvalid[PassType.diffusePass];
                 }
 
                 if (this.materialData.shaderPhaseTypes[PassType.matCapPass] &&this.materialData.shaderPhaseTypes[PassType.matCapPass].indexOf(ShaderPhaseType.normal_fragment) == -1) {
@@ -183,6 +187,14 @@
                     //this.passes[PassType.matCapPass].passInvalid();
                 }
 
+            }
+        }
+
+        protected passInvalid(passType: PassType) {
+            if (this.passes[passType] && this.passes[passType].length > 0) {
+                for (var i: number = 0; i < this.passes[passType].length; i++) {
+                    this.passes[passType][i].passInvalid();
+                }
             }
         }
         
@@ -202,7 +214,7 @@
 
                 if (this.materialData.shaderPhaseTypes[PassType.diffusePass] && this.materialData.shaderPhaseTypes[PassType.diffusePass].indexOf(ShaderPhaseType.matCap_fragment) == -1) {
                     this.materialData.shaderPhaseTypes[PassType.diffusePass].push(ShaderPhaseType.matCap_fragment);
-                    this.passes[PassType.diffusePass].passInvalid();
+                    this.passInvalid(PassType.diffusePass);
                 }
 
                 if (this.materialData.shaderPhaseTypes[PassType.matCapPass] && this.materialData.shaderPhaseTypes[PassType.matCapPass].indexOf(ShaderPhaseType.matCap_fragment) == -1) {
@@ -501,7 +513,7 @@
          * @platform Web,Native
          */
         public get diffusePass(): DiffusePass {
-            return this.passes[PassType.diffusePass];
+            return this.passes[PassType.diffusePass][0];
         }
 
 
@@ -587,7 +599,7 @@
         //    return this.materialData.normalPower;
         //}
 
-         /**
+         /** m
          * @language zh_CN
          * 返回材质 normalPower 值。
          * 返回材质 法线的强度 值。
@@ -595,7 +607,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public addPass(pass: number) {
+        public addPass(pass: PassType) {
             this.passes[pass] = this.passes[PassType.shadowPass] || PassUtil.CreatPass(pass, this.materialData);
         }
 
@@ -613,7 +625,7 @@
                 this.addPass(PassType.shadowPass);
             } else {
                 if (this.passes[PassType.shadowPass]) {
-                    this.passes[PassType.shadowPass].dispose();
+                    this.disposePass(PassType.shadowPass);
                     this.passes[PassType.shadowPass] = null;
                 }
             }
@@ -827,6 +839,12 @@
 
         public get pointSize(): number {
             return this.materialData.specularLevel;
+        }
+
+        public disposePass(passType: PassType) {
+            for (var i: number = 0; i < this.passes[passType].length; i++ ){
+                this.passes[passType][i].dispose();
+            }
         }
 
         /**
