@@ -1,4 +1,7 @@
 ﻿module egret3d {
+    /*
+    * @private
+    */
     export class AxisMesh extends Object3D{
 
         private _lineX: Mesh;
