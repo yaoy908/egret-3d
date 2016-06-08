@@ -266,11 +266,30 @@
             }
         }
 
+        private _particleProperty: Float32Array = new Float32Array(6);
+
          /**
         * @language zh_CN
         * @private 
         */
-        public activeState(time: number, animTime:number, delay: number, animDelay:number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
+        public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
+            var scaleData: Vector3D;
+            if (this._emitter.isFollowParticle && this._emitter.followTarget) {
+                scaleData = this._emitter.followTarget.globalScale;
+            }
+            else {
+                scaleData = this._emitter.globalScale;
+            }
+
+            //
+            this._particleProperty[0] = animTime * 0.001;
+            this._particleProperty[1] = this.loop;
+            this._particleProperty[2] = this._emitter.isFollowParticle ? 1 : 0;
+            this._particleProperty[3] = scaleData.x;
+            this._particleProperty[4] = scaleData.y;
+            this._particleProperty[5] = scaleData.z;
+
+            context3DProxy.uniform1fv(usage["uniform_particleProperty"].uniformIndex, this._particleProperty);
             for (var i: number = 0; i < this.animNodes.length; i++) {
                 this.animNodes[i].activeState(time, animTime, delay, animDelay, usage, geometry, context3DProxy);
             }

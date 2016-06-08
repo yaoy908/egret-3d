@@ -26,7 +26,8 @@
         }
 
         protected initMatPass() {
-            this.addPass(PassType.CubePass);
+            this.addPass(PassType.diffusePass);
+            this.diffusePass.addMethod(new CubeMethod());
         }
 
         /**

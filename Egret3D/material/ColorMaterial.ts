@@ -9,10 +9,12 @@
             super();
             this.color = color;
             this.diffuseTexture = CheckerboardTexture.texture;
+            this.initMatPass();
         }
 
-        protected initPass() {
-            this.diffusePass = new ColorPass(this.materialData);
+        protected initMatPass() {
+            this.addPass(PassType.diffusePass);
+            this.diffusePass.addMethod(new ColorMethod());
         }
 
         public set color( value:number ) {

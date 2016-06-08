@@ -1,7 +1,7 @@
 ﻿module egret3d {
     export class Class_ParticleColor extends Class_View3D {
 
-        private plane: Mesh;
+        //private plane: Mesh;
         protected view1: View3D;
 
         protected cameraCrl: LookAtController;
@@ -21,7 +21,7 @@
 
             var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
             var tex: ImageTexture = new ImageTexture(bgImg);
-            view1.backImage = tex;
+            //view1.backImage = tex;
 
             this.cameraCrl = new LookAtController(this.view1.camera3D, new Object3D());
             this.cameraCrl.distance = 1000;
@@ -40,8 +40,10 @@
 
             var data: ParticleData = new ParticleData();
             data.geometry.planeW = data.geometry.planeH = 30;
-            data.property.followPosition = true;
-            data.property.followRotation = true;
+
+            var follow: ParticleDataFollowTarget = new ParticleDataFollowTarget();
+            data.followTarget = follow;
+
 
             var life: ParticleDataLife = data.life;
             life.lifeMax = life.lifeMin = 4;
@@ -50,13 +52,13 @@
 
             var moveSpeed: ParticleDataMoveSpeed = new ParticleDataMoveSpeed();
             data.moveSpeed = moveSpeed;
-            moveSpeed.min.setTo(-20, 100, -20);
-            moveSpeed.max.setTo(20, 200, 20);
+            moveSpeed.min.setTo(-20, 50, -20);
+            moveSpeed.max.setTo(20, 100, 20);
 
-            //var acceleration: ParticleDataAcceleration = new ParticleDataAcceleration();
-            //data.acceleration = acceleration;
-            //acceleration.min.setTo(0, 40, 0);
-            //acceleration.max.setTo(0, 80, 0);
+            var acceleration: ParticleDataAcceleration = new ParticleDataAcceleration();
+            data.acceleration = acceleration;
+            acceleration.min.setTo(0, 30, 0);
+            acceleration.max.setTo(0, 60, 0);
 
             var colorOffset: ParticleDataColorOffset = new ParticleDataColorOffset();
             data.colorOffset = colorOffset;
@@ -90,6 +92,8 @@
 
             this.particle.play();
             this.view1.addChild3D(this.particle);
+
+            this.particle.rotationY = 90;
            
             this.particle.followTarget = this.cube ;
 
@@ -117,13 +121,19 @@
         private angle: number = 0; 
         public update(e: Event3D) {
             this.cameraCrl.update();
-            this.angle += 0.01;
-            this.cube.x = Math.cos(this.angle * 0.4) * 300;
-            this.cube.z = Math.sin(this.angle * 0.4) * 300;
+            this.angle += 0.005;
+            //this.cube.x = Math.cos(this.angle * 0.4) * 200;
+            //this.cube.z = Math.sin(this.angle * 0.4) * 200;
 
-            //this.cube.rotationX = this.angle * 10;
-            this.cube.rotationZ = this.angle * 20;
+            this.cube.rotationY = this.angle * 20;
+            this.cube.rotationZ = this.angle * 10;
 
+            var scale: number = Math.sin(this.angle * 0.4);
+            scale = 2 * Math.abs(scale);
+            this.cube.scale = new Vector3D(scale, scale, scale);
+
+            //this.particle.scale = this.cube.scale;
+            //this.particle.rotationY = this.angle * 1000;
         }
 
     }

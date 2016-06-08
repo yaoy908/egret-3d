@@ -743,8 +743,7 @@
         * @platform Web,Native
         */
         public decompose(orientationStyle: string = "eulerAngles"): Vector3D[] {
-            var q: Quaternion;
-
+            var q: Quaternion = MathUtil.CALCULATION_QUATERNION;
             var vec: Vector3D[] = [];
             var m = this.clone();
             var mr = m.rawData;
@@ -819,16 +818,34 @@
 
                     break;
                 case Orientation3D.EULER_ANGLES:
+                    var tr = mr[0] + mr[5] + mr[10];
 
-                    rot.y = Math.asin(-mr[2]);
+                    if (tr > 0) {
+                        q.w = Math.sqrt(1 + tr) / 2;
 
-                    if (mr[2] != 1 && mr[2] != -1) {
-                        rot.x = Math.atan2(mr[6], mr[10]);
-                        rot.z = Math.atan2(mr[1], mr[0]);
+                        q.x = (mr[6] - mr[9]) / (4 * q.w);
+                        q.y = (mr[8] - mr[2]) / (4 * q.w);
+                        q.z = (mr[1] - mr[4]) / (4 * q.w);
+                    } else if ((mr[0] > mr[5]) && (mr[0] > mr[10])) {
+                        q.x = Math.sqrt(1 + mr[0] - mr[5] - mr[10]) / 2;
+
+                        q.w = (mr[6] - mr[9]) / (4 * q.x);
+                        q.y = (mr[1] + mr[4]) / (4 * q.x);
+                        q.z = (mr[8] + mr[2]) / (4 * q.x);
+                    } else if (mr[5] > mr[10]) {
+                        rot.y = Math.sqrt(1 + mr[5] - mr[0] - mr[10]) / 2;
+
+                        q.x = (mr[1] + mr[4]) / (4 * q.y);
+                        q.w = (mr[8] - mr[2]) / (4 * q.y);
+                        q.z = (mr[6] + mr[9]) / (4 * q.y);
                     } else {
-                        rot.z = 0;
-                        rot.x = Math.atan2(mr[4], mr[5]);
+                        q.z = Math.sqrt(1 + mr[10] - mr[0] - mr[5]) / 2;
+
+                        q.x = (mr[8] + mr[2]) / (4 * q.z);
+                        q.y = (mr[6] + mr[9]) / (4 * q.z);
+                        q.w = (mr[1] - mr[4]) / (4 * q.z);
                     }
+                    q.toEulerAngles(rot);
 
                     break;
             }

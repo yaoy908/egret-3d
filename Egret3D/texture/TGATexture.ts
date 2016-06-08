@@ -15,7 +15,7 @@
 
         public upload(context3D: Context3DProxy) {
             if (!this.texture2D) {
-                this.texture2D.texture = context3D.creatTexture2D();
+                this.texture2D = context3D.creatTexture2D();
 
                 this.texture2D.internalFormat = this.internalFormat;
                 this.texture2D.colorFormat = this.colorFormat;

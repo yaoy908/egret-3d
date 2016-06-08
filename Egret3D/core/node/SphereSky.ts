@@ -15,7 +15,7 @@
         /**
         * @language zh_CN
         * constructor
-        * @param tex1 天空球贴图
+        * @param material 贴图
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -23,6 +23,7 @@
             super(new SphereGeometry(10000), material);
             this._camera = camera;
             material.cullMode = ContextConfig.FRONT;
+            material.ambientColor = 0xffffff;
         } 
 
         /**
