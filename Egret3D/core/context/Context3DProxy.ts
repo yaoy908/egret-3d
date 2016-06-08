@@ -994,6 +994,12 @@
             Context3DProxy.gl.uniform1i(uniLocation, index);
         }
 
+        public disableTexture2DAt(samplerIndex: number, uniLocation: number, index: number) {
+            //Context3DProxy.gl.activeTexture(samplerIndex);
+            //Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, null );
+            //Context3DProxy.gl.uniform1i(uniLocation, index);
+        }
+
         /**
         * @language zh_CN
         * 设置贴图采样 第一个参数并不是类型

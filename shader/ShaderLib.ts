@@ -115,6 +115,36 @@ module egret3d {
 			"return quadratic_bezier(E, F, G, t); \n" +
 			"} \n",
 
+			"bloom_fs":
+			"varying vec2 varying_uv0; \n" +
+			"uniform sampler2D diffuseTexture; \n" +
+			"void main() \n" +
+			"{ \n" +
+			"vec2 uv = vec2(varying_uv0.x,1.0-varying_uv0.y); \n" +
+			"float dx = 1.0/float(1024.0); \n" +
+			"float dy = 1.0/float(1024.0); \n" +
+			"vec4 outColor ; \n" +
+			"vec4 color = outColor = texture2D(diffuseTexture,uv.xy); \n" +
+			"color += texture2D(diffuseTexture,uv.xy+vec2(dx*3.0,0.0)); \n" +
+			"color += texture2D(diffuseTexture,uv.xy+vec2(0.0,dy)); \n" +
+			"color += texture2D(diffuseTexture,uv.xy+vec2(dx*3.0,dy)); \n" +
+			"color += texture2D(diffuseTexture,uv.xy+vec2(0.0,dy*2.0)); \n" +
+			"color += texture2D(diffuseTexture,uv.xy+vec2(dx*3.0,dy*2.0)); \n" +
+			"color += texture2D(diffuseTexture,uv.xy+vec2(0.0,dy*3.0)); \n" +
+			"color += texture2D(diffuseTexture,uv.xy+vec2(dx*3.0,dy*3.0)); \n" +
+			"color /= 8.0; \n" +
+			"vec4 cout = vec4(0.0,0.0,0.0,0.0); \n" +
+			"float lum = color.x * 0.3 + color.y *0.59 + color.z * 0.11; \n" +
+			"vec4 p = color*(lum/0.1); \n" +
+			"p /= vec4(vec4(1.0,1.0,1.0,0.0)+p); \n" +
+			"float luml = (p.x+p.y+p.z)/3.0; \n" +
+			"if (luml > 0.8) \n" +
+			"{ \n" +
+			"cout = color ; \n" +
+			"} \n" +
+			"gl_FragColor = cout ; \n" +
+			"} \n",
+
 			"colorGradients_fs":
 			"varying vec4 varying_pos; \n" +
 			"uniform float uniform_colorGradientsSource[10] ; \n" +
@@ -134,6 +164,11 @@ module egret3d {
 			"void main(){ \n" +
 			"diffuseColor = uniform_colorTransformM44 * diffuseColor; \n" +
 			"diffuseColor = diffuseColor + uniform_colorTransformVec4; \n" +
+			"} \n",
+
+			"combin_fs":
+			"uniform sampler2D colorTexture; \n" +
+			"void main(void){ \n" +
 			"} \n",
 
 			"cube_fragment":
@@ -374,11 +409,71 @@ module egret3d {
 			"return toLinear_vec4_v1(texture2D(uTex, uv)); \n" +
 			"} \n",
 
-			"hud_fs":
+			"gaussian_H_fs":
+			"varying vec2 varying_uv0; \n" +
+			"uniform sampler2D diffuseTexture; \n" +
+			"void main() \n" +
+			"{ \n" +
+			"vec2 uv = vec2(varying_uv0.x,1.0-varying_uv0.y); \n" +
+			"float d = 1.0/float(1024.0); \n" +
+			"vec4 color = vec4(0.0,0.0,0.0,0.0); \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(-8.0*d,0.0))* 0.001; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(-7.0*d,0.0))* 0.105; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(-6.0*d,0.0))* 0.217; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(-5.0*d,0.0))* 0.344; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(-4.0*d,0.0))* 0.492; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(-3.0*d,0.0))* 0.55; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(-2.0*d,0.0))* 0.69; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(-1.0*d,0.0))* 0.70; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy) * 1.0; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(1.0*d,0.0)) * 0.70; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(2.0*d,0.0)) * 0.69; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(3.0*d,0.0)) * 0.55; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(4.0*d,0.0)) * 0.492; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(5.0*d,0.0)) * 0.344; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(6.0*d,0.0)) * 0.217; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(7.0*d,0.0)) * 0.105; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(8.0*d,0.0)) * 0.001; \n" +
+			"color /= 8.0; \n" +
+			"gl_FragColor = color ; \n" +
+			"} \n",
+
+			"gaussian_V_fs":
+			"varying vec2 varying_uv0; \n" +
+			"uniform sampler2D diffuseTexture; \n" +
+			"uniform sampler2D colorTexture; \n" +
+			"void main() \n" +
+			"{ \n" +
+			"vec2 uv = vec2(varying_uv0.x,1.0-varying_uv0.y); \n" +
+			"float d = 1.0/float(1024.0); \n" +
+			"vec4 color = vec4(0.0,0.0,0.0,0.0); \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0,-8.0*d)) * 0.001; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0,-7.0*d)) * 0.105; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0,-6.0*d)) * 0.217; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0,-5.0*d)) * 0.344; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0,-4.0*d)) * 0.492; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0,-3.0*d)) * 0.55; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0,-2.0*d)) * 0.69; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0,-1.0*d)) * 0.70; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy) * 1.0; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0, 1.0*d)) * 0.70; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0, 2.0*d)) * 0.69; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0, 3.0*d)) * 0.55; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0, 4.0*d)) * 0.492; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0, 5.0*d)) * 0.344; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0, 6.0*d)) * 0.217; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0, 7.0*d)) * 0.105; \n" +
+			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0, 8.0*d)) * 0.001; \n" +
+			"color /= 8.0; \n" +
+			"gl_FragColor = color + texture2D(colorTexture,uv.xy); \n" +
+			"} \n",
+
+			"hud_H_fs":
 			"varying vec2 varying_uv0; \n" +
 			"uniform sampler2D diffuseTexture; \n" +
 			"void main(void) { \n" +
-			"vec4 color = texture2D(diffuseTexture, varying_uv0); \n" +
+			"vec2 uv = vec2(varying_uv0.x ,1.0-varying_uv0.y); \n" +
+			"vec4 color = texture2D(diffuseTexture, uv); \n" +
 			"gl_FragColor  = color; \n" +
 			"} \n",
 
@@ -391,6 +486,14 @@ module egret3d {
 			"vec4 pos = vec4(attribute_position, 1.0); \n" +
 			"gl_Position = uniform_ViewProjectionMatrix * pos; \n" +
 			"varying_uv0 = attribute_uv0; \n" +
+			"} \n",
+
+			"hud_V_fs":
+			"varying vec2 varying_uv0; \n" +
+			"uniform sampler2D diffuseTexture; \n" +
+			"void main(void) { \n" +
+			"vec4 color = texture2D(diffuseTexture, varying_uv0); \n" +
+			"gl_FragColor  = color; \n" +
 			"} \n",
 
 			"lightingBase_fs":
@@ -533,25 +636,22 @@ module egret3d {
 			"particle_accelerationSpeed":
 			"attribute vec3 attribute_accelerationSpeed ; \n" +
 			"float particle(   ParticleData emit ){ \n" +
-			"globalPosition.xyz += currentTime * currentTime * attribute_accelerationSpeed  ; \n" +
+			"vec4 accelerationSpeed = vec4(attribute_accelerationSpeed, 1.0); \n" +
+			"accelerationSpeed = followRotMatrix * accelerationSpeed; \n" +
+			"globalPosition.xyz += currentTime * currentTime * accelerationSpeed.xyz  ; \n" +
 			"} \n",
 
 			"particle_color_fs":
-			"uniform float uniform_colorTransform[16] ; \n" +
-			"vec4 pack_depth(float depth) \n" +
+			"uniform float uniform_colorTransform[16]; \n" +
+			"vec3 unpack_color(float rgb_data) \n" +
 			"{ \n" +
-			"vec4 res ; \n" +
-			"float res1 = depth/256.0; \n" +
-			"res.z = fract( res1 ); \n" +
-			"res1 -= res.z; \n" +
-			"res1 = res1/256.0; \n" +
-			"res.y = fract( res1 ); \n" +
-			"res1 -= res.y; \n" +
-			"res1 = res1/256.0; \n" +
-			"res.x = fract( res1 ); \n" +
-			"res1 -= res.x; \n" +
-			"res1 = res1/256.0; \n" +
-			"res.w = res1; \n" +
+			"vec3 res; \n" +
+			"res.z = fract( rgb_data ); \n" +
+			"rgb_data -= res.z; \n" +
+			"rgb_data = rgb_data/256.0; \n" +
+			"res.y = fract( rgb_data ); \n" +
+			"rgb_data -= res.y; \n" +
+			"res.x = rgb_data/256.0; \n" +
 			"return res; \n" +
 			"} \n" +
 			"void main() { \n" +
@@ -559,21 +659,25 @@ module egret3d {
 			"float startSegment ; \n" +
 			"float nextColor ; \n" +
 			"float nextSegment ; \n" +
-			"float w = pt.w/pt.y; \n" +
+			"float startAlpha; \n" +
+			"float nextAlpha; \n" +
+			"float progress = pt.w/pt.y; \n" +
 			"for( int i = 1 ; i < 8 ; i++ ){ \n" +
-			"if( w >= uniform_colorTransform[i+8-1] ){ \n" +
+			"if( progress >= fract(uniform_colorTransform[i+8-1]) ){ \n" +
 			"startColor = uniform_colorTransform[i-1] ; \n" +
-			"startSegment = uniform_colorTransform[i+8-1] ; \n" +
+			"startSegment = fract(uniform_colorTransform[i+8-1]) ; \n" +
 			"nextColor = uniform_colorTransform[i]; \n" +
-			"nextSegment = uniform_colorTransform[i+8] ; \n" +
+			"nextSegment = fract(uniform_colorTransform[i+8]) ; \n" +
+			"startAlpha = uniform_colorTransform[i+8-1] - startSegment; \n" +
+			"nextAlpha = uniform_colorTransform[i+8] - nextSegment; \n" +
 			"}else{ \n" +
 			"break; \n" +
 			"} \n" +
 			"} \n" +
 			"float len = nextSegment - startSegment ; \n" +
-			"float ws = ( w - startSegment ) / len ; \n" +
-			"vec4 color = mix(pack_depth(startColor),pack_depth(nextColor),ws) ; \n" +
-			"diffuseColor.xyzw *= color.xyzw ; \n" +
+			"float ws = ( progress - startSegment ) / len ; \n" +
+			"vec4 color = mix(vec4(unpack_color(startColor).xyz,startAlpha / 256.0),vec4(unpack_color(nextColor).xyz, nextAlpha / 256.0),ws) ; \n" +
+			"diffuseColor *= color; \n" +
 			"} \n",
 
 			"particle_color_vs":
@@ -585,18 +689,26 @@ module egret3d {
 			"return 1.0 ; \n" +
 			"} \n" +
 			"void main(void) { \n" +
+			"if(discard_particle == 1.0){ \n" +
+			"outPosition = vec4(0.0,0.0,0.0,0.0); \n" +
+			"}else{ \n" +
 			"outPosition.xyz = localPosition.xyz  ; \n" +
 			"outPosition = billboardMatrix * outPosition; \n" +
 			"outPosition.xyz += globalPosition.xyz; \n" +
 			"outPosition = modeViewMatrix * outPosition; \n" +
+			"} \n" +
 			"gl_Position = uniform_ProjectionMatrix * outPosition ; \n" +
 			"} \n" +
 			"	 \n",
 
 			"particle_follow_vs":
 			"attribute vec3 attribute_followPosition ; \n" +
+			"attribute vec3 attribute_followRotation ; \n" +
 			"float particle(  ParticleData emit ){ \n" +
 			"globalPosition.xyz += attribute_followPosition.xyz; \n" +
+			"followRotMatrix = buildRotMat4(attribute_followRotation.xyz); \n" +
+			"vec4 vertexPos = vec4(localPosition.xyz, 1.0); \n" +
+			"outPosition.xyz = localPosition.xyz = (followRotMatrix * vertexPos).xyz; \n" +
 			"} \n" +
 			"	 \n",
 
@@ -674,9 +786,6 @@ module egret3d {
 			"if( currentTime <= 0.0 ) \n" +
 			"return currentTime = 0.0; \n" +
 			"} \n" +
-			"void e_discard(){ \n" +
-			"varying_color.w = 0.0 ; \n" +
-			"} \n" +
 			"void main(void) { \n" +
 			"ParticleData emit ; \n" +
 			"emit.bornTime = attribute_time.x ; \n" +
@@ -697,7 +806,9 @@ module egret3d {
 			"particle_uniformSpeed":
 			"attribute vec3 attribute_uniformSpeed ; \n" +
 			"float particle(  ParticleData emit ){ \n" +
-			"globalPosition.xyz += currentTime * attribute_uniformSpeed ; \n" +
+			"vec4 uniformSpeed = vec4(attribute_uniformSpeed.xyz, 1.0); \n" +
+			"uniformSpeed = followRotMatrix * uniformSpeed; \n" +
+			"globalPosition.xyz += currentTime * uniformSpeed.xyz; \n" +
 			"} \n",
 
 			"particle_vs":
@@ -708,7 +819,12 @@ module egret3d {
 			"float totalTime = 0.0; \n" +
 			"vec4 localPosition; \n" +
 			"vec4 globalPosition; \n" +
+			"mat4 followRotMatrix; \n" +
 			"varying vec3 varyingViewDir ; \n" +
+			"float discard_particle = 0.0; \n" +
+			"void e_discard(){ \n" +
+			"discard_particle = 1.0; \n" +
+			"} \n" +
 			"mat4 buildRotMat4(vec3 rot) \n" +
 			"{ \n" +
 			"mat4 ret = mat4( \n" +
@@ -721,28 +837,28 @@ module egret3d {
 			"float c; \n" +
 			"s = sin(rot.x); \n" +
 			"c = cos(rot.x); \n" +
-			"ret *= mat4( \n" +
+			"ret = mat4( \n" +
 			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
 			"vec4(0.0, c, s, 0.0), \n" +
 			"vec4(0.0, -s, c, 0.0), \n" +
 			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
-			"); \n" +
+			") * ret; \n" +
 			"s = sin(rot.y); \n" +
 			"c = cos(rot.y); \n" +
-			"ret *= mat4( \n" +
+			"ret = mat4( \n" +
 			"vec4(c, 0.0, -s, 0.0), \n" +
 			"vec4(0.0, 1.0, 0.0, 0.0), \n" +
 			"vec4(s, 0.0, c, 0.0), \n" +
 			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
-			"); \n" +
+			") * ret; \n" +
 			"s = sin(rot.z); \n" +
 			"c = cos(rot.z); \n" +
-			"ret *= mat4( \n" +
+			"ret = mat4( \n" +
 			"vec4(c, s, 0.0, 0.0), \n" +
 			"vec4(-s, c, 0.0, 0.0), \n" +
 			"vec4(0.0, 0.0, 1.0, 0.0), \n" +
 			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
-			"); \n" +
+			") * ret; \n" +
 			"return ret; \n" +
 			"} \n" +
 			"void main(void) { \n" +
@@ -760,6 +876,11 @@ module egret3d {
 			"mat4 modeViewMatrix = uniform_ModelViewMatrix ; \n" +
 			"localPosition = outPosition = vec4(e_position, 1.0); \n" +
 			"globalPosition.xyz = vec3(0.0,0.0,0.0); \n" +
+			"followRotMatrix = mat4( \n" +
+			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
+			"vec4(0.0, 1.0, 0.0, 0.0), \n" +
+			"vec4(0.0, 0.0, 1.0, 0.0), \n" +
+			"vec4(0.0, 0.0, 0.0, 1.0)); \n" +
 			"globalPosition.xyz += attribute_offsetPosition; \n" +
 			"} \n",
 
@@ -813,7 +934,8 @@ module egret3d {
 
 			"shadowMapping_fs":
 			"uniform sampler2D shadowMapTexture; \n" +
-			"varying vec2 varying_ShadowCoord; \n" +
+			"uniform vec3 uniform_ShadowColor; \n" +
+			"varying vec4 varying_ShadowCoord; \n" +
 			"float unpackDepth(vec4 rgbaDepth){ \n" +
 			"vec4 bitShift = vec4( 1.0 , 1.0/256.0 , 1.0/(256.0*256.0) , 1.0/(256.0*256.0*256.0) ); \n" +
 			"float depth = dot(rgbaDepth,bitShift); \n" +
@@ -825,40 +947,19 @@ module egret3d {
 			"if (varying_ShadowCoord.w > 0.0) { \n" +
 			"vec3 shadowDepth = varying_ShadowCoord.xyz / varying_ShadowCoord.w * 0.5 + 0.5; \n" +
 			"vec2 sample = clamp(shadowDepth.xy,0.0,1.0); \n" +
-			"float sampleDepth = unpackDepth(texture2D(shadowMapTexture, sample)); \n" +
-			"if(sampleDepth < shadowDepth.z-0.002) \n" +
-			"shadowColor = vec3(0.5,0.5,0.6)  ; \n" +
+			"float sampleDepth = texture2D(shadowMapTexture, sample).z; \n" +
+			"if(sampleDepth > shadowDepth.z) \n" +
+			"shadowColor = uniform_ShadowColor; \n" +
 			"} \n" +
 			"diffuseColor.xyz = diffuseColor.xyz * shadowColor; \n" +
 			"} \n",
 
 			"shadowMapping_vs":
 			"uniform mat4 uniform_ShadowMatrix; \n" +
+			"uniform mat4 uniform_ModelMatrix; \n" +
 			"varying vec4 varying_ShadowCoord; \n" +
 			"void main() { \n" +
-			"varying_ShadowCoord = uniform_ShadowMatrix * vec4(attribute_position, 1.0); \n" +
-			"} \n",
-
-			"shadow_fs":
-			"uniform sampler2D shadowMapTexture; \n" +
-			"varying vec4 varying_ShadowCoord; \n" +
-			"void main() { \n" +
-			"vec4 shadowCoordinateWdivide = varying_ShadowCoord / varying_ShadowCoord.w; \n" +
-			"shadowCoordinateWdivide.z += 0.0005; \n" +
-			"float distanceFromLight = texture2D(shadowMapTexture, shadowCoordinateWdivide.st).z; \n" +
-			"float shadow = 1.0; \n" +
-			"if (varying_ShadowCoord.w > 0.0) \n" +
-			"{ \n" +
-			"shadow = distanceFromLight < shadowCoordinateWdivide.z ? 0.5 : 1.0; \n" +
-			"} \n" +
-			"diffuseColor = diffuseColor * shadow; \n" +
-			"} \n",
-
-			"shadow_vs":
-			"uniform mat4 uniform_ShadowMatrix; \n" +
-			"varying vec4 varying_ShadowCoord; \n" +
-			"void main() { \n" +
-			"varying_ShadowCoord = uniform_ShadowMatrix * vec4(e_position, 1.0); \n" +
+			"varying_ShadowCoord = uniform_ShadowMatrix * uniform_ModelMatrix * vec4(e_position, 1.0); \n" +
 			"} \n",
 
 			"skeletonShadowPass_vs":
@@ -901,6 +1002,7 @@ module egret3d {
 			"outPosition += m1 * temp_position * e_boneWeight.y; \n" +
 			"outPosition += m2 * temp_position * e_boneWeight.z; \n" +
 			"outPosition += m3 * temp_position * e_boneWeight.w; \n" +
+			"e_position = outPosition.xyz; \n" +
 			"outPosition = uniform_ModelViewMatrix * outPosition; \n" +
 			"} \n",
 
@@ -964,6 +1066,17 @@ module egret3d {
 			"specularColor.xyz *= texture2D( specularTexture , uv_0 ).xyz ; \n" +
 			"} \n",
 
+			"staticShadowPass_vs":
+			"attribute vec4 attribute_color; \n" +
+			"vec4 e_boneIndex = vec4(0.0, 0.0, 0.0, 0.0); \n" +
+			"vec4 e_boneWeight = vec4(0.0, 0.0, 0.0, 0.0); \n" +
+			"void main(void){ \n" +
+			"varying_color = attribute_color; \n" +
+			"outPosition = vec4(attribute_position, 1.0) ; \n" +
+			"e_position = outPosition.xyz; \n" +
+			"outPosition = uniform_ModelViewMatrix * outPosition; \n" +
+			"} \n",
+
 			"tangent_vs":
 			"attribute vec3 attribute_tangent; \n" +
 			"void main(void){ \n" +
@@ -1005,6 +1118,17 @@ module egret3d {
 			"uv_0.xy *= vec2(uvSpriteSheet[2],uvSpriteSheet[3]); \n" +
 			"uv_0.xy += vec2(uvSpriteSheet[0],uvSpriteSheet[1]); \n" +
 			"diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
+			"} \n",
+
+			"uvStreamerRoll_fs":
+			"uniform float uvRoll[3] ; \n" +
+			"uniform sampler2D diffuseTexture; \n" +
+			"uniform sampler2D streamerTexture; \n" +
+			"vec4 diffuseColor ; \n" +
+			"void main() { \n" +
+			"diffuseColor = texture2D(diffuseTexture , varying_uv0 ); \n" +
+			"vec2 rollUV = varying_uv0 + vec2(uvRoll[0],uvRoll[1]) + vec2(normal.xz) * 0.5 ; \n" +
+			"diffuseColor.xyz += texture2D(streamerTexture , rollUV ).xyz * uvRoll[2] ; \n" +
 			"} \n",
 
 			"varyingViewDir_vs":
