@@ -1,4 +1,8 @@
 ﻿module egret3d {
+
+    /*
+    * @private
+    */
     export class BloomPass implements IPost{
 
         public drawRectangle: Rectangle;

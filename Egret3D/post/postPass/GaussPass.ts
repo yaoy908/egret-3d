@@ -1,4 +1,8 @@
 ﻿module egret3d {
+
+    /*
+    * @private
+    */
     export class GaussPass implements IPost {
 
         public drawRectangle: Rectangle;
