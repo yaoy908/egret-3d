@@ -63,15 +63,15 @@
 
             var data: Array<Vector3D> = this._velocityOverShape.calculate(count);
             for (var i: number = 0; i < count; ++i) {
-                var force: Vector3D = data[i];
+                var over: Vector3D = data[i];
                
                 for (var j: number = 0; j < vertices; ++j) {
                     index = i * vertices + j;
                     index = index * geometry.vertexAttLength + this.attribute_velocityOver.offsetIndex;
 
-                    geometry.verticesData[index + 0] = force.x;
-                    geometry.verticesData[index + 1] = force.y;
-                    geometry.verticesData[index + 2] = force.z;
+                    geometry.verticesData[index + 0] = over.x;
+                    geometry.verticesData[index + 1] = over.y;
+                    geometry.verticesData[index + 2] = over.z;
                 }
             }
         }

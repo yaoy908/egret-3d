@@ -1,5 +1,5 @@
 ﻿module egret3d {
-    export class Class_ParticleColor extends Class_View3D {
+    export class Class_ParticleLimitConst extends Class_View3D {
 
         //private plane: Mesh;
         protected view1: View3D;
@@ -7,7 +7,7 @@
         protected cameraCrl: LookAtController;
         private particle: ParticleEmitter;
 
-        private cube: Mesh; 
+        private cube: Mesh;
         constructor() {
             super();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
@@ -43,7 +43,11 @@
 
             //var follow: ParticleDataFollowTarget = new ParticleDataFollowTarget();
             //data.followTarget = follow;
-
+            var limit: VelocityLimitLifeTimeData = new VelocityLimitLifeTimeData();
+            data.moveSpeed.velocityLimit = limit;
+            limit.type = ParticleDataMoveSpeed.ConstValue;
+            limit.max = 30;
+            limit.min = 10;
 
             var life: ParticleDataLife = data.life;
             life.lifeMax = 4;
@@ -72,7 +76,7 @@
             xBezier.posPoints.push(new Point(0.5, 20));
             xBezier.posPoints.push(new Point(0.55, 20));
             xBezier.posPoints.push(new Point(1.0, 8));
-           
+
             xBezier.ctrlPoints.push(new Point(0, 10));
             xBezier.ctrlPoints.push(new Point(0.55, 20));
             xBezier.ctrlPoints.push(new Point(0.56, 20));
@@ -136,8 +140,8 @@
             this.particle.play();
             this.view1.addChild3D(this.particle);
 
-            
-           
+
+
             //this.particle.followTarget = this.cube ;
 
             var loadtex: URLLoader = new URLLoader("resource/effect/rect.png");
@@ -149,7 +153,7 @@
             vv.value = "rest";
             document.body.appendChild(vv);
             vv.onmousedown = (e: MouseEvent) => this.mouseDown(e);
-            
+
         }
 
         protected mouseDown(e: MouseEvent) {
@@ -158,10 +162,10 @@
 
         protected obj: Object3D;
         protected onLoadTexture(e: LoaderEvent3D) {
-           e.loader["mat"].diffuseTexture = e.loader.data;
+            e.loader["mat"].diffuseTexture = e.loader.data;
         }
 
-        private angle: number = 0; 
+        private angle: number = 0;
         public update(e: Event3D) {
             this.cameraCrl.update();
             this.angle += 0.001;
@@ -171,11 +175,11 @@
             //this.cube.rotationY = this.angle * 20;
             this.cube.rotationZ = this.angle * 10;
 
-            var scale: number = Math.sin(this.angle * 0.4);
+            var scale: number = Math.sin(this.angle * 10);
             scale = 2 * Math.abs(scale);
-            //this.cube.scale = new Vector3D(scale, scale, scale);
+            this.cube.scale = new Vector3D(scale, scale, scale);
 
-            //this.particle.scale = this.cube.scale;
+            this.particle.scale = this.cube.scale;
             //this.particle.rotationX = 0;
             //this.particle.rotationY = 90;
             //this.particle.rotationZ = this.angle * 1000;

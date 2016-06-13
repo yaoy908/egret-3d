@@ -1,13 +1,10 @@
-﻿
-function jsOnload() {
-
-
-    var sample = new egret3d.Class_ParticleColor();
+﻿function jsOnload() {
+    var sample = new egret3d.Class_ParticleOverTwoBezier();
 }
 
 function onTsconfig() {
     egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_View3D.js");
-    egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_ParticleColor.js");
+    egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_ParticleOverTwoBezier.js");
 }
 
 window.onload = () => {

@@ -32,20 +32,23 @@
             loadtex1["mat"] = planemat;
            // this.view1.addChild3D(new Mesh(new PlaneGeometry(1000, 1000), planemat));
 
-            this.cube = new Mesh( new CubeGeometry(10,10,10), null );
+            this.cube = new Mesh( new CubeGeometry(40,40,40), null );
             //this.view1.addChild3D(this.cube);
 
             var mat: TextureMaterial = new TextureMaterial();
             mat.ambientColor = 0xffffff;
 
             var data: ParticleData = new ParticleData();
+            data.geometry.planeW = data.geometry.planeH = 40;
 
             var rotationSpeed: ParticleDataRotationSpeed = new ParticleDataRotationSpeed();
+            rotationSpeed.max.z = 40;
+            rotationSpeed.min.z = 20;
             data.rotationSpeed = rotationSpeed;
 
             var moveSpeed: ParticleDataMoveSpeed = new ParticleDataMoveSpeed();
             moveSpeed.max = 100;
-            moveSpeed.min = 0;
+            moveSpeed.min = 50;
             data.moveSpeed = moveSpeed;
 
             this.particle = new ParticleEmitter(data, null, mat);
@@ -74,7 +77,7 @@
 
         protected obj: Object3D;
         protected onLoadTexture(e: LoaderEvent3D) {
-           // e.loader["mat"].diffuseTexture = e.loader.data;
+           e.loader["mat"].diffuseTexture = e.loader.data;
         }
 
         private angle: number = 0; 

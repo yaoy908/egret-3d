@@ -2,34 +2,29 @@
 
     /**
     * @language zh_CN
-    * @class egret3d.ParticleVelocityOverTwoBezierNode
+    * @class egret3d.ParticleVelocityLimitTwoBezierNode
     * @classdesc
-    * 粒子速度叠加节点,双贝塞尔曲线获得
+    * 粒子速度限制,贝塞尔曲线获得
     * @see egret3d.AnimationNode
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class ParticleVelocityOverTwoBezierNode extends AnimationNode {
+    export class ParticleVelocityLimitTwoBezierNode extends AnimationNode {
 
+        private _floatCompressData: Float32Array;
+        private _floatCompressData2: Float32Array;
         private _node: ParticleDataMoveSpeed;
         private attribute_randomSeed: GLSL.VarRegister;
-        private _floatCompressDataX: Float32Array;
-        private _floatCompressDataY: Float32Array;
-        private _floatCompressDataZ: Float32Array;
-        private _floatCompressDataX2: Float32Array;
-        private _floatCompressDataY2: Float32Array;
-        private _floatCompressDataZ2: Float32Array;
-
         private _animationState: ParticleAnimationState;
         constructor() {
             super();
-            this.name = "ParticleVelocityOverTwoBezierNode";
+            this.name = "ParticleVelocityLimitTwoBezierNode";
 
             this.vertex_ShaderName[ShaderPhaseType.global_vertex] = this.vertex_ShaderName[ShaderPhaseType.global_vertex] || [];
-            this.vertex_ShaderName[ShaderPhaseType.global_vertex].push("particle_velocityOverTwoBezier");
+            this.vertex_ShaderName[ShaderPhaseType.global_vertex].push("particle_velocityLimitTwoBezier");
 
             this.attribute_randomSeed = new GLSL.VarRegister();
-            this.attribute_randomSeed.name = "attribute_velocityOverRandomSeed";
+            this.attribute_randomSeed.name = "attribute_velocityLimitRandomSeed";
             this.attribute_randomSeed.size = 1;
             this.attributes.push(this.attribute_randomSeed);
         }
@@ -43,13 +38,8 @@
         */
         public initNode(data: ParticleDataNode): void {
             this._node = <ParticleDataMoveSpeed>data;
-            this._floatCompressDataX = this._node.velocityOver.xBezier1.compress();
-            this._floatCompressDataY = this._node.velocityOver.yBezier1.compress();
-            this._floatCompressDataZ = this._node.velocityOver.zBezier1.compress();
-
-            this._floatCompressDataX2 = this._node.velocityOver.xBezier2.compress();
-            this._floatCompressDataY2 = this._node.velocityOver.yBezier2.compress();
-            this._floatCompressDataZ2 = this._node.velocityOver.zBezier2.compress();
+            this._floatCompressData = this._node.velocityLimit.bezier1.compress();
+            this._floatCompressData2 = this._node.velocityLimit.bezier2.compress();
         }
         /**
         * @language zh_CN
@@ -80,12 +70,8 @@
         * @private
         */
         public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
-            context3DProxy.uniform1fv(usage["uniform_velocityOverX"].uniformIndex, this._floatCompressDataX);
-            context3DProxy.uniform1fv(usage["uniform_velocityOverY"].uniformIndex, this._floatCompressDataY);
-            context3DProxy.uniform1fv(usage["uniform_velocityOverZ"].uniformIndex, this._floatCompressDataZ);
-            context3DProxy.uniform1fv(usage["uniform_velocityOverX2"].uniformIndex, this._floatCompressDataX2);
-            context3DProxy.uniform1fv(usage["uniform_velocityOverY2"].uniformIndex, this._floatCompressDataY2);
-            context3DProxy.uniform1fv(usage["uniform_velocityOverZ2"].uniformIndex, this._floatCompressDataZ2);
+            context3DProxy.uniform1fv(usage["uniform_velocityLimit"].uniformIndex, this._floatCompressData);
+            context3DProxy.uniform1fv(usage["uniform_velocityLimit2"].uniformIndex, this._floatCompressData2);
         }
 
 

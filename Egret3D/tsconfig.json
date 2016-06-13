@@ -201,6 +201,9 @@
         "particle/particleNode/ParticleVelocityOverConstNode.ts",
         "particle/particleNode/ParticleVelocityOverOneBezierNode.ts",
         "particle/particleNode/ParticleVelocityOverTwoBezierNode.ts",
+        "particle/particleNode/ParticleVelocityLimitConstNode.ts",
+        "particle/particleNode/ParticleVelocityLimitOneBezierNode.ts",
+        "particle/particleNode/ParticleVelocityLimitTwoBezierNode.ts",
         
         
 

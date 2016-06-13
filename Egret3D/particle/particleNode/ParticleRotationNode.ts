@@ -34,8 +34,8 @@
         public initNode(data: ParticleDataNode): void {
             var node: ParticleDataRotationSpeed = <ParticleDataRotationSpeed>data;
             this._rotation = new ConstRandomValueShape();
-            this._rotation.max = node.max.x;
-            this._rotation.min = node.min.x;
+            this._rotation.max = node.max.z;
+            this._rotation.min = node.min.z;
         }
 
         /**

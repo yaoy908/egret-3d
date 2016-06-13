@@ -480,49 +480,32 @@
         public max: number = 0;
         public min: number = 0;
 
-        public xBezier1: BezierData = new BezierData(BezierData.PointCount);
-        public yBezier1: BezierData = new BezierData(BezierData.PointCount);
-        public zBezier1: BezierData = new BezierData(BezierData.PointCount);
-                                   
-        public xBezier2: BezierData = new BezierData(BezierData.PointCount);
-        public yBezier2: BezierData = new BezierData(BezierData.PointCount);
-        public zBezier2: BezierData = new BezierData(BezierData.PointCount);
-        
+        public bezier1: BezierData = new BezierData(BezierData.PointCount);
+        public bezier2: BezierData = new BezierData(BezierData.PointCount);
 
         constructor() {
         }
 
         public validate(): void {
-            if (this.type == ParticleDataMoveSpeed.OneBezier || this.type == ParticleDataMoveSpeed.TwoBezier) {
-                if (this.xBezier1 == null) {
-                    this.xBezier1 = new BezierData(BezierData.PointCount);
-                }
-                if (this.yBezier1 == null) {
-                    this.yBezier1 = new BezierData(BezierData.PointCount);
-                }
-                if (this.zBezier1 == null) {
-                    this.zBezier1 = new BezierData(BezierData.PointCount);
-                }
+            if (this.max < 0) {
+                this.max = 0;
+            }
+            if (this.min > this.max) {
+                this.min = this.max;
+            }
 
-                this.xBezier1.validate();
-                this.yBezier1.validate();
-                this.zBezier1.validate();
+            if (this.type == ParticleDataMoveSpeed.OneBezier || this.type == ParticleDataMoveSpeed.TwoBezier) {
+                if (this.bezier1 == null) {
+                    this.bezier1 = new BezierData(BezierData.PointCount);
+                }
+                this.bezier1.validate();
             }
             
             if (this.type == ParticleDataMoveSpeed.TwoBezier) {
-                if (this.xBezier2 == null) {
-                    this.xBezier2 = new BezierData(BezierData.PointCount);
+                if (this.bezier2 == null) {
+                    this.bezier2 = new BezierData(BezierData.PointCount);
                 }               
-                if (this.yBezier2 == null) {
-                    this.yBezier2 = new BezierData(BezierData.PointCount);
-                }               
-                if (this.zBezier2 == null) {
-                    this.zBezier2 = new BezierData(BezierData.PointCount);
-                }
-
-                this.xBezier2.validate();
-                this.yBezier2.validate();
-                this.zBezier2.validate();
+                this.bezier2.validate();
             }
 
         }

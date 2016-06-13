@@ -14,6 +14,7 @@ vec4 localPosition = vec4(0.0,0.0,0.0,1.0);
 vec3 velocityBaseVec3 = vec3(0.0,0.0,0.0);
 vec3 velocityOverVec3 = vec3(0.0,0.0,0.0);
 vec2 velocityBezierWeightVec2 = vec2(1.0, 1.0);
+vec2 velocityLimitVec2 = vec2(0.0,0.0);//y为0表示不限制
 
 vec3 followTargetPosition = vec3(0.0,0.0,0.0);
 vec3 followTargetScale = vec3(1.0,1.0,1.0);
@@ -53,6 +54,54 @@ struct ParticleStateData{
 	float velocityOverWorldSpace;	//叠加速度是否为世界空间坐标
 };
 
+mat4 buildRotMat4(vec3 rot)
+{
+    mat4 ret = mat4(
+	vec4(1.0, 0.0, 0.0, 0.0),
+	vec4(0.0, 1.0, 0.0, 0.0),
+	vec4(0.0, 0.0, 1.0, 0.0),
+	vec4(0.0, 0.0, 0.0, 1.0)
+	);
+
+	//____________
+	float s;
+	float c;
+
+	s = sin(rot.x);
+	c = cos(rot.x);
+	
+	ret = mat4(
+	vec4(1.0, 0.0, 0.0, 0.0),
+	vec4(0.0, c, s, 0.0),
+	vec4(0.0, -s, c, 0.0),
+	vec4(0.0, 0.0, 0.0, 1.0)
+	) * ret;
+	
+	//____________
+	s = sin(rot.y);
+	c = cos(rot.y);
+	
+	ret = mat4(
+	vec4(c, 0.0, -s, 0.0),
+	vec4(0.0, 1.0, 0.0, 0.0),
+	vec4(s, 0.0, c, 0.0),
+	vec4(0.0, 0.0, 0.0, 1.0)
+	) * ret;
+
+
+	//____________
+	s = sin(rot.z);
+	c = cos(rot.z);
+
+	ret = mat4(
+	vec4(c, s, 0.0, 0.0),
+	vec4(-s, c, 0.0, 0.0),
+	vec4(0.0, 0.0, 1.0, 0.0),
+	vec4(0.0, 0.0, 0.0, 1.0)
+	) * ret;
+
+	return ret;
+}
 
 mat4 buildMat4Quat(vec4 quat){
 

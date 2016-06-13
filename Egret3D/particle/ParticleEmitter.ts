@@ -28,7 +28,6 @@
         private _data: ParticleData;
         private _externalGeometry: Geometry;
 
-        private static IdentityMatrix: Matrix4_4 = new Matrix4_4();
         /**
         * @language zh_CN
         * 构造函数
@@ -280,9 +279,13 @@
             var limit: VelocityLimitLifeTimeData = this._data.moveSpeed.velocityLimit;
             if (limit) {
                 if (limit.type == ParticleDataMoveSpeed.ConstValue || limit.type == ParticleDataMoveSpeed.RandomConstValue) {
-
-                } else {
-
+                    var limitConstNode: ParticleVelocityLimitConstNode = new ParticleVelocityLimitConstNode();
+                    limitConstNode.initNode(this._data.moveSpeed);
+                    nodes.push(limitConstNode);
+                } else if(limit.type == ParticleDataMoveSpeed.OneBezier){
+                    var limitOneBezierNode: ParticleVelocityLimitOneBezierNode = new ParticleVelocityLimitOneBezierNode();
+                    limitOneBezierNode.initNode(this._data.moveSpeed);
+                    nodes.push(limitOneBezierNode);
                 }
             }
 

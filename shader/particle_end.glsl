@@ -22,6 +22,15 @@ mat4 buildModelMatrix(vec4 quat, vec3 scale, vec3 position)
 	return ret;
 }
 
+vec3 limitParticleSpeed(vec3 speedXYZ, float limit){
+	vec3 temp = speedXYZ * speedXYZ;
+	float speedSquare = sqrt(temp.x + temp.y + temp.z);
+	if(speedSquare > limit){
+		speedXYZ = speedXYZ * (limit / speedSquare);
+	}
+	return speedXYZ;
+}
+
 void main(void) {
 
 	if(discard_particle == 1.0){ 
@@ -30,6 +39,7 @@ void main(void) {
 
 		//vec3 velocityBaseVec3
 		//vec3 velocityOverVec3
+		//vec2 velocityLimitVec2
 		//vec2 velocityBezierWeightVec2
 		//float currentTime
 
@@ -45,7 +55,6 @@ void main(void) {
 		}else{
 			velocityWorldVec3 += velocityOverVec3;
 		}
-
 
 		if(particleStateData.worldSpace == 1.0){
 			//followTargetPosition
@@ -70,6 +79,12 @@ void main(void) {
 		}
 
 		velocityMultiVec3 = velocityLocalVec3 + velocityWorldVec3;
+		//限速
+		if(velocityLimitVec2.y == 1.0){
+			velocityMultiVec3 = limitParticleSpeed(velocityMultiVec3, velocityLimitVec2.x);
+		}
+		//速度会受母系缩放值影响
+		velocityMultiVec3 *= followTargetScale;
 
 		mat4 modelMatrix = buildModelMatrix(followTargetRotation, followTargetScale, followTargetPosition);
 		position_emitter = (modelMatrix * vec4(position_emitter, 1.0)).xyz; 

@@ -1,12 +1,13 @@
 ﻿module egret3d {
-    export class Class_ParticleTwoBezier extends Class_View3D {
+    export class Class_ParticleLimitBezier extends Class_View3D {
 
+        //private plane: Mesh;
         protected view1: View3D;
 
         protected cameraCrl: LookAtController;
         private particle: ParticleEmitter;
 
-        private cube: Mesh; 
+        private cube: Mesh;
         constructor() {
             super();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
@@ -18,8 +19,17 @@
             view1.backColor = 0xff000000;
             this._egret3DCanvas.addView3D(view1);
 
+            var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
+            var tex: ImageTexture = new ImageTexture(bgImg);
+            //view1.backImage = tex;
+
             this.cameraCrl = new LookAtController(this.view1.camera3D, new Object3D());
             this.cameraCrl.distance = 1000;
+
+            var planemat: TextureMaterial = new TextureMaterial();
+            var loadtex1: URLLoader = new URLLoader("resource/effect/brick-diffuse.jpg");
+            loadtex1.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
+            loadtex1["mat"] = planemat;
 
             this.cube = new Mesh(new CubeGeometry(10, 40, 10), null);
             this.view1.addChild3D(this.cube);
@@ -33,12 +43,41 @@
 
             //var follow: ParticleDataFollowTarget = new ParticleDataFollowTarget();
             //data.followTarget = follow;
+            var limit: VelocityLimitLifeTimeData = new VelocityLimitLifeTimeData();
+            data.moveSpeed.velocityLimit = limit;
+            limit.type = ParticleDataMoveSpeed.TwoBezier;
 
+            //bezier1
+            var bezier: BezierData = new BezierData(BezierData.PointCount);
+            limit.bezier1 = bezier;
+            bezier.posPoints.push(new Point(0, 0));
+            bezier.posPoints.push(new Point(0.3, 60));
+            bezier.posPoints.push(new Point(0.35, 60));
+            bezier.posPoints.push(new Point(1.0, 0));
+            
+            bezier.ctrlPoints.push(new Point(0, 20));
+            bezier.ctrlPoints.push(new Point(0.35, 60));
+            bezier.ctrlPoints.push(new Point(0.36, 60));
+            bezier.ctrlPoints.push(new Point(1.0, 0));
+
+            //bezier2
+            var bezier2: BezierData = new BezierData(BezierData.PointCount);
+            limit.bezier2 = bezier2;
+            bezier2.posPoints.push(new Point(0, 0));
+            bezier2.posPoints.push(new Point(0.3, 120));
+            bezier2.posPoints.push(new Point(0.35, 120));
+            bezier2.posPoints.push(new Point(1.0, 0));
+                  
+            bezier2.ctrlPoints.push(new Point(0, 40));
+            bezier2.ctrlPoints.push(new Point(0.35, 120));
+            bezier2.ctrlPoints.push(new Point(0.36, 120));
+            bezier2.ctrlPoints.push(new Point(1.0, 0));
+            //bezier end
 
             var life: ParticleDataLife = data.life;
             life.lifeMax = 4;
-            life.lifeMin = 4;
-            life.rate = 20;
+            life.lifeMin = 2;
+            life.rate = 2;
             life.duration = 5;
             life.delay = 0.5;
             life.loop = true;
@@ -50,31 +89,36 @@
             //property.gravity = 10;
 
             var speed: ParticleDataMoveSpeed = data.moveSpeed;
-            speed.max = 50;
-            speed.min = 50;
+            speed.max = 20;
+            speed.min = 40;
 
             var velocityOver: VelocityOverLifeTimeData = new VelocityOverLifeTimeData();
             speed.velocityOver = velocityOver;
-            speed.velocityOver.type = ParticleDataMoveSpeed.TwoBezier;
+            speed.velocityOver.type = ParticleDataMoveSpeed.OneBezier;
 
-            //___bezier1
             var xBezier: BezierData = new BezierData(BezierData.PointCount);
             xBezier.posPoints.push(new Point(0, 0));
-            xBezier.posPoints.push(new Point(0.3, 60));
-            xBezier.posPoints.push(new Point(0.35, 60));
-            xBezier.posPoints.push(new Point(1.0, -40));
-           
-            xBezier.ctrlPoints.push(new Point(0, 20));
-            xBezier.ctrlPoints.push(new Point(0.35, 60));
-            xBezier.ctrlPoints.push(new Point(0.36, 60));
-            xBezier.ctrlPoints.push(new Point(1.0, -40));
+            xBezier.posPoints.push(new Point(0.5, 20));
+            xBezier.posPoints.push(new Point(0.55, 20));
+            xBezier.posPoints.push(new Point(1.0, 8));
+
+            xBezier.ctrlPoints.push(new Point(0, 10));
+            xBezier.ctrlPoints.push(new Point(0.55, 20));
+            xBezier.ctrlPoints.push(new Point(0.56, 20));
+            xBezier.ctrlPoints.push(new Point(1.0, 8));
+
             speed.velocityOver.xBezier1 = xBezier;
 
             var yBezier: BezierData = new BezierData(BezierData.PointCount);
             yBezier.posPoints.push(new Point(0, 0));
-            yBezier.posPoints.push(new Point(0, 0));
-            yBezier.ctrlPoints.push(new Point(1, 0));
-            yBezier.ctrlPoints.push(new Point(1, 0));
+            yBezier.posPoints.push(new Point(0.7, 40));
+            yBezier.posPoints.push(new Point(0.75, 40));
+            yBezier.posPoints.push(new Point(1.0, 16));
+
+            yBezier.ctrlPoints.push(new Point(0, 10));
+            yBezier.ctrlPoints.push(new Point(0.75, 40));
+            yBezier.ctrlPoints.push(new Point(0.76, 40));
+            yBezier.ctrlPoints.push(new Point(1.0, 20));
             speed.velocityOver.yBezier1 = yBezier;
 
             var zBezier: BezierData = new BezierData(BezierData.PointCount);
@@ -83,37 +127,6 @@
             zBezier.ctrlPoints.push(new Point(1, 0));
             zBezier.ctrlPoints.push(new Point(1, 0));
             speed.velocityOver.zBezier1 = zBezier;
-
-            //___bezier2
-            var xBezier2: BezierData = new BezierData(BezierData.PointCount);
-            xBezier2.posPoints.push(new Point(0, 0));
-            xBezier2.posPoints.push(new Point(0.3, 15));
-            xBezier2.posPoints.push(new Point(0.35, 15));
-            xBezier2.posPoints.push(new Point(1.0, -10));
-
-            xBezier2.ctrlPoints.push(new Point(0, 5));
-            xBezier2.ctrlPoints.push(new Point(0.35, 15));
-            xBezier2.ctrlPoints.push(new Point(0.36, 15));
-            xBezier2.ctrlPoints.push(new Point(1.0, -10));
-            speed.velocityOver.xBezier2 = xBezier2;
-
-            var yBezier2: BezierData = new BezierData(BezierData.PointCount);
-            yBezier2.posPoints.push(new Point(0, 0));
-            yBezier2.posPoints.push(new Point(0, 0));
-            yBezier2.ctrlPoints.push(new Point(1, 0));
-            yBezier2.ctrlPoints.push(new Point(1, 0));
-            speed.velocityOver.yBezier2 = yBezier2;
-
-            var zBezier2: BezierData = new BezierData(BezierData.PointCount);
-            zBezier2.posPoints.push(new Point(0, 0));
-            zBezier2.posPoints.push(new Point(0, 0));
-            zBezier2.ctrlPoints.push(new Point(1, 0));
-            zBezier2.ctrlPoints.push(new Point(1, 0));
-            speed.velocityOver.zBezier2 = zBezier2;
-
-            //__bezier end
-
-
 
 
             var colorOffset: ParticleDataColorOffset = new ParticleDataColorOffset();
@@ -131,6 +144,19 @@
             colorOffset.times.push(0.7);
             colorOffset.times.push(1.0);
 
+            var sizeBezier: ParticleDataScaleBezier = new ParticleDataScaleBezier();
+            data.scaleBesizer = sizeBezier;
+
+            sizeBezier.data.posPoints.push(new Point(0, 0));
+            sizeBezier.data.posPoints.push(new Point(0.5, 2));
+            sizeBezier.data.posPoints.push(new Point(0.55, 2));
+            sizeBezier.data.posPoints.push(new Point(1.0, 0.2));
+
+            sizeBezier.data.ctrlPoints.push(new Point(0, 1));
+            sizeBezier.data.ctrlPoints.push(new Point(0.55, 2));
+            sizeBezier.data.ctrlPoints.push(new Point(0.56, 2));
+            sizeBezier.data.ctrlPoints.push(new Point(1.0, 0.2));
+
 
             this.particle = new ParticleEmitter(data, null, mat);
 
@@ -139,10 +165,13 @@
             this.particle.play();
             this.view1.addChild3D(this.particle);
 
-            
-           
+
+
             //this.particle.followTarget = this.cube ;
 
+            var loadtex: URLLoader = new URLLoader("resource/effect/rect.png");
+            loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
+            loadtex["mat"] = mat;
 
             var vv: HTMLInputElement = <HTMLInputElement>document.createElement("input");
             vv.type = "submit";
@@ -150,19 +179,18 @@
             document.body.appendChild(vv);
             vv.onmousedown = (e: MouseEvent) => this.mouseDown(e);
 
-            var loadtex: URLLoader = new URLLoader("resource/effect/rect.png");
-            loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
-            loadtex["mat"] = mat;
-        }
-        protected onLoadTexture(e: LoaderEvent3D) {
-            e.loader["mat"].diffuseTexture = e.loader.data;
         }
 
         protected mouseDown(e: MouseEvent) {
             this.particle.play();
         }
 
-        private angle: number = 0; 
+        protected obj: Object3D;
+        protected onLoadTexture(e: LoaderEvent3D) {
+            e.loader["mat"].diffuseTexture = e.loader.data;
+        }
+
+        private angle: number = 0;
         public update(e: Event3D) {
             this.cameraCrl.update();
             this.angle += 0.001;
@@ -172,9 +200,14 @@
             //this.cube.rotationY = this.angle * 20;
             this.cube.rotationZ = this.angle * 10;
 
-            var scale: number = Math.sin(this.angle * 0.4);
+            var scale: number = Math.sin(this.angle * 10);
             scale = 2 * Math.abs(scale);
-            //this.cube.scale = new Vector3D(scale, scale, scale);
+            this.cube.scale = new Vector3D(scale, scale, scale);
+
+            //this.particle.scale = this.cube.scale;
+            //this.particle.rotationX = 0;
+            //this.particle.rotationY = 90;
+            //this.particle.rotationZ = this.angle * 1000;
 
             this.cube.rotationX = 0;
             this.cube.rotationY = 90;
