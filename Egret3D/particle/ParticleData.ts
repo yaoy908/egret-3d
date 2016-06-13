@@ -151,6 +151,9 @@
         public lifeMin: number = 2;
         public delay: number = 0;
         public loop: boolean = true;
+
+        public bursts: Array<Point>;
+
         constructor() {
             super(ParticleDataNodeType.Life);
         }
@@ -177,6 +180,7 @@
             if (this.duration < 0) {
                 this.duration = 5;
             }
+           
         }
     }
 

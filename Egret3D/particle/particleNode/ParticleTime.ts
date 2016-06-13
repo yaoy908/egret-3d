@@ -76,6 +76,11 @@
             var lifeArray: Array<number> = this._life.calculate(count);
             var speaceArray: Array<number> = this._rate.calculate(count);
 
+            //使用bursts对speaceArray进行修正
+            if (this._nodeData.bursts) {
+                this.burstParticle(this._nodeData.bursts, speaceArray, count);
+            }
+
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
 
@@ -108,6 +113,52 @@
 
         }
 
+
+        private burstParticle(bursts: Array<Point>, speaceArray: Array<number>, count: number): Array<number> {
+
+            //sort bursts
+            bursts.sort(function (a: Point, b: Point) {
+                return a.x - b.x;
+            });
+
+
+            var burstPoint: Point;
+            var bornTime: Array<number> = [];
+            bornTime.length = count;
+            var lastTime: number = 0;
+            for (var i: number = 0; i < speaceArray.length; i++) {
+                lastTime += speaceArray[i];
+                bornTime[i] = lastTime;
+            }
+
+           
+
+            for (var i: number = 0; i < bursts.length; i++) {
+                burstPoint = bursts[i];
+                //喷射时间超过了duration
+                if (this._nodeData.loop == false && burstPoint.x >= this._nodeData.duration)
+                    continue;
+
+                for (var k: number = 0; k < burstPoint.y; k++) {
+                    bornTime.push(burstPoint.x);
+                }
+            }
+
+            bornTime.sort(function (a: number, b: number) {
+                return a - b;
+            });
+
+            bornTime.length = count;
+
+            lastTime = 0;
+            for (var i: number = 0; i < count; i++) {
+                speaceArray[i] = bornTime[i] - lastTime;
+                lastTime = bornTime[i];
+            }
+
+
+            return speaceArray;
+        }
 
 
          /**
