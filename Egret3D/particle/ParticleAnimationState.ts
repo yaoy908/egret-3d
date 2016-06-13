@@ -91,6 +91,8 @@
         */
         public followTarget: Object3D = null;
 
+
+        public directionArray: Array<Vector3D>;
         /**
         * @private
         */
@@ -231,34 +233,50 @@
 
 
 
-        private _particleProperty: Float32Array = new Float32Array(11);
+        private _particleProperty: Float32Array = new Float32Array(18);
         /**
         * @language zh_CN
         * @private 
         */
         public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
             var scaleData: Vector3D;
-            var accelerationWorld: boolean = this._emitter.data.acceleration && this._emitter.data.acceleration.accelerationWorld;
+            var rotateData: Quaternion;
+            var positionData: Vector3D;
 
-            if (this._emitter.data.followTarget && this._emitter.followTarget) {
+            var data: ParticleData = this._emitter.data;
+
+            if (data.followTarget && this._emitter.followTarget) {
                 scaleData = this._emitter.followTarget.globalScale;
+                rotateData = this._emitter.followTarget.globalOrientation;
+                positionData = this._emitter.followTarget.globalPosition;
             }
             else {
                 scaleData = this._emitter.globalScale;
+                rotateData = this._emitter.globalOrientation;
+                positionData = this._emitter.globalPosition;
             }
+
             //
             this._particleProperty[0] = animTime * 0.001;
-            this._particleProperty[1] = this._emitter.data.life.loop ? 1 : 0;
-            this._particleProperty[2] = this._emitter.data.followTarget ? 1 : 0;
+            this._particleProperty[1] = data.life.loop ? 1 : 0;
+            this._particleProperty[2] = data.followTarget ? 1 : 0;
+
             this._particleProperty[3] = scaleData.x;
             this._particleProperty[4] = scaleData.y;
             this._particleProperty[5] = scaleData.z;
-            this._particleProperty[6] = this.loopTime;
-            this._particleProperty[7] = this._emitter.data.life.delay;
-            this._particleProperty[8] = this._emitter.data.life.duration;
-            this._particleProperty[9] = this._emitter.data.property.gravity;
-            this._particleProperty[10] = accelerationWorld ? 1 : 0;
+            this._particleProperty[6] = rotateData.x;
+            this._particleProperty[7] = rotateData.y;
+            this._particleProperty[8] = rotateData.z;
+            this._particleProperty[9] = rotateData.w;
+            this._particleProperty[10] = positionData.x;
+            this._particleProperty[11] = positionData.y;
+            this._particleProperty[12] = positionData.z;
 
+            this._particleProperty[13] = this.loopTime;
+            this._particleProperty[14] = data.life.delay;
+            this._particleProperty[15] = data.life.duration;
+            this._particleProperty[16] = data.property.gravity;
+            this._particleProperty[17] = (data.moveSpeed.velocityOver && data.moveSpeed.velocityOver.worldSpace) ? 1 : 0;
 
             context3DProxy.uniform1fv(usage["uniform_particleState"].uniformIndex, this._particleProperty);
             for (var i: number = 0; i < this.animNodes.length; i++) {

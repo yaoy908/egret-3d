@@ -74,18 +74,12 @@
         /**
         * @private
         */
-        public update(animTime: number, delay: number, geometry: Geometry) {
-        }
-
-        /**
-        * @private
-        */
         public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
             context3DProxy.uniform1fv(usage["uniform_colorTransform"].uniformIndex, this._colorSegment);
         }
 
         /**
-        * @压缩一个颜色值到一个float中
+        * 压缩一个颜色值到一个float中
         */
         private getGpuColor(r: number, g: number, b: number): number {
             r = this.normalizeChannel(r);
@@ -96,12 +90,21 @@
             return value;
         }
 
+        /**
+        * @private 
+        * 将一个颜色通道规范到0-255之间
+        */
         private normalizeChannel(value: number): number {
             if (value > 0xff) value = 0xff;
             else if (value < 0) value = 0;
             value = Math.floor(value);
             return value;
         }
+
+        /**
+        * @private 
+        * 将时间规范到0和0.9999之间
+        */
         private normalizeTime(value: number): number {
             //注：value是一个0-1之间的数，而非真实的秒时间
             //所以超过1将为无效会被设定成为一个接近1的数
@@ -110,10 +113,17 @@
             return value;
         }
 
+        /**
+        * @private 
+        * 合并alpha和time到一个float中
+        */
         private getTimeAndAlpha(time: number, a: number): number {
             a = this.normalizeChannel(a);
             time = this.normalizeTime(time);
             return a + time;
         }
+
+
+
     }
 } 

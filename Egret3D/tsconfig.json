@@ -193,13 +193,18 @@
         "particle/particleNode/ParticleStartColor.ts",
         
         "particle/particleNode/ParticleFollowNode.ts",
-        "particle/particleNode/ParticleUniformSpeedNode.ts",
+        "particle/particleNode/ParticleVelocityNode.ts",
         "particle/particleNode/ParticleAccelerationSpeedNode.ts",
         "particle/particleNode/ParticleRotationNode.ts",
         "particle/particleNode/ParticleColorGlobalNode.ts",
         "particle/particleNode/ParticleSizeGlobalNode.ts",
+        "particle/particleNode/ParticleVelocityOverConstNode.ts",
+        "particle/particleNode/ParticleVelocityOverOneBezierNode.ts",
+        "particle/particleNode/ParticleVelocityOverTwoBezierNode.ts",
+        
+        
 
-        "particle/particleAnimationState.ts",
+        "particle/ParticleAnimationState.ts",
         "particle/ParticleAnimation.ts",
         "particle/ParticleData.ts",
         "particle/ParticleEmitter.ts",

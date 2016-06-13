@@ -1,10 +1,9 @@
 ﻿module egret3d {
     export class Class_Scene extends Class_View3D {
 
-        private laohu: Mesh;
+        private cube: Mesh;
+        private cube2: Mesh;
         private view1: View3D;
-        private lights: LightGroup = new LightGroup();
-
         private cameraCtl: LookAtController;
 
         constructor() {
@@ -17,53 +16,37 @@
             this._egret3DCanvas.addView3D(view1);
             this.view1 = view1;
 
-            var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
-            var tex: ImageTexture = new ImageTexture(bgImg);
-            this.view1.backImage = tex;
+            this.cube = new Mesh(new CubeGeometry(10, 40, 10), null);
+            this.view1.addChild3D(this.cube);
 
-            var load: URLLoader = new URLLoader("resource/scene/foliage/FOL_Foliage_01.esm");
+            this.cube2 = new Mesh(new CubeGeometry(10, 40, 10), null);
+            this.view1.addChild3D(this.cube2);
 
-            load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoad, this);
 
-            var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));
-            dirLight.diffuse = 0xffffff;
-            this.lights.addLight(dirLight);
-
-            this.cameraCtl = new LookAtController(view1.camera3D, new Object3D());
-            this.cameraCtl.distance = 1000;
-            this.cameraCtl.rotationX = 60;
-
-            this._egret3DCanvas.start();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
+
+            this.cameraCtl = new LookAtController(this.view1.camera3D, new Object3D());
+            this.cameraCtl.distance = 1000;
         }
 
-        protected mat: TextureMaterial;
-        protected onLoad(e: LoaderEvent3D) {
 
-            var mat: TextureMaterial = new TextureMaterial();
-            mat.gloss = 0.1;
-            mat.specularColor = 0; 
-            mat.ambientColor = 0xffffff;
-            this.mat = mat;
-            var ge: Geometry = e.loader.data;
-            var mesh: Mesh = new Mesh(ge, mat);
-
-            this.view1.addChild3D(mesh);
-
-            mesh.material.lightGroup = this.lights;
-            this.laohu = mesh;
-
-            var loadtex: URLLoader = new URLLoader("resource/scene/foliage/Foliage_01.png");
-            loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
-            loadtex["mat"] = mat;
-        }
-
-        protected onLoadTexture(e:LoaderEvent3D) {
-            e.loader["mat"].diffuseTexture = e.loader.data;
-        }
-
+        private angle: number = 0;
         public update(e: Event3D) {
             this.cameraCtl.update();
+            //this.obj.rotationY++;
+            this.angle += 0.01;
+            this.cube.x = Math.cos(this.angle) * 300;
+            this.cube.z = Math.sin(this.angle) * 300;
+
+            this.cube.rotationX = 0;
+            this.cube.rotationY = 90;
+            this.cube.rotationZ = this.angle * 100;
+
+            this.cube2.orientation = this.cube.globalOrientation;
+            //this.cube2.rotationY = this.cube.globalRotationY;
+            //this.cube2.rotationX = this.cube.globalRotationX;
+            //this.cube2.rotationZ = this.cube.globalRotationZ;
+
         }
     }
 }

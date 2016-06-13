@@ -253,8 +253,38 @@
            
             //position
             this._positionNode = new ParticlePosition();
-            this._positionNode.initNode(this._data.distribute);
+            this._positionNode.initNode(this._data.shape);
             nodes.push(this._positionNode);
+
+            //speed(依赖于position)
+            var speedNode: ParticleVelocityNode = new ParticleVelocityNode();
+            speedNode.initNode(this._data.moveSpeed);
+            nodes.push(speedNode);
+
+            var velocityOver: VelocityOverLifeTimeData = this._data.moveSpeed.velocityOver;
+            if (velocityOver) {
+                if (velocityOver.type == ParticleDataMoveSpeed.ConstValue || velocityOver.type == ParticleDataMoveSpeed.RandomConstValue) {
+                    var overConstNode: ParticleVelocityOverConstNode = new ParticleVelocityOverConstNode();
+                    overConstNode.initNode(this._data.moveSpeed);
+                    nodes.push(overConstNode);
+                } else if(velocityOver.type == ParticleDataMoveSpeed.OneBezier){
+                    var overOneBezierNode: ParticleVelocityOverOneBezierNode = new ParticleVelocityOverOneBezierNode();
+                    overOneBezierNode.initNode(this._data.moveSpeed);
+                    nodes.push(overOneBezierNode);
+                } else if (velocityOver.type == ParticleDataMoveSpeed.TwoBezier) {
+                    var overTwoBezierNode: ParticleVelocityOverTwoBezierNode = new ParticleVelocityOverTwoBezierNode();
+                    overTwoBezierNode.initNode(this._data.moveSpeed);
+                    nodes.push(overTwoBezierNode);
+                }
+            }
+            var limit: VelocityLimitLifeTimeData = this._data.moveSpeed.velocityLimit;
+            if (limit) {
+                if (limit.type == ParticleDataMoveSpeed.ConstValue || limit.type == ParticleDataMoveSpeed.RandomConstValue) {
+
+                } else {
+
+                }
+            }
 
             //rotation
             this._rotationNode = new ParticleRotation();
@@ -265,7 +295,7 @@
             this._scaleNode = new ParticleScale();
             this._scaleNode.initNode(this._data.scaleBirth);
             nodes.push(this._scaleNode);
-
+            //start color
             this._colorNode = new ParticleStartColor();
             this._colorNode.initNode(this._data.property);
             nodes.push(this._colorNode);
@@ -277,17 +307,6 @@
                 nodes.push(this._particleFollowNode);
             }
             
-            //
-            if (this._data.moveSpeed) {
-                var speedNode: ParticleUniformSpeedNode = new ParticleUniformSpeedNode();
-                speedNode.initNode(this._data.moveSpeed);
-                nodes.push(speedNode);
-            }
-            if (this._data.acceleration) {
-                var acceleration: ParticleAccelerationSpeedNode = new ParticleAccelerationSpeedNode();
-                acceleration.initNode(this._data.acceleration);
-                nodes.push(acceleration);
-            }
 
             if (this._data.scaleBesizer) {
                 var scaleBesizer: ParticleSizeGlobalNode = new ParticleSizeGlobalNode();

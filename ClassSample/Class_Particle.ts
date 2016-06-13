@@ -43,14 +43,9 @@
             var rotationSpeed: ParticleDataRotationSpeed = new ParticleDataRotationSpeed();
             data.rotationSpeed = rotationSpeed;
 
-            var acceleration: ParticleDataAcceleration = new ParticleDataAcceleration();
-            acceleration.max.setTo(100, 100, 100);
-            acceleration.min.setTo(-100, 0, -100);
-            data.acceleration = acceleration;
-
             var moveSpeed: ParticleDataMoveSpeed = new ParticleDataMoveSpeed();
-            moveSpeed.max.setTo(0, 100, 0);
-            moveSpeed.min.setTo(0, 0, 0);
+            moveSpeed.max = 100;
+            moveSpeed.min = 0;
             data.moveSpeed = moveSpeed;
 
             this.particle = new ParticleEmitter(data, null, mat);

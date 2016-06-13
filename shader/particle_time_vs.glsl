@@ -16,17 +16,6 @@ struct ParticleData{
 	float index;			//下标
 };                   
 
-//particleStateData.time				
-//particleStateData.loop				
-//particleStateData.worldSpace			
-//particleStateData.scaleX				
-//particleStateData.scaleY				
-//particleStateData.scaleZ				
-//particleStateData.loopTime			
-//particleStateData.delay				
-//particleStateData.duration			
-//particleStateData.gravity				
-//particleStateData.accelerationWorld	
 
 
 float particle( ParticleData emit ){

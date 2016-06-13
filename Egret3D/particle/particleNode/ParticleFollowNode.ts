@@ -41,7 +41,7 @@
 
             this.attribute_followRotation = new GLSL.VarRegister();
             this.attribute_followRotation.name = "attribute_followRotation";
-            this.attribute_followRotation.size = 3;
+            this.attribute_followRotation.size = 4;
             this.attributes.push(this.attribute_followRotation);
 
             this.attribute_followScale = new GLSL.VarRegister();
@@ -161,13 +161,15 @@
                             index = particleIndex + j;
                             index = index * geometry.vertexAttLength + this.attribute_followRotation.offsetIndex;
                             if (this._followRotation) {
-                                geometry.verticesData[index + 0] = followTarget.globalRotationX * MathUtil.DEGREES_TO_RADIANS;
-                                geometry.verticesData[index + 1] = followTarget.globalRotationY * MathUtil.DEGREES_TO_RADIANS;
-                                geometry.verticesData[index + 2] = followTarget.globalRotationZ * MathUtil.DEGREES_TO_RADIANS;
+                                geometry.verticesData[index + 0] = followTarget.globalOrientation.x;
+                                geometry.verticesData[index + 1] = followTarget.globalOrientation.y;
+                                geometry.verticesData[index + 2] = followTarget.globalOrientation.z;
+                                geometry.verticesData[index + 3] = followTarget.globalOrientation.w;
                             } else {
                                 geometry.verticesData[index + 0] = 0;
                                 geometry.verticesData[index + 1] = 0;
                                 geometry.verticesData[index + 2] = 0;
+                                geometry.verticesData[index + 3] = 0;
                             }
                             //scale
                             index = particleIndex + j;
