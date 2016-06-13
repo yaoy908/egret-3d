@@ -43,8 +43,6 @@
             this.video.controls = false;
             this.video.autoplay = true;
 
-            document.body.appendChild(this.video);
-
             this.video.addEventListener("canplaythrough", () => this.loadReady(), true);
             this.tmpCanvas.hidden = true;
         }

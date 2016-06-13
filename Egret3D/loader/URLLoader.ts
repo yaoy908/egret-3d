@@ -14,7 +14,7 @@
      * @version Egret 3.0
      * @platform Web,Native
      */
-    export class URLLoader extends EventDispatcher{
+    export class URLLoader extends EventDispatcher {
 
 
         private _xhr: XMLHttpRequest;
@@ -117,6 +117,15 @@
         public static DATAFORMAT_ECA: string = "eca";
 
         /**
+         * @language zh_CN
+         * 以EPA格式接收加载的数据
+         * Egret3D独有的格式 属性动画文件
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public static DATAFORMAT_EPA: string = "epa";
+
+        /**
          * @private
          * @language zh_CN
          * 以pvr格式接收加载的数据
@@ -197,6 +206,9 @@
                     case ".eca":
                         this._dataformat = URLLoader.DATAFORMAT_ECA;
                         break;
+                    case ".epa":
+                        this._dataformat = URLLoader.DATAFORMAT_EPA;
+                        break;
                 }
             }
 
@@ -272,7 +284,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public resourceName: string = ""; 
+        public resourceName: string = "";
 
         /**
         * @language zh_CN
@@ -362,6 +374,9 @@
 
                     this.data = cameraAnimationController;
                     break;
+                case URLLoader.DATAFORMAT_EPA:
+                    this.data = EPAParser.parse(this._xhr.response);
+                    break;
                 case URLLoader.DATAFORMAT_PVR:
                     //var pvr:PVR = PVRParser.parse(this._xhr.response);
                     //this._data = pvr;
@@ -406,7 +421,7 @@
         }
 
         protected doLoadComplete() {
-            this.resourceName = StringUtil.getURLName( this.url );
+            this.resourceName = StringUtil.getURLName(this.url);
             this._event.eventType = LoaderEvent3D.LOADER_COMPLETE;
             this._event.target = this;
             this._event.loader = this;

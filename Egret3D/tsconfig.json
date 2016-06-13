@@ -67,6 +67,9 @@
         "anim/IAnimationState.ts",
         "anim/IAnimation.ts",
 
+        "anim/PropertyAnimation/AnimCurve.ts",
+        "anim/PropertyAnimation/PropertyAnim.ts",
+
         "anim/skeletonAnimation/Joint.ts",
         "anim/skeletonAnimation/Skeleton.ts",
         "anim/skeletonAnimation/SkeletonAnimation.ts",
@@ -143,6 +146,8 @@
         "loader/parser/ECA/ECAVersion.ts",
         "loader/parser/ESM/ESMParser.ts",
         "loader/parser/ESM/ESMVersion.ts",
+        "loader/parser/EPA/EPAParser.ts",
+        "loader/parser/EPA/EPAVersion.ts",
         "loader/parser/ParserUtils.ts",
         "loader/URLLoader.ts",
 
@@ -160,6 +165,7 @@
         "material/method/StreamerMethod.ts",
         "material/method/ShadowMethod.ts",
         "material/method/CubeMethod.ts",
+        "material/method/ColorMethod.ts",
 
         "material/pass/PassUsage.ts",
         "material/MaterialData.ts",

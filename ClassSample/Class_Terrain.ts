@@ -32,9 +32,10 @@
             this.matPlane.specularLevel = 0.5 ;
             this.matPlane.gloss = 1.0;
 
+            this.matPlane.bothside
+
             this.matPlane.repeat = true;
             this.matPlane.uvRectangle = new  Rectangle(0, 0, 2.0, 2.0);
-       
 
             this.plane = new Mesh(new PlaneGeometry(500,500), this.matPlane);
             this.view1.addChild3D(this.plane);

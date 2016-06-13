@@ -165,18 +165,22 @@
         * @language zh_CN
         * 设置骨骼逆矩阵
         * @param translation 平移量
-        * @param rotation 旋转量
+        * @param rotation 旋转量 可以是四元数 也可以是欧拉角
         * @param scaling 缩放量
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public setInverseBindPose(translation: Vector3D, rotation: Vector3D, scaling: Vector3D): void {
+        public setInverseBindPose(translation: Vector3D, rotation: Vector3D | Quaternion, scaling: Vector3D): void {
 
             if (!this.inverseBindPose) {
                 this.inverseBindPose = new Matrix4_4();
             }
-
-            this.inverseBindPose.recompose([translation, rotation, scaling]);
+            if (rotation instanceof Vector3D) {
+                this.inverseBindPose.recompose([translation, rotation, scaling]);
+            }
+            else {
+                this.inverseBindPose.makeTransform(translation, scaling, rotation);
+            }
         }
 
         /**

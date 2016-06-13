@@ -11,8 +11,8 @@
     export class StreamerMethod extends MethodBase {
 
         private _uvRoll: Float32Array = new Float32Array(3);
-        private _speedU: number = 0.00001;
-        private _speedV: number = 0.00001;
+        private _speedU: number = 0.0001;
+        private _speedV: number = 0.0001;
         private _intensity: number = 0.9;
         private _time: number = 0.0;
         private _start: boolean = false;
@@ -75,12 +75,26 @@
             return this._speedV;
         }
 
+        /**
+        * @language zh_CN
+        * 设置流动贴图
+        * @param tex 流动贴图
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public set steamerTexture(tex: ITexture) {
             this._steamerTexture = tex; 
             this.materialData["streamerTexture"] = tex;
             this.materialData.textureChange = true; 
         }
 
+        /**
+        * @language zh_CN
+        * 获取流动贴图
+        * @returns ITexture 流动贴图
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public get steamerTexture(): ITexture {
             return this._steamerTexture;
         }
@@ -99,7 +113,7 @@
         }
                 
         /**
-        * @language zh_CN
+        * @language zh_CN 
         * 停止播放uv动画
         * @version Egret 3.0
         * @platform Web,Native

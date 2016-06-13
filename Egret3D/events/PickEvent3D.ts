@@ -20,6 +20,7 @@
         /**
          * @language zh_CN
          * PICK_CLICK 点击拣选事件
+         * 手机上没有此事件 
          * @version Egret 3.0
          * @platform Web,Native
          */

@@ -100,7 +100,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public name: string;
+        public name: string = "";
 
         /**
         * @language zh_CN
@@ -108,7 +108,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public id: number;
+        public id: number = 0;
 
         /**
         * @language zh_CN
@@ -686,6 +686,24 @@
                 this.updateModelMatrix();
             }
             return this._modelMatrix3D;
+        }
+
+        /**
+        * @language zh_CN
+        * 设置 object 世界渲染矩阵
+        * @param matrix 世界矩阵
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set modelMatrix(matrix: Matrix4_4)  {
+            var tas: Vector3D[] = matrix.decompose(Orientation3D.QUATERNION);
+            this.globalPosition = tas[0];
+            MathUtil.CALCULATION_QUATERNION.x = tas[1].x;
+            MathUtil.CALCULATION_QUATERNION.y = tas[1].y;
+            MathUtil.CALCULATION_QUATERNION.z = tas[1].z;
+            MathUtil.CALCULATION_QUATERNION.w = tas[1].w;
+            this.globalOrientation = MathUtil.CALCULATION_QUATERNION;
+            this.globalScale = tas[2];
         }
 
         /**
@@ -1337,10 +1355,10 @@
         */
         public findObject3D(name: string): Object3D {
             var object3d: Object3D = null;
-            for (var i: number = 0; this.childs.length; ++i) {
+            for (var i: number = 0; i < this.childs.length; ++i) {
                 if (this.childs[i].name == name) {
                     object3d = this.childs[i];
-                    break; 
+                    return object3d;
                 }
                 object3d = this.childs[i].findObject3D(name);
             }
@@ -1358,10 +1376,10 @@
         */
         public findObject3DToID(id: number): Object3D {
             var object3d: Object3D = null;
-            for (var i: number = 0; this.childs.length; ++i) {
+            for (var i: number = 0; i < this.childs.length; ++i) {
                 if (this.childs[i].id == id) {
                     object3d = this.childs[i];
-                    break;
+                    return object3d;
                 }
                 object3d = this.childs[i].findObject3DToID(id);
             }

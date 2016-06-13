@@ -2,7 +2,7 @@
 
     /**
     * @private
-    * @class egret3d.AlphaMaskMethod
+    * @class egret3d.CubeMethod
     * @classdesc
     * @see egret3d.MethodBase
     * @version Egret 3.0
