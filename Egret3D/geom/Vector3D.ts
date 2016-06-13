@@ -59,7 +59,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public x: number;
+        public x: number = 0;
 
         /**
         * @language en_US
@@ -72,7 +72,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public y: number;
+        public y: number = 0;
 
         /**
         * @language en_US
@@ -85,7 +85,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public z: number;
+        public z: number = 0;
 
         /**
         * @language zh_CN
@@ -94,7 +94,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public w: number;
+        public w: number = 0;
 
         /**
         * @language en_US
