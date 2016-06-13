@@ -34,6 +34,15 @@
          */
         public static alphaMaskMethod: string = "alphaMaskMethod";
 
+
+        /**
+         * @language zh_CN
+         * 流动效果
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public static streamerMethod: string = "streamerMethod";
+
         /**
          * @language zh_CN
          * 特效的类型

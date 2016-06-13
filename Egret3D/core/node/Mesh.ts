@@ -52,15 +52,22 @@
             this.bound = this.buildBoundBox();
         }
 
-     
-
+        /**
+        * @private
+        */
         public setMaterialByID() {
         }
 
+        /**
+        * @private
+        */
         public get aabb(): QuadAABB {
             return this._aabbBox;
         }
 
+        /**
+        * @private
+        */
         public initAABB():void
 		{
             this._aabbBox = new QuadAABB();
@@ -73,6 +80,9 @@
             this._aabbBox.minPosY = box.min.z;
         }
 
+        /**
+        * @private
+        */
         public get isTriangle():boolean
         {
             return false;

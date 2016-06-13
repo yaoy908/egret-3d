@@ -293,11 +293,17 @@
                         material.diffusePass.addMethod(maskmapMethod);
                         maskmapMethod.maskTexture = lightTexture ? lightTexture : CheckerboardTexture.texture;
                     }
+                    else if (method.type == MaterialMethodData.streamerMethod) {
+                        var streamerMethod: StreamerMethod = new StreamerMethod();
+                        var streamerTexture: ITexture = this._sourceLib.getImage(method.texture);
+                        streamerMethod.speedU = method.uSpeed;
+                        streamerMethod.speedV = method.vSpeed;
+                        streamerMethod.start(true);
+                        material.diffusePass.addMethod(streamerMethod);
+                        streamerMethod.steamerTexture = streamerTexture ? streamerTexture : CheckerboardTexture.texture;
+                    }
                 }
             }
-
-
-           
         }
 
         //根据xml中的每个mesh，拼装完整的mesh并加到显示节点中
