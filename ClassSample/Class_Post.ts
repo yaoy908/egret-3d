@@ -14,7 +14,7 @@
             view1.camera3D.lookAt(new Vector3D(0, 1000, -1000), new Vector3D(0, 0, 0));
             view1.backColor = 0x0;
 
-            view1.post = [new MainPass(), new BloomPass() ]; 
+            //view1.post = [new MainPass(), new BloomPass() ]; 
 
             var bgImg: HTMLImageElement = <HTMLImageElement>document.getElementById("bg");
             var tex: ImageTexture = new ImageTexture(bgImg);
@@ -28,12 +28,12 @@
 
             var dirLight: DirectLight = new DirectLight(new Vector3D(-0.0, 0.6, 0.2));
             dirLight.diffuse = 0xffffff;
-            this.lights.addLight(dirLight);
+            //this.lights.addLight(dirLight);
 
-            //var po: PointLight = new PointLight(0xffffff);
-            //po.y = 200;
-            //po.z = 200;
-            //this.lights.addLight(po);
+            var po: PointLight = new PointLight(0xff0000);
+            po.y = 200;
+            po.z = 200;
+            this.lights.addLight(po);
 
             //var spo: SpotLight = new SpotLight(0xffffff);
             //spo.rotationX = 90;
@@ -72,9 +72,9 @@
                 }
                 var s: StreamerMethod = new StreamerMethod();
                 mat.lightGroup = this.lights;
-                mat.ambientColor = 0xFFFFFF;
-                mat.gloss = 100.0;
-                mat.specularLevel = 0.2;
+                mat.ambientColor = 0;
+                mat.gloss = 0.1 ;
+                mat.specularLevel = 1.0;
                 mat.repeat = true;
                // s.steamerTexture = CheckerboardTexture.texture;
                // mat.diffusePass.addMethod(s);
@@ -90,7 +90,7 @@
                 loadtex["mat"] = mat;
 
                 var loadtex: URLLoader = new URLLoader("resource/matcap/b1.jpg");
-                 loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadMatCapTexture, this);
+                //loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadMatCapTexture, this);
                 loadtex["mat"] = mat;
 
                 var loadtex: URLLoader = new URLLoader("resource/effect/vein.png");

@@ -4,9 +4,9 @@ output
 Sample/js
 script/debug.sh
 Thumbs.db
-*.js
 *.map
 *.dll
+*.js
 *.csproj.user
 *.cs
 /web.Release.config

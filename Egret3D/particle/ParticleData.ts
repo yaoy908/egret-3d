@@ -30,14 +30,13 @@
 
         public property: ParticleDataProperty = new ParticleDataProperty();
         public life: ParticleDataLife = new ParticleDataLife();
-        public distribute: ParticleDataDistribute = new ParticleDataDistribute();
+        public shape: ParticleDataShape = new ParticleDataShape();
         public rotationBirth: ParticleDataRotationBirth = new ParticleDataRotationBirth();
         public scaleBirth: ParticleDataScaleBirth = new ParticleDataScaleBirth();
         public geometry: ParticleDataGeometry = new ParticleDataGeometry();
+        public moveSpeed: ParticleDataMoveSpeed = new ParticleDataMoveSpeed();
 
         public followTarget: ParticleDataFollowTarget;
-        public moveSpeed: ParticleDataMoveSpeed;
-        public acceleration: ParticleDataAcceleration;
         public scaleBesizer: ParticleDataScaleBezier;
         public rotationSpeed: ParticleDataRotationSpeed;
         public colorOffset: ParticleDataColorOffset;
@@ -53,17 +52,13 @@
         public validate(): void {
             this.property.validate();
             this.life.validate();
-            this.distribute.validate();
+            this.shape.validate();
             this.rotationBirth.validate();
             this.scaleBirth.validate();
             this.geometry.validate();
+            this.moveSpeed.validate();
 
-            if (this.moveSpeed) {
-                this.moveSpeed.validate();
-            }
-            if (this.acceleration) {
-                this.acceleration.validate();
-            }
+           
             if (this.scaleBesizer) {
                 this.scaleBesizer.validate();
             }
@@ -97,10 +92,18 @@
     * @platform Web,Native
     */
     export class ParticleDataProperty extends ParticleDataNode {
-        public particleCount: number = -1;
-        public loop: boolean = true;
+        public particleCount: number = 10;
+
         public bounds: Vector3D = new Vector3D(10, 10, 10);
-       
+        public blendMode: BlendMode = BlendMode.ADD;
+        
+        public startColorFrom: Color = new Color(255, 255, 255, 255);
+        public startColorTo: Color = new Color(255, 255, 255, 255);
+        public gravity: number = 0;
+
+        public rotation: Vector3D = new Vector3D(0, 0, 0, 1);
+        public scale: Vector3D = new Vector3D(1, 1, 1, 1);
+        public position: Vector3D = new Vector3D(0, 0, 0, 1);
 
         constructor() {
             super(ParticleDataNodeType.Property);
@@ -119,6 +122,24 @@
             if (this.bounds.z < 0) {
                 this.bounds.z = 1;
             }
+            if (this.particleCount < 0) {
+                this.particleCount = 10;
+            }
+            if (this.startColorFrom == null) {
+                this.startColorFrom = new Color(255, 255, 255, 255);
+            }
+            if (this.startColorTo == null) {
+                this.startColorTo = new Color(255, 255, 255, 255);
+            }
+            if (this.rotation == null) {
+                this.rotation = new Vector3D(0, 0, 0, 1);
+            }
+            if (this.scale == null) {
+                this.scale = new Vector3D(1, 1, 1, 1);
+            }
+            if (this.position == null) {
+                this.rotation = new Vector3D(0, 0, 0, 1);
+            }
         }
     } 
 
@@ -128,8 +149,10 @@
         public duration: number = 5;
         public lifeMax: number = 2;
         public lifeMin: number = 2;
-        public delayMax: number = 0;
-        public delayMin: number = 0;
+        public delay: number = 0;
+        public loop: boolean = true;
+
+        public bursts: Array<Point>;
 
         constructor() {
             super(ParticleDataNodeType.Life);
@@ -146,14 +169,8 @@
                 this.lifeMin = this.lifeMax = 1;
             }
             //delay
-            if (this.delayMin < 0) {
-                this.delayMin = 0;
-            }
-            if (this.delayMax < this.delayMin) {
-                this.delayMax = this.delayMin;
-            }
-            if (this.delayMax < 0) {
-                this.delayMin = this.delayMax = 1;
+            if (this.delay < 0) {
+                this.delay = 0;
             }
             //rate
             if (this.rate < 0) {
@@ -163,30 +180,31 @@
             if (this.duration < 0) {
                 this.duration = 5;
             }
+           
         }
     }
 
-    export class ParticleDataDistribute extends ParticleDataNode {
+    export class ParticleDataShape extends ParticleDataNode {
 
         public static Point: number = 0;
         public static Cube: number = 1;
-
+        public static Sphere: number = 2;
         //粒子分布类型
-        public type: number = ParticleDataDistribute.Point;
-        public point: Vector3D;
+        public type: number = ParticleDataShape.Cube;
+        public randomDirection: boolean = false;
+
+        
         public cubeW: number = 0;
         public cubeH: number = 0;
         public cubeD: number = 0;
+
+        public sphereRadius: number = 10;
 
         constructor() {
             super(ParticleDataNodeType.Distribute);
         }
         public validate(): void {
-            if (this.type == ParticleDataDistribute.Point) {
-                if (this.point == null) {
-                    this.point = new Vector3D();
-                }
-            } else if (this.type == ParticleDataDistribute.Cube) {
+            if (this.type == ParticleDataShape.Cube) {
                 if (this.cubeW < 0) {
                     this.cubeW = 0;
                 }
@@ -197,8 +215,21 @@
                     this.cubeD = 0;
                 }
             }
+            else if (this.type == ParticleDataShape.Sphere) {
+                if (this.sphereRadius < 0) {
+                    this.sphereRadius = 10;
+                }
+            }
         }
     }
+
+
+
+
+
+
+
+
 
 
     export class ParticleDataRotationBirth extends ParticleDataNode {
@@ -318,81 +349,267 @@
         }
     }
 
-
-
-
-
-    export class ParticleDataMoveSpeed extends ParticleDataNode {
-        //初始速度
-        public max: Vector3D = new Vector3D();
-        public min: Vector3D = new Vector3D();
-
-        constructor() {
-            super(ParticleDataNodeType.MoveSpeed);
-        }
-
-        public validate(): void {
-            if (this.max == null) {
-                this.max = new Vector3D();
-            }
-            if (this.min == null) {
-                this.min = new Vector3D();
-            }
-            if (this.min.x > this.max.x) {
-                this.min.x = this.max.x;
-            }
-            if (this.min.y > this.max.y) {
-                this.min.y = this.max.y;
-            }
-            if (this.min.z > this.max.z) {
-                this.min.z = this.max.z;
-            }
-        }
-    }
-
-    export class ParticleDataAcceleration extends ParticleDataNode {
-        //加速度
-        public max: Vector3D = new Vector3D();
-        public min: Vector3D = new Vector3D();
-
-        constructor() {
-            super(ParticleDataNodeType.Acceleration);
-        }
-
-        public validate(): void {
-            if (this.max == null) {
-                this.max = new Vector3D();
-            }
-            if (this.min == null) {
-                this.min = new Vector3D();
-            }
-            if (this.min.x > this.max.x) {
-                this.min.x = this.max.x;
-            }
-            if (this.min.y > this.max.y) {
-                this.min.y = this.max.y;
-            }
-            if (this.min.z > this.max.z) {
-                this.min.z = this.max.z;
-            }
-        }
-    }
-
-    export class ParticleDataScaleBezier extends ParticleDataNode {
-        //粒子缩放贝塞尔曲线
+    
+    export class BezierData {
+        public static PointCount: number = 16;
         public posPoints: Array<Point> = [];
         public ctrlPoints: Array<Point> = [];
-        constructor() {
-            super(ParticleDataNodeType.ScaleBezier);
+
+        private _count: number;
+        constructor(ptCount:number) {
+            this._count = ptCount;
+        }
+
+        public compress():Float32Array {
+            var floats: Array<number> = [];
+            for (var i: number = 0, count: number = this.posPoints.length; i < count; i++) {
+                floats.push(this.posPoints[i].x, this.posPoints[i].y);
+                floats.push(this.ctrlPoints[i].x, this.ctrlPoints[i].y);
+            }
+            var res: Float32Array = BezierData.compressFloats(floats);
+            return res;
         }
 
         public validate(): void {
             if (this.posPoints == null) {
                 this.posPoints = [];
             }
-            if (this.posPoints == null) {
+            if (this.ctrlPoints == null) {
                 this.ctrlPoints = [];
             }
+            var i: number = 0, count: number = 0;
+            for (i = this.posPoints.length, count = this._count / 2; i < count; i++) {
+                this.posPoints.push(new Point(0, 0));
+            }
+            for (i = this.ctrlPoints.length, count = this._count / 2; i < count; i++) {
+                this.ctrlPoints.push(new Point(0, 0));
+            }
+        }
+
+        //___________压缩数据
+        public static compressFloats(floats: Array<number>): Float32Array {
+            if (floats.length % 2 == 1) {
+                floats.push(0);
+            }
+
+            var res: Float32Array = new Float32Array(floats.length / 2 + 2);
+            const maxInt: number = 4096;//最大的数，在这个范围进行压缩
+            const maxInt_1: number = maxInt - 1;
+
+            var i: number;
+            var count: number;
+
+            //获得最小和最大值
+            var ints: Array<number> = [];
+            ints.length = floats.length;
+
+            var floatValue: number;
+            var max: number = - Number.MAX_VALUE;
+            var min: number = Number.MAX_VALUE;
+
+            for (i = 0, count = floats.length; i < count; i++) {
+                floatValue = ints[i] = floats[i];
+                max = Math.max(floatValue, max);
+                min = Math.min(floatValue, min);
+            }
+            var range: number = max - min;
+            //转化每个float，于0 - maxInt之间
+            var intValue: number = 0;
+            for (i = 0, count = ints.length; i < count; i++) {
+                intValue = ints[i];
+                intValue -= min;
+                intValue /= range;//0-1之间
+                intValue *= maxInt_1;//0 - (maxInt - 1)之间
+                ints[i] = Math.floor(intValue);
+            }
+
+            //2合1
+            var int1: number;
+            var int2: number;
+            for (i = 0, count = ints.length / 2; i < count; i++) {
+                int1 = ints[i * 2];
+                int2 = ints[i * 2 + 1];
+                res[i] = int1 + int2 / maxInt;
+            }
+            res[i + 0] = min;
+            res[i + 1] = range;
+            //输出结果
+            return res;
+        }
+
+
+
+
+    }
+
+
+    export class ParticleDataMoveSpeed extends ParticleDataNode {
+       
+        //初始速度
+        public max: number = 0;
+        public min: number = 0;
+        //叠加速度
+        public velocityOver: VelocityOverLifeTimeData;
+        //速度限制
+        public velocityLimit: VelocityLimitLifeTimeData;
+
+
+        //force类型
+        public static ConstValue: number = 0;
+        public static RandomConstValue: number = 1;
+        public static OneBezier: number = 2;
+        public static TwoBezier: number = 3;
+
+        constructor() {
+            super(ParticleDataNodeType.MoveSpeed);
+        }
+
+        public validate(): void {
+            if (this.velocityOver) {
+                this.velocityOver.validate();
+            }
+            if (this.velocityLimit) {
+                this.velocityLimit.validate();
+            }
+        }
+    }
+
+
+    export class VelocityLimitLifeTimeData{
+        public type: number = ParticleDataMoveSpeed.ConstValue;
+        public max: number = 0;
+        public min: number = 0;
+
+        public bezier1: BezierData = new BezierData(BezierData.PointCount);
+        public bezier2: BezierData = new BezierData(BezierData.PointCount);
+
+        constructor() {
+        }
+
+        public validate(): void {
+            if (this.max < 0) {
+                this.max = 0;
+            }
+            if (this.min > this.max) {
+                this.min = this.max;
+            }
+
+            if (this.type == ParticleDataMoveSpeed.OneBezier || this.type == ParticleDataMoveSpeed.TwoBezier) {
+                if (this.bezier1 == null) {
+                    this.bezier1 = new BezierData(BezierData.PointCount);
+                }
+                this.bezier1.validate();
+            }
+            
+            if (this.type == ParticleDataMoveSpeed.TwoBezier) {
+                if (this.bezier2 == null) {
+                    this.bezier2 = new BezierData(BezierData.PointCount);
+                }               
+                this.bezier2.validate();
+            }
+
+        }
+    }
+
+
+    export class VelocityOverLifeTimeData {
+        public type: number = ParticleDataMoveSpeed.ConstValue;
+        public max: Vector3D = new Vector3D();
+        public min: Vector3D = new Vector3D();
+        public worldSpace: boolean = false;
+
+        public xBezier1: BezierData = new BezierData(BezierData.PointCount);
+        public yBezier1: BezierData = new BezierData(BezierData.PointCount);
+        public zBezier1: BezierData = new BezierData(BezierData.PointCount);
+                                   
+        public xBezier2: BezierData = new BezierData(BezierData.PointCount);
+        public yBezier2: BezierData = new BezierData(BezierData.PointCount);
+        public zBezier2: BezierData = new BezierData(BezierData.PointCount);
+
+        public validate(): void {
+
+            if (this.max == null) {
+                this.max = new Vector3D();
+            }
+            if (this.min == null) {
+                this.min = new Vector3D();
+            }
+            if (this.type == ParticleDataMoveSpeed.OneBezier || this.type == ParticleDataMoveSpeed.TwoBezier) {
+                if (this.xBezier1 == null) {
+                    this.xBezier1 = new BezierData(BezierData.PointCount);
+                }
+                if (this.yBezier1 == null) {
+                    this.yBezier1 = new BezierData(BezierData.PointCount);
+                }
+                if (this.zBezier1 == null) {
+                    this.zBezier1 = new BezierData(BezierData.PointCount);
+                }
+
+                this.xBezier1.validate();
+                this.yBezier1.validate();
+                this.zBezier1.validate();
+            }
+
+            if (this.type == ParticleDataMoveSpeed.TwoBezier) {
+                if (this.xBezier2 == null) {
+                    this.xBezier2 = new BezierData(BezierData.PointCount);
+                }
+                if (this.yBezier2 == null) {
+                    this.yBezier2 = new BezierData(BezierData.PointCount);
+                }
+                if (this.zBezier2 == null) {
+                    this.zBezier2 = new BezierData(BezierData.PointCount);
+                }
+                this.xBezier2.validate();
+                this.yBezier2.validate();
+                this.zBezier2.validate();
+            }
+
+        }
+    }
+
+
+    //export class ParticleDataAcceleration extends ParticleDataNode {
+    //    //加速度
+    //    public max: Vector3D = new Vector3D();
+    //    public min: Vector3D = new Vector3D();
+    //    public accelerationWorld: boolean = false;
+
+    //    constructor() {
+    //        super(ParticleDataNodeType.Acceleration);
+    //    }
+
+    //    public validate(): void {
+    //        if (this.max == null) {
+    //            this.max = new Vector3D();
+    //        }
+    //        if (this.min == null) {
+    //            this.min = new Vector3D();
+    //        }
+    //        if (this.min.x > this.max.x) {
+    //            this.min.x = this.max.x;
+    //        }
+    //        if (this.min.y > this.max.y) {
+    //            this.min.y = this.max.y;
+    //        }
+    //        if (this.min.z > this.max.z) {
+    //            this.min.z = this.max.z;
+    //        }
+    //    }
+    //}
+
+    export class ParticleDataScaleBezier extends ParticleDataNode {
+        //粒子缩放贝塞尔曲线
+        public data: BezierData = new BezierData(BezierData.PointCount);
+        constructor() {
+            super(ParticleDataNodeType.ScaleBezier);
+        }
+
+        public validate(): void {
+            if (this.data == null) {
+                this.data = new BezierData(BezierData.PointCount);
+            }
+            this.data.validate();
         }
     }
 

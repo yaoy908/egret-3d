@@ -42,25 +42,21 @@
             var data: ParticleData = new ParticleData();
 
             var moveSpeed: ParticleDataMoveSpeed = new ParticleDataMoveSpeed();
-            moveSpeed.min.setTo(0, 80, 0);
-            moveSpeed.max.setTo(0, 100, 0);
+            moveSpeed.min = 80;
+            moveSpeed.max = 100;
             data.moveSpeed = moveSpeed;
 
-            var acceleration: ParticleDataAcceleration = new ParticleDataAcceleration();
-            acceleration.min.setTo(-100, -100, -100);
-            acceleration.max.setTo(100, 100, 100);
-            data.acceleration = acceleration;
-
             var sizeBezier: ParticleDataScaleBezier = new ParticleDataScaleBezier();
-            sizeBezier.posPoints.push(new Point(0, 0));
-            sizeBezier.posPoints.push(new Point(0.5, 2));
-            sizeBezier.posPoints.push(new Point(0.55, 2));
-            sizeBezier.posPoints.push(new Point(1.0, 0.2));
+            var bezier: BezierData = sizeBezier.data;
+            bezier.posPoints.push(new Point(0, 0));
+            bezier.posPoints.push(new Point(0.5, 2));
+            bezier.posPoints.push(new Point(0.55, 2));
+            bezier.posPoints.push(new Point(1.0, 0.2));
             
-            sizeBezier.ctrlPoints.push(new Point(0, 1));
-            sizeBezier.ctrlPoints.push(new Point(0.55, 2));
-            sizeBezier.ctrlPoints.push(new Point(0.56, 2));
-            sizeBezier.ctrlPoints.push(new Point(1.0, 0.2));
+            bezier.ctrlPoints.push(new Point(0, 1));
+            bezier.ctrlPoints.push(new Point(0.55, 2));
+            bezier.ctrlPoints.push(new Point(0.56, 2));
+            bezier.ctrlPoints.push(new Point(1.0, 0.2));
             data.scaleBesizer = sizeBezier;
 
             this.particle = new ParticleEmitter(data, null, mat);

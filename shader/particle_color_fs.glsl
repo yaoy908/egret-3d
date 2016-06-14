@@ -24,7 +24,7 @@ void main() {
     float startAlpha;
 	float nextAlpha;
 
-    float progress = pt.w/pt.y;
+    float progress = particleVertex.x/particleVertex.y;
     for( int i = 1 ; i < 8 ; i++ ){
        if( progress >= fract(uniform_colorTransform[i+8-1]) ){
           startColor = uniform_colorTransform[i-1] ;

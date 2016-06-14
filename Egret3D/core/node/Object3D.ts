@@ -100,7 +100,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public name: string;
+        public name: string = "";
 
         /**
         * @language zh_CN
@@ -108,7 +108,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public id: number;
+        public id: number = 0;
 
         /**
         * @language zh_CN
@@ -1355,10 +1355,10 @@
         */
         public findObject3D(name: string): Object3D {
             var object3d: Object3D = null;
-            for (var i: number = 0; this.childs.length; ++i) {
+            for (var i: number = 0; i < this.childs.length; ++i) {
                 if (this.childs[i].name == name) {
                     object3d = this.childs[i];
-                    break; 
+                    return object3d;
                 }
                 object3d = this.childs[i].findObject3D(name);
             }
@@ -1376,10 +1376,10 @@
         */
         public findObject3DToID(id: number): Object3D {
             var object3d: Object3D = null;
-            for (var i: number = 0; this.childs.length; ++i) {
+            for (var i: number = 0; i < this.childs.length; ++i) {
                 if (this.childs[i].id == id) {
                     object3d = this.childs[i];
-                    break;
+                    return object3d;
                 }
                 object3d = this.childs[i].findObject3DToID(id);
             }

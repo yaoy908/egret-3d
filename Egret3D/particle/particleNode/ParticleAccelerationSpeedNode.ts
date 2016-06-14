@@ -2,7 +2,7 @@
 
     /**
     * @language zh_CN
-    * @class egret3d.ParticleAccelerationSpeedNode
+    * @class egret3d.ParticleAccelerationSpeedNode(常量部分)
     * @classdesc
     * 粒子加速度效果节点
     * @see egret3d.AnimationNode
@@ -37,15 +37,15 @@
        * @platform Web,Native
        */
         public initNode(data: ParticleDataNode): void {
-            var node: ParticleDataAcceleration = <ParticleDataAcceleration>data;
-            this._speedShape = new Vec3ConstRandomValueShape();
-            this._speedShape.maxX = node.max.x;
-            this._speedShape.maxY = node.max.y;
-            this._speedShape.maxZ = node.max.z;
+            //var node: ParticleDataAcceleration = <ParticleDataAcceleration>data;
+            //this._speedShape = new Vec3ConstRandomValueShape();
+            //this._speedShape.maxX = node.max.x;
+            //this._speedShape.maxY = node.max.y;
+            //this._speedShape.maxZ = node.max.z;
 
-            this._speedShape.minX = node.min.x;
-            this._speedShape.minY = node.min.y;
-            this._speedShape.minZ = node.min.z;
+            //this._speedShape.minX = node.min.x;
+            //this._speedShape.minY = node.min.y;
+            //this._speedShape.minZ = node.min.z;
         }
 
 

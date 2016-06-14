@@ -68,36 +68,12 @@
                                                 
         /**
         * @language zh_CN
-        * 粒子总持续时间
+        * 粒子走完一轮所需要的总时间
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public totalTime: number = 0;
+        public loopTime: number = 0;
                                                         
-        /**
-        * @private
-        * @language zh_CN
-        * 最大粒子数量(初始化geometry用)
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public maxCount: number = 0;
-
-        /**
-        * @language zh_CN
-        * 粒子是否循环 1.0是循环 0.0是不循环
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public loop: number = 1.0;  //0.0/1.0
-
-        /**
-        * @language zh_CN
-        * 粒子持续时间
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public duration: number = 5.0;
 
         /**
         * @language zh_CN
@@ -115,19 +91,8 @@
         */
         public followTarget: Object3D = null;
 
-        /**
-        * @private
-        */
-        public delayArray: Array<number>;
-        /**
-        * @private
-        */
-        public lifeArray: Array<number>;
-        /**
-        * @private
-        */
-        public rateArray: Array<number>;
 
+        public directionArray: Array<Vector3D>;
         /**
         * @private
         */
@@ -260,36 +225,60 @@
         * @language zh_CN
         * @private 
         */
-        public update(time: number, delay: number, geometry: Geometry) {
+        public update(animTime: number, delay: number, geometry: Geometry) {
             for (var i: number = 0; i < this.animNodes.length; i++) {
-                this.animNodes[i].update(time, delay, geometry);
+                this.animNodes[i].update(animTime, delay, geometry);
             }
         }
 
-        private _particleProperty: Float32Array = new Float32Array(6);
 
-         /**
+
+        private _particleProperty: Float32Array = new Float32Array(18);
+        /**
         * @language zh_CN
         * @private 
         */
         public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
             var scaleData: Vector3D;
-            if (this._emitter.isFollowParticle && this._emitter.followTarget) {
+            var rotateData: Quaternion;
+            var positionData: Vector3D;
+
+            var data: ParticleData = this._emitter.data;
+
+            if (data.followTarget && this._emitter.followTarget) {
                 scaleData = this._emitter.followTarget.globalScale;
+                rotateData = this._emitter.followTarget.globalOrientation;
+                positionData = this._emitter.followTarget.globalPosition;
             }
             else {
                 scaleData = this._emitter.globalScale;
+                rotateData = this._emitter.globalOrientation;
+                positionData = this._emitter.globalPosition;
             }
 
             //
             this._particleProperty[0] = animTime * 0.001;
-            this._particleProperty[1] = this.loop;
-            this._particleProperty[2] = this._emitter.isFollowParticle ? 1 : 0;
+            this._particleProperty[1] = data.life.loop ? 1 : 0;
+            this._particleProperty[2] = data.followTarget ? 1 : 0;
+
             this._particleProperty[3] = scaleData.x;
             this._particleProperty[4] = scaleData.y;
             this._particleProperty[5] = scaleData.z;
+            this._particleProperty[6] = rotateData.x;
+            this._particleProperty[7] = rotateData.y;
+            this._particleProperty[8] = rotateData.z;
+            this._particleProperty[9] = rotateData.w;
+            this._particleProperty[10] = positionData.x;
+            this._particleProperty[11] = positionData.y;
+            this._particleProperty[12] = positionData.z;
 
-            context3DProxy.uniform1fv(usage["uniform_particleProperty"].uniformIndex, this._particleProperty);
+            this._particleProperty[13] = this.loopTime;
+            this._particleProperty[14] = data.life.delay;
+            this._particleProperty[15] = data.life.duration;
+            this._particleProperty[16] = data.property.gravity;
+            this._particleProperty[17] = (data.moveSpeed.velocityOver && data.moveSpeed.velocityOver.worldSpace) ? 1 : 0;
+
+            context3DProxy.uniform1fv(usage["uniform_particleState"].uniformIndex, this._particleProperty);
             for (var i: number = 0; i < this.animNodes.length; i++) {
                 this.animNodes[i].activeState(time, animTime, delay, animDelay, usage, geometry, context3DProxy);
             }

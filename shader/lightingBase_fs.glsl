@@ -9,7 +9,7 @@
 
 vec4 LightingBlinnPhong(vec3 lightDir, vec3 lightColor , vec3 normal , vec3 viewDir, float atten){
 	// vec3 ambient = materialSource.albedo * materialSource.ambient ;
-	vec3 ambient = materialSource.ambient * materialSource.diffuse ;
+	vec3 ambient = materialSource.ambient ;
 	float NdotL = clamp(dot (normal, lightDir),0.0,1.0); 
 	vec3 diffuse = lightColor.xyz * NdotL ;
 	vec3 h = normalize (lightDir + viewDir); 

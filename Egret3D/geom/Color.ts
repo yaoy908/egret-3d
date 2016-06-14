@@ -169,5 +169,22 @@
             this.g = src.g;
             this.b = src.b;
         }
+
+        /**
+         * @language zh_CN
+         * 设置颜色值
+         * @param a Alpha
+         * @param r Red
+         * @param g Green
+         * @param b Blue
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public setTo(a: number = 255, r: number = 255, g: number = 255, b: number = 255): void {
+            this.a = a;
+            this.r = r;
+            this.g = g;
+            this.b = b;
+        }
     }
 } 

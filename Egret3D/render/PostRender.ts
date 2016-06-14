@@ -1,4 +1,8 @@
 ﻿module egret3d {
+
+    /*
+    * @private
+    */
     export class PostRender extends RenderBase{
 
         private _hud: HUD = new HUD();
