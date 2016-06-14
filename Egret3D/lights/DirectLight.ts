@@ -22,7 +22,7 @@
         * @private
         * 光源数据结构长度
         */
-        public static stride: number = 11;
+        public static stride: number = 6;
 
         /**
         * @language zh_CN
@@ -88,16 +88,16 @@
             lightData[index * DirectLight.stride + 1] = this._rot.y;
             lightData[index * DirectLight.stride + 2] = this._rot.z;
             
-            lightData[index * DirectLight.stride + 3] = this._diffuse.x; 
-            lightData[index * DirectLight.stride + 4] = this._diffuse.y;
-            lightData[index * DirectLight.stride + 5] = this._diffuse.z;
+            lightData[index * DirectLight.stride + 3] = this._diffuse.x * this._intensity ;
+            lightData[index * DirectLight.stride + 4] = this._diffuse.y * this._intensity ;
+            lightData[index * DirectLight.stride + 5] = this._diffuse.z * this._intensity ;
 
-            lightData[index * DirectLight.stride + 6] = this._ambient.x;
-            lightData[index * DirectLight.stride + 7] = this._ambient.y;
-            lightData[index * DirectLight.stride + 8] = this._ambient.z;
+            //lightData[index * DirectLight.stride + 6] = this._ambient.x;
+            //lightData[index * DirectLight.stride + 7] = this._ambient.y;
+            //lightData[index * DirectLight.stride + 8] = this._ambient.z;
 
-            lightData[index * DirectLight.stride + 9] = this._intensity;
-            lightData[index * DirectLight.stride + 10] = this._halfIntensity;
+            //lightData[index * DirectLight.stride + 9] = this._intensity;
+            //lightData[index * DirectLight.stride + 10] = this._halfIntensity;
         }
     }
 } 

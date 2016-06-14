@@ -32,7 +32,7 @@ void main() {
 	diffuseColor  = vec4(1.0,1.0,1.0,1.0);
 	specularColor = vec4(0.0,0.0,0.0,0.0);
 	ambientColor  = vec4(0.0,0.0,0.0,0.0);
-	light         = vec4(0.0,0.0,0.0,0.0);
+	light         = vec4(0.25,0.25,0.25,0.25);
     
     normal = normalize(varying_eyeNormal) ;
 	uv_0 = varying_uv0;
