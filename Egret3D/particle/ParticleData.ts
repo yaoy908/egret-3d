@@ -14,13 +14,13 @@
         RotationBirth,
         ScaleBirth,
         Geometry,
+        MoveSpeed,
         //其他挂接节点
         FollowTarget,
-        MoveSpeed,
-        Acceleration,
         ScaleBezier,
         RotationSpeed,
         ColorOffset,
+        //Acceleration,
     }
 
     /**
