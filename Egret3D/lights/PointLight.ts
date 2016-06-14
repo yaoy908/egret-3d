@@ -27,7 +27,7 @@
          * @private
          * 点光源的数据长度 
          */
-        public static stride: number = 12;
+        public static stride: number = 6;
 
         /**
         * @language zh_CN
@@ -114,17 +114,17 @@
             lightData[index * PointLight.stride + 1] = this.globalPosition.y;
             lightData[index * PointLight.stride + 2] = this.globalPosition.z;
 
-            lightData[index * PointLight.stride + 3] = this._diffuse.x;
-            lightData[index * PointLight.stride + 4] = this._diffuse.y;
-            lightData[index * PointLight.stride + 5] = this._diffuse.z;
+            lightData[index * PointLight.stride + 3] = this._diffuse.x * this._intensity ;
+            lightData[index * PointLight.stride + 4] = this._diffuse.y * this._intensity ;
+            lightData[index * PointLight.stride + 5] = this._diffuse.z * this._intensity ;
 
-            lightData[index * PointLight.stride + 6] = this._ambient.x;
-            lightData[index * PointLight.stride + 7] = this._ambient.y;
-            lightData[index * PointLight.stride + 8] = this._ambient.z;
+            //lightData[index * PointLight.stride + 6] = this._ambient.x;
+            //lightData[index * PointLight.stride + 7] = this._ambient.y;
+            //lightData[index * PointLight.stride + 8] = this._ambient.z;
 
-            lightData[index * PointLight.stride + 9] = this._intensity;
-            lightData[index * PointLight.stride + 10] = this._radius;
-            lightData[index * PointLight.stride + 11] = this._falloff;
+            //lightData[index * PointLight.stride + 9] = this._intensity;
+            //lightData[index * PointLight.stride + 10] = this._radius;
+            //lightData[index * PointLight.stride + 11] = this._falloff;
         }
     }
 } 

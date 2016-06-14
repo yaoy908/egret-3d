@@ -1,13 +1,13 @@
 const int max_directLight = 0 ;
-uniform float uniform_directLightSource[11*max_directLight] ;
+uniform float uniform_directLightSource[6*max_directLight] ;
 varying vec3 varying_ViewDir; 
 uniform mat4 uniform_NormalMatrix;
 struct DirectLight{
     vec3 direction;
 	vec3 diffuse;
-	vec3 ambient;
-    float intensity;
-    float halfIntensity;
+	// vec3 ambient;
+    // float intensity;
+    // float halfIntensity;
 };
 
 void calculateDirectLight( MaterialSource materialSource ){
@@ -15,11 +15,11 @@ void calculateDirectLight( MaterialSource materialSource ){
     vec3 N = normal; 
     for(int i = 0 ; i < max_directLight ; i++){ 
 		DirectLight directLight ; 
-		directLight.direction = vec3(uniform_directLightSource[i*11+0],uniform_directLightSource[i*11+1],uniform_directLightSource[i*11+2]); 
-		directLight.diffuse = vec3(uniform_directLightSource[i*11+3],uniform_directLightSource[i*11+4],uniform_directLightSource[i*11+5]); 
-		directLight.ambient = vec3(uniform_directLightSource[i*11+6],uniform_directLightSource[i*11+7],uniform_directLightSource[i*11+8]); 
-		directLight.intensity = uniform_directLightSource[i*11+9]; 
-		directLight.halfIntensity = uniform_directLightSource[i*11+10]; 
+		directLight.direction = vec3(uniform_directLightSource[i*6+0],uniform_directLightSource[i*6+1],uniform_directLightSource[i*6+2]); 
+		directLight.diffuse = vec3(uniform_directLightSource[i*6+3],uniform_directLightSource[i*6+4],uniform_directLightSource[i*6+5]); 
+		// directLight.ambient = vec3(uniform_directLightSource[i*11+6],uniform_directLightSource[i*11+7],uniform_directLightSource[i*11+8]); 
+		// directLight.intensity = uniform_directLightSource[i*11+9]; 
+		// directLight.halfIntensity = uniform_directLightSource[i*11+10]; 
        
 	    vec3 lightDir = -normalize(mat3(uniform_NormalMatrix) * directLight.direction); 
         light += LightingBlinnPhong(normalize(lightDir),vec3(1.0,1.0,1.0),normal,-varying_ViewDir,0.5);

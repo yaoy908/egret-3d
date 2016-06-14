@@ -262,6 +262,8 @@
 
                 this._vs_shader_methods[ShaderPhaseType.local_vertex] = this._vs_shader_methods[ShaderPhaseType.local_vertex] || [];
                 this._fs_shader_methods[ShaderPhaseType.lighting_fragment] = [];
+                this._fs_shader_methods[ShaderPhaseType.lighting_fragment].push("lightingBase_fs");
+
                 if (this.lightGroup.directLightList.length) { 
                     this._passUsage.directLightData = new Float32Array(DirectLight.stride * this.lightGroup.directLightList.length);
                     this._vs_shader_methods[ShaderPhaseType.local_vertex].push("varyingViewDir_vs");
