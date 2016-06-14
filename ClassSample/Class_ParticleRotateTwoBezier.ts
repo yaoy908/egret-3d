@@ -1,5 +1,5 @@
 ﻿module egret3d {
-    export class Class_ParticleOverTwoBezier extends Class_View3D {
+    export class Class_ParticleRotateTwoBezier extends Class_View3D {
 
         protected view1: View3D;
 
@@ -38,7 +38,7 @@
             var life: ParticleDataLife = data.life;
             life.lifeMax = 4;
             life.lifeMin = 4;
-            life.rate = 20;
+            life.rate = 1;
             life.duration = 5;
             life.delay = 0.5;
             life.loop = true;
@@ -53,67 +53,39 @@
             speed.max = 50;
             speed.min = 50;
 
-            var velocityOver: VelocityOverLifeTimeData = new VelocityOverLifeTimeData();
-            speed.velocityOver = velocityOver;
-            speed.velocityOver.type = ParticleValueType.TwoBezier;
-
+            var rotation: ParticleDataRotationSpeed = new ParticleDataRotationSpeed();
+            data.rotationSpeed = rotation;
+            rotation.type = ParticleValueType.TwoBezier;
+            //const
+            rotation.max.setTo(0, 0, 100);
+            rotation.min.setTo(0, 0, -100);
             //___bezier1
-            var xBezier: BezierData = new BezierData(BezierData.PointCount);
-            xBezier.posPoints.push(new Point(0, 0));
-            xBezier.posPoints.push(new Point(0.3, 60));
-            xBezier.posPoints.push(new Point(0.35, 60));
-            xBezier.posPoints.push(new Point(1.0, -40));
+            var bezier1: BezierData = new BezierData(BezierData.PointCount);
+            bezier1.posPoints.push(new Point(0, 0));
+            bezier1.posPoints.push(new Point(0.3, 160));
+            bezier1.posPoints.push(new Point(0.35, 160));
+            bezier1.posPoints.push(new Point(1.0, -140));
            
-            xBezier.ctrlPoints.push(new Point(0, 20));
-            xBezier.ctrlPoints.push(new Point(0.35, 60));
-            xBezier.ctrlPoints.push(new Point(0.36, 60));
-            xBezier.ctrlPoints.push(new Point(1.0, -40));
-            speed.velocityOver.xBezier1 = xBezier;
-
-            var yBezier: BezierData = new BezierData(BezierData.PointCount);
-            yBezier.posPoints.push(new Point(0, 0));
-            yBezier.posPoints.push(new Point(0, 0));
-            yBezier.ctrlPoints.push(new Point(1, 0));
-            yBezier.ctrlPoints.push(new Point(1, 0));
-            speed.velocityOver.yBezier1 = yBezier;
-
-            var zBezier: BezierData = new BezierData(BezierData.PointCount);
-            zBezier.posPoints.push(new Point(0, 0));
-            zBezier.posPoints.push(new Point(0, 0));
-            zBezier.ctrlPoints.push(new Point(1, 0));
-            zBezier.ctrlPoints.push(new Point(1, 0));
-            speed.velocityOver.zBezier1 = zBezier;
+            bezier1.ctrlPoints.push(new Point(0, 120));
+            bezier1.ctrlPoints.push(new Point(0.35, 160));
+            bezier1.ctrlPoints.push(new Point(0.36, 160));
+            bezier1.ctrlPoints.push(new Point(1.0, -140));
+            rotation.bezier1 = bezier1;
 
             //___bezier2
-            var xBezier2: BezierData = new BezierData(BezierData.PointCount);
-            xBezier2.posPoints.push(new Point(0, 0));
-            xBezier2.posPoints.push(new Point(0.3, 15));
-            xBezier2.posPoints.push(new Point(0.35, 15));
-            xBezier2.posPoints.push(new Point(1.0, -10));
+            var bezier2: BezierData = new BezierData(BezierData.PointCount);
+            bezier2.posPoints.push(new Point(0, 0));
+            bezier2.posPoints.push(new Point(0.3, 115));
+            bezier2.posPoints.push(new Point(0.35, 115));
+            bezier2.posPoints.push(new Point(1.0, 130));
 
-            xBezier2.ctrlPoints.push(new Point(0, 5));
-            xBezier2.ctrlPoints.push(new Point(0.35, 15));
-            xBezier2.ctrlPoints.push(new Point(0.36, 15));
-            xBezier2.ctrlPoints.push(new Point(1.0, -10));
-            speed.velocityOver.xBezier2= xBezier2;
-
-            var yBezier2: BezierData = new BezierData(BezierData.PointCount);
-            yBezier2.posPoints.push(new Point(0, 0));
-            yBezier2.posPoints.push(new Point(0, 0));
-            yBezier2.ctrlPoints.push(new Point(1, 0));
-            yBezier2.ctrlPoints.push(new Point(1, 0));
-            speed.velocityOver.yBezier2 = yBezier2;
-
-            var zBezier2: BezierData = new BezierData(BezierData.PointCount);
-            zBezier2.posPoints.push(new Point(0, 0));
-            zBezier2.posPoints.push(new Point(0, 0));
-            zBezier2.ctrlPoints.push(new Point(1, 0));
-            zBezier2.ctrlPoints.push(new Point(1, 0));
-            speed.velocityOver.zBezier2 = zBezier2;
+            bezier2.ctrlPoints.push(new Point(0, 105));
+            bezier2.ctrlPoints.push(new Point(0.35, 115));
+            bezier2.ctrlPoints.push(new Point(0.36, 115));
+            bezier2.ctrlPoints.push(new Point(1.0, 130));
+            rotation.bezier2= bezier2;
 
             //__bezier end
-
-
 
 
             var colorOffset: ParticleDataColorOffset = new ParticleDataColorOffset();

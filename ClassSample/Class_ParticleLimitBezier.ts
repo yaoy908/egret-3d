@@ -45,7 +45,7 @@
             //data.followTarget = follow;
             var limit: VelocityLimitLifeTimeData = new VelocityLimitLifeTimeData();
             data.moveSpeed.velocityLimit = limit;
-            limit.type = ParticleDataMoveSpeed.TwoBezier;
+            limit.type = ParticleValueType.TwoBezier;
 
             //bezier1
             var bezier: BezierData = new BezierData(BezierData.PointCount);
@@ -94,7 +94,7 @@
 
             var velocityOver: VelocityOverLifeTimeData = new VelocityOverLifeTimeData();
             speed.velocityOver = velocityOver;
-            speed.velocityOver.type = ParticleDataMoveSpeed.OneBezier;
+            speed.velocityOver.type = ParticleValueType.OneBezier;
 
             var xBezier: BezierData = new BezierData(BezierData.PointCount);
             xBezier.posPoints.push(new Point(0, 0));

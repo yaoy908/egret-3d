@@ -1,10 +1,10 @@
 ﻿function jsOnload() {
-    var sample = new egret3d.Class_ParticleOverTwoBezier();
+    var sample = new egret3d.Class_ParticleRotateTwoBezier();
 }
 
 function onTsconfig() {
     egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_View3D.js");
-    egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_ParticleOverTwoBezier.js");
+    egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_ParticleRotateTwoBezier.js");
 }
 
 window.onload = () => {

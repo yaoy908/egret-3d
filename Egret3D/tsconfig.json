@@ -210,7 +210,9 @@
         "particle/particleNode/ParticleVelocityLimitConstNode.ts",
         "particle/particleNode/ParticleVelocityLimitOneBezierNode.ts",
         "particle/particleNode/ParticleVelocityLimitTwoBezierNode.ts",
-        
+        "particle/particleNode/ParticleRotationConstNode.ts",
+        "particle/particleNode/ParticleRotationOneBezierNode.ts",
+        "particle/particleNode/ParticleRotationTwoBezierNode.ts",
         
 
         "particle/ParticleAnimationState.ts",

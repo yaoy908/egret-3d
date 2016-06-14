@@ -262,15 +262,15 @@
 
             var velocityOver: VelocityOverLifeTimeData = this._data.moveSpeed.velocityOver;
             if (velocityOver) {
-                if (velocityOver.type == ParticleDataMoveSpeed.ConstValue || velocityOver.type == ParticleDataMoveSpeed.RandomConstValue) {
+                if (velocityOver.type == ParticleValueType.Const || velocityOver.type == ParticleValueType.RandomConst) {
                     var overConstNode: ParticleVelocityOverConstNode = new ParticleVelocityOverConstNode();
                     overConstNode.initNode(this._data.moveSpeed);
                     nodes.push(overConstNode);
-                } else if(velocityOver.type == ParticleDataMoveSpeed.OneBezier){
+                } else if(velocityOver.type == ParticleValueType.OneBezier){
                     var overOneBezierNode: ParticleVelocityOverOneBezierNode = new ParticleVelocityOverOneBezierNode();
                     overOneBezierNode.initNode(this._data.moveSpeed);
                     nodes.push(overOneBezierNode);
-                } else if (velocityOver.type == ParticleDataMoveSpeed.TwoBezier) {
+                } else if (velocityOver.type == ParticleValueType.TwoBezier) {
                     var overTwoBezierNode: ParticleVelocityOverTwoBezierNode = new ParticleVelocityOverTwoBezierNode();
                     overTwoBezierNode.initNode(this._data.moveSpeed);
                     nodes.push(overTwoBezierNode);
@@ -278,11 +278,11 @@
             }
             var limit: VelocityLimitLifeTimeData = this._data.moveSpeed.velocityLimit;
             if (limit) {
-                if (limit.type == ParticleDataMoveSpeed.ConstValue || limit.type == ParticleDataMoveSpeed.RandomConstValue) {
+                if (limit.type == ParticleValueType.Const || limit.type == ParticleValueType.RandomConst) {
                     var limitConstNode: ParticleVelocityLimitConstNode = new ParticleVelocityLimitConstNode();
                     limitConstNode.initNode(this._data.moveSpeed);
                     nodes.push(limitConstNode);
-                } else if(limit.type == ParticleDataMoveSpeed.OneBezier){
+                } else if(limit.type == ParticleValueType.OneBezier){
                     var limitOneBezierNode: ParticleVelocityLimitOneBezierNode = new ParticleVelocityLimitOneBezierNode();
                     limitOneBezierNode.initNode(this._data.moveSpeed);
                     nodes.push(limitOneBezierNode);
@@ -318,9 +318,20 @@
             }
 
             if (this._data.rotationSpeed) {
-                var rotationSpeed: ParticleRotationNode = new ParticleRotationNode();
-                rotationSpeed.initNode(this._data.rotationSpeed);
-                nodes.push(rotationSpeed);
+                if (this._data.rotationSpeed.type == ParticleValueType.Const || this._data.rotationSpeed.type == ParticleValueType.RandomConst) {
+                    var rotateConst: ParticleRotationConstNode = new ParticleRotationConstNode();
+                    rotateConst.initNode(this._data.rotationSpeed);
+                    nodes.push(rotateConst);
+                } else if (this._data.rotationSpeed.type == ParticleValueType.OneBezier) {
+                    var rotateOneBezier: ParticleRotationOneBezierNode = new ParticleRotationOneBezierNode();
+                    rotateOneBezier.initNode(this._data.rotationSpeed);
+                    nodes.push(rotateOneBezier);
+                } else if (this._data.rotationSpeed.type == ParticleValueType.TwoBezier) {
+                    var rotatTwoBezier: ParticleRotationTwoBezierNode = new ParticleRotationTwoBezierNode();
+                    rotatTwoBezier.initNode(this._data.rotationSpeed);
+                    nodes.push(rotatTwoBezier);
+                }
+               
             }
 
             if (this._data.colorOffset) {

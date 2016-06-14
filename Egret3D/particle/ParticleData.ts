@@ -23,6 +23,19 @@
     }
 
     /**
+    * @language zh_CN
+    * 粒子数据类型
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export enum ParticleValueType{
+        Const,
+        RandomConst,
+        OneBezier,
+        TwoBezier,
+    }
+
+    /**
      * @private
      * @class egret3d.ParticleData
      */
@@ -453,13 +466,6 @@
         //速度限制
         public velocityLimit: VelocityLimitLifeTimeData;
 
-
-        //force类型
-        public static ConstValue: number = 0;
-        public static RandomConstValue: number = 1;
-        public static OneBezier: number = 2;
-        public static TwoBezier: number = 3;
-
         constructor() {
             super(ParticleDataNodeType.MoveSpeed);
         }
@@ -476,7 +482,7 @@
 
 
     export class VelocityLimitLifeTimeData{
-        public type: number = ParticleDataMoveSpeed.ConstValue;
+        public type: number = ParticleValueType.Const;
         public max: number = 0;
         public min: number = 0;
 
@@ -494,14 +500,14 @@
                 this.min = this.max;
             }
 
-            if (this.type == ParticleDataMoveSpeed.OneBezier || this.type == ParticleDataMoveSpeed.TwoBezier) {
+            if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
                 if (this.bezier1 == null) {
                     this.bezier1 = new BezierData(BezierData.PointCount);
                 }
                 this.bezier1.validate();
             }
             
-            if (this.type == ParticleDataMoveSpeed.TwoBezier) {
+            if (this.type == ParticleValueType.TwoBezier) {
                 if (this.bezier2 == null) {
                     this.bezier2 = new BezierData(BezierData.PointCount);
                 }               
@@ -513,7 +519,7 @@
 
 
     export class VelocityOverLifeTimeData {
-        public type: number = ParticleDataMoveSpeed.ConstValue;
+        public type: number = ParticleValueType.Const;
         public max: Vector3D = new Vector3D();
         public min: Vector3D = new Vector3D();
         public worldSpace: boolean = false;
@@ -534,7 +540,7 @@
             if (this.min == null) {
                 this.min = new Vector3D();
             }
-            if (this.type == ParticleDataMoveSpeed.OneBezier || this.type == ParticleDataMoveSpeed.TwoBezier) {
+            if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
                 if (this.xBezier1 == null) {
                     this.xBezier1 = new BezierData(BezierData.PointCount);
                 }
@@ -550,7 +556,7 @@
                 this.zBezier1.validate();
             }
 
-            if (this.type == ParticleDataMoveSpeed.TwoBezier) {
+            if (this.type == ParticleValueType.TwoBezier) {
                 if (this.xBezier2 == null) {
                     this.xBezier2 = new BezierData(BezierData.PointCount);
                 }
@@ -619,26 +625,38 @@
         //角速度
         public max: Vector3D = new Vector3D();
         public min: Vector3D = new Vector3D();
+        
+        public type: number = ParticleValueType.Const;
 
+        public bezier1: BezierData = new BezierData(BezierData.PointCount);
+        public bezier2: BezierData = new BezierData(BezierData.PointCount);
         constructor() {
             super(ParticleDataNodeType.RotationSpeed);
         }
+
+
         public validate(): void {
+
             if (this.max == null) {
                 this.max = new Vector3D();
             }
             if (this.min == null) {
                 this.min = new Vector3D();
             }
-            if (this.min.x > this.max.x) {
-                this.min.x = this.max.x;
+            if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
+                if (this.bezier1 == null) {
+                    this.bezier1 = new BezierData(BezierData.PointCount);
+                }
+                this.bezier1.validate();
             }
-            if (this.min.y > this.max.y) {
-                this.min.y = this.max.y;
+
+            if (this.type == ParticleValueType.TwoBezier) {
+                if (this.bezier2 == null) {
+                    this.bezier2 = new BezierData(BezierData.PointCount);
+                }
+                this.bezier2.validate();
             }
-            if (this.min.z > this.max.z) {
-                this.min.z = this.max.z;
-            }
+
         }
     }
 
