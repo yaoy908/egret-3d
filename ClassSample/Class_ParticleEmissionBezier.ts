@@ -1,5 +1,5 @@
 ﻿module egret3d {
-    export class Class_ParticleBursts extends Class_View3D {
+    export class Class_ParticleEmissionBezier extends Class_View3D {
         protected view1: View3D;
         protected cameraCrl: LookAtController;
         private particle: ParticleEmitter;
@@ -46,13 +46,19 @@
             lifeData.duration = 6;
 
             var emission: ParticleDataEmission = data.emission;
-            emission.rate = 10;
-            emission.bursts = [];
+            emission.type = ParticleValueType.OneBezier;
 
-            
-            emission.bursts.push(new Point(1, 25));
-            emission.bursts.push(new Point(2.0, 20));
-            emission.bursts.push(new Point(4.5, 45));
+            var bezier: BezierData = new BezierData(BezierData.PointCount);
+            emission.bezier = bezier;
+            bezier.posPoints.push(new Point(0, 0));
+            bezier.posPoints.push(new Point(0.3, 6));
+            bezier.posPoints.push(new Point(0.35, 6));
+            bezier.posPoints.push(new Point(1.0, 0));
+
+            bezier.ctrlPoints.push(new Point(0, 2));
+            bezier.ctrlPoints.push(new Point(0.35, 6));
+            bezier.ctrlPoints.push(new Point(0.36, 6));
+            bezier.ctrlPoints.push(new Point(1.0, 0));
 
 
             this.particle = new ParticleEmitter(data, null, mat);

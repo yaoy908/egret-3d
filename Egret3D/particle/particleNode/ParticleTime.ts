@@ -12,7 +12,7 @@
         private _life: ValueShape;
 
         private attribute_time: GLSL.VarRegister;
-        private particleAnimationState: ParticleAnimationState;
+        private _animationState: ParticleAnimationState;
 
        
 
@@ -64,10 +64,17 @@
         */
         public build(geometry: Geometry, count: number) {
 
-            this.particleAnimationState = <ParticleAnimationState>this.state;
+            this._animationState = <ParticleAnimationState>this.state;
+            var emission: ParticleDataEmission = this._animationState.emitter.data.emission;
 
             var lifeArray: Array<number> = this._life.calculate(count);
-            var bornTimeArray: Array<number> = this.createBornTimeArray(count);
+            
+            var bornTimeArray: Array<number>;
+            if (emission.type == ParticleValueType.Const) {
+                bornTimeArray = this.createBornTimeConst(count, emission);
+            } else {
+                bornTimeArray = this.createBornTimeBezier(count, emission);
+            }
 
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
@@ -97,26 +104,50 @@
             }
 
             //粒子一个完整的周期为最后一个粒子走完周期
-            this.particleAnimationState.loopTime = loopTime;
+            this._animationState.loopTime = loopTime;
 
         }
 
         /**
         * private
-        * 出生时间创建
+        * 出生时间创建(const)
         */
-        private createBornTimeArray(count:number): Array<number> {
+        private createBornTimeConst(count:number, emission:ParticleDataEmission): Array<number> {
             var bornTimeArray: Array<number> = [];
-            var speace: number = 1 / this._nodeData.rate;
+            
+            var speace: number = 1 / emission.rate;
             for (var i: number = 0; i < count; i++) {
-                bornTimeArray.push(i * speace);
+                bornTimeArray.push(i * speace + speace);//i + 1
             }
             //使用bursts对speaceArray进行修正
-            if (this._nodeData.bursts) {
-                bornTimeArray = this.burstParticle(this._nodeData.bursts, bornTimeArray, count);
+            if (emission.bursts) {
+                bornTimeArray = this.burstParticle(emission.bursts, bornTimeArray, count);
             }
             return bornTimeArray;
         }
+
+        /**
+         * private
+         * 出生时间创建(bezier);
+         */
+        private createBornTimeBezier(count: number, emission: ParticleDataEmission): Array<number> {
+            var bornTimeArray: Array<number> = [];
+            var curve: BezierCurve = new BezierCurve();
+            var data: BezierData = emission.bezier;
+            //采用的算法为：
+            //1，将duration划分为每1s10帧，然后获得总帧数frameCount
+            //2，根据frameCount遍历循环，计算每个frame对应的curveValue数据：particleCount += curveValue/10;
+            //3，取出particleCount中的超过整数部分，记为particleCountInt
+            //4，根据particleCountInt在这个frame中，插入对应数量的bornTime，平均分配
+            //5，particleCount减去particleCountInt获得小数部分
+
+            //使用bursts对speaceArray进行修正
+            if (emission.bursts) {
+                bornTimeArray = this.burstParticle(emission.bursts, bornTimeArray, count);
+            }
+            return bornTimeArray;
+        }
+        
 
         /**
         * private

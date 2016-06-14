@@ -38,10 +38,12 @@
             var life: ParticleDataLife = data.life;
             life.lifeMax = 4;
             life.lifeMin = 4;
-            life.rate = 20;
             life.duration = 5;
             life.delay = 0.5;
             life.loop = true;
+
+            var emission: ParticleDataEmission = data.emission;
+            emission.rate = 20;
 
             var property: ParticleDataProperty = data.property;
             property.particleCount = 100;
