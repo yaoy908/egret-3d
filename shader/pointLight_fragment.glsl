@@ -1,6 +1,6 @@
 const int max_pointLight = 0 ;
 uniform float uniform_pointLightSource[12*max_pointLight] ;
-
+uniform mat4 uniform_NormalMatrix;
 struct PointLight{
         vec3 position ;
         vec3 diffuse ;
@@ -21,22 +21,32 @@ void calculatePointLight(MaterialSource materialSource){
 		pointLight.radius = uniform_pointLightSource[i*12+10];
 		pointLight.falloff = uniform_pointLightSource[i*12+11];
 
-		ambientColor.xyz += pointLight.diffuse.xyz * pointLight.ambient ;
+		vec3 viewDir = normalize(varying_ViewPose.xyz/varying_ViewPose.w); 
+		vec4 lightVirePos = uniform_NormalMatrix * vec4(pointLight.position.xyz,1.0) ; 
+		vec3 lightDir = varying_ViewPose.xyz - lightVirePos.xyz ; 
 		
-		vec4 lightVirePos = uniform_ViewMatrix * vec4(pointLight.position.xyz,1.0) ; 
-        vec3 lightDir = varying_ViewPose.xyz - lightVirePos.xyz ; 
-	    float intensity = max(dot(N,normalize(lightDir)), 0.0);
+		float intensity = max(dot(N,normalize(lightDir)), 0.0); 
 		float lightDist = length( lightDir ); 
-		float attenuation = pointLight.intensity / (3.0 + 0.001 * lightDist +  0.00009 * lightDist * lightDist);
-		light.xyz += pointLight.diffuse * intensity * attenuation ;
+		float attenuation = pointLight.intensity / (3.0 + 0.001 * lightDist +  0.00009 * lightDist * lightDist); 
 		
-		if( attenuation> 0.0){ 
-			vec3 viewDir = normalize(varying_ViewPose.xyz/varying_ViewPose.w); 
-			vec3 H = normalize( normalize(lightDir) + viewDir ); 
-			float NdotH = dot( normal, H ); 
-			float lambertTerm = pow( clamp( NdotH ,0.0,1.0),materialSource.shininess ); 
-			specularColor.xyz += pointLight.diffuse * lambertTerm * materialSource.specular * attenuation ; 
-		} 
+		light += LightingBlinnPhong(normalize(lightDir),vec3(1.0,1.0,1.0),normal,varying_ViewDir,attenuation);
+  //-------------------
+		// ambientColor.xyz += pointLight.diffuse.xyz * pointLight.ambient ;
+		
+		// vec4 lightVirePos = uniform_NormalMatrix * vec4(pointLight.position.xyz,1.0) ; 
+        // vec3 lightDir = varying_ViewPose.xyz - lightVirePos.xyz ; 
+	    // float intensity = max(dot(N,normalize(lightDir)), 0.0);
+		// float lightDist = length( lightDir ); 
+		// float attenuation = pointLight.intensity / (3.0 + 0.001 * lightDist +  0.00009 * lightDist * lightDist);
+		// light.xyz += pointLight.diffuse * intensity * attenuation ;
+		
+		// if( attenuation> 0.0){ 
+		// 	vec3 viewDir = normalize(varying_ViewPose.xyz/varying_ViewPose.w); 
+		// 	vec3 H = normalize( normalize(lightDir) + viewDir ); 
+		// 	float NdotH = dot( normal, H ); 
+		// 	float lambertTerm = pow( clamp( NdotH ,0.0,1.0),materialSource.shininess ); 
+		// 	specularColor.xyz += pointLight.diffuse * lambertTerm * materialSource.specular * attenuation ; 
+		// } 
 	};
 }
 
