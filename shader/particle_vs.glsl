@@ -125,22 +125,6 @@ mat4 buildMat4Quat(vec4 quat){
    );
 }
 
-//_____________½âÑ¹ËõÊý¾Ý
-vec2 decompressFloat(float min, float range, float mergeFloat){
-	
-	float convert_1_4096 = 1.0 / 4096.0;
-	float value2 = fract(mergeFloat);
-	float value1 = mergeFloat - value2;
-	value1 *= convert_1_4096;
-
-	value1 *= range;
-	value2 *= range;
-
-	value1 += min;
-	value2 += min;
-
-	return vec2(value1, value2);
-}
 
 
 void main(void) {

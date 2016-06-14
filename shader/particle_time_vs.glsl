@@ -18,33 +18,33 @@ struct ParticleData{
 
 
 
-float particle( ParticleData emit ){
+float particle( ParticleData curParticle ){
 	//扣除延迟时间
 	float time = particleStateData.time - particleStateData.delay;
 	//还未出生
-	if(time <= emit.bornTime){
+	if(time <= curParticle.bornTime){
 		return currentTime = 0.0;
 	}
 	if(particleStateData.loop == 0.0){
 		float emitterDuring = particleStateData.duration - particleStateData.delay;
 		//还没到出生时间，发射器已经死亡
-		if(emit.bornTime >= emitterDuring)
+		if(curParticle.bornTime >= emitterDuring)
 		{
 			return currentTime = 0.0;
 		}
 		//单个粒子本身的生命周期已经结束
-		if(time >= emit.life + emit.bornTime)
+		if(time >= curParticle.life + curParticle.bornTime)
 		{
 			return currentTime = 0.0;
 		}
 		
 	}
 
-	currentTime = time - emit.bornTime;
+	currentTime = time - curParticle.bornTime;
 	//计算当前粒子在单次循环中的相对时间
 	currentTime = mod(currentTime, particleStateData.loopTime);
 	//当前loopTime内超过粒子自身的什么周期，死亡状态
-	if(currentTime >= emit.life){
+	if(currentTime >= curParticle.life){
 		return currentTime = 0.0;
 	}
 	if( currentTime <= 0.0 ) 
@@ -54,16 +54,16 @@ float particle( ParticleData emit ){
 
 void main(void) {
 	
-	ParticleData emit ;
-	emit.bornTime = attribute_time.x ; 
-	emit.life = attribute_time.y ; 
-	emit.index = attribute_time.z ; 
+	ParticleData curParticle ;
+	curParticle.bornTime = attribute_time.x ; 
+	curParticle.life = attribute_time.y ; 
+	curParticle.index = attribute_time.z ; 
 	
-	float active = particle( emit ) ;
+	float active = particle( curParticle ) ;
 	
 	varying_particleData.x = currentTime;
-	varying_particleData.y = emit.life ;
-	varying_particleData.z = emit.index;
+	varying_particleData.y = curParticle.life ;
+	varying_particleData.z = curParticle.index;
 	
 	if( active == 0.0 ){
 		e_discard();
