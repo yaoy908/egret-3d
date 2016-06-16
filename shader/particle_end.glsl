@@ -22,13 +22,20 @@ mat4 buildModelMatrix(vec4 quat, vec3 scale, vec3 position)
 	return ret;
 }
 
-vec3 limitParticleSpeed(vec3 speedXYZ, float limit){
-	vec3 temp = speedXYZ * speedXYZ;
-	float speedSquare = sqrt(temp.x + temp.y + temp.z);
-	if(speedSquare > limit){
-		speedXYZ = speedXYZ * (limit / speedSquare);
+vec3 calcParticleMove(vec3 speedXYZ, vec3 forceXYZ){
+	vec3 distanceXYZ = speedXYZ * currentTime;
+	distanceXYZ += forceXYZ * currentTime * currentTime;
+	//限速
+	if(velocityLimitVec2.y == 1.0){
+		vec3 temp = distanceXYZ * distanceXYZ;
+		float distanceCurrent = sqrt(temp.x + temp.y + temp.z);
+		float distanceLimit = currentTime * velocityLimitVec2.x;
+
+		if(distanceCurrent > distanceLimit){
+			distanceXYZ *= distanceLimit / distanceCurrent;
+		}
 	}
-	return speedXYZ;
+	return distanceXYZ;
 }
 
 void main(void) {
@@ -40,6 +47,7 @@ void main(void) {
 		//vec3 velocityBaseVec3
 		//vec3 velocityOverVec3
 		//vec2 velocityLimitVec2
+		//vec3 velocityForceVec3
 		//vec2 velocityBezierWeightVec2
 		//float currentTime
 
@@ -55,6 +63,7 @@ void main(void) {
 		}else{
 			velocityWorldVec3 += velocityOverVec3;
 		}
+
 
 		if(particleStateData.worldSpace == 1.0){
 			//followTargetPosition
@@ -75,20 +84,19 @@ void main(void) {
 			followTargetRotation.z = particleStateData.rotationZ;
 			followTargetRotation.w = particleStateData.rotationW;
 
-			velocityLocalVec3 = (buildMat4Quat(followTargetRotation) * vec4(velocityLocalVec3, 1.0)).xyz;
+			mat4 followRotQuat = buildMat4Quat(followTargetRotation);
+			velocityLocalVec3 = (followRotQuat * vec4(velocityLocalVec3, 1.0)).xyz;
+			velocityForceVec3 = (followRotQuat * vec4(velocityForceVec3, 1.0)).xyz;
 		}
-
-		velocityMultiVec3 = velocityLocalVec3 + velocityWorldVec3;
-		//限速
-		if(velocityLimitVec2.y == 1.0){
-			velocityMultiVec3 = limitParticleSpeed(velocityMultiVec3, velocityLimitVec2.x);
-		}
-		//速度会受母系缩放值影响
-		velocityMultiVec3 *= followTargetScale;
 
 		mat4 modelMatrix = buildModelMatrix(followTargetRotation, followTargetScale, followTargetPosition);
 		position_emitter = (modelMatrix * vec4(position_emitter, 1.0)).xyz; 
-		position_emitter += currentTime * velocityMultiVec3;
+
+		velocityMultiVec3 = velocityLocalVec3 + velocityWorldVec3;
+
+		
+		//叠加移动速度，速度会受母系缩放值影响
+		position_emitter += calcParticleMove(velocityMultiVec3, velocityForceVec3) * followTargetScale;
 
 		//重力默认为全局坐标系
 		position_emitter.y -= currentTime * currentTime * particleStateData.gravity;

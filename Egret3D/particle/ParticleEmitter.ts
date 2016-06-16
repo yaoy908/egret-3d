@@ -87,11 +87,11 @@
         private createShape(): Geometry {
             var geo: Geometry;
             var geomData: ParticleDataGeometry = this._data.geometry;
-            if (geomData.type == ParticleDataGeometry.Plane) {
+            if (geomData.type == ParticleGeometryType.Plane) {
                 geo = new PlaneGeometry(geomData.planeW, geomData.planeH, 1, 1, 1, 1, Vector3D.Z_AXIS);
-            } else if (geomData.type == ParticleDataGeometry.Cube) {
+            } else if (geomData.type == ParticleGeometryType.Cube) {
                 geo = new CubeGeometry(geomData.cubeW, geomData.cubeH, geomData.cubeD);
-            } else if (geomData.type == ParticleDataGeometry.Sphere) {
+            } else if (geomData.type == ParticleGeometryType.Sphere) {
                 geo = new SphereGeometry(geomData.sphereRadius, geomData.sphereSegW, geomData.sphereSegH);
             }
             return geo;
@@ -260,6 +260,7 @@
             speedNode.initNode(this._data.moveSpeed);
             nodes.push(speedNode);
 
+            //velocity
             var velocityOver: VelocityOverLifeTimeData = this._data.moveSpeed.velocityOver;
             if (velocityOver) {
                 if (velocityOver.type == ParticleValueType.Const || velocityOver.type == ParticleValueType.RandomConst) {
@@ -286,6 +287,23 @@
                     var limitOneBezierNode: ParticleVelocityLimitOneBezierNode = new ParticleVelocityLimitOneBezierNode();
                     limitOneBezierNode.initNode(this._data.moveSpeed);
                     nodes.push(limitOneBezierNode);
+                }
+            }
+
+            var velocityForce: VelocityForceLifeTimeData = this._data.moveSpeed.velocityForce;
+            if (velocityForce) {
+                if (velocityForce.type == ParticleValueType.Const || velocityForce.type == ParticleValueType.RandomConst) {
+                    var forceConstNode: ParticleVelocityForceConstNode = new ParticleVelocityForceConstNode();
+                    forceConstNode.initNode(this._data.moveSpeed);
+                    nodes.push(forceConstNode);
+                } else if (velocityForce.type == ParticleValueType.OneBezier) {
+                    var forceOneBezierNode: ParticleVelocityForceOneBezierNode = new ParticleVelocityForceOneBezierNode();
+                    forceOneBezierNode.initNode(this._data.moveSpeed);
+                    nodes.push(forceOneBezierNode);
+                } else if (velocityForce.type == ParticleValueType.TwoBezier) {
+                    var forceTwoBezierNode: ParticleVelocityForceTwoBezierNode = new ParticleVelocityForceTwoBezierNode();
+                    forceTwoBezierNode.initNode(this._data.moveSpeed);
+                    nodes.push(forceTwoBezierNode);
                 }
             }
 

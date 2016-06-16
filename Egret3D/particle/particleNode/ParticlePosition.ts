@@ -87,7 +87,7 @@
                 pos.multiply(data.property.scale, pos);
                 //旋转______________________________________________________
                 this.rotationMat.identity();
-                this.rotationMat.rotation(data.property.scale.x, data.property.scale.y, data.property.scale.z);
+                this.rotationMat.rotation(data.property.rotation.x, data.property.rotation.y, data.property.rotation.z);
                 this.rotationMat.transformVector4(pos, pos);
 
                 //粒子发射方向
@@ -100,7 +100,7 @@
                     } else if (this._node.type == ParticleDataShape.Cube) {
                         dir.setTo(0, 1, 0, 1);
                         this.rotationMat.identity();
-                        this.rotationMat.rotation(data.property.scale.x, data.property.scale.y, data.property.scale.z);
+                        this.rotationMat.rotation(data.property.rotation.x, data.property.rotation.y, data.property.rotation.z);
                         this.rotationMat.transformVector4(dir, dir);
                     } else if (this._node.type == ParticleDataShape.Sphere) {
                         dir.copyFrom(pos);

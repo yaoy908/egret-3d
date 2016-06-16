@@ -36,7 +36,7 @@
                     continue;
                 method = new MaterialMethodData();
                 method.type = nodeName;
-                EgretMapXmlParser.eachXmlAttr(item, function (label: string, value: string): void {
+                XmlParser.eachXmlAttr(item, function (label: string, value: string): void {
                     if (label == "texture") {
                         method.texture = value;
                     } else if (label == "usePower") {

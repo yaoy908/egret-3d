@@ -186,5 +186,40 @@
             this.g = g;
             this.b = b;
         }
+
+        /**
+         * @language zh_CN
+         * 创建颜色值
+         * @param argb 0xff00ff00格式
+         * @return color
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public static createColor(argb: number): Color {
+            var color: Color = new Color();
+            color.setColorARGB(argb);
+            return color;
+        }
+
+
+        /**
+         * @language zh_CN
+         * 设置颜色值
+         * @param argb 0xff00ff00格式
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public setColorARGB(argb: number): void {
+            this.a = argb / 0x1000000;
+            this.a >>= 0;
+
+            this.r = argb & 0xff0000;
+            this.r >>= 16;
+
+            this.g = argb & 0xff00;
+            this.g >>= 8;
+
+            this.b = argb & 0xff;
+        }
     }
 } 

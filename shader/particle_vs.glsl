@@ -13,6 +13,7 @@ float totalTime = 0.0;
 vec4 localPosition = vec4(0.0,0.0,0.0,1.0);
 vec3 velocityBaseVec3 = vec3(0.0,0.0,0.0);
 vec3 velocityOverVec3 = vec3(0.0,0.0,0.0);
+vec3 velocityForceVec3 = vec3(0.0,0.0,0.0);
 vec2 velocityBezierWeightVec2 = vec2(1.0, 1.0);
 vec2 velocityLimitVec2 = vec2(0.0,0.0);//y为0表示不限制
 
