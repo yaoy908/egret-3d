@@ -82,7 +82,7 @@
       <xBezier1>
         <pos x="0" y="0"></pos>
         <pos x="0.3" y="60"></pos>
-        <pos x="0.35" y="60"></pos>
+        <pos x="0.3" y="60"></pos>
         <pos x="1.0" y="-40"></pos>
         <ctrl x="0" y="20"></ctrl>
         <ctrl x="0.35" y="60"></ctrl>
@@ -104,7 +104,7 @@
       <xBezier2>
         <pos x="0" y="0"></pos>
         <pos x="0.3" y="15"></pos>
-        <pos x="0.35" y="15"></pos>
+        <pos x="0.3" y="15"></pos>
         <pos x="1" y="-10"></pos>
         <ctrl x="0" y="5"></ctrl>
         <ctrl x="0.3" y="15"></ctrl>
@@ -138,7 +138,7 @@
       <yBezier1>
         <pos x="0" y="0"></pos>
         <pos x="0.3" y="12"></pos>
-        <pos x="0.35" y="12"></pos>
+        <pos x="0.3" y="12"></pos>
         <pos x="1.0" y="-8"></pos>
         <ctrl x="0" y="4"></ctrl>
         <ctrl x="0.35" y="12"></ctrl>
@@ -160,7 +160,7 @@
       <yBezier2>
         <pos x="0" y="0"></pos>
         <pos x="0.3" y="3"></pos>
-        <pos x="0.35" y="3"></pos>
+        <pos x="0.3" y="3"></pos>
         <pos x="1" y="-2.0"></pos>
         <ctrl x="0" y="1"></ctrl>
         <ctrl x="0.3" y="3"></ctrl>
@@ -211,7 +211,7 @@
     <bezier>
       <pos x="0" y="10"></pos>
       <pos x="0.3" y="60"></pos>
-      <pos x="0.35" y="60"></pos>
+      <pos x="0.3" y="60"></pos>
       <pos x="1.0" y="20"></pos>
       <ctrl x="0" y="20"></ctrl>
       <ctrl x="0.35" y="60"></ctrl>
@@ -228,7 +228,7 @@
     <bezier1>
       <pos x="0" y="10"></pos>
       <pos x="0.3" y="60"></pos>
-      <pos x="0.35" y="60"></pos>
+      <pos x="0.3" y="60"></pos>
       <pos x="1.0" y="20"></pos>
       <ctrl x="0" y="20"></ctrl>
       <ctrl x="0.35" y="60"></ctrl>
@@ -238,7 +238,7 @@
     <bezier2>
       <pos x="0" y="0"></pos>
       <pos x="0.3" y="60"></pos>
-      <pos x="0.35" y="60"></pos>
+      <pos x="0.3" y="60"></pos>
       <pos x="1.0" y="-80"></pos>
       <ctrl x="0" y="20"></ctrl>
       <ctrl x="0.35" y="60"></ctrl>

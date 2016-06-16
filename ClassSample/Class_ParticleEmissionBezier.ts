@@ -29,13 +29,15 @@
 
             var mat: TextureMaterial = new TextureMaterial();
             mat.ambientColor = 0xffffff;
-
+            mat.diffuseColor = 0xffffff;
 
             var data: ParticleData = new ParticleData();
             data.followTarget = new ParticleDataFollowTarget();
 
-            data.property.particleCount = 200;
+            data.property.particleCount = 1000;
             data.shape.type = ParticleDataShape.Point;
+            data.property.startColorFrom.setColorARGB(0xffff0000);
+            data.property.startColorTo.setColorARGB(0xff00ff00);
 
             var moveSpeed: ParticleDataMoveSpeed = new ParticleDataMoveSpeed();
             moveSpeed.min = 80;
@@ -44,22 +46,26 @@
 
             var lifeData: ParticleDataLife = data.life;
             lifeData.duration = 6;
+            lifeData.loop = true;
 
             var emission: ParticleDataEmission = data.emission;
             emission.type = ParticleValueType.OneBezier;
+            emission.rate = 10;
 
             var bezier: BezierData = new BezierData(BezierData.PointCount);
             emission.bezier = bezier;
             bezier.posPoints.push(new Point(0, 0));
-            bezier.posPoints.push(new Point(0.3, 6));
-            bezier.posPoints.push(new Point(0.35, 6));
+            bezier.posPoints.push(new Point(0.3, 20));
+            bezier.posPoints.push(new Point(0.3, 20));
             bezier.posPoints.push(new Point(1.0, 0));
 
-            bezier.ctrlPoints.push(new Point(0, 2));
-            bezier.ctrlPoints.push(new Point(0.35, 6));
-            bezier.ctrlPoints.push(new Point(0.36, 6));
+            bezier.ctrlPoints.push(new Point(0, 5));
+            bezier.ctrlPoints.push(new Point(0.35, 10));
+            bezier.ctrlPoints.push(new Point(0.36, 10));
             bezier.ctrlPoints.push(new Point(1.0, 0));
 
+
+            
 
             this.particle = new ParticleEmitter(data, null, mat);
 

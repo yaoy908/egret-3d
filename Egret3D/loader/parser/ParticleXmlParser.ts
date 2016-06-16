@@ -66,13 +66,13 @@
             //this.parseFollowTarget(followTarget);
             //parseBezierNode
             var scaleBezier: Node = this.getNode(this._xml, "scaleBezier");
-            this.parseScaleBeizer(scaleBezier);
+            //this.parseScaleBeizer(scaleBezier);
             //rotationSpeed
             var rotationSpeed: Node = this.getNode(this._xml, "rotationSpeed");
-            this.parseRotationSpeed(rotationSpeed);
+            //this.parseRotationSpeed(rotationSpeed);
             //colorOffset
             var colorOffset: Node = this.getNode(this._xml, "colorOffset");
-            this.parseColorOffset(colorOffset);
+           // this.parseColorOffset(colorOffset);
 
 
 

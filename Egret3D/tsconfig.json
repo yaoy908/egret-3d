@@ -27,7 +27,7 @@
         "geom/Bound.ts",
         "data/HashMap.ts",
         "geom/BoundBox.ts",
-        "geom/BeizerCurve.ts",
+        "geom/BezierCurve.ts",
         "geom/ColorTransform.ts",
         "events/PickResult.ts",
         "events/Event3D.ts",

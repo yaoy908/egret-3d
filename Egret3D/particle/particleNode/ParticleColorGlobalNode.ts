@@ -15,7 +15,7 @@
         * @private
         * 最大支持的颜色变化数量
         */
-        private static MaxColor: number = 8;
+        private static MaxColor: number = 20;
         private _colorSegment: Float32Array = new Float32Array(ParticleColorGlobalNode.MaxColor * 2 ); 
         constructor() {
 

@@ -13,11 +13,58 @@
 
         }
 
+        public calcBezierY(pos: Array<Point>, ctrl: Array<Point>, t: number): number {
 
-        public calc(t: number): number {
-            return 0;
+            var A0: Point;
+            var B0: Point;
+            var A1: Point;
+            var B1: Point;
+
+            for (var i: number = 0; i < 3; i++) {
+                if (t >= pos[i].x && t <= pos[i + 1].x) {
+                    A0 = pos[i];
+                    B0 = ctrl[i];
+
+                    A1 = pos[i + 1];
+                    B1 = ctrl[i + 1];
+                    break;
+                }
+            }
+            t = (t - A0.x) / (A1.x - A0.x);
+            return this.cubic_bezier(A0.y, B0.y, B1.y, A1.y, t);
         }
 
+        public calcBezierX(pos: Array<Point>, ctrl: Array<Point>, t: number): number {
+
+            var A0: Point;
+            var B0: Point;
+            var A1: Point;
+            var B1: Point;
+
+            for (var i: number = 0; i < 3; i++) {
+                if (t >= pos[i].x && t <= pos[i + 1].x) {
+                    A0 = pos[i];
+                    B0 = ctrl[i];
+
+                    A1 = pos[i + 1];
+                    B1 = ctrl[i + 1];
+                    break;
+                }
+            }
+            t = (t - A0.x) / (A1.x - A0.x);
+            return this.cubic_bezier(A0.x, B0.x, B1.x, A1.x, t);
+        }
+
+        private cubic_bezier(p0: number, p1: number, p2: number, p3: number, t:number): number {
+            var progress: number = 1.0 - t;
+            var progress2: number = progress * progress;
+            var progress3: number = progress2 * progress;
+            var t2: number = t * t;
+            var t3: number = t2 * t;
+           
+            var res: number = p0 * progress3 + 3.0 * p1 * t * progress2 + 3.0 * p2 * t2 * progress + p3 * t3;
+            return res;
+        }
 
     }
 
@@ -27,10 +74,16 @@
         public static PointCount: number = 16;
         public posPoints: Array<Point> = [];
         public ctrlPoints: Array<Point> = [];
+        private static calc: BezierCurve = new BezierCurve();
 
         private _count: number;
         constructor(ptCount: number) {
             this._count = ptCount;
+        }
+
+        public calc(t:number): number {
+            var value: number = BezierData.calc.calcBezierY(this.posPoints, this.ctrlPoints, t);
+            return value;
         }
 
         public compress(): Float32Array {

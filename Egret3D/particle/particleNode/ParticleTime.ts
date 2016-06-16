@@ -75,6 +75,12 @@
             } else {
                 bornTimeArray = this.createBornTimeBezier(count, emission);
             }
+            //排序
+            bornTimeArray.sort(function (a: number, b: number) {
+                return a - b;
+            });
+            //略去多余的部分
+            bornTimeArray.length = count;
 
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
@@ -132,15 +138,38 @@
          */
         private createBornTimeBezier(count: number, emission: ParticleDataEmission): Array<number> {
             var bornTimeArray: Array<number> = [];
-            var curve: BezierCurve = new BezierCurve();
             var data: BezierData = emission.bezier;
             //采用的算法为：
-            //1，将duration划分为每1s10帧，然后获得总帧数frameCount
-            //2，根据frameCount遍历循环，计算每个frame对应的curveValue数据：particleCount += curveValue/10;
+            //1，将duration划分为每1s10帧，然后获得总帧数totalFrame
+            //2，根据totalFrame遍历循环，计算每个frame对应的curveValue数据：particleCount += curveValue/10;
             //3，取出particleCount中的超过整数部分，记为particleCountInt
             //4，根据particleCountInt在这个frame中，插入对应数量的bornTime，平均分配
             //5，particleCount减去particleCountInt获得小数部分
+            //6，执行逻辑2
+            const PerSecFrame: number = 10;
+            const FrameTime: number = 1000 / PerSecFrame;
+            const duration: number = this._nodeData.duration * 1000;
+            const TotalFrame: number = Math.ceil(this._nodeData.duration * 1000 / FrameTime);
 
+            var currentTime: number = 0;
+            var rateValue: number = 0;
+            var insertCount: number = 0;
+            var totalInsertCount: number = 0;
+
+            while (totalInsertCount < count) {
+                currentTime += FrameTime;
+                rateValue += data.calc((currentTime % duration) / duration) / PerSecFrame;
+                if (rateValue >= 1) {
+                    insertCount = Math.floor(rateValue);
+                    totalInsertCount += insertCount;
+                    for (var i: number = 0; i < insertCount; i++) {
+                        bornTimeArray.push((currentTime + i * FrameTime / insertCount) / 1000);
+                    }
+                    rateValue -= insertCount;
+                    console.log("bezier:" + insertCount);
+                }
+                        
+            }
             //使用bursts对speaceArray进行修正
             if (emission.bursts) {
                 bornTimeArray = this.burstParticle(emission.bursts, bornTimeArray, count);
@@ -171,12 +200,6 @@
                     bornTimeArray.push(burstPoint.x);
                 }
             }
-
-            bornTimeArray.sort(function (a: number, b: number) {
-                return a - b;
-            });
-
-            bornTimeArray.length = count;
             return bornTimeArray;
         }
 
