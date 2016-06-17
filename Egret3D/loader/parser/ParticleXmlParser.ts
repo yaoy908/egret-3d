@@ -93,10 +93,10 @@
 
             //color
             property.colorType = ParticleBirthColorType[this.getNode(node, "colorType").textContent];
-            var color: number = Number(this.getNode(node, "startColorFrom").textContent);
-            property.colorConst1 = Color.createColor(color);
-            var color: number = Number(this.getNode(node, "startColorTo").textContent);
-            property.colorConst2 = Color.createColor(color);
+            var colorConst1: number = Number(this.getNode(node, "colorConst1").textContent);
+            property.colorConst1 = Color.createColor(colorConst1);
+            var colorConst2: number = Number(this.getNode(node, "colorConst2").textContent);
+            property.colorConst2 = Color.createColor(colorConst2);
             var gradients1: NodeList = this.getNodeList(node, "gradients1");
             property.colorGradients1 = this.parseGradientsColor(gradients1);
             var gradients2: NodeList = this.getNodeList(node, "gradients2");

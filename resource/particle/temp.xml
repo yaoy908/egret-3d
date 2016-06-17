@@ -5,8 +5,8 @@
     <particleCount>200</particleCount>
     <bounds x="10" y="10" z="10"></bounds>
     <colorType>Const</colorType>
-    <startColorFrom>0xffffffff</startColorFrom>
-    <startColorTo>0xff00ff00</startColorTo>
+    <colorConst1>0xffffffff</colorConst1>
+    <colorConst2>0xff00ff00</colorConst2>
     <gradients1>
       <item time="0.0" color="0xff00ff00"></item>
       <item time="0.4" color="0xffff0000"></item>
