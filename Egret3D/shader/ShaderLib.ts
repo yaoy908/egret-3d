@@ -74,7 +74,7 @@ module egret3d {
 			"diffuseColor  = vec4(1.0,1.0,1.0,1.0); \n" +
 			"specularColor = vec4(0.0,0.0,0.0,0.0); \n" +
 			"ambientColor  = vec4(0.0,0.0,0.0,0.0); \n" +
-			"light         = vec4(0.0,0.0,0.0,0.0); \n" +
+			"light         = vec4(0.25,0.25,0.25,0.25); \n" +
 			"normal = normalize(varying_eyeNormal) ; \n" +
 			"uv_0 = varying_uv0; \n" +
 			"} \n",
@@ -179,6 +179,11 @@ module egret3d {
 			"diffuseColor.xyz *= diffuseColor.w ; \n" +
 			"} \n",
 
+			"combin_fs":
+			"uniform sampler2D colorTexture; \n" +
+			"void main(void){ \n" +
+			"} \n",
+
 			"cube_fragment":
 			"uniform samplerCube diffuseTexture ; \n" +
 			"varying vec3 varying_pos; \n" +
@@ -255,36 +260,22 @@ module egret3d {
 
 			"directLight_fragment":
 			"const int max_directLight = 0 ; \n" +
-			"uniform float uniform_directLightSource[11*max_directLight] ; \n" +
+			"uniform float uniform_directLightSource[6*max_directLight] ; \n" +
 			"varying vec3 varying_ViewDir; \n" +
 			"uniform mat4 uniform_NormalMatrix; \n" +
 			"struct DirectLight{ \n" +
 			"vec3 direction; \n" +
 			"vec3 diffuse; \n" +
-			"vec3 ambient; \n" +
-			"float intensity; \n" +
-			"float halfIntensity; \n" +
 			"}; \n" +
 			"void calculateDirectLight( MaterialSource materialSource ){ \n" +
 			"float lambertTerm , specular ; \n" +
 			"vec3 N = normal; \n" +
 			"for(int i = 0 ; i < max_directLight ; i++){ \n" +
 			"DirectLight directLight ; \n" +
-			"directLight.direction = vec3(uniform_directLightSource[i*11+0],uniform_directLightSource[i*11+1],uniform_directLightSource[i*11+2]); \n" +
-			"directLight.diffuse = vec3(uniform_directLightSource[i*11+3],uniform_directLightSource[i*11+4],uniform_directLightSource[i*11+5]); \n" +
-			"directLight.ambient = vec3(uniform_directLightSource[i*11+6],uniform_directLightSource[i*11+7],uniform_directLightSource[i*11+8]); \n" +
-			"directLight.intensity = uniform_directLightSource[i*11+9]; \n" +
-			"directLight.halfIntensity = uniform_directLightSource[i*11+10]; \n" +
-			"ambientColor.xyz += directLight.ambient.xyz * directLight.diffuse ; \n" +
-			"vec3 lightDir = normalize(mat3(uniform_NormalMatrix) * directLight.direction); \n" +
-			"lambertTerm = max(dot(-lightDir,N), 0.0); \n" +
-			"light.xyz += directLight.diffuse * lambertTerm * directLight.intensity ; \n" +
-			"if( lambertTerm> 0.0){ \n" +
-			"vec3 H = normalize( normalize(lightDir) + varying_ViewDir ); \n" +
-			"float NdotH = dot( normal, -H ); \n" +
-			"float lambertTerm = pow( clamp( NdotH ,0.0,1.0),materialSource.shininess ); \n" +
-			"specularColor.xyz += directLight.diffuse * materialSource.specular * lambertTerm; \n" +
-			"} \n" +
+			"directLight.direction = vec3(uniform_directLightSource[i*6+0],uniform_directLightSource[i*6+1],uniform_directLightSource[i*6+2]); \n" +
+			"directLight.diffuse = vec3(uniform_directLightSource[i*6+3],uniform_directLightSource[i*6+4],uniform_directLightSource[i*6+5]); \n" +
+			"vec3 lightDir = -normalize(mat3(uniform_NormalMatrix) * directLight.direction); \n" +
+			"light += LightingBlinnPhong(normalize(lightDir),vec3(1.0,1.0,1.0),normal,-varying_ViewDir,0.5); \n" +
 			"} \n" +
 			"} \n" +
 			"void main() { \n" +
@@ -316,7 +307,7 @@ module egret3d {
 			"vec4 light ; \n" +
 			"void main() { \n" +
 			"diffuseColor.xyz = materialSource.diffuse.xyz * diffuseColor.xyz ; \n" +
-			"outColor.xyz = (ambientColor.xyz + materialSource.ambient.xyz + light.xyz) * diffuseColor.xyz + specularColor.xyz * materialSource.specularScale; \n" +
+			"outColor.xyz = light.xyz * diffuseColor.xyz * materialSource.diffuse ; \n" +
 			"outColor.w = materialSource.alpha * diffuseColor.w ; \n" +
 			"gl_FragColor = outColor * varying_color; \n" +
 			"} \n",
@@ -507,7 +498,19 @@ module egret3d {
 			"} \n",
 
 			"lightingBase_fs":
-			"",
+			"vec4 LightingBlinnPhong(vec3 lightDir, vec3 lightColor , vec3 normal , vec3 viewDir, float atten){ \n" +
+			"vec3 ambient = materialSource.ambient ; \n" +
+			"float NdotL = clamp(dot (normal, lightDir),0.0,1.0); \n" +
+			"vec3 diffuse = lightColor.xyz * NdotL ; \n" +
+			"vec3 h = normalize (lightDir + viewDir); \n" +
+			"float nh = clamp(dot (normal, h),0.0,1.0); \n" +
+			"float specPower = pow (nh, materialSource.shininess ) * materialSource.specularScale ; \n" +
+			"vec3 specular = lightColor.xyz * specPower * materialSource.specular ; \n" +
+			"vec4 c; \n" +
+			"c.rgb = (ambient + diffuse + specular) * (atten * 2.0 ); \n" +
+			"c.a = materialSource.alpha + (specPower * atten); \n" +
+			"return c; \n" +
+			"} \n",
 
 			"lightMapSpecularPower_fs":
 			"uniform sampler2D lightTexture ; \n" +
@@ -643,48 +646,67 @@ module egret3d {
 			"normal.xyz = tbn( normalTex.xyz , normal.xyz , normalize(varying_ViewPose.xyz) , uv_0 ) ; \n" +
 			"} \n",
 
-			"particle_accelerationSpeed":
-			"attribute vec3 attribute_accelerationSpeed ; \n" +
-			"float particle(   ParticleData emit ){ \n" +
-			"accelerationOffset.xyz = currentTime * currentTime * attribute_accelerationSpeed.xyz; \n" +
-			"} \n",
-
 			"particle_bezier":
-			"vec2 quadratic_bezier(vec2 A, vec2 B, vec2 C, float t) \n" +
-			"{ \n" +
-			"vec2 D = mix(A, B, t); \n" +
-			"vec2 E = mix(B, C, t); \n" +
-			"return mix(D, E, t); \n" +
-			"} \n" +
-			"vec2 cubic_bezier(vec2 A, vec2 B, vec2 C, vec2 D, float t) \n" +
-			"{ \n" +
-			"vec2 E = mix(A, B, t); \n" +
-			"vec2 F = mix(B, C, t); \n" +
-			"vec2 G = mix(C, D, t); \n" +
-			"return quadratic_bezier(E, F, G, t); \n" +
+			"float cubic_bezier(float p0, float p1, float p2, float p3, float t) { \n" +
+			"float progress = 1.0 - t; \n" +
+			"float progress2 = progress * progress; \n" +
+			"float progress3 = progress2 * progress; \n" +
+			"float t2 = t * t; \n" +
+			"float t3 = t2 * t; \n" +
+			"t = p0 * progress3 + 3.0 * p1 * t * progress2 + 3.0 * p2 * t2 * progress + p3 * t3; \n" +
+			"return t; \n" +
 			"} \n" +
 			"float calcBezier(vec2 points[16], float t){ \n" +
-			"vec2 startA ; \n" +
-			"vec2 startB ; \n" +
-			"vec2 nextA ; \n" +
-			"vec2 nextB ; \n" +
+			"vec2 A0 ; \n" +
+			"vec2 B0 ; \n" +
+			"vec2 A1 ; \n" +
+			"vec2 B1 ; \n" +
 			"for( int i = 0 ; i < 4 ; i++ ){ \n" +
 			"if( t >= points[i*4].x && t <= points[i*4+3].x ){ \n" +
-			"startA = points[i*4] ; \n" +
-			"startB = points[i*4+1] ; \n" +
-			"nextA = points[i*4+2] ; \n" +
-			"nextB = points[i*4+3] ; \n" +
+			"A0 = points[i*4] ; \n" +
+			"B0 = points[i*4+1] ; \n" +
+			"A1 = points[i*4+2] ; \n" +
+			"B1 = points[i*4+3] ; \n" +
 			"break; \n" +
 			"} \n" +
 			"} \n" +
-			"float len = nextB.x - startA.x ; \n" +
-			"float ws = ( t - startA.x ) / len ; \n" +
-			"vec2 res = cubic_bezier( startA , startB , nextA , nextB , ws); \n" +
-			"return res.y; \n" +
+			"t = (t - A0.x) / (A1.x - A0.x); \n" +
+			"return cubic_bezier(A0.y, B0.y, B1.y, A1.y, t); \n" +
+			"} \n" +
+			"vec2 decompressFloat(float min, float range, float mergeFloat){ \n" +
+			"float convert_1_4096 = 1.0 / 4096.0; \n" +
+			"float value2 = fract(mergeFloat); \n" +
+			"float value1 = mergeFloat - value2; \n" +
+			"value1 *= convert_1_4096; \n" +
+			"value1 *= range; \n" +
+			"value2 *= range; \n" +
+			"value1 += min; \n" +
+			"value2 += min; \n" +
+			"return vec2(value1, value2); \n" +
+			"} \n" +
+			"float calcDoubleBezier(float bezierData[18], float bezierData2[18], float particleProgress, float randomSeed){ \n" +
+			"vec2 bezierPoints[16]; \n" +
+			"vec2 bezierPoints2[16]; \n" +
+			"for(int i = 0; i < 16; i ++){ \n" +
+			"bezierPoints[i] = decompressFloat(bezierData[16], bezierData[17], bezierData[i]); \n" +
+			"bezierPoints2[i] = decompressFloat(bezierData2[16], bezierData2[17], bezierData2[i]); \n" +
+			"} \n" +
+			"float res1 = calcBezier(bezierPoints, particleProgress); \n" +
+			"float res2 = calcBezier(bezierPoints2, particleProgress); \n" +
+			"res1 = randomSeed * res1 + (1.0 - randomSeed) * res2; \n" +
+			"return res1; \n" +
+			"} \n" +
+			"float calcSingleBezier(float bezierData[18], float particleProgress){ \n" +
+			"vec2 bezierPoints[16]; \n" +
+			"for(int i = 0; i < 16; i ++){ \n" +
+			"bezierPoints[i] = decompressFloat(bezierData[16], bezierData[17], bezierData[i]); \n" +
+			"} \n" +
+			"float res = calcBezier(bezierPoints, particleProgress); \n" +
+			"return res; \n" +
 			"} \n",
 
 			"particle_color_fs":
-			"uniform float uniform_colorTransform[16]; \n" +
+			"uniform float uniform_colorTransform[40]; \n" +
 			"vec3 unpack_color(float rgb_data) \n" +
 			"{ \n" +
 			"vec3 res; \n" +
@@ -704,14 +726,15 @@ module egret3d {
 			"float startAlpha; \n" +
 			"float nextAlpha; \n" +
 			"float progress = particleVertex.x/particleVertex.y; \n" +
-			"for( int i = 1 ; i < 8 ; i++ ){ \n" +
-			"if( progress >= fract(uniform_colorTransform[i+8-1]) ){ \n" +
+			"const int maxColorCount = 20; \n" +
+			"for( int i = 1 ; i < maxColorCount ; i++ ){ \n" +
+			"if( progress >= fract(uniform_colorTransform[i+maxColorCount-1]) ){ \n" +
 			"startColor = uniform_colorTransform[i-1] ; \n" +
-			"startSegment = fract(uniform_colorTransform[i+8-1]) ; \n" +
+			"startSegment = fract(uniform_colorTransform[i+maxColorCount-1]) ; \n" +
 			"nextColor = uniform_colorTransform[i]; \n" +
-			"nextSegment = fract(uniform_colorTransform[i+8]) ; \n" +
-			"startAlpha = uniform_colorTransform[i+8-1] - startSegment; \n" +
-			"nextAlpha = uniform_colorTransform[i+8] - nextSegment; \n" +
+			"nextSegment = fract(uniform_colorTransform[i+maxColorCount]) ; \n" +
+			"startAlpha = uniform_colorTransform[i+maxColorCount-1] - startSegment; \n" +
+			"nextAlpha = uniform_colorTransform[i+maxColorCount] - nextSegment; \n" +
 			"}else{ \n" +
 			"break; \n" +
 			"} \n" +
@@ -723,11 +746,11 @@ module egret3d {
 			"} \n",
 
 			"particle_color_vs":
-			"float particle(  ParticleData emit ){ \n" +
+			"float particle(  ParticleData curParticle ){ \n" +
 			"} \n",
 
 			"particle_end":
-			"float particle( ParticleData emit ){ \n" +
+			"float particle( ParticleData curParticle ){ \n" +
 			"return 1.0 ; \n" +
 			"} \n" +
 			"mat4 buildModelMatrix(vec4 quat, vec3 scale, vec3 position) \n" +
@@ -744,13 +767,18 @@ module egret3d {
 			"ret[3][2] = position.z; \n" +
 			"return ret; \n" +
 			"} \n" +
-			"vec3 limitParticleSpeed(vec3 speedXYZ, float limit){ \n" +
-			"vec3 temp = speedXYZ * speedXYZ; \n" +
-			"float speedSquare = sqrt(temp.x + temp.y + temp.z); \n" +
-			"if(speedSquare > limit){ \n" +
-			"speedXYZ = speedXYZ * (limit / speedSquare); \n" +
+			"vec3 calcParticleMove(vec3 speedXYZ, vec3 forceXYZ){ \n" +
+			"vec3 distanceXYZ = speedXYZ * currentTime; \n" +
+			"distanceXYZ += forceXYZ * currentTime * currentTime; \n" +
+			"if(velocityLimitVec2.y == 1.0){ \n" +
+			"vec3 temp = distanceXYZ * distanceXYZ; \n" +
+			"float distanceCurrent = sqrt(temp.x + temp.y + temp.z); \n" +
+			"float distanceLimit = currentTime * velocityLimitVec2.x; \n" +
+			"if(distanceCurrent > distanceLimit){ \n" +
+			"distanceXYZ *= distanceLimit / distanceCurrent; \n" +
 			"} \n" +
-			"return speedXYZ; \n" +
+			"} \n" +
+			"return distanceXYZ; \n" +
 			"} \n" +
 			"void main(void) { \n" +
 			"if(discard_particle == 1.0){ \n" +
@@ -777,16 +805,14 @@ module egret3d {
 			"followTargetRotation.y = particleStateData.rotationY; \n" +
 			"followTargetRotation.z = particleStateData.rotationZ; \n" +
 			"followTargetRotation.w = particleStateData.rotationW; \n" +
-			"velocityLocalVec3 = (buildMat4Quat(followTargetRotation) * vec4(velocityLocalVec3, 1.0)).xyz; \n" +
+			"mat4 followRotQuat = buildMat4Quat(followTargetRotation); \n" +
+			"velocityLocalVec3 = (followRotQuat * vec4(velocityLocalVec3, 1.0)).xyz; \n" +
+			"velocityForceVec3 = (followRotQuat * vec4(velocityForceVec3, 1.0)).xyz; \n" +
 			"} \n" +
-			"velocityMultiVec3 = velocityLocalVec3 + velocityWorldVec3; \n" +
-			"if(velocityLimitVec2.y == 1.0){ \n" +
-			"velocityMultiVec3 = limitParticleSpeed(velocityMultiVec3, velocityLimitVec2.x); \n" +
-			"} \n" +
-			"velocityMultiVec3 *= followTargetScale; \n" +
 			"mat4 modelMatrix = buildModelMatrix(followTargetRotation, followTargetScale, followTargetPosition); \n" +
 			"position_emitter = (modelMatrix * vec4(position_emitter, 1.0)).xyz; \n" +
-			"position_emitter += currentTime * velocityMultiVec3; \n" +
+			"velocityMultiVec3 = velocityLocalVec3 + velocityWorldVec3; \n" +
+			"position_emitter += calcParticleMove(velocityMultiVec3, velocityForceVec3) * followTargetScale; \n" +
 			"position_emitter.y -= currentTime * currentTime * particleStateData.gravity; \n" +
 			"localPosition.xyz *= vec3(particleStateData.scaleX, particleStateData.scaleY, particleStateData.scaleZ); \n" +
 			"outPosition = billboardMatrix * localPosition; \n" +
@@ -801,29 +827,46 @@ module egret3d {
 			"attribute vec3 attribute_followPosition ; \n" +
 			"attribute vec4 attribute_followRotation ; \n" +
 			"attribute vec3 attribute_followScale; \n" +
-			"float particle(  ParticleData emit ){ \n" +
+			"float particle(  ParticleData curParticle ){ \n" +
 			"followTargetPosition = attribute_followPosition; \n" +
 			"followTargetScale = attribute_followScale; \n" +
 			"followTargetRotation = attribute_followRotation; \n" +
 			"} \n" +
 			"	 \n",
 
-			"particle_rotationZ":
+			"particle_rotationConst":
 			"attribute float attribute_rotationZ ; \n" +
-			"float particle(  ParticleData emit ){ \n" +
+			"float particle(  ParticleData curParticle ){ \n" +
 			"float rot = currentTime * attribute_rotationZ * (PI / 180.0); \n" +
 			"localPosition = buildRotMat4(vec3(0.0,0.0,rot)) * localPosition; \n" +
+			"} \n",
+
+			"particle_rotationOneBezier":
+			"uniform float uniform_rotationBezier[18]; \n" +
+			"float particle(  ParticleData curParticle ){ \n" +
+			"if(discard_particle == 0.0){ \n" +
+			"float rot = calcSingleBezier(uniform_rotationBezier, currentTime/curParticle.life);; \n" +
+			"rot = currentTime * rot * (PI / 180.0); \n" +
+			"localPosition = buildRotMat4(vec3(0.0,0.0,rot)) * localPosition; \n" +
+			"} \n" +
+			"} \n",
+
+			"particle_rotationTwoBezier":
+			"uniform float uniform_rotationBezier[18]; \n" +
+			"uniform float uniform_rotationBezier2[18]; \n" +
+			"attribute float attribute_rotationRandomSeed; \n" +
+			"float particle(  ParticleData curParticle ){ \n" +
+			"if(discard_particle == 0.0){ \n" +
+			"float rot = calcDoubleBezier(uniform_rotationBezier, uniform_rotationBezier2, currentTime/curParticle.life, attribute_rotationRandomSeed); \n" +
+			"rot = currentTime * rot * (PI / 180.0); \n" +
+			"localPosition = buildRotMat4(vec3(0.0,0.0,rot)) * localPosition; \n" +
+			"} \n" +
 			"} \n",
 
 			"particle_size_vs":
 			"uniform float uniform_size_compressed[18]; \n" +
 			"void main() { \n" +
-			"vec2 sizeBezierPoints[16]; \n" +
-			"for(int szi = 0; szi < 16; szi ++){ \n" +
-			"sizeBezierPoints[szi] = decompressFloat(uniform_size_compressed[16], uniform_size_compressed[17], uniform_size_compressed[szi]); \n" +
-			"} \n" +
-			"float sizeBezier = calcBezier(sizeBezierPoints, currentTime/emit.life); \n" +
-			"localPosition.xyz *= sizeBezier; \n" +
+			"localPosition.xyz *= calcSingleBezier(uniform_size_compressed, currentTime/curParticle.life); \n" +
 			"} \n",
 
 			"particle_time_fs":
@@ -841,39 +884,39 @@ module egret3d {
 			"float life; \n" +
 			"float index; \n" +
 			"}; \n" +
-			"float particle( ParticleData emit ){ \n" +
+			"float particle( ParticleData curParticle ){ \n" +
 			"float time = particleStateData.time - particleStateData.delay; \n" +
-			"if(time <= emit.bornTime){ \n" +
+			"if(time <= curParticle.bornTime){ \n" +
 			"return currentTime = 0.0; \n" +
 			"} \n" +
 			"if(particleStateData.loop == 0.0){ \n" +
 			"float emitterDuring = particleStateData.duration - particleStateData.delay; \n" +
-			"if(emit.bornTime >= emitterDuring) \n" +
+			"if(curParticle.bornTime >= emitterDuring) \n" +
 			"{ \n" +
 			"return currentTime = 0.0; \n" +
 			"} \n" +
-			"if(time >= emit.life + emit.bornTime) \n" +
+			"if(time >= curParticle.life + curParticle.bornTime) \n" +
 			"{ \n" +
 			"return currentTime = 0.0; \n" +
 			"} \n" +
 			"} \n" +
-			"currentTime = time - emit.bornTime; \n" +
+			"currentTime = time - curParticle.bornTime; \n" +
 			"currentTime = mod(currentTime, particleStateData.loopTime); \n" +
-			"if(currentTime >= emit.life){ \n" +
+			"if(currentTime >= curParticle.life){ \n" +
 			"return currentTime = 0.0; \n" +
 			"} \n" +
 			"if( currentTime <= 0.0 ) \n" +
 			"return currentTime = 0.0; \n" +
 			"} \n" +
 			"void main(void) { \n" +
-			"ParticleData emit ; \n" +
-			"emit.bornTime = attribute_time.x ; \n" +
-			"emit.life = attribute_time.y ; \n" +
-			"emit.index = attribute_time.z ; \n" +
-			"float active = particle( emit ) ; \n" +
+			"ParticleData curParticle ; \n" +
+			"curParticle.bornTime = attribute_time.x ; \n" +
+			"curParticle.life = attribute_time.y ; \n" +
+			"curParticle.index = attribute_time.z ; \n" +
+			"float active = particle( curParticle ) ; \n" +
 			"varying_particleData.x = currentTime; \n" +
-			"varying_particleData.y = emit.life ; \n" +
-			"varying_particleData.z = emit.index; \n" +
+			"varying_particleData.y = curParticle.life ; \n" +
+			"varying_particleData.z = curParticle.index; \n" +
 			"if( active == 0.0 ){ \n" +
 			"e_discard(); \n" +
 			"}else{ \n" +
@@ -882,13 +925,47 @@ module egret3d {
 
 			"particle_velocity":
 			"attribute vec3 attribute_velocity; \n" +
-			"float particle(  ParticleData emit ){ \n" +
+			"float particle(  ParticleData curParticle ){ \n" +
 			"velocityBaseVec3 = attribute_velocity; \n" +
+			"} \n",
+
+			"particle_velocityForceConst":
+			"attribute vec3 attribute_velocityForceConst ; \n" +
+			"float particle(   ParticleData curParticle ){ \n" +
+			"velocityForceVec3 = attribute_velocityForceConst; \n" +
+			"} \n",
+
+			"particle_velocityForceOneBezier":
+			"uniform float uniform_velocityForceX[18]; \n" +
+			"uniform float uniform_velocityForceY[18]; \n" +
+			"uniform float uniform_velocityForceZ[18]; \n" +
+			"void main() { \n" +
+			"if(discard_particle == 0.0){ \n" +
+			"velocityForceVec3.x = calcSingleBezier(uniform_velocityForceX, currentTime/curParticle.life); \n" +
+			"velocityForceVec3.y = calcSingleBezier(uniform_velocityForceY, currentTime/curParticle.life); \n" +
+			"velocityForceVec3.z = calcSingleBezier(uniform_velocityForceZ, currentTime/curParticle.life); \n" +
+			"} \n" +
+			"} \n",
+
+			"particle_velocityForceTwoBezier":
+			"uniform float uniform_velocityForceX[18]; \n" +
+			"uniform float uniform_velocityForceY[18]; \n" +
+			"uniform float uniform_velocityForceZ[18]; \n" +
+			"uniform float uniform_velocityForceX2[18]; \n" +
+			"uniform float uniform_velocityForceY2[18]; \n" +
+			"uniform float uniform_velocityForceZ2[18]; \n" +
+			"attribute float attribute_velocityForceRandomSeed; \n" +
+			"void main() { \n" +
+			"if(discard_particle == 0.0){ \n" +
+			"velocityForceVec3.x = calcDoubleBezier(uniform_velocityForceX, uniform_velocityForceX2, currentTime/curParticle.life, attribute_velocityForceRandomSeed); \n" +
+			"velocityForceVec3.y = calcDoubleBezier(uniform_velocityForceY, uniform_velocityForceY2, currentTime/curParticle.life, attribute_velocityForceRandomSeed); \n" +
+			"velocityForceVec3.z = calcDoubleBezier(uniform_velocityForceZ, uniform_velocityForceZ2, currentTime/curParticle.life, attribute_velocityForceRandomSeed); \n" +
+			"} \n" +
 			"} \n",
 
 			"particle_velocityLimitConst":
 			"attribute float attribute_velocityLimit; \n" +
-			"float particle(  ParticleData emit ){ \n" +
+			"float particle(  ParticleData curParticle ){ \n" +
 			"velocityLimitVec2.x = attribute_velocityLimit; \n" +
 			"if(velocityLimitVec2.x < 0.0){ \n" +
 			"velocityLimitVec2.x = 0.0; \n" +
@@ -900,20 +977,9 @@ module egret3d {
 			"uniform float uniform_velocityLimit[18]; \n" +
 			"void main() { \n" +
 			"if(discard_particle == 0.0){ \n" +
-			"velocityLimitVec2.x = calcVelocityLimitBezier(emit); \n" +
+			"velocityLimitVec2.x = calcSingleBezier(uniform_velocityLimit, currentTime/curParticle.life); \n" +
 			"velocityLimitVec2.y = 1.0; \n" +
 			"} \n" +
-			"} \n" +
-			"float calcVelocityLimitBezier(ParticleData particle){ \n" +
-			"vec2 bezierPoints[16]; \n" +
-			"for(int vox = 0; vox < 16; vox ++){ \n" +
-			"bezierPoints[vox] = decompressFloat(uniform_velocityLimit[16], uniform_velocityLimit[17], uniform_velocityLimit[vox]); \n" +
-			"} \n" +
-			"float res = calcBezier(bezierPoints, currentTime/particle.life); \n" +
-			"if(res < 0.0){ \n" +
-			"res = 0.0; \n" +
-			"} \n" +
-			"return res; \n" +
 			"} \n",
 
 			"particle_velocityLimitTwoBezier":
@@ -922,29 +988,17 @@ module egret3d {
 			"attribute float attribute_velocityLimitRandomSeed; \n" +
 			"void main() { \n" +
 			"if(discard_particle == 0.0){ \n" +
-			"velocityLimitVec2.x = calcVelocityLimitBezier(emit); \n" +
+			"velocityLimitVec2.x = calcDoubleBezier(uniform_velocityLimit, uniform_velocityLimit2, currentTime/curParticle.life, attribute_velocityLimitRandomSeed); \n" +
+			"if(velocityLimitVec2.x < 0.0){ \n" +
+			"velocityLimitVec2.x = 0.0; \n" +
+			"} \n" +
 			"velocityLimitVec2.y = 1.0; \n" +
 			"} \n" +
-			"} \n" +
-			"float calcVelocityLimitBezier(ParticleData particle){ \n" +
-			"vec2 bezierPoints[16]; \n" +
-			"vec2 bezierPoints2[16]; \n" +
-			"for(int vL = 0; vL < 16; vL ++){ \n" +
-			"bezierPoints[vL] = decompressFloat(uniform_velocityLimit[16], uniform_velocityLimit[17], uniform_velocityLimit[vL]); \n" +
-			"bezierPoints2[vL] = decompressFloat(uniform_velocityLimit2[16], uniform_velocityLimit2[17], uniform_velocityLimit2[vL]); \n" +
-			"} \n" +
-			"float res1 = calcBezier(bezierPoints, currentTime/particle.life); \n" +
-			"float res2 = calcBezier(bezierPoints2, currentTime/particle.life); \n" +
-			"if(res1 < 0.0){ \n" +
-			"res1 = 0.0; \n" +
-			"} \n" +
-			"res1 = attribute_velocityOverRandomSeed * res1 + (1.0 - attribute_velocityOverRandomSeed) * res2; \n" +
-			"return res1; \n" +
 			"} \n",
 
 			"particle_velocityOverConst":
 			"attribute vec3 attribute_velocityOverVec3; \n" +
-			"float particle(  ParticleData emit ){ \n" +
+			"float particle(  ParticleData curParticle ){ \n" +
 			"velocityOverVec3 = attribute_velocityOverVec3; \n" +
 			"} \n",
 
@@ -954,26 +1008,10 @@ module egret3d {
 			"uniform float uniform_velocityOverZ[18]; \n" +
 			"void main() { \n" +
 			"if(discard_particle == 0.0){ \n" +
-			"velocityOverVec3.xyz = calcVelocityOverBezierXYZ(emit); \n" +
+			"velocityOverVec3.x = calcSingleBezier(uniform_velocityOverX, currentTime/curParticle.life); \n" +
+			"velocityOverVec3.y = calcSingleBezier(uniform_velocityOverY, currentTime/curParticle.life); \n" +
+			"velocityOverVec3.z = calcSingleBezier(uniform_velocityOverZ, currentTime/curParticle.life); \n" +
 			"} \n" +
-			"} \n" +
-			"vec3 calcVelocityOverBezierXYZ(ParticleData particle){ \n" +
-			"vec3 res = vec3(0.0,0.0,0.0); \n" +
-			"vec2 bezierPoints[16]; \n" +
-			"float particleProgress = currentTime/particle.life; \n" +
-			"for(int vox = 0; vox < 16; vox ++){ \n" +
-			"bezierPoints[vox] = decompressFloat(uniform_velocityOverX[16], uniform_velocityOverX[17], uniform_velocityOverX[vox]); \n" +
-			"} \n" +
-			"res.x = calcBezier(bezierPoints, particleProgress); \n" +
-			"for(int voy = 0; voy < 16; voy ++){ \n" +
-			"bezierPoints[voy] = decompressFloat(uniform_velocityOverY[16], uniform_velocityOverY[17], uniform_velocityOverY[voy]); \n" +
-			"} \n" +
-			"res.y = calcBezier(bezierPoints, particleProgress); \n" +
-			"for(int voz = 0; voz < 16; voz ++){ \n" +
-			"bezierPoints[voz] = decompressFloat(uniform_velocityOverZ[16], uniform_velocityOverZ[17], uniform_velocityOverZ[voz]); \n" +
-			"} \n" +
-			"res.z = calcBezier(bezierPoints, particleProgress); \n" +
-			"return res; \n" +
 			"} \n",
 
 			"particle_velocityOverTwoBezier":
@@ -986,36 +1024,10 @@ module egret3d {
 			"attribute float attribute_velocityOverRandomSeed; \n" +
 			"void main() { \n" +
 			"if(discard_particle == 0.0){ \n" +
-			"velocityOverVec3.xyz = calcVelocityOverBezierRandom(emit); \n" +
+			"velocityOverVec3.x = calcDoubleBezier(uniform_velocityOverX, uniform_velocityOverX2, currentTime/curParticle.life, attribute_velocityOverRandomSeed); \n" +
+			"velocityOverVec3.y = calcDoubleBezier(uniform_velocityOverY, uniform_velocityOverY2, currentTime/curParticle.life, attribute_velocityOverRandomSeed); \n" +
+			"velocityOverVec3.z = calcDoubleBezier(uniform_velocityOverZ, uniform_velocityOverZ2, currentTime/curParticle.life, attribute_velocityOverRandomSeed); \n" +
 			"} \n" +
-			"} \n" +
-			"vec3 calcVelocityOverBezierRandom(ParticleData particle){ \n" +
-			"vec3 res1 = vec3(0.0,0.0,0.0); \n" +
-			"vec3 res2 = vec3(0.0,0.0,0.0); \n" +
-			"vec2 bezierPoints[16]; \n" +
-			"vec2 bezierPoints2[16]; \n" +
-			"float particleProgress = currentTime/particle.life; \n" +
-			"vec2 velocityOverPointsX2[16]; \n" +
-			"for(int vox = 0; vox < 16; vox ++){ \n" +
-			"bezierPoints[vox] = decompressFloat(uniform_velocityOverX[16], uniform_velocityOverX[17], uniform_velocityOverX[vox]); \n" +
-			"bezierPoints2[vox] = decompressFloat(uniform_velocityOverX2[16], uniform_velocityOverX2[17], uniform_velocityOverX2[vox]); \n" +
-			"} \n" +
-			"res1.x = calcBezier(bezierPoints, particleProgress); \n" +
-			"res2.x = calcBezier(bezierPoints2, particleProgress); \n" +
-			"for(int voy = 0; voy < 16; voy ++){ \n" +
-			"bezierPoints[voy] = decompressFloat(uniform_velocityOverY[16], uniform_velocityOverY[17], uniform_velocityOverY[voy]); \n" +
-			"bezierPoints2[voy] = decompressFloat(uniform_velocityOverY2[16], uniform_velocityOverY2[17], uniform_velocityOverY2[voy]); \n" +
-			"} \n" +
-			"res1.y = calcBezier(bezierPoints, particleProgress); \n" +
-			"res2.y = calcBezier(bezierPoints2, particleProgress); \n" +
-			"for(int voz = 0; voz < 16; voz ++){ \n" +
-			"bezierPoints[voz] = decompressFloat(uniform_velocityOverZ[16], uniform_velocityOverZ[17], uniform_velocityOverZ[voz]); \n" +
-			"bezierPoints2[voz] = decompressFloat(uniform_velocityOverZ2[16], uniform_velocityOverZ2[17], uniform_velocityOverZ2[voz]); \n" +
-			"} \n" +
-			"res1.z = calcBezier(bezierPoints, particleProgress); \n" +
-			"res2.z = calcBezier(bezierPoints2, particleProgress); \n" +
-			"res1 = attribute_velocityOverRandomSeed * res1 + (1.0 - attribute_velocityOverRandomSeed) * res2; \n" +
-			"return res1; \n" +
 			"} \n",
 
 			"particle_vs":
@@ -1030,6 +1042,7 @@ module egret3d {
 			"vec4 localPosition = vec4(0.0,0.0,0.0,1.0); \n" +
 			"vec3 velocityBaseVec3 = vec3(0.0,0.0,0.0); \n" +
 			"vec3 velocityOverVec3 = vec3(0.0,0.0,0.0); \n" +
+			"vec3 velocityForceVec3 = vec3(0.0,0.0,0.0); \n" +
 			"vec2 velocityBezierWeightVec2 = vec2(1.0, 1.0); \n" +
 			"vec2 velocityLimitVec2 = vec2(0.0,0.0); \n" +
 			"vec3 followTargetPosition = vec3(0.0,0.0,0.0); \n" +
@@ -1114,17 +1127,6 @@ module egret3d {
 			"0.0,							0.0,					0.0,					1 \n" +
 			"); \n" +
 			"} \n" +
-			"vec2 decompressFloat(float min, float range, float mergeFloat){ \n" +
-			"float convert_1_4096 = 1.0 / 4096.0; \n" +
-			"float value2 = fract(mergeFloat); \n" +
-			"float value1 = mergeFloat - value2; \n" +
-			"value1 *= convert_1_4096; \n" +
-			"value1 *= range; \n" +
-			"value2 *= range; \n" +
-			"value1 += min; \n" +
-			"value2 += min; \n" +
-			"return vec2(value1, value2); \n" +
-			"} \n" +
 			"void main(void) { \n" +
 			"particleStateData.time							= uniform_particleState[0]; \n" +
 			"particleStateData.loop							= uniform_particleState[1]; \n" +
@@ -1155,39 +1157,24 @@ module egret3d {
 
 			"pointLight_fragment":
 			"const int max_pointLight = 0 ; \n" +
-			"uniform float uniform_pointLightSource[12*max_pointLight] ; \n" +
+			"uniform float uniform_pointLightSource[6*max_pointLight] ; \n" +
+			"uniform mat4 uniform_NormalMatrix; \n" +
 			"struct PointLight{ \n" +
 			"vec3 position ; \n" +
 			"vec3 diffuse ; \n" +
-			"vec3 ambient ; \n" +
-			"float intensity; \n" +
-			"float radius; \n" +
-			"float falloff; \n" +
 			"}; \n" +
 			"void calculatePointLight(MaterialSource materialSource){ \n" +
 			"vec3 N = normal; \n" +
 			"for(int i = 0 ; i < max_pointLight ; i++){ \n" +
 			"PointLight pointLight; \n" +
-			"pointLight.position = vec3(uniform_pointLightSource[i*12],uniform_pointLightSource[i*12+1],uniform_pointLightSource[i*12+2]); \n" +
-			"pointLight.diffuse = vec3(uniform_pointLightSource[i*12+3],uniform_pointLightSource[i*12+4],uniform_pointLightSource[i*12+5]); \n" +
-			"pointLight.ambient = vec3(uniform_pointLightSource[i*12+6],uniform_pointLightSource[i*12+7],uniform_pointLightSource[i*12+8]); \n" +
-			"pointLight.intensity = uniform_pointLightSource[i*12+9]; \n" +
-			"pointLight.radius = uniform_pointLightSource[i*12+10]; \n" +
-			"pointLight.falloff = uniform_pointLightSource[i*12+11]; \n" +
-			"ambientColor.xyz += pointLight.diffuse.xyz * pointLight.ambient ; \n" +
-			"vec4 lightVirePos = uniform_ViewMatrix * vec4(pointLight.position.xyz,1.0) ; \n" +
-			"vec3 lightDir = varying_ViewPose.xyz - lightVirePos.xyz ; \n" +
-			"float intensity = max(dot(N,normalize(lightDir)), 0.0); \n" +
-			"float lightDist = length( lightDir ); \n" +
-			"float attenuation = pointLight.intensity / (3.0 + 0.001 * lightDist +  0.00009 * lightDist * lightDist); \n" +
-			"light.xyz += pointLight.diffuse * intensity * attenuation ; \n" +
-			"if( attenuation> 0.0){ \n" +
+			"pointLight.position = vec3(uniform_pointLightSource[i*6],uniform_pointLightSource[i*6+1],uniform_pointLightSource[i*6+2]); \n" +
+			"pointLight.diffuse = vec3(uniform_pointLightSource[i*6+3],uniform_pointLightSource[i*6+4],uniform_pointLightSource[i*6+5]); \n" +
 			"vec3 viewDir = normalize(varying_ViewPose.xyz/varying_ViewPose.w); \n" +
-			"vec3 H = normalize( normalize(lightDir) + viewDir ); \n" +
-			"float NdotH = dot( normal, H ); \n" +
-			"float lambertTerm = pow( clamp( NdotH ,0.0,1.0),materialSource.shininess ); \n" +
-			"specularColor.xyz += pointLight.diffuse * lambertTerm * materialSource.specular * attenuation ; \n" +
-			"} \n" +
+			"vec4 lightVirePos = uniform_NormalMatrix * vec4(pointLight.position.xyz,1.0) ; \n" +
+			"vec3 lightDir = varying_ViewPose.xyz - lightVirePos.xyz ; \n" +
+			"float lightDist = length( lightDir ); \n" +
+			"float attenuation = 1.0 / (3.0 + 0.001 * lightDist +  0.00009 * lightDist * lightDist); \n" +
+			"light += LightingBlinnPhong(normalize(lightDir),vec3(1.0,1.0,1.0),normal,-varying_ViewDir,attenuation); \n" +
 			"}; \n" +
 			"} \n" +
 			"void main() { \n" +
