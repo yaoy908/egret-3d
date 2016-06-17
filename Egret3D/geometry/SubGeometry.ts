@@ -12,6 +12,7 @@
      * @platform Web,Native
      */
     export class SubGeometry {
+
         /**
          * @language zh_CN
          * 顶点索引
@@ -64,6 +65,7 @@
         public textureSpecular: string;
 
         public preAttList: Array<GLSL.Attribute> = new Array<GLSL.Attribute>();
+
 
         /**
         * @language zh_CN
@@ -249,13 +251,22 @@
 
             if (passUsage.attributeDiry)
                 this.upload(passUsage, contextProxy);
+            
+            if (!contextProxy.isActiveVertexFormat(this.geometry.vertexFormat)) {
+                contextProxy.unActiveVertexFormat()
+                for (var i: number = 0; i < passUsage["attributeList"].length; i++) {
+                    var attribute: GLSL.Attribute = passUsage["attributeList"][i];
+                    if (attribute.uniformIndex >= 0)
+                        contextProxy.clearVaPointer(attribute.uniformIndex);
+                }
 
-            for (var i: number = 0; i < passUsage["attributeList"].length; i++) {
-                var attribute: GLSL.Attribute = passUsage["attributeList"][i]; 
-                if (attribute.uniformIndex >= 0)
-                    contextProxy.vertexAttribPointer(attribute.uniformIndex, attribute.size, attribute.dataType, attribute.normalized, attribute.stride, attribute.offsetBytes);
+                contextProxy.activeVertexFormat(this.geometry.vertexFormat);
+                for (var i: number = 0; i < passUsage["attributeList"].length; i++) {
+                    var attribute: GLSL.Attribute = passUsage["attributeList"][i];
+                    if (attribute.uniformIndex >= 0)
+                        contextProxy.vertexAttribPointer(attribute.uniformIndex, attribute.size, attribute.dataType, attribute.normalized, attribute.stride, attribute.offsetBytes);
+                }
             }
-
         }
 
         /**
@@ -265,11 +276,12 @@
         * @platform Web,Native
         */
         public deactiveState(passUsage: PassUsage, contextProxy: Context3DProxy): void {
-            for (var i: number = 0; i < passUsage["attributeList"].length; i++) {
-                var attribute: GLSL.Attribute = passUsage["attributeList"][i];
-                if (attribute.uniformIndex >= 0)
-                    contextProxy.clearVaPointer(attribute.uniformIndex);
-            }
+            //contextProxy.unActiveVertexFormat()
+            //for (var i: number = 0; i < passUsage["attributeList"].length; i++) {
+            //    var attribute: GLSL.Attribute = passUsage["attributeList"][i];
+            //    if (attribute.uniformIndex >= 0)
+            //        contextProxy.clearVaPointer(attribute.uniformIndex);
+            //}
         }
     }
 } 
