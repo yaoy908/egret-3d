@@ -38,7 +38,7 @@
 
             this.matPlane = new TextureMaterial();
             this.matPlane.lightGroup = this.lights;
-            this.matPlane.ambientColor = 0;
+            this.matPlane.ambientColor = 0; 
             this.matPlane.specularLevel = 10.0 ;
             this.matPlane.gloss = 10.0;
 
