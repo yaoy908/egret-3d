@@ -19,10 +19,9 @@
     * @platform Web,Native
     */
     export class Mesh extends IRender implements IQuadNode{
+
         protected _aabbBox: QuadAABB;
-
-
-
+        protected _lightGroup: LightGroup; 
         /**
         * @language zh_CN
         * 构建一个Mesh对象
@@ -91,7 +90,13 @@
         protected onUpdateTransform() {
             this._aabbBox.setOffset(this._pos);
         }
-       
+
+        public set lightGroup(lightGroup: LightGroup) {
+            this._lightGroup = lightGroup; 
+            for (var id in this.multiMaterial ){
+                this.multiMaterial[id].lightGroup = this._lightGroup; 
+            }
+        }
 
         /**
         * @language zh_CN
@@ -106,6 +111,7 @@
                 this._materialCount++;
             }
             this.multiMaterial[id] = material;
+            material.lightGroup = this._lightGroup; 
         }
                 
         /**

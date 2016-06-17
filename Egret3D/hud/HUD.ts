@@ -35,6 +35,7 @@
         private _indexBuffer3D: IndexBuffer3D;
         private _vertexBuffer3D: VertexBuffer3D;
         private _changeTexture: boolean = false;
+        private _vertexFormat: number = VertexFormat.VF_POSITION | VertexFormat.VF_UV0 ;
 
         /**
         * @language zh_CN
@@ -388,20 +389,20 @@
         /**
         * @private
         */
-        public draw(context: Context3DProxy) {
+        public draw(contextProxy: Context3DProxy) {
             if (!this._passUsage.program3D) {
-                this.upload(context);
+                this.upload(contextProxy);
             }
-            context.setProgram(this._passUsage.program3D);
-            context.bindVertexBuffer(this._vertexBuffer3D);
-            context.bindIndexBuffer(this._indexBuffer3D);
-
+            contextProxy.setProgram(this._passUsage.program3D);
+            contextProxy.bindVertexBuffer(this._vertexBuffer3D);
+            contextProxy.bindIndexBuffer(this._indexBuffer3D);
+            contextProxy.activeVertexFormat(this._vertexFormat);
             for (var i: number = 0; i < this._attList.length; ++i) {
-                context.vertexAttribPointer(this._attList[i].uniformIndex, this._attList[i].size, this._attList[i].dataType, this._attList[i].normalized, this._attList[i].stride, this._attList[i].offset);
+                contextProxy.vertexAttribPointer(this._attList[i].uniformIndex, this._attList[i].size, this._attList[i].dataType, this._attList[i].normalized, this._attList[i].stride, this._attList[i].offset);
             }
 
             if (this._changeTexture) {
-                this.updateTexture(context);
+                this.updateTexture(contextProxy);
             }
 
             //texture 2D
@@ -411,30 +412,30 @@
                 if (!sampler2D.texture) {
                     continue;
                 }
-                sampler2D.texture.upload(context);
-                context.setTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index, sampler2D.texture.texture2D);
+                sampler2D.texture.upload(contextProxy);
+                contextProxy.setTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index, sampler2D.texture.texture2D);
             }
 
             if (this._passUsage.uniform_ViewProjectionMatrix) {
-                context.uniformMatrix4fv(this._passUsage.uniform_ViewProjectionMatrix.uniformIndex, false, this.transformMatrix.rawData);
+                contextProxy.uniformMatrix4fv(this._passUsage.uniform_ViewProjectionMatrix.uniformIndex, false, this.transformMatrix.rawData);
             }
 
-            context.setCulling(this.cullMode);
+            contextProxy.setCulling(this.cullMode);
 
             if (this.bothside) {
-                context.disable(ContextConfig.CULL_FACE);
+                contextProxy.disableCullFace();
             } else
-                context.enable(ContextConfig.CULL_FACE);
+                contextProxy.enableCullFace();
 
-            context.enable(ContextConfig.BLEND);
-            context.setBlendFactors(ContextConfig.SRC_ALPHA, ContextConfig.ONE_MINUS_SRC_ALPHA);
-            context.drawElement(DrawMode.TRIANGLES, 0, 6);
-            context.clear(ContextConfig.DEPTH_BUFFER_BIT);
+            contextProxy.enableBlend();
+            contextProxy.setBlendFactors(ContextConfig.SRC_ALPHA, ContextConfig.ONE_MINUS_SRC_ALPHA);
+            contextProxy.drawElement(DrawMode.TRIANGLES, 0, 6);
+            contextProxy.clear(ContextConfig.DEPTH_BUFFER_BIT);
 
-            for (var i: number = 0; i < this._attList.length; ++i) {
-                if (this._attList[i].uniformIndex >= 0)
-                    context.clearVaPointer(this._attList[i].uniformIndex);
-            }
+            //for (var i: number = 0; i < this._attList.length; ++i) {
+            //    if (this._attList[i].uniformIndex >= 0)
+            //        context.clearVaPointer(this._attList[i].uniformIndex);
+            //}
 
             //for (var index in this._passUsage.sampler2DList) {
             //    sampler2D = this._passUsage.sampler2DList[index];
