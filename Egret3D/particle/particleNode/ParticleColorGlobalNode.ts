@@ -40,16 +40,17 @@
         public initNode(data: ParticleDataNode): void {
             var node: ParticleDataColorOffset = <ParticleDataColorOffset>data;
             var count: number = ParticleColorGlobalNode.MaxColor;
-            node.colors.length = node.times.length = count;
+            var gradients: ColorGradients = node.data;
+            gradients.colors.length = gradients.times.length = count;
 
             var color: Color;
             for (var i: number = 0; i < count; i++) {
-                color = node.colors[i];
+                color = gradients.colors[i];
                 if (color) {
                     //这里采用了压缩方法：rgb三个数值压缩到一个float，a和time压缩放到第二个float
                     //然后在gpu中还原
                     this._colorSegment[i] = this.getGpuColor(color.r, color.g, color.b);
-                    this._colorSegment[i + count] = this.getTimeAndAlpha(node.times[i], color.a);
+                    this._colorSegment[i + count] = this.getTimeAndAlpha(gradients.times[i], color.a);
                 }
                 else {
                     this._colorSegment[i] = 0;

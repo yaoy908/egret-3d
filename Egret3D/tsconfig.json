@@ -24,6 +24,7 @@
         "geom/MathUtil.ts",
         "geom/Ray.ts",
         "geom/Color.ts",
+        "geom/ColorGradients.ts",
         "geom/Bound.ts",
         "data/HashMap.ts",
         "geom/BoundBox.ts",

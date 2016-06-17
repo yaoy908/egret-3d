@@ -4,15 +4,29 @@
   <property>
     <particleCount>200</particleCount>
     <bounds x="10" y="10" z="10"></bounds>
+    <colorType>Const</colorType>
     <startColorFrom>0xffffffff</startColorFrom>
-    <startColorTo>0xffffffff</startColorTo>
+    <startColorTo>0xff00ff00</startColorTo>
+    <gradients1>
+      <item time="0.0" color="0xff00ff00"></item>
+      <item time="0.4" color="0xffff0000"></item>
+      <item time="0.6" color="0xff0000ff"></item>
+      <item time="1.0" color="0xffffffff"></item>
+    </gradients1>
+    <gradients2>
+      <item time="0.0" color="0xff00ff00"></item>
+      <item time="0.4" color="0xffff0000"></item>
+      <item time="0.6" color="0xff0000ff"></item>
+      <item time="1.0" color="0xffffffff"></item>
+    </gradients2>
     <gravity>0</gravity>
     <transform>
       <rotation x="0" y="0" z="0"></rotation>
       <scale x="1" y="1" z="1"></scale>
       <position x="0" y="0" z="0"></position>
     </transform>
-  </property>
+  
+</property>
   
   
   <emission>

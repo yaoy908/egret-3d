@@ -87,8 +87,8 @@
 
             var property: ParticleDataProperty = data.property;
             property.particleCount = 100;
-            property.startColorFrom.setTo(255, 255, 255, 255);
-            property.startColorTo.setTo(255, 255, 255, 255);
+            property.colorConst1.setTo(255, 255, 255, 255);
+            property.colorConst2.setTo(255, 255, 255, 255);
             //property.gravity = 10;
 
             var speed: ParticleDataMoveSpeed = data.moveSpeed;
@@ -134,18 +134,18 @@
 
             var colorOffset: ParticleDataColorOffset = new ParticleDataColorOffset();
             data.colorOffset = colorOffset;
-            colorOffset.colors.push(new Color(255.0, 0.0, 0.0, 255.0));
-            colorOffset.colors.push(new Color(0.0, 255.0, 0.0, 255.0));
-            colorOffset.colors.push(new Color(0.0, 0.0, 255.0, 255.0));
-            colorOffset.colors.push(new Color(0.0, 255.0, 0.0, 255.0));
-            colorOffset.colors.push(new Color(255.0, 0.0, 0.0, 128.0));
-            colorOffset.colors.push(new Color(255.0, 0.0, 0.0, 0.0));
-            colorOffset.times.push(0.0);
-            colorOffset.times.push(0.2);
-            colorOffset.times.push(0.4);
-            colorOffset.times.push(0.6);
-            colorOffset.times.push(0.7);
-            colorOffset.times.push(1.0);
+            colorOffset.data.colors.push(new Color(255.0, 0.0, 0.0, 255.0));
+            colorOffset.data.colors.push(new Color(0.0, 255.0, 0.0, 255.0));
+            colorOffset.data.colors.push(new Color(0.0, 0.0, 255.0, 255.0));
+            colorOffset.data.colors.push(new Color(0.0, 255.0, 0.0, 255.0));
+            colorOffset.data.colors.push(new Color(255.0, 0.0, 0.0, 128.0));
+            colorOffset.data.colors.push(new Color(255.0, 0.0, 0.0, 0.0));
+            colorOffset.data.times.push(0.0);
+            colorOffset.data.times.push(0.2);
+            colorOffset.data.times.push(0.4);
+            colorOffset.data.times.push(0.6);
+            colorOffset.data.times.push(0.7);
+            colorOffset.data.times.push(1.0);
 
             var sizeBezier: ParticleDataScaleBezier = new ParticleDataScaleBezier();
             data.scaleBesizer = sizeBezier;
