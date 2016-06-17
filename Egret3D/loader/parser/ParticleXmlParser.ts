@@ -62,23 +62,27 @@
             var moveSpeed: Node = this.getNode(this._xml, "moveSpeed");
             this.parseMoveSpeed(moveSpeed);
             //followTarget
-            //var followTarget: Node = this.getNode(this._xml, "followTarget");
-            //this.parseFollowTarget(followTarget);
+            var followTarget: Node = this.getNode(this._xml, "followTarget");
+            this.parseFollowTarget(followTarget);
             //parseBezierNode
             var scaleBezier: Node = this.getNode(this._xml, "scaleBezier");
-            //this.parseScaleBeizer(scaleBezier);
+            this.parseScaleBeizer(scaleBezier);
             //rotationSpeed
             var rotationSpeed: Node = this.getNode(this._xml, "rotationSpeed");
-            //this.parseRotationSpeed(rotationSpeed);
+            this.parseRotationSpeed(rotationSpeed);
             //colorOffset
             var colorOffset: Node = this.getNode(this._xml, "colorOffset");
-           // this.parseColorOffset(colorOffset);
+            this.parseColorOffset(colorOffset);
 
 
 
             return this._particleData;
         }
 
+        /**
+         * @private
+         * 解析基础属性
+         */
         private parseProperty(node: Node): void {
             var property: ParticleDataProperty = this._particleData.property;
 
@@ -87,13 +91,19 @@
             var bounds: Node = this.getNode(node, "bounds");
             property.bounds = this.parseVector3D(bounds, property.bounds);
 
-            var color: number = Number(this.getNode(node, "startColorFrom").textContent);
-            property.startColorFrom = Color.createColor(color);
-            var color: number = Number(this.getNode(node, "startColorTo").textContent);
-            property.startColorTo = Color.createColor(color);
-
+            //color
+            property.colorType = ParticleBirthColorType[this.getNode(node, "colorType").textContent];
+            var colorConst1: number = Number(this.getNode(node, "colorConst1").textContent);
+            property.colorConst1 = Color.createColor(colorConst1);
+            var colorConst2: number = Number(this.getNode(node, "colorConst2").textContent);
+            property.colorConst2 = Color.createColor(colorConst2);
+            var gradients1: NodeList = this.getNodeList(node, "gradients1");
+            property.colorGradients1 = this.parseGradientsColor(gradients1);
+            var gradients2: NodeList = this.getNodeList(node, "gradients2");
+            property.colorGradients2 = this.parseGradientsColor(gradients2);
+            //gravity
             property.gravity = Number(this.getNode(node, "gravity").textContent);
-
+            //transform
             var transform: Node = this.getNode(node, "transform");
             var rotation: Node = this.getNode(transform, "rotation");
             var scale: Node = this.getNode(transform, "scale");
@@ -104,7 +114,10 @@
             property.position = this.parseVector3D(position, property.position);
         }
 
-
+        /**
+         * @private
+         * 解析发射器数据
+         */
         private parseEmission(node: Node): void {
             var emission: ParticleDataEmission = this._particleData.emission;
             emission.type = ParticleValueType[this.getNode(node, "type").textContent];
@@ -138,7 +151,10 @@
 
         }
 
-
+        /**
+         * @private
+         * 解析生命周期相关数据
+         */
         private parseLife(node: Node): void {
             var life: ParticleDataLife = this._particleData.life;
             life.duration = Number(this.getNode(node, "duration").textContent);
@@ -149,11 +165,15 @@
 
         }
 
-
+        /**
+         * @private
+         * 解析发射器的范围类型
+         */
         private parseShape(node: Node): void {
             var shape: ParticleDataShape = this._particleData.shape;
             shape.type = ParticleDataShape[this.getNode(node, "type").textContent];
             shape.randomDirection = this.getNode(node, "randomDirection").textContent == "true";
+            //cube
             var cube: Node = this.getNode(node, "cube");
             this.eachAttr(cube, function (label: string, value: string): void {
                 if (label == "width") {
@@ -164,10 +184,14 @@
                     shape.cubeD = Number(value);
                 }
             });
+            //sphere
             shape.sphereRadius = Number(this.getNode(node, "sphereRadius").textContent);
 
         }
-
+        /**
+         * @private
+         * 解析粒子出生的旋转信息
+         */
         private parseRotationBirth(node: Node): void {
             var rotationBirth: ParticleDataRotationBirth = this._particleData.rotationBirth;
             var min: Node = this.getNode(node, "min");
@@ -177,7 +201,10 @@
 
         }
 
-
+        /**
+         * @private
+         * 解析粒子出生的缩放信息
+         */
         private parseScaleBirth(node: Node): void {
             var scaleBirth: ParticleDataScaleBirth = this._particleData.scaleBirth;
             var min: Node = this.getNode(node, "min");
@@ -187,7 +214,10 @@
             scaleBirth.max = this.parseVector3D(max, scaleBirth.max);
         }
 
-
+        /**
+         * @private
+         * 解析粒子的几何形状
+         */
         private parseGeometry(node: Node): void {
             var geometry: ParticleDataGeometry = this._particleData.geometry;
             geometry.type = ParticleGeometryType[this.getNode(node, "type").textContent];
@@ -227,7 +257,10 @@
         }
 
 
-        
+        /**
+         * @private
+         * 解析粒子速度相关信息
+         */
         private parseMoveSpeed(node: Node): void {
             var moveSpeed: ParticleDataMoveSpeed = this._particleData.moveSpeed;
             moveSpeed.min = Number(this.getNode(node, "min").textContent);
@@ -293,7 +326,10 @@
 
         }
 
-
+        /**
+         * @private
+         * 解析全局位置or本地位置类型
+         */
         private parseFollowTarget(node: Node): void {
             if (node == null)
                 return;
@@ -304,7 +340,10 @@
             
         }
 
-        
+        /**
+         * @private
+         * 解析粒子生命过程中缩放变化信息
+         */
         private parseScaleBeizer(node: Node): void {
             if (node == null)
                 return;
@@ -313,7 +352,10 @@
         }
 
 
-
+         /**
+         * @private
+         * 解析粒子旋转角速度
+         */
         private parseRotationSpeed(node: Node): void {
             if (node == null)
                 return;
@@ -329,41 +371,51 @@
 
         }
 
-
+         /**
+         * @private
+         * 解析粒子生命过程中颜色渐变信息
+         */
         private parseColorOffset(node: Node): void {
             if (node == null)
                 return;
             var colorOffset: ParticleDataColorOffset = this._particleData.colorOffset = new ParticleDataColorOffset();
-
             var itemList: NodeList = this.getNodeList(node, "item");
+            colorOffset.data = this.parseGradientsColor(itemList, colorOffset.data);
+        }
+
+
+         /**
+         * @private
+         * 解析渐变数据
+         */
+        private parseGradientsColor(itemList: NodeList, dst:ColorGradients = null): ColorGradients {
+            dst || (dst = new ColorGradients);
             var item: Node;
             var i: number = 0;
             var count: number = 0;
             var pt: Point;
             var color: Color;
             var time: number;
-
             for (i = 0, count = itemList.length; i < count; i++) {
                 item = itemList[i];
                 this.eachAttr(item, function (label: string, value: string): void {
                     if (label == "time") {
-                        colorOffset.times.push(Number(value));
+                        dst.times.push(Number(value));
                     } else if (label == "color") {
                         color = Color.createColor(Number(value));
-                        colorOffset.colors.push(color);
+                        dst.colors.push(color);
                     }
                 });
             }
-
+            return dst;
         }
 
 
-        
 
-
-
-
-
+         /**
+         * @private
+         * 解析一条贝塞尔曲线数据
+         */
         private parseBezierData(node: Node): BezierData {
             var bzData: BezierData = new BezierData(BezierData.PointCount);
             var posList: NodeList = this.getNodeList(node, "pos");
@@ -402,6 +454,10 @@
             return bzData;
         }
 
+         /**
+         * @private
+         * 解析一个vector3D数据
+         */
         private parseVector3D(node: Node, vector: Vector3D): Vector3D {
             if (vector == null)
                 vector = new Vector3D();
@@ -417,6 +473,10 @@
             return vector;
         }
 
+         /**
+         * @private
+         * 在obj中，获取name的元素，第一个
+         */
         private getNode(obj:any, name: string): Node {
             if (obj == null)
                 return null;
@@ -426,6 +486,10 @@
             return list[0];
         }
 
+        /**
+         * @private
+         * 在obj中，获取name的元素列表
+         */
         private getNodeList(obj: any, name: string): NodeList {
             if (obj == null)
                 return null;
@@ -434,6 +498,7 @@
                 return null;
             return list;
         }
+
 
         private eachAttr(item: Node, fun: Function): void {
             XmlParser.eachXmlAttr(item, fun);

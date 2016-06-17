@@ -1,37 +1,31 @@
-//±´Èû¶ûÇúÏß
-
-float cubic_bezier(float p0, float p1, float p2, float p3, float t) {
-    float progress = 1.0 - t;
-    float progress2 = progress * progress;
-    float progress3 = progress2 * progress;
-    float t2 = t * t;
-    float t3 = t2 * t;
-           
-	t = p0 * progress3 + 3.0 * p1 * t * progress2 + 3.0 * p2 * t2 * progress + p3 * t3;
-	return t;
-}
-
-
 float calcBezier(vec2 points[16], float t){
 	
-	vec2 A0 ;
-	vec2 B0 ;
-    vec2 A1 ;
-    vec2 B1 ;
+	vec2 P0 ;
+	vec2 P1 ;
+    vec2 P2 ;
+    vec2 P3 ;
 	
     for( int i = 0 ; i < 4 ; i++ ){
         if( t >= points[i*4].x && t <= points[i*4+3].x ){
-            A0 = points[i*4] ;
-            B0 = points[i*4+1] ;
+            P0 = points[i*4] ;
+            P1 = points[i*4+1] ;
             
-            A1 = points[i*4+2] ;
-            B1 = points[i*4+3] ;
+            P3 = points[i*4+2] ;
+            P2 = points[i*4+3] ;
             break;
         }
     } 
 	
-    t = (t - A0.x) / (A1.x - A0.x);
-    return cubic_bezier(A0.y, B0.y, B1.y, A1.y, t);
+    t = (t - P0.x) / (P3.x - P0.x);
+
+	float p0y = mix(P0.y, P1.y, t);
+	float p1y = mix(P1.y, P2.y, t);
+	float p2y = mix(P2.y, P3.y, t);
+	
+	p0y = mix(p0y, p1y, t);
+	p1y = mix(p1y, p2y, t);
+
+	return mix(p0y, p1y, t);
 }
 
 

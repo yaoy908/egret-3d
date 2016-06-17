@@ -10,7 +10,7 @@
         Property,
         Emission,
         Life,
-        Distribute,
+        Shape,
         RotationBirth,
         ScaleBirth,
         Geometry,
@@ -47,6 +47,19 @@
         Plane,
         Cube,
         Sphere,
+    }
+
+    /**
+    * @language zh_CN
+    * 粒子出生颜色
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export enum ParticleBirthColorType {
+        Const,
+        RandomConst,
+        OneGradients,
+        TwoGradients,
     }
 
 
@@ -127,9 +140,13 @@
 
         public bounds: Vector3D = new Vector3D(10, 10, 10);
         public blendMode: BlendMode = BlendMode.ADD;
-        
-        public startColorFrom: Color = new Color(255, 255, 255, 255);
-        public startColorTo: Color = new Color(255, 255, 255, 255);
+        //初始颜色
+        public colorType: number = ParticleBirthColorType.Const;
+        public colorConst1: Color = new Color(255, 255, 255, 255);
+        public colorConst2: Color = new Color(255, 255, 255, 255);
+        public colorGradients1: ColorGradients;
+        public colorGradients2: ColorGradients;
+        //重力
         public gravity: number = 0;
 
         public rotation: Vector3D = new Vector3D(0, 0, 0, 1);
@@ -156,12 +173,23 @@
             if (this.particleCount < 0) {
                 this.particleCount = 10;
             }
-            if (this.startColorFrom == null) {
-                this.startColorFrom = new Color(255, 255, 255, 255);
+            if (this.colorConst1 == null) {
+                this.colorConst1 = new Color(255, 255, 255, 255);
             }
-            if (this.startColorTo == null) {
-                this.startColorTo = new Color(255, 255, 255, 255);
+            if (this.colorConst2 == null) {
+                this.colorConst2 = new Color(255, 255, 255, 255);
             }
+            if (this.colorType == ParticleBirthColorType.OneGradients || this.colorType == ParticleBirthColorType.TwoGradients) {
+                if (this.colorGradients1 == null) {
+                    this.colorGradients1 = new ColorGradients();
+                }
+            }
+            if (this.colorType == ParticleBirthColorType.TwoGradients) {
+                if (this.colorGradients2 == null) {
+                    this.colorGradients2 = new ColorGradients();
+                }
+            }
+
             if (this.rotation == null) {
                 this.rotation = new Vector3D(0, 0, 0, 1);
             }
@@ -249,7 +277,7 @@
         public sphereRadius: number = 10;
 
         constructor() {
-            super(ParticleDataNodeType.Distribute);
+            super(ParticleDataNodeType.Shape);
         }
         public validate(): void {
             if (this.type == ParticleDataShape.Cube) {
@@ -666,18 +694,17 @@
 
     export class ParticleDataColorOffset extends ParticleDataNode {
         //粒子颜色变化贝塞尔曲线
-        public colors: Array<Color> = [];
-        public times: Array<number> = [];
+        public data: ColorGradients = new ColorGradients();
         constructor() {
             super(ParticleDataNodeType.ColorOffset);
         }
 
         public validate(): void {
-            if (this.colors == null) {
-                this.colors = [];
+            if (this.data.colors == null) {
+                this.data.colors = [];
             }
-            if (this.times == null) {
-                this.times = [];
+            if (this.data.times == null) {
+                this.data.times = [];
             }
         }
     }

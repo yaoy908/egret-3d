@@ -166,7 +166,6 @@
                         bornTimeArray.push((currentTime + i * FrameTime / insertCount) / 1000);
                     }
                     rateValue -= insertCount;
-                    console.log("bezier:" + insertCount);
                 }
                         
             }
@@ -189,17 +188,30 @@
                 return a.x - b.x;
             });
 
+            var duration: number = this._nodeData.duration;
+            var burstLife: Array<number> = [];
             var burstPoint: Point;
             for (var i: number = 0; i < bursts.length; i++) {
                 burstPoint = bursts[i];
-                //喷射时间超过了duration
-                if (this._nodeData.loop == false && burstPoint.x >= this._nodeData.duration)
-                    continue;
-
                 for (var k: number = 0; k < burstPoint.y; k++) {
-                    bornTimeArray.push(burstPoint.x);
+                    burstLife.push(burstPoint.x);
                 }
             }
+
+            var maxTime: number = bornTimeArray[bornTimeArray.length - 1];
+            var loopCount: number = 1;
+            if (this._nodeData.loop) {
+                loopCount = Math.ceil(maxTime / this._nodeData.duration);
+            }
+            for (var i: number = 0, count = burstLife.length; i < count; i++)
+            {
+                var tempTime: number = burstLife[i];
+                for (var btCt: number = 0; btCt < loopCount; btCt++) {
+                    bornTimeArray.push(btCt * duration + tempTime);
+                }
+            }
+
+            
             return bornTimeArray;
         }
 
