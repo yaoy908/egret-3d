@@ -41,6 +41,7 @@ module egret3d {
                 if (t >= this.times[i] && t < this.times[i + 1]) {
                     t = this.times[i] / (this.times[i + 1] - this.times[i]);
                     dst.lerp(this.colors[i], this.colors[i + 1], t);
+                    break;
                 }
             }
 

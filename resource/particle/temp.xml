@@ -7,18 +7,18 @@
     <colorType>Const</colorType>
     <colorConst1>0xffffffff</colorConst1>
     <colorConst2>0xff00ff00</colorConst2>
-    <gradients1>
+    <colorGradients1>
       <item time="0.0" color="0xff00ff00"></item>
       <item time="0.4" color="0xffff0000"></item>
       <item time="0.6" color="0xff0000ff"></item>
       <item time="1.0" color="0xffffffff"></item>
-    </gradients1>
-    <gradients2>
+    </colorGradients1>
+    <colorGradients2>
       <item time="0.0" color="0xff00ff00"></item>
       <item time="0.4" color="0xffff0000"></item>
       <item time="0.6" color="0xff0000ff"></item>
       <item time="1.0" color="0xffffffff"></item>
-    </gradients2>
+    </colorGradients2>
     <gravity>0</gravity>
     <transform>
       <rotation x="0" y="0" z="0"></rotation>
@@ -26,6 +26,7 @@
       <position x="0" y="0" z="0"></position>
     </transform>
   
+
 </property>
   
   
