@@ -452,7 +452,9 @@
          * 解析一条贝塞尔曲线数据
          */
         private parseBezierData(node: Node): BezierData {
-            var bzData: BezierData = new BezierData(BezierData.PointCount);
+            var bzData: BezierData = new BezierData();
+            if (node == null)
+                return bzData;
             var posList: NodeList = this.getNodeList(node, "pos");
             var ctrlList: NodeList = this.getNodeList(node, "ctrl");
             var item: Node;

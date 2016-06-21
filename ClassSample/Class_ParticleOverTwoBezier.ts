@@ -60,7 +60,7 @@
             speed.velocityOver.type = ParticleValueType.TwoBezier;
 
             //___bezier1
-            var xBezier: BezierData = new BezierData(BezierData.PointCount);
+            var xBezier: BezierData = new BezierData();
             xBezier.posPoints.push(new Point(0, 0));
             xBezier.posPoints.push(new Point(0.3, 60));
             xBezier.posPoints.push(new Point(0.35, 60));
@@ -72,14 +72,14 @@
             xBezier.ctrlPoints.push(new Point(1.0, -40));
             speed.velocityOver.xBezier1 = xBezier;
 
-            var yBezier: BezierData = new BezierData(BezierData.PointCount);
+            var yBezier: BezierData = new BezierData();
             yBezier.posPoints.push(new Point(0, 0));
             yBezier.posPoints.push(new Point(1, 0));
             yBezier.ctrlPoints.push(new Point(0, 0));
             yBezier.ctrlPoints.push(new Point(1, 0));
             speed.velocityOver.yBezier1 = yBezier;
 
-            var zBezier: BezierData = new BezierData(BezierData.PointCount);
+            var zBezier: BezierData = new BezierData();
             zBezier.posPoints.push(new Point(0, 0));
             zBezier.posPoints.push(new Point(1, 0));
             zBezier.ctrlPoints.push(new Point(0, 0));
@@ -87,7 +87,7 @@
             speed.velocityOver.zBezier1 = zBezier;
 
             //___bezier2
-            var xBezier2: BezierData = new BezierData(BezierData.PointCount);
+            var xBezier2: BezierData = new BezierData();
             xBezier2.posPoints.push(new Point(0, 0));
             xBezier2.posPoints.push(new Point(0.3, 15));
             xBezier2.posPoints.push(new Point(0.35, 15));
@@ -99,14 +99,14 @@
             xBezier2.ctrlPoints.push(new Point(1.0, -10));
             speed.velocityOver.xBezier2= xBezier2;
 
-            var yBezier2: BezierData = new BezierData(BezierData.PointCount);
+            var yBezier2: BezierData = new BezierData();
             yBezier2.posPoints.push(new Point(0, 0));
             yBezier2.posPoints.push(new Point(1, 0));
             yBezier2.ctrlPoints.push(new Point(0, 0));
             yBezier2.ctrlPoints.push(new Point(1, 0));
             speed.velocityOver.yBezier2 = yBezier2;
 
-            var zBezier2: BezierData = new BezierData(BezierData.PointCount);
+            var zBezier2: BezierData = new BezierData();
             zBezier2.posPoints.push(new Point(0, 0));
             zBezier2.posPoints.push(new Point(1, 0));
             zBezier2.ctrlPoints.push(new Point(0, 0));

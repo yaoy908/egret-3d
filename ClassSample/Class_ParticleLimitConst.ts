@@ -73,7 +73,7 @@
             speed.velocityOver = velocityOver;
             speed.velocityOver.type = ParticleValueType.OneBezier;
 
-            var xBezier: BezierData = new BezierData(BezierData.PointCount);
+            var xBezier: BezierData = new BezierData();
             xBezier.posPoints.push(new Point(0, 0));
             xBezier.posPoints.push(new Point(0.5, 20));
             xBezier.posPoints.push(new Point(0.55, 20));
@@ -86,7 +86,7 @@
 
             speed.velocityOver.xBezier1 = xBezier;
 
-            var yBezier: BezierData = new BezierData(BezierData.PointCount);
+            var yBezier: BezierData = new BezierData();
             yBezier.posPoints.push(new Point(0, 0));
             yBezier.posPoints.push(new Point(0.7, 40));
             yBezier.posPoints.push(new Point(0.75, 40));
@@ -98,7 +98,7 @@
             yBezier.ctrlPoints.push(new Point(1.0, 20));
             speed.velocityOver.yBezier1 = yBezier;
 
-            var zBezier: BezierData = new BezierData(BezierData.PointCount);
+            var zBezier: BezierData = new BezierData();
             zBezier.posPoints.push(new Point(0, 0));
             zBezier.posPoints.push(new Point(0, 0));
             zBezier.ctrlPoints.push(new Point(1, 0));

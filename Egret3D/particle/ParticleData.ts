@@ -206,7 +206,7 @@
         public rate: number = 10;
         public type: number = ParticleValueType.Const;
         public bursts: Array<Point>;
-        public bezier: BezierData = new BezierData(BezierData.PointCount);
+        public bezier: BezierData = new BezierData();
         constructor() {
             super(ParticleDataNodeType.Emission);
         }
@@ -217,7 +217,7 @@
             }
             if (this.type == ParticleValueType.OneBezier) {
                 if (this.bezier == null) {
-                    this.bezier = new BezierData(BezierData.PointCount);
+                    this.bezier = new BezierData();
                 }
                 this.bezier.validate();
             }
@@ -461,8 +461,8 @@
         public max: number = 0;
         public min: number = 0;
 
-        public bezier1: BezierData = new BezierData(BezierData.PointCount);
-        public bezier2: BezierData = new BezierData(BezierData.PointCount);
+        public bezier1: BezierData = new BezierData();
+        public bezier2: BezierData = new BezierData();
 
         constructor() {
         }
@@ -477,14 +477,14 @@
 
             if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
                 if (this.bezier1 == null) {
-                    this.bezier1 = new BezierData(BezierData.PointCount);
+                    this.bezier1 = new BezierData();
                 }
                 this.bezier1.validate();
             }
             
             if (this.type == ParticleValueType.TwoBezier) {
                 if (this.bezier2 == null) {
-                    this.bezier2 = new BezierData(BezierData.PointCount);
+                    this.bezier2 = new BezierData();
                 }               
                 this.bezier2.validate();
             }
@@ -499,13 +499,13 @@
         public min: Vector3D = new Vector3D();
         public worldSpace: boolean = false;
 
-        public xBezier1: BezierData = new BezierData(BezierData.PointCount);
-        public yBezier1: BezierData = new BezierData(BezierData.PointCount);
-        public zBezier1: BezierData = new BezierData(BezierData.PointCount);
+        public xBezier1: BezierData = new BezierData();
+        public yBezier1: BezierData = new BezierData();
+        public zBezier1: BezierData = new BezierData();
                                    
-        public xBezier2: BezierData = new BezierData(BezierData.PointCount);
-        public yBezier2: BezierData = new BezierData(BezierData.PointCount);
-        public zBezier2: BezierData = new BezierData(BezierData.PointCount);
+        public xBezier2: BezierData = new BezierData();
+        public yBezier2: BezierData = new BezierData();
+        public zBezier2: BezierData = new BezierData();
 
         public validate(): void {
 
@@ -517,13 +517,13 @@
             }
             if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
                 if (this.xBezier1 == null) {
-                    this.xBezier1 = new BezierData(BezierData.PointCount);
+                    this.xBezier1 = new BezierData();
                 }
                 if (this.yBezier1 == null) {
-                    this.yBezier1 = new BezierData(BezierData.PointCount);
+                    this.yBezier1 = new BezierData();
                 }
                 if (this.zBezier1 == null) {
-                    this.zBezier1 = new BezierData(BezierData.PointCount);
+                    this.zBezier1 = new BezierData();
                 }
 
                 this.xBezier1.validate();
@@ -533,13 +533,13 @@
 
             if (this.type == ParticleValueType.TwoBezier) {
                 if (this.xBezier2 == null) {
-                    this.xBezier2 = new BezierData(BezierData.PointCount);
+                    this.xBezier2 = new BezierData();
                 }
                 if (this.yBezier2 == null) {
-                    this.yBezier2 = new BezierData(BezierData.PointCount);
+                    this.yBezier2 = new BezierData();
                 }
                 if (this.zBezier2 == null) {
-                    this.zBezier2 = new BezierData(BezierData.PointCount);
+                    this.zBezier2 = new BezierData();
                 }
                 this.xBezier2.validate();
                 this.yBezier2.validate();
@@ -556,13 +556,13 @@
         public min: Vector3D = new Vector3D();
         public worldSpace: boolean = false;
 
-        public xBezier1: BezierData = new BezierData(BezierData.PointCount);
-        public yBezier1: BezierData = new BezierData(BezierData.PointCount);
-        public zBezier1: BezierData = new BezierData(BezierData.PointCount);
+        public xBezier1: BezierData = new BezierData();
+        public yBezier1: BezierData = new BezierData();
+        public zBezier1: BezierData = new BezierData();
 
-        public xBezier2: BezierData = new BezierData(BezierData.PointCount);
-        public yBezier2: BezierData = new BezierData(BezierData.PointCount);
-        public zBezier2: BezierData = new BezierData(BezierData.PointCount);
+        public xBezier2: BezierData = new BezierData();
+        public yBezier2: BezierData = new BezierData();
+        public zBezier2: BezierData = new BezierData();
 
         public validate(): void {
 
@@ -574,13 +574,13 @@
             }
             if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
                 if (this.xBezier1 == null) {
-                    this.xBezier1 = new BezierData(BezierData.PointCount);
+                    this.xBezier1 = new BezierData();
                 }
                 if (this.yBezier1 == null) {
-                    this.yBezier1 = new BezierData(BezierData.PointCount);
+                    this.yBezier1 = new BezierData();
                 }
                 if (this.zBezier1 == null) {
-                    this.zBezier1 = new BezierData(BezierData.PointCount);
+                    this.zBezier1 = new BezierData();
                 }
 
                 this.xBezier1.validate();
@@ -590,13 +590,13 @@
 
             if (this.type == ParticleValueType.TwoBezier) {
                 if (this.xBezier2 == null) {
-                    this.xBezier2 = new BezierData(BezierData.PointCount);
+                    this.xBezier2 = new BezierData();
                 }
                 if (this.yBezier2 == null) {
-                    this.yBezier2 = new BezierData(BezierData.PointCount);
+                    this.yBezier2 = new BezierData();
                 }
                 if (this.zBezier2 == null) {
-                    this.zBezier2 = new BezierData(BezierData.PointCount);
+                    this.zBezier2 = new BezierData();
                 }
                 this.xBezier2.validate();
                 this.yBezier2.validate();
@@ -638,14 +638,14 @@
 
     export class ParticleDataScaleBezier extends ParticleDataNode {
         //粒子缩放贝塞尔曲线
-        public data: BezierData = new BezierData(BezierData.PointCount);
+        public data: BezierData = new BezierData();
         constructor() {
             super(ParticleDataNodeType.ScaleBezier);
         }
 
         public validate(): void {
             if (this.data == null) {
-                this.data = new BezierData(BezierData.PointCount);
+                this.data = new BezierData();
             }
             this.data.validate();
         }
@@ -660,8 +660,8 @@
         
         public type: number = ParticleValueType.Const;
 
-        public bezier1: BezierData = new BezierData(BezierData.PointCount);
-        public bezier2: BezierData = new BezierData(BezierData.PointCount);
+        public bezier1: BezierData = new BezierData();
+        public bezier2: BezierData = new BezierData();
         constructor() {
             super(ParticleDataNodeType.RotationSpeed);
         }
@@ -677,14 +677,14 @@
             }
             if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
                 if (this.bezier1 == null) {
-                    this.bezier1 = new BezierData(BezierData.PointCount);
+                    this.bezier1 = new BezierData();
                 }
                 this.bezier1.validate();
             }
 
             if (this.type == ParticleValueType.TwoBezier) {
                 if (this.bezier2 == null) {
-                    this.bezier2 = new BezierData(BezierData.PointCount);
+                    this.bezier2 = new BezierData();
                 }
                 this.bezier2.validate();
             }

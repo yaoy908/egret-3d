@@ -6,7 +6,7 @@ float calcBezier(vec2 points[16], float t){
     vec2 P3 ;
 	
     for( int i = 0 ; i < 4 ; i++ ){
-        if( t >= points[i*4].x && t <= points[i*4+3].x ){
+        if( t >= points[i*4].x && t <= points[i*4+2].x ){
             P0 = points[i*4] ;
             P1 = points[i*4+1] ;
             

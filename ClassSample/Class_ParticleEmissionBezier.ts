@@ -52,7 +52,7 @@
             emission.type = ParticleValueType.OneBezier;
             emission.rate = 10;
 
-            var bezier: BezierData = new BezierData(BezierData.PointCount);
+            var bezier: BezierData = new BezierData();
             emission.bezier = bezier;
             bezier.posPoints.push(new Point(0, 0));
             bezier.posPoints.push(new Point(0.3, 20));
