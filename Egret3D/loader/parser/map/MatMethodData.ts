@@ -1,6 +1,7 @@
 ﻿module egret3d {
     /**
     * @language zh_CN
+    * @private
     * @class egret3d.MaterialMethodData
     * @classdesc
     * 材质球的特效数据

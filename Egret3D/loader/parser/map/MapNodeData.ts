@@ -1,6 +1,7 @@
 ﻿module egret3d {
     /**
     * @language zh_CN
+    * @private
     * @class egret3d.MapNodeData
     * @classdesc
     * 节点数据

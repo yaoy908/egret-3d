@@ -1,4 +1,11 @@
 ﻿module egret3d {
+
+    /**
+    * @language zh_CN
+    * @private
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class MapXmlParser {
 
         /**

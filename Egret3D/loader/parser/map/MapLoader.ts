@@ -1,5 +1,38 @@
 ﻿module egret3d {
+
+    /**
+    * @language zh_CN
+    * @class egret3d.MapLoader
+    * @classdesc
+    * 加载egret地图类
+    * 用于加载和解析egret地图文件的类，加载完毕后，mesh内容已经添加到了container中.
+    * 主要封装了esm/eca/png/eam的加载和组装，以及mesh的render method相关信息，和灯光数据的生效.
+    * 加载完毕后，会派发事件LoaderEvent3D.LOADER_COMPLETE
+    * @see egret3d.EventDispatcher
+    *
+    * @includeExample loader/parser/map/MapLoader.ts
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+
     export class MapLoader extends EventDispatcher {
+
+        /**
+        * @language zh_CN
+        * 属性动画对象，加载完成后 需要更新
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public propertyAnims: Array<PropertyAnim> = new Array<PropertyAnim>();
+
+        /**
+        * @language zh_CN
+        * 场景对象的所有根节点.
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public container: Object3D = null;
+
         private _pathRoot: string = "";
         private _path: string = "";
         private _xmlLoader: URLLoader = null;
@@ -10,15 +43,17 @@
         private _epaLoader: any = {};
         private _texutreLoader: any = {};
         private _methodTexutreLoader: any = {};
-
-        public propertyAnims: Array<PropertyAnim> = new Array<PropertyAnim>();
-
-        public container: Object3D = null;
-
         private _taskCount: number = 0;
-
         private _event: LoaderEvent3D = new LoaderEvent3D();
 
+         /**
+         * @language zh_CN
+         * 构建一个场景加载对象 构建后直接加载
+         * @param name 场景名字
+         * @param path 场景文件路径 默认"resource/scene/"
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         constructor(name: string, path: string = "resource/scene/") {
             super();
             this.container = new Object3D();
