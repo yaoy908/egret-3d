@@ -28,7 +28,7 @@ module egret3d {
                 //曲线数量;
                 var curveCount: number = bytes.readUnsignedShort();
 
-                for (var j = 1; j < curveCount; j++) {
+                for (var j = 0; j < curveCount; j++) {
 
                     var animCurve: AnimCurve = new AnimCurve();
                     animCurve.type = bytes.readUnsignedInt();

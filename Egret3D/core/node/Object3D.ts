@@ -256,7 +256,8 @@
 
         /**
         * @language zh_CN
-        * @private
+        * 是否开启相机视锥裁剪 默认为true
+        * @default true
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -343,7 +344,67 @@
 
             this.updateTransformChange(true);
         }
-        
+
+        /**
+        * @language zh_CN
+        * 设置旋转 分量x
+        * @param value 分量x
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set orientationX(value: number) {
+            this._orientation.x = value;
+            this._orientation.toEulerAngles(this._rot);
+            this._angle = this._orientation.toAxisAngle(this._axis);
+
+            this.updateTransformChange(true);
+        }
+
+        /**
+        * @language zh_CN
+        * 设置旋转 分量y
+        * @param value 分量y
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set orientationY(value: number) {
+            this._orientation.y = value;
+            this._orientation.toEulerAngles(this._rot);
+            this._angle = this._orientation.toAxisAngle(this._axis);
+
+            this.updateTransformChange(true);
+        }
+
+        /**
+        * @language zh_CN
+        * 设置旋转 分量z
+        * @param value 分量z
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set orientationZ(value: number) {
+            this._orientation.z = value;
+            this._orientation.toEulerAngles(this._rot);
+            this._angle = this._orientation.toAxisAngle(this._axis);
+
+            this.updateTransformChange(true);
+        }
+
+        /**
+        * @language zh_CN
+        * 设置旋转 分量w
+        * @param value 分量w
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set orientationW(value: number) {
+            this._orientation.w = value;
+            this._orientation.toEulerAngles(this._rot);
+            this._angle = this._orientation.toAxisAngle(this._axis);
+
+            this.updateTransformChange(true);
+        }
+
         /**
         * @language zh_CN
         * 返回旋转。</p>
@@ -736,7 +797,12 @@
                 this._globalSca.copyFrom(this._sca);
                 this._globalRot.copyFrom(this._rot);
             }
-            this._modelMatrix3D.makeTransform(this._globalPos, this._globalSca, this._globalOrientation);
+            if (this instanceof Camera3D) {
+                this._modelMatrix3D.makeTransform(this._globalPos, new Vector3D(1, 1, 1), this._globalOrientation);
+            }
+            else {
+                this._modelMatrix3D.makeTransform(this._globalPos, this._globalSca, this._globalOrientation);
+            }
             this.onUpdateTransform();
             this._transformChange = false;
         }
@@ -1255,6 +1321,51 @@
                 return;
             }
         }
+
+        /**
+        * @language zh_CN
+        * @private
+        * 交换对象
+        * @param other 交换中的对象
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public swapObject(other: Object3D) {
+            var parent = other.parent;
+
+            var childs: Array<Object3D> = new Array<Object3D>();
+
+            for (var i: number = 0; i < other.childs.length; ++i) {
+                childs[i] = other.childs[i];
+            }
+
+            if (this.parent) {
+
+                var index: number = this.parent.getChildIndex(this);
+
+                this.parent.childs[index] = other;
+            }
+
+            if (other.parent) {
+
+                var index: number = other.parent.getChildIndex(other);
+
+                other.parent.childs[index] = this;
+            }
+
+            other.childs.length = 0;
+
+            for (var i: number = 0; i < this.childs.length; ++i) {
+                other.childs[i] = this.childs[i];
+            }
+
+            for (var i: number = 0; i < childs.length; ++i) {
+                this.childs[i] = childs[i];
+            }
+
+            this.updateTransformChange(true);
+            other.updateTransformChange(true);
+        }
                                                         
         /**
         * @language zh_CN
@@ -1361,6 +1472,9 @@
                     return object3d;
                 }
                 object3d = this.childs[i].findObject3D(name);
+                if (object3d) {
+                    return object3d;
+                }
             }
 
             return object3d;
@@ -1382,6 +1496,9 @@
                     return object3d;
                 }
                 object3d = this.childs[i].findObject3DToID(id);
+                if (object3d) {
+                    return object3d;
+                }
             }
 
             return object3d;

@@ -28,16 +28,19 @@
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
 
             this.matPlane = new TextureMaterial();
-            this.matPlane.lightGroup = this.lights;
             this.matPlane.specularLevel = 0.5 ;
             this.matPlane.gloss = 1.0;
-
-            this.matPlane.bothside
-
             this.matPlane.repeat = true;
-            this.matPlane.uvRectangle = new  Rectangle(0, 0, 2.0, 2.0);
+            this.matPlane.uvRectangle = new Rectangle(0, 0, 1.0, 1.0);
 
-            this.plane = new Mesh(new PlaneGeometry(500,500), this.matPlane);
+            var dirLight: DirectLight = new DirectLight(new Vector3D(-0.7, 1.0, 0.0));
+            
+            var lightGroup: LightGroup = new LightGroup();
+            lightGroup.addLight(dirLight);
+
+            this.plane = new Mesh(new PlaneGeometry(500, 500), this.matPlane);
+            this.plane.lightGroup = lightGroup; 
+
             this.view1.addChild3D(this.plane);
 
             this.terrainMethod = new TerrainARGBMethod(

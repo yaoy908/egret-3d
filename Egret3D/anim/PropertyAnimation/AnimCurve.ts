@@ -31,8 +31,6 @@ module egret3d {
                     return this.valueFromBesselCurve(time);
             }
             
-            var world2D;
-            
             return 0;
         }
 
@@ -58,13 +56,15 @@ module egret3d {
 
         public cacheCurveData(): void {
 
-            this.cache = [];
+            return;
 
-            for (var time = this.start.x; time < this.end.x; time++) {
-                this.cache.push(this.calculateValue(time));
-            }
+            //this.cache = [];
 
-            this.useCache = true;
+            //for (var time = this.start.x; time < this.end.x; time++) {
+            //    this.cache.push(this.calculateValue(time));
+            //}
+
+            //this.useCache = true;
         }
     }
 }

@@ -54,14 +54,15 @@
                 if (!camera.isVisibleToCamera(renderItem)) {
                     return;
                 }
-                if (renderItem.material != null && renderItem.material.materialData.alphaBlending) {
-                    //layer.alphaObjects.push(renderItem);
-                    this._alphaRenderItems.push(renderItem);
-                }
-                else {
-                    this._normalRenderItems.push(renderItem);
-                }
                // this.renderList.push(renderItem);
+            }
+
+            if (renderItem.material != null && renderItem.material.materialData.alphaBlending) {
+                //layer.alphaObjects.push(renderItem);
+                this._alphaRenderItems.push(renderItem);
+            }
+            else {
+                this._normalRenderItems.push(renderItem);
             }
 
             if (renderItem.enablePick) {

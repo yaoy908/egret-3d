@@ -136,7 +136,6 @@
 
         "input/input.ts",
         "input/OrientationController.ts",
-        "loader/parser/XmlParser.ts",
         "loader/parser/DDS.ts",
         "loader/parser/DDSParser.ts",
         "loader/parser/PVR.ts",
@@ -152,6 +151,15 @@
         "loader/parser/ESM/ESMVersion.ts",
         "loader/parser/EPA/EPAParser.ts",
         "loader/parser/EPA/EPAVersion.ts",
+        "loader/parser/XML/XMLParser.ts",
+
+        "loader/map/DataInfo/SourceDataBase.ts",
+        "loader/parser/map/MapLoader.ts",
+        "loader/parser/map/MapNodeData.ts",
+        "loader/parser/map/MapXmlParser.ts",
+        "loader/parser/map/MatMethodData.ts",
+        "loader/parser/map/MatSphereData.ts",
+
         "loader/parser/ParserUtils.ts",
         "loader/URLLoader.ts",
 
@@ -280,7 +288,6 @@
         
         "post/PostProcessing.ts",
 
-        "loader/map/DataInfo/SourceDataBase.ts",
         "loader/map/DataInfo/MaterialMethodData.ts",
         "loader/map/DataInfo/MaterialSphereData.ts",
         "loader/map/DataInfo/MeshData.ts",
