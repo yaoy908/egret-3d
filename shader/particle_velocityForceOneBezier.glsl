@@ -1,11 +1,11 @@
-uniform float uniform_velocityForceX[18];
-uniform float uniform_velocityForceY[18];
-uniform float uniform_velocityForceZ[18];
+uniform float uniform_velocityForceX[15];
+uniform float uniform_velocityForceY[15];
+uniform float uniform_velocityForceZ[15];
 
 void main() {
-	if(discard_particle == 0.0){
-		velocityForceVec3.x = calcSingleBezier(uniform_velocityForceX, currentTime/curParticle.life);
-		velocityForceVec3.y = calcSingleBezier(uniform_velocityForceY, currentTime/curParticle.life);
-		velocityForceVec3.z = calcSingleBezier(uniform_velocityForceZ, currentTime/curParticle.life);
+	if(discard_particle < TrueOrFalse){
+		velocityForceVec3.x = calcOneBezierArea(uniform_velocityOverX, currentTime, curParticle.life, 1.0);
+		velocityForceVec3.y = calcOneBezierArea(uniform_velocityOverY, currentTime, curParticle.life, 1.0);
+		velocityForceVec3.z = calcOneBezierArea(uniform_velocityOverZ, currentTime, curParticle.life, 1.0);
 	} 
 }

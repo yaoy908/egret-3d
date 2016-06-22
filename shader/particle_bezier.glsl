@@ -1,24 +1,57 @@
-vec2 bezierSamples[40];
+vec2 bzData[20];
+float f2Key = 1.0 / 4096.0;
 
-//decompress 1 float value to 2.
-vec2 decompressFloat(float min, float range, float mergeFloat){
+vec2 dcp2f(float min, float range, float mf){
+
+	float value2 = fract(mf);
+	float value1 = mf - value2;
+	value1 *= f2Key;
 	
-	float convert_1_4096 = 1.0 / 4096.0;
-	float value2 = fract(mergeFloat);
-	float value1 = mergeFloat - value2;
-	value1 *= convert_1_4096;
-
 	value1 *= range;
 	value2 *= range;
-
+	
 	value1 += min;
 	value2 += min;
-
+	
 	return vec2(value1, value2);
 }
 
 
-//计算贝塞尔曲线面积
+void dcpBezier(float bezierData[15], float tTotal)
+{
+	vec2 f2;
+	float min = bezierData[10];
+	float range = bezierData[11];
+	float sameValue = bezierData[12];
+
+	float timeStart = 0.0;
+	float timeSegment = 0.0;
+	float fj = 0.0;
+
+	for(int i = 0; i < 2; i ++){
+		timeSegment = bezierData[13 + i] * tTotal / 9.0;
+		fj = 0.0;
+		for(int j = 0; j < 5; j ++){
+			if(sameValue > TrueOrFalse){
+				f2 = vec2(bezierData[0]);
+			}else{
+				f2 = dcp2f(min, range, bezierData[i * 5 + j]);
+			}
+			bzData[i * 10 + j * 2].x = timeStart + fj * 2.0 * timeSegment;
+			bzData[i * 10 + j * 2 + 1].x = timeStart + (fj * 2.0 + 1.0) * timeSegment;
+
+			bzData[i * 10 + j * 2].y = f2.x;
+			bzData[i * 10 + j * 2 + 1].y = f2.y;
+			fj ++;
+		}
+		timeStart += bezierData[13 + i] * tTotal;
+	}
+}
+
+
+
+
+
 float calcBezierArea(float tCurrent, float randomSeed){
 	float res = 0.0;
 
@@ -30,20 +63,20 @@ float calcBezierArea(float tCurrent, float randomSeed){
 	float a;
 
 
-	for(int i = 0; i < 39; i ++){
-		v0 = bezierSamples[i].y * randomSeed;
-		v1 = bezierSamples[i + 1].y * randomSeed;
-		t0 = bezierSamples[i].x;
-		t1 = bezierSamples[i + 1].x;
+	for(int i = 0; i < 19; i ++){
+		v0 = bzData[i].y * randomSeed;
+		v1 = bzData[i + 1].y * randomSeed;
+		t0 = bzData[i].x;
+		t1 = bzData[i + 1].x;
 		deltaTime = t1 - t0;
 		if(deltaTime > 0.0)
 		{
-			a = (v1 - v0) / deltaTime;
+			a = 0.5 * (v1 - v0) / deltaTime;
 			if(tCurrent >= t1){
-				res += v0 * deltaTime + a * deltaTime * deltaTime * 0.5;
+				res += deltaTime * (v0 + a * deltaTime);
 			}else{
 				deltaTime = tCurrent - t0;
-				res += v0 * deltaTime + a * deltaTime * deltaTime * 0.5;
+				res += deltaTime * (v0 + a * deltaTime);
 				break;
 			}
 		}
@@ -56,49 +89,19 @@ float calcBezierArea(float tCurrent, float randomSeed){
 
 
 
-float calcOneBezierArea(float bezierData[27], float tCurrent, float tTotal, float randomSeed){
-	vec2 compressedFloats;
-	float min = bezierData[20];
-	float range = bezierData[21];
-	float sameValue = bezierData[22];
-
-	float timeStart = 0.0;
-	float timeSegment = 0.0;
-	float fj = 0.0;
-	for(int i = 0; i < 4; i ++){
-		timeSegment = bezierData[23 + i] * tTotal / 9.0;
-		fj = 0.0;
-		for(int j = 0; j < 5; j ++){
-			if(sameValue == 1.0){
-				compressedFloats = vec2(bezierData[0],bezierData[0]);
-			}else{
-				compressedFloats = decompressFloat(min, range, bezierData[i * 5 + j]);
-			}
-			bezierSamples[i * 10 + j * 2].x = timeStart + fj * 2.0 * timeSegment;
-			bezierSamples[i * 10 + j * 2 + 1].x = timeStart + (fj * 2.0 + 1.0) * timeSegment;
-
-			bezierSamples[i * 10 + j * 2].y = compressedFloats.x;
-			bezierSamples[i * 10 + j * 2 + 1].y = compressedFloats.y;
-			fj ++;
-		}
-		timeStart += bezierData[23 + i] * tTotal;
-	}
-
-	float res = calcBezierArea(tCurrent, randomSeed);
+float calcOneBezierArea(float bezierData[15], float tCurrent, float tTotal, float randomSeed){
+	dcpBezier(bezierData, tTotal);
+	return calcBezierArea(tCurrent, randomSeed);
+}
+float calcDoubleBezierArea(float sampleData1[15], float sampleData2[15], float tCurrent, float tTotal, float randomSeed){
+	float res = calcOneBezierArea(sampleData1, tCurrent, tTotal, randomSeed);
+	res += calcOneBezierArea(sampleData2, tCurrent, tTotal, 1.0 - randomSeed);
 	return res;
 }
 
 
 
-float calcDoubleBezierArea(float sampleData1[27], float sampleData2[27], float tCurrent, float tTotal, float randomSeed){
-	float res1 = calcOneBezierArea(sampleData1, tCurrent, tTotal, randomSeed);
-	float res2 = calcOneBezierArea(sampleData2, tCurrent, tTotal, 1.0 - randomSeed);
-	return res1;
-}
 
-
-
-//计算贝塞尔曲线在某个位置的高度
 float calcBezierSize(float tCurrent, float randomSeed){
 	float res = 0.0;
 
@@ -109,18 +112,18 @@ float calcBezierSize(float tCurrent, float randomSeed){
 	float deltaTime = 0.0;
 	float v;
 
-	for(int i = 0; i < 39; i ++){
-		y0 = bezierSamples[i].y * randomSeed;
-		y1 = bezierSamples[i + 1].y * randomSeed;
-		t0 = bezierSamples[i].x;
-		t1 = bezierSamples[i + 1].x;
+	for(int i = 0; i < 19; i ++){
+		y0 = bzData[i].y * randomSeed;
+		y1 = bzData[i + 1].y * randomSeed;
+		t0 = bzData[i].x;
+		t1 = bzData[i + 1].x;
 		deltaTime = t1 - t0;
 		if(deltaTime > 0.0)
 		{
-			v = (y1 - y0) / deltaTime;
 			if(tCurrent >= t1){
-				res = y0 + v * deltaTime;
+				res = y1;
 			}else{
+				v = (y1 - y0) / deltaTime;
 				deltaTime = tCurrent - t0;
 				res = y0 + v * deltaTime;
 				break;
@@ -133,37 +136,14 @@ float calcBezierSize(float tCurrent, float randomSeed){
 }
 
 
-float calcOneBezierSize(float bezierData[27], float tCurrent, float tTotal, float randomSeed){
-	vec2 compressedFloats;
-	float min = bezierData[20];
-	float range = bezierData[21];
-	float sameValue = bezierData[22];
-
-	float timeStart = 0.0;
-	float timeSegment = 0.0;
-	float fj = 0.0;
-	for(int i = 0; i < 4; i ++){
-		timeSegment = bezierData[23 + i] * tTotal / 9.0;
-		fj = 0.0;
-		for(int j = 0; j < 5; j ++){
-			if(sameValue == 1.0){
-				compressedFloats = vec2(bezierData[0],bezierData[0]);
-			}else{
-				compressedFloats = decompressFloat(min, range, bezierData[i * 5 + j]);
-			}
-			bezierSamples[i * 10 + j * 2].x = timeStart + fj * 2.0 * timeSegment;
-			bezierSamples[i * 10 + j * 2 + 1].x = timeStart + (fj * 2.0 + 1.0) * timeSegment;
-
-			bezierSamples[i * 10 + j * 2].y = compressedFloats.x;
-			bezierSamples[i * 10 + j * 2 + 1].y = compressedFloats.y;
-			fj ++;
-		}
-		timeStart += bezierData[23 + i] * tTotal;
-	}
-
+float calcOneBezierSize(float bezierData[15], float tCurrent, float tTotal, float randomSeed){
+	dcpBezier(bezierData, tTotal);
 	float res = calcBezierSize(tCurrent, randomSeed);
 	return res;
 }
+
+
+
 
 
 
@@ -206,8 +186,8 @@ float calcOneBezierSize(float bezierData[27], float tCurrent, float tTotal, floa
 //	vec2 bezierPoints[16];
 //	vec2 bezierPoints2[16];
 //	for(int i = 0; i < 16; i ++){
-//		bezierPoints[i] = decompressFloat(bezierData[16], bezierData[17], bezierData[i]);
-//		bezierPoints2[i] = decompressFloat(bezierData2[16], bezierData2[17], bezierData2[i]);
+//		bezierPoints[i] = dcp2f(bezierData[16], bezierData[17], bezierData[i]);
+//		bezierPoints2[i] = dcp2f(bezierData2[16], bezierData2[17], bezierData2[i]);
 //	}
 //	float res1 = calcBezier(bezierPoints, particleProgress);
 //	float res2 = calcBezier(bezierPoints2, particleProgress);
@@ -220,7 +200,7 @@ float calcOneBezierSize(float bezierData[27], float tCurrent, float tTotal, floa
 //float calcSingleBezier(float bezierData[18], float particleProgress){
 //	vec2 bezierPoints[16];
 //	for(int i = 0; i < 16; i ++){
-//		bezierPoints[i] = decompressFloat(bezierData[16], bezierData[17], bezierData[i]);
+//		bezierPoints[i] = dcp2f(bezierData[16], bezierData[17], bezierData[i]);
 //	}
 //	float res = calcBezier(bezierPoints, particleProgress);
 //	return res;

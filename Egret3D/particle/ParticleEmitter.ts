@@ -288,6 +288,11 @@
                     limitOneBezierNode.initNode(this._data.moveSpeed);
                     nodes.push(limitOneBezierNode);
                 }
+                else if (limit.type == ParticleValueType.TwoBezier) {
+                    var limitTwoBezierNode: ParticleVelocityLimitTwoBezierNode = new ParticleVelocityLimitTwoBezierNode();
+                    limitTwoBezierNode.initNode(this._data.moveSpeed);
+                    nodes.push(limitTwoBezierNode);
+                }
             }
 
             var velocityForce: VelocityForceLifeTimeData = this._data.moveSpeed.velocityForce;

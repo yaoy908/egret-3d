@@ -25,7 +25,7 @@ float particle( ParticleData curParticle ){
 	if(time <= curParticle.bornTime){
 		return currentTime = 0.0;
 	}
-	if(particleStateData.loop == 0.0){
+	if(particleStateData.loop < TrueOrFalse){
 		float emitterDuring = particleStateData.duration - particleStateData.delay;
 		//还没到出生时间，发射器已经死亡
 		if(curParticle.bornTime >= emitterDuring)
@@ -65,7 +65,7 @@ void main(void) {
 	varying_particleData.y = curParticle.life ;
 	varying_particleData.z = curParticle.index;
 	
-	if( active == 0.0 ){
+	if( active < TrueOrFalse ){
 		e_discard();
 	}else{
 		

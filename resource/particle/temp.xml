@@ -2,9 +2,9 @@
 <particle>
   <version>1</version>
   <property>
-    <particleCount>200</particleCount>
+    <particleCount>400</particleCount>
     <bounds x="10" y="10" z="10"></bounds>
-    <colorType>Const</colorType>
+    <colorType>OneGradients</colorType>
     <colorConst1>0xffffffff</colorConst1>
     <colorConst2>0xff00ff00</colorConst2>
     <colorGradients1>
@@ -27,7 +27,14 @@
     </transform>
   
 
-</property>
+  </property>
+
+  <colorOffset>
+    <item time="0.0" color="0xff00ff00"></item>
+    <item time="0.4" color="0xffff0000"></item>
+    <item time="0.6" color="0xff0000ff"></item>
+    <item time="1.0" color="0xffffffff"></item>
+  </colorOffset>
   
   
   <emission>
@@ -80,9 +87,9 @@
   
   <geometry>
     <type>Plane</type>
-    <plane width="40" height="40"></plane>
-    <cube width="40" height="40" depth="40"></cube>
-    <sphere radius="20" segmentW="6" segmentH="6"></sphere>
+    <plane width="4" height="4"></plane>
+    <cube width="4" height="4" depth="4"></cube>
+    <sphere radius="2" segmentW="6" segmentH="6"></sphere>
   </geometry>
   
   
@@ -90,7 +97,7 @@
     <max>40</max>
     <min>40</min>
     <velocityOver>
-      <type>OneBezier</type>
+      <type>TwoBezier</type>
       <min x="1" y="1" z="1"></min>
       <max x="2" y="1" z="2"></max>
       <worldSpace>true</worldSpace>
@@ -139,8 +146,8 @@
         <ctrl x="1" y="0"></ctrl>
       </zBezier2>
     </velocityOver>
-    <!--<velocityForce>
-      <type>OneBezier</type>
+    <velocityForce>
+      <type>TwoBezier</type>
       <min x="1" y="1" z="1"></min>
       <max x="2" y="1" z="2"></max>
       <worldSpace>true</worldSpace>
@@ -188,7 +195,7 @@
         <ctrl x="0" y="0"></ctrl>
         <ctrl x="1" y="0"></ctrl>
       </zBezier2>
-    </velocityForc-->e>
+    </velocityForce>
     <velocityLimit>
       <type>Const</type>
       <min>100</min>
@@ -225,19 +232,19 @@
   <scaleBezier>
     <bezier>
       <pos x="0" y="1"></pos>
-      <pos x="0.3" y="6"></pos>
-      <pos x="0.3" y="6"></pos>
-      <pos x="1.0" y="2"></pos>
-      <ctrl x="0" y="2"></ctrl>
-      <ctrl x="0.35" y="6"></ctrl>
-      <ctrl x="0.36" y="6"></ctrl>
-      <ctrl x="1" y="2"></ctrl>
+      <pos x="0.5" y="2"></pos>
+      <pos x="0.5" y="2"></pos>
+      <pos x="1.0" y="1"></pos>
+      <ctrl x="0.2" y="1"></ctrl>
+      <ctrl x="0.35" y="2"></ctrl>
+      <ctrl x="0.7" y="2"></ctrl>
+      <ctrl x="0.9" y="1"></ctrl>
     </bezier>
   </scaleBezier>
   
   
-  <rotationSpeed>
-    <type>Const</type>
+  <rotationSpeed1>
+    <type>TwoBezier</type>
     <min x="1" y="1" z="1"></min>
     <max x="2" y="1" z="1"></max>
     <bezier1>
@@ -260,15 +267,10 @@
       <ctrl x="0.36" y="60"></ctrl>
       <ctrl x="1" y="-80"></ctrl>
     </bezier2>
-  </rotationSpeed>
+  </rotationSpeed1>
   
   
-  <!--<colorOffset>
-    <item time="0.0" color="0xff00ff00"></item>
-    <item time="0.4" color="0xffff0000"></item>
-    <item time="0.6" color="0xff0000ff"></item>
-    <item time="1.0" color="0xffffffff"></item>
-  </colorOffset>-->
+
   
   <mat id="0">
     <diffuseTextureName>Textures/sponza_column_c_diff.jpg</diffuseTextureName>

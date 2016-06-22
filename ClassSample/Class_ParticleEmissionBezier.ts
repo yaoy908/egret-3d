@@ -36,7 +36,8 @@
 
             data.property.particleCount = 1000;
             data.shape.type = ParticleDataShape.Point;
-            data.property.colorConst1.setColorARGB(0xffff0000);
+            data.property.colorType = ParticleBirthColorType.Const;
+            data.property.colorConst1.setColorARGB(0xff0000ff);
             data.property.colorConst2.setColorARGB(0xff00ff00);
 
             var moveSpeed: ParticleDataMoveSpeed = new ParticleDataMoveSpeed();

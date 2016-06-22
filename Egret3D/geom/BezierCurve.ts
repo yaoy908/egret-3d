@@ -97,7 +97,7 @@
 
 
     export class BezierData {
-        public static SegCount: number = 4;//四段贝塞尔曲线
+        public static SegCount: number = 2;//四段贝塞尔曲线
         public posPoints: Array<Point> = [];
         public ctrlPoints: Array<Point> = [];
         private static calc: BezierCurve = new BezierCurve();

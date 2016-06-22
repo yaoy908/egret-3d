@@ -10,6 +10,7 @@ const float PI = 3.1415926 ;
 float currentTime = 0.0;
 float totalTime = 0.0;
 
+const float TrueOrFalse = 0.55555;
 vec4 localPosition = vec4(0.0,0.0,0.0,1.0);
 vec3 velocityBaseVec3 = vec3(0.0,0.0,0.0);
 vec3 velocityOverVec3 = vec3(0.0,0.0,0.0);
@@ -57,13 +58,6 @@ struct ParticleStateData{
 
 mat4 buildRotMat4(vec3 rot)
 {
-    mat4 ret = mat4(
-	vec4(1.0, 0.0, 0.0, 0.0),
-	vec4(0.0, 1.0, 0.0, 0.0),
-	vec4(0.0, 0.0, 1.0, 0.0),
-	vec4(0.0, 0.0, 0.0, 1.0)
-	);
-
 	//____________
 	float s;
 	float c;
@@ -71,12 +65,12 @@ mat4 buildRotMat4(vec3 rot)
 	s = sin(rot.x);
 	c = cos(rot.x);
 	
-	ret = mat4(
+	mat4 ret = mat4(
 	vec4(1.0, 0.0, 0.0, 0.0),
 	vec4(0.0, c, s, 0.0),
 	vec4(0.0, -s, c, 0.0),
 	vec4(0.0, 0.0, 0.0, 1.0)
-	) * ret;
+	);
 	
 	//____________
 	s = sin(rot.y);

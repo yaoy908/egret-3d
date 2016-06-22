@@ -1,5 +1,6 @@
-uniform float uniform_size_compressed[27];
+uniform float uniform_bezierSize[15];
 void main() {
-	localPosition.xyz *= calcOneBezierSize(uniform_size_compressed, currentTime, curParticle.life, 1.0);
+	float bezierSize = calcOneBezierSize(uniform_bezierSize, currentTime, curParticle.life, 1.0);
+	localPosition.xyz *= bezierSize;
 }
 

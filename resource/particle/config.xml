@@ -46,7 +46,7 @@
     <max>0</max>
     <min>0</min>
     <velocityOver>
-      <type>OneBezier</type>
+      <type>TwoBezier</type>
       <worldSpace>false</worldSpace>
       <xBezier1>
         <pos x="0" y="0"></pos>

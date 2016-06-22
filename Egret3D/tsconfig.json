@@ -204,7 +204,6 @@
         
         "particle/particleNode/ParticleFollowNode.ts",
         "particle/particleNode/ParticleVelocityNode.ts",
-        "particle/particleNode/ParticleRotationNode.ts",
         "particle/particleNode/ParticleColorGlobalNode.ts",
         "particle/particleNode/ParticleSizeGlobalNode.ts",
         "particle/particleNode/ParticleVelocityOverConstNode.ts",

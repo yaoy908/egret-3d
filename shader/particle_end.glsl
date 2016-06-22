@@ -22,14 +22,12 @@ mat4 buildModelMatrix(vec4 quat, vec3 scale, vec3 position)
 	return ret;
 }
 
-vec3 calcParticleMove(vec3 speedXYZ, vec3 forceXYZ){
-	vec3 distanceXYZ = speedXYZ * currentTime;
-	distanceXYZ += forceXYZ * currentTime * currentTime;
+vec3 calcParticleMove(vec3 distanceXYZ){
 	//限速
-	if(velocityLimitVec2.y == 1.0){
+	if(velocityLimitVec2.y > TrueOrFalse){
 		vec3 temp = distanceXYZ * distanceXYZ;
 		float distanceCurrent = sqrt(temp.x + temp.y + temp.z);
-		float distanceLimit = currentTime * velocityLimitVec2.x;
+		float distanceLimit = velocityLimitVec2.x;
 
 		if(distanceCurrent > distanceLimit){
 			distanceXYZ *= distanceLimit / distanceCurrent;
@@ -40,7 +38,7 @@ vec3 calcParticleMove(vec3 speedXYZ, vec3 forceXYZ){
 
 void main(void) {
 
-	if(discard_particle == 1.0){ 
+	if(discard_particle > TrueOrFalse){ 
 		outPosition = vec4(0.0,0.0,0.0,0.0); 
 	}else{
 
@@ -57,7 +55,7 @@ void main(void) {
 		vec3 velocityLocalVec3 = velocityBaseVec3 * currentTime;
 		vec3 velocityWorldVec3 = vec3(0.0,0.0,0.0);
 		vec3 velocityMultiVec3 = vec3(0.0,0.0,0.0);
-		if(particleStateData.velocityOverWorldSpace == 0.0){
+		if(particleStateData.velocityOverWorldSpace < TrueOrFalse){
 			//速度叠加为本地坐标系
 			velocityLocalVec3 += velocityOverVec3;
 		}else{
@@ -65,7 +63,7 @@ void main(void) {
 		}
 
 
-		if(particleStateData.worldSpace == 1.0){
+		if(particleStateData.worldSpace > TrueOrFalse){
 			//followTargetPosition
 			//followTargetScale
 			//followTargetRotation
@@ -92,8 +90,10 @@ void main(void) {
 		mat4 modelMatrix = buildModelMatrix(followTargetRotation, followTargetScale, followTargetPosition);
 		position_emitter = (modelMatrix * vec4(position_emitter, 1.0)).xyz; 
 
+		//固定速度+速度叠加+加速度叠加
 		velocityMultiVec3 = velocityLocalVec3 + velocityWorldVec3 + velocityForceVec3;
-
+		//限制速度（计算平均速度）
+		velocityMultiVec3 = calcParticleMove(velocityMultiVec3);
 		
 		//叠加位移，位移会受母系缩放值影响
 		position_emitter += velocityMultiVec3 * followTargetScale;
