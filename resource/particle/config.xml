@@ -14,7 +14,7 @@
     </transform>
   </property>
   <emission>
-    <rate>4</rate>
+    <rate>1</rate>
     <type>Const</type>
   </emission>
   <life>
@@ -43,8 +43,8 @@
     <plane width="2" height="2" />
   </geometry>
   <moveSpeed>
-    <max>5</max>
-    <min>5</min>
+    <max>0</max>
+    <min>0</min>
     <velocityOver>
       <type>OneBezier</type>
       <worldSpace>false</worldSpace>
@@ -72,12 +72,12 @@
       </zBezier1>
       <xBezier2>
         <pos x="0" y="0"></pos>
-        <pos x="0.5" y="6"></pos>
-        <pos x="0.5" y="6"></pos>
+        <pos x="0.5" y="12"></pos>
+        <pos x="0.5" y="12"></pos>
         <pos x="1.0" y="0"></pos>
-        <ctrl x="0.1" y="2"></ctrl>
-        <ctrl x="0.3" y="6"></ctrl>
-        <ctrl x="0.7" y="6"></ctrl>
+        <ctrl x="0.1" y="4"></ctrl>
+        <ctrl x="0.3" y="12"></ctrl>
+        <ctrl x="0.7" y="12"></ctrl>
         <ctrl x="0.9" y="0"></ctrl>
       </xBezier2>
       <yBezier2>
@@ -94,6 +94,19 @@
       </zBezier2>
     </velocityOver>
   </moveSpeed>
+  <scaleBezier>
+    <bezier>
+      <pos x="0" y="0"></pos>
+      <pos x="0.5" y="3"></pos>
+      <pos x="0.5" y="3"></pos>
+      <pos x="1.0" y="0"></pos>
+      <ctrl x="0.1" y="1"></ctrl>
+      <ctrl x="0.3" y="3"></ctrl>
+      <ctrl x="0.7" y="3"></ctrl>
+      <ctrl x="0.9" y="0"></ctrl>
+    </bezier>
+  </scaleBezier>
+  
   <!--<followTarget>
     <followRotation>true</followRotation>
     <followScale>true</followScale>
