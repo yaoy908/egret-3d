@@ -247,26 +247,31 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
+        static use: boolean = false;
         public activeState(time: number, delay: number, passUsage: PassUsage, contextProxy: Context3DProxy) {
 
             if (passUsage.attributeDiry)
                 this.upload(passUsage, contextProxy);
-            
-            if (!contextProxy.isActiveVertexFormat(this.geometry.vertexFormat)) {
-                contextProxy.unActiveVertexFormat()
-                for (var i: number = 0; i < passUsage["attributeList"].length; i++) {
-                    var attribute: GLSL.Attribute = passUsage["attributeList"][i];
-                    if (attribute.uniformIndex >= 0)
-                        contextProxy.clearVaPointer(attribute.uniformIndex);
-                }
 
-                contextProxy.activeVertexFormat(this.geometry.vertexFormat);
+           contextProxy.unActiveVertexFormat()
+            //if (!SubGeometry.use) {
+            //    SubGeometry.use = true;
                 for (var i: number = 0; i < passUsage["attributeList"].length; i++) {
                     var attribute: GLSL.Attribute = passUsage["attributeList"][i];
                     if (attribute.uniformIndex >= 0)
                         contextProxy.vertexAttribPointer(attribute.uniformIndex, attribute.size, attribute.dataType, attribute.normalized, attribute.stride, attribute.offsetBytes);
                 }
-            }
+            //}
+
+            //if (!contextProxy.isActiveVertexFormat(this.geometry.vertexFormat)) {
+            //    contextProxy.unActiveVertexFormat()
+            //    contextProxy.activeVertexFormat(this.geometry.vertexFormat);
+            //    for (var i: number = 0; i < passUsage["attributeList"].length; i++) {
+            //        var attribute: GLSL.Attribute = passUsage["attributeList"][i];
+            //        if (attribute.uniformIndex >= 0)
+            //            contextProxy.vertexAttribPointer(attribute.uniformIndex, attribute.size, attribute.dataType, attribute.normalized, attribute.stride, attribute.offsetBytes);
+            //    }
+            //}
         }
 
         /**

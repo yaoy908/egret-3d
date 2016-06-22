@@ -25,9 +25,10 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(fogType: string = "expHeightFog_fs" ) {
+        constructor(fogType: string = "expHeightFog_fs") {
             super();
 
+            this.vsShaderList[ShaderPhaseType.local_vertex] = this.vsShaderList[ShaderPhaseType.local_vertex] || [];
             this.vsShaderList[ShaderPhaseType.local_vertex].push( "vertexPos_vs" );
 
             if (fogType == "line") {
@@ -35,6 +36,7 @@
             } else if (fogType == "exp") {
                 this.fsShaderList[ShaderPhaseType.lighting_fragment].push("expFog_fs");
             } else if (fogType == "expHeightFog_fs") {
+                this.fsShaderList[ShaderPhaseType.lighting_fragment] = this.fsShaderList[ShaderPhaseType.lighting_fragment] || [];
                 this.fsShaderList[ShaderPhaseType.lighting_fragment].push("expHeightFog_fs");
             }
             //0.5, 0.6, 0.7

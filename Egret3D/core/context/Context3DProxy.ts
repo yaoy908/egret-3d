@@ -21,7 +21,6 @@
     */
     export class Context3DProxy {
        
-        private _cacheProgram: Program3D;
 
         /**
          * @language zh_CN
@@ -45,7 +44,7 @@
         */
         public isLost: boolean = false ;
 
-        //--------------
+        //-------cache-------
         private DEPTH_TEST: boolean = false;
 
         private CULL_FACE: boolean = false;
@@ -62,6 +61,10 @@
 
         private vertexFormat: number = -1;
 
+        private program: Program3D;
+
+        private programChange: boolean;
+        
         //--------------
 
         /**
@@ -592,10 +595,11 @@
         * @platform Web,Native
         */
         public setProgram(program: Program3D) {
-            if (this._cacheProgram != program) {
-                this._cacheProgram = program;
-                Context3DProxy.gl.useProgram(program.program);
-            }
+            this.programChange = false;
+            if (this.program == program) return;
+            this.programChange = true;
+            this.program = program;
+            Context3DProxy.gl.useProgram(program.program);
         }
 
         /**
@@ -1056,9 +1060,9 @@
         * @platform Web,Native
         */
         public isActiveVertexFormat(format: number): boolean {
-            if (this.vertexFormat == format)
-                return true;
-            this.vertexFormat = format;
+            //if (this.vertexFormat == format && !this.programChange )
+            //    return true;
+            //this.vertexFormat = format;
             return false;
         }
 
@@ -1082,6 +1086,9 @@
         */
         public unActiveVertexFormat(): void {
             this.vertexFormat = -1;
+            for (var i: number = 0; i < 12 ; i++) {
+                this.clearVaPointer(i);
+            }
         }
 
         /**

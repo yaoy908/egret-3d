@@ -41,6 +41,14 @@
             this.imageData = img;
         }
 
+        public get width(): number {
+            return this.imageData.width;
+        }
+
+        public get height(): number {
+            return this.imageData.height;
+        }
+
         /**
         * @language zh_CN
         * 上传贴图数据给GPU

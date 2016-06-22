@@ -131,6 +131,8 @@
         "geometry/PlaneGeometry.ts",
         "geometry/SphereGeometry.ts",
         "geometry/GeometryUtil.ts",
+        "geometry/ElevationGeometry.ts",
+        
 
         "input/input.ts",
         "input/OrientationController.ts",
