@@ -7,18 +7,18 @@
     <colorType>Const</colorType>
     <colorConst1>0xffffffff</colorConst1>
     <colorConst2>0xff00ff00</colorConst2>
-    <gradients1>
+    <colorGradients1>
       <item time="0.0" color="0xff00ff00"></item>
       <item time="0.4" color="0xffff0000"></item>
       <item time="0.6" color="0xff0000ff"></item>
       <item time="1.0" color="0xffffffff"></item>
-    </gradients1>
-    <gradients2>
+    </colorGradients1>
+    <colorGradients2>
       <item time="0.0" color="0xff00ff00"></item>
       <item time="0.4" color="0xffff0000"></item>
       <item time="0.6" color="0xff0000ff"></item>
       <item time="1.0" color="0xffffffff"></item>
-    </gradients2>
+    </colorGradients2>
     <gravity>0</gravity>
     <transform>
       <rotation x="0" y="0" z="0"></rotation>
@@ -26,6 +26,7 @@
       <position x="0" y="0" z="0"></position>
     </transform>
   
+
 </property>
   
   
@@ -89,19 +90,19 @@
     <max>40</max>
     <min>40</min>
     <velocityOver>
-      <type>TwoBezier</type>
+      <type>OneBezier</type>
       <min x="1" y="1" z="1"></min>
       <max x="2" y="1" z="2"></max>
       <worldSpace>true</worldSpace>
       <xBezier1>
         <pos x="0" y="0"></pos>
-        <pos x="0.3" y="60"></pos>
-        <pos x="0.3" y="60"></pos>
-        <pos x="1.0" y="-40"></pos>
-        <ctrl x="0" y="20"></ctrl>
-        <ctrl x="0.35" y="60"></ctrl>
-        <ctrl x="0.36" y="60"></ctrl>
-        <ctrl x="1" y="-40"></ctrl>
+        <pos x="0.3" y="15"></pos>
+        <pos x="0.3" y="15"></pos>
+        <pos x="1" y="-10"></pos>
+        <ctrl x="0" y="5"></ctrl>
+        <ctrl x="0.3" y="15"></ctrl>
+        <ctrl x="0.35" y="15"></ctrl>
+        <ctrl x="1" y="-10"></ctrl>
       </xBezier1>
       <yBezier1>
         <pos x="0" y="0"></pos>
@@ -138,7 +139,7 @@
         <ctrl x="1" y="0"></ctrl>
       </zBezier2>
     </velocityOver>
-    <velocityForce>
+    <!--<velocityForce>
       <type>OneBezier</type>
       <min x="1" y="1" z="1"></min>
       <max x="2" y="1" z="2"></max>
@@ -187,7 +188,7 @@
         <ctrl x="0" y="0"></ctrl>
         <ctrl x="1" y="0"></ctrl>
       </zBezier2>
-    </velocityForce>
+    </velocityForc-->e>
     <velocityLimit>
       <type>Const</type>
       <min>100</min>
@@ -223,20 +224,20 @@
   
   <scaleBesizer>
     <bezier>
-      <pos x="0" y="10"></pos>
-      <pos x="0.3" y="60"></pos>
-      <pos x="0.3" y="60"></pos>
-      <pos x="1.0" y="20"></pos>
-      <ctrl x="0" y="20"></ctrl>
-      <ctrl x="0.35" y="60"></ctrl>
-      <ctrl x="0.36" y="60"></ctrl>
-      <ctrl x="1" y="20"></ctrl>
+      <pos x="0" y="1"></pos>
+      <pos x="0.3" y="6"></pos>
+      <pos x="0.3" y="6"></pos>
+      <pos x="1.0" y="2"></pos>
+      <ctrl x="0" y="2"></ctrl>
+      <ctrl x="0.35" y="6"></ctrl>
+      <ctrl x="0.36" y="6"></ctrl>
+      <ctrl x="1" y="2"></ctrl>
     </bezier>
   </scaleBesizer>
   
   
   <rotationSpeed>
-    <type>TwoBezier</type>
+    <type>Const</type>
     <min x="1" y="1" z="1"></min>
     <max x="2" y="1" z="1"></max>
     <bezier1>
@@ -262,12 +263,12 @@
   </rotationSpeed>
   
   
-  <colorOffset>
+  <!--<colorOffset>
     <item time="0.0" color="0xff00ff00"></item>
     <item time="0.4" color="0xffff0000"></item>
     <item time="0.6" color="0xff0000ff"></item>
     <item time="1.0" color="0xffffffff"></item>
-  </colorOffset>
+  </colorOffset>-->
   
   <mat id="0">
     <diffuseTextureName>Textures/sponza_column_c_diff.jpg</diffuseTextureName>

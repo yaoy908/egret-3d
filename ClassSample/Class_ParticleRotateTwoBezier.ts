@@ -63,7 +63,7 @@
             rotation.max.setTo(0, 0, 100);
             rotation.min.setTo(0, 0, -100);
             //___bezier1
-            var bezier1: BezierData = new BezierData(BezierData.PointCount);
+            var bezier1: BezierData = new BezierData();
             bezier1.posPoints.push(new Point(0, 0));
             bezier1.posPoints.push(new Point(0.3, 160));
             bezier1.posPoints.push(new Point(0.35, 160));
@@ -76,7 +76,7 @@
             rotation.bezier1 = bezier1;
 
             //___bezier2
-            var bezier2: BezierData = new BezierData(BezierData.PointCount);
+            var bezier2: BezierData = new BezierData();
             bezier2.posPoints.push(new Point(0, 0));
             bezier2.posPoints.push(new Point(0.3, 115));
             bezier2.posPoints.push(new Point(0.35, 115));

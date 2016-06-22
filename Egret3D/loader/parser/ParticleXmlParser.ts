@@ -93,14 +93,11 @@
 
             //color
             property.colorType = ParticleBirthColorType[this.getNode(node, "colorType").textContent];
-            var colorConst1: number = Number(this.getNode(node, "colorConst1").textContent);
-            property.colorConst1 = Color.createColor(colorConst1);
-            var colorConst2: number = Number(this.getNode(node, "colorConst2").textContent);
-            property.colorConst2 = Color.createColor(colorConst2);
-            var gradients1: NodeList = this.getNodeList(node, "gradients1");
-            property.colorGradients1 = this.parseGradientsColor(gradients1);
-            var gradients2: NodeList = this.getNodeList(node, "gradients2");
-            property.colorGradients2 = this.parseGradientsColor(gradients2);
+            var colorConst1: Node = this.getNode(node, "colorConst1");
+            var colorConst2: Node = this.getNode(node, "colorConst2");
+            var gradients1: Node = this.getNode(node, "colorGradients1");
+            var gradients2: Node = this.getNode(node, "colorGradients2");
+            this.parseColorProperty(property, colorConst1, colorConst2, gradients1, gradients2);
             //gravity
             property.gravity = Number(this.getNode(node, "gravity").textContent);
             //transform
@@ -113,6 +110,29 @@
             property.scale = this.parseVector3D(scale, property.scale);
             property.position = this.parseVector3D(position, property.position);
         }
+
+        /**
+         * @private
+         * 解析颜色属性
+         */
+        private parseColorProperty(property: ParticleDataProperty, c1: Node, c2: Node, cg1: Node, cg2: Node): void {
+            if (c1) {
+                property.colorConst1 = Color.createColor(Number(c1.textContent));
+            }
+            if (c2) {
+                property.colorConst2 = Color.createColor(Number(c2.textContent));
+            }
+            if (cg1) {
+                var itemList: NodeList = this.getNodeList(cg1, "item");
+                property.colorGradients1 = this.parseGradientsColor(itemList, property.colorGradients1);
+            }
+            if (cg2) {
+                var itemList: NodeList = this.getNodeList(cg2, "item");
+                property.colorGradients2 = this.parseGradientsColor(itemList, property.colorGradients2);
+            }
+
+        }
+
 
         /**
          * @private
@@ -388,7 +408,7 @@
          * @private
          * 解析渐变数据
          */
-        private parseGradientsColor(itemList: NodeList, dst:ColorGradients = null): ColorGradients {
+        private parseGradientsColor(itemList: NodeList, dst:ColorGradients): ColorGradients {
             dst || (dst = new ColorGradients);
             var item: Node;
             var i: number = 0;
@@ -407,6 +427,21 @@
                     }
                 });
             }
+
+            //排序
+            var sortTimes: Array<number> = dst.times.slice();
+            var sortColors: Array<Color> = dst.colors.slice();
+            sortTimes.sort(function (a: number, b: number) {
+                return a - b;
+            });
+
+            for (i = 0, count = dst.times.length; i < count; i++) {
+                var index: number = sortTimes.indexOf(dst.times[i]);
+                dst.colors[i] = sortColors[index];
+            }
+            dst.times = sortTimes;
+
+
             return dst;
         }
 
@@ -417,7 +452,9 @@
          * 解析一条贝塞尔曲线数据
          */
         private parseBezierData(node: Node): BezierData {
-            var bzData: BezierData = new BezierData(BezierData.PointCount);
+            var bzData: BezierData = new BezierData();
+            if (node == null)
+                return bzData;
             var posList: NodeList = this.getNodeList(node, "pos");
             var ctrlList: NodeList = this.getNodeList(node, "ctrl");
             var item: Node;

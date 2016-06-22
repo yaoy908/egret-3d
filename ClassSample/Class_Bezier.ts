@@ -27,7 +27,7 @@
 
 
            
-            var geom: CubeGeometry = new CubeGeometry(4, 4, 10);
+            var geom: CubeGeometry = new CubeGeometry(2, 2, 10);
             var position: Vector3D = new Vector3D();
 
             var plane: Mesh;
@@ -35,26 +35,26 @@
             material.ambientColor = 0xffffff;
             material.bothside = true;
 
-            var bezier: BezierData = new BezierData(BezierData.PointCount);
-            bezier.posPoints.push(new Point(0, 0));
-            bezier.posPoints.push(new Point(1.0, 0));
-            bezier.ctrlPoints.push(new Point(0.3, 0.7));
-            bezier.ctrlPoints.push(new Point(0.7, -0.7));
-
+            var bezier: BezierData = new BezierData();
             //bezier.posPoints.push(new Point(0, 0));
-            //bezier.posPoints.push(new Point(0.3, 60));
-            //bezier.posPoints.push(new Point(0.3, 60));
-            //bezier.posPoints.push(new Point(1.0, -40));
-            //bezier.ctrlPoints.push(new Point(0, 20));
-            //bezier.ctrlPoints.push(new Point(0.35, 60));
-            //bezier.ctrlPoints.push(new Point(0.36, 60));
-            //bezier.ctrlPoints.push(new Point(1.0, -40));
+            //bezier.posPoints.push(new Point(1.0, 0));
+            //bezier.ctrlPoints.push(new Point(0.3, 0.7));
+            //bezier.ctrlPoints.push(new Point(0.7, -0.7));
+
+            bezier.posPoints.push(new Point(0.0, 0));
+            bezier.posPoints.push(new Point(0.5, 60));
+            bezier.posPoints.push(new Point(0.5, 60));
+            bezier.posPoints.push(new Point(1.0, -40));
+            bezier.ctrlPoints.push(new Point(0.1, 20));
+            bezier.ctrlPoints.push(new Point(0.3, 60));
+            bezier.ctrlPoints.push(new Point(0.7, 60));
+            bezier.ctrlPoints.push(new Point(0.9, -40));
 
             var curveValue: number;
-            for (var i: number = 0; i < 100; i++) {
+            for (var i: number = 0; i < 500; i++) {
                 plane = new Mesh(geom, material);
-                curveValue = bezier.calc(i / 100) * 100;
-                position.setTo(i, curveValue, 0);
+                curveValue = bezier.calc(i / 500);
+                position.setTo(i / 5, curveValue, 0);
                 plane.position = position;
                 this.node.addChild(plane);
             }

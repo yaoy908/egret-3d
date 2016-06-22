@@ -55,15 +55,41 @@
             return this.cubic_bezier(A0.x, B0.x, B1.x, A1.x, t);
         }
 
-        private cubic_bezier(p0: number, p1: number, p2: number, p3: number, t:number): number {
+        private cubic_bezier(p0: number, p1: number, p2: number, p3: number, t: number): number {
+            //第一次混合
+            p0 = this.mix(p0, p1, t);
+            p1 = this.mix(p1, p2, t);
+            p2 = this.mix(p2, p3, t);
+            //第二次混合
+            p0 = this.mix(p0, p1, t);
+            p1 = this.mix(p1, p2, t);
+            //第三次混合
+            p0 = this.mix(p0, p1, t);
+            return p0;
+
+            //var progress: number = 1.0 - t;
+            //var progress2: number = progress * progress;
+            //var progress3: number = progress2 * progress;
+            //var t2: number = t * t;
+            //var t3: number = t2 * t;
+           
+            //var res: number = p0 * progress3 + 3.0 * p1 * t * progress2 + 3.0 * p2 * t2 * progress + p3 * t3;
+            //return res;
+        }
+
+        private cubic_bezier2(p0: number, p1: number, p2: number, p3: number, t: number): number {
             var progress: number = 1.0 - t;
             var progress2: number = progress * progress;
             var progress3: number = progress2 * progress;
             var t2: number = t * t;
             var t3: number = t2 * t;
-           
+
             var res: number = p0 * progress3 + 3.0 * p1 * t * progress2 + 3.0 * p2 * t2 * progress + p3 * t3;
             return res;
+        }
+
+        private mix(num0:number, num1:number, t:number): number {
+            return num0 * (1 - t) + num1 * t;
         }
 
     }
@@ -71,19 +97,31 @@
 
 
     export class BezierData {
-        public static PointCount: number = 16;
+        public static SegCount: number = 4;//四段贝塞尔曲线
         public posPoints: Array<Point> = [];
         public ctrlPoints: Array<Point> = [];
         private static calc: BezierCurve = new BezierCurve();
 
-        private _count: number;
-        constructor(ptCount: number) {
-            this._count = ptCount;
+
+        constructor() {
+            
         }
 
         public calc(t:number): number {
             var value: number = BezierData.calc.calcBezierY(this.posPoints, this.ctrlPoints, t);
             return value;
+        }
+
+        public merge(): Float32Array {
+            var res: Float32Array = new Float32Array(BezierData.SegCount * 4 * 2);
+            for (var i: number = 0, count: number = BezierData.SegCount * 2; i < count; i++) {
+                res[i * 4 + 0] = this.posPoints[i].x;
+                res[i * 4 + 1] = this.posPoints[i].y;
+                res[i * 4 + 2] = this.ctrlPoints[i].x;
+                res[i * 4 + 3] = this.ctrlPoints[i].y;
+            }
+
+            return res;
         }
 
         public compress(): Float32Array {
@@ -104,11 +142,13 @@
                 this.ctrlPoints = [];
             }
             var i: number = 0, count: number = 0;
-            for (i = this.posPoints.length, count = this._count / 2; i < count; i++) {
+            for (i = this.posPoints.length / 2, count = BezierData.SegCount; i < count; i++) {
                 this.posPoints.push(new Point(0, 0));
+                this.posPoints.push(new Point(0, 1));
             }
-            for (i = this.ctrlPoints.length, count = this._count / 2; i < count; i++) {
+            for (i = this.ctrlPoints.length / 2, count = BezierData.SegCount; i < count; i++) {
                 this.ctrlPoints.push(new Point(0, 0));
+                this.ctrlPoints.push(new Point(0, 1));
             }
         }
 
