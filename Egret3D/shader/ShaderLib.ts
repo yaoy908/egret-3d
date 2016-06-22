@@ -647,31 +647,27 @@ module egret3d {
 			"} \n",
 
 			"particle_bezier":
-			"float cubic_bezier(float p0, float p1, float p2, float p3, float t) { \n" +
-			"float progress = 1.0 - t; \n" +
-			"float progress2 = progress * progress; \n" +
-			"float progress3 = progress2 * progress; \n" +
-			"float t2 = t * t; \n" +
-			"float t3 = t2 * t; \n" +
-			"t = p0 * progress3 + 3.0 * p1 * t * progress2 + 3.0 * p2 * t2 * progress + p3 * t3; \n" +
-			"return t; \n" +
-			"} \n" +
 			"float calcBezier(vec2 points[16], float t){ \n" +
-			"vec2 A0 ; \n" +
-			"vec2 B0 ; \n" +
-			"vec2 A1 ; \n" +
-			"vec2 B1 ; \n" +
+			"vec2 P0 ; \n" +
+			"vec2 P1 ; \n" +
+			"vec2 P2 ; \n" +
+			"vec2 P3 ; \n" +
 			"for( int i = 0 ; i < 4 ; i++ ){ \n" +
 			"if( t >= points[i*4].x && t <= points[i*4+3].x ){ \n" +
-			"A0 = points[i*4] ; \n" +
-			"B0 = points[i*4+1] ; \n" +
-			"A1 = points[i*4+2] ; \n" +
-			"B1 = points[i*4+3] ; \n" +
+			"P0 = points[i*4] ; \n" +
+			"P1 = points[i*4+1] ; \n" +
+			"P3 = points[i*4+2] ; \n" +
+			"P2 = points[i*4+3] ; \n" +
 			"break; \n" +
 			"} \n" +
 			"} \n" +
-			"t = (t - A0.x) / (A1.x - A0.x); \n" +
-			"return cubic_bezier(A0.y, B0.y, B1.y, A1.y, t); \n" +
+			"t = (t - P0.x) / (P3.x - P0.x); \n" +
+			"float p0y = mix(P0.y, P1.y, t); \n" +
+			"float p1y = mix(P1.y, P2.y, t); \n" +
+			"float p2y = mix(P2.y, P3.y, t); \n" +
+			"p0y = mix(p0y, p1y, t); \n" +
+			"p1y = mix(p1y, p2y, t); \n" +
+			"return mix(p0y, p1y, t); \n" +
 			"} \n" +
 			"vec2 decompressFloat(float min, float range, float mergeFloat){ \n" +
 			"float convert_1_4096 = 1.0 / 4096.0; \n" +
