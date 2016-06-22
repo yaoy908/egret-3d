@@ -23,6 +23,7 @@
 
             this.vertex_ShaderName[ShaderPhaseType.local_vertex] = this.vertex_ShaderName[ShaderPhaseType.local_vertex] || [];
             this.vertex_ShaderName[ShaderPhaseType.local_vertex].push("particle_bezier");
+            this.vertex_ShaderName[ShaderPhaseType.local_vertex].push("particle_bezier_area");
             this.vertex_ShaderName[ShaderPhaseType.local_vertex].push("particle_time_vs");
 
             this.fragment_ShaderName[ShaderPhaseType.start_fragment] = this.fragment_ShaderName[ShaderPhaseType.start_fragment] || [];

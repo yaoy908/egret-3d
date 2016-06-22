@@ -54,11 +54,11 @@ void main(void) {
 		//相对发射器的位置
 		vec3 position_emitter = attribute_offsetPosition;
 
-		vec3 velocityLocalVec3 = velocityBaseVec3;
+		vec3 velocityLocalVec3 = velocityBaseVec3 * currentTime;
 		vec3 velocityWorldVec3 = vec3(0.0,0.0,0.0);
 		vec3 velocityMultiVec3 = vec3(0.0,0.0,0.0);
 		if(particleStateData.velocityOverWorldSpace == 0.0){
-			//加速度为本地坐标系
+			//速度叠加为本地坐标系
 			velocityLocalVec3 += velocityOverVec3;
 		}else{
 			velocityWorldVec3 += velocityOverVec3;
@@ -92,11 +92,11 @@ void main(void) {
 		mat4 modelMatrix = buildModelMatrix(followTargetRotation, followTargetScale, followTargetPosition);
 		position_emitter = (modelMatrix * vec4(position_emitter, 1.0)).xyz; 
 
-		velocityMultiVec3 = velocityLocalVec3 + velocityWorldVec3;
+		velocityMultiVec3 = velocityLocalVec3 + velocityWorldVec3 + velocityForceVec3;
 
 		
-		//叠加移动速度，速度会受母系缩放值影响
-		position_emitter += calcParticleMove(velocityMultiVec3, velocityForceVec3) * followTargetScale;
+		//叠加位移，位移会受母系缩放值影响
+		position_emitter += velocityMultiVec3 * followTargetScale;
 
 		//重力默认为全局坐标系
 		position_emitter.y -= currentTime * currentTime * particleStateData.gravity;
