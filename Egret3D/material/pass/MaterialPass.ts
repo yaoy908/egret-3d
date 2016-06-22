@@ -262,6 +262,8 @@
 
                 this._vs_shader_methods[ShaderPhaseType.local_vertex] = this._vs_shader_methods[ShaderPhaseType.local_vertex] || [];
                 this._fs_shader_methods[ShaderPhaseType.lighting_fragment] = [];
+                this._fs_shader_methods[ShaderPhaseType.lighting_fragment].push("lightingBase_fs");
+
                 if (this.lightGroup.directLightList.length) { 
                     this._passUsage.directLightData = new Float32Array(DirectLight.stride * this.lightGroup.directLightList.length);
                     this._vs_shader_methods[ShaderPhaseType.local_vertex].push("varyingViewDir_vs");
@@ -446,25 +448,25 @@
             subGeometry.activeState(time, delay, this._passUsage, context3DProxy);
 
             if (this._materialData.depthTest) {
-                context3DProxy.enable(ContextConfig.DEPTH_TEST);
+                context3DProxy.enableDepth();
                 context3DProxy.depthFunc(ContextConfig.LEQUAL);
             }
             else {
-                context3DProxy.disable(ContextConfig.DEPTH_TEST);
+                context3DProxy.disableDepth();
                 context3DProxy.depthFunc(ContextConfig.LEQUAL);
             }
 
             context3DProxy.setCulling(this._materialData.cullFrontOrBack);
 
             if (this._materialData.bothside) {
-                context3DProxy.disable(ContextConfig.CULL_FACE);
+                context3DProxy.disableCullFace();
             } else
-                context3DProxy.enable(ContextConfig.CULL_FACE);
+                context3DProxy.enableCullFace();
 
             if (this._materialData.alphaBlending)
                 Context3DProxy.gl.depthMask(false);
 
-            context3DProxy.enable(ContextConfig.BLEND);
+            context3DProxy.enableBlend();
             context3DProxy.setBlendFactors(this._materialData.blend_src, this._materialData.blend_dest);
 
             if (this._passUsage.uniform_materialSource) {

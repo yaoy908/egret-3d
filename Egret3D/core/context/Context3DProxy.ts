@@ -21,7 +21,6 @@
     */
     export class Context3DProxy {
        
-        private _cacheProgram: Program3D;
 
         /**
          * @language zh_CN
@@ -43,11 +42,30 @@
         * 一般情况下，当切换程序的时候，设备将会丢失，
         * 这个时候就需要快速重新申请设备，并将相应的资源buffer，texture重新提交至显卡
         */
-        public isLost: boolean;
+        public isLost: boolean = false ;
 
-      
+        //-------cache-------
+        private DEPTH_TEST: boolean = false;
 
+        private CULL_FACE: boolean = false;
 
+        private BLEND: boolean = false;
+
+        private blend_Factors_src: number = -1;
+
+        private blend_Factors_dst: number = -1;
+
+        private cullingMode: number = -1;
+
+        private depthCompareMode: number = -1;
+
+        private vertexFormat: number = -1;
+
+        private program: Program3D;
+
+        private programChange: boolean;
+        
+        //--------------
 
         /**
         * @private
@@ -577,10 +595,11 @@
         * @platform Web,Native
         */
         public setProgram(program: Program3D) {
-            if (this._cacheProgram != program) {
-                this._cacheProgram = program;
-                Context3DProxy.gl.useProgram(program.program);
-            }
+            this.programChange = false;
+            if (this.program == program) return;
+            this.programChange = true;
+            this.program = program;
+            Context3DProxy.gl.useProgram(program.program);
         }
 
         /**
@@ -846,6 +865,9 @@
         * @platform Web,Native
         */
         public setBlendFactors(src: number, dst: number) {
+            if (this.blend_Factors_src == src && this.blend_Factors_dst == dst) return;
+            this.blend_Factors_src = src;
+            this.blend_Factors_dst = dst ;
             Context3DProxy.gl.blendFunc(src, dst);
         }
 
@@ -859,30 +881,109 @@
         * @platform Web,Native
         */
         public setCulling(mode: number) {
+            if (this.cullingMode == mode) return;
+
+            this.cullingMode = mode;
             Context3DProxy.gl.cullFace(mode);
         }
 
+ 
         /**
         * @language zh_CN
-        * 开启 绘制模式
-        * @param cap
+        * 开启 深度测试模式
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public enable(cap: number) {
-            Context3DProxy.gl.enable(cap);
+        public enableDepth() {
+            if (this.DEPTH_TEST) return;
+            this.DEPTH_TEST = true; 
+            Context3DProxy.gl.enable(ContextConfig.DEPTH_TEST);
         }
 
         /**
         * @language zh_CN
-        * 关闭 绘制模式
-        * @param cap
+        * 关闭 深度测试模式
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public disable(cap: number) {
-            Context3DProxy.gl.disable(cap);
+        public disableDepth() {
+            if (!this.DEPTH_TEST) return;
+            this.DEPTH_TEST = false;
+            Context3DProxy.gl.disable(ContextConfig.DEPTH_TEST);
         }
+
+        /**
+        * @language zh_CN
+        * 开启 剔除面模式
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public enableCullFace() {
+            if (this.CULL_FACE) return;
+            this.CULL_FACE = true;
+            Context3DProxy.gl.enable(ContextConfig.CULL_FACE);
+        }
+
+        /**
+        * @language zh_CN
+        * 关闭 剔除面模式
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public disableCullFace() {
+            if (!this.CULL_FACE) return;
+            this.CULL_FACE = false;
+            Context3DProxy.gl.disable(ContextConfig.CULL_FACE);
+        }
+
+        /**
+        * @language zh_CN
+        * 开启 混合模式
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public enableBlend() {
+            if (this.BLEND) return;
+            this.BLEND = true;
+            Context3DProxy.gl.enable(ContextConfig.BLEND);
+        }
+
+        /**
+        * @language zh_CN
+        * 关闭 混合模式
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public disableBlend() {
+            if (!this.BLEND) return;
+            this.BLEND = false;
+            Context3DProxy.gl.disable(ContextConfig.BLEND);
+        }
+
+
+
+
+        ///**
+        // * @language zh_CN
+        // * 开启 绘制模式
+        // * @param cap
+        // * @version Egret 3.0
+        // * @platform Web,Native
+        // */
+        //public enable(cap: number) {
+        //    Context3DProxy.gl.enable(cap);
+        //}
+
+        ///**
+        //* @language zh_CN
+        //* 关闭 绘制模式
+        //* @param cap
+        //* @version Egret 3.0
+        //* @platform Web,Native
+        //*/
+        //public disable(cap: number) {
+        //    Context3DProxy.gl.disable(cap);
+        //}
 
         /**
         * @language zh_CN
@@ -893,6 +994,8 @@
         * @platform Web,Native
         */
         public depthFunc(compareMode: number = 0) {
+            if (this.depthCompareMode == compareMode) return;
+            this.depthCompareMode = compareMode;
               Context3DProxy.gl.depthFunc(compareMode);
         }
 
@@ -948,6 +1051,44 @@
         */
         public clearVaPointer(index: number): void {
             Context3DProxy.gl.disableVertexAttribArray(index);
+        }
+
+        /**
+        * @language zh_CN
+        * 检查激活 的顶点结构
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public isActiveVertexFormat(format: number): boolean {
+            //if (this.vertexFormat == format && !this.programChange )
+            //    return true;
+            //this.vertexFormat = format;
+            return false;
+        }
+
+
+        /**
+        * @language zh_CN
+        * 激活的顶点结构
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public activeVertexFormat(format: number){
+            this.vertexFormat = format;
+        }
+
+        /**
+        * @language zh_CN
+        * 关闭顶点着色器变量索引
+        * @param index 变量索引
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public unActiveVertexFormat(): void {
+            this.vertexFormat = -1;
+            for (var i: number = 0; i < 12 ; i++) {
+                this.clearVaPointer(i);
+            }
         }
 
         /**

@@ -12,6 +12,7 @@
      * @platform Web,Native
      */
     export class SubGeometry {
+
         /**
          * @language zh_CN
          * 顶点索引
@@ -64,6 +65,7 @@
         public textureSpecular: string;
 
         public preAttList: Array<GLSL.Attribute> = new Array<GLSL.Attribute>();
+
 
         /**
         * @language zh_CN
@@ -245,17 +247,31 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
+        static use: boolean = false;
         public activeState(time: number, delay: number, passUsage: PassUsage, contextProxy: Context3DProxy) {
 
             if (passUsage.attributeDiry)
                 this.upload(passUsage, contextProxy);
 
-            for (var i: number = 0; i < passUsage["attributeList"].length; i++) {
-                var attribute: GLSL.Attribute = passUsage["attributeList"][i]; 
-                if (attribute.uniformIndex >= 0)
-                    contextProxy.vertexAttribPointer(attribute.uniformIndex, attribute.size, attribute.dataType, attribute.normalized, attribute.stride, attribute.offsetBytes);
-            }
+           contextProxy.unActiveVertexFormat()
+            //if (!SubGeometry.use) {
+            //    SubGeometry.use = true;
+                for (var i: number = 0; i < passUsage["attributeList"].length; i++) {
+                    var attribute: GLSL.Attribute = passUsage["attributeList"][i];
+                    if (attribute.uniformIndex >= 0)
+                        contextProxy.vertexAttribPointer(attribute.uniformIndex, attribute.size, attribute.dataType, attribute.normalized, attribute.stride, attribute.offsetBytes);
+                }
+            //}
 
+            //if (!contextProxy.isActiveVertexFormat(this.geometry.vertexFormat)) {
+            //    contextProxy.unActiveVertexFormat()
+            //    contextProxy.activeVertexFormat(this.geometry.vertexFormat);
+            //    for (var i: number = 0; i < passUsage["attributeList"].length; i++) {
+            //        var attribute: GLSL.Attribute = passUsage["attributeList"][i];
+            //        if (attribute.uniformIndex >= 0)
+            //            contextProxy.vertexAttribPointer(attribute.uniformIndex, attribute.size, attribute.dataType, attribute.normalized, attribute.stride, attribute.offsetBytes);
+            //    }
+            //}
         }
 
         /**
@@ -265,11 +281,12 @@
         * @platform Web,Native
         */
         public deactiveState(passUsage: PassUsage, contextProxy: Context3DProxy): void {
-            for (var i: number = 0; i < passUsage["attributeList"].length; i++) {
-                var attribute: GLSL.Attribute = passUsage["attributeList"][i];
-                if (attribute.uniformIndex >= 0)
-                    contextProxy.clearVaPointer(attribute.uniformIndex);
-            }
+            //contextProxy.unActiveVertexFormat()
+            //for (var i: number = 0; i < passUsage["attributeList"].length; i++) {
+            //    var attribute: GLSL.Attribute = passUsage["attributeList"][i];
+            //    if (attribute.uniformIndex >= 0)
+            //        contextProxy.clearVaPointer(attribute.uniformIndex);
+            //}
         }
     }
 } 

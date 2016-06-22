@@ -14,6 +14,7 @@
         private _rotationNode: ParticleRotation;
         private _positionNode: ParticlePosition;
         private _scaleNode: ParticleScale;
+        private _colorNode: ParticleStartColor;
 
         private particleGeometryShape: Geometry;
         private particleAnimation: ParticleAnimation;
@@ -27,7 +28,6 @@
         private _data: ParticleData;
         private _externalGeometry: Geometry;
 
-        private static IdentityMatrix: Matrix4_4 = new Matrix4_4();
         /**
         * @language zh_CN
         * 构造函数
@@ -41,7 +41,7 @@
             super(null, material );
             this._data = data;
             this._externalGeometry = geo;
-            this.material.blendMode = BlendMode.ADD; 
+            this.material.blendMode = data.property.blendMode;
 
             this.animation = this.particleAnimation = new ParticleAnimation(this);
             this.animation.particleAnimationController = this.particleAnimation;
@@ -70,8 +70,6 @@
                 this.particleGeometryShape = this._externalGeometry;
             }
 
-            this.loop = this._data.property.loop;
-            this.duration = this._data.life.duration;
             this.initialize();
 
             this.initBoudBox(this._data.property.bounds);
@@ -89,25 +87,20 @@
         private createShape(): Geometry {
             var geo: Geometry;
             var geomData: ParticleDataGeometry = this._data.geometry;
-            if (geomData.type == ParticleDataGeometry.Plane) {
+            if (geomData.type == ParticleGeometryType.Plane) {
                 geo = new PlaneGeometry(geomData.planeW, geomData.planeH, 1, 1, 1, 1, Vector3D.Z_AXIS);
-            } else if (geomData.type == ParticleDataGeometry.Cube) {
+            } else if (geomData.type == ParticleGeometryType.Cube) {
                 geo = new CubeGeometry(geomData.cubeW, geomData.cubeH, geomData.cubeD);
-            } else if (geomData.type == ParticleDataGeometry.Sphere) {
+            } else if (geomData.type == ParticleGeometryType.Sphere) {
                 geo = new SphereGeometry(geomData.sphereRadius, geomData.sphereSegW, geomData.sphereSegH);
             }
             return geo;
         }
 
-        /**
-        * @language zh_CN
-        * 获取是否为follow类型
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public get isFollowParticle(): boolean {
-            return this._data.followTarget != null;
+        public get data(): ParticleData {
+            return this._data;
         }
+
 
         /**
         * @language zh_CN
@@ -119,36 +112,6 @@
             return this._timeNode;
         }
 
-        /**
-        * @language zh_CN
-        * 粒子发射器的 发射，是否进行循环播放
-        */
-        private set loop(flag: boolean) {
-            if (flag)
-                this._particleState.loop = 1;
-            else
-                this._particleState.loop = 0;
-        }
-
-        private get loop(): boolean {
-            return this._particleState.loop == 1;
-        }
-
-        /**
-        * @language zh_CN
-        * 粒子发射器的 发射时间周期，如果loop 为true 这个值将会无效
-        */
-        private set duration(value: number) {
-            this._particleState.duration = value;
-        }
-
-        /**
-        * @language zh_CN
-        * 粒子发射器的 发射时间周期，如果loop 为true 这个值将会无效
-        */
-        private get duration(): number {
-            return this._particleState.duration;
-        }
 
         /**
         * @language zh_CN
@@ -212,7 +175,7 @@
         */
         public play(prewarm: boolean = false) {
             if (prewarm) {
-                this.animation.time = this._particleState.totalTime;
+                this.animation.animTime = this._particleState.loopTime;
                 this.animation.play("", 1.0, false);
             } else {
                 this.animation.play();
@@ -226,17 +189,11 @@
             //clean
             this.particleAnimation.particleAnimationState.clean();
 
-            var particlePerLife: number = (this._data.life.lifeMax + this._data.life.lifeMin) / 2;
-            var particleCount: number = Math.floor(particlePerLife * this._data.life.rate);//粒子的目标数量是这个的时候，可以达到循环
-
-            if (this._data.property.particleCount != -1) {
-                particleCount = Math.min(this._data.property.particleCount, particleCount);
-            }
-            this._particleState.maxCount = particleCount;
+            var count: number = this._data.property.particleCount;
 
             this.geometry = new Geometry();
             this.geometry.buildDefaultSubGeometry();
-            this.geometry.subGeometrys[0].count = this._particleState.maxCount * this.particleGeometryShape.indexData.length;
+            this.geometry.subGeometrys[0].count = count * this.particleGeometryShape.indexData.length;
 
 
             //根据 模型形状初始化 
@@ -252,7 +209,7 @@
             this.initEndNode();
 
             this.geometry.verticesData = new Array<number>();
-            for (var i: number = 0; i < this._particleState.maxCount; ++i) {
+            for (var i: number = 0; i < count; ++i) {
                 for (var j: number = 0; j < this.particleGeometryShape.vertexCount; ++j) {
 
                     for (var k: number = 0; k < this.geometry.vertexAttLength; ++k) {
@@ -271,14 +228,14 @@
             }
 
             this.geometry.indexData = new Array<number>();
-            for (var i: number = 0; i < this._particleState.maxCount; ++i) {
+            for (var i: number = 0; i < count; ++i) {
                 for (var j: number = 0; j < this.particleGeometryShape.indexData.length; ++j) {
                     this.geometry.indexData[i * this.particleGeometryShape.indexData.length + j] = this.particleGeometryShape.indexData[j] + i * this.particleGeometryShape.vertexCount;
                 }
             }
 
             //最后根据节点功能，填充模型
-            this.particleAnimation.particleAnimationState.fill(this.geometry, this._particleState.maxCount);
+            this.particleAnimation.particleAnimationState.fill(this.geometry, count);
         }
 
         /**
@@ -295,8 +252,60 @@
            
             //position
             this._positionNode = new ParticlePosition();
-            this._positionNode.initNode(this._data.distribute);
+            this._positionNode.initNode(this._data.shape);
             nodes.push(this._positionNode);
+
+            //speed(依赖于position)
+            var speedNode: ParticleVelocityNode = new ParticleVelocityNode();
+            speedNode.initNode(this._data.moveSpeed);
+            nodes.push(speedNode);
+
+            //velocity
+            var velocityOver: VelocityOverLifeTimeData = this._data.moveSpeed.velocityOver;
+            if (velocityOver) {
+                if (velocityOver.type == ParticleValueType.Const || velocityOver.type == ParticleValueType.RandomConst) {
+                    var overConstNode: ParticleVelocityOverConstNode = new ParticleVelocityOverConstNode();
+                    overConstNode.initNode(this._data.moveSpeed);
+                    nodes.push(overConstNode);
+                } else if(velocityOver.type == ParticleValueType.OneBezier){
+                    var overOneBezierNode: ParticleVelocityOverOneBezierNode = new ParticleVelocityOverOneBezierNode();
+                    overOneBezierNode.initNode(this._data.moveSpeed);
+                    nodes.push(overOneBezierNode);
+                } else if (velocityOver.type == ParticleValueType.TwoBezier) {
+                    var overTwoBezierNode: ParticleVelocityOverTwoBezierNode = new ParticleVelocityOverTwoBezierNode();
+                    overTwoBezierNode.initNode(this._data.moveSpeed);
+                    nodes.push(overTwoBezierNode);
+                }
+            }
+            var limit: VelocityLimitLifeTimeData = this._data.moveSpeed.velocityLimit;
+            if (limit) {
+                if (limit.type == ParticleValueType.Const || limit.type == ParticleValueType.RandomConst) {
+                    var limitConstNode: ParticleVelocityLimitConstNode = new ParticleVelocityLimitConstNode();
+                    limitConstNode.initNode(this._data.moveSpeed);
+                    nodes.push(limitConstNode);
+                } else if(limit.type == ParticleValueType.OneBezier){
+                    var limitOneBezierNode: ParticleVelocityLimitOneBezierNode = new ParticleVelocityLimitOneBezierNode();
+                    limitOneBezierNode.initNode(this._data.moveSpeed);
+                    nodes.push(limitOneBezierNode);
+                }
+            }
+
+            var velocityForce: VelocityForceLifeTimeData = this._data.moveSpeed.velocityForce;
+            if (velocityForce) {
+                if (velocityForce.type == ParticleValueType.Const || velocityForce.type == ParticleValueType.RandomConst) {
+                    var forceConstNode: ParticleVelocityForceConstNode = new ParticleVelocityForceConstNode();
+                    forceConstNode.initNode(this._data.moveSpeed);
+                    nodes.push(forceConstNode);
+                } else if (velocityForce.type == ParticleValueType.OneBezier) {
+                    var forceOneBezierNode: ParticleVelocityForceOneBezierNode = new ParticleVelocityForceOneBezierNode();
+                    forceOneBezierNode.initNode(this._data.moveSpeed);
+                    nodes.push(forceOneBezierNode);
+                } else if (velocityForce.type == ParticleValueType.TwoBezier) {
+                    var forceTwoBezierNode: ParticleVelocityForceTwoBezierNode = new ParticleVelocityForceTwoBezierNode();
+                    forceTwoBezierNode.initNode(this._data.moveSpeed);
+                    nodes.push(forceTwoBezierNode);
+                }
+            }
 
             //rotation
             this._rotationNode = new ParticleRotation();
@@ -307,6 +316,10 @@
             this._scaleNode = new ParticleScale();
             this._scaleNode.initNode(this._data.scaleBirth);
             nodes.push(this._scaleNode);
+            //start color
+            this._colorNode = new ParticleStartColor();
+            this._colorNode.initNode(this._data.property);
+            nodes.push(this._colorNode);
 
             //follow
             if (this._data.followTarget) {
@@ -315,17 +328,6 @@
                 nodes.push(this._particleFollowNode);
             }
             
-            //
-            if (this._data.moveSpeed) {
-                var speedNode: ParticleUniformSpeedNode = new ParticleUniformSpeedNode();
-                speedNode.initNode(this._data.moveSpeed);
-                nodes.push(speedNode);
-            }
-            if (this._data.acceleration) {
-                var acceleration: ParticleAccelerationSpeedNode = new ParticleAccelerationSpeedNode();
-                acceleration.initNode(this._data.acceleration);
-                nodes.push(acceleration);
-            }
 
             if (this._data.scaleBesizer) {
                 var scaleBesizer: ParticleSizeGlobalNode = new ParticleSizeGlobalNode();
@@ -334,9 +336,20 @@
             }
 
             if (this._data.rotationSpeed) {
-                var rotationSpeed: ParticleRotationNode = new ParticleRotationNode();
-                rotationSpeed.initNode(this._data.rotationSpeed);
-                nodes.push(rotationSpeed);
+                if (this._data.rotationSpeed.type == ParticleValueType.Const || this._data.rotationSpeed.type == ParticleValueType.RandomConst) {
+                    var rotateConst: ParticleRotationConstNode = new ParticleRotationConstNode();
+                    rotateConst.initNode(this._data.rotationSpeed);
+                    nodes.push(rotateConst);
+                } else if (this._data.rotationSpeed.type == ParticleValueType.OneBezier) {
+                    var rotateOneBezier: ParticleRotationOneBezierNode = new ParticleRotationOneBezierNode();
+                    rotateOneBezier.initNode(this._data.rotationSpeed);
+                    nodes.push(rotateOneBezier);
+                } else if (this._data.rotationSpeed.type == ParticleValueType.TwoBezier) {
+                    var rotatTwoBezier: ParticleRotationTwoBezierNode = new ParticleRotationTwoBezierNode();
+                    rotatTwoBezier.initNode(this._data.rotationSpeed);
+                    nodes.push(rotatTwoBezier);
+                }
+               
             }
 
             if (this._data.colorOffset) {

@@ -4,20 +4,20 @@
     * @private
     * 粒子的旋转角速度，当前实现为Z轴的速度（todo：模型粒子或许需要同时有x/y/z三个方向的角速度）
     */
-    export class ParticleRotationNode extends AnimationNode {
+    export class ParticleRotationConstNode extends AnimationNode {
 
         private _rotation: ConstRandomValueShape;
         private attribute_Rotation: GLSL.VarRegister
         constructor() {
 
             super();
-            this.name = "ParticleRotationNode"; 
+            this.name = "ParticleRotationConstNode"; 
 
             this.vertex_ShaderName[ShaderPhaseType.local_vertex] = this.vertex_ShaderName[ShaderPhaseType.local_vertex] || [];
-            this.vertex_ShaderName[ShaderPhaseType.local_vertex].push("particle_Rotation");
+            this.vertex_ShaderName[ShaderPhaseType.local_vertex].push("particle_rotationConst");
 
             this.attribute_Rotation = new GLSL.VarRegister();
-            this.attribute_Rotation.name = "attribute_Rotation";
+            this.attribute_Rotation.name = "attribute_rotationZ";
             this.attribute_Rotation.size = 1;
             this.attributes.push(this.attribute_Rotation);
         }
@@ -34,8 +34,8 @@
         public initNode(data: ParticleDataNode): void {
             var node: ParticleDataRotationSpeed = <ParticleDataRotationSpeed>data;
             this._rotation = new ConstRandomValueShape();
-            this._rotation.max = node.max.x;
-            this._rotation.min = node.min.x;
+            this._rotation.max = node.max.z;
+            this._rotation.min = node.min.z;
         }
 
         /**

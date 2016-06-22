@@ -2,14 +2,14 @@
 
     /**
     * @language zh_CN
-    * @class egret3d.ParticleAccelerationSpeedNode
+    * @class egret3d.ParticleVelocityForceConstNode(常量部分)
     * @classdesc
     * 粒子加速度效果节点
     * @see egret3d.AnimationNode
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class ParticleAccelerationSpeedNode extends AnimationNode {
+    export class ParticleVelocityForceConstNode extends AnimationNode {
         
         /**
         * @private
@@ -18,12 +18,12 @@
         private attribute_accelerationSpeed: GLSL.VarRegister;
         constructor() {
             super();
-            this.name = "ParticleAccelerationSpeedNode"; 
+            this.name = "ParticleVelocityForceConstNode"; 
             this.vertex_ShaderName[ShaderPhaseType.global_vertex] = this.vertex_ShaderName[ShaderPhaseType.global_vertex] || [];
-            this.vertex_ShaderName[ShaderPhaseType.global_vertex].push("particle_accelerationSpeed");
+            this.vertex_ShaderName[ShaderPhaseType.global_vertex].push("particle_velocityForceConst");
 
             this.attribute_accelerationSpeed = new GLSL.VarRegister();
-            this.attribute_accelerationSpeed.name = "attribute_accelerationSpeed";
+            this.attribute_accelerationSpeed.name = "attribute_velocityForceConst";
             this.attribute_accelerationSpeed.size = 3;
             this.attributes.push(this.attribute_accelerationSpeed);
         }
@@ -37,15 +37,15 @@
        * @platform Web,Native
        */
         public initNode(data: ParticleDataNode): void {
-            var node: ParticleDataAcceleration = <ParticleDataAcceleration>data;
-            this._speedShape = new Vec3ConstRandomValueShape();
-            this._speedShape.maxX = node.max.x;
-            this._speedShape.maxY = node.max.y;
-            this._speedShape.maxZ = node.max.z;
+            //var node: ParticleDataAcceleration = <ParticleDataAcceleration>data;
+            //this._speedShape = new Vec3ConstRandomValueShape();
+            //this._speedShape.maxX = node.max.x;
+            //this._speedShape.maxY = node.max.y;
+            //this._speedShape.maxZ = node.max.z;
 
-            this._speedShape.minX = node.min.x;
-            this._speedShape.minY = node.min.y;
-            this._speedShape.minZ = node.min.z;
+            //this._speedShape.minX = node.min.x;
+            //this._speedShape.minY = node.min.y;
+            //this._speedShape.minZ = node.min.z;
         }
 
 

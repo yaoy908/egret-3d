@@ -1,4 +1,4 @@
-uniform float uniform_colorTransform[16];
+uniform float uniform_colorTransform[40];
 //压缩过的颜色,rg.b的格式
 vec3 unpack_color(float rgb_data)
 {
@@ -24,16 +24,17 @@ void main() {
     float startAlpha;
 	float nextAlpha;
 
-    float progress = pt.w/pt.y;
-    for( int i = 1 ; i < 8 ; i++ ){
-       if( progress >= fract(uniform_colorTransform[i+8-1]) ){
+    float progress = particleVertex.x/particleVertex.y;
+	const int maxColorCount = 20;
+    for( int i = 1 ; i < maxColorCount ; i++ ){
+       if( progress >= fract(uniform_colorTransform[i+maxColorCount-1]) ){
           startColor = uniform_colorTransform[i-1] ;
-          startSegment = fract(uniform_colorTransform[i+8-1]) ;
+          startSegment = fract(uniform_colorTransform[i+maxColorCount-1]) ;
           nextColor = uniform_colorTransform[i];
-          nextSegment = fract(uniform_colorTransform[i+8]) ;
+          nextSegment = fract(uniform_colorTransform[i+maxColorCount]) ;
 
-		  startAlpha = uniform_colorTransform[i+8-1] - startSegment;
-		  nextAlpha = uniform_colorTransform[i+8] - nextSegment;
+		  startAlpha = uniform_colorTransform[i+maxColorCount-1] - startSegment;
+		  nextAlpha = uniform_colorTransform[i+maxColorCount] - nextSegment;
        }else{
           break;
        }

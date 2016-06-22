@@ -8,19 +8,61 @@
     export enum ParticleDataNodeType {
         //以下类型必须有
         Property,
+        Emission,
         Life,
-        Distribute,
+        Shape,
         RotationBirth,
         ScaleBirth,
         Geometry,
+        MoveSpeed,
         //其他挂接节点
         FollowTarget,
-        MoveSpeed,
-        Acceleration,
         ScaleBezier,
         RotationSpeed,
         ColorOffset,
+        //Acceleration,
     }
+
+    /**
+    * @language zh_CN
+    * 粒子数据类型
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export enum ParticleValueType{
+        Const,
+        RandomConst,
+        OneBezier,
+        TwoBezier,
+    }
+
+    /**
+    * @language zh_CN
+    * 粒子的几何形状
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export enum ParticleGeometryType {
+        External,
+        Plane,
+        Cube,
+        Sphere,
+    }
+
+    /**
+    * @language zh_CN
+    * 粒子出生颜色
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export enum ParticleBirthColorType {
+        Const,
+        RandomConst,
+        OneGradients,
+        TwoGradients,
+    }
+
+
 
     /**
      * @private
@@ -29,15 +71,15 @@
     export class ParticleData {
 
         public property: ParticleDataProperty = new ParticleDataProperty();
+        public emission: ParticleDataEmission = new ParticleDataEmission();
         public life: ParticleDataLife = new ParticleDataLife();
-        public distribute: ParticleDataDistribute = new ParticleDataDistribute();
+        public shape: ParticleDataShape = new ParticleDataShape();
         public rotationBirth: ParticleDataRotationBirth = new ParticleDataRotationBirth();
         public scaleBirth: ParticleDataScaleBirth = new ParticleDataScaleBirth();
         public geometry: ParticleDataGeometry = new ParticleDataGeometry();
+        public moveSpeed: ParticleDataMoveSpeed = new ParticleDataMoveSpeed();
 
         public followTarget: ParticleDataFollowTarget;
-        public moveSpeed: ParticleDataMoveSpeed;
-        public acceleration: ParticleDataAcceleration;
         public scaleBesizer: ParticleDataScaleBezier;
         public rotationSpeed: ParticleDataRotationSpeed;
         public colorOffset: ParticleDataColorOffset;
@@ -52,18 +94,15 @@
 
         public validate(): void {
             this.property.validate();
+            this.emission.validate();
             this.life.validate();
-            this.distribute.validate();
+            this.shape.validate();
             this.rotationBirth.validate();
             this.scaleBirth.validate();
             this.geometry.validate();
+            this.moveSpeed.validate();
 
-            if (this.moveSpeed) {
-                this.moveSpeed.validate();
-            }
-            if (this.acceleration) {
-                this.acceleration.validate();
-            }
+           
             if (this.scaleBesizer) {
                 this.scaleBesizer.validate();
             }
@@ -97,10 +136,22 @@
     * @platform Web,Native
     */
     export class ParticleDataProperty extends ParticleDataNode {
-        public particleCount: number = -1;
-        public loop: boolean = true;
+        public particleCount: number = 10;
+
         public bounds: Vector3D = new Vector3D(10, 10, 10);
-       
+        public blendMode: BlendMode = BlendMode.ADD;
+        //初始颜色
+        public colorType: number = ParticleBirthColorType.Const;
+        public colorConst1: Color = new Color(255, 255, 255, 255);
+        public colorConst2: Color = new Color(255, 255, 255, 255);
+        public colorGradients1: ColorGradients;
+        public colorGradients2: ColorGradients;
+        //重力
+        public gravity: number = 0;
+
+        public rotation: Vector3D = new Vector3D(0, 0, 0, 1);
+        public scale: Vector3D = new Vector3D(1, 1, 1, 1);
+        public position: Vector3D = new Vector3D(0, 0, 0, 1);
 
         constructor() {
             super(ParticleDataNodeType.Property);
@@ -119,17 +170,69 @@
             if (this.bounds.z < 0) {
                 this.bounds.z = 1;
             }
+            if (this.particleCount < 0) {
+                this.particleCount = 10;
+            }
+            if (this.colorConst1 == null) {
+                this.colorConst1 = new Color(255, 255, 255, 255);
+            }
+            if (this.colorConst2 == null) {
+                this.colorConst2 = new Color(255, 255, 255, 255);
+            }
+            if (this.colorType == ParticleBirthColorType.OneGradients || this.colorType == ParticleBirthColorType.TwoGradients) {
+                if (this.colorGradients1 == null) {
+                    this.colorGradients1 = new ColorGradients();
+                }
+            }
+            if (this.colorType == ParticleBirthColorType.TwoGradients) {
+                if (this.colorGradients2 == null) {
+                    this.colorGradients2 = new ColorGradients();
+                }
+            }
+
+            if (this.rotation == null) {
+                this.rotation = new Vector3D(0, 0, 0, 1);
+            }
+            if (this.scale == null) {
+                this.scale = new Vector3D(1, 1, 1, 1);
+            }
+            if (this.position == null) {
+                this.rotation = new Vector3D(0, 0, 0, 1);
+            }
         }
     } 
 
+    export class ParticleDataEmission extends ParticleDataNode {
+        public rate: number = 10;
+        public type: number = ParticleValueType.Const;
+        public bursts: Array<Point>;
+        public bezier: BezierData = new BezierData();
+        constructor() {
+            super(ParticleDataNodeType.Emission);
+        }
+
+        public validate(): void {
+            if (this.rate < 0) {
+                this.rate = 0.00001;
+            }
+            if (this.type == ParticleValueType.OneBezier) {
+                if (this.bezier == null) {
+                    this.bezier = new BezierData();
+                }
+                this.bezier.validate();
+            }
+        }
+    }
+
 
     export class ParticleDataLife extends ParticleDataNode{
-        public rate: number = 10;
+       
         public duration: number = 5;
         public lifeMax: number = 2;
         public lifeMin: number = 2;
-        public delayMax: number = 0;
-        public delayMin: number = 0;
+        public delay: number = 0;
+        public loop: boolean = true;
+        
 
         constructor() {
             super(ParticleDataNodeType.Life);
@@ -146,47 +249,38 @@
                 this.lifeMin = this.lifeMax = 1;
             }
             //delay
-            if (this.delayMin < 0) {
-                this.delayMin = 0;
-            }
-            if (this.delayMax < this.delayMin) {
-                this.delayMax = this.delayMin;
-            }
-            if (this.delayMax < 0) {
-                this.delayMin = this.delayMax = 1;
-            }
-            //rate
-            if (this.rate < 0) {
-                this.rate = 10;
+            if (this.delay < 0) {
+                this.delay = 0;
             }
             //duration
             if (this.duration < 0) {
                 this.duration = 5;
             }
+           
         }
     }
 
-    export class ParticleDataDistribute extends ParticleDataNode {
+    export class ParticleDataShape extends ParticleDataNode {
 
         public static Point: number = 0;
         public static Cube: number = 1;
-
+        public static Sphere: number = 2;
         //粒子分布类型
-        public type: number = ParticleDataDistribute.Point;
-        public point: Vector3D;
+        public type: number = ParticleDataShape.Cube;
+        public randomDirection: boolean = false;
+
+        
         public cubeW: number = 0;
         public cubeH: number = 0;
         public cubeD: number = 0;
 
+        public sphereRadius: number = 10;
+
         constructor() {
-            super(ParticleDataNodeType.Distribute);
+            super(ParticleDataNodeType.Shape);
         }
         public validate(): void {
-            if (this.type == ParticleDataDistribute.Point) {
-                if (this.point == null) {
-                    this.point = new Vector3D();
-                }
-            } else if (this.type == ParticleDataDistribute.Cube) {
+            if (this.type == ParticleDataShape.Cube) {
                 if (this.cubeW < 0) {
                     this.cubeW = 0;
                 }
@@ -197,8 +291,21 @@
                     this.cubeD = 0;
                 }
             }
+            else if (this.type == ParticleDataShape.Sphere) {
+                if (this.sphereRadius < 0) {
+                    this.sphereRadius = 10;
+                }
+            }
         }
     }
+
+
+
+
+
+
+
+
 
 
     export class ParticleDataRotationBirth extends ParticleDataNode {
@@ -262,13 +369,10 @@
 
     export class ParticleDataGeometry extends ParticleDataNode {
 
-        public static External: number = 0;
-        public static Plane: number = 1;
-        public static Cube: number = 2;
-        public static Sphere: number = 3;
+
 
         //粒子模型
-        public type: number = ParticleDataGeometry.Plane;
+        public type: number = ParticleGeometryType.Plane;
         public planeW: number = 10;
         public planeH: number = 10;
 
@@ -284,16 +388,16 @@
             super(ParticleDataNodeType.Geometry);
         }
         public validate(): void {
-            if (this.type == ParticleDataGeometry.External)
+            if (this.type == ParticleGeometryType.External)
                 return;
-            if (this.type == ParticleDataGeometry.Plane) {
+            if (this.type == ParticleGeometryType.Plane) {
                 if (this.planeW < 0) {
                     this.planeW = 10;
                 }
                 if (this.planeH < 0) {
                     this.planeH = 10;
                 }
-            } else if (this.type == ParticleDataGeometry.Cube) {
+            } else if (this.type == ParticleGeometryType.Cube) {
                 if (this.cubeW < 0) {
                     this.cubeW = 10;
                 }
@@ -303,7 +407,7 @@
                 if (this.cubeD < 0) {
                     this.cubeD = 10;
                 }
-            } else if (this.type == ParticleDataGeometry.Sphere) {
+            } else if (this.type == ParticleGeometryType.Sphere) {
                 if (this.sphereRadius < 0) {
                     this.sphereRadius = 10;
                 }
@@ -318,81 +422,232 @@
         }
     }
 
-
-
+    
+    
 
 
     export class ParticleDataMoveSpeed extends ParticleDataNode {
+       
         //初始速度
-        public max: Vector3D = new Vector3D();
-        public min: Vector3D = new Vector3D();
+        public max: number = 0;
+        public min: number = 0;
+        //叠加速度
+        public velocityOver: VelocityOverLifeTimeData;
+        //速度限制
+        public velocityLimit: VelocityLimitLifeTimeData;
+        //加速度
+        public velocityForce: VelocityForceLifeTimeData;
 
         constructor() {
             super(ParticleDataNodeType.MoveSpeed);
         }
 
         public validate(): void {
-            if (this.max == null) {
-                this.max = new Vector3D();
+            if (this.velocityOver) {
+                this.velocityOver.validate();
             }
-            if (this.min == null) {
-                this.min = new Vector3D();
+            if (this.velocityLimit) {
+                this.velocityLimit.validate();
             }
-            if (this.min.x > this.max.x) {
-                this.min.x = this.max.x;
-            }
-            if (this.min.y > this.max.y) {
-                this.min.y = this.max.y;
-            }
-            if (this.min.z > this.max.z) {
-                this.min.z = this.max.z;
+            if (this.velocityForce) {
+                this.velocityForce.validate();
             }
         }
     }
 
-    export class ParticleDataAcceleration extends ParticleDataNode {
-        //加速度
-        public max: Vector3D = new Vector3D();
-        public min: Vector3D = new Vector3D();
+
+    export class VelocityLimitLifeTimeData{
+        public type: number = ParticleValueType.Const;
+        public max: number = 0;
+        public min: number = 0;
+
+        public bezier1: BezierData = new BezierData();
+        public bezier2: BezierData = new BezierData();
 
         constructor() {
-            super(ParticleDataNodeType.Acceleration);
         }
 
         public validate(): void {
+            if (this.max < 0) {
+                this.max = 0;
+            }
+            if (this.min > this.max) {
+                this.min = this.max;
+            }
+
+            if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
+                if (this.bezier1 == null) {
+                    this.bezier1 = new BezierData();
+                }
+                this.bezier1.validate();
+            }
+            
+            if (this.type == ParticleValueType.TwoBezier) {
+                if (this.bezier2 == null) {
+                    this.bezier2 = new BezierData();
+                }               
+                this.bezier2.validate();
+            }
+
+        }
+    }
+
+
+    export class VelocityOverLifeTimeData {
+        public type: number = ParticleValueType.Const;
+        public max: Vector3D = new Vector3D();
+        public min: Vector3D = new Vector3D();
+        public worldSpace: boolean = false;
+
+        public xBezier1: BezierData = new BezierData();
+        public yBezier1: BezierData = new BezierData();
+        public zBezier1: BezierData = new BezierData();
+                                   
+        public xBezier2: BezierData = new BezierData();
+        public yBezier2: BezierData = new BezierData();
+        public zBezier2: BezierData = new BezierData();
+
+        public validate(): void {
+
             if (this.max == null) {
                 this.max = new Vector3D();
             }
             if (this.min == null) {
                 this.min = new Vector3D();
             }
-            if (this.min.x > this.max.x) {
-                this.min.x = this.max.x;
+            if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
+                if (this.xBezier1 == null) {
+                    this.xBezier1 = new BezierData();
+                }
+                if (this.yBezier1 == null) {
+                    this.yBezier1 = new BezierData();
+                }
+                if (this.zBezier1 == null) {
+                    this.zBezier1 = new BezierData();
+                }
+
+                this.xBezier1.validate();
+                this.yBezier1.validate();
+                this.zBezier1.validate();
             }
-            if (this.min.y > this.max.y) {
-                this.min.y = this.max.y;
+
+            if (this.type == ParticleValueType.TwoBezier) {
+                if (this.xBezier2 == null) {
+                    this.xBezier2 = new BezierData();
+                }
+                if (this.yBezier2 == null) {
+                    this.yBezier2 = new BezierData();
+                }
+                if (this.zBezier2 == null) {
+                    this.zBezier2 = new BezierData();
+                }
+                this.xBezier2.validate();
+                this.yBezier2.validate();
+                this.zBezier2.validate();
             }
-            if (this.min.z > this.max.z) {
-                this.min.z = this.max.z;
-            }
+
         }
     }
 
+
+    export class VelocityForceLifeTimeData {
+        public type: number = ParticleValueType.Const;
+        public max: Vector3D = new Vector3D();
+        public min: Vector3D = new Vector3D();
+        public worldSpace: boolean = false;
+
+        public xBezier1: BezierData = new BezierData();
+        public yBezier1: BezierData = new BezierData();
+        public zBezier1: BezierData = new BezierData();
+
+        public xBezier2: BezierData = new BezierData();
+        public yBezier2: BezierData = new BezierData();
+        public zBezier2: BezierData = new BezierData();
+
+        public validate(): void {
+
+            if (this.max == null) {
+                this.max = new Vector3D();
+            }
+            if (this.min == null) {
+                this.min = new Vector3D();
+            }
+            if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
+                if (this.xBezier1 == null) {
+                    this.xBezier1 = new BezierData();
+                }
+                if (this.yBezier1 == null) {
+                    this.yBezier1 = new BezierData();
+                }
+                if (this.zBezier1 == null) {
+                    this.zBezier1 = new BezierData();
+                }
+
+                this.xBezier1.validate();
+                this.yBezier1.validate();
+                this.zBezier1.validate();
+            }
+
+            if (this.type == ParticleValueType.TwoBezier) {
+                if (this.xBezier2 == null) {
+                    this.xBezier2 = new BezierData();
+                }
+                if (this.yBezier2 == null) {
+                    this.yBezier2 = new BezierData();
+                }
+                if (this.zBezier2 == null) {
+                    this.zBezier2 = new BezierData();
+                }
+                this.xBezier2.validate();
+                this.yBezier2.validate();
+                this.zBezier2.validate();
+            }
+
+        }
+    }
+
+
+    //export class ParticleDataAcceleration extends ParticleDataNode {
+    //    //加速度
+    //    public max: Vector3D = new Vector3D();
+    //    public min: Vector3D = new Vector3D();
+    //    public accelerationWorld: boolean = false;
+
+    //    constructor() {
+    //        super(ParticleDataNodeType.Acceleration);
+    //    }
+
+    //    public validate(): void {
+    //        if (this.max == null) {
+    //            this.max = new Vector3D();
+    //        }
+    //        if (this.min == null) {
+    //            this.min = new Vector3D();
+    //        }
+    //        if (this.min.x > this.max.x) {
+    //            this.min.x = this.max.x;
+    //        }
+    //        if (this.min.y > this.max.y) {
+    //            this.min.y = this.max.y;
+    //        }
+    //        if (this.min.z > this.max.z) {
+    //            this.min.z = this.max.z;
+    //        }
+    //    }
+    //}
+
     export class ParticleDataScaleBezier extends ParticleDataNode {
         //粒子缩放贝塞尔曲线
-        public posPoints: Array<Point> = [];
-        public ctrlPoints: Array<Point> = [];
+        public data: BezierData = new BezierData();
         constructor() {
             super(ParticleDataNodeType.ScaleBezier);
         }
 
         public validate(): void {
-            if (this.posPoints == null) {
-                this.posPoints = [];
+            if (this.data == null) {
+                this.data = new BezierData();
             }
-            if (this.posPoints == null) {
-                this.ctrlPoints = [];
-            }
+            this.data.validate();
         }
     }
 
@@ -402,43 +657,54 @@
         //角速度
         public max: Vector3D = new Vector3D();
         public min: Vector3D = new Vector3D();
+        
+        public type: number = ParticleValueType.Const;
 
+        public bezier1: BezierData = new BezierData();
+        public bezier2: BezierData = new BezierData();
         constructor() {
             super(ParticleDataNodeType.RotationSpeed);
         }
+
+
         public validate(): void {
+
             if (this.max == null) {
                 this.max = new Vector3D();
             }
             if (this.min == null) {
                 this.min = new Vector3D();
             }
-            if (this.min.x > this.max.x) {
-                this.min.x = this.max.x;
+            if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
+                if (this.bezier1 == null) {
+                    this.bezier1 = new BezierData();
+                }
+                this.bezier1.validate();
             }
-            if (this.min.y > this.max.y) {
-                this.min.y = this.max.y;
+
+            if (this.type == ParticleValueType.TwoBezier) {
+                if (this.bezier2 == null) {
+                    this.bezier2 = new BezierData();
+                }
+                this.bezier2.validate();
             }
-            if (this.min.z > this.max.z) {
-                this.min.z = this.max.z;
-            }
+
         }
     }
 
     export class ParticleDataColorOffset extends ParticleDataNode {
-        //粒子缩放贝塞尔曲线
-        public colors: Array<Color> = [];
-        public times: Array<number> = [];
+        //粒子颜色变化贝塞尔曲线
+        public data: ColorGradients = new ColorGradients();
         constructor() {
             super(ParticleDataNodeType.ColorOffset);
         }
 
         public validate(): void {
-            if (this.colors == null) {
-                this.colors = [];
+            if (this.data.colors == null) {
+                this.data.colors = [];
             }
-            if (this.times == null) {
-                this.times = [];
+            if (this.data.times == null) {
+                this.data.times = [];
             }
         }
     }

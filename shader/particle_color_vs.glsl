@@ -1,5 +1,3 @@
-
-
-float particle(  ParticleData emit ){
+float particle(  ParticleData curParticle ){
 	
 }

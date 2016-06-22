@@ -29,26 +29,25 @@
 
             this._p = new PointLight( 0xffcccc );
             this._p.y = 100 ;
-            this._p.intensity = 1;
-            this._p.ambient = 0x6666cc;
-            this._p.ambient = 0x32327D;
+            this._p.intensity = 5 ;
             this.lights.addLight(this._p);
 
-            var d: DirectLight = new DirectLight(new Vector3D(0.0, 1.0, 0.0));
-            d.ambient = 0x32327D;
-             this.lights.addLight(d);
+            var d: DirectLight = new DirectLight(new Vector3D(-0.9, 1.0, 0.0));
+            d.ambient = 0xffffff;
+            this.lights.addLight(d);
 
             this.matPlane = new TextureMaterial();
             this.matPlane.lightGroup = this.lights;
-            this.matPlane.specularLevel = 2.0 ;
-            this.matPlane.gloss = 100.0;
+            this.matPlane.ambientColor = 0; 
+            this.matPlane.specularLevel = 10.0 ;
+            this.matPlane.gloss = 10.0;
 
             this.matPlane.repeat = true;
             this.matPlane.uvRectangle = new Rectangle(0, 0, 1.0, 1.0);
 
-            var lightMethod: LightmapMethod = new LightmapMethod();
-            this.matPlane.diffusePass.addMethod(lightMethod);
-            lightMethod.lightTexture = CheckerboardTexture.texture;
+            //var lightMethod: LightmapMethod = new LightmapMethod();
+            //this.matPlane.diffusePass.addMethod(lightMethod);
+            //lightMethod.lightTexture = CheckerboardTexture.texture;
 
 
 

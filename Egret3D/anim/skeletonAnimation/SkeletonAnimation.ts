@@ -39,7 +39,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public time: number;
+        public animTime: number;
 
         /**
         * @language zh_CN
@@ -283,7 +283,7 @@
         */
         public activeState(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
             if (usage.uniform_time) {
-                context3DProxy.uniform1f(usage.uniform_time.uniformIndex, this.time);
+                context3DProxy.uniform1f(usage.uniform_time.uniformIndex, this.animTime);
             }
             context3DProxy.uniform4fv(usage.uniform_PoseMatrix.uniformIndex, this.currentSkeletonMatrixData);
         }

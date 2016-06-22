@@ -27,21 +27,11 @@
         private onSceneLoaded(e: LoaderEvent3D): void {
             this._mapLoader.removeEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onSceneLoaded, this);
             this.view1.addChild3D(this._mapLoader.container);
-            var loadtex: URLLoader = new URLLoader("resource/matcap/12719-ambientocclusion.jpg");
-            loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadMatCapTexture, this);
-        }
-
-        protected onLoadMatCapTexture(e: LoaderEvent3D) {
-            //e.loader["mat"].matcapTexture = e.loader.data;
-            //var meshList: Mesh[] = this._mapLoader.meshMap.getValues();
-            //for (var i: number = 0; i < meshList.length; i++) {
-            //    meshList[i].material.matcapTexture = e.loader.data; 
-            //}
         }
 
         //获取进度信息
         private update(e: Event3D) {
-            console.log("加载：" + this._mapLoader.calcProgress);
+           // console.log("加载：" + this._mapLoader.calcProgress() );
             this.cameraCrl.update();
         }
 

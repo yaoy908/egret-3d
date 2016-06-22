@@ -15,7 +15,7 @@
         * @private
         * 最大支持的颜色变化数量
         */
-        private static MaxColor: number = 8;
+        private static MaxColor: number = 20;
         private _colorSegment: Float32Array = new Float32Array(ParticleColorGlobalNode.MaxColor * 2 ); 
         constructor() {
 
@@ -40,16 +40,17 @@
         public initNode(data: ParticleDataNode): void {
             var node: ParticleDataColorOffset = <ParticleDataColorOffset>data;
             var count: number = ParticleColorGlobalNode.MaxColor;
-            node.colors.length = node.times.length = count;
+            var gradients: ColorGradients = node.data;
+            gradients.colors.length = gradients.times.length = count;
 
             var color: Color;
             for (var i: number = 0; i < count; i++) {
-                color = node.colors[i];
+                color = gradients.colors[i];
                 if (color) {
                     //这里采用了压缩方法：rgb三个数值压缩到一个float，a和time压缩放到第二个float
                     //然后在gpu中还原
                     this._colorSegment[i] = this.getGpuColor(color.r, color.g, color.b);
-                    this._colorSegment[i + count] = this.getTimeAndAlpha(node.times[i], color.a);
+                    this._colorSegment[i + count] = this.getTimeAndAlpha(gradients.times[i], color.a);
                 }
                 else {
                     this._colorSegment[i] = 0;
@@ -74,18 +75,12 @@
         /**
         * @private
         */
-        public update(time: number, delay: number, geometry: Geometry) {
-        }
-
-        /**
-        * @private
-        */
         public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
             context3DProxy.uniform1fv(usage["uniform_colorTransform"].uniformIndex, this._colorSegment);
         }
 
         /**
-        * @压缩一个颜色值到一个float中
+        * 压缩一个颜色值到一个float中
         */
         private getGpuColor(r: number, g: number, b: number): number {
             r = this.normalizeChannel(r);
@@ -96,12 +91,21 @@
             return value;
         }
 
+        /**
+        * @private 
+        * 将一个颜色通道规范到0-255之间
+        */
         private normalizeChannel(value: number): number {
             if (value > 0xff) value = 0xff;
             else if (value < 0) value = 0;
             value = Math.floor(value);
             return value;
         }
+
+        /**
+        * @private 
+        * 将时间规范到0和0.9999之间
+        */
         private normalizeTime(value: number): number {
             //注：value是一个0-1之间的数，而非真实的秒时间
             //所以超过1将为无效会被设定成为一个接近1的数
@@ -110,10 +114,17 @@
             return value;
         }
 
+        /**
+        * @private 
+        * 合并alpha和time到一个float中
+        */
         private getTimeAndAlpha(time: number, a: number): number {
             a = this.normalizeChannel(a);
             time = this.normalizeTime(time);
             return a + time;
         }
+
+
+
     }
 } 
