@@ -593,7 +593,7 @@
 
         private project(n:Vector3D,target:Vector3D):Vector3D
 		{
-            target = this.projectMatrix.transformVector(n);
+            target = this.projectMatrix.transformVector(n, target);
             target.x = target.x / target.w;
             target.y = -target.y / target.w;
 
