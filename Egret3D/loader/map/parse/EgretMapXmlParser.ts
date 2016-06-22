@@ -118,7 +118,7 @@
             this.init();
             //
             this.sceneName = sceneName;
-            var obj = XmlParser.parsingXML(text);
+            var obj = XMLParser.parse(text);
 
             var versionList: NodeList = obj.getElementsByTagName("version");
             this.version = Number(versionList[0].textContent);
@@ -188,7 +188,7 @@
 
 
         private eachAttr(item: Node, fun: Function): void {
-            XmlParser.eachXmlAttr(item, fun);
+            XMLParser.eachXmlAttr(item, fun);
         }
 
         private parseMesh(xml: Node): MeshData {

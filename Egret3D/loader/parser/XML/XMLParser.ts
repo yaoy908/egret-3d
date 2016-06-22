@@ -55,5 +55,23 @@
 
             return xmlDoc;
         }
+
+
+        /**
+        * @private
+        * @language zh_CN
+        * 解析node节点的属性值
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public static eachXmlAttr(item: Node, fun: Function): void {
+            if (item == null || fun == null)
+                return;
+            var attr: Attr;
+            for (var i: number = 0, count = item.attributes.length; i < count; i++) {
+                attr = item.attributes[i];
+                fun(attr.nodeName, attr.textContent);
+            }
+        }
     }
 }

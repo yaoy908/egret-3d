@@ -136,7 +136,6 @@
 
         "input/input.ts",
         "input/OrientationController.ts",
-        "loader/parser/XmlParser.ts",
         "loader/parser/DDS.ts",
         "loader/parser/DDSParser.ts",
         "loader/parser/PVR.ts",
