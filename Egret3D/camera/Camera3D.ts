@@ -523,6 +523,7 @@
         * @platform Web,Native
         */
         public update(time: number, delay: number, camera: Camera3D) {
+            super.update(time, delay, camera);
             for (var key in this._animation) {
                 this._animation[key].update(time, delay);
             }

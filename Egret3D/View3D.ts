@@ -61,6 +61,8 @@
             this._render = new MultiRender(PassType.diffusePass);
 
             this._camera = camera || new Camera3D(CameraType.perspective);
+            this._camera.name = "MainCamera";
+            this._scene.addChild3D(this._camera);
 
             this._viewPort.x = x;
             this._viewPort.y = y;
@@ -160,6 +162,10 @@
         */
         public set camera3D(value: Camera3D) {
             this._camera = value;
+
+            this._camera.aspectRatio = this._viewPort.width / this._viewPort.height;
+            this._camera.updateViewport(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+
         }
         
         /**
@@ -396,11 +402,12 @@
             this._entityCollect.update(this._camera);
 
             //------------------
-            this._numberEntity = this._entityCollect.renderList.length;
-            for (this._index = 0; this._index < this._numberEntity; this._index++) {
-                this._renderItem = this._entityCollect.renderList[this._index];
-                this._renderItem.update(time, delay, this._camera);
-            }
+            this.updateObject3D(this._scene.root, time, delay);
+            //this._numberEntity = this._entityCollect.renderList.length;
+            //for (this._index = 0; this._index < this._numberEntity; this._index++) {
+            //    this._renderItem = this._entityCollect.renderList[this._index];
+            //    this._renderItem.update(time, delay, this._camera);
+            //}
             //------------------
             //this._render.update(time, delay, this._entityCollect, this._camera);
 
@@ -440,6 +447,15 @@
                 this._huds[i].draw(View3D._contex3DProxy);
             }
         
+        }
+
+        private updateObject3D(object3d: Object3D, time: number, delay: number) {
+            if (object3d) {
+                object3d.update(time, delay, this.camera3D)
+                for (var i: number = 0; i < object3d.childs.length; ++i) {
+                    this.updateObject3D(object3d.childs[i], time, delay);
+                }
+            }
         }
 
         /**

@@ -37,9 +37,9 @@
         */
         public update(time:number, delay:number) {
 
-            for (var i: number = 0; i < this.cameras.length; ++i) {
-                this.cameras[i].update(time, delay, this.cameras[i]);
-            }
+            //for (var i: number = 0; i < this.cameras.length; ++i) {
+            //    this.cameras[i].update(time, delay, this.cameras[i]);
+            //}
         }
     }
 } 
