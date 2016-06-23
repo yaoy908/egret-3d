@@ -25,6 +25,64 @@
 
         public matDict: any = {};
 
+        public lightDict: any = {};
+
+        public directLight: boolean = false;
+        public pointLight: boolean = false;
+
+        constructor(data: any) {
+
+            var versionList: NodeList = data.getElementsByTagName("version");
+            this.version = Number(versionList[0].textContent);
+
+            var matList: NodeList = data.getElementsByTagName("mat");
+            var nodeList: NodeList = data.getElementsByTagName("node");
+            var environment: NodeList = data.getElementsByTagName("env");
+            var cameraAnimList: NodeList = data.getElementsByTagName("cameraAnims");
+
+            this.parseEnvironment(environment);
+
+            for (var i: number = 0; i < matList.length; i++) {
+                var matNodeData = this.parseMat(matList[i]);
+                if (matNodeData) {
+                    this.matDict[matNodeData.id] = matNodeData;
+                }
+            }
+
+            for (var i: number = 0; i < nodeList.length; i++) {
+                var mapNodeData: MapNodeData = this.parseNode(nodeList[i]);
+                if (mapNodeData) {
+                    this.nodeList.push(mapNodeData);
+                }
+            }
+
+            for (var i: number = 0; i < this.nodeList.length; i++) {
+                var mapNodeData: MapNodeData = this.nodeList[i];
+
+                if (mapNodeData.type == "Camera3D") {
+                    var camera: Camera3D = new Camera3D();
+                    camera.fieldOfView = Number(mapNodeData.fov);
+                    mapNodeData.object3d = camera;
+
+                }
+                else if (mapNodeData.type == "Billboard") {
+                    mapNodeData.object3d = new Billboard(new TextureMaterial(CheckerboardTexture.texture));
+                }
+                else if (mapNodeData.type == "Terrain") {
+                    mapNodeData.object3d = new Object3D();
+                }
+                else {
+                    mapNodeData.object3d = new Object3D();
+                }
+                mapNodeData.object3d.name = mapNodeData.name;
+                mapNodeData.object3d.position = new Vector3D(mapNodeData.x, mapNodeData.y, mapNodeData.z);
+                mapNodeData.object3d.orientation = new Quaternion(mapNodeData.rx, mapNodeData.ry, mapNodeData.rz, mapNodeData.rw);
+                mapNodeData.object3d.scale = new Vector3D(mapNodeData.sx, mapNodeData.sy, mapNodeData.sz);
+            }
+
+            this.processNode();
+        }
+
         private parseMethod(node: Node): MatMethodData[] {
             if (node.childNodes.length <= 1)
                 return null;
@@ -55,6 +113,20 @@
                     else if (v == "boolean") {
                         method[attr.name] = (attr.value == "true" ? true : false);
                     }
+                }
+
+                for (var j: number = 0; j < item.childNodes.length; ++j) {
+                    var textureItem: Node = item.childNodes[j];
+                    if (textureItem.nodeName == "#text") {
+                        continue;
+                    }
+                    var textureData: any = {};
+                    for (var k: number = 0; k < textureItem.attributes.length; ++k) {
+                        attr = textureItem.attributes[k];
+                        textureData[attr.name] = attr.value;
+                    }
+
+                    method.texturesData.push(textureData);
                 }
                
                 list.push(method);
@@ -106,100 +178,11 @@
                         data[item.nodeName] = (item.textContent == "true" ? true : false);
                     }
                 }
-
-                //if (nodeName == "diffuseTextureName") {
-                //    data.diffuseTextureName = item.textContent;
-                //} else if (nodeName == "normalTextureName") {
-                //    data.normalTextureName = item.textContent;
-                //} else if (nodeName == "specularTextureName") {
-                //    data.specularTextureName = item.textContent;
-                //} else if (nodeName == "diffuseColor") {
-                //    data.diffuseColor = Number(item.textContent);
-                //} else if (nodeName == "ambientColor") {
-                //    data.ambientColor = Number(item.textContent);
-                //} else if (nodeName == "specularColor") {
-                //    data.specularColor = Number(item.textContent);
-                //} else if (nodeName == "alpha") {
-                //    data.alpha = Number(item.textContent);
-                //} else if (nodeName == "specularLevel") {
-                //    data.specularLevel = Number(item.textContent);
-                //} else if (nodeName == "gloss") {
-                //    data.gloss = Number(item.textContent);
-                //} else if (nodeName == "ambientPower") {
-                //    data.ambientPower = Number(item.textContent);
-                //} else if (nodeName == "diffusePower") {
-                //    data.diffusePower = Number(item.textContent);
-                //} else if (nodeName == "normalPower") {
-                //    data.normalPower = Number(item.textContent);
-                //} else if (nodeName == "castShadow") {
-                //    data.castShadow = String(item.textContent) == "true";
-                //} else if (nodeName == "acceptShadow") {
-                //    data.acceptShadow = String(item.textContent) == "true";
-                //} else if (nodeName == "smooth") {
-                //    data.smooth = String(item.textContent) == "true";
-                //} else if (nodeName == "repeat") {
-                //    //data.repeat = String(item.textContent) == "true";
-                //    data.repeat = true;
-                //} else if (nodeName == "bothside") {
-                //    data.bothside = String(item.textContent) == "true";
-                //} else if (nodeName == "drawMode") {
-                //    data.drawMode = Number(item.textContent);
-                //} else if (nodeName == "cullMode") {
-                //    data.cullMode = Number(item.textContent);
-                //} else if (nodeName == "blendMode") {
-                //    data.blendMode = BlendMode[item.textContent];
-                //} else if (nodeName == "cutAlpha") {
-                //    data.cutAlpha = Number(item.textContent);
-                //} 
             }
 
             return data;
         }
 
-        constructor(data: any) {
-
-            var versionList: NodeList = data.getElementsByTagName("version");
-            this.version = Number(versionList[0].textContent);
-
-            var matList: NodeList = data.getElementsByTagName("mat");
-            var nodeList: NodeList = data.getElementsByTagName("node");
-            var environment: NodeList = data.getElementsByTagName("env");
-            var cameraAnimList: NodeList = data.getElementsByTagName("cameraAnims");
-
-            for (var i: number = 0; i < matList.length; i++) {
-                var matNodeData = this.parseMat(matList[i]);
-                if (matNodeData) {
-                    this.matDict[matNodeData.id] = matNodeData;
-                }
-            }
-
-            for (var i: number = 0; i < nodeList.length; i++) {
-                var mapNodeData:MapNodeData = this.parseNode(nodeList[i]);
-                if (mapNodeData) {
-                    this.nodeList.push(mapNodeData);
-                }
-            }
-
-            for (var i: number = 0; i < this.nodeList.length; i++) {
-                var mapNodeData: MapNodeData = this.nodeList[i];
-
-                if (mapNodeData.type == "Camera3D") {
-                    var camera: Camera3D = new Camera3D();
-                    camera.fieldOfView = Number(mapNodeData.fov);
-                    mapNodeData.object3d = camera;
-
-                }
-                else {
-                    mapNodeData.object3d = new Object3D();
-                }
-                mapNodeData.object3d.name = mapNodeData.name; 
-                mapNodeData.object3d.position = new Vector3D(mapNodeData.x, mapNodeData.y, mapNodeData.z);
-                mapNodeData.object3d.orientation = new Quaternion(mapNodeData.rx, mapNodeData.ry, mapNodeData.rz, mapNodeData.rw);
-                mapNodeData.object3d.scale = new Vector3D(mapNodeData.sx, mapNodeData.sy, mapNodeData.sz);
-            }
-
-            this.processNode();
-        }
 
         private processNode() {
             for (var i: number = 0; i < this.nodeList.length; i++) {
@@ -277,6 +260,17 @@
                         propertyAnimsData[attr.nodeName] = attr.value;
                     }
                 }
+                else if (nodeName == "heightmap") {
+                    for (var j: number = 0; j < item.attributes.length; ++j) {
+                        attr = item.attributes[j];
+                        if (typeof data[attr.name] == "number") {
+                            data[attr.name] = Number(attr.value);
+                        }
+                        else if (typeof data[attr.name] == "string") {
+                            data[attr.name] = attr.value;
+                        }
+                    }
+                }
                 //else if (nodeName == "lightIds") {
                 //    if (item.textContent == null || item.textContent == "") {
                 //        data.lightIds = [];
@@ -312,5 +306,79 @@
 
             return data;
         }
+
+
+        private parseEnvironment(environment: NodeList): void {
+            if (environment.length <= 0) {
+                return;
+            }
+            //灯光全局配置
+            var dlOpen: boolean;
+            var plOpen: boolean;
+
+            //this.enableDirectLight = dlOpen;
+            //this.enablePointLight = plOpen;
+
+            //解析灯光
+            var item: Node;
+            var item0: Node;
+            var item1: Node;
+            var attr: Attr = null;
+
+            for (var iii: number = 0; iii < environment[0].attributes.length; ++iii) {
+                attr = environment[0].attributes[iii];
+                this[attr.name] = (attr.value == "open");
+            }
+
+
+            for (var i = 0, count = environment.length; i < count; i++) {
+                item = environment[i];
+                for (var ii: number = 0; ii < item.childNodes.length; ++ii) {
+                    item0 = item.childNodes[ii];
+                    if (item0.nodeName == "#text")
+                        continue;
+                    if (item0.nodeName == "light") {
+
+                        var lightData: MapLightData = new MapLightData();
+
+                        for (var iii: number = 0; iii < item0.attributes.length; ++iii) {
+                            attr = item0.attributes[iii];
+                            lightData[attr.name] = attr.value;
+                        }
+
+                        this.lightDict[lightData.id] = lightData;
+
+                        for (var iii: number = 0; iii < item0.childNodes.length; ++iii) {
+                            item1 = item0.childNodes[iii];
+
+                            if (item1.nodeName == "#text") {
+                                continue;
+                            }
+
+                            if (item1.nodeName == "direction") {
+                                for (var iiii: number = 0; iiii < item1.attributes.length; ++iiii) {
+                                    attr = item1.attributes[iiii];
+                                    lightData.direction[attr.name] = Number(attr.value);
+                                }
+                            }
+                            else if (item1.nodeName == "position") {
+                                for (var iiii: number = 0; iiii < item1.attributes.length; ++iiii) {
+                                    attr = item1.attributes[iiii];
+                                    lightData.position[attr.name] = Number(attr.value);
+                                }
+                            }
+                            else if (item1.nodeName == "type") {
+                                lightData.type = LightType[item1.textContent];
+                            }
+                        }
+                    }
+                    else if (item0.nodeName == "fog") {
+
+                    }
+                }
+            }
+
+        }
+
     }
 }

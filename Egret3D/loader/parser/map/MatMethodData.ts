@@ -48,6 +48,14 @@
 
         /**
          * @language zh_CN
+         * 地型效果
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public static terrainARGBMethod: string = "terrainMethod";
+
+        /**
+         * @language zh_CN
          * 特效的类型
          * @version Egret 3.0
          * @platform Web,Native
@@ -68,7 +76,7 @@
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public texture: string = "";
+        public texturesData: any = [];
 
         /**
          * @language zh_CN

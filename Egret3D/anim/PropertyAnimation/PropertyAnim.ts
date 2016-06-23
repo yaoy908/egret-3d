@@ -158,101 +158,10 @@ module egret3d {
             this.timePosition += delay * this.speed;
         }
 
-        public static parsingEPMFile(data: ByteArray): PropertyAnim {
-
-            var propertyAnim: PropertyAnim = null;
-
-            //验证标识头：'E' 'P' 'A' '\0'
-            if (data.readUnsignedInt() != 0x65706100) {
-                return propertyAnim;
-            }
-
-            propertyAnim = new PropertyAnim();
-
-            //版本号;
-            data.readUnsignedInt();
-
-            //属性个数;
-            var propertyCount: number = data.readUnsignedShort()
-
-            for (var i = 0; i < propertyCount; i++) {
-
-                //属性名称;
-                var propertyName: string = data.readUTF();
-
-                var keyFrames: AnimCurve[] = [];
-
-                //曲线数量;
-                var curveCount: number = data.readUnsignedShort();
-
-                for (var j = 1; j < curveCount; j++) {
-
-                    var animCurve: AnimCurve = new AnimCurve();
-                    animCurve.type = data.readUnsignedInt();
-                    animCurve.start.x = data.readFloat();
-                    animCurve.start.y = data.readFloat();
-                    animCurve.end.x = data.readFloat();
-                    animCurve.end.y = data.readFloat();
-                    animCurve.c1.x = data.readFloat();
-                    animCurve.c1.y = data.readFloat();
-                    animCurve.c2.x = data.readFloat();
-                    animCurve.c2.y = data.readFloat();
-                    keyFrames.push(animCurve);
-                }
-
-                propertyAnim.addAnimCurve(propertyName, keyFrames);
-            }
-
-            return propertyAnim;
-        }
-
-        //==============================测试代码==============================;
-
-        public buildTestLine(): Wireframe[] {
-
-            var lines: Wireframe[] = [];
-
-            var color: number[] = [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xffffff];
-
-            var count: number = 0;
-
-            var propertyData: PropertyData;
-
-            for (var k = 0; k < this._propertyArray.length; k++) {
-
-                propertyData = this._propertyArray[k];
-
-                var vb = [];
-
-                var ib = [];
-
-                var keyFrames: AnimCurve[] = propertyData.keyFrames;
-
-                for (var index = 0; index < keyFrames.length; index++) {
-
-                    for (var i = keyFrames[index].start.x; i < keyFrames[index].end.x; i += 10) {
-
-                        vb.push(i, keyFrames[index].calculateValue(i), 0);
-
-                    }
-                }
-
-                for (var i = 1; i < vb.length / 3; i++) {
-                    ib.push(i - 1);
-                    ib.push(i);
-                }
-
-                var wireframe: Wireframe = new Wireframe();
-                var geom: Geometry = wireframe.geometry;
-                geom.setVerticesForIndex(0, VertexFormat.VF_POSITION, vb, vb.length / 3);
-                geom.indexData = ib;
-                wireframe.material.diffuseColor = color[count];
-                wireframe.material.ambientColor = 0xffffff;
-                lines.push(wireframe);
-                count = (count + 1) % color.length;
-            }
-
-            return lines;
+        public clone(): PropertyAnim {
+            var pro: PropertyAnim = new PropertyAnim();
+            pro._propertyArray = this._propertyArray;
+            return pro;
         }
     }
 

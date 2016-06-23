@@ -1,13 +1,14 @@
 ﻿module egret3d {
     /**
-     * @language zh_CN
-     * @class egret3d.EgretMaterialMethodParser
-     * @classdesc
-     * 解析材质球渲染的method数据
-     *
-     * @version Egret 3.0
-     * @platform Web,Native
-     */
+    * @private
+    * @language zh_CN
+    * @class egret3d.EgretMaterialMethodParser
+    * @classdesc
+    * 解析材质球渲染的method数据
+    *
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class EgretMaterialMethodParser {
 
          /**

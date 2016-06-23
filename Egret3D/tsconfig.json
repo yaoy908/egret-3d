@@ -159,6 +159,7 @@
         "loader/parser/map/MapXmlParser.ts",
         "loader/parser/map/MatMethodData.ts",
         "loader/parser/map/MatSphereData.ts",
+        "loader/parser/map/MapLightData.ts",
 
         "loader/parser/ParserUtils.ts",
         "loader/URLLoader.ts",

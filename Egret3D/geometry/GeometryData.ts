@@ -523,9 +523,10 @@
         }
 
 		/**
+         * @private
 		 * Updates the normals for each face.
 		 */
-        private  static updateFaceNormals(geomtrtData: GeometryData)
+        public static updateFaceNormals(geomtrtData: GeometryData)
 		{
             var i: number = 0, j: number = 0, k: number = 0;
             var index: number;

@@ -95,6 +95,17 @@
               
         }
 
+        /**
+         * @language zh_CN
+         * 获取材质球接受的灯光组。
+         * @return LightGroup 灯光组
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public get lightGroup(): LightGroup {
+            return this._lightGroup;
+        }
+
         ///**
         // * @language zh_CN
         // * 设置材质 shadowMapTexture 。

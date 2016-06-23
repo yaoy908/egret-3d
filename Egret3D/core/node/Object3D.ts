@@ -80,6 +80,14 @@
 
         /**
         * @language zh_CN
+        * 属性动画对象
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public proAnimation: PropertyAnim;
+
+        /**
+        * @language zh_CN
         * @private
         * @version Egret 3.0
         * @platform Web,Native
@@ -746,6 +754,11 @@
             if (this._transformChange) {
                 this.updateModelMatrix();
             }
+
+            if (this.name == "guangzhu") {
+                var i = 0;
+            }
+
             return this._modelMatrix3D;
         }
 
@@ -797,17 +810,17 @@
                 this._globalSca.copyFrom(this._sca);
                 this._globalRot.copyFrom(this._rot);
             }
-            if (this instanceof Camera3D) {
-                this._modelMatrix3D.makeTransform(this._globalPos, new Vector3D(1, 1, 1), this._globalOrientation);
-            }
-            else {
-                this._modelMatrix3D.makeTransform(this._globalPos, this._globalSca, this._globalOrientation);
-            }
+            this.onMakeTransform();
+
             this.onUpdateTransform();
             this._transformChange = false;
         }
 
         protected onUpdateTransform() {
+        }
+
+        protected onMakeTransform() {
+            this._modelMatrix3D.makeTransform(this._globalPos, this._globalSca, this._globalOrientation);
         }
 
         /**
@@ -1353,6 +1366,9 @@
                 other.parent.childs[index] = this;
             }
 
+            other.parent = this.parent;
+            this.parent = parent;
+
             other.childs.length = 0;
 
             for (var i: number = 0; i < this.childs.length; ++i) {
@@ -1511,6 +1527,18 @@
                 this.childs[i].updateTransformChange(change);
             }
         }
+
+        /**
+        * @language zh_CN
+        * 绑定一个属性动画对象
+        * @param proAnimation 属性动画对象
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public bindAnimation(proAnimation: PropertyAnim) {
+            this.proAnimation = proAnimation;
+            this.proAnimation.bindObject3D(this);
+        }
         
         /**
         * @language zh_CN
@@ -1523,7 +1551,9 @@
         * @platform Web,Native
         */
         public update(time: number, delay: number, camera:Camera3D) {
-
+            if (this.proAnimation) {
+                this.proAnimation.update(delay);
+            }
         }
 
         /**

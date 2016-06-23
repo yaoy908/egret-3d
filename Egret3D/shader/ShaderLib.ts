@@ -642,21 +642,21 @@ module egret3d {
 			"} \n",
 
 			"particle_bezier":
-			"vec2 bezierSamples[20]; \n" +
-			"const float decompressKey = 1.0 / 4096.0; \n" +
-			"vec2 decompressFloat(float min, float range, float mergeFloat){ \n" +
-			"float value2 = fract(mergeFloat); \n" +
-			"float value1 = mergeFloat - value2; \n" +
-			"value1 *= decompressKey; \n" +
+			"vec2 bzData[20]; \n" +
+			"float f2Key = 1.0 / 4096.0; \n" +
+			"vec2 dcp2f(float min, float range, float mf){ \n" +
+			"float value2 = fract(mf); \n" +
+			"float value1 = mf - value2; \n" +
+			"value1 *= f2Key; \n" +
 			"value1 *= range; \n" +
 			"value2 *= range; \n" +
 			"value1 += min; \n" +
 			"value2 += min; \n" +
 			"return vec2(value1, value2); \n" +
 			"} \n" +
-			"void decompressBezier(float bezierData[15], float tTotal) \n" +
+			"void dcpBezier(float bezierData[15], float tTotal) \n" +
 			"{ \n" +
-			"vec2 compressedFloats; \n" +
+			"vec2 f2; \n" +
 			"float min = bezierData[10]; \n" +
 			"float range = bezierData[11]; \n" +
 			"float sameValue = bezierData[12]; \n" +
@@ -668,14 +668,14 @@ module egret3d {
 			"fj = 0.0; \n" +
 			"for(int j = 0; j < 5; j ++){ \n" +
 			"if(sameValue > TrueOrFalse){ \n" +
-			"compressedFloats = vec2(bezierData[0]); \n" +
+			"f2 = vec2(bezierData[0]); \n" +
 			"}else{ \n" +
-			"compressedFloats = decompressFloat(min, range, bezierData[i * 5 + j]); \n" +
+			"f2 = dcp2f(min, range, bezierData[i * 5 + j]); \n" +
 			"} \n" +
-			"bezierSamples[i * 10 + j * 2].x = timeStart + fj * 2.0 * timeSegment; \n" +
-			"bezierSamples[i * 10 + j * 2 + 1].x = timeStart + (fj * 2.0 + 1.0) * timeSegment; \n" +
-			"bezierSamples[i * 10 + j * 2].y = compressedFloats.x; \n" +
-			"bezierSamples[i * 10 + j * 2 + 1].y = compressedFloats.y; \n" +
+			"bzData[i * 10 + j * 2].x = timeStart + fj * 2.0 * timeSegment; \n" +
+			"bzData[i * 10 + j * 2 + 1].x = timeStart + (fj * 2.0 + 1.0) * timeSegment; \n" +
+			"bzData[i * 10 + j * 2].y = f2.x; \n" +
+			"bzData[i * 10 + j * 2 + 1].y = f2.y; \n" +
 			"fj ++; \n" +
 			"} \n" +
 			"timeStart += bezierData[13 + i] * tTotal; \n" +
@@ -690,10 +690,10 @@ module egret3d {
 			"float deltaTime = 0.0; \n" +
 			"float a; \n" +
 			"for(int i = 0; i < 19; i ++){ \n" +
-			"v0 = bezierSamples[i].y * randomSeed; \n" +
-			"v1 = bezierSamples[i + 1].y * randomSeed; \n" +
-			"t0 = bezierSamples[i].x; \n" +
-			"t1 = bezierSamples[i + 1].x; \n" +
+			"v0 = bzData[i].y * randomSeed; \n" +
+			"v1 = bzData[i + 1].y * randomSeed; \n" +
+			"t0 = bzData[i].x; \n" +
+			"t1 = bzData[i + 1].x; \n" +
 			"deltaTime = t1 - t0; \n" +
 			"if(deltaTime > 0.0) \n" +
 			"{ \n" +
@@ -702,7 +702,7 @@ module egret3d {
 			"res += deltaTime * (v0 + a * deltaTime); \n" +
 			"}else{ \n" +
 			"deltaTime = tCurrent - t0; \n" +
-			"res += deltaTime * £¨v0 + a * deltaTime); \n" +
+			"res += deltaTime * (v0 + a * deltaTime); \n" +
 			"break; \n" +
 			"} \n" +
 			"} \n" +
@@ -710,7 +710,7 @@ module egret3d {
 			"return res; \n" +
 			"} \n" +
 			"float calcOneBezierArea(float bezierData[15], float tCurrent, float tTotal, float randomSeed){ \n" +
-			"decompressBezier(bezierData, tTotal); \n" +
+			"dcpBezier(bezierData, tTotal); \n" +
 			"return calcBezierArea(tCurrent, randomSeed); \n" +
 			"} \n" +
 			"float calcDoubleBezierArea(float sampleData1[15], float sampleData2[15], float tCurrent, float tTotal, float randomSeed){ \n" +
@@ -727,10 +727,10 @@ module egret3d {
 			"float deltaTime = 0.0; \n" +
 			"float v; \n" +
 			"for(int i = 0; i < 19; i ++){ \n" +
-			"y0 = bezierSamples[i].y * randomSeed; \n" +
-			"y1 = bezierSamples[i + 1].y * randomSeed; \n" +
-			"t0 = bezierSamples[i].x; \n" +
-			"t1 = bezierSamples[i + 1].x; \n" +
+			"y0 = bzData[i].y * randomSeed; \n" +
+			"y1 = bzData[i + 1].y * randomSeed; \n" +
+			"t0 = bzData[i].x; \n" +
+			"t1 = bzData[i + 1].x; \n" +
 			"deltaTime = t1 - t0; \n" +
 			"if(deltaTime > 0.0) \n" +
 			"{ \n" +
@@ -747,7 +747,7 @@ module egret3d {
 			"return res; \n" +
 			"} \n" +
 			"float calcOneBezierSize(float bezierData[15], float tCurrent, float tTotal, float randomSeed){ \n" +
-			"decompressBezier(bezierData, tTotal); \n" +
+			"dcpBezier(bezierData, tTotal); \n" +
 			"float res = calcBezierSize(tCurrent, randomSeed); \n" +
 			"return res; \n" +
 			"} \n",
@@ -1125,22 +1125,16 @@ module egret3d {
 			"}; \n" +
 			"mat4 buildRotMat4(vec3 rot) \n" +
 			"{ \n" +
-			"mat4 ret = mat4( \n" +
-			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
-			"vec4(0.0, 1.0, 0.0, 0.0), \n" +
-			"vec4(0.0, 0.0, 1.0, 0.0), \n" +
-			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
-			"); \n" +
 			"float s; \n" +
 			"float c; \n" +
 			"s = sin(rot.x); \n" +
 			"c = cos(rot.x); \n" +
-			"ret = mat4( \n" +
+			"mat4 ret = mat4( \n" +
 			"vec4(1.0, 0.0, 0.0, 0.0), \n" +
 			"vec4(0.0, c, s, 0.0), \n" +
 			"vec4(0.0, -s, c, 0.0), \n" +
 			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
-			") * ret; \n" +
+			"); \n" +
 			"s = sin(rot.y); \n" +
 			"c = cos(rot.y); \n" +
 			"ret = mat4( \n" +

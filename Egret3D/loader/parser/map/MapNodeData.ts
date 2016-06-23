@@ -179,6 +179,13 @@
          */
         public sz: number = 1;
 
+        public texture: string = "";
+        public width: number = 0;
+        public height: number = 0;
+        public depth: number = 0;
+        public segmentsW: number = 0;
+        public segmentsH: number = 0;
+
         /**
         * @private
         * @language zh_CN

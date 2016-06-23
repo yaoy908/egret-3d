@@ -91,6 +91,14 @@
             this._aabbBox.setOffset(this._pos);
         }
 
+         /**
+         * @language zh_CN
+         * 设置材质 lightGroup 。
+         * 设置材质球接受的灯光组。
+         * @param lightGroup LightGroup
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
         public set lightGroup(lightGroup: LightGroup) {
             this._lightGroup = lightGroup; 
             for (var id in this.multiMaterial ){
@@ -177,10 +185,10 @@
         * @platform Web,Native
         */
         public update(time: number, delay: number, camera: Camera3D) {
-            if (this.isDisable)
-                return;
             super.update(time, delay, camera);
 
+            if (this.isDisable)
+                return;
             if (this.animation) {
                 this.animation.update(time, delay, this.geometry);
             }
