@@ -53,6 +53,21 @@
                 cubeShape.depth = node.cubeD;
                 this._positions = cubeShape;
             }
+            else if (node.type == ParticleDataShape.Sphere) {
+                var sphereShape: BallValueShape = new BallValueShape();
+                sphereShape.r = node.sphereRadius;
+                this._positions = sphereShape;
+            } else if (node.type == ParticleDataShape.HemiSphere) {
+                var hemiShape: HemiBallValueShape = new HemiBallValueShape();
+                hemiShape.r = node.hemiSphereRaiuds;
+                this._positions = hemiShape;
+            } else if (node.type == ParticleDataShape.Cone) {
+                var coneShape: CylinderValueShape = new CylinderValueShape();
+                coneShape.radiusTop = node.coneRadiusTop;
+                coneShape.radiusBottom = node.coneRadiusBottom;
+                coneShape.height = node.coneHeight;
+                this._positions = coneShape;
+            }
 
         }
 
@@ -81,14 +96,19 @@
             var index: number = 0;
             var data: ParticleData = this.particleAnimationState.emitter.data;
 
+            var recordPos: Vector3D = new Vector3D();//用于计算方向，缩放后的位置不能用于计算方向
+            var coneShape: CylinderValueShape = <CylinderValueShape>this._positions;
             for (var i: number = 0; i < count; ++i) {
                 var pos: Vector3D = posArray[i];
+                recordPos.copyFrom(pos);
                 //缩放______________________________________________________
                 pos.multiply(data.property.scale, pos);
                 //旋转______________________________________________________
-                this.rotationMat.identity();
-                this.rotationMat.rotation(data.property.rotation.x, data.property.rotation.y, data.property.rotation.z);
-                this.rotationMat.transformVector4(pos, pos);
+                if (data.property.rotation.x != 0 || data.property.rotation.y != 0 || data.property.rotation.z != 0) {
+                    this.rotationMat.identity();
+                    this.rotationMat.rotation(data.property.rotation.x, data.property.rotation.y, data.property.rotation.z);
+                    this.rotationMat.transformVector4(pos, pos);
+                }
 
                 //粒子发射方向
                 var dir: Vector3D = new Vector3D();
@@ -103,9 +123,21 @@
                         this.rotationMat.rotation(data.property.rotation.x, data.property.rotation.y, data.property.rotation.z);
                         this.rotationMat.transformVector4(dir, dir);
                     } else if (this._node.type == ParticleDataShape.Sphere) {
-                        dir.copyFrom(pos);
+                        dir.copyFrom(recordPos);
+                    } else if (this._node.type == ParticleDataShape.HemiSphere) {
+                        dir.copyFrom(recordPos);
+                    } else if (this._node.type == ParticleDataShape.Cone) {
+                        dir = coneShape.getDirection(recordPos, dir);
+                    }
+
+                    //旋转______________________________________________________
+                    if (data.property.rotation.x != 0 || data.property.rotation.y != 0 || data.property.rotation.z != 0) {
+                        this.rotationMat.identity();
+                        this.rotationMat.rotation(data.property.rotation.x, data.property.rotation.y, data.property.rotation.z);
+                        this.rotationMat.transformVector4(dir, dir);
                     }
                 }
+
                 dir.normalize();
                 directionArray.push(dir);
 

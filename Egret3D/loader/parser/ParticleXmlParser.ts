@@ -206,7 +206,19 @@
             });
             //sphere
             shape.sphereRadius = Number(this.getNode(node, "sphereRadius").textContent);
-
+            //hemiSphereRaiuds
+            shape.hemiSphereRaiuds = Number(this.getNode(node, "hemiSphereRaiuds").textContent);
+            //cone
+            var cone: Node = this.getNode(node, "cone");
+            this.eachAttr(cone, function (label: string, value: string): void {
+                if (label == "coneHeight") {
+                    shape.coneHeight = Number(value);
+                } else if (label == "coneRadiusBottom") {
+                    shape.coneRadiusBottom = Number(value);
+                } else if (label == "coneRadiusTop") {
+                    shape.coneRadiusTop = Number(value);
+                }
+            });
         }
         /**
          * @private

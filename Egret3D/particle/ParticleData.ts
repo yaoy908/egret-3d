@@ -265,16 +265,26 @@
         public static Point: number = 0;
         public static Cube: number = 1;
         public static Sphere: number = 2;
+        public static HemiSphere: number = 3;
+        public static Cone: number = 4;
         //粒子分布类型
         public type: number = ParticleDataShape.Cube;
         public randomDirection: boolean = false;
 
-        
+        //正方体
         public cubeW: number = 0;
         public cubeH: number = 0;
         public cubeD: number = 0;
 
+        //球型
         public sphereRadius: number = 10;
+
+        //半球
+        public hemiSphereRaiuds: number = 10;
+        //圆筒状
+        public coneHeight: number = 10;
+        public coneRadiusBottom: number = 2;
+        public coneRadiusTop: number = 4;
 
         constructor() {
             super(ParticleDataNodeType.Shape);
