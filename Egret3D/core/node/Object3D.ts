@@ -746,6 +746,11 @@
             if (this._transformChange) {
                 this.updateModelMatrix();
             }
+
+            if (this.name == "guangzhu") {
+                var i = 0;
+            }
+
             return this._modelMatrix3D;
         }
 
@@ -1352,6 +1357,9 @@
 
                 other.parent.childs[index] = this;
             }
+
+            other.parent = this.parent;
+            this.parent = parent;
 
             other.childs.length = 0;
 
