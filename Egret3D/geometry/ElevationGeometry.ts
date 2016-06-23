@@ -84,12 +84,12 @@
                     v = Math.floor((this._segmentsH - zi) * vDiv);
 
                     col = this.getPixel(u, v) & 0xff;
-                    y = (col > this._maxElevation) ? (this._maxElevation / 0xff) * this._height : ((col < this._minElevation) ? (this._minElevation / 0xff) * this._height : (col / 0xff) * this._height);
+                    y =  (col > this._maxElevation) ? (this._maxElevation / 0xff) * this._height : ((col < this._minElevation) ? (this._minElevation / 0xff) * this._height : (col / 0xff) * this._height);
 
                     //pos
                     this.verticesData[numVerts++] = x;
                     this.verticesData[numVerts++] = y;//Math.random() * 1000;;
-                    this.verticesData[numVerts++] = -z;
+                    this.verticesData[numVerts++] = z;
                     //normal
                     this.verticesData[numVerts++] = 1.0;
                     this.verticesData[numVerts++] = 1.0;
@@ -112,22 +112,16 @@
                     if (xi != this._segmentsW && zi != this._segmentsH) {
                         base = xi + zi * tw;
                         this.indexData[numInds++] = base;
+                        this.indexData[numInds++] = base + tw + 1;
                         this.indexData[numInds++] = base + tw;
-                        this.indexData[numInds++] = base + tw + 1;
                         this.indexData[numInds++] = base;
-                        this.indexData[numInds++] = base + tw + 1;
                         this.indexData[numInds++] = base + 1;
+                        this.indexData[numInds++] = base + tw + 1;
                     }
                 }
-
             }
 
-            //this.numItems = indices.length / 3 ;
-            // this.updateFaceNormals();
-            //this._subGeometry.autoDeriveVertexNormals = true;
-            //this._subGeometry.autoDeriveVertexTangents = true;
-            //this._subGeometry.updateVertexData(vertices);
-            //this._subGeometry.updateIndexData(indices);
+            this.updateFaceNormals();
             this.buildDefaultSubGeometry();
         }
 
@@ -157,43 +151,59 @@
             var vertices: Array<number> = this.verticesData;
             var posStride: number = 17;
             var posOffset: number = 0;
-
+            var faceNormals: number[] = []; 
             while (i < len) {
 
-                index = posOffset + this.indexData[i++] * posStride;
+                index = posOffset + this.indexData[i+0] * posStride;
                 x1 = vertices[index];
                 y1 = vertices[index + 1];
                 z1 = vertices[index + 2];
-                index = posOffset + this.indexData[i++] * posStride;
+                index = posOffset + this.indexData[i+1] * posStride;
                 x2 = vertices[index];
                 y2 = vertices[index + 1];
                 z2 = vertices[index + 2];
-                index = posOffset + this.indexData[i++] * posStride;
+                index = posOffset + this.indexData[i+2] * posStride;
                 x3 = vertices[index];
                 y3 = vertices[index + 1];
                 z3 = vertices[index + 2];
-                dx1 = x3 - x1;
-                dy1 = y3 - y1;
-                dz1 = z3 - z1;
-                dx2 = x2 - x1;
-                dy2 = y2 - y1;
-                dz2 = z2 - z1;
+                dx1 = x2 - x1;
+                dy1 = y2 - y1;
+                dz1 = z2 - z1;
+                dx2 = x3 - x1;
+                dy2 = y3 - y1;
+                dz2 = z3 - z1;
                 cx = dz1 * dy2 - dy1 * dz2;
                 cy = dx1 * dz2 - dz1 * dx2;
                 cz = dy1 * dx2 - dx1 * dy2;
                 d = Math.sqrt(cx * cx + cy * cy + cz * cz);
-                // length of cross product = 2*triangle area
-                //if (true) {
-                //    var w: number = d * 10000;
-                //    if (w < 1)
-                //        w = 1;
-                //    geomtrtData.faceWeights[k++] = w;
-                //}
-                d = 1 / d;
-                vertices[j * posStride + 3] = cx * d;
-                vertices[j * posStride + 4] = cy * d;
-                vertices[j * posStride + 5] = cz * d;
-                j++;
+
+                faceNormals[j++] = cz * d;
+                faceNormals[j++] = cy * d;
+                faceNormals[j++] = cx * d;
+
+                i += 3;
+            }
+
+            i = 0;
+            var f1: number = 0, f2: number = 1, f3: number = 2;
+            var normalStride: number = this.vertexAttLength;
+            var normalOffset: number = 3;
+            while (i < len) {
+                index = normalOffset + this.indexData[i++] * normalStride;
+                this.verticesData[index++] = faceNormals[f1];
+                this.verticesData[index++] = faceNormals[f2];
+                this.verticesData[index++] = faceNormals[f3];
+                index = normalOffset + this.indexData[i++] * normalStride;
+                this.verticesData[index++] = faceNormals[f1];
+                this.verticesData[index++] = faceNormals[f2];
+                this.verticesData[index++] = faceNormals[f3];
+                index = normalOffset + this.indexData[i++] * normalStride;
+                this.verticesData[index++] = faceNormals[f1];
+                this.verticesData[index++] = faceNormals[f2];
+                this.verticesData[index++] = faceNormals[f3];
+                f1 += 3;
+                f2 += 3;
+                f3 += 3;
             }
         }
 
