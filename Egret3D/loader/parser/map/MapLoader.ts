@@ -163,6 +163,8 @@
                 var mesh: Mesh = new Mesh(envHeightGeometry, new TextureMaterial(heightImgload.data));
                 this.processHeightMesh(mapNodeData, mesh);
             }
+
+            this.processTask();
         }
 
         private processHeightMesh(mapNodeData: MapNodeData, mesh: Mesh) {
