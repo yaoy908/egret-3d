@@ -46,8 +46,8 @@
             var limit: VelocityLimitLifeTimeData = new VelocityLimitLifeTimeData();
             data.moveSpeed.velocityLimit = limit;
             limit.type = ParticleValueType.Const;
-            limit.max = 30;
-            limit.min = 10;
+            limit.max = 10;
+            limit.min = 2;
 
             var life: ParticleDataLife = data.life;
             life.lifeMax = 4;
@@ -66,12 +66,12 @@
             //property.gravity = 10;
 
             var speed: ParticleDataMoveSpeed = data.moveSpeed;
-            speed.max = 50;
-            speed.min = 50;
+            speed.max = 100;
+            speed.min = 100;
 
             var velocityOver: VelocityOverLifeTimeData = new VelocityOverLifeTimeData();
             speed.velocityOver = velocityOver;
-            speed.velocityOver.type = ParticleValueType.OneBezier;
+            speed.velocityOver.type = ParticleValueType.Const;
 
             var xBezier: BezierData = new BezierData();
             xBezier.posPoints.push(new Point(0, 0));
@@ -181,7 +181,7 @@
             scale = 2 * Math.abs(scale);
             this.cube.scale = new Vector3D(scale, scale, scale);
 
-            this.particle.scale = this.cube.scale;
+            //this.particle.scale = this.cube.scale;
             //this.particle.rotationX = 0;
             //this.particle.rotationY = 90;
             //this.particle.rotationZ = this.angle * 1000;

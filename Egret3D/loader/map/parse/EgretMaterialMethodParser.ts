@@ -36,7 +36,7 @@
                     continue;
                 method = new MaterialMethodData();
                 method.type = nodeName;
-                XmlParser.eachXmlAttr(item, function (label: string, value: string): void {
+                XMLParser.eachXmlAttr(item, function (label: string, value: string): void {
                     if (label == "texture") {
                         method.texture = value;
                     } else if (label == "usePower") {

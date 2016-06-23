@@ -39,7 +39,7 @@ module egret3d {
             var nextClr: Color;
             for (var i: number = 0, count = this.times.length - 1; i < count; i++) {
                 if (t >= this.times[i] && t < this.times[i + 1]) {
-                    t = this.times[i] / (this.times[i + 1] - this.times[i]);
+                    t = (t - this.times[i]) / (this.times[i + 1] - this.times[i]);
                     dst.lerp(this.colors[i], this.colors[i + 1], t);
                     break;
                 }

@@ -1,27 +1,22 @@
 ﻿module egret3d {
+
     /**
-     * @private 
-     * @language zh_CN
-     * @class egret3d.XmlParser
-     * @classdesc
-     * 用 XmlParser 解析粒子文件
-     */
-    export class XmlParser {
+    * @language zh_CN
+    * @private
+    * @class egret3d.XMLParser
+    * @classdesc
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export class XMLParser {
+
         /**
         * @language zh_CN
-        * constructor 
+        * 
+        * @param xml xml文件
+        * @returns any
         */
-        constructor() {
-
-        }
-
-
-        /**
-         * @language zh_CN
-         * @param text 想要解析成xml的文本
-         * @returns ParticleData
-         */
-        public static parsingXML(text: string): any {
+        public static parse(xml: string): any {
             var xmlDoc = null;
             ///判断浏览器的类型
             ///支持IE浏览器 
@@ -31,9 +26,11 @@
                     try {
                         xmlDoc = new ActiveXObject(xmlDomVersions[i]);
                         xmlDoc.async = false;
-                        xmlDoc.loadXML(text); ///loadXML方法载入xml字符串
+                        xmlDoc.loadXML(xml); ///loadXML方法载入xml字符串
+                        
                         break;
                     } catch (e) {
+
                     }
                 }
             }
@@ -46,8 +43,10 @@
                      * 可能是 "text/xml" 、"application/xml" 或 "application/xhtml+xml" 中的一个。注意，不支持 "text/html"。
                      */
                     var domParser = new DOMParser();
-                    xmlDoc = domParser.parseFromString(text, 'text/xml');
+                    xmlDoc = domParser.parseFromString(xml, 'text/xml');
+
                 } catch (e) {
+
                 }
             }
             else {
@@ -56,6 +55,7 @@
 
             return xmlDoc;
         }
+
 
         /**
         * @private
@@ -73,6 +73,5 @@
                 fun(attr.nodeName, attr.textContent);
             }
         }
-
     }
 }

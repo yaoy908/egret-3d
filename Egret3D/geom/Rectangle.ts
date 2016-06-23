@@ -66,6 +66,21 @@
         }
 
         /**
+        * @language zh_CN
+        * 复制矩形数据
+        * @param other 被复制的矩形
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public copy(other: Rectangle): Rectangle {
+            this.x = other.x;
+            this.y = other.y;
+            this.width = other.width;
+            this.height = other.height;
+            return this;
+        }
+
+        /**
          * @language zh_CN
          * 检测x y 是否在当前矩形内
          * @param x  x 坐标。 

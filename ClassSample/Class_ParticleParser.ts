@@ -20,10 +20,12 @@
             this._egret3DCanvas.addView3D(view1);
 
             this._cameraCrl = new LookAtController(this._view3D.camera3D, new Object3D());
-            this._cameraCrl.distance = 1000;
+            this._cameraCrl.distance = 100;
 
             this._xmlLoader = new URLLoader("resource/particle/temp.xml", URLLoader.DATAFORMAT_TEXT);
             this._xmlLoader.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onGotParticleXml, this);
+
+            view1.addChild3D(new AxisMesh(20));
         }
 
         private onGotParticleXml(e: LoaderEvent3D): void {

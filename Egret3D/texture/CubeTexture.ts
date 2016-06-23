@@ -43,19 +43,19 @@
         /**
          * @language zh_CN
          * 构造函数
-         * @param image_front 前部HTMLImageElement图片元素
-         * @param image_back 背部HTMLImageElement图片元素
-         * @param image_left 左部HTMLImageElement图片元素
-         * @param image_right 右部HTMLImageElement图片元素
-         * @param image_up 顶部HTMLImageElement图片元素
-         * @param image_down 底部HTMLImageElement图片元素
+         * @param image_front 默认参为null 前部HTMLImageElement图片元素
+         * @param image_back 默认参为null 背部HTMLImageElement图片元素
+         * @param image_left 默认参为null 左部HTMLImageElement图片元素
+         * @param image_right 默认参为null 右部HTMLImageElement图片元素
+         * @param image_up 默认参为null 顶部HTMLImageElement图片元素
+         * @param image_down 默认参为null 底部HTMLImageElement图片元素
          */
-        constructor(image_front: Texture2D,
-            image_back: Texture2D,
-            image_left: Texture2D,
-            image_right: Texture2D,
-            image_up: Texture2D,
-            image_down: Texture2D) {
+        constructor(image_front: Texture2D = null,
+            image_back: Texture2D = null,
+            image_left: Texture2D = null,
+            image_right: Texture2D = null,
+            image_up: Texture2D = null,
+            image_down: Texture2D = null) {
             super();
 
             this.image_front = image_front;
@@ -107,11 +107,44 @@
 
         /**
          * @language zh_CN
+         * 设置CubuTexture
+         * @param cubeTexture 源CubuTexture
+         * @param image_front 前部ITexture图片元素
+         * @param image_back 背部ITexture图片元素
+         * @param image_left 左部ITexture图片元素
+         * @param image_right 右部ITexture图片元素
+         * @param image_up 顶部ITexture图片元素
+         * @param image_down 底部ITexture图片元素
+         */
+        public static setCubeTexture(cubeTexture: CubeTexture, image_front: ITexture,
+            image_back: ITexture,
+            image_left: ITexture,
+            image_right: ITexture,
+            image_up: ITexture,
+            image_down: ITexture) {
+            cubeTexture.image_front = image_front.texture2D;
+            cubeTexture.image_back = image_back.texture2D;
+            cubeTexture.image_left = image_left.texture2D;
+            cubeTexture.image_right = image_right.texture2D;
+            cubeTexture.image_up = image_up.texture2D;
+            cubeTexture.image_down = image_down.texture2D;
+        }
+
+        /**
+         * @language zh_CN
          * 上传贴图数据给GPU
          * 更新上传 cube 贴图纹理到GPU 现存中缓存起来
          * @param context3D
          */
         public upload(context3D: Context3DProxy) {
+            if (!this.image_front ||
+                !this.image_back ||
+                !this.image_left ||
+                !this.image_right ||
+                !this.image_up ||
+                !this.image_down) {
+                return;
+            }
             if (!this.texture3D) {
 
                 this.texture3D = context3D.creatCubeTexture();

@@ -1153,6 +1153,9 @@
         * @platform Web,Native
         */
         public setCubeTextureAt(samplerIndex: number, uniLocation: number, index: number, texture: Texture3D) {
+            if (!texture) {
+                return;
+            }
             Context3DProxy.gl.activeTexture(samplerIndex);
             Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_CUBE_MAP, texture.texture);
             Context3DProxy.gl.uniform1i(uniLocation, index);

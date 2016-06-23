@@ -50,28 +50,28 @@
             //bezier1
             var bezier: BezierData = new BezierData();
             limit.bezier1 = bezier;
-            bezier.posPoints.push(new Point(0, 0));
-            bezier.posPoints.push(new Point(0.3, 60));
-            bezier.posPoints.push(new Point(0.35, 60));
+
+            bezier.posPoints.push(new Point(0.0, 0));
+            bezier.posPoints.push(new Point(0.5, 2));
+            bezier.posPoints.push(new Point(0.5, 1));
             bezier.posPoints.push(new Point(1.0, 0));
-            
-            bezier.ctrlPoints.push(new Point(0, 20));
-            bezier.ctrlPoints.push(new Point(0.35, 60));
-            bezier.ctrlPoints.push(new Point(0.36, 60));
-            bezier.ctrlPoints.push(new Point(1.0, 0));
+            bezier.ctrlPoints.push(new Point(0.1, 1));
+            bezier.ctrlPoints.push(new Point(0.3, 0));
+            bezier.ctrlPoints.push(new Point(0.7, 0));
+            bezier.ctrlPoints.push(new Point(0.9, 1));
 
             //bezier2
             var bezier2: BezierData = new BezierData();
             limit.bezier2 = bezier2;
-            bezier2.posPoints.push(new Point(0, 0));
-            bezier2.posPoints.push(new Point(0.3, 120));
-            bezier2.posPoints.push(new Point(0.35, 120));
-            bezier2.posPoints.push(new Point(1.0, 0));
-                  
-            bezier2.ctrlPoints.push(new Point(0, 40));
-            bezier2.ctrlPoints.push(new Point(0.35, 120));
-            bezier2.ctrlPoints.push(new Point(0.36, 120));
-            bezier2.ctrlPoints.push(new Point(1.0, 0));
+
+            bezier2.posPoints.push(new Point(0.0, 0));
+            bezier2.posPoints.push(new Point(0.5, 150));
+            bezier2.posPoints.push(new Point(0.5, 140));
+            bezier2.posPoints.push(new Point(1.0, 100));
+            bezier2.ctrlPoints.push(new Point(0.1, 120));
+            bezier2.ctrlPoints.push(new Point(0.3, 140));
+            bezier2.ctrlPoints.push(new Point(0.7, 160));
+            bezier2.ctrlPoints.push(new Point(0.9, 50));
             //bezier end
 
             var life: ParticleDataLife = data.life;
@@ -92,12 +92,12 @@
             //property.gravity = 10;
 
             var speed: ParticleDataMoveSpeed = data.moveSpeed;
-            speed.max = 20;
-            speed.min = 40;
+            speed.max = 100;
+            speed.min = 100;
 
             var velocityOver: VelocityOverLifeTimeData = new VelocityOverLifeTimeData();
-            speed.velocityOver = velocityOver;
-            speed.velocityOver.type = ParticleValueType.OneBezier;
+            //speed.velocityOver = velocityOver;
+            velocityOver.type = ParticleValueType.OneBezier;
 
             var xBezier: BezierData = new BezierData();
             xBezier.posPoints.push(new Point(0, 0));
@@ -110,7 +110,7 @@
             xBezier.ctrlPoints.push(new Point(0.56, 20));
             xBezier.ctrlPoints.push(new Point(1.0, 8));
 
-            speed.velocityOver.xBezier1 = xBezier;
+            velocityOver.xBezier1 = xBezier;
 
             var yBezier: BezierData = new BezierData();
             yBezier.posPoints.push(new Point(0, 0));
@@ -122,14 +122,14 @@
             yBezier.ctrlPoints.push(new Point(0.75, 40));
             yBezier.ctrlPoints.push(new Point(0.76, 40));
             yBezier.ctrlPoints.push(new Point(1.0, 20));
-            speed.velocityOver.yBezier1 = yBezier;
+            velocityOver.yBezier1 = yBezier;
 
             var zBezier: BezierData = new BezierData();
             zBezier.posPoints.push(new Point(0, 0));
             zBezier.posPoints.push(new Point(0, 0));
             zBezier.ctrlPoints.push(new Point(1, 0));
             zBezier.ctrlPoints.push(new Point(1, 0));
-            speed.velocityOver.zBezier1 = zBezier;
+            velocityOver.zBezier1 = zBezier;
 
 
             var colorOffset: ParticleDataColorOffset = new ParticleDataColorOffset();

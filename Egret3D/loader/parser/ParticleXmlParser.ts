@@ -34,7 +34,7 @@
         public parse(text: string): ParticleData {
             this._particleData = new ParticleData();
 
-            this._xml = XmlParser.parsingXML(text);
+            this._xml = XMLParser.parse(text);
 
             this.version = Number(this.getNode(this._xml, "version").textContent);
             //property
@@ -538,7 +538,7 @@
 
 
         private eachAttr(item: Node, fun: Function): void {
-            XmlParser.eachXmlAttr(item, fun);
+            XMLParser.eachXmlAttr(item, fun);
         }
 
     }
