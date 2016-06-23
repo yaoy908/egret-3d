@@ -1,14 +1,15 @@
 ﻿module egret3d {
-     /**
-     * @language zh_CN
-     * @class egret3d.EgretMapXmlParser
-     * @classdesc
-     * 解析egret地图xml配置文件的类
-     * 用于解析egret地图文件的类，解析完后，该类中保存有xml中所有的信息
-     *
-     * @version Egret 3.0
-     * @platform Web,Native
-     */
+    /**
+    * @private
+    * @language zh_CN
+    * @class egret3d.EgretMapXmlParser
+    * @classdesc
+    * 解析egret地图xml配置文件的类
+    * 用于解析egret地图文件的类，解析完后，该类中保存有xml中所有的信息
+    *
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class EgretMapXmlParser {
 
         /**
