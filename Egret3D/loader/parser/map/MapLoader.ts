@@ -478,7 +478,7 @@
                         var maskTexture: ITexture = CheckerboardTexture.texture;
                         var textureData: any = method.texturesData[0];
 
-                        load = this.addMethodImgTask(textureData.path, lightmapMethod, textureData.attributeName);
+                        load = this.addMethodImgTask(textureData.path, maskmapMethod, textureData.attributeName);
                         if (load.data) {
                             maskTexture = load.data;
                         }
@@ -490,7 +490,7 @@
                         var steamerTexture: ITexture = CheckerboardTexture.texture;
                         var textureData: any = method.texturesData[0];
 
-                        load = this.addMethodImgTask(textureData.path, lightmapMethod, textureData.attributeName);
+                        load = this.addMethodImgTask(textureData.path, streamerMethod, textureData.attributeName);
                         if (load.data) {
                             steamerTexture = load.data;
                         }
@@ -510,6 +510,7 @@
                             if (load.data) {
                                 terrainARGBMethod[textureData.attrName] = load.data;
                             }
+
 
                             if (i != 0) {
                                 terrainARGBMethod.setUVTitling(i - 1, textureData.uvTitlingX, textureData.uvTitlingY);
