@@ -797,17 +797,17 @@
                 this._globalSca.copyFrom(this._sca);
                 this._globalRot.copyFrom(this._rot);
             }
-            if (this instanceof Camera3D) {
-                this._modelMatrix3D.makeTransform(this._globalPos, new Vector3D(1, 1, 1), this._globalOrientation);
-            }
-            else {
-                this._modelMatrix3D.makeTransform(this._globalPos, this._globalSca, this._globalOrientation);
-            }
+            this.onMakeTransform();
+
             this.onUpdateTransform();
             this._transformChange = false;
         }
 
         protected onUpdateTransform() {
+        }
+
+        protected onMakeTransform() {
+            this._modelMatrix3D.makeTransform(this._globalPos, this._globalSca, this._globalOrientation);
         }
 
         /**

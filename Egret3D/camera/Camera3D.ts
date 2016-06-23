@@ -77,7 +77,7 @@
          * @platform Web,Native
          */
         public projectMatrix: Matrix4_4 = new Matrix4_4();
-        
+
         /**
         * @private
         * @language zh_CN
@@ -101,21 +101,21 @@
 
         private _scissorRect: Rectangle = new Rectangle();
 
-        private _aspectRatio: number = 1.0 ;
+        private _aspectRatio: number = 1.0;
 
         private _fovY: number = 45.0;
 
-        private _near: number = 1 ;
+        private _near: number = 1;
 
         private _far: number = 10000.0;
 
-        private temp: Matrix4_4 = new Matrix4_4();        
+        private temp: Matrix4_4 = new Matrix4_4();
 
         private _lookAtPosition: Vector3D = new Vector3D();
 
         private _up: Vector3D = new Vector3D(0, 1, 0);
 
-        private _cameraType: number = 0; 
+        private _cameraType: number = 0;
 
         private _cameraMatrixChange: boolean = false;
 
@@ -153,14 +153,14 @@
             this._cameraType = cameraType;
             switch (cameraType) {
                 case CameraType.orthogonal:
-                      this.projectMatrix.ortho(this._viewPort.width, this._viewPort.height, this._near, this._far);
-                        //this.updataOrth();
+                    this.projectMatrix.ortho(this._viewPort.width, this._viewPort.height, this._near, this._far);
+                    //this.updataOrth();
                     break;
                 case CameraType.perspective:
                     this.projectMatrix.perspective(this._fovY, this._aspectRatio, this._near, this._far);
                     break;
                 case CameraType.VR:
-                    this.projectMatrix.perspective(this._fovY, 1.0 , this._near, this._far);
+                    this.projectMatrix.perspective(this._fovY, 1.0, this._near, this._far);
                     this.eyeMatrix = this.eyeMatrix || new EyesMatrix();
                     break;
             }
@@ -175,9 +175,9 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public tap(cameraType: CameraType, vrType: VRType = null ) {
+        public tap(cameraType: CameraType, vrType: VRType = null) {
             if (cameraType == CameraType.VR) {
-                this.eyeMatrix.update( this );
+                this.eyeMatrix.update(this);
                 if (vrType == VRType.left) {
                     this.viewMatrix.copyFrom(this.eyeMatrix.leftEyeMatrix);
                 } else if (vrType == VRType.right) {
@@ -186,7 +186,7 @@
                 this.viewMatrix.invert();
             }
         }
-                                              
+
         /**
         * @language zh_CN        
         * 设置相机横纵比
@@ -198,10 +198,10 @@
         public set aspectRatio(value: number) {
             if (this._aspectRatio != value) {
                 this._aspectRatio = value;
-                this.cameraType = this._cameraType; 
+                this.cameraType = this._cameraType;
             }
         }
-                              
+
         /**
         * @language zh_CN        
         * 返回相机横纵比
@@ -213,7 +213,7 @@
         public get aspectRatio(): number {
             return this._aspectRatio;
         }
-                                      
+
         /**
         * @language zh_CN
         * 设置相机fovY
@@ -228,7 +228,7 @@
                 this.cameraType = this._cameraType;
             }
         }
-                      
+
         /**
         * @language zh_CN
         * 返回相机fovY
@@ -238,9 +238,9 @@
         * @platform Web,Native
         */
         public get fieldOfView(): number {
-            return this._fovY ;
+            return this._fovY;
         }
-                              
+
         /**
         * @language zh_CN
         * 设置相机近截面
@@ -255,7 +255,7 @@
                 this.cameraType = this._cameraType;
             }
         }
-              
+
         /**
         * @language zh_CN
         * 返回相机近截面
@@ -267,7 +267,7 @@
         public get near(): number {
             return this._near;
         }
-                      
+
         /**
         * @language zh_CN
         * 设置相机远截面
@@ -282,7 +282,7 @@
                 this.cameraType = this._cameraType;
             }
         }
-              
+
         /**
         * @language zh_CN
         * 返回相机远截面
@@ -294,7 +294,7 @@
         public get far(): number {
             return this._far;
         }
-      
+
         /**
         * @language zh_CN
         * 返回相机视图投影矩阵
@@ -322,7 +322,7 @@
         //    this._normalMatrix.multiply(this.projectMatrix);
         //    return this._normalMatrix; 
         //}
-        
+
         /**
          * @private
          * @language zh_CN
@@ -399,7 +399,7 @@
             }
             return this._viewMatrix;
         }
-        
+
         /**
          * @language zh_CN
          *  
@@ -421,8 +421,8 @@
         */
         public updataOrth() {
             var _projectionHeight: number = 2000;
-            var _yMax:number = _projectionHeight * .5;
-            var _xMax:number = _yMax * this._aspectRatio ;
+            var _yMax: number = _projectionHeight * .5;
+            var _xMax: number = _yMax * this._aspectRatio;
 
             var left: number, right: number, top: number, bottom: number;
             ///return 
@@ -438,8 +438,8 @@
                 this.raw[10] = 1 / (this._far - this._near);
                 this.raw[14] = this._near / (this._near - this._far);
                 this.raw[1] = this.raw[2] = this.raw[3] = this.raw[4] =
-                this.raw[6] = this.raw[7] = this.raw[8] = this.raw[9] =
-                this.raw[11] = this.raw[12] = this.raw[13] = 0;
+                    this.raw[6] = this.raw[7] = this.raw[8] = this.raw[9] =
+                    this.raw[11] = this.raw[12] = this.raw[13] = 0;
                 this.raw[15] = 1;
 
             } else {
@@ -463,7 +463,7 @@
                 this.raw[14] = this._near / (this.near - this.far);
 
                 this.raw[1] = this.raw[2] = this.raw[3] = this.raw[4] =
-                this.raw[6] = this.raw[7] = this.raw[8] = this.raw[9] = this.raw[11] = 0;
+                    this.raw[6] = this.raw[7] = this.raw[8] = this.raw[9] = this.raw[11] = 0;
                 this.raw[15] = 1;
             }
 
@@ -483,7 +483,7 @@
             renderItem.modelMatrix;
             return renderItem.bound.inBound(this.frustum);
         }
-        
+
         /**
          * @language zh_CN
          * 增加相机动画
@@ -495,7 +495,7 @@
         public addAnimation(name: string, ani: CameraAnimationController) {
             this._animation[name] = ani;
         }
-        
+
         /**
         * @language zh_CN
         * 播放某个动画
@@ -528,8 +528,8 @@
             }
         }
 
-        private _halfw: number ; 
-        private _halfh: number; 
+        private _halfw: number;
+        private _halfh: number;
 
         /**
         * @private
@@ -537,17 +537,17 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public object3DToScreenRay(n: Vector3D,target:Vector3D): Vector3D {
+        public object3DToScreenRay(n: Vector3D, target: Vector3D): Vector3D {
 
             this._halfw = this.viewPort.width * 0.5;
-            this._halfh = this.viewPort.height * 0.5; 
+            this._halfh = this.viewPort.height * 0.5;
 
             target = this.viewMatrix.transformVector(n, target);
             this.project(target, target);
 
-            target.x = this._halfw + target.x * this._halfw ;
+            target.x = this._halfw + target.x * this._halfw;
             target.y = this.viewPort.height - (this._halfh - target.y * this._halfh);
-            return target ;
+            return target;
         }
 
         /**
@@ -559,7 +559,7 @@
         public ScreenRayToObject3D(n: Vector3D, target: Vector3D): Vector3D {
 
             this._halfw = this.viewPort.width * 0.5;
-            this._halfh = this.viewPort.height * 0.5; 
+            this._halfh = this.viewPort.height * 0.5;
 
             target.x = (n.x - this._halfw) / this._halfw;
             target.y = (this._halfh - (this.viewPort.height - n.y)) / this._halfh;
@@ -567,12 +567,12 @@
             this.unproject(target.x, target.y, n.z, target);
             this.modelMatrix.transformVector(target, target);
 
-            return target; 
+            return target;
         }
 
-        private v: Vector3D = new Vector3D(); 
-        private p: Vector3D = new Vector3D(); 
-        private unproject(nX: number, nY: number, sZ: number,target:Vector3D): Vector3D {
+        private v: Vector3D = new Vector3D();
+        private p: Vector3D = new Vector3D();
+        private unproject(nX: number, nY: number, sZ: number, target: Vector3D): Vector3D {
             target.x = nX;
             target.y = -nY;
             target.z = sZ;
@@ -591,8 +591,7 @@
             return target;
         }
 
-        private project(n:Vector3D,target:Vector3D):Vector3D
-		{
+        private project(n: Vector3D, target: Vector3D): Vector3D {
             target = this.projectMatrix.transformVector(n, target);
             target.x = target.x / target.w;
             target.y = -target.y / target.w;
@@ -600,6 +599,13 @@
             target.z = n.z;
 
             return target;
+        }
+
+        protected onMakeTransform() {
+            MathUtil.CALCULATION_VECTOR3D.x = 1;
+            MathUtil.CALCULATION_VECTOR3D.y = 1;
+            MathUtil.CALCULATION_VECTOR3D.z = 1;
+            this._modelMatrix3D.makeTransform(this._globalPos, MathUtil.CALCULATION_VECTOR3D, this._globalOrientation);
         }
     }
 } 
