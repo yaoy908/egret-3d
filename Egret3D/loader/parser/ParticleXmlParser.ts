@@ -73,6 +73,9 @@
             //colorOffset
             var colorOffset: Node = this.getNode(this._xml, "colorOffset");
             this.parseColorOffset(colorOffset);
+            //material
+            var material: Node = this.getNode(this._xml, "mat");
+            this.parseMaterial(material);
 
 
 
@@ -415,6 +418,16 @@
             colorOffset.data = this.parseGradientsColor(itemList, colorOffset.data);
         }
 
+        /**
+        * @private
+        * 解析材质球
+        */
+        private parseMaterial(node: Node): MaterialSphereData {
+            if (node == null)
+                return null;
+            var material: MaterialSphereData = this._particleData.materialData = EgretMapXmlParser.parseMaterial(node);
+            return material;
+        }
 
          /**
          * @private

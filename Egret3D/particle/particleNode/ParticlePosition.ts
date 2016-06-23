@@ -17,7 +17,7 @@
         private _positions: ValueShape;
         private _node: ParticleDataShape;
 
-        private particleAnimationState: ParticleAnimationState;
+        private _animationState: ParticleAnimationState;
         private attribute_offsetPosition: GLSL.VarRegister;
         constructor() {
             super();
@@ -88,13 +88,13 @@
         * @platform Web,Native
         */
         public build(geometry: Geometry, count: number) {
-            this.particleAnimationState = <ParticleAnimationState>this.state;
+            this._animationState = <ParticleAnimationState>this.state;
             var posArray: Vector3D[] = this._positions.calculate(count);
-            var directionArray: Vector3D[] = this.particleAnimationState.directionArray = [];
+            var directionArray: Vector3D[] = this._animationState.directionArray = [];
 
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
-            var data: ParticleData = this.particleAnimationState.emitter.data;
+            var data: ParticleData = this._animationState.emitter.data;
 
             var recordPos: Vector3D = new Vector3D();//用于计算方向，缩放后的位置不能用于计算方向
             var coneShape: CylinderValueShape = <CylinderValueShape>this._positions;

@@ -14,13 +14,13 @@
     </transform>
   </property>
   <emission>
-    <rate>5</rate>
+    <rate>2</rate>
     <type>Const</type>
   </emission>
   <life>
     <duration>5</duration>
-    <lifeMax>5</lifeMax>
-    <lifeMin>5</lifeMin>
+    <lifeMax>20</lifeMax>
+    <lifeMin>20</lifeMin>
     <delay>0</delay>
     <loop>true</loop>
   </life>
@@ -42,11 +42,11 @@
   </scaleBirth>
   <geometry>
     <type>Plane</type>
-    <plane width="2" height="2" />
+    <plane width="20" height="20" />
   </geometry>
   <moveSpeed>
-    <max>10</max>
-    <min>10</min>
+    <max>5</max>
+    <min>5</min>
     <velocityOver1>
       <type>TwoBezier</type>
       <worldSpace>false</worldSpace>
@@ -114,7 +114,7 @@
     <followScale>true</followScale>
   </followTarget>-->
   <mat id="0" name="Egret3D/d/E3D_D_AlphaBlending">
-    <diffuseTextureName>Texture/sponza_flag.jpg</diffuseTextureName>
+    <diffuseTextureName>sponza_flag.jpg</diffuseTextureName>
     <normalTextureName />
     <specularTextureName />
     <shadowTextureName />
@@ -136,5 +136,9 @@
     <drawMode>4</drawMode>
     <cullMode>1029</cullMode>
     <blendMode>ALPHA</blendMode>
+    <methods>
+      <alphaMaskMethod texture="Textures/halomask.jpg"></alphaMaskMethod>
+      <uvRollMethod uSpeed="0.2" vSpeed="0"></uvRollMethod>
+    </methods>
   </mat>
 </particle>

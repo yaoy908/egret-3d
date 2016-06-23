@@ -13,6 +13,11 @@
     */
     export class MaterialPass {
 
+        /**
+       * @private
+       */
+        public _passID: number ;
+
          /**
         * @private
         */
@@ -157,14 +162,21 @@
             }
         }
 
-        protected addShaderPhase(sourcePhase: { [shaderPhase: number]: string[] }, targetPhase: { [shaderPhase: number]: string[] }) {
+        protected addShaderPhase(passType:number , sourcePhase: { [shaderPhase: number]: string[] }, targetPhase: { [shaderPhase: number]: string[] }) {
             var names: string[];
             var phase: any;
+            var tn: string;
             for (phase in sourcePhase) {
                 names = <string[]>sourcePhase[phase];
                 for (var i: number = 0; i < names.length; i++) {
                     targetPhase[phase] = targetPhase[phase] || [];
                     targetPhase[phase].push(names[i]);
+
+                    tn = ShaderPhaseType[phase];
+                    var index: number = this._materialData.shaderPhaseTypes[passType].indexOf(ShaderPhaseType[tn]);
+                    if (index!= -1) {
+                        this._materialData.shaderPhaseTypes[passType].splice(index,1) ;
+                    }
                 }
             }
         }
@@ -221,8 +233,8 @@
                     this._vs_shader_methods[ShaderPhaseType.start_vertex] = [];
                     this._vs_shader_methods[ShaderPhaseType.start_vertex].push("particle_vs");
                     //to change importent
-                    this.addShaderPhase(animation.particleAnimationController.particleAnimationState.vertex_shaders, this._vs_shader_methods);
-                    this.addShaderPhase(animation.particleAnimationController.particleAnimationState.fragment_shaders, this._fs_shader_methods);
+                    this.addShaderPhase( this._passID , animation.particleAnimationController.particleAnimationState.vertex_shaders, this._vs_shader_methods);
+                    this.addShaderPhase( this._passID , animation.particleAnimationController.particleAnimationState.fragment_shaders, this._fs_shader_methods);
                 }
             }
 

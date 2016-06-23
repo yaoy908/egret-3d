@@ -63,7 +63,7 @@
         /**
         * @private
         */
-        public initNode(data: ParticleDataNode): void {
+        public initNode(data: ParticleDataNode, arg:any): void {
 
         }
         /**

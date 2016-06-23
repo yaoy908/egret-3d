@@ -84,6 +84,7 @@
         public rotationSpeed: ParticleDataRotationSpeed;
         public colorOffset: ParticleDataColorOffset;
 
+        public materialData: MaterialSphereData;
         /**
         * @language zh_CN
         * @version Egret 3.0
