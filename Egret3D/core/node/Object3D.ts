@@ -80,6 +80,14 @@
 
         /**
         * @language zh_CN
+        * 属性动画对象
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public proAnimation: PropertyAnim;
+
+        /**
+        * @language zh_CN
         * @private
         * @version Egret 3.0
         * @platform Web,Native
@@ -1519,6 +1527,18 @@
                 this.childs[i].updateTransformChange(change);
             }
         }
+
+        /**
+        * @language zh_CN
+        * 绑定一个属性动画对象
+        * @param proAnimation 属性动画对象
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public bindAnimation(proAnimation: PropertyAnim) {
+            this.proAnimation = proAnimation;
+            this.proAnimation.bindObject3D(this);
+        }
         
         /**
         * @language zh_CN
@@ -1531,7 +1551,9 @@
         * @platform Web,Native
         */
         public update(time: number, delay: number, camera:Camera3D) {
-
+            if (this.proAnimation) {
+                this.proAnimation.update(delay);
+            }
         }
 
         /**

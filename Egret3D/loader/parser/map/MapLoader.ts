@@ -17,13 +17,13 @@
 
     export class MapLoader extends EventDispatcher {
 
-        /**
-        * @language zh_CN
-        * 属性动画对象，加载完成后 需要更新
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public propertyAnims: Array<PropertyAnim> = new Array<PropertyAnim>();
+        ///**
+        //* @language zh_CN
+        //* 属性动画对象，加载完成后 需要更新
+        //* @version Egret 3.0
+        //* @platform Web,Native
+        //*/
+        //public propertyAnims: Array<PropertyAnim> = new Array<PropertyAnim>();
 
         /**
         * @language zh_CN
@@ -32,6 +32,14 @@
         * @platform Web,Native
         */
         public container: Object3D = null;
+
+        /**
+        * @language zh_CN
+        * 是否自动播放动画  默认不自动播放
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public autoPlayAnimation: boolean = false;
 
         private _pathRoot: string = "";
         private _path: string = "";
@@ -78,26 +86,11 @@
                     this.container.addChild(mapNodeData.object3d);
                 }
 
-                if (mapNodeData.propertyAnims) {
-                    for (var j: number = 0; j < mapNodeData.propertyAnims.length; ++j) {
-                        var propertyAnimsData: any = mapNodeData.propertyAnims[j];
-                        if (!this._epaLoader[propertyAnimsData["path"]]) {
-                            var epaload: URLLoader = new URLLoader(this._pathRoot + propertyAnimsData["path"]);
-                            this._epaLoader[propertyAnimsData["path"]] = epaload;
-
-                            var nodeDatas: Array<MapNodeData> = [];
-                            nodeDatas.push(mapNodeData);
-                            epaload["epanodeData"] = nodeDatas;
-                            epaload.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onEpaLoad, this);
-                            this._taskCount++;
-                        }
-                        else {
-                            var epaload: URLLoader = this._epaLoader[propertyAnimsData["path"]];
-                            var nodeDatas: Array<MapNodeData> = epaload["epanodeData"];
-                            nodeDatas.push(mapNodeData);
-                        }
-                    }
+                if (mapNodeData.type == "Object3D" || mapNodeData.type == "Camera3D") {
+                    this.doLoadEpa(mapNodeData);
                 }
+
+                
                 switch (mapNodeData.type) {
                     case "Mesh":
                         if (mapNodeData.path) {
@@ -121,7 +114,6 @@
                                 }
                             }
                         }
-                     
                         break;
                     case "Terrain":
                         if (mapNodeData.texture) {
@@ -153,6 +145,43 @@
             }
         }
 
+        private doLoadEpa(mapNodeData: MapNodeData) {
+
+            if (mapNodeData.propertyAnims) {
+                for (var j: number = 0; j < mapNodeData.propertyAnims.length; ++j) {
+                    var propertyAnimsData: any = mapNodeData.propertyAnims[j];
+                    if (!this._epaLoader[propertyAnimsData["path"]]) {
+                        var epaload: URLLoader = new URLLoader(this._pathRoot + propertyAnimsData["path"]);
+                        this._epaLoader[propertyAnimsData["path"]] = epaload;
+
+                        var nodeDatas: Array<MapNodeData> = [];
+                        nodeDatas.push(mapNodeData);
+                        epaload["epanodeData"] = nodeDatas;
+                        epaload.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onEpaLoad, this);
+                        this._taskCount++;
+                    }
+                    else {
+                        var epaload: URLLoader = this._epaLoader[propertyAnimsData["path"]];
+                        var nodeDatas: Array<MapNodeData> = epaload["epanodeData"];
+                        nodeDatas.push(mapNodeData);
+
+                        if (epaload.data) {
+                            this.processEpa(mapNodeData, epaload.data);
+                        }
+                    }
+                }
+            }
+        }
+
+        private processEpa(mapNodeData: MapNodeData, pro: PropertyAnim) {
+            mapNodeData.object3d.bindAnimation(pro);
+            if (this.autoPlayAnimation) {
+                if (mapNodeData.object3d.proAnimation) {
+                    mapNodeData.object3d.proAnimation.play();
+                }
+            }
+        }
+
         private onHeightTextureLoad(e: LoaderEvent3D) {
             var heightImgload: URLLoader = e.loader;
             var nodeDatas: Array<MapNodeData> = heightImgload["heightNodeDatas"];
@@ -162,6 +191,7 @@
                 var envHeightGeometry: ElevationGeometry = new ElevationGeometry(heightImgload.data, mapNodeData.width, mapNodeData.height, mapNodeData.depth, mapNodeData.segmentsW, mapNodeData.segmentsH);
                 var mesh: Mesh = new Mesh(envHeightGeometry, new TextureMaterial(heightImgload.data));
                 this.processHeightMesh(mapNodeData, mesh);
+                this.doLoadEpa(mapNodeData);
             }
 
             this.processTask();
@@ -225,6 +255,7 @@
                 var mapNodeData: MapNodeData = nodeDatas[i];
                 if (cloneMesh) {
                     this.processMesh(mapNodeData, cloneMesh);
+                    this.doLoadEpa(mapNodeData);
 
                     if (i == nodeDatas.length - 1) {
                         break;
@@ -255,11 +286,9 @@
                     cloneClip = clip.clone();
                 }
             }
-
-          
-            //mesh.animation.play(clip.animationName);
-            //mesh.animation.skeletonAnimationController.play(clip.animationName, 0);
-
+            if (this.autoPlayAnimation) {
+                mesh.animation.play(clip.animationName);
+            }
             this.processTask();
         }
 
@@ -272,8 +301,12 @@
             for (var i: number = 0; i < nodeDatas.length; ++i) {
                 var mapNodeData: MapNodeData = nodeDatas[i];
                 if (clonePa) {
-                    clonePa.bindObject3D(mapNodeData.object3d);
-                    this.propertyAnims.push(pa);
+                    this.processEpa(mapNodeData, clonePa);
+
+                    if (i == nodeDatas.length - 1) {
+                        break;
+                    }
+                    clonePa = pa.clone();
                 }
             }
             
