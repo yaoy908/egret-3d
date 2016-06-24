@@ -2,6 +2,18 @@ module egret3d {
 
     export enum CurveType { Line, BesselCurve };
 
+    /**
+    * @language zh_CN
+    * @class egret3d.AnimCurve
+    * @classdesc
+    * AnimCurve 类为动画曲线，其中包含该曲线的类型，起始结束时刻以及参数�?
+    * 
+    * @version Egret 3.0
+    * @platform Web,Native
+    * @includeExample animation/PropertyAnimation/AnimCurve.ts
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class AnimCurve {
         public type: CurveType = CurveType.Line;
         public start: Point = new Point();
@@ -14,6 +26,14 @@ module egret3d {
         public constructor() {
         }
 
+        /**
+        * @language zh_CN
+        * 计算数�?
+        * @param time 某个时刻
+        * @returns number 该时刻对应的数�?
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public calculateValue(time: number): number {
 
             if (time < this.start.x || time > this.end.x) {
@@ -56,15 +76,13 @@ module egret3d {
 
         public cacheCurveData(): void {
 
-            return;
+            this.cache = [];
 
-            //this.cache = [];
+            for (var time = this.start.x; time < this.end.x; time++) {
+                this.cache.push(this.calculateValue(time));
+            }
 
-            //for (var time = this.start.x; time < this.end.x; time++) {
-            //    this.cache.push(this.calculateValue(time));
-            //}
-
-            //this.useCache = true;
+            this.useCache = true;
         }
     }
 }
