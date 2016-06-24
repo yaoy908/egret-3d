@@ -22,17 +22,17 @@
             this._cameraCrl = new LookAtController(this._view3D.camera3D, new Object3D());
             this._cameraCrl.distance = 100;
 
-            this._xmlLoader = new URLLoader("resource/particle/temp.xml", URLLoader.DATAFORMAT_TEXT);
+            this._xmlLoader = new URLLoader("resource/particle/config.xml", URLLoader.DATAFORMAT_TEXT);
             this._xmlLoader.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onGotParticleXml, this);
 
-            view1.addChild3D(new AxisMesh(20));
+            //view1.addChild3D(new AxisMesh(20));
         }
 
         private onGotParticleXml(e: LoaderEvent3D): void {
             this._xmlLoader.removeEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onGotParticleXml, this);
             var text: string = this._xmlLoader.data;
             this._particleData = new ParticleXmlParser().parse(text);
-            var loadtex: URLLoader = new URLLoader("resource/effect/rect.png");
+            var loadtex: URLLoader = new URLLoader("resource/particle/" + this._particleData.materialData.diffuseTextureName);//sponza_flag.jpg
             loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
         }
 

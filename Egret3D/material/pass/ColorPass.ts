@@ -4,6 +4,12 @@
     * @private
     */
     export class ColorPass extends MaterialPass {
+
+        constructor(materialData: MaterialData) {
+            super(materialData);
+            this._passID = PassType.colorPass;
+        }
+
         /**
        * @language zh_CN
        * @private

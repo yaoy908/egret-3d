@@ -153,7 +153,7 @@
             //___________mat
             for (i = 0, count = matList.length; i < count; i++) {
                 tempNode = matList[i];
-                materialData = this.parseMaterial(tempNode);
+                materialData = EgretMapXmlParser.parseMaterial(tempNode);
                 if (materialData) {
                     this.materialList.push(materialData);
                 }
@@ -297,12 +297,12 @@
 
        
 
-        private parseMaterial(xml: Node): MaterialSphereData {
+        public static parseMaterial(xml: Node): MaterialSphereData {
             if (xml.childNodes.length == 0)
                 return null;
             var data: MaterialSphereData = new MaterialSphereData();
 
-            this.eachAttr(xml, function (label: string, value: string): void {
+            XMLParser.eachXmlAttr(xml, function (label: string, value: string): void {
                 if (label == "id") {
                     data.id = Number(value);
                 }
@@ -365,7 +365,7 @@
                 } else if (nodeName == "methods") {
                     data.methods = EgretMaterialMethodParser.parse(item);
                 } else if (nodeName == "uvRectangle") {
-                    this.eachAttr(item, function (label: string, value: string): void {
+                    XMLParser.eachXmlAttr(item, function (label: string, value: string): void {
                         if (label == "x") {
                             data.uvRectangle.x = Number(value);
                         } else if (label == "y") {
@@ -385,6 +385,7 @@
 
             return data;
         }
+
 
         private parseEnvironment(environment: NodeList): void {
             //灯光全局配置

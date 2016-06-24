@@ -73,6 +73,9 @@
             //colorOffset
             var colorOffset: Node = this.getNode(this._xml, "colorOffset");
             this.parseColorOffset(colorOffset);
+            //material
+            var material: Node = this.getNode(this._xml, "mat");
+            this.parseMaterial(material);
 
 
 
@@ -206,7 +209,19 @@
             });
             //sphere
             shape.sphereRadius = Number(this.getNode(node, "sphereRadius").textContent);
-
+            //hemiSphereRaiuds
+            shape.hemiSphereRaiuds = Number(this.getNode(node, "hemiSphereRaiuds").textContent);
+            //cone
+            var cone: Node = this.getNode(node, "cone");
+            this.eachAttr(cone, function (label: string, value: string): void {
+                if (label == "coneHeight") {
+                    shape.coneHeight = Number(value);
+                } else if (label == "coneRadiusBottom") {
+                    shape.coneRadiusBottom = Number(value);
+                } else if (label == "coneRadiusTop") {
+                    shape.coneRadiusTop = Number(value);
+                }
+            });
         }
         /**
          * @private
@@ -403,6 +418,16 @@
             colorOffset.data = this.parseGradientsColor(itemList, colorOffset.data);
         }
 
+        /**
+        * @private
+        * 解析材质球
+        */
+        private parseMaterial(node: Node): MaterialSphereData {
+            if (node == null)
+                return null;
+            var material: MaterialSphereData = this._particleData.materialData = EgretMapXmlParser.parseMaterial(node);
+            return material;
+        }
 
          /**
          * @private

@@ -202,26 +202,87 @@
     export class CylinderValueShape extends ValueShape {
         public valueType: ValueType = ValueType.vec3;
 
-        public radius: number = 20;
+        public radiusTop: number = 20;
+        public radiusBottom: number = 20;
         public height: number = 20;
+
+        //圆筒的尖端延长方向的交汇点，如果top和bottom的半径相等，这个值是null
+        public origPoint: Vector3D;
+
         public calculate(num: number): any {
-            var values: Vector3D[] = [];
             var pos: Vector3D;
-            for (var i: number = 0; i < num; i++) {
-                pos = new Vector3D();
-                pos.x = Math.random() * this.radius ;
-                pos.z = Math.random() * this.radius ;
-                if (Math.random() > 0.5) pos.x *= -1;
-                if (Math.random() > 0.5) pos.z *= -1;
-                pos.y = Math.random() * this.height - this.height * 0.5;
-                if ((pos.x * pos.x + pos.z * pos.z) > (this.radius * this.radius)) {
-                    //不在圆内就重新随机 
-                    i--;
-                } else {
+            var values: Vector3D[] = [];
+            if (this.radiusBottom == this.radiusTop) {
+                this.origPoint = null;
+                var angle: number;
+                for (var i: number = 0; i < num; i++) {
+                    pos = new Vector3D();
+                    angle = Math.random() * 2 * Math.PI;
+                    pos.x = Math.sin(angle) * this.radiusBottom;
+                    pos.z = Math.cos(angle) * this.radiusBottom;
+                    pos.y = Math.random() * this.height - this.height * 0.5;
                     values.push(pos);
                 }
+            } else {
+                this.origPoint = new Vector3D(0,0,0);
+                var awayValue: number = this.radiusTop * this.height / Math.abs(this.radiusTop - this.radiusBottom);
+                this.origPoint.y = -(this.height / 2 + awayValue);
+                if (this.radiusTop < this.radiusBottom) {
+                    this.origPoint.y *= -1;
+                }
+                //圆筒中的位置
+                var angle: number;
+                var targetR: number;
+                
+                var radiusT_B: number = Math.abs(this.radiusBottom - this.radiusTop);
+                for (var i: number = 0; i < num; i++) {
+                    pos = new Vector3D();
+                    angle = Math.random() * 2 * Math.PI;
+                    pos.y = Math.random() * this.height - this.height * 0.5;
+
+                    targetR = Math.abs(pos.y - this.origPoint.y);//点到原点的y距离
+
+                    if (this.radiusBottom < this.radiusTop) {
+                        targetR = radiusT_B * (this.height / 2 + pos.y) / this.height;
+                        targetR += this.radiusBottom;
+                    }
+                    else {
+                        targetR = radiusT_B * (this.height / 2 - pos.y) / this.height;
+                        targetR += this.radiusBottom;
+                    }
+                    pos.x = Math.sin(angle) * targetR;
+                    pos.z = Math.cos(angle) * targetR;
+
+                    values.push(pos);
+                }
+
+
             }
+
             return values;
+        }
+
+        //获取从这个桶里面发射的粒子，沿着桶的发射朝向
+        public getDirection(point: Vector3D, dst: Vector3D): Vector3D {
+            if (dst == null) {
+                dst = new Vector3D();
+            }
+            dst.setTo(0, 1, 0);
+            if (point == null) {
+                return dst;
+            }
+            if (this.origPoint){
+                dst.copyFrom(point);
+                dst.decrementBy(this.origPoint);
+                dst.normalize();
+                if (this.radiusTop < this.radiusBottom) {
+                    dst.x *= -1;
+                    dst.y *= -1;
+                    dst.z *= -1;
+                }
+
+            }
+            return dst;
         }
     }
 
@@ -321,16 +382,15 @@
     * @private
     * 球内分布
     */
-    class BallValueShape extends ValueShape {
+    export class BallValueShape extends ValueShape {
         public valueType: ValueType = ValueType.vec3;
 
+        public r: number = 10;
 
         //parameters = [R]
-        public calculation(num: number, ...parameters): any {
+        public calculate(num: number): any {
             var values: Vector3D[] = [];
-            var r: number = parameters[0][0];
-
-            values = this.getPoints1(num, r);
+            values = this.getPoints1(num, this.r);
             return values;
         }
 
@@ -355,7 +415,47 @@
             return values;
         }
     }
-            
+
+
+    /**
+    * @private
+    * 半球内分布
+    */
+    export class HemiBallValueShape extends ValueShape {
+        public valueType: ValueType = ValueType.vec3;
+
+        public r: number = 10;
+
+        //parameters = [R]
+        public calculate(num: number): any {
+            var values: Vector3D[] = [];
+            values = this.getPoints1(num, this.r);
+            return values;
+        }
+
+        private getPoints1(num: number, r: number): Vector3D[] {
+            var values: Vector3D[] = [];
+            var x: number;
+            var y: number;
+            var z: number;
+            var pos: Vector3D;
+            var radio: Vector3D = new Vector3D(0, 0, 0);
+            for (var i: number = 0; i < num; i++) {
+                x = Math.random() * 2 * r - r;
+                y = Math.abs(Math.random() * 2 * r - r);
+                z = Math.random() * 2 * r - r;
+                pos = new Vector3D(x, y, z);
+                if (Vector3D.distance(radio, pos) > r) {
+                    i--;
+                } else {
+                    values.push(pos);
+                }
+            }
+            return values;
+        }
+    }
+
+
     /**
     * @private
     * 平面圆
