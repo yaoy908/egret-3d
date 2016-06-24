@@ -144,12 +144,6 @@ void main(void) {
 	particleStateData.velocityOverWorldSpace		= uniform_particleState[17];
 
 
-	mat4 billboardMatrix = mat4(
-				uniform_cameraMatrix[0],
-				uniform_cameraMatrix[1],
-				uniform_cameraMatrix[2],
-				vec4(0.0, 0.0, 1.0, 1.0));
-
 	mat4 modeViewMatrix = uniform_ModelViewMatrix ; 
 	outPosition = localPosition = vec4(e_position, 1.0);
 

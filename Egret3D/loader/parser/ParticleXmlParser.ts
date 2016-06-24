@@ -112,6 +112,13 @@
             property.rotation = this.parseVector3D(rotation, property.rotation);
             property.scale = this.parseVector3D(scale, property.scale);
             property.position = this.parseVector3D(position, property.position);
+
+            //render
+            var render: Node = this.getNode(node, "render");
+
+            var renderMode: Node = this.getNode(render, "renderMode");
+            property.renderMode = ParticleRenderModeType[renderMode.textContent];
+
         }
 
         /**

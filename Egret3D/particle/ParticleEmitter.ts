@@ -252,7 +252,7 @@
            
             //position
             this._positionNode = new ParticlePosition();
-            this._positionNode.initNode(this._data.shape);
+            this._positionNode.initNode(this._data.shape, this._data.property);
             nodes.push(this._positionNode);
 
             //speed(依赖于position)

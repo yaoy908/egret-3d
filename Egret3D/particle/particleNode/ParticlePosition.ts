@@ -27,6 +27,7 @@
             this.attribute_offsetPosition.name = "attribute_offsetPosition";
             this.attribute_offsetPosition.size = 3;
             this.attributes.push(this.attribute_offsetPosition);
+
         }
 
 
@@ -37,7 +38,22 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public initNode(data: ParticleDataNode): void {
+        public initNode(data: ParticleDataNode, arg: any): void {
+
+            //根据粒子的属性，选择使用相机方式
+            var renderMode: number = (<ParticleDataProperty>arg).renderMode;
+            var renderMode_vs: string;
+            if (renderMode == ParticleRenderModeType.Billboard) {
+                renderMode_vs = "particle_rm_billboard";
+            } else if (renderMode == ParticleRenderModeType.StretchedBillboard) {
+                renderMode_vs = "particle_rm_stretched";
+            } else if (renderMode == ParticleRenderModeType.Mesh) {
+                renderMode_vs = "particle_rm_mesh";
+            }
+            this.vertex_ShaderName[ShaderPhaseType.local_vertex] = this.vertex_ShaderName[ShaderPhaseType.local_vertex] || [];
+            this.vertex_ShaderName[ShaderPhaseType.local_vertex].push(renderMode_vs);
+
+            //初始化顶点数据
             var node: ParticleDataShape = this._node = <ParticleDataShape>data;
             if (node.type == ParticleDataShape.Point) {
                 var pointShape: Vec3ConstValueShape = new Vec3ConstValueShape();
