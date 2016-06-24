@@ -1,19 +1,70 @@
 module egret3d {
 
+    /**
+    * @private
+    */
     export enum CurveType { Line, BesselCurve };
 
+    /**
+    * @language zh_CN
+    * @class egret3d.AnimCurve
+    * @classdesc
+    * AnimCurve 类为动画曲线，其中包含该曲线的类型，起始结束时刻以及参数�?
+    * 
+    * @version Egret 3.0
+    * @platform Web,Native
+    * @includeExample animation/PropertyAnimation/AnimCurve.ts
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class AnimCurve {
+
+        /**
+        * @private
+        */
         public type: CurveType = CurveType.Line;
+
+        /**
+        * @private
+        */
         public start: Point = new Point();
+
+        /**
+        * @private
+        */
         public end: Point = new Point();
+
+        /**
+        * @private
+        */
         public c1: Point = new Point();
+
+        /**
+        * @private
+        */
         public c2: Point = new Point();
+
+        /**
+        * @private
+        */
         public cache: number[] = null;
+
+        /**
+        * @private
+        */
         public useCache: boolean = false;
 
         public constructor() {
         }
 
+        /**
+        * @language zh_CN
+        * 计算数�?
+        * @param time 某个时刻
+        * @returns number 该时刻对应的数�?
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public calculateValue(time: number): number {
 
             if (time < this.start.x || time > this.end.x) {
@@ -54,17 +105,18 @@ module egret3d {
             return this.start.y * _1t3 + 3 * this.c1.y * t * _1t2 + 3 * this.c2.x * t * t * _1t + this.end.y * t * t * t;
         }
 
+        /**
+        * @private
+        */
         public cacheCurveData(): void {
 
-            return;
+            this.cache = [];
 
-            //this.cache = [];
+            for (var time = this.start.x; time < this.end.x; time++) {
+                this.cache.push(this.calculateValue(time));
+            }
 
-            //for (var time = this.start.x; time < this.end.x; time++) {
-            //    this.cache.push(this.calculateValue(time));
-            //}
-
-            //this.useCache = true;
+            this.useCache = true;
         }
     }
 }

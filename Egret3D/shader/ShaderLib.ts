@@ -796,6 +796,22 @@ module egret3d {
 			"float particle(  ParticleData curParticle ){ \n" +
 			"} \n",
 
+			"particle_diffuse_fragment":
+			"uniform sampler2D diffuseTexture; \n" +
+			"vec4 diffuseColor ; \n" +
+			"vec2 particleUVRoll = vec2(0.0); \n" +
+			"void main() { \n" +
+			"if( diffuseColor.w == 0.0 ){ \n" +
+			"discard; \n" +
+			"} \n" +
+			"uv_0 += particleUVRoll; \n" +
+			"diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
+			"if( diffuseColor.w <= materialSource.cutAlpha ){ \n" +
+			"discard; \n" +
+			"}else \n" +
+			"diffuseColor.xyz *= diffuseColor.w ; \n" +
+			"} \n",
+
 			"particle_end":
 			"float particle( ParticleData curParticle ){ \n" +
 			"return 1.0 ; \n" +
@@ -969,6 +985,12 @@ module egret3d {
 			"e_discard(); \n" +
 			"}else{ \n" +
 			"} \n" +
+			"} \n",
+
+			"particle_uv_roll_fs":
+			"uniform float uniform_particleUVRoll[2]; \n" +
+			"void main() { \n" +
+			"particleUVRoll = vec2(particleVertex.x * uniform_particleUVRoll[0], particleVertex.x * uniform_particleUVRoll[1]); \n" +
 			"} \n",
 
 			"particle_velocity":

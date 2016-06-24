@@ -59,15 +59,31 @@
          /**
          * @language zh_CN
          * 构建一个场景加载对象 构建后直接加载
-         * @param name 场景名字
-         * @param mapConfig 场景配置文件
+         * @param name 场景名字 默认为null 不加载 有值时 直接加载 
+         * @param mapConfig 场景配置文件 默认为"MapConfig.xml"
          * @param path 场景文件路径 默认"resource/scene/"
          * @version Egret 3.0
          * @platform Web,Native
          */
-        constructor(name: string, mapConfig: string = "MapConfig.xml", path: string = "resource/scene/") {
+        constructor(name: string = null, mapConfig: string = "MapConfig.xml", path: string = "resource/scene/") {
             super();
             this.container = new Object3D();
+            if (name) {
+                this.load(name, mapConfig, path);
+            }
+           
+        }
+
+         /**
+         * @language zh_CN
+         * 加载场景
+         * @param name 场景名字
+         * @param mapConfig 场景配置文件 默认为"MapConfig.xml"
+         * @param path 场景文件路径 默认"resource/scene/"
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public load(name: string, mapConfig: string = "MapConfig.xml", path: string = "resource/scene/") {
             this._pathRoot = path + name + "/";
             this._path = this._pathRoot + mapConfig;
             this._xmlLoader = new URLLoader(this._path);
@@ -440,7 +456,6 @@
                     mesh.addSubMaterial(i, material);
                 }
 
-                material.lightGroup = this._lightGroup;
                 var load: URLLoader = null;
 
                 if (matData.diffuseTextureName != "") {
@@ -556,6 +571,9 @@
                     }
                 }
             }
+
+            mesh.lightGroup = this._lightGroup;
+
         }
         //灯光
         private createLight(): void {
