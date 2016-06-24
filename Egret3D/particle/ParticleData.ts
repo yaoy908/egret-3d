@@ -49,6 +49,22 @@
         Sphere,
     }
 
+
+    /**
+    * @language zh_CN
+    * 粒子的几何形状
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export enum ParticleRenderModeType {
+        Billboard,
+        StretchedBillboard,
+        HorizontalBillboard,
+        VerticalBillboard,
+        Mesh,
+    }
+
+
     /**
     * @language zh_CN
     * 粒子出生颜色
@@ -153,6 +169,10 @@
         public rotation: Vector3D = new Vector3D(0, 0, 0, 1);
         public scale: Vector3D = new Vector3D(1, 1, 1, 1);
         public position: Vector3D = new Vector3D(0, 0, 0, 1);
+
+        //render mode
+        public renderMode: number = ParticleRenderModeType.Billboard;
+
 
         constructor() {
             super(ParticleDataNodeType.Property);
