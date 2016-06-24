@@ -60,7 +60,7 @@
          * @language zh_CN
          * 构建一个场景加载对象 构建后直接加载
          * @param name 场景名字
-         * @param mapConfig 场景配置文件
+         * @param mapConfig 场景配置文件 默认为"MapConfig.xml"
          * @param path 场景文件路径 默认"resource/scene/"
          * @version Egret 3.0
          * @platform Web,Native

@@ -1,5 +1,8 @@
 module egret3d {
 
+    /**
+    * @private
+    */
     export enum CurveType { Line, BesselCurve };
 
     /**
@@ -15,12 +18,40 @@ module egret3d {
     * @platform Web,Native
     */
     export class AnimCurve {
+
+        /**
+        * @private
+        */
         public type: CurveType = CurveType.Line;
+
+        /**
+        * @private
+        */
         public start: Point = new Point();
+
+        /**
+        * @private
+        */
         public end: Point = new Point();
+
+        /**
+        * @private
+        */
         public c1: Point = new Point();
+
+        /**
+        * @private
+        */
         public c2: Point = new Point();
+
+        /**
+        * @private
+        */
         public cache: number[] = null;
+
+        /**
+        * @private
+        */
         public useCache: boolean = false;
 
         public constructor() {
@@ -74,6 +105,9 @@ module egret3d {
             return this.start.y * _1t3 + 3 * this.c1.y * t * _1t2 + 3 * this.c2.x * t * t * _1t + this.end.y * t * t * t;
         }
 
+        /**
+        * @private
+        */
         public cacheCurveData(): void {
 
             this.cache = [];
