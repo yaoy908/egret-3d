@@ -374,11 +374,6 @@
                         var uvNode: ParticleUVRollNode = new ParticleUVRollNode();
                         uvNode.initNode(null, method);
                         nodes.push(uvNode);
-                        //var uvScrollMethod: UVRollMethod = new UVRollMethod();
-                        //uvScrollMethod.speedU = method.uSpeed;
-                        //uvScrollMethod.speedV = method.vSpeed;
-                        //uvScrollMethod.start(true);
-                        //material.diffusePass.addMethod(uvScrollMethod);
                     }
                     else if (method.type == MaterialMethodData.alphaMaskMethod) {
                         //var maskmapMethod: AlphaMaskMethod = new AlphaMaskMethod();
@@ -396,6 +391,13 @@
                         //streamerMethod.steamerTexture = streamerTexture ? streamerTexture : CheckerboardTexture.texture;
                     }
                 }
+            }
+
+            //texture sheet
+            if (this._data.textureSheet) {
+                var textureSheet: ParticleTextureSheetNode = new ParticleTextureSheetNode();
+                textureSheet.initNode(null, this._data.textureSheet);
+                nodes.push(textureSheet);
             }
 
             for (var i: number = 0, count: number = nodes.length; i < count; i++) {

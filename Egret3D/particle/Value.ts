@@ -206,6 +206,8 @@
         public radiusBottom: number = 20;
         public height: number = 20;
 
+        //目前没写完，只支持Volume和VolumeShell，后面慢慢补充
+        public coneType: number = ParticleConeShapeType.Volume;
         //圆筒的尖端延长方向的交汇点，如果top和bottom的半径相等，这个值是null
         public origPoint: Vector3D;
 
@@ -218,8 +220,14 @@
                 for (var i: number = 0; i < num; i++) {
                     pos = new Vector3D();
                     angle = Math.random() * 2 * Math.PI;
+                   
                     pos.x = Math.sin(angle) * this.radiusBottom;
                     pos.z = Math.cos(angle) * this.radiusBottom;
+                    if (this.coneType == ParticleConeShapeType.Volume) {
+                        var random: number = Math.random();
+                        pos.x *= random;
+                        pos.y *= random;
+                    }
                     pos.y = Math.random() * this.height - this.height * 0.5;
                     values.push(pos);
                 }
@@ -250,8 +258,15 @@
                         targetR = radiusT_B * (this.height / 2 - pos.y) / this.height;
                         targetR += this.radiusBottom;
                     }
+
+
                     pos.x = Math.sin(angle) * targetR;
                     pos.z = Math.cos(angle) * targetR;
+                    if (this.coneType == ParticleConeShapeType.Volume) {
+                        var random: number = Math.random();
+                        pos.x *= random;
+                        pos.y *= random;
+                    }
 
                     values.push(pos);
                 }
