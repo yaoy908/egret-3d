@@ -39,7 +39,7 @@
     <randomDirection>false</randomDirection>
     <cube width="0" height="0" depth="0" />
     <sphereRadius>10</sphereRadius>
-    <hemiSphereRaiuds>20</hemiSphereRaiuds>
+    <hemiSphereRadius>20</hemiSphereRadius>
     <cone coneHeight="10" coneRadiusBottom="4" coneRadiusTop="12"></cone>
   </shape>
   <rotationBirth>

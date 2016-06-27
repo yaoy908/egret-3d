@@ -74,7 +74,7 @@
     <randomDirection>false</randomDirection>
     <cube width="0" height="0" depth="0"></cube>
     <sphereRadius>0</sphereRadius>
-    <hemiSphereRaiuds>0</hemiSphereRaiuds>
+    <hemiSphereRadius>0</hemiSphereRadius>
     <cone coneHeight="10" coneRadiusBottom="4" coneRadiusTop="6"></cone>
   </shape>
   

@@ -75,7 +75,7 @@
                 this._positions = sphereShape;
             } else if (node.type == ParticleDataShapeType.HemiSphere) {
                 var hemiShape: HemiBallValueShape = new HemiBallValueShape();
-                hemiShape.r = node.hemiSphereRaiuds;
+                hemiShape.r = node.hemiSphereRadius;
                 this._positions = hemiShape;
             } else if (node.type == ParticleDataShapeType.Cone) {
                 var coneShape: CylinderValueShape = new CylinderValueShape();

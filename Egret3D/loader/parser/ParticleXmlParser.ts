@@ -218,8 +218,8 @@
             });
             //sphere
             shape.sphereRadius = Number(this.getNode(node, "sphereRadius").textContent);
-            //hemiSphereRaiuds
-            shape.hemiSphereRaiuds = Number(this.getNode(node, "hemiSphereRaiuds").textContent);
+            //hemiSphereRadius
+            shape.hemiSphereRadius = Number(this.getNode(node, "hemiSphereRadius").textContent);
             //cone
             var cone: Node = this.getNode(node, "cone");
             this.eachAttr(cone, function (label: string, value: string): void {

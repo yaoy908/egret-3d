@@ -335,7 +335,7 @@
         public sphereRadius: number = 10;
 
         //半球
-        public hemiSphereRaiuds: number = 10;
+        public hemiSphereRadius: number = 10;
         //圆筒状
         public coneHeight: number = 10;
         public coneRadiusBottom: number = 2;
