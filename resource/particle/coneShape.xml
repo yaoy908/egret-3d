@@ -27,7 +27,7 @@
     </transform>
 
     <render>
-      <renderMode>Billboard</renderMode>
+      <renderMode>StretchedBillboard</renderMode>
 
     </render>
   </property>
@@ -70,12 +70,12 @@
   </life>
   
   <shape>
-    <type>Cube</type>
+    <type>Cone</type>
     <randomDirection>false</randomDirection>
     <cube width="0" height="0" depth="0"></cube>
     <sphereRadius>0</sphereRadius>
     <hemiSphereRaiuds>0</hemiSphereRaiuds>
-    <cone coneHeight="10" coneRadiusBottom="4" coneRadiusTop="6"></cone>
+    <cone coneHeight="10" coneRadiusBottom="4" coneRadiusTop="6" type="Volume"></cone>
   </shape>
   
   
@@ -278,7 +278,7 @@
 
   
   <mat id="0">
-    <diffuseTextureName>Textures/sponza_column_c_diff.jpg</diffuseTextureName>
+    <diffuseTextureName>arrow2.png</diffuseTextureName>
     <specularTextureName />
     <diffuseColor>0xffffff</diffuseColor>
     <ambientColor>0xffffff</ambientColor>

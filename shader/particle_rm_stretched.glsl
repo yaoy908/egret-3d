@@ -8,9 +8,9 @@ mat4 getRenderModeMatrix(mat4 cameraMatrix) {
 }
 
 
-void updateStretchedBillBoard(vec3 fromPos, vec3 toPos, mat4 viewMatrix){
+void updateStretchedBillBoard(vec3 moveDir, mat4 viewMatrix){
 
-  vec4 dirVector = vec4(toPos - fromPos, 0.0); 
+  vec4 dirVector = vec4(moveDir, 0.0); 
   float scaleBefore = dirVector.x * dirVector.x + dirVector.y * dirVector.y + dirVector.z * dirVector.z; 
   scaleBefore = sqrt(scaleBefore); 
   dirVector = viewMatrix * dirVector; 

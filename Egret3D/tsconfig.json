@@ -227,7 +227,7 @@
         "particle/particleNode/ParticleRotationConstNode.ts",
         "particle/particleNode/ParticleRotationOneBezierNode.ts",
         "particle/particleNode/ParticleRotationTwoBezierNode.ts",
-        "particle/particleNode/ParticleUVSpriteSheetNode.ts",
+        "particle/particleNode/ParticleTextureSheetNode.ts",
         "particle/particleNode/ParticleUVRollNode.ts",
         
         "particle/ParticleAnimationState.ts",

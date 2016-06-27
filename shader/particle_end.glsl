@@ -41,7 +41,7 @@ mat4 getRenderModeMatrix(mat4 cameraMatrix){
 }
 
 //rewrite by stretched
-void updateStretchedBillBoard(vec3 fromPos, vec3 toPos, mat4 billboardMatrix){
+void updateStretchedBillBoard(vec3 moveDir, mat4 billboardMatrix){
 		
 }
 
@@ -110,7 +110,7 @@ void main(void) {
 		velocityMultiVec3 -= currentTime * currentTime * particleStateData.gravity;
 		
 		//是否需要修改local position指向运动方向，直接修改localPosition
-		updateStretchedBillBoard(position_emitter, velocityMultiVec3, uniform_ViewMatrix);
+		updateStretchedBillBoard(velocityMultiVec3, uniform_ViewMatrix);
 		//
 		position_emitter += velocityMultiVec3;
 		localPosition.xyz *= vec3(particleStateData.scaleX, particleStateData.scaleY, particleStateData.scaleZ);

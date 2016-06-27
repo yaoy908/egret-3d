@@ -2,7 +2,7 @@
 vec4 diffuseColor ;
 
 
-void calcUVCoord(vec3 particleVertex){
+void calcUVCoord(){
 
 }
 
@@ -10,7 +10,7 @@ void main() {
     if( diffuseColor.w == 0.0 ){
 		discard;
 	}
-	calcUVCoord(particleVertex);
+	calcUVCoord();
 	diffuseColor = texture2D(diffuseTexture , uv_0 );
     
     if( diffuseColor.w <= materialSource.cutAlpha ){
