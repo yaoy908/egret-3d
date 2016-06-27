@@ -35,7 +35,7 @@
             data.followTarget = new ParticleDataFollowTarget();
 
             data.property.particleCount = 200;
-            data.shape.type = ParticleDataShape.Point;
+            data.shape.type = ParticleDataShapeType.Point;
 
             var moveSpeed: ParticleDataMoveSpeed = new ParticleDataMoveSpeed();
             moveSpeed.min = 80;

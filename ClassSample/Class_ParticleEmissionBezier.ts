@@ -35,7 +35,7 @@
             data.followTarget = new ParticleDataFollowTarget();
 
             data.property.particleCount = 1000;
-            data.shape.type = ParticleDataShape.Point;
+            data.shape.type = ParticleDataShapeType.Point;
             data.property.colorType = ParticleBirthColorType.Const;
             data.property.colorConst1.setColorARGB(0xff0000ff);
             data.property.colorConst2.setColorARGB(0xff00ff00);
