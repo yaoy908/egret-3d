@@ -9,8 +9,14 @@
     * @platform Web,Native
     */
     export class SphereSky extends Mesh {
-           
-        private _camera: Camera3D;
+
+        /**
+        * @language zh_CN
+        * 天空的摄像机
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public camera: Camera3D;
 
         /**
         * @language zh_CN
@@ -21,7 +27,7 @@
         */
         constructor(material: MaterialBase, camera: Camera3D = null) {
             super(new SphereGeometry(10000), material);
-            this._camera = camera;
+            this.camera = camera;
             material.cullMode = ContextConfig.FRONT;
             material.ambientColor = 0xffffff;
         } 
@@ -37,8 +43,8 @@
         */
         public update(time: number, delay: number, camera: Camera3D) {
             super.update(time, delay, camera);
-            if (this._camera) {
-                this.position = this._camera.globalPosition;
+            if (this.camera) {
+                this.globalPosition = this.camera.globalPosition;
             }
         }
     }

@@ -54,7 +54,7 @@
         private _heightTextureLoader: any = {};
         private _taskCount: number = 0;
         private _event: LoaderEvent3D = new LoaderEvent3D();
-        private _lightGroup: LightGroup = new LightGroup();
+        public lightGroup: LightGroup = new LightGroup();
 
          /**
          * @language zh_CN
@@ -572,7 +572,7 @@
                 }
             }
 
-            mesh.lightGroup = this._lightGroup;
+            mesh.lightGroup = this.lightGroup;
 
         }
         //灯光
@@ -591,7 +591,7 @@
                     dirLight.halfIntensity = mapLightData.halfIntensity;
                     dirLight.intensity = mapLightData.intensity;
 
-                    this._lightGroup.addLight(dirLight);
+                    this.lightGroup.addLight(dirLight);
 
                 } else if (mapLightData.type == LightType.pointlight && this._mapXmlParser.pointLight) {
                     var pLight: PointLight = new PointLight(0);
@@ -604,7 +604,7 @@
 
                     pLight.falloff = mapLightData.falloff;
                     pLight.intensity = mapLightData.intensity;
-                    this._lightGroup.addLight(pLight);
+                    this.lightGroup.addLight(pLight);
                 }
             }
 
