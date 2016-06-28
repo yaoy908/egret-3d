@@ -412,13 +412,13 @@
 
             e.preventDefault();
 
-            var x1: number = e.targetTouches[0].clientX - Input.canvas.x;
-            var y1: number = e.targetTouches[0].clientY - Input.canvas.y;
+            var x1: number = e.targetTouches[0].clientX - Input.canvas.x + Input.canvas.offsetX;
+            var y1: number = e.targetTouches[0].clientY - Input.canvas.y + Input.canvas.offsetY;
 
             if (e.targetTouches.length == 2) {
 
-                var x2: number = e.targetTouches[1].clientX - Input.canvas.x;
-                var y2: number = e.targetTouches[1].clientY - Input.canvas.y;
+                var x2: number = e.targetTouches[1].clientX - Input.canvas.x + Input.canvas.offsetX;
+                var y2: number = e.targetTouches[1].clientY - Input.canvas.y + Input.canvas.offsetY;
 
                 this.onPinch(x1, y1, x2, y2);
             }
@@ -443,16 +443,16 @@
 
             if (e.targetTouches.length > 1) {
 
-                var x: number = e.targetTouches[0].clientX - Input.canvas.x;
-                var y: number = e.targetTouches[0].clientY - Input.canvas.y;
-                var x1: number = e.targetTouches[1].clientX - Input.canvas.x;
-                var y1: number = e.targetTouches[1].clientY - Input.canvas.y;
+                var x: number = e.targetTouches[0].clientX - Input.canvas.x + Input.canvas.offsetX;
+                var y: number = e.targetTouches[0].clientY - Input.canvas.y + Input.canvas.offsetY;
+                var x1: number = e.targetTouches[1].clientX - Input.canvas.x + Input.canvas.offsetX;
+                var y1: number = e.targetTouches[1].clientY - Input.canvas.y + Input.canvas.offsetY;
 
                 this.onPinch(x, y, x1, y1);
             }
             else if (e.targetTouches.length == 1) {
 
-                this.onSwipe(e.targetTouches[0].clientX - Input.canvas.x, e.targetTouches[0].clientY - Input.canvas.y);
+                this.onSwipe(e.targetTouches[0].clientX - Input.canvas.x + Input.canvas.offsetX, e.targetTouches[0].clientY - Input.canvas.y + Input.canvas.offsetY);
             }
             else {
 
@@ -474,8 +474,8 @@
             Input.mouseLastX = Input.mouseX;
             Input.mouseLastY = Input.mouseY;
 
-            Input.mouseX = e.targetTouches[0].clientX - Input.canvas.x;
-            Input.mouseY = e.targetTouches[0].clientY - Input.canvas.y;
+            Input.mouseX = e.targetTouches[0].clientX - Input.canvas.x + Input.canvas.offsetX;
+            Input.mouseY = e.targetTouches[0].clientY - Input.canvas.y + Input.canvas.offsetY;
 
             Input.mouseOffsetX = Input.mouseX - Input.mouseLastX;
             Input.mouseOffsetY = Input.mouseY - Input.mouseLastY;
@@ -486,7 +486,7 @@
             if (e.targetTouches.length > 1) {
 
                 var newPosition1: Point = new Point(Input.mouseX, Input.mouseY);
-                var newPosition2: Point = new Point(e.targetTouches[1].clientX - Input.canvas.x, e.targetTouches[1].clientY - Input.canvas.y);
+                var newPosition2: Point = new Point(e.targetTouches[1].clientX - Input.canvas.x + Input.canvas.offsetX, e.targetTouches[1].clientY - Input.canvas.y + Input.canvas.offsetY);
 
                 if (this._oldPosition1 == null)
                     this._oldPosition1 = newPosition1;
@@ -562,8 +562,8 @@
             Input.mouseLastX = Input.mouseX;
             Input.mouseLastY = Input.mouseY;
 
-            Input.mouseX = e.clientX - Input.canvas.x;
-            Input.mouseY = e.clientY - Input.canvas.y;
+            Input.mouseX = e.clientX - Input.canvas.x + Input.canvas.offsetX;
+            Input.mouseY = e.clientY - Input.canvas.y + Input.canvas.offsetY;
 
             Input.mouseOffsetX = Input.mouseX - Input.mouseLastX;
             Input.mouseOffsetY = Input.mouseY - Input.mouseLastY;

@@ -68,6 +68,7 @@
         "anim/AnimationCurve.ts",
         "anim/IAnimationState.ts",
         "anim/IAnimation.ts",
+        "anim/TimerAxis.ts",
 
         "anim/PropertyAnimation/AnimCurve.ts",
         "anim/PropertyAnimation/PropertyAnim.ts",
