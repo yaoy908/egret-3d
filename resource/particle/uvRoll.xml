@@ -23,8 +23,9 @@
   </emission>
   <life>
     <duration>5</duration>
-    <lifeMax>20</lifeMax>
-    <lifeMin>20</lifeMin>
+    <type>Const</type>
+    <max>20</max>
+    <min>20</min>
     <delay>0</delay>
     <loop>true</loop>
   </life>
@@ -37,18 +38,21 @@
     <cone coneHeight="10" coneRadiusBottom="4" coneRadiusTop="12"></cone>
   </shape>
   <rotationBirth>
-    <min x="0" y="0" z="0" />
-    <max x="0" y="0" z="0" />
+    <type>Const</type>
+    <max>0</max>
+    <min>0</min>
   </rotationBirth>
   <scaleBirth>
-    <max x="1" y="1" z="1" />
-    <min x="1" y="1" z="1" />
+    <type>Const</type>
+    <max>1</max>
+    <min>1</min>
   </scaleBirth>
   <geometry>
     <type>Plane</type>
     <plane width="20" height="20" />
   </geometry>
   <moveSpeed>
+    <type>Const</type>
     <max>5</max>
     <min>5</min>
     <velocityOver1>

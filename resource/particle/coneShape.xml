@@ -63,8 +63,9 @@
   
   <life>
     <duration>5</duration>
-    <lifeMax>2</lifeMax>
-    <lifeMin>5</lifeMin>
+    <type>Const</type>
+    <max>5</max>
+    <min>2</min>
     <delay>0</delay>
     <loop>true</loop>
   </life>
@@ -80,14 +81,16 @@
   
   
   <rotationBirth>
-    <min x="0" y="0" z="0"></min>
-    <max x="0" y="0" z="0"></max>
+    <type>Const</type>
+    <max>0</max>
+    <min>0</min>
   </rotationBirth>
   
   
   <scaleBirth>
-    <min x="1" y="1" z="1"></min>
-    <max x="1" y="1" z="1"></max>
+    <type>Const</type>
+    <max>1</max>
+    <min>1</min>
   </scaleBirth>
   
   <geometry>
@@ -99,6 +102,7 @@
   
   
   <moveSpeed>
+    <type>Const</type>
     <max>40</max>
     <min>40</min>
     <velocityOver>

@@ -265,6 +265,7 @@
         public rate: number = 10;
         public type: number = ParticleValueType.Const;
         public bursts: Array<Point>;
+
         public bezier: BezierData = new BezierData();
         constructor() {
             super(ParticleDataNodeType.Emission);
@@ -285,10 +286,15 @@
 
 
     export class ParticleDataLife extends ParticleDataNode{
+        public type: number = ParticleValueType.Const;
+        public max: number = 0;
+        public min: number = 0;
+        public bezier1: BezierData;
+        public bezier2: BezierData;
        
         public duration: number = 5;
-        public lifeMax: number = 2;
-        public lifeMin: number = 2;
+
+
         public delay: number = 0;
         public loop: boolean = true;
         
@@ -298,14 +304,25 @@
         }
         public validate(): void {
             //life
-            if (this.lifeMin < 0) {
-                this.lifeMin = 0;
+            if (this.type == ParticleValueType.Const) {
+                this.min = this.max;
             }
-            if (this.lifeMax < this.lifeMin) {
-                this.lifeMax = this.lifeMin;
+            if (this.type == ParticleValueType.RandomConst) {
+                if (this.min > this.max) {
+                    this.min = this.max;
+                }
             }
-            if (this.lifeMax < 0) {
-                this.lifeMin = this.lifeMax = 1;
+            if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
+                if (this.bezier1 == null) {
+                    this.bezier1 = new BezierData();
+                }
+                this.bezier1.validate();
+            }
+            if (this.type == ParticleValueType.TwoBezier) {
+                if (this.bezier2 == null) {
+                    this.bezier2 = new BezierData();
+                }
+                this.bezier2.validate();
             }
             //delay
             if (this.delay < 0) {
@@ -376,27 +393,35 @@
 
     export class ParticleDataRotationBirth extends ParticleDataNode {
         //初始角度
-        public max: Vector3D = new Vector3D();
-        public min: Vector3D = new Vector3D();
-
+        public type: number = ParticleValueType.Const;
+        public max: number = 0;
+        public min: number = 0;
+        public bezier1: BezierData;
+        public bezier2: BezierData;
         constructor() {
             super(ParticleDataNodeType.RotationBirth);
         }
         public validate(): void {
-            if (this.max == null) {
-                this.max = new Vector3D();
+
+            if (this.type == ParticleValueType.Const) {
+                this.min = this.max;
             }
-            if (this.min == null) {
-                this.min = new Vector3D();
+            if (this.type == ParticleValueType.RandomConst) {
+                if (this.min > this.max) {
+                    this.min = this.max;
+                }
             }
-            if (this.min.x > this.max.x) {
-                this.min.x = this.max.x;
+            if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
+                if (this.bezier1 == null) {
+                    this.bezier1 = new BezierData();
+                }
+                this.bezier1.validate();
             }
-            if (this.min.y > this.max.y) {
-                this.min.y = this.max.y;
-            }
-            if (this.min.z > this.max.z) {
-                this.min.z = this.max.z;
+            if (this.type == ParticleValueType.TwoBezier) {
+                if (this.bezier2 == null) {
+                    this.bezier2 = new BezierData();
+                }
+                this.bezier2.validate();
             }
         }
     }
@@ -405,30 +430,36 @@
 
     export class ParticleDataScaleBirth extends ParticleDataNode {
         //初始缩放值
-        public max: Vector3D = new Vector3D(1, 1, 1);
-        public min: Vector3D = new Vector3D(1, 1, 1);
-
+        public type: number = ParticleValueType.Const;
+        public max: number = 0;
+        public min: number = 0;
+        public bezier1: BezierData;
+        public bezier2: BezierData;
         constructor() {
             super(ParticleDataNodeType.ScaleBirth);
         }
         public validate(): void {
 
-            if (this.max == null) {
-                this.max = new Vector3D(1, 1, 1);
+            if (this.type == ParticleValueType.Const) {
+                this.min = this.max;
             }
-            if (this.min == null) {
-                this.min = new Vector3D(1, 1, 1);
+            if (this.type == ParticleValueType.RandomConst) {
+                if (this.min > this.max) {
+                    this.min = this.max;
+                }
             }
-            if (this.min.x > this.max.x) {
-                this.min.x = this.max.x;
+            if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
+                if (this.bezier1 == null) {
+                    this.bezier1 = new BezierData();
+                }
+                this.bezier1.validate();
             }
-            if (this.min.y > this.max.y) {
-                this.min.y = this.max.y;
+            if (this.type == ParticleValueType.TwoBezier) {
+                if (this.bezier2 == null) {
+                    this.bezier2 = new BezierData();
+                }
+                this.bezier2.validate();
             }
-            if (this.min.z > this.max.z) {
-                this.min.z = this.max.z;
-            }
-
         }
     }
 
@@ -495,8 +526,12 @@
     export class ParticleDataMoveSpeed extends ParticleDataNode {
        
         //初始速度
+        public type: number = ParticleValueType.Const;
         public max: number = 0;
         public min: number = 0;
+        public bezier1: BezierData;
+        public bezier2: BezierData;
+
         //叠加速度
         public velocityOver: VelocityOverLifeTimeData;
         //速度限制
@@ -517,6 +552,26 @@
             }
             if (this.velocityForce) {
                 this.velocityForce.validate();
+            }
+            if (this.type == ParticleValueType.Const) {
+                this.min = this.max;
+            }
+            if (this.type == ParticleValueType.RandomConst) {
+                if (this.min > this.max) {
+                    this.min = this.max;
+                }
+            }
+            if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
+                if (this.bezier1 == null) {
+                    this.bezier1 = new BezierData();
+                }
+                this.bezier1.validate();
+            }
+            if (this.type == ParticleValueType.TwoBezier) {
+                if (this.bezier2 == null) {
+                    this.bezier2 = new BezierData();
+                }
+                this.bezier2.validate();
             }
         }
     }
@@ -541,6 +596,10 @@
                 this.min = this.max;
             }
 
+            if (this.type == ParticleValueType.Const) {
+                this.min = this.max;
+            }
+            
             if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
                 if (this.bezier1 == null) {
                     this.bezier1 = new BezierData();
@@ -579,7 +638,7 @@
                 this.max = new Vector3D();
             }
             if (this.min == null) {
-                this.min = new Vector3D();
+                this.min = this.max.clone();
             }
             if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
                 if (this.xBezier1 == null) {
@@ -636,7 +695,7 @@
                 this.max = new Vector3D();
             }
             if (this.min == null) {
-                this.min = new Vector3D();
+                this.min = this.max.clone();
             }
             if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
                 if (this.xBezier1 == null) {
@@ -739,7 +798,7 @@
                 this.max = new Vector3D();
             }
             if (this.min == null) {
-                this.min = new Vector3D();
+                this.min = this.max.clone();
             }
             if (this.type == ParticleValueType.OneBezier || this.type == ParticleValueType.TwoBezier) {
                 if (this.bezier1 == null) {
