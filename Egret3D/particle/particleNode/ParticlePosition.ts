@@ -55,29 +55,29 @@
 
             //初始化顶点数据
             var node: ParticleDataShape = this._node = <ParticleDataShape>data;
-            if (node.type == ParticleDataShape.Point) {
+            if (node.type == ParticleDataShapeType.Point) {
                 var pointShape: Vec3ConstValueShape = new Vec3ConstValueShape();
                 pointShape.minX = 0;
                 pointShape.minY = 0;
                 pointShape.minZ = 0;
                 this._positions = pointShape;
             }
-            else if (node.type == ParticleDataShape.Cube) {
+            else if (node.type == ParticleDataShapeType.Cube) {
                 var cubeShape: CubeVector3DValueShape = new CubeVector3DValueShape();
                 cubeShape.width = node.cubeW;
                 cubeShape.height = node.cubeH;
                 cubeShape.depth = node.cubeD;
                 this._positions = cubeShape;
             }
-            else if (node.type == ParticleDataShape.Sphere) {
+            else if (node.type == ParticleDataShapeType.Sphere) {
                 var sphereShape: BallValueShape = new BallValueShape();
                 sphereShape.r = node.sphereRadius;
                 this._positions = sphereShape;
-            } else if (node.type == ParticleDataShape.HemiSphere) {
+            } else if (node.type == ParticleDataShapeType.HemiSphere) {
                 var hemiShape: HemiBallValueShape = new HemiBallValueShape();
                 hemiShape.r = node.hemiSphereRaiuds;
                 this._positions = hemiShape;
-            } else if (node.type == ParticleDataShape.Cone) {
+            } else if (node.type == ParticleDataShapeType.Cone) {
                 var coneShape: CylinderValueShape = new CylinderValueShape();
                 coneShape.radiusTop = node.coneRadiusTop;
                 coneShape.radiusBottom = node.coneRadiusBottom;
@@ -131,18 +131,18 @@
                 if (data.shape.randomDirection) {
                     dir.setTo(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
                 } else {
-                    if (this._node.type == ParticleDataShape.Point) {
+                    if (this._node.type == ParticleDataShapeType.Point) {
                         dir.setTo(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
-                    } else if (this._node.type == ParticleDataShape.Cube) {
+                    } else if (this._node.type == ParticleDataShapeType.Cube) {
                         dir.setTo(0, 1, 0, 1);
                         this.rotationMat.identity();
                         this.rotationMat.rotation(data.property.rotation.x, data.property.rotation.y, data.property.rotation.z);
                         this.rotationMat.transformVector4(dir, dir);
-                    } else if (this._node.type == ParticleDataShape.Sphere) {
+                    } else if (this._node.type == ParticleDataShapeType.Sphere) {
                         dir.copyFrom(recordPos);
-                    } else if (this._node.type == ParticleDataShape.HemiSphere) {
+                    } else if (this._node.type == ParticleDataShapeType.HemiSphere) {
                         dir.copyFrom(recordPos);
-                    } else if (this._node.type == ParticleDataShape.Cone) {
+                    } else if (this._node.type == ParticleDataShapeType.Cone) {
                         dir = coneShape.getDirection(recordPos, dir);
                     }
 

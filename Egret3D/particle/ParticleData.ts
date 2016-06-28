@@ -80,6 +80,20 @@
     }
 
 
+    /**
+    * @language zh_CN
+    * 发射器形状
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export enum ParticleDataShapeType {
+        Point,
+        Cube,
+        Sphere,
+        HemiSphere,
+        Cone,
+    }
+
 
     /**
     * @language zh_CN
@@ -93,6 +107,9 @@
         Volume,
         VolumeShell,
     }
+
+
+
 
 
 
@@ -304,13 +321,9 @@
 
     export class ParticleDataShape extends ParticleDataNode {
 
-        public static Point: number = 0;
-        public static Cube: number = 1;
-        public static Sphere: number = 2;
-        public static HemiSphere: number = 3;
-        public static Cone: number = 4;
+
         //粒子分布类型
-        public type: number = ParticleDataShape.Cube;
+        public type: number = ParticleDataShapeType.Cube;
         public randomDirection: boolean = false;
 
         //正方体
@@ -333,7 +346,7 @@
             super(ParticleDataNodeType.Shape);
         }
         public validate(): void {
-            if (this.type == ParticleDataShape.Cube) {
+            if (this.type == ParticleDataShapeType.Cube) {
                 if (this.cubeW < 0) {
                     this.cubeW = 0;
                 }
@@ -344,7 +357,7 @@
                     this.cubeD = 0;
                 }
             }
-            else if (this.type == ParticleDataShape.Sphere) {
+            else if (this.type == ParticleDataShapeType.Sphere) {
                 if (this.sphereRadius < 0) {
                     this.sphereRadius = 10;
                 }
