@@ -180,6 +180,8 @@
         "material/method/CubeMethod.ts",
         "material/method/ColorMethod.ts",
         "material/method/WaterWaveMethod.ts",
+        "material/method/WaterNormalMethod.ts",
+        "material/method/EnvironmentMethod.ts",
 
         "material/pass/PassUsage.ts",
         "material/MaterialData.ts",
@@ -246,6 +248,7 @@
         "texture/PVRTexture.ts",
         "texture/CubeTexture.ts",
         "texture/CheckerboardTexture.ts",
+        "texture/CheckerboardCubeTexture.ts",
         "texture/VideoTexture.ts",
         "texture/RenderTexture.ts",
 
