@@ -20,6 +20,7 @@
         ScaleBezier,
         RotationSpeed,
         ColorOffset,
+        TextureSheet,
         //Acceleration,
     }
 
@@ -49,6 +50,22 @@
         Sphere,
     }
 
+
+    /**
+    * @language zh_CN
+    * 粒子的几何形状
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export enum ParticleRenderModeType {
+        Billboard,
+        StretchedBillboard,
+        HorizontalBillboard,
+        VerticalBillboard,
+        Mesh,
+    }
+
+
     /**
     * @language zh_CN
     * 粒子出生颜色
@@ -61,6 +78,38 @@
         OneGradients,
         TwoGradients,
     }
+
+
+    /**
+    * @language zh_CN
+    * 发射器形状
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export enum ParticleDataShapeType {
+        Point,
+        Cube,
+        Sphere,
+        HemiSphere,
+        Cone,
+    }
+
+
+    /**
+    * @language zh_CN
+    * 圆筒发射器类型
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export enum ParticleConeShapeType {
+        Base,
+        BaseShell,
+        Volume,
+        VolumeShell,
+    }
+
+
+
 
 
 
@@ -84,6 +133,8 @@
         public rotationSpeed: ParticleDataRotationSpeed;
         public colorOffset: ParticleDataColorOffset;
 
+        public materialData: MaterialSphereData;
+        public textureSheet: ParticleDataTextureSheet;
         /**
         * @language zh_CN
         * @version Egret 3.0
@@ -115,6 +166,10 @@
             if (this.followTarget) {
                 this.followTarget.validate();
             }
+            if (this.textureSheet) {
+                this.textureSheet.validate();
+            }
+
         }
     }
 
@@ -152,6 +207,10 @@
         public rotation: Vector3D = new Vector3D(0, 0, 0, 1);
         public scale: Vector3D = new Vector3D(1, 1, 1, 1);
         public position: Vector3D = new Vector3D(0, 0, 0, 1);
+
+        //render mode
+        public renderMode: number = ParticleRenderModeType.Billboard;
+
 
         constructor() {
             super(ParticleDataNodeType.Property);
@@ -262,25 +321,32 @@
 
     export class ParticleDataShape extends ParticleDataNode {
 
-        public static Point: number = 0;
-        public static Cube: number = 1;
-        public static Sphere: number = 2;
+
         //粒子分布类型
-        public type: number = ParticleDataShape.Cube;
+        public type: number = ParticleDataShapeType.Cube;
         public randomDirection: boolean = false;
 
-        
+        //正方体
         public cubeW: number = 0;
         public cubeH: number = 0;
         public cubeD: number = 0;
 
+        //球型
         public sphereRadius: number = 10;
+
+        //半球
+        public hemiSphereRaiuds: number = 10;
+        //圆筒状
+        public coneHeight: number = 10;
+        public coneRadiusBottom: number = 2;
+        public coneRadiusTop: number = 4;
+        public coneType: number = ParticleConeShapeType.Volume;
 
         constructor() {
             super(ParticleDataNodeType.Shape);
         }
         public validate(): void {
-            if (this.type == ParticleDataShape.Cube) {
+            if (this.type == ParticleDataShapeType.Cube) {
                 if (this.cubeW < 0) {
                     this.cubeW = 0;
                 }
@@ -291,7 +357,7 @@
                     this.cubeD = 0;
                 }
             }
-            else if (this.type == ParticleDataShape.Sphere) {
+            else if (this.type == ParticleDataShapeType.Sphere) {
                 if (this.sphereRadius < 0) {
                     this.sphereRadius = 10;
                 }
@@ -719,7 +785,130 @@
         }
 
         public validate(): void {
-           
+
+        }
+
+    }
+
+    export class ParticleDataTextureSheet extends ParticleDataNode {
+
+        /**
+        * @language zh_CN
+        * tileX 序列帧划分为多少列
+        */
+        public tileX: number = 1;
+
+        /**
+        * @language zh_CN
+        * tileY 序列帧划分为多少行
+        */
+        public tileY: number = 1;
+
+        /**
+        * @language zh_CN
+        * whole 范围是否为全部帧
+        */
+        public whole: boolean = true;
+
+        /**
+        * @language zh_CN
+        * frameType 帧控制类型
+        */
+        public frameType: number = ParticleValueType.Const;
+
+        /**
+        * @language zh_CN
+        * randomRow 是否随机单行
+        */
+        public randomRow: boolean = false;
+        
+        /**
+        * @language zh_CN
+        * row 指定锁定第几行播放
+        */
+        public row: number = 0;
+
+        /**
+        * @language zh_CN
+        * min 常量范围最小值
+        */
+        public min: number = 0;
+
+
+        /**
+        * @language zh_CN
+        * max 常量范围最大值
+        */
+        public max: number = 0;
+
+        /**
+        * @language zh_CN
+        * circles 循环播放次数，最小值为1
+        */
+        public circles: number = 1;
+
+
+        /**
+        * @language zh_CN
+        * bezier1 第一条贝塞尔曲线
+        */
+        public bezier1: BezierData = new BezierData();
+
+
+        /**
+        * @language zh_CN
+        * bezier2 第二条贝塞尔曲线
+        */
+        public bezier2: BezierData = new BezierData();
+
+
+        /**
+        * @language zh_CN
+        * constructor
+        */
+        constructor() {
+            super(ParticleDataNodeType.TextureSheet);
+        }
+
+
+        public validate(): void {
+            //
+            if (this.tileX < 0) {
+                this.tileX = 1;
+            }
+            this.tileX = Math.floor(this.tileX);
+            //
+            if (this.tileY < 0) {
+                this.tileY = 1;
+            }
+            this.tileY = Math.floor(this.tileY);
+            //
+            if (this.max < 0) {
+                this.max = 0;
+            }
+            if (this.min > this.max) {
+                this.min = this.max;
+            }
+            //
+            if (this.frameType == ParticleValueType.OneBezier || this.frameType == ParticleValueType.TwoBezier) {
+                if (this.bezier1 == null) {
+                    this.bezier1 = new BezierData();
+                }
+                this.bezier1.validate();
+            }
+            //
+            if (this.frameType == ParticleValueType.TwoBezier) {
+                if (this.bezier2 == null) {
+                    this.bezier2 = new BezierData();
+                }
+                this.bezier2.validate();
+            }
+            //
+            if (this.circles < 1) {
+                this.circles = 1;
+            }
+
+
         }
     }
 

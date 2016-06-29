@@ -68,6 +68,7 @@
         "anim/AnimationCurve.ts",
         "anim/IAnimationState.ts",
         "anim/IAnimation.ts",
+        "anim/TimerAxis.ts",
 
         "anim/PropertyAnimation/AnimCurve.ts",
         "anim/PropertyAnimation/PropertyAnim.ts",
@@ -105,7 +106,6 @@
         "core/node/Mesh.ts",
         "core/node/BillBoard.ts",
         "core/node/Sky.ts",
-        "core/node/SphereSky.ts",
         "core/node/Wireframe.ts",
 
         "lights/LightBase.ts",
@@ -160,6 +160,7 @@
         "loader/parser/map/MatMethodData.ts",
         "loader/parser/map/MatSphereData.ts",
         "loader/parser/map/MapLightData.ts",
+        "loader/parser/map/HUDData.ts",
 
         "loader/parser/ParserUtils.ts",
         "loader/URLLoader.ts",
@@ -230,8 +231,9 @@
         "particle/particleNode/ParticleRotationConstNode.ts",
         "particle/particleNode/ParticleRotationOneBezierNode.ts",
         "particle/particleNode/ParticleRotationTwoBezierNode.ts",
+        "particle/particleNode/ParticleTextureSheetNode.ts",
+        "particle/particleNode/ParticleUVRollNode.ts",
         
-
         "particle/ParticleAnimationState.ts",
         "particle/ParticleAnimation.ts",
         "particle/ParticleData.ts",

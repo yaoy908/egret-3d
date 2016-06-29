@@ -24,7 +24,7 @@ void main() {
     float startAlpha;
 	float nextAlpha;
 
-    float progress = particleVertex.x/particleVertex.y;
+    float progress = varying_particleData.x/varying_particleData.y;
 	const int maxColorCount = 20;
     for( int i = 1 ; i < maxColorCount ; i++ ){
        if( progress >= fract(uniform_colorTransform[i+maxColorCount-1]) ){

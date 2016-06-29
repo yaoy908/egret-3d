@@ -39,6 +39,13 @@
 
         /**
         * @language zh_CN
+        * 名字
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public name: string = "";
+        /**
+        * @language zh_CN
         * 显示双面的开关。
         * @version Egret 3.0
         * @platform Web,Native

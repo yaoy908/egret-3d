@@ -17,7 +17,7 @@
         private _positions: ValueShape;
         private _node: ParticleDataShape;
 
-        private particleAnimationState: ParticleAnimationState;
+        private _animationState: ParticleAnimationState;
         private attribute_offsetPosition: GLSL.VarRegister;
         constructor() {
             super();
@@ -27,6 +27,7 @@
             this.attribute_offsetPosition.name = "attribute_offsetPosition";
             this.attribute_offsetPosition.size = 3;
             this.attributes.push(this.attribute_offsetPosition);
+
         }
 
 
@@ -37,21 +38,51 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public initNode(data: ParticleDataNode): void {
+        public initNode(data: ParticleDataNode, arg: any): void {
+
+            //根据粒子的属性，选择使用相机方式
+            var renderMode: number = (<ParticleDataProperty>arg).renderMode;
+            var renderMode_vs: string;
+            if (renderMode == ParticleRenderModeType.Billboard) {
+                renderMode_vs = "particle_rm_billboard";
+            } else if (renderMode == ParticleRenderModeType.StretchedBillboard) {
+                renderMode_vs = "particle_rm_stretched";
+            } else if (renderMode == ParticleRenderModeType.Mesh) {
+                renderMode_vs = "particle_rm_mesh";
+            }
+            this.vertex_ShaderName[ShaderPhaseType.local_vertex] = this.vertex_ShaderName[ShaderPhaseType.local_vertex] || [];
+            this.vertex_ShaderName[ShaderPhaseType.local_vertex].push(renderMode_vs);
+
+            //初始化顶点数据
             var node: ParticleDataShape = this._node = <ParticleDataShape>data;
-            if (node.type == ParticleDataShape.Point) {
+            if (node.type == ParticleDataShapeType.Point) {
                 var pointShape: Vec3ConstValueShape = new Vec3ConstValueShape();
                 pointShape.minX = 0;
                 pointShape.minY = 0;
                 pointShape.minZ = 0;
                 this._positions = pointShape;
             }
-            else if (node.type == ParticleDataShape.Cube) {
+            else if (node.type == ParticleDataShapeType.Cube) {
                 var cubeShape: CubeVector3DValueShape = new CubeVector3DValueShape();
                 cubeShape.width = node.cubeW;
                 cubeShape.height = node.cubeH;
                 cubeShape.depth = node.cubeD;
                 this._positions = cubeShape;
+            }
+            else if (node.type == ParticleDataShapeType.Sphere) {
+                var sphereShape: BallValueShape = new BallValueShape();
+                sphereShape.r = node.sphereRadius;
+                this._positions = sphereShape;
+            } else if (node.type == ParticleDataShapeType.HemiSphere) {
+                var hemiShape: HemiBallValueShape = new HemiBallValueShape();
+                hemiShape.r = node.hemiSphereRaiuds;
+                this._positions = hemiShape;
+            } else if (node.type == ParticleDataShapeType.Cone) {
+                var coneShape: CylinderValueShape = new CylinderValueShape();
+                coneShape.radiusTop = node.coneRadiusTop;
+                coneShape.radiusBottom = node.coneRadiusBottom;
+                coneShape.height = node.coneHeight;
+                this._positions = coneShape;
             }
 
         }
@@ -73,39 +104,56 @@
         * @platform Web,Native
         */
         public build(geometry: Geometry, count: number) {
-            this.particleAnimationState = <ParticleAnimationState>this.state;
+            this._animationState = <ParticleAnimationState>this.state;
             var posArray: Vector3D[] = this._positions.calculate(count);
-            var directionArray: Vector3D[] = this.particleAnimationState.directionArray = [];
+            var directionArray: Vector3D[] = this._animationState.directionArray = [];
 
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
-            var data: ParticleData = this.particleAnimationState.emitter.data;
+            var data: ParticleData = this._animationState.emitter.data;
 
+            var recordPos: Vector3D = new Vector3D();//用于计算方向，缩放后的位置不能用于计算方向
+            var coneShape: CylinderValueShape = <CylinderValueShape>this._positions;
             for (var i: number = 0; i < count; ++i) {
                 var pos: Vector3D = posArray[i];
+                recordPos.copyFrom(pos);
                 //缩放______________________________________________________
                 pos.multiply(data.property.scale, pos);
                 //旋转______________________________________________________
-                this.rotationMat.identity();
-                this.rotationMat.rotation(data.property.rotation.x, data.property.rotation.y, data.property.rotation.z);
-                this.rotationMat.transformVector4(pos, pos);
+                if (data.property.rotation.x != 0 || data.property.rotation.y != 0 || data.property.rotation.z != 0) {
+                    this.rotationMat.identity();
+                    this.rotationMat.rotation(data.property.rotation.x, data.property.rotation.y, data.property.rotation.z);
+                    this.rotationMat.transformVector4(pos, pos);
+                }
 
                 //粒子发射方向
                 var dir: Vector3D = new Vector3D();
                 if (data.shape.randomDirection) {
                     dir.setTo(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
                 } else {
-                    if (this._node.type == ParticleDataShape.Point) {
+                    if (this._node.type == ParticleDataShapeType.Point) {
                         dir.setTo(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
-                    } else if (this._node.type == ParticleDataShape.Cube) {
+                    } else if (this._node.type == ParticleDataShapeType.Cube) {
                         dir.setTo(0, 1, 0, 1);
                         this.rotationMat.identity();
                         this.rotationMat.rotation(data.property.rotation.x, data.property.rotation.y, data.property.rotation.z);
                         this.rotationMat.transformVector4(dir, dir);
-                    } else if (this._node.type == ParticleDataShape.Sphere) {
-                        dir.copyFrom(pos);
+                    } else if (this._node.type == ParticleDataShapeType.Sphere) {
+                        dir.copyFrom(recordPos);
+                    } else if (this._node.type == ParticleDataShapeType.HemiSphere) {
+                        dir.copyFrom(recordPos);
+                    } else if (this._node.type == ParticleDataShapeType.Cone) {
+                        dir = coneShape.getDirection(recordPos, dir);
+                    }
+
+                    //旋转______________________________________________________
+                    if (data.property.rotation.x != 0 || data.property.rotation.y != 0 || data.property.rotation.z != 0) {
+                        this.rotationMat.identity();
+                        this.rotationMat.rotation(data.property.rotation.x, data.property.rotation.y, data.property.rotation.z);
+                        this.rotationMat.transformVector4(dir, dir);
                     }
                 }
+
                 dir.normalize();
                 directionArray.push(dir);
 

@@ -78,8 +78,6 @@
         
         /**
          * @language zh_CN
-         * @private
-         * 开发者不可以直接调用，需要通过Mesh 等显示对象来设置lightGroup
          * 设置材质 lightGroup 。
          * 设置材质球接受的灯光组。
          * @param lightGroup LightGroup
@@ -95,6 +93,17 @@
                 }
             }
               
+        }
+
+        /**
+         * @language zh_CN
+         * 获取材质球接受的灯光组。
+         * @return LightGroup 灯光组
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public get lightGroup(): LightGroup {
+            return this._lightGroup;
         }
 
         ///**

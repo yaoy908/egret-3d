@@ -2,9 +2,9 @@
 
     /**
     * @language zh_CN
-    * @private
     * @class egret3d.XMLParser
     * @classdesc
+    * 解析XML文件格式
     * @version Egret 3.0
     * @platform Web,Native
     */

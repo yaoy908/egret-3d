@@ -73,7 +73,12 @@
             //colorOffset
             var colorOffset: Node = this.getNode(this._xml, "colorOffset");
             this.parseColorOffset(colorOffset);
-
+            //material
+            var material: Node = this.getNode(this._xml, "mat");
+            this.parseMaterial(material);
+            //textureSheet
+            var textureSheet: Node = this.getNode(this._xml, "textureSheet");
+            this.parseTextureSheet(textureSheet);
 
 
             return this._particleData;
@@ -109,6 +114,13 @@
             property.rotation = this.parseVector3D(rotation, property.rotation);
             property.scale = this.parseVector3D(scale, property.scale);
             property.position = this.parseVector3D(position, property.position);
+
+            //render
+            var render: Node = this.getNode(node, "render");
+
+            var renderMode: Node = this.getNode(render, "renderMode");
+            property.renderMode = ParticleRenderModeType[renderMode.textContent];
+
         }
 
         /**
@@ -206,7 +218,21 @@
             });
             //sphere
             shape.sphereRadius = Number(this.getNode(node, "sphereRadius").textContent);
-
+            //hemiSphereRaiuds
+            shape.hemiSphereRaiuds = Number(this.getNode(node, "hemiSphereRaiuds").textContent);
+            //cone
+            var cone: Node = this.getNode(node, "cone");
+            this.eachAttr(cone, function (label: string, value: string): void {
+                if (label == "coneHeight") {
+                    shape.coneHeight = Number(value);
+                } else if (label == "coneRadiusBottom") {
+                    shape.coneRadiusBottom = Number(value);
+                } else if (label == "coneRadiusTop") {
+                    shape.coneRadiusTop = Number(value);
+                } else if (label == "coneType") {
+                    shape.coneType = ParticleConeShapeType[value];
+                }
+            });
         }
         /**
          * @private
@@ -403,6 +429,41 @@
             colorOffset.data = this.parseGradientsColor(itemList, colorOffset.data);
         }
 
+        /**
+        * @private
+        * 解析材质球
+        */
+        private parseMaterial(node: Node): MaterialSphereData {
+            if (node == null)
+                return null;
+            var material: MaterialSphereData = this._particleData.materialData = EgretMapXmlParser.parseMaterial(node);
+            return material;
+        }
+
+
+        /**
+        * @private
+        * 解析材质球
+        */
+        private parseTextureSheet(node: Node): ParticleDataTextureSheet {
+            if (node == null)
+                return null;
+            var textureSheet: ParticleDataTextureSheet = this._particleData.textureSheet = new ParticleDataTextureSheet();
+            textureSheet.frameType = ParticleValueType[this.getNode(node, "frameType").textContent];
+            textureSheet.tileX = Number(this.getNode(node, "tileX").textContent);
+            textureSheet.tileY = Number(this.getNode(node, "tileY").textContent);
+            textureSheet.whole = this.getNode(node, "whole").textContent == "true";
+            textureSheet.row = Number(this.getNode(node, "row").textContent);
+            textureSheet.min = Number(this.getNode(node, "min").textContent);
+            textureSheet.max = Number(this.getNode(node, "max").textContent);
+            textureSheet.circles = Number(this.getNode(node, "circles").textContent);
+            textureSheet.bezier1 = this.parseBezierData(this.getNode(node, "bezier1"));
+            textureSheet.bezier2 = this.parseBezierData(this.getNode(node, "bezier2"));
+
+            return textureSheet;
+        }
+
+        
 
          /**
          * @private

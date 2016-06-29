@@ -36,6 +36,15 @@ vec3 calcParticleMove(vec3 distanceXYZ){
 	return distanceXYZ;
 }
 
+mat4 getRenderModeMatrix(mat4 cameraMatrix){
+	return cameraMatrix;
+}
+
+//rewrite by stretched
+void updateStretchedBillBoard(vec3 moveDir, mat4 billboardMatrix){
+		
+}
+
 void main(void) {
 
 	if(discard_particle > TrueOrFalse){ 
@@ -96,12 +105,17 @@ void main(void) {
 		velocityMultiVec3 = calcParticleMove(velocityMultiVec3);
 		
 		//叠加位移，位移会受母系缩放值影响
-		position_emitter += velocityMultiVec3 * followTargetScale;
-
+		velocityMultiVec3 *= followTargetScale;
 		//重力默认为全局坐标系
-		position_emitter.y -= currentTime * currentTime * particleStateData.gravity;
-
+		velocityMultiVec3 -= currentTime * currentTime * particleStateData.gravity;
+		
+		//是否需要修改local position指向运动方向，直接修改localPosition
+		updateStretchedBillBoard(velocityMultiVec3, uniform_ViewMatrix);
+		//
+		position_emitter += velocityMultiVec3;
 		localPosition.xyz *= vec3(particleStateData.scaleX, particleStateData.scaleY, particleStateData.scaleZ);
+		//
+		mat4 billboardMatrix = getRenderModeMatrix(uniform_cameraMatrix);
 		outPosition = billboardMatrix * localPosition;
 		outPosition.xyz += position_emitter.xyz;
 		outPosition = uniform_ViewMatrix * outPosition;

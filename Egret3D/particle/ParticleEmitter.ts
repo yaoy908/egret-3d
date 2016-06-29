@@ -252,7 +252,7 @@
            
             //position
             this._positionNode = new ParticlePosition();
-            this._positionNode.initNode(this._data.shape);
+            this._positionNode.initNode(this._data.shape, this._data.property);
             nodes.push(this._positionNode);
 
             //speed(依赖于position)
@@ -361,6 +361,43 @@
                 var colorOffset: ParticleColorGlobalNode = new ParticleColorGlobalNode();
                 colorOffset.initNode(this._data.colorOffset);
                 nodes.push(colorOffset);
+            }
+
+            //materialData
+            if (this._data.materialData) {
+                //uvRoll
+                var method: MaterialMethodData;
+                for (method of this._data.materialData.methods) {
+                    if (method.type == MaterialMethodData.lightmapMethod) {
+                       
+                    } else if (method.type == MaterialMethodData.uvRollMethod) {
+                        var uvNode: ParticleUVRollNode = new ParticleUVRollNode();
+                        uvNode.initNode(null, method);
+                        nodes.push(uvNode);
+                    }
+                    else if (method.type == MaterialMethodData.alphaMaskMethod) {
+                        //var maskmapMethod: AlphaMaskMethod = new AlphaMaskMethod();
+                        //var lightTexture: ITexture = this._sourceLib.getImage(method.texture);
+                        //material.diffusePass.addMethod(maskmapMethod);
+                        //maskmapMethod.maskTexture = lightTexture ? lightTexture : CheckerboardTexture.texture;
+                    }
+                    else if (method.type == MaterialMethodData.streamerMethod) {
+                        //var streamerMethod: StreamerMethod = new StreamerMethod();
+                        //var streamerTexture: ITexture = this._sourceLib.getImage(method.texture);
+                        //streamerMethod.speedU = method.uSpeed;
+                        //streamerMethod.speedV = method.vSpeed;
+                        //streamerMethod.start(true);
+                        //material.diffusePass.addMethod(streamerMethod);
+                        //streamerMethod.steamerTexture = streamerTexture ? streamerTexture : CheckerboardTexture.texture;
+                    }
+                }
+            }
+
+            //texture sheet
+            if (this._data.textureSheet) {
+                var textureSheet: ParticleTextureSheetNode = new ParticleTextureSheetNode();
+                textureSheet.initNode(null, this._data.textureSheet);
+                nodes.push(textureSheet);
             }
 
             for (var i: number = 0, count: number = nodes.length; i < count; i++) {

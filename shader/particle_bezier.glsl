@@ -3,8 +3,8 @@ float f2Key = 1.0 / 4096.0;
 
 vec2 dcp2f(float min, float range, float mf){
 
-	float value2 = fract(mf);
-	float value1 = mf - value2;
+	float value1 = floor(mf);
+	float value2 = mf - value1;
 	value1 *= f2Key;
 	
 	value1 *= range;
@@ -141,7 +141,11 @@ float calcOneBezierSize(float bezierData[15], float tCurrent, float tTotal, floa
 	float res = calcBezierSize(tCurrent, randomSeed);
 	return res;
 }
-
+float calcDoubleBezierSize(float sampleData1[15], float sampleData2[15], float tCurrent, float tTotal, float randomSeed){
+	float res = calcOneBezierSize(sampleData1, tCurrent, tTotal, randomSeed);
+	res += calcOneBezierSize(sampleData2, tCurrent, tTotal, 1.0 - randomSeed);
+	return res;
+}
 
 
 

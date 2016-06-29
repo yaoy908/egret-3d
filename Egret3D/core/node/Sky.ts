@@ -14,22 +14,29 @@
     * @includeExample core/node/Sky.ts
     */
     export class Sky extends Mesh  {
-       
-        private _camera: Camera3D;
+
+        /**
+        * @language zh_CN
+        * 天空的摄像机
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public camera: Camera3D;
 
         /**
         * @language zh_CN
         * 构建一个天空盒子对象
-        * @param cubMaterial 天空盒子贴图材质 
-        * @param camera 天空盒子渲染相机
+        * @param geometry 天空模型数据
+        * @param material 天空材质
+        * @param camera 天空渲染相机
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(cubMaterial: CubeTextureMaterial, camera: Camera3D = null) {
-            super(new CubeGeometry(10000, 10000, 10000), cubMaterial);
-            this._camera = camera;
-            cubMaterial.cullMode = ContextConfig.FRONT;
-            cubMaterial.ambientColor = 0xffffff;
+        constructor(geometry: Geometry, material: MaterialBase, camera: Camera3D = null) {
+            super(geometry, material);
+            this.camera = camera;
+            material.cullMode = ContextConfig.FRONT;
+            material.ambientColor = 0xffffff;
             if (!this.bound) {
                 this.bound = this.buildBoundBox();
             }
@@ -46,8 +53,8 @@
         */
         public update(time: number, delay: number, camera: Camera3D) {
             super.update(time, delay, camera);
-            if (this._camera) {
-                this.position = this._camera.globalPosition;
+            if (this.camera) {
+                this.position = this.camera.globalPosition;
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿module egret3d {
 
     /**
+    * @private
     * @class egret3d.EgretMapConfig
     * @classdesc
     * 配置加载一个场景的相关信息

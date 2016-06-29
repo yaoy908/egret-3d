@@ -28,6 +28,9 @@
             this.fragment_ShaderName[ShaderPhaseType.start_fragment] = this.fragment_ShaderName[ShaderPhaseType.start_fragment] || [];
             this.fragment_ShaderName[ShaderPhaseType.start_fragment].push("particle_time_fs");
 
+            this.fragment_ShaderName[ShaderPhaseType.diffuse_fragment] = this.fragment_ShaderName[ShaderPhaseType.diffuse_fragment] || [];
+            this.fragment_ShaderName[ShaderPhaseType.diffuse_fragment].push("particle_diffuse_fragment");
+
             this.attribute_time = new GLSL.VarRegister();
             this.attribute_time.name = "attribute_time";
             this.attribute_time.size = 3;
