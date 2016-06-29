@@ -622,10 +622,13 @@
 
                         material.diffusePass.addMethod(lightmapMethod);
                         lightmapMethod.lightTexture = lightTexture;
-                    } else if (method.type == MatMethodData.uvRollMethod) {
+                    }
+                    else if (method.type == MatMethodData.uvRollMethod) {
                         var uvScrollMethod: UVRollMethod = new UVRollMethod();
                         uvScrollMethod.speedU = method.uSpeed;
                         uvScrollMethod.speedV = method.vSpeed;
+                        material.repeat = true;
+
                         uvScrollMethod.start(true);
                         material.diffusePass.addMethod(uvScrollMethod);
                     }
