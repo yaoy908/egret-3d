@@ -203,6 +203,8 @@
         public colorGradients2: ColorGradients;
         //重力
         public gravity: number = 0;
+        //是否预热
+        public prewarm: boolean = false;
 
         public rotation: Vector3D = new Vector3D(0, 0, 0, 1);
         public scale: Vector3D = new Vector3D(1, 1, 1, 1);

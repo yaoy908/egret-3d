@@ -27,7 +27,7 @@
         public initNode(data: ParticleDataNode): void {
 
             this._node = <ParticleDataScaleBezier>data;
-            this._floatCompressData = this._node.data.compress();
+            this._floatCompressData = this._node.data.sampler();
         }
          
         /**

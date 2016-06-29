@@ -69,15 +69,15 @@
                 this.fragment_ShaderName[ShaderPhaseType.start_fragment] = this.fragment_ShaderName[ShaderPhaseType.start_fragment] || [];
                 this.fragment_ShaderName[ShaderPhaseType.start_fragment].push("particle_bezier");
                 this.fragment_ShaderName[ShaderPhaseType.start_fragment].push("particle_textureSheetOneBezier");
-                this._floatCompressData1 = this._sheetData.bezier1.compress();
+                this._floatCompressData1 = this._sheetData.bezier1.sampler();
 
             } else if(this._sheetData.frameType == ParticleValueType.TwoBezier){
                 this.fragment_ShaderName[ShaderPhaseType.start_fragment] = this.fragment_ShaderName[ShaderPhaseType.start_fragment] || [];
                 this.fragment_ShaderName[ShaderPhaseType.start_fragment].push("particle_bezier");
                 this.fragment_ShaderName[ShaderPhaseType.start_fragment].push("particle_textureSheetTwoBezier");
 
-                this._floatCompressData1 = this._sheetData.bezier1.compress();
-                this._floatCompressData2 = this._sheetData.bezier2.compress();
+                this._floatCompressData1 = this._sheetData.bezier1.sampler();
+                this._floatCompressData2 = this._sheetData.bezier2.sampler();
             }
 
 

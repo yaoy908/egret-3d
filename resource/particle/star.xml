@@ -63,18 +63,7 @@
     <max>15</max>
     <min>15</min>
   </moveSpeed>
-  <scaleBezier>
-    <bezier>
-      <pos x="0" y="0"></pos>
-      <pos x="0.5" y="3"></pos>
-      <pos x="0.5" y="3"></pos>
-      <pos x="1.0" y="0"></pos>
-      <ctrl x="0.1" y="1"></ctrl>
-      <ctrl x="0.3" y="3"></ctrl>
-      <ctrl x="0.7" y="3"></ctrl>
-      <ctrl x="0.9" y="0"></ctrl>
-    </bezier>
-  </scaleBezier>
+  
   <!--<followTarget>
     <followRotation>true</followRotation>
     <followScale>true</followScale>

@@ -14,7 +14,8 @@
         /**
         * @private
         */
-        private _speedShape: Vec3ConstRandomValueShape;
+        private _node: ParticleDataMoveSpeed;
+        private _forceData: Vec3ConstRandomValueShape;
         private attribute_accelerationSpeed: GLSL.VarRegister;
         constructor() {
             super();
@@ -37,15 +38,16 @@
        * @platform Web,Native
        */
         public initNode(data: ParticleDataNode): void {
-            //var node: ParticleDataAcceleration = <ParticleDataAcceleration>data;
-            //this._speedShape = new Vec3ConstRandomValueShape();
-            //this._speedShape.maxX = node.max.x;
-            //this._speedShape.maxY = node.max.y;
-            //this._speedShape.maxZ = node.max.z;
+            this._node = <ParticleDataMoveSpeed>data;
+            var node: VelocityForceLifeTimeData = this._node.velocityForce;
+            this._forceData = new Vec3ConstRandomValueShape();
+            this._forceData.maxX = node.max.x;
+            this._forceData.maxY = node.max.y;
+            this._forceData.maxZ = node.max.z;
 
-            //this._speedShape.minX = node.min.x;
-            //this._speedShape.minY = node.min.y;
-            //this._speedShape.minZ = node.min.z;
+            this._forceData.minX = node.min.x;
+            this._forceData.minY = node.min.y;
+            this._forceData.minZ = node.min.z;
         }
 
 
@@ -61,7 +63,7 @@
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
 
-            var data: any[] = this._speedShape.calculate(count);
+            var data: any[] = this._forceData.calculate(count);
             for (var i: number = 0; i < count; ++i) {
                 var accSpeed: Vector3D = data[i] ; 
                 for (var j: number = 0; j < vertices; ++j) {

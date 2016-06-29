@@ -1,17 +1,19 @@
-uniform float uniform_velocityForceX[15];
-uniform float uniform_velocityForceY[15];
-uniform float uniform_velocityForceZ[15];
-
-uniform float uniform_velocityForceX2[15];
-uniform float uniform_velocityForceY2[15];
-uniform float uniform_velocityForceZ2[15];
-
 attribute float attribute_velocityForceRandomSeed;
+
+vec3 velocityForceTwoBezier1 = vec3(0.0);
+vec3 velocityForceTwoBezier2 = vec3(0.0);
+
+void calcVelocityForceBezier(float curTime, float totalTime)
+{
+}
 
 void main() {
 	if(discard_particle < TrueOrFalse){
-		velocityForceVec3.x = calcDoubleBezierArea(uniform_velocityForceX, uniform_velocityForceX2, currentTime, curParticle.life, attribute_velocityForceRandomSeed);
-		velocityForceVec3.y = calcDoubleBezierArea(uniform_velocityForceY, uniform_velocityForceY2, currentTime, curParticle.life, attribute_velocityForceRandomSeed);
-		velocityForceVec3.z = calcDoubleBezierArea(uniform_velocityForceZ, uniform_velocityForceZ2, currentTime, curParticle.life, attribute_velocityForceRandomSeed);
+
+		calcVelocityForceBezier(currentTime, curParticle.life);
+		//
+		velocityForceVec3.x = mix(velocityForceTwoBezier1.x, velocityForceTwoBezier2.x, attribute_velocityForceRandomSeed);
+		velocityForceVec3.y = mix(velocityForceTwoBezier1.y, velocityForceTwoBezier2.y, attribute_velocityForceRandomSeed);
+		velocityForceVec3.z = mix(velocityForceTwoBezier1.z, velocityForceTwoBezier2.z, attribute_velocityForceRandomSeed);
 	}
 }

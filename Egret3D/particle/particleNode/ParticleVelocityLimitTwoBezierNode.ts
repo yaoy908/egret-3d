@@ -38,8 +38,8 @@
         */
         public initNode(data: ParticleDataNode): void {
             this._node = <ParticleDataMoveSpeed>data;
-            this._floatCompressData = this._node.velocityLimit.bezier1.compress();
-            this._floatCompressData2 = this._node.velocityLimit.bezier2.compress();
+            this._floatCompressData = this._node.velocityLimit.bezier1.sampler();
+            this._floatCompressData2 = this._node.velocityLimit.bezier2.sampler();
         }
         /**
         * @language zh_CN

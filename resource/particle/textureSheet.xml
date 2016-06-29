@@ -7,6 +7,7 @@
     <colorType>Const</colorType>
     <colorConst1>0xffffffff</colorConst1>
     <gravity>0</gravity>
+    <prewarm>false</prewarm>
     <transform>
       <rotation x="0" y="0" z="0" />
       <scale x="1" y="1" z="1" />
