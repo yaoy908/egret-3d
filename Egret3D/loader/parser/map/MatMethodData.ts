@@ -28,6 +28,13 @@
          */
         public static uvRollMethod: string = "uvRollMethod";
 
+        /**
+         * @language zh_CN
+         * 多uv滚动效果
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public static mulUvRollMethod: string = "mulUvRollMethod";
 
         /**
          * @language zh_CN
@@ -54,6 +61,14 @@
          */
         public static terrainARGBMethod: string = "terrainMethod";
 
+        /**
+        * @language zh_CN
+        * 地型效果
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public static waterWaveMethod: string = "waterWaveMethod";
+        
         /**
          * @language zh_CN
          * 特效的类型

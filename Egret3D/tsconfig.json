@@ -170,6 +170,7 @@
         "material/method/TerrainARGBMethod.ts",
         "material/method/FogMethod.ts",
         "material/method/UVRollMethod.ts",
+        "material/method/MulUVRollMethod.ts",
         "material/method/UVSpriteSheetMethod.ts",
         "material/method/LightMapMethod.ts",
         "material/method/PlantDistortedMethod.ts",
