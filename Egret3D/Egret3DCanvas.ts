@@ -37,6 +37,23 @@
         protected _delay: number = 0;
         protected _timeDate: Date = null;
         protected _envetManager: EventManager;
+
+
+        /**
+        * @language zh_CN
+        * Egret3DCanvas X 偏移
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public offsetX: number = 0;
+
+        /**
+        * @language zh_CN
+        * Egret3DCanvas Y 偏移
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public offsetY: number = 0;
                             
         /**
         * @language zh_CN

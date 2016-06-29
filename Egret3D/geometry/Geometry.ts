@@ -236,6 +236,14 @@
 
         /**
         * @language zh_CN
+        * 面翻转，仅对系统 geometry 有效
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public faceOrBack: boolean = false 
+
+        /**
+        * @language zh_CN
         * 顶点坐标大小
         * @version Egret 3.0
         * @platform Web,Native

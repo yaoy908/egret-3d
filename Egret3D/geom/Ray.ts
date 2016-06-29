@@ -116,7 +116,8 @@
         * @language zh_CN
         * 检测射线相交模型
         * @param renderItem 检测的模型
-        * @param inPos 相交点
+        * @param uv_offset 顶点uv数据偏移 可以为-1
+        * @param result 数据返回
         * @returns boolean 相交返回true
         * @version Egret 3.0
         * @platform Web,Native
@@ -132,8 +133,9 @@
         * @param indexData 检测的模型的索引数据
         * @param offset 每个顶点的大小
         * @param faces 模型面数
-        * @param inPos 返回相交点
+        * @param uv_offset 顶点uv数据偏移 可以为-1
         * @param mMat 顶点的世界变换矩阵
+        * @param result 数据返回
         * @returns boolean 相交返回true
         * @version Egret 3.0
         * @platform Web,Native

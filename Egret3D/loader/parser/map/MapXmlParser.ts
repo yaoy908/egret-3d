@@ -22,6 +22,7 @@
          * @platform Web,Native
          */
         public nodeList: Array<MapNodeData> = new Array<MapNodeData>();
+        public hudList: Array<HUDData> = new Array<HUDData>();
 
         public matDict: any = {};
 
@@ -30,6 +31,30 @@
         public directLight: boolean = false;
         public pointLight: boolean = false;
 
+        public textures: any = [];
+
+        private parseTexture(node: Node) {
+            if (node.childNodes.length == 1)
+                return null;
+
+            var attr: Attr = null;
+            var item: Node;
+            var i: number = 0;
+            var count: number = 0;
+            for (i = 0, count = node.childNodes.length; i < count; i++) {
+                item = node.childNodes[i];
+                if (item.nodeName == "#text")
+                    continue;
+
+                var data: any = {};
+                for (var j: number = 0; j < item.attributes.length; ++j) {
+                    attr = item.attributes[j];
+                    data[attr.name] = attr.value;
+                }
+
+                this.textures.push(data);
+            }
+        }
         constructor(data: any) {
 
             var versionList: NodeList = data.getElementsByTagName("version");
@@ -39,6 +64,8 @@
             var nodeList: NodeList = data.getElementsByTagName("node");
             var environment: NodeList = data.getElementsByTagName("env");
             var cameraAnimList: NodeList = data.getElementsByTagName("cameraAnims");
+            var hudList: NodeList = data.getElementsByTagName("hud");
+            var textureList: NodeList = data.getElementsByTagName("texture");
 
             this.parseEnvironment(environment);
 
@@ -53,6 +80,17 @@
                 var mapNodeData: MapNodeData = this.parseNode(nodeList[i]);
                 if (mapNodeData) {
                     this.nodeList.push(mapNodeData);
+                }
+            }
+
+            for (var i: number = 0; i < textureList.length; i++) {
+                this.parseTexture(textureList[i]);
+            }
+
+            for (var i: number = 0; i < hudList.length; i++) {
+                var hudNodeData = this.parseHud(hudList[i]);
+                if (hudNodeData) {
+                    this.hudList.push(hudNodeData);
                 }
             }
 
@@ -217,7 +255,9 @@
             for (i = 0, count = node.childNodes.length; i < count; i++) {
                 item = node.childNodes[i];
                 nodeName = item.nodeName;
-
+                if (nodeName == "#text") {
+                    continue;
+                }
                 if (nodeName == "pos") {
                     for (var j: number = 0; j < item.attributes.length; ++j) {
                         attr = item.attributes[j];
@@ -260,16 +300,19 @@
                         propertyAnimsData[attr.nodeName] = attr.value;
                     }
                 }
-                else if (nodeName == "heightmap") {
+                else if (nodeName == "geometry") {
+                    var geo: any = {};
                     for (var j: number = 0; j < item.attributes.length; ++j) {
                         attr = item.attributes[j];
-                        if (typeof data[attr.name] == "number") {
-                            data[attr.name] = Number(attr.value);
+                        if (attr.name == "type") {
+                            geo[attr.name] = attr.value;
                         }
-                        else if (typeof data[attr.name] == "string") {
-                            data[attr.name] = attr.value;
+                        else {
+
+                            geo[attr.name] = Number(attr.value);
                         }
                     }
+                    data.geometry = geo;
                 }
                 //else if (nodeName == "lightIds") {
                 //    if (item.textContent == null || item.textContent == "") {
@@ -380,5 +423,41 @@
 
         }
 
+        private parseHud(node: Node): HUDData {
+            if (node.childNodes.length == 1)
+                return null;
+
+            var attr: Attr = null;
+
+            var hudData: HUDData = new HUDData();
+
+
+            for (var i: number = 0; i < node.attributes.length; ++i) {
+                attr = node.attributes[i];
+                if (attr.nodeName == "bothside") {
+                    hudData[attr.nodeName] = (attr.value == "true");
+                }
+                else {
+                    hudData[attr.nodeName] = attr.value;
+                }
+            }
+            var item: Node;
+            var nodeName: string;
+            var i: number = 0;
+            var count: number = 0;
+            for (i = 0, count = node.childNodes.length; i < count; i++) {
+                item = node.childNodes[i];
+                nodeName = item.nodeName;
+                if (nodeName == "#text") {
+                    continue;
+                }
+                for (var j: number = 0; j < item.attributes.length; ++j) {
+                    attr = item.attributes[j];
+                    hudData[attr.nodeName] = Number(attr.value);
+                }
+            }
+
+            return hudData;
+        }
     }
 }

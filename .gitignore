@@ -6,7 +6,6 @@ script/debug.sh
 Thumbs.db
 *.map
 *.dll
-*.js
 *.csproj.user
 *.cs
 /web.Release.config

@@ -43,19 +43,19 @@
 
         private _pathRoot: string = "";
         private _path: string = "";
-        private _xmlLoader: URLLoader = null;
         private _mapXmlParser: MapXmlParser = null;
 
-        private _esmLoader: any = {};
-        private _eamLoader: any = {};
-        private _epaLoader: any = {};
-        private _texutreLoader: any = {};
-        private _methodTexutreLoader: any = {};
-        private _heightTextureLoader: any = {};
+        private _loaderDict: any = {};
+
         private _taskCount: number = 0;
         private _event: LoaderEvent3D = new LoaderEvent3D();
-        private _lightGroup: LightGroup = new LightGroup();
+        public lightGroup: LightGroup = new LightGroup();
 
+        public huds: Array<HUD> = new Array<HUD>();
+
+        public textures: any = {};
+
+        public view3d: View3D;
          /**
          * @language zh_CN
          * 构建一个场景加载对象 构建后直接加载
@@ -86,12 +86,31 @@
         public load(name: string, mapConfig: string = "MapConfig.xml", path: string = "resource/scene/") {
             this._pathRoot = path + name + "/";
             this._path = this._pathRoot + mapConfig;
-            this._xmlLoader = new URLLoader(this._path);
-            this._xmlLoader.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onXmlLoad, this);
+
+
+            var load: URLLoader = this.findLoader(this._path);
+            if (!load) {
+                load = this.createLoader(this._path);
+                load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onXmlLoad, this);
+            }
+            else {
+                if (load.data) {
+                    this.parseXML(load.data);
+                }
+            }
         }
 
-        private onXmlLoad(e: LoaderEvent3D) {
-            var xmlDoc = XMLParser.parse(e.loader.data);
+
+        private addLoader(loader: URLLoader) {
+            this._loaderDict[loader.url] = loader;
+        }
+
+        private findLoader(path: string): URLLoader {
+            return this._loaderDict[path];
+        }
+
+        private parseXML(xml: string) {
+            var xmlDoc = XMLParser.parse(xml);
             this._mapXmlParser = new MapXmlParser(xmlDoc);
 
             this.createLight();
@@ -106,22 +125,20 @@
                     this.doLoadEpa(mapNodeData);
                 }
 
-                
                 switch (mapNodeData.type) {
                     case "Mesh":
                         if (mapNodeData.path) {
-                            if (!this._esmLoader[mapNodeData.path]) {
-                                var esmload: URLLoader = new URLLoader(this._pathRoot + mapNodeData.path);
-                                this._esmLoader[mapNodeData.path] = esmload;
+                            var path: string = this._pathRoot + mapNodeData.path;
+                            var esmload: URLLoader = this.findLoader(path);
+                            if (!esmload) {
+                                esmload = this.createLoader(path);
 
                                 var nodeDatas: Array<MapNodeData> = [];
                                 nodeDatas.push(mapNodeData);
                                 esmload["esmnodeData"] = nodeDatas;
                                 esmload.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onEsmLoad, this);
-                                this._taskCount++;
                             }
                             else {
-                                var esmload: URLLoader = this._esmLoader[mapNodeData.path];
                                 var nodeDatas: Array<MapNodeData> = esmload["esmnodeData"];
                                 nodeDatas.push(mapNodeData);
 
@@ -130,26 +147,30 @@
                                 }
                             }
                         }
+                        else if (mapNodeData.geometry) {
+                           this.processMesh(mapNodeData, new Mesh(GeometryUtil.createGemetryForType(mapNodeData.geometry.type, mapNodeData.geometry), new TextureMaterial()));
+                        }
                         break;
                     case "Terrain":
-                        if (mapNodeData.texture) {
-                            if (!this._heightTextureLoader[mapNodeData.texture]) {
-                                var heightImgload: URLLoader = new URLLoader(this._pathRoot + mapNodeData.texture);
-                                this._heightTextureLoader[mapNodeData.texture] = heightImgload;
+                        if (mapNodeData.path) {
+                            var path: string = this._pathRoot + mapNodeData.path;
+                            var heightImgload: URLLoader = this.findLoader(path);
+                            if (!heightImgload) {
+                                heightImgload = this.createLoader(path);
 
                                 var nodeDatas: Array<MapNodeData> = [];
                                 nodeDatas.push(mapNodeData);
                                 heightImgload["heightNodeDatas"] = nodeDatas;
                                 heightImgload.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onHeightTextureLoad, this);
-                                this._taskCount++;
                             }
                             else {
-                                var heightImgload: URLLoader = this._heightTextureLoader[mapNodeData.texture];
                                 var nodeDatas: Array<MapNodeData> = heightImgload["heightNodeDatas"];
                                 nodeDatas.push(mapNodeData);
 
+                                var geo: any = mapNodeData.geometry;
+
                                 if (heightImgload.data) {
-                                    var envHeightGeometry: ElevationGeometry = new ElevationGeometry(heightImgload.data, mapNodeData.width, mapNodeData.height, mapNodeData.depth, mapNodeData.segmentsW, mapNodeData.segmentsH);
+                                    var envHeightGeometry: ElevationGeometry = new ElevationGeometry(heightImgload.data, geo.width, geo.height, geo.depth, geo.segmentsW, geo.segmentsH);
                                     var mesh: Mesh = new Mesh(envHeightGeometry, new TextureMaterial(heightImgload.data));
                                     this.processHeightMesh(mapNodeData, mesh);
                                 }
@@ -157,8 +178,82 @@
                         }
                         break;
                 }
-               
             }
+
+            for (var i: number = 0; i < this._mapXmlParser.textures.length; ++i) {
+                var data: any = this._mapXmlParser.textures[i];
+                var path: string = this._pathRoot + data.path;
+                var textureLoad: URLLoader = this.findLoader(path);
+                if (!textureLoad) {
+                    textureLoad = this.createLoader(path);
+                    textureLoad["name"] = data.name;
+                    textureLoad.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onTexture, this);
+                }
+                else {
+
+                }
+
+            }
+
+            for (var i: number = 0; i < this._mapXmlParser.hudList.length; ++i) {
+                var hudData: HUDData = this._mapXmlParser.hudList[i];
+                var hud: HUD = new HUD();
+
+                hud.name = hudData.name;
+                hud.bothside = hudData.bothside;
+                hud.x = hudData.x;
+                hud.y = hudData.y;
+                hud.rotationX = hudData.rx;
+                hud.rotationY = hudData.ry;
+                hud.rotationZ = hudData.rz;
+                hud.width = hudData.width;
+                hud.height = hudData.height;
+
+                this.huds.push(hud);
+                hudData.hud = hud;
+
+                if (!hudData.texture) {
+                    continue;
+                }
+                var path: string = this._pathRoot + hudData.texture;
+                var hudLoad: URLLoader = this.findLoader(path);
+                if (!hudLoad) {
+                    hudLoad = this.createLoader(path);
+
+                    var hudDatas: Array<HUDData> = [];
+                    hudDatas.push(hudData);
+                    hudLoad["hudDatas"] = hudDatas;
+                    hudLoad.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onHudLoad, this);
+                }
+                else {
+                    var hudDatas: Array<HUDData> = hudLoad["hudDatas"];
+                    hudDatas.push(hudData);
+
+                    if (hudLoad.data) {
+                        hud.diffuseTexture = hudLoad.data;
+                    }
+                }
+            }
+        }
+
+        private onXmlLoad(e: LoaderEvent3D) {
+            this.parseXML(e.loader.data);
+            this.processTask(e.loader);
+        }
+
+        private onTexture(e: LoaderEvent3D) {
+            var textureLoad: URLLoader = e.loader;
+            this.textures[textureLoad["name"]] = textureLoad.data;
+            this.processTask(textureLoad);
+        }
+
+        private onHudLoad(e: LoaderEvent3D) {
+            var hudDatas: Array<HUDData> = e.loader["hudDatas"];
+            for (var i: number = 0; i < hudDatas.length; ++i) {
+                var hudData: HUDData = hudDatas[i];
+                hudData.hud.diffuseTexture = e.loader.data;
+            }
+            this.processTask(e.loader);
         }
 
         private doLoadEpa(mapNodeData: MapNodeData) {
@@ -166,18 +261,18 @@
             if (mapNodeData.propertyAnims) {
                 for (var j: number = 0; j < mapNodeData.propertyAnims.length; ++j) {
                     var propertyAnimsData: any = mapNodeData.propertyAnims[j];
-                    if (!this._epaLoader[propertyAnimsData["path"]]) {
-                        var epaload: URLLoader = new URLLoader(this._pathRoot + propertyAnimsData["path"]);
-                        this._epaLoader[propertyAnimsData["path"]] = epaload;
+
+                    var path: string = this._pathRoot + propertyAnimsData["path"];
+                    var epaload: URLLoader = this.findLoader(path);
+                    if (!epaload) {
+                        epaload = this.createLoader(path);
 
                         var nodeDatas: Array<MapNodeData> = [];
                         nodeDatas.push(mapNodeData);
                         epaload["epanodeData"] = nodeDatas;
                         epaload.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onEpaLoad, this);
-                        this._taskCount++;
                     }
                     else {
-                        var epaload: URLLoader = this._epaLoader[propertyAnimsData["path"]];
                         var nodeDatas: Array<MapNodeData> = epaload["epanodeData"];
                         nodeDatas.push(mapNodeData);
 
@@ -204,13 +299,14 @@
 
             for (var i: number = 0; i < nodeDatas.length; ++i) {
                 var mapNodeData: MapNodeData = nodeDatas[i];
-                var envHeightGeometry: ElevationGeometry = new ElevationGeometry(heightImgload.data, mapNodeData.width, mapNodeData.height, mapNodeData.depth, mapNodeData.segmentsW, mapNodeData.segmentsH);
+                var geometry: any = mapNodeData.geometry;
+                var envHeightGeometry: ElevationGeometry = new ElevationGeometry(heightImgload.data, geometry.width, geometry.height, geometry.depth, geometry.segmentsW, geometry.segmentsH);
                 var mesh: Mesh = new Mesh(envHeightGeometry, new TextureMaterial(heightImgload.data));
                 this.processHeightMesh(mapNodeData, mesh);
                 this.doLoadEpa(mapNodeData);
             }
 
-            this.processTask();
+            this.processTask(heightImgload);
         }
 
         private processHeightMesh(mapNodeData: MapNodeData, mesh: Mesh) {
@@ -236,9 +332,12 @@
 
                 var eamData: any = mapNodeData.skinClips[j];
 
-                if (!this._eamLoader[eamData["path"]]) {
-                    var load: URLLoader = new URLLoader(this._pathRoot + eamData["path"]);
-                    this._eamLoader[eamData["path"]] = load;
+
+                var path: string = this._pathRoot + eamData["path"];
+                var load: URLLoader = this.findLoader(path);
+
+                if (!load) {
+                    this.createLoader(path);
                     load["name"] = eamData["name"];
 
                     var eamnodeDatas: Array<MapNodeData> = [];
@@ -247,15 +346,13 @@
 
                     load["mesh"] = mesh;
                     load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onEamLoad, this);
-                    this._taskCount++;
                 }
                 else {
-                    var eamload: URLLoader = this._eamLoader[eamData["path"]];
-                    var eamnodeDatas: Array<MapNodeData> = eamload["eamnodeData"];
+                    var eamnodeDatas: Array<MapNodeData> = load["eamnodeData"];
                     eamnodeDatas.push(mapNodeData);
 
-                    if (eamload.data) {
-                        var clip: SkeletonAnimationClip = eamload.data;
+                    if (load.data) {
+                        var clip: SkeletonAnimationClip = load.data;
                         mesh.animation.skeletonAnimationController.addSkeletonAnimationClip(clip.clone());
                     }
                 }
@@ -280,7 +377,7 @@
                 }
             }
 
-            this.processTask();
+            this.processTask(e.loader);
         }
 
         private onEamLoad(e: LoaderEvent3D) {
@@ -305,7 +402,7 @@
             if (this.autoPlayAnimation) {
                 mesh.animation.play(clip.animationName);
             }
-            this.processTask();
+            this.processTask(e.loader);
         }
 
         private onEpaLoad(e: LoaderEvent3D) {
@@ -326,7 +423,7 @@
                 }
             }
             
-            this.processTask();
+            this.processTask(e.loader);
         }
 
         private onImgLoad(e: LoaderEvent3D) {
@@ -346,7 +443,7 @@
                 mat[textureData.type] = load.data;
             }
 
-            this.processTask();
+            this.processTask(load);
         }
 
         private onImgMethodLoad(e: LoaderEvent3D) {
@@ -361,23 +458,42 @@
                 methodData.method[methodData.textureName] = load.data;
             }
 
-            this.processTask();
+            this.processTask(load);
         }
 
-        private processTask() {
+        private createLoader(path: string): URLLoader {
+            var load: URLLoader = new URLLoader(path);
+            this.addLoader(load);
+            this._taskCount++;
+            //console.log("+++" + load.url + "+++" + this._taskCount);
+            return load;
+        }
+
+        private processTask(load:URLLoader) {
             this._taskCount--;
+            //console.log("---" + load.url + "---" + this._taskCount);
             if (this._taskCount <= 0) {
                 this._event.eventType = LoaderEvent3D.LOADER_COMPLETE;
                 this._event.target = this;
+
+                if (this.view3d) {
+                    for (var i: number = 0; i < this.huds.length; ++i) {
+                        this.view3d.addHUD(this.huds[i]);
+                    }
+                }
+
                 this.dispatchEvent(this._event);
             }
         }
 
         private addImaTask(name:string, type:string, matID:number, mapNodeData:MapNodeData):URLLoader {
             var load: URLLoader = null;
-            if (!this._texutreLoader[name]) {
-                load = new URLLoader(this._pathRoot + name);
-                this._texutreLoader[name] = load;
+
+            var path: string = this._pathRoot + name;
+            var load: URLLoader = this.findLoader(path);
+
+            if (!load) {
+                load = this.createLoader(path);
 
                 var textureDatas: any = [];
                 var textureData: any = {};
@@ -389,10 +505,8 @@
                 load["textureDatas"] = textureDatas;
 
                 load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onImgLoad, this);
-                this._taskCount++;
             }
             else {
-                load = this._texutreLoader[name];
 
                 var textureDatas: any = load["textureDatas"];
 
@@ -409,10 +523,11 @@
 
 
         private addMethodImgTask(name:string, method:MethodBase, textureName:string): URLLoader {
-            var load: URLLoader = null;
-            if (!this._methodTexutreLoader[name]) {
-                load = new URLLoader(this._pathRoot + name);
-                this._methodTexutreLoader[name] = load;
+            var path: string = this._pathRoot + name;
+            var load: URLLoader = this.findLoader(path);
+
+            if (!load) {
+                load = this.createLoader(path);
 
                 var methodDatas: any = [];
                 var methodData: any = {};
@@ -422,11 +537,8 @@
 
                 load["methodDatas"] = methodDatas;
                 load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onImgMethodLoad, this);
-                this._taskCount++;
             }
             else {
-                load = this._methodTexutreLoader[name];
-
                 var methodDatas: any = load["methodDatas"];
                 var methodData: any = {};
                 methodData.method = method;
@@ -516,12 +628,40 @@
 
                         material.diffusePass.addMethod(lightmapMethod);
                         lightmapMethod.lightTexture = lightTexture;
-                    } else if (method.type == MatMethodData.uvRollMethod) {
+                    }
+                    else if (method.type == MatMethodData.uvRollMethod) {
                         var uvScrollMethod: UVRollMethod = new UVRollMethod();
                         uvScrollMethod.speedU = method.uSpeed;
                         uvScrollMethod.speedV = method.vSpeed;
+                        material.repeat = true;
+
                         uvScrollMethod.start(true);
                         material.diffusePass.addMethod(uvScrollMethod);
+                    }
+                    else if (method.type == MatMethodData.mulUvRollMethod) {
+
+                        var diffuseTexture1: ITexture = CheckerboardTexture.texture;
+
+                        var uvMethod: MulUVRollMethod = new MulUVRollMethod();
+                        uvMethod.setSpeedU(0, method.uSpeed);
+                        uvMethod.setSpeedV(0, method.vSpeed);
+
+                        var textureData: any = method.texturesData[0];
+
+                        uvMethod.setSpeedU(1, textureData.uSpeed);
+                        uvMethod.setSpeedV(1, textureData.vSpeed);
+
+                        load = this.addMethodImgTask(textureData.path, uvMethod, textureData.attributeName);
+                        if (load.data) {
+                            diffuseTexture1 = load.data;
+                        }
+
+                        material.repeat = true;
+
+                        uvMethod.start(true);
+                        material.diffusePass.addMethod(uvMethod);
+
+                        uvMethod.diffuseTexture1 = diffuseTexture1;
                     }
                     else if (method.type == MatMethodData.alphaMaskMethod) {
                         var maskmapMethod: AlphaMaskMethod = new AlphaMaskMethod();
@@ -569,10 +709,15 @@
 
                         material.diffusePass.addMethod(terrainARGBMethod);
                     }
+                    else if (method.type == MatMethodData.waterWaveMethod) {
+                        var waterWaveMethod: WaterWaveMethod = new WaterWaveMethod();
+                        material.repeat = true;
+                        material.diffusePass.addMethod(waterWaveMethod);
+                    }
                 }
             }
 
-            mesh.lightGroup = this._lightGroup;
+            mesh.lightGroup = this.lightGroup;
 
         }
         //灯光
@@ -591,7 +736,7 @@
                     dirLight.halfIntensity = mapLightData.halfIntensity;
                     dirLight.intensity = mapLightData.intensity;
 
-                    this._lightGroup.addLight(dirLight);
+                    this.lightGroup.addLight(dirLight);
 
                 } else if (mapLightData.type == LightType.pointlight && this._mapXmlParser.pointLight) {
                     var pLight: PointLight = new PointLight(0);
@@ -604,7 +749,7 @@
 
                     pLight.falloff = mapLightData.falloff;
                     pLight.intensity = mapLightData.intensity;
-                    this._lightGroup.addLight(pLight);
+                    this.lightGroup.addLight(pLight);
                 }
             }
 

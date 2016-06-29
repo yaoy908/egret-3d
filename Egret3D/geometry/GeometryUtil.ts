@@ -25,5 +25,27 @@
             geo.vertexFormat = vertexFromat;
             return geo;
         }
+
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public static createGemetryForType(type: string, gemetry: any): Geometry {
+            switch (type) {
+                case "CubeGeometry":
+                    return new CubeGeometry(gemetry.width, gemetry.height, gemetry.depth);
+                case "CylinderGeometry":
+                    return new CylinderGeometry(gemetry.height, gemetry.radius);
+                case "ElevationGeometry":
+                    return new ElevationGeometry(gemetry.heightmap, gemetry.width, gemetry.height, gemetry.depth, gemetry.segmentsW, gemetry.segmentsH);
+                case "PlaneGeometry":
+                    return new PlaneGeometry(gemetry.width, gemetry.height, gemetry.segmentsW, gemetry.segmentsH, gemetry.uScale, gemetry.vScale);
+                case "SphereGeometry":
+                    return new SphereGeometry(gemetry.r, gemetry.segmentsW, gemetry.segmentsH);
+            }
+            return null;
+        }
     }
 }
