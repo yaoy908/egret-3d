@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <version>1</version>
+  <cameraAnims />
+  <node type="Object3D" insID="-587504" parent="-1" name="Point light">
+    <pos x="-417.999969" y="624" z="0" />
+    <rot rx="0.09323948" ry="0" rz="0" rw="0.995643735" />
+    <scale sx="1" sy="1" sz="1" />
+  </node>
+  <node type="Mesh" insID="-551570" parent="-551542" name="zhanchuan_13" path="Model/1_zhanchuan_13.esm">
+    <pos x="3.03530565E-20" y="-6.86440054E-13" z="1.82031982E-07" />
+    <rot rx="1.34869936E-06" ry="-1.31779063E-06" rz="0.7071069" rw="0.707106769" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="2" />
+    <lightIds>1</lightIds>
+  </node>
+  <node type="Mesh" insID="-551568" parent="-551542" name="zhanchuan_12" path="Model/2_zhanchuan_12.esm">
+    <pos x="3.03530565E-20" y="-6.86440054E-13" z="1.82031982E-07" />
+    <rot rx="1.34869936E-06" ry="-1.31779063E-06" rz="0.7071069" rw="0.707106769" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="3" />
+    <lightIds>1</lightIds>
+  </node>
+  <node type="Mesh" insID="-551566" parent="-551542" name="zhanchuan_11" path="Model/3_zhanchuan_11.esm">
+    <pos x="3.03530565E-20" y="-6.86440054E-13" z="1.82031982E-07" />
+    <rot rx="1.34869936E-06" ry="-1.31779063E-06" rz="0.7071069" rw="0.707106769" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="4" />
+    <lightIds>1</lightIds>
+  </node>
+  <node type="Mesh" insID="-551564" parent="-551542" name="zhanchuan_10" path="Model/4_zhanchuan_10.esm">
+    <pos x="3.03530565E-20" y="-6.86440054E-13" z="1.82031982E-07" />
+    <rot rx="1.34869936E-06" ry="-1.31779063E-06" rz="0.7071069" rw="0.707106769" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="5" />
+    <lightIds>1</lightIds>
+  </node>
+  <node type="Mesh" insID="-551562" parent="-551542" name="zhanchuan_09b" path="Model/5_zhanchuan_09b.esm">
+    <pos x="3.03530565E-20" y="-6.86440054E-13" z="1.82031982E-07" />
+    <rot rx="1.34869936E-06" ry="-1.31779063E-06" rz="0.7071069" rw="0.707106769" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="6" />
+    <lightIds>1</lightIds>
+  </node>
+  <node type="Mesh" insID="-551560" parent="-551542" name="zhanchuan_09a" path="Model/6_zhanchuan_09a.esm">
+    <pos x="3.03530565E-20" y="-6.86440054E-13" z="1.82031982E-07" />
+    <rot rx="1.34869936E-06" ry="-1.31779063E-06" rz="0.7071069" rw="0.707106769" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="6" />
+    <lightIds>1</lightIds>
+  </node>
+  <node type="Mesh" insID="-551558" parent="-551542" name="zhanchuan_08" path="Model/7_zhanchuan_08.esm">
+    <pos x="3.03530565E-20" y="-6.86440054E-13" z="1.82031982E-07" />
+    <rot rx="1.34869936E-06" ry="-1.31779063E-06" rz="0.7071069" rw="0.707106769" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="8" />
+    <lightIds>1</lightIds>
+  </node>
+  <node type="Mesh" insID="-551556" parent="-551542" name="zhanchuan_07" path="Model/8_zhanchuan_07.esm">
+    <pos x="3.03530565E-20" y="-6.86440054E-13" z="1.82031982E-07" />
+    <rot rx="1.34869936E-06" ry="-1.31779063E-06" rz="0.7071069" rw="0.707106769" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="9" />
+    <lightIds>1</lightIds>
+  </node>
+  <node type="Mesh" insID="-551554" parent="-551542" name="zhanchuan_06" path="Model/9_zhanchuan_06.esm">
+    <pos x="3.03530565E-20" y="-6.86440054E-13" z="1.82031982E-07" />
+    <rot rx="1.34869936E-06" ry="-1.31779063E-06" rz="0.7071069" rw="0.707106769" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="10" />
+    <lightIds>1</lightIds>
+  </node>
+  <node type="Mesh" insID="-551552" parent="-551542" name="zhanchuan_05" path="Model/10_zhanchuan_05.esm">
+    <pos x="3.03530565E-20" y="-6.86440054E-13" z="1.82031982E-07" />
+    <rot rx="1.34869936E-06" ry="-1.31779063E-06" rz="0.7071069" rw="0.707106769" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="11" />
+    <lightIds>1</lightIds>
+  </node>
+  <node type="Mesh" insID="-551550" parent="-551542" name="zhanchuan_04" path="Model/11_zhanchuan_04.esm">
+    <pos x="3.03530565E-20" y="-6.86440054E-13" z="1.82031982E-07" />
+    <rot rx="1.34869936E-06" ry="-1.31779063E-06" rz="0.7071069" rw="0.707106769" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="12" />
+    <lightIds>1</lightIds>
+  </node>
+  <node type="Mesh" insID="-551548" parent="-551542" name="zhanchuan_03" path="Model/12_zhanchuan_03.esm">
+    <pos x="3.03530565E-20" y="-6.86440054E-13" z="1.82031982E-07" />
+    <rot rx="1.34869936E-06" ry="-1.31779063E-06" rz="0.7071069" rw="0.707106769" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="13" />
+    <lightIds>1</lightIds>
+  </node>
+  <node type="Mesh" insID="-551546" parent="-551542" name="zhanchuan_02" path="Model/13_zhanchuan_02.esm">
+    <pos x="3.03530565E-20" y="-6.86440054E-13" z="1.82031982E-07" />
+    <rot rx="1.34869936E-06" ry="-1.31779063E-06" rz="0.7071069" rw="0.707106769" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="14" />
+    <lightIds>1</lightIds>
+  </node>
+  <node type="Mesh" insID="-551544" parent="-551542" name="zhanchuan_01" path="Model/14_zhanchuan_01.esm">
+    <pos x="3.03530565E-20" y="-6.86440054E-13" z="1.82031982E-07" />
+    <rot rx="1.34869936E-06" ry="-1.31779063E-06" rz="0.7071069" rw="0.707106769" />
+    <scale sx="1" sy="1" sz="1" />
+    <mat id="15" />
+    <lightIds>1</lightIds>
+  </node>
+  <node type="Object3D" insID="-551542" parent="-551538" name="Bone001">
+    <pos x="0" y="0" z="-1.82031982E-07" />
+    <rot rx="-1.34869924E-06" ry="1.34869924E-06" rz="-0.7071068" rw="0.7071068" />
+    <scale sx="1" sy="1" sz="1" />
+    <propertyAnim path="ProAnim/Bone001.epa" name="Bone001.epa" />
+  </node>
+  <node type="Object3D" insID="-551538" parent="-1" name="zhanchuan(1)">
+    <pos x="0" y="0" z="0" />
+    <rot rx="0" ry="0" rz="0" rw="1" />
+    <scale sx="1" sy="1" sz="1" />
+  </node>
+  <node type="Camera3D" insID="-403338" parent="-1" name="Main Camera" fov="60">
+    <pos x="0" y="100" z="-1000" />
+    <rot rx="0" ry="0" rz="0" rw="1" />
+    <scale sx="1" sy="1" sz="1" />
+  </node>
+  <mat id="2" name="Egret3D/d/E3D_D_Normal">
+    <diffuseTextureName>Texture/13.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0x605a5a</ambientColor>
+    <specularColor>0x1f4f78</specularColor>
+    <alpha>1</alpha>
+    <cutAlpha>0</cutAlpha>
+    <specularLevel>1</specularLevel>
+    <gloss>80</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+  </mat>
+  <mat id="3" name="Egret3D/d/E3D_D_Normal">
+    <diffuseTextureName>Texture/12.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0x605a5a</ambientColor>
+    <specularColor>0x1f4f78</specularColor>
+    <alpha>1</alpha>
+    <cutAlpha>0</cutAlpha>
+    <specularLevel>1</specularLevel>
+    <gloss>80</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+  </mat>
+  <mat id="4" name="Egret3D/d/E3D_D_Normal">
+    <diffuseTextureName>Texture/11.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0x605a5a</ambientColor>
+    <specularColor>0x1f4f78</specularColor>
+    <alpha>1</alpha>
+    <cutAlpha>0</cutAlpha>
+    <specularLevel>1</specularLevel>
+    <gloss>80</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+  </mat>
+  <mat id="5" name="Egret3D/d/E3D_D_Normal">
+    <diffuseTextureName>Texture/10.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0x605a5a</ambientColor>
+    <specularColor>0x1f4f78</specularColor>
+    <alpha>1</alpha>
+    <cutAlpha>0</cutAlpha>
+    <specularLevel>1</specularLevel>
+    <gloss>80</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+  </mat>
+  <mat id="6" name="Egret3D/d/E3D_D_Normal">
+    <diffuseTextureName>Texture/9.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0x605a5a</ambientColor>
+    <specularColor>0x1f4f78</specularColor>
+    <alpha>1</alpha>
+    <cutAlpha>0</cutAlpha>
+    <specularLevel>1</specularLevel>
+    <gloss>80</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+  </mat>
+  <mat id="8" name="Egret3D/d/E3D_D_Normal">
+    <diffuseTextureName>Texture/8.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0x605a5a</ambientColor>
+    <specularColor>0x1f4f78</specularColor>
+    <alpha>1</alpha>
+    <cutAlpha>0</cutAlpha>
+    <specularLevel>1</specularLevel>
+    <gloss>80</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+  </mat>
+  <mat id="9" name="Egret3D/d/E3D_D_Normal">
+    <diffuseTextureName>Texture/7.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0x605a5a</ambientColor>
+    <specularColor>0x1f4f78</specularColor>
+    <alpha>1</alpha>
+    <cutAlpha>0</cutAlpha>
+    <specularLevel>1</specularLevel>
+    <gloss>80</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+  </mat>
+  <mat id="10" name="Egret3D/d/E3D_D_Normal">
+    <diffuseTextureName>Texture/6.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0x605a5a</ambientColor>
+    <specularColor>0x1f4f78</specularColor>
+    <alpha>1</alpha>
+    <cutAlpha>0</cutAlpha>
+    <specularLevel>1</specularLevel>
+    <gloss>80</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+  </mat>
+  <mat id="11" name="Egret3D/d/E3D_D_Normal">
+    <diffuseTextureName>Texture/5.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0x605a5a</ambientColor>
+    <specularColor>0x1f4f78</specularColor>
+    <alpha>1</alpha>
+    <cutAlpha>0</cutAlpha>
+    <specularLevel>1</specularLevel>
+    <gloss>80</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+  </mat>
+  <mat id="12" name="Egret3D/d/E3D_D_Normal">
+    <diffuseTextureName>Texture/4.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0x605a5a</ambientColor>
+    <specularColor>0x1f4f78</specularColor>
+    <alpha>1</alpha>
+    <cutAlpha>0</cutAlpha>
+    <specularLevel>1</specularLevel>
+    <gloss>80</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+  </mat>
+  <mat id="13" name="Egret3D/d/E3D_D_Normal">
+    <diffuseTextureName>Texture/3.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0x605a5a</ambientColor>
+    <specularColor>0x1f4f78</specularColor>
+    <alpha>1</alpha>
+    <cutAlpha>0</cutAlpha>
+    <specularLevel>1</specularLevel>
+    <gloss>80</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+  </mat>
+  <mat id="14" name="Egret3D/d/E3D_D_Normal">
+    <diffuseTextureName>Texture/2.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0x605a5a</ambientColor>
+    <specularColor>0x1f4f78</specularColor>
+    <alpha>1</alpha>
+    <cutAlpha>0</cutAlpha>
+    <specularLevel>1</specularLevel>
+    <gloss>80</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+  </mat>
+  <mat id="15" name="Egret3D/d/E3D_D_Normal">
+    <diffuseTextureName>Texture/1.png</diffuseTextureName>
+    <normalTextureName />
+    <specularTextureName />
+    <shadowTextureName />
+    <diffuseColor>0xffffff</diffuseColor>
+    <ambientColor>0x605a5a</ambientColor>
+    <specularColor>0x1f4f78</specularColor>
+    <alpha>1</alpha>
+    <cutAlpha>0</cutAlpha>
+    <specularLevel>1</specularLevel>
+    <gloss>80</gloss>
+    <ambientPower>1</ambientPower>
+    <diffusePower>1</diffusePower>
+    <normalPower>1</normalPower>
+    <castShadow>false</castShadow>
+    <acceptShadow>false</acceptShadow>
+    <smooth>true</smooth>
+    <repeat>false</repeat>
+    <bothside>false</bothside>
+    <drawMode>4</drawMode>
+    <cullMode>1029</cullMode>
+    <blendMode>NORMAL</blendMode>
+  </mat>
+  <env directLight="open" pointLight="close">
+    <light id="1">
+      <type>directlight</type>
+      <direction x="0" y="-0.1856666" z="0.9826128" />
+      <diffuseColor>0xffffff</diffuseColor>
+      <ambientColor>0x000000</ambientColor>
+      <intensity>8</intensity>
+      <halfIntensity>0</halfIntensity>
+      <falloff>0</falloff>
+      <radius>0</radius>
+    </light>
+  </env>
+</scene>

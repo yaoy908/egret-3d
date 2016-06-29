@@ -33,12 +33,54 @@
      */
     export class CubeTexture extends ITexture {
 
-        private image_front: Texture2D;
-        private image_back: Texture2D;
-        private image_left: Texture2D;
-        private image_right: Texture2D;
-        private image_up: Texture2D;
-        private image_down: Texture2D;
+        /**
+        * @language zh_CN
+        * image_front 前部ITexture图片元素
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public image_front: Texture2D;
+
+        /**
+        * @language zh_CN
+        * image_back 背部ITexture图片元素
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public image_back: Texture2D;
+
+        /**
+        * @language zh_CN
+        * image_left 左部ITexture图片元素
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public image_left: Texture2D;
+
+        /**
+        * @language zh_CN
+        * image_right 右部ITexture图片元素
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public image_right: Texture2D;
+
+        /**
+        * @language zh_CN
+        * image_up 顶部ITexture图片元素
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public image_up: Texture2D;
+
+
+        /**
+        * @language zh_CN
+        * image_down 底部ITexture图片元素
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public image_down: Texture2D;
 
         /**
          * @language zh_CN

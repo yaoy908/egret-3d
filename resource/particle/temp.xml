@@ -25,8 +25,11 @@
       <scale x="1" y="1" z="1"></scale>
       <position x="0" y="0" z="0"></position>
     </transform>
-  
 
+    <render>
+      <renderMode>Billboard</renderMode>
+
+    </render>
   </property>
 
   <colorOffset>
@@ -70,7 +73,9 @@
     <type>Cube</type>
     <randomDirection>false</randomDirection>
     <cube width="0" height="0" depth="0"></cube>
-    <sphereRadius>10</sphereRadius>
+    <sphereRadius>0</sphereRadius>
+    <hemiSphereRaiuds>0</hemiSphereRaiuds>
+    <cone coneHeight="10" coneRadiusBottom="4" coneRadiusTop="6"></cone>
   </shape>
   
   

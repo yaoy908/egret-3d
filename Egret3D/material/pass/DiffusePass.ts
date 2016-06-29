@@ -7,6 +7,7 @@
 
         constructor(materialData: MaterialData) {
             super(materialData);
+            this._passID = PassType.diffusePass;
         }
 
         /**

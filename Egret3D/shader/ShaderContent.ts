@@ -193,8 +193,8 @@
                     if (otherContent.attributeList[i].name == this.attributeList[j].name) {
                         if (otherContent.attributeList[i].valueType != this.attributeList[j].valueType ||
                             otherContent.attributeList[i].key != this.attributeList[j].key) {
-                            console.log(otherContent.attributeList[i].name + "=> type:" + otherContent.attributeList[i].valueType + " " + this.attributeList[j].valueType
-                                + " => key:" + otherContent.attributeList[i].key + " " + this.attributeList[j].key);
+                            //console.log(otherContent.attributeList[i].name + "=> type:" + otherContent.attributeList[i].valueType + " " + this.attributeList[j].valueType
+                            //    + " => key:" + otherContent.attributeList[i].key + " " + this.attributeList[j].key);
                         }
 
                         isAdd = false;
@@ -213,8 +213,8 @@
                     if (otherContent.varyingList[i].name == this.varyingList[j].name) {
                         if (otherContent.varyingList[i].valueType != this.varyingList[j].valueType ||
                             otherContent.varyingList[i].key != this.varyingList[j].key) {
-                            console.log(otherContent.varyingList[i].name + "=> type:" + otherContent.varyingList[i].valueType + " " + this.varyingList[j].valueType
-                                + " => key:" + otherContent.varyingList[i].key + " " + this.varyingList[j].key);
+                            //console.log(otherContent.varyingList[i].name + "=> type:" + otherContent.varyingList[i].valueType + " " + this.varyingList[j].valueType
+                            //    + " => key:" + otherContent.varyingList[i].key + " " + this.varyingList[j].key);
                         }
 
                         isAdd = false;
@@ -233,8 +233,8 @@
                     if (otherContent.uniformList[i].name == this.uniformList[j].name) {
                         if (otherContent.uniformList[i].valueType != this.uniformList[j].valueType ||
                             otherContent.uniformList[i].key != this.uniformList[j].key) {
-                            console.log(otherContent.uniformList[i].name + "=> type:" + otherContent.uniformList[i].valueType + " " + this.uniformList[j].valueType
-                                + " => key:" + otherContent.uniformList[i].key + " " + this.uniformList[j].key);
+                            //console.log(otherContent.uniformList[i].name + "=> type:" + otherContent.uniformList[i].valueType + " " + this.uniformList[j].valueType
+                            //    + " => key:" + otherContent.uniformList[i].key + " " + this.uniformList[j].key);
                         }
 
                         isAdd = false;
@@ -253,8 +253,8 @@
                     if (otherContent.constList[i].name == this.constList[j].name) {
                         if (otherContent.constList[i].valueType != this.constList[j].valueType ||
                             otherContent.constList[i].key != this.constList[j].key) {
-                            console.log(otherContent.constList[i].name + "=> type:" + otherContent.constList[i].valueType + " " + this.constList[j].valueType
-                                + " => key:" + otherContent.constList[i].key + " " + this.constList[j].key);
+                            //console.log(otherContent.constList[i].name + "=> type:" + otherContent.constList[i].valueType + " " + this.constList[j].valueType
+                            //    + " => key:" + otherContent.constList[i].key + " " + this.constList[j].key);
                         }
 
                         isAdd = false;
@@ -272,8 +272,8 @@
                     if (otherContent.tempList[i].name == this.tempList[j].name) {
                         if (otherContent.tempList[i].valueType != this.tempList[j].valueType ||
                             otherContent.tempList[i].key != this.tempList[j].key) {
-                            console.log(otherContent.tempList[i].name + "=> type:" + otherContent.tempList[i].valueType + " " + this.tempList[j].valueType
-                                + " => key:" + otherContent.tempList[i].key + " " + this.tempList[j].key);
+                            //console.log(otherContent.tempList[i].name + "=> type:" + otherContent.tempList[i].valueType + " " + this.tempList[j].valueType
+                            //    + " => key:" + otherContent.tempList[i].key + " " + this.tempList[j].key);
                         }
 
                         isAdd = false;
@@ -292,8 +292,8 @@
                     if (otherContent.sampler2DList[i].name == this.sampler2DList[j].name) {
                         if (otherContent.sampler2DList[i].valueType != this.sampler2DList[j].valueType ||
                             otherContent.sampler2DList[i].key != this.sampler2DList[j].key) {
-                            console.log(otherContent.sampler2DList[i].name + "=> type:" + otherContent.sampler2DList[i].valueType + " " + this.sampler2DList[j].valueType
-                                + " => key:" + otherContent.sampler2DList[i].key + " " + this.sampler2DList[j].key);
+                            //console.log(otherContent.sampler2DList[i].name + "=> type:" + otherContent.sampler2DList[i].valueType + " " + this.sampler2DList[j].valueType
+                            //    + " => key:" + otherContent.sampler2DList[i].key + " " + this.sampler2DList[j].key);
                         }
 
                         isAdd = false;
@@ -311,8 +311,8 @@
                     if (otherContent.sampler3DList[i].name == this.sampler3DList[j].name) {
                         if (otherContent.sampler2DList[i].valueType != this.sampler3DList[j].valueType ||
                             otherContent.sampler3DList[i].key != this.sampler3DList[j].key) {
-                            console.log(otherContent.sampler3DList[i].name + "=> type:" + otherContent.sampler3DList[i].valueType + " " + this.sampler3DList[j].valueType
-                                + " => key:" + otherContent.sampler3DList[i].key + " " + this.sampler3DList[j].key);
+                        //    console.log(otherContent.sampler3DList[i].name + "=> type:" + otherContent.sampler3DList[i].valueType + " " + this.sampler3DList[j].valueType
+                        //        + " => key:" + otherContent.sampler3DList[i].key + " " + this.sampler3DList[j].key);
                         }
 
                         isAdd = false;

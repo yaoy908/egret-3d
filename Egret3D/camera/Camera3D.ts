@@ -523,6 +523,7 @@
         * @platform Web,Native
         */
         public update(time: number, delay: number, camera: Camera3D) {
+            super.update(time, delay, camera);
             for (var key in this._animation) {
                 this._animation[key].update(time, delay);
             }
@@ -534,11 +535,16 @@
         /**
         * @private
         * @language zh_CN
+        * 3维坐标转2维屏幕坐标
+        * @param n 3维坐标
+        * @param target 2维屏幕坐标 默认为null 为null会返回一个新的对象
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public object3DToScreenRay(n: Vector3D, target: Vector3D): Vector3D {
-
+        public object3DToScreenRay(n: Vector3D, target: Vector3D = null): Vector3D {
+            if (!target) {
+                target = new Vector3D()
+            }
             this._halfw = this.viewPort.width * 0.5;
             this._halfh = this.viewPort.height * 0.5;
 
@@ -553,11 +559,16 @@
         /**
         * @private
         * @language zh_CN
+        * 2维屏幕坐标转3维坐标
+        * @param n 2维屏幕坐标
+        * @param target 3维坐标 默认为null 为null会返回一个新的对象
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public ScreenRayToObject3D(n: Vector3D, target: Vector3D): Vector3D {
-
+        public ScreenRayToObject3D(n: Vector3D, target: Vector3D = null): Vector3D {
+            if (!target) {
+                target = new Vector3D()
+            }
             this._halfw = this.viewPort.width * 0.5;
             this._halfh = this.viewPort.height * 0.5;
 

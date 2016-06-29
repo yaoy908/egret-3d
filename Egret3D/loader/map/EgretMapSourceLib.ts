@@ -1,18 +1,18 @@
 ﻿module egret3d {
 
-     /**
-     * @language zh_CN
-     * @class egret3d.EgretMapSourceLib
-     * @classdesc
-     * 地图数据的资源库，并管理最基础的加载
-     * 通过地图的parser结果，管理esm/eca/png/eam的加载
-     * 加载完毕基础文件后，会派发事件LoaderEvent3D.LOADER_COMPLETE
-     * @see egret3d.EventDispatcher
-     *
-     * @version Egret 3.0
-     * @platform Web,Native
-     */
-
+    /**
+    * @private
+    * @language zh_CN
+    * @class egret3d.EgretMapSourceLib
+    * @classdesc
+    * 地图数据的资源库，并管理最基础的加载
+    * 通过地图的parser结果，管理esm/eca/png/eam的加载
+    * 加载完毕基础文件后，会派发事件LoaderEvent3D.LOADER_COMPLETE
+    * @see egret3d.EventDispatcher
+    *
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class EgretMapSourceLib extends EventDispatcher {
 
         private _imageLoaders: DoubleArray;
