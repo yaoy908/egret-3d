@@ -374,6 +374,22 @@
 
         /**
         * @language zh_CN
+        * 查找HUD
+        * @param name hud 名字
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public findHud(name: string): HUD {
+            for (var i: number = 0; i < this._huds.length; ++i) {
+                if (this._huds[i].name == name) {
+                    return this._huds[i];
+                }
+            }
+            return null;
+        }
+
+        /**
+        * @language zh_CN
         * 在渲染列表中删除一个HUD
         * @param hud 需要删除的HUD
         * @version Egret 3.0
