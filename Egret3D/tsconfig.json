@@ -106,7 +106,6 @@
         "core/node/Mesh.ts",
         "core/node/BillBoard.ts",
         "core/node/Sky.ts",
-        "core/node/SphereSky.ts",
         "core/node/Wireframe.ts",
 
         "lights/LightBase.ts",

@@ -26,16 +26,17 @@
         /**
         * @language zh_CN
         * 构建一个天空盒子对象
-        * @param cubMaterial 天空盒子贴图材质 
-        * @param camera 天空盒子渲染相机
+        * @param geometry 天空模型数据
+        * @param material 天空材质
+        * @param camera 天空渲染相机
         * @version Egret 3.0
         * @platform Web,Native
         */
-        constructor(cubMaterial: CubeTextureMaterial, camera: Camera3D = null) {
-            super(new CubeGeometry(10000, 10000, 10000), cubMaterial);
+        constructor(geometry: Geometry, material: MaterialBase, camera: Camera3D = null) {
+            super(geometry, material);
             this.camera = camera;
-            cubMaterial.cullMode = ContextConfig.FRONT;
-            cubMaterial.ambientColor = 0xffffff;
+            material.cullMode = ContextConfig.FRONT;
+            material.ambientColor = 0xffffff;
             if (!this.bound) {
                 this.bound = this.buildBoundBox();
             }
