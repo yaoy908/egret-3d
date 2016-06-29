@@ -465,13 +465,13 @@
             var load: URLLoader = new URLLoader(path);
             this.addLoader(load);
             this._taskCount++;
-            console.log("+++" + load.url + "+++" + this._taskCount);
+            //console.log("+++" + load.url + "+++" + this._taskCount);
             return load;
         }
 
         private processTask(load:URLLoader) {
             this._taskCount--;
-            console.log("---" + load.url + "---" + this._taskCount);
+            //console.log("---" + load.url + "---" + this._taskCount);
             if (this._taskCount <= 0) {
                 this._event.eventType = LoaderEvent3D.LOADER_COMPLETE;
                 this._event.target = this;
@@ -651,7 +651,7 @@
                         uvMethod.setSpeedU(1, textureData.uSpeed);
                         uvMethod.setSpeedV(1, textureData.vSpeed);
 
-                        load = this.addMethodImgTask(textureData.path, lightmapMethod, textureData.attributeName);
+                        load = this.addMethodImgTask(textureData.path, uvMethod, textureData.attributeName);
                         if (load.data) {
                             diffuseTexture1 = load.data;
                         }
