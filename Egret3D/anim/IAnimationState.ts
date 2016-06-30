@@ -25,7 +25,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        vertex_shaders: { [shaderPhaseType: number]: string[] };
+        vertex_shaders?: { [shaderPhaseType: number]: string[] };
                                          
                         
 
@@ -36,7 +36,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        fragment_shaders: { [shaderPhaseType: number]: string[] };
+        fragment_shaders?: { [shaderPhaseType: number]: string[] };
                                 
         /**
         * @language zh_CN
@@ -44,7 +44,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        numberOfVertices: number;
+        numberOfVertices?: number;
                                         
         /**
         * @language zh_CN
@@ -52,7 +52,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        vertexSizeInBytes: number;
+        vertexSizeInBytes?: number;
                                                 
         /**
         * @language zh_CN
@@ -60,7 +60,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        animNodes: AnimationNode[];
+        animNodes?: AnimationNode[];
                                                         
         /**
         * @language zh_CN
@@ -68,6 +68,6 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        keyFrames: AnimationCurve[];
+        keyFrames?: AnimationCurve[];
     }
 }

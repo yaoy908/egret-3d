@@ -136,7 +136,7 @@
                 translation.y = bytes.readFloat();
                 translation.z = bytes.readFloat();
 
-                joint.setInverseBindPose(translation, rotation, scaling);
+                joint.buildInverseMatrix(scaling, rotation, translation);
                 geomtry.skeleton.joints.push(joint);
             }
 
@@ -280,7 +280,7 @@
                 translation.y = bytes.readFloat();
                 translation.z = bytes.readFloat();
 
-                joint.setInverseBindPose(translation, rotation, scaling);
+                joint.buildInverseMatrix(scaling, rotation, translation);
                 geomtry.skeleton.joints.push(joint);
             }
 
@@ -427,7 +427,7 @@
                 translation.y = bytes.readFloat();
                 translation.z = bytes.readFloat();
 
-                joint.setInverseBindPose(translation, orientation, scaling);
+                joint.buildInverseMatrix(scaling, orientation, translation);
                 geomtry.skeleton.joints.push(joint);
             }
 
