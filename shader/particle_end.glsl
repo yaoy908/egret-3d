@@ -28,7 +28,9 @@ vec3 calcParticleMove(vec3 distanceXYZ){
 		vec3 temp = distanceXYZ * distanceXYZ;
 		float distanceCurrent = sqrt(temp.x + temp.y + temp.z);
 		float distanceLimit = velocityLimitVec2.x;
-
+		if(distanceLimit < 0.0001){
+			return vec3(0.0);
+		}
 		if(distanceCurrent > distanceLimit){
 			distanceXYZ *= distanceLimit / distanceCurrent;
 		}

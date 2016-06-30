@@ -4,7 +4,7 @@
   <property>
     <particleCount>400</particleCount>
     <bounds x="10" y="10" z="10"></bounds>
-    <colorType>OneGradients</colorType>
+    <colorType>Const</colorType>
     <colorConst1>0xffffffff</colorConst1>
     <colorConst2>0xff00ff00</colorConst2>
     <colorGradients1>
@@ -20,6 +20,7 @@
       <item time="1.0" color="0xffffffff"></item>
     </colorGradients2>
     <gravity>0</gravity>
+    <prewarm>false</prewarm>
     <transform>
       <rotation x="0" y="0" z="0"></rotation>
       <scale x="1" y="1" z="1"></scale>
@@ -32,12 +33,12 @@
     </render>
   </property>
 
-  <colorOffset>
+  <!--<colorOffset>
     <item time="0.0" color="0xff00ff00"></item>
     <item time="0.4" color="0xffff0000"></item>
     <item time="0.6" color="0xff0000ff"></item>
     <item time="1.0" color="0xffffffff"></item>
-  </colorOffset>
+  </colorOffset>-->
   
   
   <emission>
@@ -63,31 +64,34 @@
   
   <life>
     <duration>5</duration>
-    <lifeMax>2</lifeMax>
-    <lifeMin>5</lifeMin>
+    <type>Const</type>
+    <max>5</max>
+    <min>2</min>
     <delay>0</delay>
     <loop>true</loop>
   </life>
   
   <shape>
-    <type>Cone</type>
+    <type>Sphere</type>
     <randomDirection>false</randomDirection>
     <cube width="0" height="0" depth="0"></cube>
-    <sphereRadius>0</sphereRadius>
-    <hemiSphereRaiuds>0</hemiSphereRaiuds>
+    <sphereRadius>10</sphereRadius>
+    <hemiSphereRadius>0</hemiSphereRadius>
     <cone coneHeight="10" coneRadiusBottom="4" coneRadiusTop="6" type="Volume"></cone>
   </shape>
   
   
   <rotationBirth>
-    <min x="0" y="0" z="0"></min>
-    <max x="0" y="0" z="0"></max>
+    <type>Const</type>
+    <max>0</max>
+    <min>0</min>
   </rotationBirth>
   
   
   <scaleBirth>
-    <min x="1" y="1" z="1"></min>
-    <max x="1" y="1" z="1"></max>
+    <type>Const</type>
+    <max>1</max>
+    <min>1</min>
   </scaleBirth>
   
   <geometry>
@@ -99,10 +103,11 @@
   
   
   <moveSpeed>
+    <type>Const</type>
     <max>40</max>
     <min>40</min>
     <velocityOver>
-      <type>TwoBezier</type>
+      <type>OneBezier</type>
       <min x="1" y="1" z="1"></min>
       <max x="2" y="1" z="2"></max>
       <worldSpace>true</worldSpace>
@@ -152,7 +157,7 @@
       </zBezier2>
     </velocityOver>
     <velocityForce>
-      <type>TwoBezier</type>
+      <type>OneBezier</type>
       <min x="1" y="1" z="1"></min>
       <max x="2" y="1" z="2"></max>
       <worldSpace>true</worldSpace>
@@ -249,7 +254,7 @@
   
   
   <rotationSpeed1>
-    <type>TwoBezier</type>
+    <type>OneBezier</type>
     <min x="1" y="1" z="1"></min>
     <max x="2" y="1" z="1"></max>
     <bezier1>

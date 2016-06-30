@@ -20,6 +20,7 @@
       <item time="1.0" color="0xffffffff"></item>
     </colorGradients2>
     <gravity>0</gravity>
+    <prewarm>false</prewarm>
     <transform>
       <rotation x="0" y="0" z="0"></rotation>
       <scale x="1" y="1" z="1"></scale>
@@ -63,8 +64,9 @@
   
   <life>
     <duration>5</duration>
-    <lifeMax>2</lifeMax>
-    <lifeMin>5</lifeMin>
+    <type>Const</type>
+    <max>5</max>
+    <min>2</min>
     <delay>0</delay>
     <loop>true</loop>
   </life>
@@ -74,20 +76,22 @@
     <randomDirection>false</randomDirection>
     <cube width="0" height="0" depth="0"></cube>
     <sphereRadius>0</sphereRadius>
-    <hemiSphereRaiuds>0</hemiSphereRaiuds>
+    <hemiSphereRadius>0</hemiSphereRadius>
     <cone coneHeight="10" coneRadiusBottom="4" coneRadiusTop="6"></cone>
   </shape>
   
   
   <rotationBirth>
-    <min x="0" y="0" z="0"></min>
-    <max x="0" y="0" z="0"></max>
+    <type>Const</type>
+    <max>0</max>
+    <min>0</min>
   </rotationBirth>
   
   
   <scaleBirth>
-    <min x="1" y="1" z="1"></min>
-    <max x="1" y="1" z="1"></max>
+    <type>Const</type>
+    <max>1</max>
+    <min>1</min>
   </scaleBirth>
   
   <geometry>
@@ -99,6 +103,7 @@
   
   
   <moveSpeed>
+    <type>Const</type>
     <max>40</max>
     <min>40</min>
     <velocityOver>
@@ -202,18 +207,18 @@
       </zBezier2>
     </velocityForce>
     <velocityLimit>
-      <type>Const</type>
+      <type>TwoBezier</type>
       <min>100</min>
       <max>200</max>
       <bezier1>
         <pos x="0" y="0"></pos>
-        <pos x="0" y="0"></pos>
-        <pos x="1" y="0"></pos>
-        <pos x="1" y="0"></pos>
-        <ctrl x="0" y="0"></ctrl>
-        <ctrl x="0" y="0"></ctrl>
-        <ctrl x="1" y="0"></ctrl>
-        <ctrl x="1" y="0"></ctrl>
+        <pos x="0.5" y="150"></pos>
+        <pos x="0.5" y="150"></pos>
+        <pos x="1" y="100"></pos>
+        <ctrl x="0.2" y="50"></ctrl>
+        <ctrl x="0.4" y="150"></ctrl>
+        <ctrl x="0.6" y="150"></ctrl>
+        <ctrl x="0.8" y="100"></ctrl>
       </bezier1>
       <bezier2>
         <pos x="0" y="0"></pos>
@@ -248,7 +253,7 @@
   </scaleBezier>
   
   
-  <rotationSpeed1>
+  <rotationSpeed>
     <type>TwoBezier</type>
     <min x="1" y="1" z="1"></min>
     <max x="2" y="1" z="1"></max>
@@ -272,13 +277,13 @@
       <ctrl x="0.36" y="60"></ctrl>
       <ctrl x="1" y="-80"></ctrl>
     </bezier2>
-  </rotationSpeed1>
+  </rotationSpeed>
   
   
 
   
   <mat id="0">
-    <diffuseTextureName>Textures/sponza_column_c_diff.jpg</diffuseTextureName>
+    <diffuseTextureName>sponza_flag.jpg</diffuseTextureName>
     <specularTextureName />
     <diffuseColor>0xffffff</diffuseColor>
     <ambientColor>0xffffff</ambientColor>

@@ -11,10 +11,11 @@
     */
     export class ParticleVelocityNode extends AnimationNode {
 
-        private _velocityShape: ConstRandomValueShape;
+        private _velocityConstShape: ConstRandomValueShape;
         private attribute_velocity: GLSL.VarRegister;
 
-        private particleAnimationState: ParticleAnimationState;
+        private _node: ParticleDataMoveSpeed;
+        private _animationState: ParticleAnimationState;
         constructor() {
             super();
             this.name = "ParticleVelocityNode"; 
@@ -37,10 +38,12 @@
         * @platform Web,Native
         */
         public initNode(data: ParticleDataNode): void {
-            var node: ParticleDataMoveSpeed = <ParticleDataMoveSpeed>data;
-            this._velocityShape = new ConstRandomValueShape();
-            this._velocityShape.max = node.max;
-            this._velocityShape.min = node.min;
+            var node: ParticleDataMoveSpeed = this._node = <ParticleDataMoveSpeed>data;
+            if (node.type == ParticleValueType.Const || node.type == ParticleValueType.RandomConst) {
+                this._velocityConstShape = new ConstRandomValueShape();
+                this._velocityConstShape.max = node.max;
+                this._velocityConstShape.min = node.min;
+            }
         }
         /**
         * @language zh_CN
@@ -51,19 +54,46 @@
         * @platform Web,Native
         */
         public build(geometry: Geometry, count: number) {
-            this.particleAnimationState = <ParticleAnimationState>this.state;
+            this._animationState = <ParticleAnimationState>this.state;
 
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
 
-            var data: Array<number> = this._velocityShape.calculate(count);
-            var directionVector: Vector3D[] = this.particleAnimationState.directionArray;
+            var constList: Array<number> = this._velocityConstShape.calculate(count);
+            var directionVector: Vector3D[] = this._animationState.directionArray;
             var direction: Vector3D = new Vector3D();
 
+            //
+            var progress: number = 0;
+            var duration: number = this._animationState.emitter.data.life.duration;
+            var timeOffsetIndex: number = this._animationState.emitter.timeNode.offsetIndex;
+            var particleIndex: number = 0;
+            var timeIndex: number;
+            var bornTime: number;
+
+            var speed: number;
             for (var i: number = 0; i < count; ++i) {
-                var speed: number = data[i];
+                particleIndex = i * vertices;
+
+                //
+                if (this._node.type == ParticleValueType.OneBezier || this._node.type == ParticleValueType.TwoBezier) {
+                    timeIndex = particleIndex * geometry.vertexAttLength + timeOffsetIndex;
+                    bornTime = geometry.verticesData[timeIndex + 0];          //出生时间
+                    progress = bornTime / duration;
+                    progress = progress - Math.floor(progress);               //取小数部分
+                    speed = this._node.bezier1.calc(progress);
+                    if (this._node.type == ParticleValueType.TwoBezier) {
+                        var random: number = Math.random();
+                        speed *= random;
+                        speed += this._node.bezier2.calc(progress) * (1 - random);
+                    }
+                } else {
+                    speed = constList[i];
+                }
+
                 direction.copyFrom(directionVector[i]);
                 direction.scaleBy(speed);
+
                 for (var j: number = 0; j < vertices; ++j) {
                     index = i * vertices + j;
                     index = index * geometry.vertexAttLength + this.attribute_velocity.offsetIndex;

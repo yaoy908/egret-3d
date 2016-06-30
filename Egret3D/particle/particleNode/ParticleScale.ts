@@ -2,12 +2,13 @@
 
     /**
     * @private
-    * 粒子初始化的尺寸大小（直接修改顶点数据，todo：xyz三轴缩放）
+    * 粒子初始化的尺寸大小
     */
     export class ParticleScale extends AnimationNode {
       
-        private _scale: Vec3ConstRandomValueShape;
-        private particleAnimationState: ParticleAnimationState;
+        private _scale: ConstRandomValueShape;
+        private _animationState: ParticleAnimationState;
+        private _node: ParticleDataScaleBirth;
         constructor() {
             super();
 
@@ -22,16 +23,12 @@
         * @platform Web,Native
         */
         public initNode(data: ParticleDataNode): void {
-            var node: ParticleDataScaleBirth = <ParticleDataScaleBirth>data;
+            var node: ParticleDataScaleBirth = this._node = <ParticleDataScaleBirth>data;
 
-            this._scale = new Vec3ConstRandomValueShape();
-            this._scale.maxX = node.max.x;
-            this._scale.maxY = node.max.y;
-            this._scale.maxZ = node.max.z;
-            
-            this._scale.minX = node.min.x;
-            this._scale.minY = node.min.x;
-            this._scale.minZ = node.min.x;
+            this._scale = new ConstRandomValueShape();
+            this._scale.max = node.max;
+            this._scale.min = node.min;
+
         }
 
 
@@ -45,19 +42,42 @@
         */
         public build(geometry: Geometry, count: number) {
 
-            this.particleAnimationState = <ParticleAnimationState>this.state;
-            var scaleVec3Array: Vector3D[] = this._scale.calculate(count);
+            this._animationState = <ParticleAnimationState>this.state;
+            var scaleArray: number[] = this._scale.calculate(count);
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
+
+            var progress: number = 0;
+            var duration: number = this._animationState.emitter.data.life.duration;
+            var timeOffsetIndex: number = this._animationState.emitter.timeNode.offsetIndex;
+            var particleIndex: number = 0;
+            var timeIndex: number;
+            var bornTime: number;
+
+
+            var scale: number = 0;
             for (var i: number = 0; i < count; ++i) {
-                var scale: Vector3D = scaleVec3Array[i]; 
+                //
+                if (this._node.type == ParticleValueType.OneBezier || this._node.type == ParticleValueType.TwoBezier) {
+                    timeIndex = particleIndex * geometry.vertexAttLength + timeOffsetIndex;
+                    bornTime = geometry.verticesData[timeIndex + 0];          //出生时间
+                    progress = bornTime / duration;
+                    progress = progress - Math.floor(progress);               //取小数部分
+                    scale = this._node.bezier1.calc(progress);
+                    if (this._node.type == ParticleValueType.TwoBezier) {
+                        var random: number = Math.random();
+                        scale *= random;
+                        scale += this._node.bezier2.calc(progress) * (1 - random);
+                    }
+                } else {
+                    scale = scaleArray[i];
+                }
                 for (var j: number = 0; j < vertices; ++j) {
                    index = i * vertices + j;
-                   index = index * geometry.vertexAttLength ;
-
-                   geometry.verticesData[index + 0] *= scale.x;
-                   geometry.verticesData[index + 1] *= scale.y;
-                   geometry.verticesData[index + 2] *= scale.z;
+                   index = index * geometry.vertexAttLength;
+                   geometry.verticesData[index + 0] *= scale;
+                   geometry.verticesData[index + 1] *= scale;
+                   geometry.verticesData[index + 2] *= scale;
 
                 }
             }

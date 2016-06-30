@@ -75,7 +75,7 @@
                 this._positions = sphereShape;
             } else if (node.type == ParticleDataShapeType.HemiSphere) {
                 var hemiShape: HemiBallValueShape = new HemiBallValueShape();
-                hemiShape.r = node.hemiSphereRaiuds;
+                hemiShape.r = node.hemiSphereRadius;
                 this._positions = hemiShape;
             } else if (node.type == ParticleDataShapeType.Cone) {
                 var coneShape: CylinderValueShape = new CylinderValueShape();
@@ -134,7 +134,7 @@
                     if (this._node.type == ParticleDataShapeType.Point) {
                         dir.setTo(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
                     } else if (this._node.type == ParticleDataShapeType.Cube) {
-                        dir.setTo(0, 1, 0, 1);
+                        dir.setTo(0, 0, 1, 1);
                         this.rotationMat.identity();
                         this.rotationMat.rotation(data.property.rotation.x, data.property.rotation.y, data.property.rotation.z);
                         this.rotationMat.transformVector4(dir, dir);

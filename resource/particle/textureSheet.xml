@@ -7,6 +7,7 @@
     <colorType>Const</colorType>
     <colorConst1>0xffffffff</colorConst1>
     <gravity>0</gravity>
+    <prewarm>false</prewarm>
     <transform>
       <rotation x="0" y="0" z="0" />
       <scale x="1" y="1" z="1" />
@@ -24,8 +25,9 @@
   </emission>
   <life>
     <duration>4</duration>
-    <lifeMax>5</lifeMax>
-    <lifeMin>5</lifeMin>
+    <type>Const</type>
+    <max>5</max>
+    <min>5</min>
     <delay>0</delay>
     <loop>true</loop>
   </life>
@@ -34,22 +36,25 @@
     <randomDirection>false</randomDirection>
     <cube width="0" height="0" depth="0"></cube>
     <sphereRadius>0</sphereRadius>
-    <hemiSphereRaiuds>0</hemiSphereRaiuds>
+    <hemiSphereRadius>0</hemiSphereRadius>
     <cone coneHeight="10" coneRadiusBottom="4" coneRadiusTop="6" type="Volume"></cone>
   </shape>
   <rotationBirth>
-    <min x="0" y="0" z="0" />
-    <max x="0" y="0" z="0" />
+    <type>Const</type>
+    <max>0</max>
+    <min>0</min>
   </rotationBirth>
   <scaleBirth>
-    <max x="1" y="1" z="1" />
-    <min x="1" y="1" z="1" />
+    <type>Const</type>
+    <max>1</max>
+    <min>1</min>
   </scaleBirth>
   <geometry>
     <type>Plane</type>
     <plane width="5" height="5" />
   </geometry>
   <moveSpeed>
+    <type>Const</type>
     <max>15</max>
     <min>15</min>
   </moveSpeed>

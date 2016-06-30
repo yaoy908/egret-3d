@@ -1,4 +1,5 @@
-﻿module egret3d {
+module egret3d {
+
     /**
     * @language zh_CN
     * @class egret3d.Joint
@@ -12,38 +13,6 @@
     * @platform Web,Native
     */
     export class Joint {
-        
-        /**
-        * @language zh_CN
-        * 骨骼矩阵是否有效
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public jointMatrixValid: boolean = false;
-
-        /**
-        * @language zh_CN
-        * 骨骼世界矩阵是否有效
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public worldMatrixValid: boolean = false;
-
-        /**
-        * @language zh_CN
-        * 骨骼矩阵
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public jointMatrix: Matrix4_4 = new Matrix4_4();
-
-        /**
-        * @language zh_CN
-        * 骨骼世界矩阵
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public worldMatrix: Matrix4_4 = new Matrix4_4();
 
         /**
         * @language zh_CN
@@ -51,7 +20,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public name: string = null;
+        public name: string;
 
         /**
         * @language zh_CN
@@ -67,15 +36,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public parentIndex: number = -1;
-
-        /**
-        * @language zh_CN
-        * 骨骼逆矩阵
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public inverseBindPose: Matrix4_4 = null;
+        public parentIndex: number;
 
         /**
         * @language zh_CN
@@ -83,7 +44,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public scale: Vector3D = null;
+        public scale: Vector3D;
 
         /**
         * @language zh_CN
@@ -91,7 +52,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public orientation: Quaternion = null;
+        public orientation: Quaternion;
 
         /**
         * @language zh_CN
@@ -99,7 +60,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public translation: Vector3D = null;
+        public translation: Vector3D;
 
         /**
         * @language zh_CN
@@ -107,7 +68,31 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public localMatrix: Matrix4_4 = null;
+        public localMatrix: Matrix4_4;
+
+        /**
+        * @language zh_CN
+        * 骨骼逆矩阵
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public inverseMatrix: Matrix4_4;
+
+        /**
+        * @language zh_CN
+        * 骨骼世界矩阵
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public worldMatrix: Matrix4_4;
+
+        /**
+        * @language zh_CN
+        * 骨骼世界矩阵是否有效
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public worldMatrixValid: boolean;
 
         /**
         * @language zh_CN
@@ -118,6 +103,13 @@
         */
         constructor(name: string) {
             this.name = name;
+            this.parentIndex = -1;
+            this.scale = new Vector3D(1, 1, 1);
+            this.orientation = new Quaternion();
+            this.translation = new Vector3D();
+            this.localMatrix = new Matrix4_4();
+            this.worldMatrix = new Matrix4_4();
+            this.worldMatrixValid = false;
         }
 
         /**
@@ -128,81 +120,52 @@
         * @platform Web,Native
         */
         public clone(): Joint {
-
-            var cloneObj: Joint = new Joint(this.name);
-
-            cloneObj.parent = this.parent;
-            cloneObj.parentIndex = this.parentIndex;
-
-            if (this.inverseBindPose) {
-                cloneObj.inverseBindPose = new Matrix4_4;
-                cloneObj.inverseBindPose.copyFrom(this.inverseBindPose);
-            }
-
-            if (this.scale) {
-                cloneObj.scale = new Vector3D();
-                cloneObj.scale.copyFrom(this.scale);
-            }
-
-            if (this.orientation) {
-                cloneObj.orientation = new Quaternion();
-                cloneObj.orientation.copyFrom(this.orientation);
-            }
-
-            if (this.translation) {
-                cloneObj.translation = new Vector3D();
-                cloneObj.translation.copyFrom(this.translation);
-            }
-
-            if (this.scale && this.orientation && this.translation) {
-                cloneObj.setLocalTransform(cloneObj.orientation, cloneObj.scale, cloneObj.translation);
-            }
-
-            return cloneObj;
+            var joint: Joint = new Joint(this.name);
+            joint.parent = this.parent;
+            joint.parentIndex = this.parentIndex;
+            joint.scale.copyFrom(this.scale);
+            joint.orientation.copyFrom(this.orientation);
+            joint.translation.copyFrom(this.translation);
+            joint.localMatrix.copyFrom(this.localMatrix);
+            joint.worldMatrix.copyFrom(this.worldMatrix);
+            joint.worldMatrixValid = this.worldMatrixValid;
+            return joint;
         }
 
         /**
         * @language zh_CN
-        * 设置骨骼逆矩阵
-        * @param translation 平移量
-        * @param rotation 旋转量 可以是四元数 也可以是欧拉角
-        * @param scaling 缩放量
+        * 构建骨骼本地矩阵
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public setInverseBindPose(translation: Vector3D, rotation: Vector3D | Quaternion, scaling: Vector3D): void {
-
-            if (!this.inverseBindPose) {
-                this.inverseBindPose = new Matrix4_4();
-            }
+        public buildLocalMatrix(scale: Vector3D, rotation: Vector3D | Quaternion, translation: Vector3D): void {
+            this.scale.copyFrom(scale);
+            this.translation.copyFrom(translation);
             if (rotation instanceof Vector3D) {
-                this.inverseBindPose.recompose([translation, rotation, scaling]);
+                this.orientation.fromEulerAngles(rotation.x, rotation.y, rotation.z);
             }
             else {
-                this.inverseBindPose.makeTransform(translation, scaling, rotation);
+                this.orientation.copyFrom(rotation);
             }
+            this.localMatrix.makeTransform(this.translation, this.scale, this.orientation);
         }
 
         /**
         * @language zh_CN
-        * 设置骨骼本地置换
-        * @param orientation 旋转量
-        * @param scale 缩放量
-        * @param translation 平移量
+        * 构建骨骼逆矩阵
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public setLocalTransform(orientation: Quaternion, scale: Vector3D, translation: Vector3D): void {
-
-            this.translation = translation;
-            this.orientation = orientation;
-            this.scale = scale;
-
-            if (!this.localMatrix) {
-                this.localMatrix = new Matrix4_4();
+        public buildInverseMatrix(scale: Vector3D, rotation: Vector3D | Quaternion, translation: Vector3D): void {
+            if (!this.inverseMatrix) {
+                this.inverseMatrix = new Matrix4_4();
             }
-
-            this.localMatrix.makeTransform(this.translation, this.scale, this.orientation);
+            if (rotation instanceof Vector3D) {
+                this.inverseMatrix.recompose([translation, rotation, scale]);
+            }
+            else {
+                this.inverseMatrix.makeTransform(translation, scale, rotation);
+            }
         }
     }
 }

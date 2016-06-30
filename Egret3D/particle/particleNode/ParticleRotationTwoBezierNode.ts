@@ -20,8 +20,6 @@
             super();
             this.name = "ParticleRotationTwoBezierNode";
 
-            this.vertex_ShaderName[ShaderPhaseType.global_vertex] = this.vertex_ShaderName[ShaderPhaseType.global_vertex] || [];
-            this.vertex_ShaderName[ShaderPhaseType.global_vertex].push("particle_rotationTwoBezier");
 
             this.attribute_randomSeed = new GLSL.VarRegister();
             this.attribute_randomSeed.name = "attribute_rotationRandomSeed";
@@ -38,8 +36,12 @@
         */
         public initNode(data: ParticleDataNode): void {
             this._node = <ParticleDataRotationSpeed>data;
-            this._floatCompressData = this._node.bezier1.compress();
-            this._floatCompressData2 = this._node.bezier2.compress();
+            this._floatCompressData = this._node.bezier1.sampler();
+            this._floatCompressData2 = this._node.bezier2.sampler();
+
+
+            this.vertex_ShaderName[ShaderPhaseType.global_vertex] = this.vertex_ShaderName[ShaderPhaseType.global_vertex] || [];
+            this.vertex_ShaderName[ShaderPhaseType.global_vertex].push("particle_rotationTwoBezier");
         }
         /**
         * @language zh_CN

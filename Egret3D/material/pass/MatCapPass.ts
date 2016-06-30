@@ -29,7 +29,7 @@
             if (animation) {
                 // to add accept animation shader
                 if (animation.skeletonAnimationController) {
-                    this._passUsage.maxBone = animation.skeletonAnimationController.jointNumber * 2;
+                    this._passUsage.maxBone = animation.skeletonAnimationController.jointNum * 2;
 
                     this._vs_shader_methods[ShaderPhaseType.start_vertex] = [];
                     this._vs_shader_methods[ShaderPhaseType.start_vertex].push("skeleton_vs");
