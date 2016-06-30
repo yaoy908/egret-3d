@@ -30,8 +30,8 @@
             this.vsShaderList[ShaderPhaseType.start_vertex] = this.vsShaderList[ShaderPhaseType.start_vertex] || [];
             this.vsShaderList[ShaderPhaseType.start_vertex].push("wave_vs");
 
-            this.fsShaderList[ShaderPhaseType.diffuse_fragment] = this.fsShaderList[ShaderPhaseType.diffuse_fragment] || [];
-            this.fsShaderList[ShaderPhaseType.diffuse_fragment].push("wave_fs");
+            this.fsShaderList[ShaderPhaseType.multi_end_fragment] = this.fsShaderList[ShaderPhaseType.multi_end_fragment] || [];
+            this.fsShaderList[ShaderPhaseType.multi_end_fragment].push("wave_fs");
 
             this.start();
 
