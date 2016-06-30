@@ -14,9 +14,10 @@
         /**
         * @private
         */
-        private _rotations: Vec3ConstRandomValueShape;
-        private particleAnimationState: ParticleAnimationState;
+        private _rotations: ConstRandomValueShape;
+        private _animationState: ParticleAnimationState;
         private rotationMat: Matrix4_4 = new Matrix4_4();
+        private _node: ParticleDataRotationBirth;
         constructor() {
             super();
 
@@ -31,15 +32,10 @@
         * @platform Web,Native
         */
         public initNode(data: ParticleDataNode): void {
-            var node: ParticleDataRotationBirth = <ParticleDataRotationBirth>data;
-            this._rotations = new Vec3ConstRandomValueShape();
-            this._rotations.maxX = node.max.x;
-            this._rotations.maxY = node.max.y;
-            this._rotations.maxZ = node.max.z;
-            
-            this._rotations.minX = node.min.x;
-            this._rotations.minY = node.min.y;
-            this._rotations.minZ = node.min.z;
+            var node: ParticleDataRotationBirth = this._node = <ParticleDataRotationBirth>data;
+            this._rotations = new ConstRandomValueShape();
+            this._rotations.max = node.max;
+            this._rotations.min = node.min;
         }
         /**
         * @language zh_CN
@@ -51,15 +47,42 @@
         */
         public build(geometry: Geometry, count: number) {
 
-            this.particleAnimationState = <ParticleAnimationState>this.state;
-            var rotationArray: Vector3D[] = this._rotations.calculate(count);
+            this._animationState = <ParticleAnimationState>this.state;
+            var rotationArray: number[] = this._rotations.calculate(count);
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
             var pos: Vector3D = new Vector3D();
+            var rot: number;
+
+            var progress: number = 0;
+            var duration: number = this._animationState.emitter.data.life.duration;
+            var timeOffsetIndex: number = this._animationState.emitter.timeNode.offsetIndex;
+            var particleIndex: number = 0;
+            var timeIndex: number;
+            var bornTime: number;
+
+
             for (var i: number = 0; i < count; ++i) {
-                var rot: Vector3D = rotationArray[i]; 
+
+                //
+                if (this._node.type == ParticleValueType.OneBezier || this._node.type == ParticleValueType.TwoBezier) {
+                    timeIndex = particleIndex * geometry.vertexAttLength + timeOffsetIndex;
+                    bornTime = geometry.verticesData[timeIndex + 0];          //出生时间
+                    progress = bornTime / duration;
+                    progress = progress - Math.floor(progress);               //取小数部分
+                    rot = this._node.bezier1.calc(progress);
+                    if (this._node.type == ParticleValueType.TwoBezier) {
+                        var random: number = Math.random();
+                        rot *= random;
+                        rot += this._node.bezier2.calc(progress) * (1 - random);
+                    }
+                } else {
+                    rot = rotationArray[i];
+                }
+
+
                 this.rotationMat.identity();
-                this.rotationMat.rotation(rot.x, rot.y, rot.z);
+                this.rotationMat.rotation(0, 0, rot);
                 for (var j: number = 0; j < vertices; ++j) {
                     index = i * vertices + j;
                     index = index * geometry.vertexAttLength ;

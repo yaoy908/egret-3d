@@ -134,9 +134,48 @@
         //    return res;
         //}
 
-        public compress(): Float32Array {
+        public trySampler(): Float32Array {
+            for (var i: number = 0, count: number = this.posPoints.length; i < count; i++) {
+                if (this.posPoints[i].y != 0 || this.ctrlPoints[i].y != 0) {
+                    return this.doSampler();
+                }
+            }
+            return null;
+        }
+
+        public sampler(): Float32Array {
+            //if (ignore0) {
+            //    var value: number = this.posPoints[0].y;
+
+            //    for (var i: number = 0, count: number = this.posPoints.length; i < count; i++) {
+            //        if (this.posPoints[i].y != value || this.ctrlPoints[i].y != value) {
+            //            return this.doSampler();
+            //        }
+            //    }
+            //    return null;
+
+            //}
+            return this.doSampler();
+            
+        }
+
+        private pushSameValue(value: number): Float32Array {
+            const SegmentCount: number = 9 + 1;
+            var res: Float32Array = new Float32Array(SegmentCount * BezierData.SegCount + 2 + 1);//10 + 10 + 2 + 1
+            for (var i: number = 0, count: number = BezierData.SegCount * BezierData.SegCount + 2; i < count; i++) {
+                res[i] = value;
+            }
+            //true
+            res[count + 2] = 1;
+            return res;
+        }
 
 
+
+        public static dfdf: number = 0;
+        private doSampler(): Float32Array {
+            BezierData.dfdf++;
+            console.log("asdfasdf : " + BezierData.dfdf);
             var floats: Array<number> = [];
             var times: Array<number> = [];
 
@@ -145,20 +184,57 @@
             var segmentEndTime: number = 0;
             //每段有10个数据，将该段曲线分为9小段
             const SegmentCount: number = 9;
-            for (var i: number = 0, count: number = BezierData.SegCount; i < count; i++) {
+            var i: number;
+            var count: number;
+
+            for (i = 0, count = BezierData.SegCount; i < count; i++) {
                 floats.push(this.posPoints[i * 2].y);//第一个数字
                 segmentStartTime = this.posPoints[i * 2].x;
                 segmentEndTime = this.posPoints[i * 2 + 1].x;
-                segmentTime = segmentEndTime - segmentStartTime;//该段的时间
+                segmentTime = (segmentEndTime - segmentStartTime) / SegmentCount;//该贝塞尔的每小段
                 times.push(segmentTime);
                 for (var j: number = 1; j < SegmentCount; j++) {
-                    floats.push(this.calc(segmentStartTime + segmentTime * j / SegmentCount));
+                    floats.push(this.calc(segmentStartTime + segmentTime * j));
                 }
                 floats.push(this.posPoints[i * 2 + 1].y);//第10个数字
             }
-            var res: Float32Array = BezierData.compressFloats(floats, times);
+            var res: Float32Array = new Float32Array(floats.length + times.length);
+            for (i = 0, count = floats.length; i < count; i++) {
+                res[i] = floats[i];
+            }
+            for (var j: number = 0, count = times.length; j < count; i++ , j++) {
+                res[i] = times[j];
+            }
+            //false
+            //res[i] = 0;
             return res;
         }
+
+        //public compress(): Float32Array {
+
+
+        //    var floats: Array<number> = [];
+        //    var times: Array<number> = [];
+
+        //    var segmentTime: number;
+        //    var segmentStartTime: number = 0;
+        //    var segmentEndTime: number = 0;
+        //    //每段有10个数据，将该段曲线分为9小段
+        //    const SegmentCount: number = 9;
+        //    for (var i: number = 0, count: number = BezierData.SegCount; i < count; i++) {
+        //        floats.push(this.posPoints[i * 2].y);//第一个数字
+        //        segmentStartTime = this.posPoints[i * 2].x;
+        //        segmentEndTime = this.posPoints[i * 2 + 1].x;
+        //        segmentTime = segmentEndTime - segmentStartTime;//该段的时间
+        //        times.push(segmentTime);
+        //        for (var j: number = 1; j < SegmentCount; j++) {
+        //            floats.push(this.calc(segmentStartTime + segmentTime * j / SegmentCount));
+        //        }
+        //        floats.push(this.posPoints[i * 2 + 1].y);//第10个数字
+        //    }
+        //    var res: Float32Array = BezierData.compressFloats(floats, times);
+        //    return res;
+        //}
 
         public validate(): void {
             if (this.posPoints == null) {

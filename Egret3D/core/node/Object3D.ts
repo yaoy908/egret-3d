@@ -137,15 +137,6 @@
 
         /**
         * @language zh_CN
-        * 是否需要视锥体裁剪。</p>
-        * 设定这个物件是否具有 视锥体裁剪功能，为否的话，将永远不参加场景渲染剔除树，无论是否在显示范围内都会进行相关的渲染逻辑运算。</p>
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public enableCut: boolean = true;
-        
-        /**
-        * @language zh_CN
         * 父亲节点
         * @version Egret 3.0
         * @platform Web,Native
@@ -265,6 +256,7 @@
         /**
         * @language zh_CN
         * 是否开启相机视锥裁剪 默认为true
+        * 设定这个物件是否具有 视锥体裁剪功能，为否的话，将永远不参加场景渲染剔除树，无论是否在显示范围内都会进行相关的渲染逻辑运算。</p>
         * @default true
         * @version Egret 3.0
         * @platform Web,Native
@@ -753,10 +745,6 @@
         public get modelMatrix(): Matrix4_4 {
             if (this._transformChange) {
                 this.updateModelMatrix();
-            }
-
-            if (this.name == "guangzhu") {
-                var i = 0;
             }
 
             return this._modelMatrix3D;

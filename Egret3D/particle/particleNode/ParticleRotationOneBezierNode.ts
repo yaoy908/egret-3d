@@ -32,7 +32,7 @@
         */
         public initNode(data: ParticleDataNode): void {
             this._node = <ParticleDataRotationSpeed>data;
-            this._floatCompressData = this._node.bezier1.compress();
+            this._floatCompressData = this._node.bezier1.sampler();
         }
 
 

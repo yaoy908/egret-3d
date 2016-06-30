@@ -147,10 +147,13 @@
                                 }
                             }
                         }
+                        else if (mapNodeData.geometry) {
+                           this.processMesh(mapNodeData, new Mesh(GeometryUtil.createGemetryForType(mapNodeData.geometry.type, mapNodeData.geometry), new TextureMaterial()));
+                        }
                         break;
                     case "Terrain":
-                        if (mapNodeData.texture) {
-                            var path: string = this._pathRoot + mapNodeData.texture;
+                        if (mapNodeData.path) {
+                            var path: string = this._pathRoot + mapNodeData.path;
                             var heightImgload: URLLoader = this.findLoader(path);
                             if (!heightImgload) {
                                 heightImgload = this.createLoader(path);
@@ -164,8 +167,10 @@
                                 var nodeDatas: Array<MapNodeData> = heightImgload["heightNodeDatas"];
                                 nodeDatas.push(mapNodeData);
 
+                                var geo: any = mapNodeData.geometry;
+
                                 if (heightImgload.data) {
-                                    var envHeightGeometry: ElevationGeometry = new ElevationGeometry(heightImgload.data, mapNodeData.width, mapNodeData.height, mapNodeData.depth, mapNodeData.segmentsW, mapNodeData.segmentsH);
+                                    var envHeightGeometry: ElevationGeometry = new ElevationGeometry(heightImgload.data, geo.width, geo.height, geo.depth, geo.segmentsW, geo.segmentsH);
                                     var mesh: Mesh = new Mesh(envHeightGeometry, new TextureMaterial(heightImgload.data));
                                     this.processHeightMesh(mapNodeData, mesh);
                                 }
@@ -294,7 +299,8 @@
 
             for (var i: number = 0; i < nodeDatas.length; ++i) {
                 var mapNodeData: MapNodeData = nodeDatas[i];
-                var envHeightGeometry: ElevationGeometry = new ElevationGeometry(heightImgload.data, mapNodeData.width, mapNodeData.height, mapNodeData.depth, mapNodeData.segmentsW, mapNodeData.segmentsH);
+                var geometry: any = mapNodeData.geometry;
+                var envHeightGeometry: ElevationGeometry = new ElevationGeometry(heightImgload.data, geometry.width, geometry.height, geometry.depth, geometry.segmentsW, geometry.segmentsH);
                 var mesh: Mesh = new Mesh(envHeightGeometry, new TextureMaterial(heightImgload.data));
                 this.processHeightMesh(mapNodeData, mesh);
                 this.doLoadEpa(mapNodeData);
@@ -459,13 +465,13 @@
             var load: URLLoader = new URLLoader(path);
             this.addLoader(load);
             this._taskCount++;
-            console.log("+++" + load.url + "+++" + this._taskCount);
+            //console.log("+++" + load.url + "+++" + this._taskCount);
             return load;
         }
 
         private processTask(load:URLLoader) {
             this._taskCount--;
-            console.log("---" + load.url + "---" + this._taskCount);
+            //console.log("---" + load.url + "---" + this._taskCount);
             if (this._taskCount <= 0) {
                 this._event.eventType = LoaderEvent3D.LOADER_COMPLETE;
                 this._event.target = this;
@@ -632,6 +638,31 @@
                         uvScrollMethod.start(true);
                         material.diffusePass.addMethod(uvScrollMethod);
                     }
+                    else if (method.type == MatMethodData.mulUvRollMethod) {
+
+                        var diffuseTexture1: ITexture = CheckerboardTexture.texture;
+
+                        var uvMethod: MulUVRollMethod = new MulUVRollMethod();
+                        uvMethod.setSpeedU(0, method.uSpeed);
+                        uvMethod.setSpeedV(0, method.vSpeed);
+
+                        var textureData: any = method.texturesData[0];
+
+                        uvMethod.setSpeedU(1, textureData.uSpeed);
+                        uvMethod.setSpeedV(1, textureData.vSpeed);
+
+                        load = this.addMethodImgTask(textureData.path, uvMethod, textureData.attributeName);
+                        if (load.data) {
+                            diffuseTexture1 = load.data;
+                        }
+
+                        material.repeat = true;
+
+                        uvMethod.start(true);
+                        material.diffusePass.addMethod(uvMethod);
+
+                        uvMethod.diffuseTexture1 = diffuseTexture1;
+                    }
                     else if (method.type == MatMethodData.alphaMaskMethod) {
                         var maskmapMethod: AlphaMaskMethod = new AlphaMaskMethod();
                         var maskTexture: ITexture = CheckerboardTexture.texture;
@@ -677,6 +708,11 @@
                         }
 
                         material.diffusePass.addMethod(terrainARGBMethod);
+                    }
+                    else if (method.type == MatMethodData.waterWaveMethod) {
+                        var waterWaveMethod: WaterWaveMethod = new WaterWaveMethod();
+                        material.repeat = true;
+                        material.diffusePass.addMethod(waterWaveMethod);
                     }
                 }
             }

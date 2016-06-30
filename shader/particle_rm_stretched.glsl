@@ -10,6 +10,13 @@ mat4 getRenderModeMatrix(mat4 cameraMatrix) {
 
 void updateStretchedBillBoard(vec3 moveDir, mat4 viewMatrix){
 
+  if(moveDir.x == 0.0 && moveDir.y == 0.0 && moveDir.z == 0.0){
+	 moveDir = attribute_offsetPosition;
+  }
+  if(moveDir.x == 0.0 && moveDir.y == 0.0 && moveDir.z == 0.0){
+	return;
+  }
+
   vec4 dirVector = vec4(moveDir, 0.0); 
   float scaleBefore = dirVector.x * dirVector.x + dirVector.y * dirVector.y + dirVector.z * dirVector.z; 
   scaleBefore = sqrt(scaleBefore); 

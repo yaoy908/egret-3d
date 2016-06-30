@@ -20,8 +20,7 @@
             super();
             this.name = "ParticleVelocityOverOneBezierNode";
 
-            this.vertex_ShaderName[ShaderPhaseType.global_vertex] = this.vertex_ShaderName[ShaderPhaseType.global_vertex] || [];
-            this.vertex_ShaderName[ShaderPhaseType.global_vertex].push("particle_velocityOverOneBezier");
+
 
         }
 
@@ -34,9 +33,23 @@
         */
         public initNode(data: ParticleDataNode): void {
             this._node = <ParticleDataMoveSpeed>data;
-            this._floatCompressDataX = this._node.velocityOver.xBezier1.compress();
-            this._floatCompressDataY = this._node.velocityOver.yBezier1.compress();
-            this._floatCompressDataZ = this._node.velocityOver.zBezier1.compress();
+            this._floatCompressDataX = this._node.velocityOver.xBezier1.trySampler();
+            this._floatCompressDataY = this._node.velocityOver.yBezier1.trySampler();
+            this._floatCompressDataZ = this._node.velocityOver.zBezier1.trySampler();
+
+            this.vertex_ShaderName[ShaderPhaseType.global_vertex] = this.vertex_ShaderName[ShaderPhaseType.global_vertex] || [];
+            this.vertex_ShaderName[ShaderPhaseType.global_vertex].push("particle_velocityOverOneBezier");
+
+            if (this._floatCompressDataX) {
+                this.vertex_ShaderName[ShaderPhaseType.global_vertex].push("particle_velocityOverOneBezierX");
+            }
+            if (this._floatCompressDataY) {
+                this.vertex_ShaderName[ShaderPhaseType.global_vertex].push("particle_velocityOverOneBezierY");
+            }
+            if (this._floatCompressDataZ) {
+                this.vertex_ShaderName[ShaderPhaseType.global_vertex].push("particle_velocityOverOneBezierZ");
+            }
+
         }
         /**
         * @language zh_CN
@@ -56,9 +69,18 @@
         * @private
         */
         public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
-            context3DProxy.uniform1fv(usage["uniform_velocityOverX"].uniformIndex, this._floatCompressDataX);
-            context3DProxy.uniform1fv(usage["uniform_velocityOverY"].uniformIndex, this._floatCompressDataY);
-            context3DProxy.uniform1fv(usage["uniform_velocityOverZ"].uniformIndex, this._floatCompressDataZ);
+            if (this._floatCompressDataX) {
+                context3DProxy.uniform1fv(usage["uniform_velocityOverX"].uniformIndex, this._floatCompressDataX);
+            }
+            
+            if (this._floatCompressDataY) {
+                context3DProxy.uniform1fv(usage["uniform_velocityOverY"].uniformIndex, this._floatCompressDataY);
+            }
+            
+            if (this._floatCompressDataZ) {
+                context3DProxy.uniform1fv(usage["uniform_velocityOverZ"].uniformIndex, this._floatCompressDataZ);
+            }
+            
         }
 
 

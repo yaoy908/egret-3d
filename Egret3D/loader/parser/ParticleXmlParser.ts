@@ -92,6 +92,7 @@
             var property: ParticleDataProperty = this._particleData.property;
 
             property.particleCount = Number(this.getNode(node, "particleCount").textContent);
+            property.prewarm = this.getNode(node, "prewarm").textContent == "true";
 
             var bounds: Node = this.getNode(node, "bounds");
             property.bounds = this.parseVector3D(bounds, property.bounds);
@@ -119,7 +120,9 @@
             var render: Node = this.getNode(node, "render");
 
             var renderMode: Node = this.getNode(render, "renderMode");
-            property.renderMode = ParticleRenderModeType[renderMode.textContent];
+            if (renderMode) {
+                property.renderMode = ParticleRenderModeType[renderMode.textContent];
+            }
 
         }
 
@@ -189,9 +192,13 @@
          */
         private parseLife(node: Node): void {
             var life: ParticleDataLife = this._particleData.life;
+            life.type = ParticleValueType[this.getNode(node, "type").textContent];
+            life.min = Number(this.getNode(node, "min").textContent);
+            life.max = Number(this.getNode(node, "max").textContent);
+            life.bezier1 = this.parseBezierData(this.getNode(node, "bezier1"));
+            life.bezier2 = this.parseBezierData(this.getNode(node, "bezier2"));
+
             life.duration = Number(this.getNode(node, "duration").textContent);
-            life.lifeMax = Number(this.getNode(node, "lifeMax").textContent);
-            life.lifeMin = Number(this.getNode(node, "lifeMin").textContent);
             life.delay = Number(this.getNode(node, "delay").textContent);
             life.loop = this.getNode(node, "loop").textContent == "true";
 
@@ -203,7 +210,7 @@
          */
         private parseShape(node: Node): void {
             var shape: ParticleDataShape = this._particleData.shape;
-            shape.type = ParticleDataShape[this.getNode(node, "type").textContent];
+            shape.type = ParticleDataShapeType[this.getNode(node, "type").textContent];
             shape.randomDirection = this.getNode(node, "randomDirection").textContent == "true";
             //cube
             var cube: Node = this.getNode(node, "cube");
@@ -217,9 +224,15 @@
                 }
             });
             //sphere
-            shape.sphereRadius = Number(this.getNode(node, "sphereRadius").textContent);
-            //hemiSphereRaiuds
-            shape.hemiSphereRaiuds = Number(this.getNode(node, "hemiSphereRaiuds").textContent);
+            var sphereRadius: Node = this.getNode(node, "sphereRadius");
+            if (sphereRadius) {
+                shape.sphereRadius = Number(sphereRadius.textContent);
+            }
+            //hemiSphereRadius
+            var hemiSphereRadius: Node = this.getNode(node, "hemiSphereRadius");
+            if (hemiSphereRadius) {
+                shape.hemiSphereRadius = Number(hemiSphereRadius.textContent);
+            }
             //cone
             var cone: Node = this.getNode(node, "cone");
             this.eachAttr(cone, function (label: string, value: string): void {
@@ -240,10 +253,11 @@
          */
         private parseRotationBirth(node: Node): void {
             var rotationBirth: ParticleDataRotationBirth = this._particleData.rotationBirth;
-            var min: Node = this.getNode(node, "min");
-            var max: Node = this.getNode(node, "max");
-            rotationBirth.min = this.parseVector3D(min, rotationBirth.min);
-            rotationBirth.max = this.parseVector3D(max, rotationBirth.max);
+            rotationBirth.type = ParticleValueType[this.getNode(node, "type").textContent];
+            rotationBirth.min = Number(this.getNode(node, "min").textContent);
+            rotationBirth.max = Number(this.getNode(node, "max").textContent);
+            rotationBirth.bezier1 = this.parseBezierData(this.getNode(node, "bezier1"));
+            rotationBirth.bezier2 = this.parseBezierData(this.getNode(node, "bezier2"));
 
         }
 
@@ -253,11 +267,11 @@
          */
         private parseScaleBirth(node: Node): void {
             var scaleBirth: ParticleDataScaleBirth = this._particleData.scaleBirth;
-            var min: Node = this.getNode(node, "min");
-            var max: Node = this.getNode(node, "max");
-
-            scaleBirth.min = this.parseVector3D(min, scaleBirth.min);
-            scaleBirth.max = this.parseVector3D(max, scaleBirth.max);
+            scaleBirth.type = ParticleValueType[this.getNode(node, "type").textContent];
+            scaleBirth.min = Number(this.getNode(node, "min").textContent);
+            scaleBirth.max = Number(this.getNode(node, "max").textContent);
+            scaleBirth.bezier1 = this.parseBezierData(this.getNode(node, "bezier1"));
+            scaleBirth.bezier2 = this.parseBezierData(this.getNode(node, "bezier2"));
         }
 
         /**
@@ -309,8 +323,12 @@
          */
         private parseMoveSpeed(node: Node): void {
             var moveSpeed: ParticleDataMoveSpeed = this._particleData.moveSpeed;
+            moveSpeed.type = ParticleValueType[this.getNode(node, "type").textContent];
             moveSpeed.min = Number(this.getNode(node, "min").textContent);
             moveSpeed.max = Number(this.getNode(node, "max").textContent);
+            moveSpeed.bezier1 = this.parseBezierData(this.getNode(node, "bezier1"));
+            moveSpeed.bezier2 = this.parseBezierData(this.getNode(node, "bezier2"));
+
 
             var velocityOverNode: Node = this.getNode(node, "velocityOver");
             if (velocityOverNode) {

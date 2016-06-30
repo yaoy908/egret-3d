@@ -5,12 +5,11 @@
     */
     export class ParticleTime extends AnimationNode {
 
-        private _nodeData: ParticleDataLife;
+        private _node: ParticleDataLife;
         /**
         * 所有单位粒子的生命周期
         */
         private _life: ValueShape;
-
         private attribute_time: GLSL.VarRegister;
         private _animationState: ParticleAnimationState;
 
@@ -46,13 +45,12 @@
         * @platform Web,Native
         */
         public initNode(data: ParticleDataNode): void {
-            var node: ParticleDataLife = this._nodeData = <ParticleDataLife>data;
-            //life
-            var lifeValue: ConstRandomValueShape = new ConstRandomValueShape();
-            lifeValue.max = node.lifeMax;
-            lifeValue.min = node.lifeMin;
-            this._life = lifeValue;
+            var node: ParticleDataLife = this._node = <ParticleDataLife>data;
 
+            var lifeValue: ConstRandomValueShape = new ConstRandomValueShape();
+            lifeValue.max = node.max;
+            lifeValue.min = node.min;
+            this._life = lifeValue;
 
            }
 
@@ -90,11 +88,29 @@
            
             var maxLife: number = 0;
             var bornTime: number = 0;
+            var lifeTime: number;
+
+            var progress: number = 0;
+            var duration: number = this._animationState.emitter.data.life.duration;
+
             for (var i: number = 0; i < count; ++i) {
 
                 //当前累加的间隔时间就是出生时间
                 bornTime = bornTimeArray[i];
-                var lifeTime: number = lifeArray[i];
+
+                //
+                if (this._node.type == ParticleValueType.OneBezier || this._node.type == ParticleValueType.TwoBezier) {
+                    progress = bornTime / duration;
+                    progress = progress - Math.floor(progress);               //取小数部分
+                    lifeTime = this._node.bezier1.calc(progress);
+                    if (this._node.type == ParticleValueType.TwoBezier) {
+                        var random: number = Math.random();
+                        lifeTime *= random;
+                        lifeTime += this._node.bezier2.calc(progress) * (1 - random);
+                    }
+                } else {
+                    lifeTime = lifeArray[i];
+                }
 
                 for (var j: number = 0; j < vertices; ++j) {
                     index = i * vertices + j;
@@ -151,8 +167,8 @@
             //6，执行逻辑2
             const PerSecFrame: number = 10;
             const FrameTime: number = 1000 / PerSecFrame;
-            const duration: number = this._nodeData.duration * 1000;
-            const TotalFrame: number = Math.ceil(this._nodeData.duration * 1000 / FrameTime);
+            const duration: number = this._node.duration * 1000;
+            const TotalFrame: number = Math.ceil(this._node.duration * 1000 / FrameTime);
 
             var currentTime: number = 0;
             var rateValue: number = 0;
@@ -191,7 +207,7 @@
                 return a.x - b.x;
             });
 
-            var duration: number = this._nodeData.duration;
+            var duration: number = this._node.duration;
             var burstLife: Array<number> = [];
             var burstPoint: Point;
             for (var i: number = 0; i < bursts.length; i++) {
@@ -203,8 +219,8 @@
 
             var maxTime: number = bornTimeArray[bornTimeArray.length - 1];
             var loopCount: number = 1;
-            if (this._nodeData.loop) {
-                loopCount = Math.ceil(maxTime / this._nodeData.duration);
+            if (this._node.loop) {
+                loopCount = Math.ceil(maxTime / this._node.duration);
             }
             for (var i: number = 0, count = burstLife.length; i < count; i++)
             {

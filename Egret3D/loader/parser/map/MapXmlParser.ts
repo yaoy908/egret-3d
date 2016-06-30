@@ -300,16 +300,19 @@
                         propertyAnimsData[attr.nodeName] = attr.value;
                     }
                 }
-                else if (nodeName == "heightmap") {
+                else if (nodeName == "geometry") {
+                    var geo: any = {};
                     for (var j: number = 0; j < item.attributes.length; ++j) {
                         attr = item.attributes[j];
-                        if (typeof data[attr.name] == "number") {
-                            data[attr.name] = Number(attr.value);
+                        if (attr.name == "type") {
+                            geo[attr.name] = attr.value;
                         }
-                        else if (typeof data[attr.name] == "string") {
-                            data[attr.name] = attr.value;
+                        else {
+
+                            geo[attr.name] = Number(attr.value);
                         }
                     }
+                    data.geometry = geo;
                 }
                 //else if (nodeName == "lightIds") {
                 //    if (item.textContent == null || item.textContent == "") {

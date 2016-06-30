@@ -7,6 +7,7 @@
     <colorType>Const</colorType>
     <colorConst1>0xffffffff</colorConst1>
     <gravity>0</gravity>
+    <prewarm>false</prewarm>
     <transform>
       <rotation x="0" y="0" z="0" />
       <scale x="1" y="1" z="1" />
@@ -29,8 +30,9 @@
   </emission>
   <life>
     <duration>4</duration>
-    <lifeMax>5</lifeMax>
-    <lifeMin>5</lifeMin>
+    <type>Const</type>
+    <max>5</max>
+    <min>5</min>
     <delay>0</delay>
     <loop>true</loop>
   </life>
@@ -39,26 +41,40 @@
     <randomDirection>false</randomDirection>
     <cube width="0" height="0" depth="0" />
     <sphereRadius>10</sphereRadius>
-    <hemiSphereRaiuds>20</hemiSphereRaiuds>
+    <hemiSphereRadius>20</hemiSphereRadius>
     <cone coneHeight="10" coneRadiusBottom="4" coneRadiusTop="12"></cone>
   </shape>
   <rotationBirth>
-    <min x="0" y="0" z="0" />
-    <max x="0" y="0" z="0" />
+    <type>Const</type>
+    <max>0</max>
+    <min>0</min>
   </rotationBirth>
   <scaleBirth>
-    <max x="1" y="1" z="1" />
-    <min x="1" y="1" z="1" />
+    <type>Const</type>
+    <max>1</max>
+    <min>1</min>
   </scaleBirth>
   <geometry>
     <type>Plane</type>
     <plane width="5" height="10" />
   </geometry>
   <moveSpeed>
+    <type>Const</type>
     <max>15</max>
     <min>15</min>
   </moveSpeed>
-  
+  <scaleBezier>
+    <bezier>
+      <pos x="0" y="0"></pos>
+      <pos x="0.5" y="3"></pos>
+      <pos x="0.5" y="3"></pos>
+      <pos x="1.0" y="0"></pos>
+      <ctrl x="0.1" y="1"></ctrl>
+      <ctrl x="0.3" y="3"></ctrl>
+      <ctrl x="0.7" y="3"></ctrl>
+      <ctrl x="0.9" y="0"></ctrl>
+    </bezier>
+  </scaleBezier>
   <!--<followTarget>
     <followRotation>true</followRotation>
     <followScale>true</followScale>

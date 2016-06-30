@@ -75,8 +75,8 @@
             //bezier end
 
             var life: ParticleDataLife = data.life;
-            life.lifeMax = 4;
-            life.lifeMin = 2;
+            life.max = 4;
+            life.min = 2;
             life.duration = 5;
             life.delay = 0.5;
             life.loop = true;
