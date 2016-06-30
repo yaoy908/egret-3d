@@ -494,6 +494,28 @@ module egret3d {
 			"gl_FragColor = color + texture2D(colorTexture,uv.xy); \n" +
 			"} \n",
 
+			"hud_cull_fs":
+			"varying vec2 varying_uv0; \n" +
+			"uniform sampler2D diffuseTexture; \n" +
+			"uniform vec2 uv_scale; \n" +
+			"void main(void) { \n" +
+			"vec2 uv_0 = varying_uv0; \n" +
+			"uv_0 *= uv_scale; \n" +
+			"vec4 color = texture2D(diffuseTexture, varying_uv0); \n" +
+			"float mask = 1.0; \n" +
+			"float f = uv_scale.y - varying_uv0.y; \n" +
+			"if (varying_uv0.y < uv_scale.y){ \n" +
+			"if(f < 0.03 && f > 0.0){ \n" +
+			"mask =1.0 - (f / 0.03 * 0.9 + 0.1); \n" +
+			"} \n" +
+			"else{ \n" +
+			"mask = 0.1; \n" +
+			"} \n" +
+			"} \n" +
+			"color.xyz *= mask; \n" +
+			"gl_FragColor  = color; \n" +
+			"} \n",
+
 			"hud_H_fs":
 			"varying vec2 varying_uv0; \n" +
 			"uniform sampler2D diffuseTexture; \n" +

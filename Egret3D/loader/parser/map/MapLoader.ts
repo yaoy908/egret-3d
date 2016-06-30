@@ -54,8 +54,11 @@
         public huds: Array<HUD> = new Array<HUD>();
 
         public textures: any = {};
+        public taskTotal: number = 0;
+        public taskCurrent: number = 0;
 
         public view3d: View3D;
+
          /**
          * @language zh_CN
          * 构建一个场景加载对象 构建后直接加载
@@ -87,6 +90,7 @@
             this._pathRoot = path + name + "/";
             this._path = this._pathRoot + mapConfig;
 
+            this.taskTotal++;
 
             var load: URLLoader = this.findLoader(this._path);
             if (!load) {
@@ -112,6 +116,10 @@
         private parseXML(xml: string) {
             var xmlDoc = XMLParser.parse(xml);
             this._mapXmlParser = new MapXmlParser(xmlDoc);
+
+            for (var v in this._mapXmlParser.taskDict) {
+                this.taskTotal++;
+            }
 
             this.createLight();
 
@@ -192,7 +200,6 @@
                 else {
 
                 }
-
             }
 
             for (var i: number = 0; i < this._mapXmlParser.hudList.length; ++i) {
@@ -208,6 +215,14 @@
                 hud.rotationZ = hudData.rz;
                 hud.width = hudData.width;
                 hud.height = hudData.height;
+
+                if (hudData.vs) {
+                    hud.vsShader = hudData.vs;
+                }
+
+                if (hudData.fs) {
+                    hud.fsShader = hudData.fs;
+                }
 
                 this.huds.push(hud);
                 hudData.hud = hud;
@@ -471,6 +486,8 @@
 
         private processTask(load:URLLoader) {
             this._taskCount--;
+            this.taskCurrent++;
+
             //console.log("---" + load.url + "---" + this._taskCount);
             if (this._taskCount <= 0) {
                 this._event.eventType = LoaderEvent3D.LOADER_COMPLETE;
@@ -484,6 +501,7 @@
 
                 this.dispatchEvent(this._event);
             }
+
         }
 
         private addImaTask(name:string, type:string, matID:number, mapNodeData:MapNodeData):URLLoader {
