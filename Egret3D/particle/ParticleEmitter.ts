@@ -35,42 +35,12 @@
             super(null, material );
             this._data = data;
             this._externalGeometry = geo;
-            var matData: MatSphereData = data.materialData;
-            material.diffuseColor = matData.diffuseColor;
-            material.ambientColor = matData.ambientColor;
-            material.specularColor = matData.specularColor;
-
-            material.alpha = matData.alpha;
-
-            material.specularLevel = matData.specularLevel;
-            material.gloss = matData.gloss;
-
-            //material.ambientPower = matData.ambientPower;
-            //material.diffusePower = matData.diffusePower;
-            //material.normalPower = matData.normalPower;
-
-            material.castShadow = matData.castShadow;
-            material.acceptShadow = matData.acceptShadow;
-            material.smooth = true;//matData.smooth;
-            material.repeat = true;//matData.repeat;
-            material.bothside = matData.bothside;
-
-            material.drawMode = 0x4;//matData.drawMode;
-            material.cullMode = 0x405;//matData.cullMode;
-
-            material.blendMode = matData.blendMode;
-            material.cutAlpha = matData.cutAlpha;
-
-
+           
             this.animation = this.particleAnimation = new ParticleAnimation(this);
             this.animation.particleAnimationController = this.particleAnimation;
             this._particleState = this.particleAnimation.particleAnimationState ;
 
             this.particleAnimation.emit = this;
-            //
-            this.position = data.property.position;
-            this.rotation = data.property.rotation;
-            this.scale = new Vector3D();
 
             this.buildParticle();
         }
