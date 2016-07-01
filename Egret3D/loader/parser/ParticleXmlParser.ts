@@ -124,6 +124,19 @@
                 property.renderMode = ParticleRenderModeType[renderMode.textContent];
             }
 
+            var lengthScale: Node = this.getNode(render, "lengthScale");
+            if (lengthScale) {
+                property.lengthScale = Number(lengthScale.textContent);
+            }
+            var cameraScale: Node = this.getNode(render, "cameraScale");
+            if (cameraScale) {
+                property.cameraScale = Number(cameraScale.textContent);
+            }
+            var speedScale: Node = this.getNode(render, "speedScale");
+            if (speedScale) {
+                property.speedScale = Number(speedScale.textContent);
+            }
+
         }
 
         /**

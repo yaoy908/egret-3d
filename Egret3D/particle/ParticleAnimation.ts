@@ -70,7 +70,7 @@
 
         /**
         * @language zh_CN
-        * 动画节点容器
+        * 是否在播放
         * @version Egret 3.0
         * @platform Web,Native
         */
