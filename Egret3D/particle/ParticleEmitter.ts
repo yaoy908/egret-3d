@@ -35,7 +35,7 @@
             super(null, material );
             this._data = data;
             this._externalGeometry = geo;
-            var matData: MaterialSphereData = data.materialData;
+            var matData: MatSphereData = data.materialData;
             material.diffuseColor = matData.diffuseColor;
             material.ambientColor = matData.ambientColor;
             material.specularColor = matData.specularColor;
