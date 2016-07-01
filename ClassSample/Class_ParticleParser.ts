@@ -8,6 +8,7 @@
         private _cube: Mesh;
         private _xmlLoader: URLLoader;
         private _particleData: ParticleData;
+        private _particleLoader: MapLoader;
         constructor() {
             super();
             this._egret3DCanvas.addEventListener(Event3D.ENTER_FRAME, this.update, this);
@@ -22,10 +23,16 @@
             this._cameraCrl = new LookAtController(this._view3D.camera3D, new Object3D());
             this._cameraCrl.distance = 100;
 
-            this._xmlLoader = new URLLoader("resource/particle/config.xml", URLLoader.DATAFORMAT_TEXT);
-            this._xmlLoader.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onGotParticleXml, this);
+            this._particleLoader = new MapLoader("test", "MapConfig.xml", "resource/scene/");
+            this._particleLoader.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onParticleLoad, this);
+            this._view3D.addChild3D(this._particleLoader.container);
+
+            //this._xmlLoader = new URLLoader("resource/particle/config.xml", URLLoader.DATAFORMAT_TEXT);
+            //this._xmlLoader.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onGotParticleXml, this);
 
             //view1.addChild3D(new AxisMesh(20));
+        }
+        private onParticleLoad(e: LoaderEvent3D): void {
         }
 
         private onGotParticleXml(e: LoaderEvent3D): void {
