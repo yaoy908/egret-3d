@@ -74,6 +74,47 @@
         }
 
         /**
+        * @language zh_CN 
+        * 设置UV 速度
+        * @param index 0 或 1
+        * @param u  
+        * @param v 
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public setUvSpeed(index: number, u: number, v: number) {
+            switch (index) {
+                case 0:
+                    this._speedU_0.x = u;
+                    this._speedU_0.y = v;
+                    this._uvData[0] = this._speedU_0.x * 2.5;
+                    this._uvData[1] = this._speedU_0.y * 2.5;
+                    break;
+                case 1:
+                    this._speedU_1.x = u;
+                    this._speedU_1.y = v;
+                    this._uvData[2] = this._speedU_1.x * 2.5;
+                    this._uvData[3] = this._speedU_1.y * 2.5;
+                    break;
+            }
+        }
+
+        /**
+        * @language zh_CN 
+        * 设置UV repat次数
+        * @param u  
+        * @param v 
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public setUvScale(u: number, v: number) {
+            this._normal_0_UVScale = u;
+            this._normal_1_UVScale = v;
+            this._uvData[6] = this._normal_0_UVScale;
+            this._uvData[7] = this._normal_1_UVScale;
+        }
+
+        /**
          * @language zh_CN
          * 设置lightmap贴图
          * @param texture lightmap贴图

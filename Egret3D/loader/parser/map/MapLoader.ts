@@ -780,6 +780,13 @@
                 else if (method.type == MatMethodData.methodType.waterWaveMethod) {
                     var waterWaveMethod: WaterWaveMethod = new WaterWaveMethod();
                     material.diffusePass.addMethod(waterWaveMethod);
+                    if (method["deepWaterColor"]) {
+                        waterWaveMethod.deepWaterColor = Number( method["deepWaterColor"]);
+                    }
+
+                    if (method["shallowWaterColor"]) {
+                        waterWaveMethod.shallowWaterColor = Number( method["shallowWaterColor"]);
+                    }
 
                     material.repeat = true;
                 }
@@ -790,10 +797,16 @@
                     waterNormalMethod.normalTextureA = defaultTexture;
                     waterNormalMethod.normalTextureB = defaultTexture;
 
+                    if (method["uScale"] && method["vScale"]) {
+                        waterNormalMethod.setUvScale(Number(method["uScale"]), Number( method["vScale"]));
+                    }
+
+
                     var textureData: any = null;
                     for (var i: number = 0; i < method.texturesData.length; ++i) {
                         textureData = method.texturesData[i];
 
+                        waterNormalMethod.setUvSpeed(i, Number(textureData.uSpeed), Number(textureData.vSpeed));
                         load = this.addMethodImgTask(textureData.path, waterNormalMethod, textureData.attributeName);
                     }
 
