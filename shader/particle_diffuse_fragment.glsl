@@ -1,9 +1,16 @@
 ﻿uniform sampler2D diffuseTexture;
 vec4 diffuseColor ;
-
+varying float varying_posZ;
 
 void calcUVCoord(){
 
+}
+
+void fadeOutParticleByZ(){
+	float fadeAlpha = (1500.0 - varying_posZ) / 1500.0;
+	fadeAlpha = clamp(fadeAlpha, 0.0, 1.0);
+	fadeAlpha *= fadeAlpha;
+	outColor.w *= fadeAlpha;
 }
 
 void main() {
@@ -14,9 +21,9 @@ void main() {
 	diffuseColor = texture2D(diffuseTexture , uv_0 );
     
     if( diffuseColor.w <= materialSource.cutAlpha ){
-			discard;
+		discard;
 	}else
-			diffuseColor.xyz *= diffuseColor.w ;
+		diffuseColor.xyz *= diffuseColor.w ;
 }
 
 

@@ -261,9 +261,9 @@
             this._particleProperty[1] = data.life.loop ? 1 : 0;
             this._particleProperty[2] = data.followTarget ? 1 : 0;
 
-            this._particleProperty[3] = 0;//scaleData.x;
-            this._particleProperty[4] = 0;//scaleData.y;
-            this._particleProperty[5] = 0;//scaleData.z;
+            this._particleProperty[3] = 1;//scaleData.x;
+            this._particleProperty[4] = 1;//scaleData.y;
+            this._particleProperty[5] = 1;//scaleData.z;
             this._particleProperty[6] = rotateData.x;
             this._particleProperty[7] = rotateData.y;
             this._particleProperty[8] = rotateData.z;

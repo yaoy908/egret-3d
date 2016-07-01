@@ -23,6 +23,7 @@ vec3 followTargetScale = vec3(1.0,1.0,1.0);
 vec4 followTargetRotation = vec4(0.0,0.0,0.0,0.0);
 
 varying vec3 varyingViewDir ;
+varying float varying_posZ;
 
 float discard_particle = 0.0;
 

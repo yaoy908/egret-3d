@@ -125,7 +125,7 @@ void main(void) {
 		outPosition.xyz += position_emitter.xyz;
 		outPosition = uniform_ViewMatrix * outPosition;
 	}
-
+	varying_posZ = outPosition.z;
 	gl_Position = uniform_ProjectionMatrix * outPosition ; 
 }
 	
