@@ -18,6 +18,7 @@
             terrainARGBMethod: "terrainARGBMethod",
             waterWaveMethod: "waterWaveMethod",
             waterNormalMethod: "waterNormalMethod",
+            particleUVRoll: "particleUVRoll",
         };
 
         public id: string = "";

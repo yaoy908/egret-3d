@@ -75,7 +75,7 @@
             this.parseColorOffset(colorOffset);
             //material
             var material: Node = this.getNode(this._xml, "mat");
-            this.parseMaterial(material);
+            //this.parseMaterial(material);
             //textureSheet
             var textureSheet: Node = this.getNode(this._xml, "textureSheet");
             this.parseTextureSheet(textureSheet);
@@ -451,12 +451,12 @@
         * @private
         * 解析材质球
         */
-        private parseMaterial(node: Node): MaterialSphereData {
-            if (node == null)
-                return null;
-            var material: MaterialSphereData = this._particleData.materialData = EgretMapXmlParser.parseMaterial(node);
-            return material;
-        }
+        //private parseMaterial(node: Node): MaterialSphereData {
+        //    if (node == null)
+        //        return null;
+        //    var material: MaterialSphereData = this._particleData.materialData = EgretMapXmlParser.parseMaterial(node);
+        //    return material;
+        //}
 
 
         /**

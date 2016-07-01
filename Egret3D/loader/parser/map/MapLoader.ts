@@ -283,6 +283,8 @@
             for (var i: number = 0; i < nodeDatas.length; ++i) {
                 this.processParticle(particleData, nodeDatas[i]);
             }
+
+            this.processTask(e.loader);
         }
 
         private processParticle(particleData: ParticleData, nodeData: MapNodeData): ParticleEmitter {
@@ -290,6 +292,7 @@
             if (nodeData.geometry) {
                 geo = GeometryUtil.createGemetryForType(nodeData.geometry.type, nodeData.geometry);
             }
+            particleData.materialData = this._mapXmlParser.matDict[nodeData.materialIDs[0]];
             var particleNode: ParticleEmitter = new ParticleEmitter(particleData, geo, new TextureMaterial());
 
             particleNode.name = nodeData.object3d.name;
@@ -298,6 +301,8 @@
             particleNode.scale = nodeData.object3d.scale;
             nodeData.object3d.swapObject(particleNode);
             nodeData.object3d = particleNode;
+
+            particleNode.play();
             this.processMat(nodeData);
 
             return particleNode;

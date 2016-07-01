@@ -133,7 +133,7 @@
         public rotationSpeed: ParticleDataRotationSpeed;
         public colorOffset: ParticleDataColorOffset;
 
-        public materialData: MaterialSphereData;
+        public materialData: MatSphereData;
         public textureSheet: ParticleDataTextureSheet;
         /**
         * @language zh_CN
