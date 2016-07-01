@@ -9,66 +9,19 @@
     * @platform Web,Native
     */
     export class MatMethodData {
+        public static methodType: any = {
+            lightmapMethod: "lightmapMethod",
+            uvRollMethod: "uvRollMethod",
+            mulUvRollMethod: "mulUvRollMethod",
+            alphaMaskMethod: "alphaMaskMethod",
+            streamerMethod: "streamerMethod",
+            terrainARGBMethod: "terrainARGBMethod",
+            waterWaveMethod: "waterWaveMethod",
+            waterNormalMethod: "waterNormalMethod",
+        };
 
         public id: string = "";
 
-        /**
-         * @language zh_CN
-         * 烘焙效果
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public static lightmapMethod: string = "lightmapMethod";
-
-        /**
-         * @language zh_CN
-         * uv滚动效果
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public static uvRollMethod: string = "uvRollMethod";
-
-        /**
-         * @language zh_CN
-         * 多uv滚动效果
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public static mulUvRollMethod: string = "mulUvRollMethod";
-
-        /**
-         * @language zh_CN
-         * alpha遮罩
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public static alphaMaskMethod: string = "alphaMaskMethod";
-
-
-        /**
-         * @language zh_CN
-         * 流动效果
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public static streamerMethod: string = "streamerMethod";
-
-        /**
-         * @language zh_CN
-         * 地型效果
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public static terrainARGBMethod: string = "terrainMethod";
-
-        /**
-        * @language zh_CN
-        * 地型效果
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public static waterWaveMethod: string = "waterWaveMethod";
-        
         /**
          * @language zh_CN
          * 特效的类型
