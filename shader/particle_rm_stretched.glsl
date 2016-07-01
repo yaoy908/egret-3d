@@ -8,37 +8,48 @@ mat4 getRenderModeMatrix(mat4 cameraMatrix) {
 }
 
 
-void updateStretchedBillBoard(vec3 moveDir, mat4 viewMatrix){
+void updateStretchedBillBoard(vec4 startPos, vec4 newPos){
 
-  if(moveDir.x == 0.0 && moveDir.y == 0.0 && moveDir.z == 0.0){
-	 moveDir = attribute_offsetPosition;
-  }
-  if(moveDir.x == 0.0 && moveDir.y == 0.0 && moveDir.z == 0.0){
-	return;
-  }
+	localPosition.x *= particleStateData.lengthScale;
+  
+	startPos =  uniform_ViewMatrix * startPos; 
+	startPos =  uniform_ProjectionMatrix * startPos; 
+	newPos =  uniform_ViewMatrix * newPos; 
+	newPos =  uniform_ProjectionMatrix * newPos; 
 
-  vec4 dirVector = vec4(moveDir, 0.0); 
-  float scaleBefore = dirVector.x * dirVector.x + dirVector.y * dirVector.y + dirVector.z * dirVector.z; 
-  scaleBefore = sqrt(scaleBefore); 
-  dirVector = viewMatrix * dirVector; 
-  float scaleAfter = dirVector.x * dirVector.x + dirVector.y * dirVector.y; 
-  scaleAfter = sqrt(scaleAfter);
-  scaleAfter = scaleAfter / scaleBefore; 
-  scaleAfter = sqrt(scaleAfter);
-  localPosition.y *= scaleAfter;
-  dirVector.z = 0.0; 
-  dirVector = normalize(dirVector); 
-  vec3 dirStartVector = vec3(0.0, 1.0, 0.0); 
-  float angleAdded = 0.0;
+	vec3 dirVector = vec3(newPos.x - startPos.x, newPos.y - startPos.y, newPos.z - startPos.z);
+    if(dirVector.x == 0.0 && dirVector.y == 0.0 && dirVector.z == 0.0){
+		dirVector = attribute_offsetPosition;
+	}
+	if(dirVector.x == 0.0 && dirVector.y == 0.0 && dirVector.z == 0.0){
+		return;
+	}
 
-  if(dirVector.x > 0.0){
-    angleAdded = PI;
-    dirVector *= -1.0;
-  }
-  float acosValue = dot(dirStartVector, vec3(dirVector.x, dirVector.y, dirVector.z)); 
-  float angle = acos(acosValue) + angleAdded;
- 
-  mat4 headMat = buildRotMat4(vec3(0.0, 0.0, angle)); 
-  localPosition = headMat * localPosition;
+	float scaleBefore = dirVector.x * dirVector.x + dirVector.y * dirVector.y + dirVector.z * dirVector.z; 
+	scaleBefore = sqrt(scaleBefore); 
+	float scaleAfter = dirVector.x * dirVector.x + dirVector.y * dirVector.y; 
+	scaleAfter = sqrt(scaleAfter);
+	scaleAfter = scaleAfter / scaleBefore; 
+	scaleAfter = sqrt(scaleAfter);
+	localPosition.y *= scaleAfter;
+
+	dirVector.z = 0.0;
+
+	vec3 dirStartVector = vec3(0.0, 1.0, 0.0);
+
+	dirVector = normalize(dirVector); 
+	float added = 0.0;
+	if(dirVector.x > 0.0){
+		dirVector.xy *= -1.0;
+		added = PI;
+	}
+	float acosValue = dot(dirStartVector, dirVector); 
+	float angle = acos(acosValue) + 0.5 * PI + added; 
+  
+  
+
+	mat4 headMat = buildRotMat4(vec3(0.0, 0.0, angle)); 
+	localPosition = headMat * localPosition; 
+
 
 }

@@ -33,6 +33,8 @@
 
         public textures: any = [];
 
+        public taskDict: any = {};
+
         private parseTexture(node: Node) {
             if (node.childNodes.length == 1)
                 return null;
@@ -53,6 +55,9 @@
                 }
 
                 this.textures.push(data);
+
+                this.calculateTextureTask(data);
+
             }
         }
         constructor(data: any) {
@@ -73,6 +78,8 @@
                 var matNodeData = this.parseMat(matList[i]);
                 if (matNodeData) {
                     this.matDict[matNodeData.id] = matNodeData;
+
+                    this.calculateMatTask(matNodeData);
                 }
             }
 
@@ -80,6 +87,7 @@
                 var mapNodeData: MapNodeData = this.parseNode(nodeList[i]);
                 if (mapNodeData) {
                     this.nodeList.push(mapNodeData);
+                    this.calculateNodeTask(mapNodeData);
                 }
             }
 
@@ -91,6 +99,7 @@
                 var hudNodeData = this.parseHud(hudList[i]);
                 if (hudNodeData) {
                     this.hudList.push(hudNodeData);
+                    this.calculateHudTask(hudNodeData);
                 }
             }
 
@@ -453,11 +462,75 @@
                 }
                 for (var j: number = 0; j < item.attributes.length; ++j) {
                     attr = item.attributes[j];
-                    hudData[attr.nodeName] = Number(attr.value);
+                    if (nodeName == "shader") {
+                        hudData[attr.nodeName] = attr.value;
+                    }
+                    else {
+                        hudData[attr.nodeName] = Number(attr.value);
+                    }
                 }
             }
 
             return hudData;
+        }
+
+        protected calculateMatTask(data: MatSphereData) {
+            if (data.diffuseTextureName != "") {
+                this.taskDict[data.diffuseTextureName] = 0;
+            }
+
+            if (data.normalTextureName != "") {
+                this.taskDict[data.normalTextureName] = 0;
+            }
+
+            if (data.specularTextureName != "") {
+                this.taskDict[data.specularTextureName] = 0;
+            }
+
+            for (var i: number = 0; i < data.methods.length; ++i) {
+                var methodData: MatMethodData = data.methods[i];
+
+                for (var j: number = 0; j < methodData.texturesData.length; ++j) {
+                    var texData: any = methodData.texturesData[j];
+                    if (texData.path) {
+                        this.taskDict[texData.path] = 0;
+                    }
+                }
+            }
+        }
+
+        protected calculateNodeTask(data: MapNodeData) {
+            if (data.path) {
+                this.taskDict[data.path] = 0;
+            }
+
+
+            for (var j: number = 0; j < data.skinClips.length; j++) {
+
+                var eamData: any = data.skinClips[j];
+                if (eamData.path) {
+                    this.taskDict[eamData.path] = 0;
+                }
+            }
+
+            for (var j: number = 0; j < data.propertyAnims.length; ++j) {
+                var propertyAnimsData: any = data.propertyAnims[j];
+                if (propertyAnimsData.path) {
+                    this.taskDict[propertyAnimsData.path] = 0;
+                }
+            }
+        }
+
+        protected calculateHudTask(data: HUDData) {
+            if (data.texture) {
+                this.taskDict[data.texture] = 0;
+            }
+        }
+
+        protected calculateTextureTask(data: any) {
+            if (data.path) {
+                this.taskDict[data.path] = 0;
+            }
         }
     }
 }

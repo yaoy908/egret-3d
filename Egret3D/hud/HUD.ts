@@ -35,7 +35,8 @@
         private _indexBuffer3D: IndexBuffer3D;
         private _vertexBuffer3D: VertexBuffer3D;
         private _changeTexture: boolean = false;
-        private _vertexFormat: number = VertexFormat.VF_POSITION | VertexFormat.VF_UV0 ;
+        private _vertexFormat: number = VertexFormat.VF_POSITION | VertexFormat.VF_UV0;
+        private _uv_scale: Float32Array = new Float32Array(2);
 
         /**
         * @language zh_CN
@@ -59,6 +60,15 @@
         * @platform Web,Native
         */
         public cullMode: number = ContextConfig.BACK;
+
+
+        /**
+        * @language zh_CN
+        * 是否可见
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public visible: boolean = true;
 
         public vsShader: string = "hud_vs" ; 
         public fsShader: string = "hud_V_fs" ;
@@ -86,6 +96,8 @@
             this.y = y;
             this.width = width;
             this.height = height;
+            this._uv_scale[0] = 1.0;
+            this._uv_scale[1] = 1.0;
         }
 
         /**
@@ -291,6 +303,50 @@
         /**
         * @private
         */
+        public set uScale(u: number) {
+            //this._change = true;
+            this._uv_scale[0] = u;
+
+            if (this._uv_scale[0] > 1.0) {
+                this._uv_scale[0] = 1.0;
+            }
+            if (this._uv_scale[0] < 0.0) {
+                this._uv_scale[0] = 0.0;
+            }
+        }
+
+        /**
+        * @private
+        */
+        public set vScale(v: number) {
+            //this._change = true;
+
+            this._uv_scale[1] = v;
+            if (this._uv_scale[1] > 1.0) {
+                this._uv_scale[1] = 1.0;
+            }
+            if (this._uv_scale[1] < 0.0) {
+                this._uv_scale[1] = 0.0;
+            }
+        }
+
+        /**
+        * @private
+        */
+        public get uScale():number {
+            return this._uv_scale[0];
+        }
+
+        /**
+        * @private
+        */
+        public get vScale(): number {
+            return this._uv_scale[1];
+        }
+
+        /**
+        * @private
+        */
         public get transformMatrix(): Matrix4_4 {
             if (!this._viewPort) {
                 return this._transformMatrix;
@@ -391,12 +447,17 @@
 
                 offset += Geometry.uvSize * Float32Array.BYTES_PER_ELEMENT;
             }
+
+            this._passUsage["uv_scale"] = context.getUniformLocation(this._passUsage.program3D, "uv_scale");
         }
 
         /**
         * @private
         */
         public draw(contextProxy: Context3DProxy) {
+            if (!this.visible) {
+                return;
+            }
             if (!this._passUsage.program3D) {
                 this.upload(contextProxy);
             }
@@ -425,6 +486,10 @@
 
             if (this._passUsage.uniform_ViewProjectionMatrix) {
                 contextProxy.uniformMatrix4fv(this._passUsage.uniform_ViewProjectionMatrix.uniformIndex, false, this.transformMatrix.rawData);
+            }
+
+            if (this._passUsage["uv_scale"] && this._passUsage["uv_scale"] != -1) {
+                contextProxy.uniform2f(this._passUsage["uv_scale"], this._uv_scale[0], this._uv_scale[1]);
             }
 
             contextProxy.setCulling(this.cullMode);

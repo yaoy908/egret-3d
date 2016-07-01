@@ -43,7 +43,7 @@ mat4 getRenderModeMatrix(mat4 cameraMatrix){
 }
 
 //rewrite by stretched
-void updateStretchedBillBoard(vec3 moveDir, mat4 billboardMatrix){
+void updateStretchedBillBoard(vec4 startPos, vec4 newPos){
 		
 }
 
@@ -66,13 +66,18 @@ void main(void) {
 		vec3 velocityLocalVec3 = velocityBaseVec3 * currentTime;
 		vec3 velocityWorldVec3 = vec3(0.0,0.0,0.0);
 		vec3 velocityMultiVec3 = vec3(0.0,0.0,0.0);
+
 		if(particleStateData.velocityOverWorldSpace < TrueOrFalse){
-			//速度叠加为本地坐标系
-			velocityLocalVec3 += velocityOverVec3;
+			velocityLocalVec3 += velocityOverVec3;		
 		}else{
 			velocityWorldVec3 += velocityOverVec3;
 		}
 
+		if(particleStateData.velocityForceWorldSpace < TrueOrFalse){
+			velocityLocalVec3 += velocityForceVec3;
+		}else{
+			velocityWorldVec3 += velocityForceVec3;
+		}
 
 		if(particleStateData.worldSpace > TrueOrFalse){
 			//followTargetPosition
@@ -84,38 +89,36 @@ void main(void) {
 			followTargetPosition.y = particleStateData.positionY;
 			followTargetPosition.z = particleStateData.positionZ;
 
-			followTargetScale.x = particleStateData.scaleX;
-			followTargetScale.y = particleStateData.scaleY;
-			followTargetScale.z = particleStateData.scaleZ;
+			//followTargetScale.x = particleStateData.scaleX;
+			//followTargetScale.y = particleStateData.scaleY;
+			//followTargetScale.z = particleStateData.scaleZ;
 
 			followTargetRotation.x = particleStateData.rotationX;
 			followTargetRotation.y = particleStateData.rotationY;
 			followTargetRotation.z = particleStateData.rotationZ;
 			followTargetRotation.w = particleStateData.rotationW;
 
-			mat4 followRotQuat = buildMat4Quat(followTargetRotation);
-			velocityLocalVec3 = (followRotQuat * vec4(velocityLocalVec3, 1.0)).xyz;
-			velocityForceVec3 = (followRotQuat * vec4(velocityForceVec3, 1.0)).xyz;
 		}
+
+		mat4 followRotQuat = buildMat4Quat(followTargetRotation);
+		velocityLocalVec3 = (followRotQuat * vec4(velocityLocalVec3, 1.0)).xyz;
 
 		mat4 modelMatrix = buildModelMatrix(followTargetRotation, followTargetScale, followTargetPosition);
 		position_emitter = (modelMatrix * vec4(position_emitter, 1.0)).xyz; 
 
 		//固定速度+速度叠加+加速度叠加
-		velocityMultiVec3 = velocityLocalVec3 + velocityWorldVec3 + velocityForceVec3;
+		velocityMultiVec3 = velocityLocalVec3 + velocityWorldVec3;
 		//限制速度（计算平均速度）
 		velocityMultiVec3 = calcParticleMove(velocityMultiVec3);
 		
-		//叠加位移，位移会受母系缩放值影响
-		velocityMultiVec3 *= followTargetScale;
 		//重力默认为全局坐标系
-		velocityMultiVec3 -= currentTime * currentTime * particleStateData.gravity;
+		velocityMultiVec3.y -= 4.9 * currentTime * currentTime * particleStateData.gravity;// 0.5 * g * t * t;
 		
 		//是否需要修改local position指向运动方向，直接修改localPosition
-		updateStretchedBillBoard(velocityMultiVec3, uniform_ViewMatrix);
-		//
-		position_emitter += velocityMultiVec3;
-		localPosition.xyz *= vec3(particleStateData.scaleX, particleStateData.scaleY, particleStateData.scaleZ);
+		vec3 origPosition = position_emitter;
+		position_emitter += velocityMultiVec3; 
+
+		updateStretchedBillBoard(vec4(origPosition, 1.0), vec4(position_emitter, 1.0));
 		//
 		mat4 billboardMatrix = getRenderModeMatrix(uniform_cameraMatrix);
 		outPosition = billboardMatrix * localPosition;

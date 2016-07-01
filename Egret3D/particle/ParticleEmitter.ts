@@ -11,15 +11,9 @@
     export class ParticleEmitter extends Mesh {
 
         private _timeNode: ParticleTime;
-        private _rotationNode: ParticleRotation;
-        private _positionNode: ParticlePosition;
-        private _scaleNode: ParticleScale;
-        private _colorNode: ParticleStartColor;
 
         private particleGeometryShape: Geometry;
         private particleAnimation: ParticleAnimation;
-
-        private _particleFollowNode: ParticleFollowNode; 
         private _particleState: ParticleAnimationState; 
         private _isEmitterDirty: boolean = true;
 
@@ -41,8 +35,7 @@
             super(null, material );
             this._data = data;
             this._externalGeometry = geo;
-            this.material.blendMode = data.property.blendMode;
-
+           
             this.animation = this.particleAnimation = new ParticleAnimation(this);
             this.animation.particleAnimationController = this.particleAnimation;
             this._particleState = this.particleAnimation.particleAnimationState ;
@@ -251,9 +244,9 @@
 
            
             //position
-            this._positionNode = new ParticlePosition();
-            this._positionNode.initNode(this._data.shape, this._data.property);
-            nodes.push(this._positionNode);
+            var positionNode: ParticlePosition = new ParticlePosition();
+            positionNode.initNode(this._data.shape, this._data.property);
+            nodes.push(positionNode);
 
             //speed(依赖于position)
             var speedNode: ParticleVelocityNode = new ParticleVelocityNode();
@@ -313,24 +306,24 @@
             }
 
             //rotation
-            this._rotationNode = new ParticleRotation();
-            this._rotationNode.initNode(this._data.rotationBirth);
-            nodes.push(this._rotationNode);
+            var rotationNode: ParticleRotation = new ParticleRotation();
+            rotationNode.initNode(this._data.rotationBirth);
+            nodes.push(rotationNode);
             
             //scale
-            this._scaleNode = new ParticleScale();
-            this._scaleNode.initNode(this._data.scaleBirth);
-            nodes.push(this._scaleNode);
+            var scaleNode: ParticleScale = new ParticleScale();
+            scaleNode.initNode(this._data.scaleBirth);
+            nodes.push(scaleNode);
             //start color
-            this._colorNode = new ParticleStartColor();
-            this._colorNode.initNode(this._data.property);
-            nodes.push(this._colorNode);
+            var colorNode: ParticleStartColor = new ParticleStartColor();
+            colorNode.initNode(this._data.property);
+            nodes.push(colorNode);
 
             //follow
             if (this._data.followTarget) {
-                this._particleFollowNode = new ParticleFollowNode();
-                this._particleFollowNode.initNode(this._data.followTarget);
-                nodes.push(this._particleFollowNode);
+                var particleFollowNode: ParticleFollowNode = new ParticleFollowNode();
+                particleFollowNode.initNode(this._data.followTarget);
+                nodes.push(particleFollowNode);
             }
             
 
@@ -366,22 +359,23 @@
             //materialData
             if (this._data.materialData) {
                 //uvRoll
-                var method: MaterialMethodData;
+                var method: MatMethodData;
                 for (method of this._data.materialData.methods) {
-                    if (method.type == MaterialMethodData.lightmapMethod) {
+                    if (method.type == MatMethodData.methodType.lightmapMethod) {
                        
-                    } else if (method.type == MaterialMethodData.uvRollMethod) {
+                    }
+                    else if (method.type == MatMethodData.methodType.uvRollMethod) {
                         var uvNode: ParticleUVRollNode = new ParticleUVRollNode();
                         uvNode.initNode(null, method);
                         nodes.push(uvNode);
                     }
-                    else if (method.type == MaterialMethodData.alphaMaskMethod) {
+                    else if (method.type == MatMethodData.methodType.alphaMaskMethod) {
                         //var maskmapMethod: AlphaMaskMethod = new AlphaMaskMethod();
                         //var lightTexture: ITexture = this._sourceLib.getImage(method.texture);
                         //material.diffusePass.addMethod(maskmapMethod);
                         //maskmapMethod.maskTexture = lightTexture ? lightTexture : CheckerboardTexture.texture;
                     }
-                    else if (method.type == MaterialMethodData.streamerMethod) {
+                    else if (method.type == MatMethodData.methodType.streamerMethod) {
                         //var streamerMethod: StreamerMethod = new StreamerMethod();
                         //var streamerTexture: ITexture = this._sourceLib.getImage(method.texture);
                         //streamerMethod.speedU = method.uSpeed;
