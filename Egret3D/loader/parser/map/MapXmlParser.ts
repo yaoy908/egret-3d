@@ -160,6 +160,9 @@
                     else if (v == "boolean") {
                         method[attr.name] = (attr.value == "true" ? true : false);
                     }
+                    else {
+                        method[attr.name] = attr.value;
+                    }
                 }
 
                 for (var j: number = 0; j < item.childNodes.length; ++j) {

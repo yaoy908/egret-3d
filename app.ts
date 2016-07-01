@@ -1,9 +1,10 @@
 ﻿function jsOnload() {
-    var sample = new egret3d.MainEnter();
+    var sample = new egret3d.Class_WaveWater();
 }
 
 function onTsconfig() {
-    egret3d.Egret3DEngine.addImportScript("./js/demo/MainEnter.js");
+    egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_View3D.js");
+    egret3d.Egret3DEngine.addImportScript("./js/ClassSample/Class_WaveWater.js");
 }
 
 window.onload = () => {

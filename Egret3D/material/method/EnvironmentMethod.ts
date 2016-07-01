@@ -10,7 +10,7 @@
     export class EnvironmentMethod extends MethodBase {
 
         private texture: ITexture; 
-        private reflectValue: number = 0.5;
+        private reflectValue: number = 0.3;
 
         /**
         * @private

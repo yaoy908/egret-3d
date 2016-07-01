@@ -10,7 +10,7 @@
     */
     export class WaterNormalMethod extends MethodBase {
 
-        private _uvData: Float32Array = new Float32Array(6);
+        private _uvData: Float32Array = new Float32Array(8);
 
         private _time: number = 0.0;
         private _start: boolean = false;
@@ -22,6 +22,10 @@
 
         private _normalTexture_0: ITexture; 
         private _normalTexture_1: ITexture; 
+
+        private _normal_0_UVScale: number = 4.0; 
+        private _normal_1_UVScale: number = 4.0; 
+
 
         /** 
         * @private
@@ -36,12 +40,14 @@
             this.start();
 
             //---------------
-            this._uvData[0] = this._speedU_0.x;
-            this._uvData[1] = this._speedU_0.y;
-            this._uvData[2] = this._speedU_1.x;
-            this._uvData[3] = this._speedU_1.y;
+            this._uvData[0] = this._speedU_0.x * 2.5 ;
+            this._uvData[1] = this._speedU_0.y * 2.5 ;
+            this._uvData[2] = this._speedU_1.x * 2.5 ;
+            this._uvData[3] = this._speedU_1.y * 2.5 ;
             this._uvData[4] = this._distion_intensity.x;
             this._uvData[5] = this._distion_intensity.y;
+            this._uvData[6] = this._normal_0_UVScale ;
+            this._uvData[7] = this._normal_1_UVScale ;
         }
 
         /**
@@ -65,6 +71,47 @@
         */
         public stop() {
             this._start = false;
+        }
+
+        /**
+        * @language zh_CN 
+        * 设置UV 速度
+        * @param index 0 或 1
+        * @param u  
+        * @param v 
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public setUvSpeed(index: number, u: number, v: number) {
+            switch (index) {
+                case 0:
+                    this._speedU_0.x = u;
+                    this._speedU_0.y = v;
+                    this._uvData[0] = this._speedU_0.x * 2.5;
+                    this._uvData[1] = this._speedU_0.y * 2.5;
+                    break;
+                case 1:
+                    this._speedU_1.x = u;
+                    this._speedU_1.y = v;
+                    this._uvData[2] = this._speedU_1.x * 2.5;
+                    this._uvData[3] = this._speedU_1.y * 2.5;
+                    break;
+            }
+        }
+
+        /**
+        * @language zh_CN 
+        * 设置UV repat次数
+        * @param u  
+        * @param v 
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public setUvScale(first: number, second: number) {
+            this._normal_0_UVScale = first;
+            this._normal_1_UVScale = second;
+            this._uvData[6] = this._normal_0_UVScale;
+            this._uvData[7] = this._normal_1_UVScale;
         }
 
         /**
@@ -111,7 +158,7 @@
         * @param camera3D
         */
         public upload(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
-            usage["uvData"] = context3DProxy.getUniformLocation(usage.program3D, "uvData");
+            usage["waterNormalData"] = context3DProxy.getUniformLocation(usage.program3D, "waterNormalData");
             usage["time"] = context3DProxy.getUniformLocation(usage.program3D, "time");
         }
 
@@ -122,7 +169,7 @@
         public activeState(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
             if (this._start) {
                 this._time += delay;
-                context3DProxy.uniform2fv(usage["uvData"], this._uvData);
+                context3DProxy.uniform2fv(usage["waterNormalData"], this._uvData);
                 context3DProxy.uniform1f(usage["time"], this._time);
             }
         }
