@@ -8,16 +8,16 @@
 // };
 
 vec4 LightingBlinnPhong(vec3 lightDir, vec3 lightColor , vec3 normal , vec3 viewDir, float atten){
-	// vec3 ambient = materialSource.albedo * materialSource.ambient ;
-	vec3 ambient = materialSource.ambient ;
+	vec3 ambient = materialSource.ambient ; 
 	float NdotL = clamp(dot (normal, lightDir),0.0,1.0); 
-	vec3 diffuse = lightColor.xyz * NdotL ;
-	vec3 h = normalize (lightDir + viewDir); 
+	vec3 diffuse = lightColor.xyz * NdotL ; 
+	
+	vec3 h = normalize (lightDir + normalize(viewDir)); 
 	float nh = clamp(dot (normal, h),0.0,1.0); 
-	float specPower = pow (nh, materialSource.shininess ) * materialSource.specularScale ;
-	vec3 specular = lightColor.xyz * specPower * materialSource.specular ;
-	vec4 c;
-	c.rgb = (ambient + diffuse + specular) * (atten * 2.0 );
-	c.a = materialSource.alpha + (specPower * atten);
-	return c; 
+	float specPower = pow (nh, materialSource.shininess ) * materialSource.specularScale ; 
+	vec3 specular = lightColor.xyz * specPower * materialSource.specular ; 
+	vec4 c; 
+	c.rgb = (diffuse+specular+ambient) * (atten * 2.0 ); 
+	c.a = materialSource.alpha + (specPower * atten); 
+	return c;  
 }

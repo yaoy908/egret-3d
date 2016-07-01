@@ -4,7 +4,7 @@ attribute vec4 attribute_color;
 varying vec3 varying_ViewDir ;
 uniform mat4 uniform_NormalMatrix;
 
-uniform vec3 waveData[4];
+uniform vec3 waveVSData[4];
 uniform float time ;
 uniform sampler2D normalTextureA;
 struct wave{
@@ -33,10 +33,10 @@ vec3 calcWave2( float t , vec3 x, float amplitude, float waveLength ,float angul
 
 void main(void){
    wave wa ; 
-    wa.wave_xyz_intensity_0 = vec3(waveData[0]) ; 
-    wa.wave_xyz_intensity_1 = vec3(waveData[1]) ; 
-    wa.wave_xyz_speed_0 = vec3(waveData[2]) ; 
-    wa.wave_xyz_speed_1 = vec3(waveData[3]) ; 
+    wa.wave_xyz_intensity_0 = vec3(waveVSData[0]) ; 
+    wa.wave_xyz_intensity_1 = vec3(waveVSData[1]) ; 
+    wa.wave_xyz_speed_0 = vec3(waveVSData[2]) ; 
+    wa.wave_xyz_speed_1 = vec3(waveVSData[3]) ; 
     
     float tempTime = mod( time , 100000.0 ); 
     vec3 newPose1 = calcWave2(tempTime,e_position,10.0, 30.0, 20.0,vec3(3.0,0.0,2.0));
@@ -62,11 +62,10 @@ void main(void){
     vec3 normal = normalize(cross(side1, side2));//attribute_normal * vec3(offset,1.0,offset) ;
     
     mat3 normalMatrix = mat3(uniform_NormalMatrix); 
-    varying_eyeNormal = normalize(normalMatrix*normal); 
-    varying_eyeNormal = normalize(normalMatrix*vec3(0.0,-1.0,0.0)); 
+    varying_eyeNormal = normalize(-attribute_normal); 
 
     varying_ViewPose = vec4(e_position, 1.0) ; 
-    varying_ViewDir = normalize(normalMatrix*(uniform_eyepos.xyz - e_position)) ; 
+    varying_ViewDir = ((uniform_eyepos.xyz - e_position)) ; 
     outPosition = uniform_ModelViewMatrix * vec4(e_position, 1.0) ; 
     varying_color = attribute_color; 
 } 

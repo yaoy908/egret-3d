@@ -1,4 +1,4 @@
-uniform vec2 uvData[3];
+uniform vec2 waterNormalData[4];
 uniform float time ;
 uniform sampler2D normalTextureA;
 uniform sampler2D normalTextureB;
@@ -29,16 +29,16 @@ vec3 tbn(vec3 map, vec3 N, vec3 V, vec2 texcoord) {
 void main(void){
     
     float tempTime = mod(time,100000.0); 
-    vec2 uvA = uv_0 * 3.0 + uvData[0] * tempTime * 2.5; 
-    vec2 uvB = uv_0 * 3.0 + uvData[1] * tempTime * 1.5 ; 
-    vec3 normalTex_0 = texture2D(normalTextureA,uvA * 2.0 + normal.x*uvData[2].x ).xyz *2.0 - 1.0; 
-    vec3 normalTex_1 = texture2D(normalTextureB,uvB * 2.0 + normal.z*uvData[2].y ).xyz *2.0 - 1.0; 
+    vec2 uvA = uv_0 * waterNormalData[3].x + waterNormalData[0] * tempTime ; 
+    vec2 uvB = uv_0 * waterNormalData[3].y + waterNormalData[1] * tempTime  ; 
+    vec3 normalTex_0 = texture2D(normalTextureA,uvA * 2.0 + normal.x*waterNormalData[2].x ).xyz *2.0 - 1.0; 
+    vec3 normalTex_1 = texture2D(normalTextureB,uvB * 2.0 + normal.z*waterNormalData[2].y ).xyz *2.0 - 1.0; 
     
     normalTex_0.y *= -1.0; 
     normalTex_1.y *= -1.0; 
     
-    vec3 normalTex_A = tbn( normalTex_0 , normal , -normalize(varying_ViewDir) , uv_0 );
-    vec3 normalTex_B = tbn( normalTex_1 , normal , -normalize(varying_ViewDir) , uv_0 );
+    vec3 normalTex_A = tbn( normalTex_0 , normal , -(varying_ViewDir) , uv_0 );
+    vec3 normalTex_B = tbn( normalTex_1 , normal , -(varying_ViewDir) , uv_0 );
 
-    normal.xyz = normalize(normal + normalTex_A + normalTex_B ) ; 
+    normal.xyz = normalize( normalTex_A + normalTex_B ) ; 
 } 
