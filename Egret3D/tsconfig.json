@@ -73,10 +73,12 @@
         "anim/PropertyAnimation/AnimCurve.ts",
         "anim/PropertyAnimation/PropertyAnim.ts",
 
-        "anim/skeletonAnimation/Joint.ts",
-        "anim/skeletonAnimation/Skeleton.ts",
-        "anim/skeletonAnimation/SkeletonAnimation.ts",
-        "anim/skeletonAnimation/SkeletonAnimationClip.ts",
+        "anim/SkeletonAnimation/Joint.ts",
+        "anim/SkeletonAnimation/Skeleton.ts",
+        "anim/SkeletonAnimation/SkeletonPose.ts",
+        "anim/SkeletonAnimation/SkeletonAnimationClip.ts",
+        "anim/SkeletonAnimation/SkeletonAnimationState.ts",
+        "anim/SkeletonAnimation/SkeletonAnimation.ts",
 
         "audio/Channel.ts",
         "audio/Channel3d.ts",

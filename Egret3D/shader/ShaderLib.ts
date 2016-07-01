@@ -324,17 +324,7 @@ module egret3d {
 			"                       \n",
 
 			"environmentDiffuse_vertex":
-			"attribute vec3 attribute_normal; \n" +
-			"attribute vec4 attribute_color; \n" +
-			"varying vec3 varying_ViewDir ; \n" +
-			"uniform mat4 uniform_NormalMatrix; \n" +
 			"void main(){ \n" +
-			"mat3 normalMatrix = mat3(uniform_NormalMatrix); \n" +
-			"varying_eyeNormal = normalize(-attribute_normal); \n" +
-			"varying_ViewPose = vec4(e_position, 1.0) ; \n" +
-			"varying_ViewDir = normalize((uniform_eyepos.xyz - e_position)) ; \n" +
-			"outPosition = uniform_ModelViewMatrix * vec4(e_position, 1.0) ; \n" +
-			"varying_color = attribute_color; \n" +
 			"} \n",
 
 			"environmentMapping_fragment":
@@ -343,7 +333,7 @@ module egret3d {
 			"void main(){ \n" +
 			"vec3 r = reflect(-normalize(varying_ViewDir),  normal  ); \n" +
 			"vec4 reflectiveColor = textureCube(environmentMapTex,r.xyz); \n" +
-			"diffuseColor.xyz = mix( diffuseColor.xyz,reflectiveColor.xyz, reflectValue ); \n" +
+			"diffuseColor.xyz = mix( diffuseColor.xyz,reflectiveColor.xyz, normal.y ); \n" +
 			"} \n" +
 			"          \n",
 
@@ -492,6 +482,28 @@ module egret3d {
 			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0, 8.0*d)) * 0.001; \n" +
 			"color /= 8.0; \n" +
 			"gl_FragColor = color + texture2D(colorTexture,uv.xy); \n" +
+			"} \n",
+
+			"hud_cull_fs":
+			"varying vec2 varying_uv0; \n" +
+			"uniform sampler2D diffuseTexture; \n" +
+			"uniform vec2 uv_scale; \n" +
+			"void main(void) { \n" +
+			"vec2 uv_0 = varying_uv0; \n" +
+			"uv_0 *= uv_scale; \n" +
+			"vec4 color = texture2D(diffuseTexture, varying_uv0); \n" +
+			"float mask = 1.0; \n" +
+			"float f = uv_scale.y - varying_uv0.y; \n" +
+			"if (varying_uv0.y < uv_scale.y){ \n" +
+			"if(f < 0.03 && f > 0.0){ \n" +
+			"mask =1.0 - (f / 0.03 * 0.9 + 0.1); \n" +
+			"} \n" +
+			"else{ \n" +
+			"mask = 0.1; \n" +
+			"} \n" +
+			"} \n" +
+			"color.xyz *= mask; \n" +
+			"gl_FragColor  = color; \n" +
 			"} \n",
 
 			"hud_H_fs":
@@ -687,82 +699,55 @@ module egret3d {
 
 			"particle_bezier":
 			"vec2 bzData[20]; \n" +
-			"float f2Key = 1.0 / 4096.0; \n" +
-			"vec2 dcp2f(float min, float range, float mf){ \n" +
-			"float value1 = floor(mf); \n" +
-			"float value2 = mf - value1; \n" +
-			"value1 *= f2Key; \n" +
-			"value1 *= range; \n" +
-			"value2 *= range; \n" +
-			"value1 += min; \n" +
-			"value2 += min; \n" +
-			"return vec2(value1, value2); \n" +
-			"} \n" +
-			"void dcpBezier(float bezierData[15], float tTotal) \n" +
+			"void dcpBezier(float bezierData[22], float tTotal) \n" +
 			"{ \n" +
-			"vec2 f2; \n" +
-			"float min = bezierData[10]; \n" +
-			"float range = bezierData[11]; \n" +
-			"float sameValue = bezierData[12]; \n" +
-			"float timeStart = 0.0; \n" +
-			"float timeSegment = 0.0; \n" +
-			"float fj = 0.0; \n" +
-			"for(int i = 0; i < 2; i ++){ \n" +
-			"timeSegment = bezierData[13 + i] * tTotal / 9.0; \n" +
-			"fj = 0.0; \n" +
-			"for(int j = 0; j < 5; j ++){ \n" +
-			"if(sameValue > TrueOrFalse){ \n" +
-			"f2 = vec2(bezierData[0]); \n" +
-			"}else{ \n" +
-			"f2 = dcp2f(min, range, bezierData[i * 5 + j]); \n" +
-			"} \n" +
-			"bzData[i * 10 + j * 2].x = timeStart + fj * 2.0 * timeSegment; \n" +
-			"bzData[i * 10 + j * 2 + 1].x = timeStart + (fj * 2.0 + 1.0) * timeSegment; \n" +
-			"bzData[i * 10 + j * 2].y = f2.x; \n" +
-			"bzData[i * 10 + j * 2 + 1].y = f2.y; \n" +
-			"fj ++; \n" +
-			"} \n" +
-			"timeStart += bezierData[13 + i] * tTotal; \n" +
+			"float timeNow = 0.0; \n" +
+			"float time1 = bezierData[20] * tTotal; \n" +
+			"float time2 = bezierData[21] * tTotal; \n" +
+			"for(int i = 0; i < 20; i ++){ \n" +
+			"bzData[i].x = timeNow; \n" +
+			"bzData[i].y = bezierData[i]; \n" +
+			"if(i <= 9){ \n" +
+			"timeNow += time1; \n" +
+			"}else if(i >= 11){ \n" +
+			"timeNow += time2; \n" +
 			"} \n" +
 			"} \n" +
-			"float calcBezierArea(float tCurrent, float randomSeed){ \n" +
+			"bzData[10].x = bzData[9].x; \n" +
+			"} \n" +
+			"float calcBezierArea(float tCurrent){ \n" +
 			"float res = 0.0; \n" +
 			"float v0; \n" +
 			"float v1; \n" +
 			"float t0; \n" +
 			"float t1; \n" +
 			"float deltaTime = 0.0; \n" +
-			"float a; \n" +
+			"float a_deltaTime; \n" +
 			"for(int i = 0; i < 19; i ++){ \n" +
-			"v0 = bzData[i].y * randomSeed; \n" +
-			"v1 = bzData[i + 1].y * randomSeed; \n" +
+			"v0 = bzData[i].y; \n" +
+			"v1 = bzData[i + 1].y; \n" +
 			"t0 = bzData[i].x; \n" +
 			"t1 = bzData[i + 1].x; \n" +
 			"deltaTime = t1 - t0; \n" +
-			"if(deltaTime > 0.0) \n" +
+			"if(deltaTime > 0.0001) \n" +
 			"{ \n" +
-			"a = 0.5 * (v1 - v0) / deltaTime; \n" +
+			"a_deltaTime = 0.5 * (v1 - v0); \n" +
 			"if(tCurrent >= t1){ \n" +
-			"res += deltaTime * (v0 + a * deltaTime); \n" +
+			"res += deltaTime * (v0 + a_deltaTime); \n" +
 			"}else{ \n" +
 			"deltaTime = tCurrent - t0; \n" +
-			"res += deltaTime * (v0 + a * deltaTime); \n" +
+			"res += deltaTime * (v0 + a_deltaTime); \n" +
 			"break; \n" +
 			"} \n" +
 			"} \n" +
 			"} \n" +
 			"return res; \n" +
 			"} \n" +
-			"float calcOneBezierArea(float bezierData[15], float tCurrent, float tTotal, float randomSeed){ \n" +
+			"float calcOneBezierArea(float bezierData[22], float tCurrent, float tTotal){ \n" +
 			"dcpBezier(bezierData, tTotal); \n" +
-			"return calcBezierArea(tCurrent, randomSeed); \n" +
+			"return calcBezierArea(tCurrent); \n" +
 			"} \n" +
-			"float calcDoubleBezierArea(float sampleData1[15], float sampleData2[15], float tCurrent, float tTotal, float randomSeed){ \n" +
-			"float res = calcOneBezierArea(sampleData1, tCurrent, tTotal, randomSeed); \n" +
-			"res += calcOneBezierArea(sampleData2, tCurrent, tTotal, 1.0 - randomSeed); \n" +
-			"return res; \n" +
-			"} \n" +
-			"float calcBezierSize(float tCurrent, float randomSeed){ \n" +
+			"float calcBezierSize(float tCurrent){ \n" +
 			"float res = 0.0; \n" +
 			"float y0; \n" +
 			"float y1; \n" +
@@ -771,16 +756,14 @@ module egret3d {
 			"float deltaTime = 0.0; \n" +
 			"float v; \n" +
 			"for(int i = 0; i < 19; i ++){ \n" +
-			"y0 = bzData[i].y * randomSeed; \n" +
-			"y1 = bzData[i + 1].y * randomSeed; \n" +
+			"y0 = bzData[i].y; \n" +
+			"y1 = bzData[i + 1].y; \n" +
 			"t0 = bzData[i].x; \n" +
 			"t1 = bzData[i + 1].x; \n" +
 			"deltaTime = t1 - t0; \n" +
-			"if(deltaTime > 0.0) \n" +
+			"if(deltaTime > 0.0001) \n" +
 			"{ \n" +
-			"if(tCurrent >= t1){ \n" +
-			"res = y1; \n" +
-			"}else{ \n" +
+			"if(tCurrent <= t1){ \n" +
 			"v = (y1 - y0) / deltaTime; \n" +
 			"deltaTime = tCurrent - t0; \n" +
 			"res = y0 + v * deltaTime; \n" +
@@ -790,15 +773,9 @@ module egret3d {
 			"} \n" +
 			"return res; \n" +
 			"} \n" +
-			"float calcOneBezierSize(float bezierData[15], float tCurrent, float tTotal, float randomSeed){ \n" +
+			"float calcOneBezierSize(float bezierData[22], float tCurrent, float tTotal){ \n" +
 			"dcpBezier(bezierData, tTotal); \n" +
-			"float res = calcBezierSize(tCurrent, randomSeed); \n" +
-			"return res; \n" +
-			"} \n" +
-			"float calcDoubleBezierSize(float sampleData1[15], float sampleData2[15], float tCurrent, float tTotal, float randomSeed){ \n" +
-			"float res = calcOneBezierSize(sampleData1, tCurrent, tTotal, randomSeed); \n" +
-			"res += calcOneBezierSize(sampleData2, tCurrent, tTotal, 1.0 - randomSeed); \n" +
-			"return res; \n" +
+			"return calcBezierSize(tCurrent); \n" +
 			"} \n",
 
 			"particle_color_fs":
@@ -885,6 +862,9 @@ module egret3d {
 			"vec3 temp = distanceXYZ * distanceXYZ; \n" +
 			"float distanceCurrent = sqrt(temp.x + temp.y + temp.z); \n" +
 			"float distanceLimit = velocityLimitVec2.x; \n" +
+			"if(distanceLimit < 0.0001){ \n" +
+			"return vec3(0.0); \n" +
+			"} \n" +
 			"if(distanceCurrent > distanceLimit){ \n" +
 			"distanceXYZ *= distanceLimit / distanceCurrent; \n" +
 			"} \n" +
@@ -985,6 +965,12 @@ module egret3d {
 			"return matrix; \n" +
 			"} \n" +
 			"void updateStretchedBillBoard(vec3 moveDir, mat4 viewMatrix){ \n" +
+			"if(moveDir.x == 0.0 && moveDir.y == 0.0 && moveDir.z == 0.0){ \n" +
+			"moveDir = attribute_offsetPosition; \n" +
+			"} \n" +
+			"if(moveDir.x == 0.0 && moveDir.y == 0.0 && moveDir.z == 0.0){ \n" +
+			"return; \n" +
+			"} \n" +
 			"vec4 dirVector = vec4(moveDir, 0.0); \n" +
 			"float scaleBefore = dirVector.x * dirVector.x + dirVector.y * dirVector.y + dirVector.z * dirVector.z; \n" +
 			"scaleBefore = sqrt(scaleBefore); \n" +
@@ -1016,31 +1002,34 @@ module egret3d {
 			"} \n",
 
 			"particle_rotationOneBezier":
-			"uniform float uniform_rotationBezier[15]; \n" +
+			"uniform float uniform_rotationBezier[22]; \n" +
 			"float particle(  ParticleData curParticle ){ \n" +
 			"if(discard_particle < TrueOrFalse){ \n" +
-			"float rot = calcOneBezierSize(uniform_rotationBezier, currentTime, curParticle.life, 1.0); \n" +
+			"float rot = calcOneBezierSize(uniform_rotationBezier, currentTime, curParticle.life); \n" +
 			"rot = currentTime * rot * (PI / 180.0); \n" +
 			"localPosition = buildRotMat4(vec3(0.0,0.0,rot)) * localPosition; \n" +
 			"} \n" +
 			"} \n",
 
 			"particle_rotationTwoBezier":
-			"uniform float uniform_rotationBezier[15]; \n" +
-			"uniform float uniform_rotationBezier2[15]; \n" +
 			"attribute float attribute_rotationRandomSeed; \n" +
+			"uniform float uniform_rotationBezier[22]; \n" +
+			"uniform float uniform_rotationBezier2[22]; \n" +
 			"float particle(  ParticleData curParticle ){ \n" +
 			"if(discard_particle < TrueOrFalse){ \n" +
-			"float rot = calcDoubleBezierArea(uniform_rotationBezier, uniform_rotationBezier2, currentTime, curParticle.life, attribute_rotationRandomSeed); \n" +
+			"vec2 rotationTwoBezier = vec2(0.0); \n" +
+			"rotationTwoBezier.x = calcOneBezierArea(uniform_rotationBezier, currentTime, curParticle.life); \n" +
+			"rotationTwoBezier.y = calcOneBezierArea(uniform_rotationBezier2, currentTime, curParticle.life); \n" +
+			"float rot = mix(rotationTwoBezier.x, rotationTwoBezier.y, attribute_rotationRandomSeed); \n" +
 			"rot = currentTime * rot * (PI / 180.0); \n" +
 			"localPosition = buildRotMat4(vec3(0.0,0.0,rot)) * localPosition; \n" +
 			"} \n" +
 			"} \n",
 
 			"particle_size_vs":
-			"uniform float uniform_bezierSize[15]; \n" +
+			"uniform float uniform_bezierSize[22]; \n" +
 			"void main() { \n" +
-			"float bezierSize = calcOneBezierSize(uniform_bezierSize, currentTime, curParticle.life, 1.0); \n" +
+			"float bezierSize = calcOneBezierSize(uniform_bezierSize, currentTime, curParticle.life); \n" +
 			"localPosition.xyz *= bezierSize; \n" +
 			"} \n",
 
@@ -1068,7 +1057,7 @@ module egret3d {
 			"particle_textureSheetOneBezier":
 			"varying vec3 varying_textureSheetData; \n" +
 			"uniform float uniform_textureSheet[5]; \n" +
-			"uniform float uniform_frameBezier[15]; \n" +
+			"uniform float uniform_frameBezier[22]; \n" +
 			"vec2 getSheetOffset(float frame, float tileX, float tileY) \n" +
 			"{ \n" +
 			"frame = floor(frame); \n" +
@@ -1085,7 +1074,7 @@ module egret3d {
 			"float frame = varying_textureSheetData.x + varying_textureSheetData.y; \n" +
 			"float currentTime = varying_particleData.x * uniform_textureSheet[2]; \n" +
 			"currentTime = mod(currentTime, varying_particleData.y); \n" +
-			"float bezierFrame = calcOneBezierSize(uniform_frameBezier, currentTime, varying_particleData.y, 1.0); \n" +
+			"float bezierFrame = calcOneBezierSize(uniform_frameBezier, currentTime, varying_particleData.y); \n" +
 			"bezierFrame = clamp(bezierFrame, uniform_textureSheet[3], uniform_textureSheet[4]); \n" +
 			"frame += bezierFrame; \n" +
 			"uv_0.xy += getSheetOffset(frame, uniform_textureSheet[0], uniform_textureSheet[1]); \n" +
@@ -1094,8 +1083,8 @@ module egret3d {
 			"particle_textureSheetTwoBezier":
 			"varying vec3 varying_textureSheetData; \n" +
 			"uniform float uniform_textureSheet[5]; \n" +
-			"uniform float uniform_frameBezier1[15]; \n" +
-			"uniform float uniform_frameBezier2[15]; \n" +
+			"uniform float uniform_frameBezier1[22]; \n" +
+			"uniform float uniform_frameBezier2[22]; \n" +
 			"vec2 getSheetOffset(float frame, float tileX, float tileY) \n" +
 			"{ \n" +
 			"frame = floor(frame); \n" +
@@ -1112,7 +1101,9 @@ module egret3d {
 			"float frame = varying_textureSheetData.x + varying_textureSheetData.y; \n" +
 			"float currentTime = varying_particleData.x * uniform_textureSheet[2]; \n" +
 			"currentTime = mod(currentTime, varying_particleData.y); \n" +
-			"float bezierFrame = calcDoubleBezierSize(uniform_frameBezier1, uniform_frameBezier2, currentTime2, varying_particleData.y, varying_textureSheetData.z); \n" +
+			"float b1 = calcOneBezierSize(uniform_frameBezier1, currentTime2, varying_particleData.y); \n" +
+			"float b2 = calcOneBezierSize(uniform_frameBezier2, currentTime2, varying_particleData.y); \n" +
+			"float bezierFrame = mix(b1, b2, varying_particleData.z); \n" +
 			"bezierFrame = clamp(bezierFrame, uniform_textureSheet[3], uniform_textureSheet[4]); \n" +
 			"frame += bezierFrame; \n" +
 			"uv_0.xy += getSheetOffset(frame, uniform_textureSheet[0], uniform_textureSheet[1]); \n" +
@@ -1200,31 +1191,94 @@ module egret3d {
 			"} \n",
 
 			"particle_velocityForceOneBezier":
-			"uniform float uniform_velocityForceX[15]; \n" +
-			"uniform float uniform_velocityForceY[15]; \n" +
-			"uniform float uniform_velocityForceZ[15]; \n" +
+			"vec3 velocityForceOneBezier = vec3(0.0); \n" +
+			"void calcVelocityForceBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"} \n" +
 			"void main() { \n" +
 			"if(discard_particle < TrueOrFalse){ \n" +
-			"velocityForceVec3.x = calcOneBezierArea(uniform_velocityOverX, currentTime, curParticle.life, 1.0); \n" +
-			"velocityForceVec3.y = calcOneBezierArea(uniform_velocityOverY, currentTime, curParticle.life, 1.0); \n" +
-			"velocityForceVec3.z = calcOneBezierArea(uniform_velocityOverZ, currentTime, curParticle.life, 1.0); \n" +
+			"velocityForceVec3.xyz = velocityForceOneBezier.xyz; \n" +
+			"calcVelocityForceBezier(currentTime, curParticle.life); \n" +
 			"} \n" +
 			"} \n",
 
+			"particle_velocityForceOneBezierX":
+			"uniform float uniform_velocityForceX[22]; \n" +
+			"void calcVelocityForceBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityForceOneBezier.x = calcOneBezierArea(uniform_velocityForceX, curTime, totalTime); \n" +
+			"} \n",
+
+			"particle_velocityForceOneBezierY":
+			"uniform float uniform_velocityForceY[22]; \n" +
+			"void calcVelocityForceBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityForceOneBezier.y = calcOneBezierArea(uniform_velocityForceY, curTime, totalTime); \n" +
+			"} \n",
+
+			"particle_velocityForceOneBezierZ":
+			"uniform float uniform_velocityForceZ[22]; \n" +
+			"void calcVelocityForceBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityForceOneBezier.z = calcOneBezierArea(uniform_velocityForceZ, curTime, totalTime); \n" +
+			"} \n",
+
 			"particle_velocityForceTwoBezier":
-			"uniform float uniform_velocityForceX[15]; \n" +
-			"uniform float uniform_velocityForceY[15]; \n" +
-			"uniform float uniform_velocityForceZ[15]; \n" +
-			"uniform float uniform_velocityForceX2[15]; \n" +
-			"uniform float uniform_velocityForceY2[15]; \n" +
-			"uniform float uniform_velocityForceZ2[15]; \n" +
 			"attribute float attribute_velocityForceRandomSeed; \n" +
+			"vec3 velocityForceTwoBezier1 = vec3(0.0); \n" +
+			"vec3 velocityForceTwoBezier2 = vec3(0.0); \n" +
+			"void calcVelocityForceBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"} \n" +
 			"void main() { \n" +
 			"if(discard_particle < TrueOrFalse){ \n" +
-			"velocityForceVec3.x = calcDoubleBezierArea(uniform_velocityForceX, uniform_velocityForceX2, currentTime, curParticle.life, attribute_velocityForceRandomSeed); \n" +
-			"velocityForceVec3.y = calcDoubleBezierArea(uniform_velocityForceY, uniform_velocityForceY2, currentTime, curParticle.life, attribute_velocityForceRandomSeed); \n" +
-			"velocityForceVec3.z = calcDoubleBezierArea(uniform_velocityForceZ, uniform_velocityForceZ2, currentTime, curParticle.life, attribute_velocityForceRandomSeed); \n" +
+			"calcVelocityForceBezier(currentTime, curParticle.life); \n" +
+			"velocityForceVec3.x = mix(velocityForceTwoBezier1.x, velocityForceTwoBezier2.x, attribute_velocityForceRandomSeed); \n" +
+			"velocityForceVec3.y = mix(velocityForceTwoBezier1.y, velocityForceTwoBezier2.y, attribute_velocityForceRandomSeed); \n" +
+			"velocityForceVec3.z = mix(velocityForceTwoBezier1.z, velocityForceTwoBezier2.z, attribute_velocityForceRandomSeed); \n" +
 			"} \n" +
+			"} \n",
+
+			"particle_velocityForceTwoBezierX1":
+			"uniform float uniform_velocityForceX1[22]; \n" +
+			"void calcVelocityForceBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityForceTwoBezier1.x = calcOneBezierArea(uniform_velocityForceX1, curTime, totalTime); \n" +
+			"} \n",
+
+			"particle_velocityForceTwoBezierX2":
+			"uniform float uniform_velocityForceX2[22]; \n" +
+			"void calcVelocityForceBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityForceTwoBezier2.x = calcOneBezierArea(uniform_velocityForceX2, curTime, totalTime); \n" +
+			"} \n",
+
+			"particle_velocityForceTwoBezierY1":
+			"uniform float uniform_velocityForceY1[22]; \n" +
+			"void calcVelocityForceBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityForceTwoBezier1.y = calcOneBezierArea(uniform_velocityForceY1, curTime, totalTime); \n" +
+			"} \n",
+
+			"particle_velocityForceTwoBezierY2":
+			"uniform float uniform_velocityForceY2[22]; \n" +
+			"void calcVelocityForceBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityForceTwoBezier2.y = calcOneBezierArea(uniform_velocityForceY2, curTime, totalTime); \n" +
+			"} \n",
+
+			"particle_velocityForceTwoBezierZ1":
+			"uniform float uniform_velocityForceZ1[22]; \n" +
+			"void calcVelocityForceBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityForceTwoBezier1.z = calcOneBezierArea(uniform_velocityForceZ1, curTime, totalTime); \n" +
+			"} \n",
+
+			"particle_velocityForceTwoBezierZ2":
+			"uniform float uniform_velocityForceZ2[22]; \n" +
+			"void calcVelocityForceBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityForceTwoBezier2.z = calcOneBezierArea(uniform_velocityForceZ2, curTime, totalTime); \n" +
 			"} \n",
 
 			"particle_velocityLimitConst":
@@ -1238,21 +1292,23 @@ module egret3d {
 			"} \n",
 
 			"particle_velocityLimitOneBezier":
-			"uniform float uniform_velocityLimit[15]; \n" +
+			"uniform float uniform_velocityLimit[22]; \n" +
 			"void main() { \n" +
 			"if(discard_particle < TrueOrFalse){ \n" +
-			"velocityLimitVec2.x = calcOneBezierArea(uniform_velocityLimit, currentTime, curParticle.life, 1.0); \n" +
+			"velocityLimitVec2.x = calcOneBezierArea(uniform_velocityLimit, currentTime, curParticle.life); \n" +
 			"velocityLimitVec2.y = 1.0; \n" +
 			"} \n" +
 			"} \n",
 
 			"particle_velocityLimitTwoBezier":
-			"uniform float uniform_velocityLimit[15]; \n" +
-			"uniform float uniform_velocityLimit2[15]; \n" +
+			"uniform float uniform_velocityLimit[22]; \n" +
+			"uniform float uniform_velocityLimit2[22]; \n" +
 			"attribute float attribute_velocityLimitRandomSeed; \n" +
 			"void main() { \n" +
 			"if(discard_particle < TrueOrFalse){ \n" +
-			"velocityLimitVec2.x = calcDoubleBezierArea(uniform_velocityLimit, uniform_velocityLimit2, currentTime, curParticle.life, attribute_velocityLimitRandomSeed); \n" +
+			"float velocity2Limit1 = calcOneBezierArea(uniform_velocityLimit, currentTime, curParticle.life); \n" +
+			"float velocity2Limit2 = calcOneBezierArea(uniform_velocityLimit2, currentTime, curParticle.life); \n" +
+			"velocityLimitVec2.x = mix(velocity2Limit1, velocity2Limit1, attribute_velocityLimitRandomSeed); \n" +
 			"if(velocityLimitVec2.x < 0.0){ \n" +
 			"velocityLimitVec2.x = 0.0; \n" +
 			"} \n" +
@@ -1267,31 +1323,94 @@ module egret3d {
 			"} \n",
 
 			"particle_velocityOverOneBezier":
-			"uniform float uniform_velocityOverX[15]; \n" +
-			"uniform float uniform_velocityOverY[15]; \n" +
-			"uniform float uniform_velocityOverZ[15]; \n" +
+			"vec3 velocityTwoBezier = vec3(0.0); \n" +
+			"void calcVelocityOverBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"} \n" +
 			"void main() { \n" +
 			"if(discard_particle < TrueOrFalse){ \n" +
-			"velocityOverVec3.x = calcOneBezierArea(uniform_velocityOverX, currentTime, curParticle.life, 1.0); \n" +
-			"velocityOverVec3.y = calcOneBezierArea(uniform_velocityOverY, currentTime, curParticle.life, 1.0); \n" +
-			"velocityOverVec3.z = calcOneBezierArea(uniform_velocityOverZ, currentTime, curParticle.life, 1.0); \n" +
+			"calcVelocityOverBezier(currentTime, curParticle.life); \n" +
+			"velocityOverVec3.xyz = velocityTwoBezier.xyz; \n" +
 			"} \n" +
 			"} \n",
 
+			"particle_velocityOverOneBezierX":
+			"uniform float uniform_velocityOverX[22]; \n" +
+			"void calcVelocityOverBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityTwoBezier.x = calcOneBezierArea(uniform_velocityOverX, curTime, totalTime); \n" +
+			"} \n",
+
+			"particle_velocityOverOneBezierY":
+			"uniform float uniform_velocityOverY[22]; \n" +
+			"void calcVelocityOverBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityTwoBezier.y = calcOneBezierArea(uniform_velocityOverY, curTime, totalTime); \n" +
+			"} \n",
+
+			"particle_velocityOverOneBezierZ":
+			"uniform float uniform_velocityOverZ[22]; \n" +
+			"void calcVelocityOverBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityTwoBezier.z = calcOneBezierArea(uniform_velocityOverZ, curTime, totalTime); \n" +
+			"} \n",
+
 			"particle_velocityOverTwoBezier":
-			"uniform float uniform_velocityOverX[15]; \n" +
-			"uniform float uniform_velocityOverY[15]; \n" +
-			"uniform float uniform_velocityOverZ[15]; \n" +
-			"uniform float uniform_velocityOverX2[15]; \n" +
-			"uniform float uniform_velocityOverY2[15]; \n" +
-			"uniform float uniform_velocityOverZ2[15]; \n" +
 			"attribute float attribute_velocityOverRandomSeed; \n" +
+			"vec3 velocityOverTwoBezier1 = vec3(0.0); \n" +
+			"vec3 velocityOverTwoBezier2 = vec3(0.0); \n" +
+			"void calcVelocityOverBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"} \n" +
 			"void main() { \n" +
 			"if(discard_particle < TrueOrFalse){ \n" +
-			"velocityOverVec3.x = calcDoubleBezierArea(uniform_velocityOverX, uniform_velocityOverX2, currentTime, curParticle.life, attribute_velocityOverRandomSeed); \n" +
-			"velocityOverVec3.y = calcDoubleBezierArea(uniform_velocityOverY, uniform_velocityOverY2, currentTime, curParticle.life, attribute_velocityOverRandomSeed); \n" +
-			"velocityOverVec3.z = calcDoubleBezierArea(uniform_velocityOverZ, uniform_velocityOverZ2, currentTime, curParticle.life, attribute_velocityOverRandomSeed); \n" +
+			"calcVelocityOverBezier(currentTime, curParticle.life); \n" +
+			"velocityOverVec3.x = mix(velocityOverTwoBezier1.x, velocityOverTwoBezier2.x, attribute_velocityOverRandomSeed); \n" +
+			"velocityOverVec3.y = mix(velocityOverTwoBezier1.y, velocityOverTwoBezier2.y, attribute_velocityOverRandomSeed); \n" +
+			"velocityOverVec3.z = mix(velocityOverTwoBezier1.z, velocityOverTwoBezier2.z, attribute_velocityOverRandomSeed); \n" +
 			"} \n" +
+			"} \n",
+
+			"particle_velocityOverTwoBezierX1":
+			"uniform float uniform_velocityOverX1[22]; \n" +
+			"void calcVelocityOverBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityOverTwoBezier1.x = calcOneBezierArea(uniform_velocityOverX1, curTime, totalTime); \n" +
+			"} \n",
+
+			"particle_velocityOverTwoBezierX2":
+			"uniform float uniform_velocityOverX2[22]; \n" +
+			"void calcVelocityOverBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityOverTwoBezier2.x = calcOneBezierArea(uniform_velocityOverX2, curTime, totalTime); \n" +
+			"} \n",
+
+			"particle_velocityOverTwoBezierY1":
+			"uniform float uniform_velocityOverY1[22]; \n" +
+			"void calcVelocityOverBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityOverTwoBezier1.y = calcOneBezierArea(uniform_velocityOverY1, curTime, totalTime); \n" +
+			"} \n",
+
+			"particle_velocityOverTwoBezierY2":
+			"uniform float uniform_velocityOverY2[22]; \n" +
+			"void calcVelocityOverBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityOverTwoBezier2.y = calcOneBezierArea(uniform_velocityOverY2, curTime, totalTime); \n" +
+			"} \n",
+
+			"particle_velocityOverTwoBezierZ1":
+			"uniform float uniform_velocityOverZ1[22]; \n" +
+			"void calcVelocityOverBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityOverTwoBezier1.z = calcOneBezierArea(uniform_velocityOverZ1, curTime, totalTime); \n" +
+			"} \n",
+
+			"particle_velocityOverTwoBezierZ2":
+			"uniform float uniform_velocityOverZ2[22]; \n" +
+			"void calcVelocityOverBezier(float curTime, float totalTime) \n" +
+			"{ \n" +
+			"velocityOverTwoBezier2.z = calcOneBezierArea(uniform_velocityOverZ2, curTime, totalTime); \n" +
 			"} \n",
 
 			"particle_vs":
@@ -1688,27 +1807,27 @@ module egret3d {
 			"} \n" +
 			"void main(void){ \n" +
 			"float tempTime = mod(time,100000.0); \n" +
-			"vec2 uvA = uv_0 + uvData[0] * tempTime ; \n" +
-			"vec2 uvB = uv_0 + uvData[1] * tempTime ; \n" +
+			"vec2 uvA = uv_0 * 3.0 + uvData[0] * tempTime * 2.5; \n" +
+			"vec2 uvB = uv_0 * 3.0 + uvData[1] * tempTime * 1.5 ; \n" +
 			"vec3 normalTex_0 = texture2D(normalTextureA,uvA * 2.0 + normal.x*uvData[2].x ).xyz *2.0 - 1.0; \n" +
 			"vec3 normalTex_1 = texture2D(normalTextureB,uvB * 2.0 + normal.z*uvData[2].y ).xyz *2.0 - 1.0; \n" +
 			"normalTex_0.y *= -1.0; \n" +
 			"normalTex_1.y *= -1.0; \n" +
-			"normal.xyz = cross(normal, normalTex_0) * 2.0 ; \n" +
-			"normal.xyz = cross(normal , normalTex_1) * 2.0 ; \n" +
+			"vec3 normalTex_A = tbn( normalTex_0 , normal , -normalize(varying_ViewDir) , uv_0 ); \n" +
+			"vec3 normalTex_B = tbn( normalTex_1 , normal , -normalize(varying_ViewDir) , uv_0 ); \n" +
+			"normal.xyz = normalize(normal + normalTex_A + normalTex_B ) ; \n" +
 			"}  \n",
 
 			"wave_fs":
 			"uniform sampler2D diffuseTexture; \n" +
 			"vec4 diffuseColor ; \n" +
 			"void main(void){ \n" +
-			"light = vec4(1.0,1.0,1.0,1.0); \n" +
-			"diffuseColor = texture2D(diffuseTexture , uv_0 + normal.xz * 0.2 ); \n" +
-			"vec3 deepWaterColor = vec3(0.0/255.0,63.0/255.0,77.0/255.0) * 0.2; \n" +
-			"vec3 shallowWaterColor = vec3(71.0/255.0,118.0/255.0,138.0/255.0) * 2.3; \n" +
-			"float facing = clamp(dot( -varying_ViewDir,normal),0.0,1.0); \n" +
+			"diffuseColor = vec4(50.0/255.0,49.0/255.0,30.0/255.0,1.0); \n" +
+			"vec3 deepWaterColor = vec3(0.0/255.0,63.0/255.0,77.0/255.0) * 0.0; \n" +
+			"vec3 shallowWaterColor = vec3(71.0/255.0,118.0/255.0,138.0/255.0) * 0.5; \n" +
+			"float facing = clamp(dot( -normalize(varying_ViewDir),normal),0.0,1.0); \n" +
 			"vec3 waterColor = mix(shallowWaterColor,deepWaterColor,facing); \n" +
-			"diffuseColor.xyz *= waterColor ; \n" +
+			"diffuseColor.xyz += waterColor ; \n" +
 			"}  \n",
 
 			"wave_vs":
@@ -1725,6 +1844,20 @@ module egret3d {
 			"vec3 wave_xyz_speed_0 ; \n" +
 			"vec3 wave_xyz_speed_1 ; \n" +
 			"}; \n" +
+			"const float pi = 3.14 ; \n" +
+			"vec3 calcWave2( float t , vec3 x, float amplitude, float waveLength ,float angularVelocity ,  vec3 waveDir ){ \n" +
+			"angularVelocity = angularVelocity * 0.1; \n" +
+			"vec3 waveVector = waveDir ; \n" +
+			"float waveNumber = pi / waveLength; \n" +
+			"waveVector *= waveNumber ; \n" +
+			"vec3 temp ; \n" +
+			"float kDotX0SubWt = dot(waveVector , x ) - angularVelocity * t  * 0.001; \n" +
+			"float A = amplitude * sin(kDotX0SubWt) ; \n" +
+			"temp.xz = waveDir.xz * A ; \n" +
+			"temp.y += amplitude * cos(kDotX0SubWt); \n" +
+			"temp = x - temp ; \n" +
+			"return temp ; \n" +
+			"} \n" +
 			"void main(void){ \n" +
 			"wave wa ; \n" +
 			"wa.wave_xyz_intensity_0 = vec3(waveData[0]) ; \n" +
@@ -1732,31 +1865,24 @@ module egret3d {
 			"wa.wave_xyz_speed_0 = vec3(waveData[2]) ; \n" +
 			"wa.wave_xyz_speed_1 = vec3(waveData[3]) ; \n" +
 			"float tempTime = mod( time , 100000.0 ); \n" +
-			"vec2 offestW ; \n" +
-			"vec2 offestW2 ; \n" +
-			"float offset; \n" +
-			"vec3 a = attribute_position ; \n" +
-			"vec3 b = attribute_position + vec3( 1.0,0.0,0.0 ); \n" +
-			"vec3 c = attribute_position + vec3( 0.0,0.0,1.0 ); \n" +
-			"vec4 v1 = texture2D( normalTextureA, varying_uv0 ); \n" +
-			"offestW = sin( tempTime*wa.wave_xyz_speed_0.xz + a.xz/ ( 3.14 * wa.wave_xyz_intensity_0.xz) ) * wa.wave_xyz_intensity_0.y ; \n" +
-			"offestW2 = sin( tempTime*wa.wave_xyz_speed_1.xz + a.xz/ ( 3.14 * wa.wave_xyz_intensity_1.xz) ) * wa.wave_xyz_intensity_1.y ; \n" +
-			"offset = offestW.x + offestW.y + offestW2.x + offestW2.y ; \n" +
-			"a.y += offset ; \n" +
-			"e_position.y = a.y + v1.y ; \n" +
-			"offestW = sin( tempTime*wa.wave_xyz_speed_0.xz + b.xz/ ( 3.14 * wa.wave_xyz_intensity_0.xz) ) * wa.wave_xyz_intensity_0.y ; \n" +
-			"offestW2 = sin( tempTime*wa.wave_xyz_speed_1.xz + b.xz/ ( 3.14 * wa.wave_xyz_intensity_1.xz) ) * wa.wave_xyz_intensity_1.y ; \n" +
-			"offset = offestW.x + offestW.y + offestW2.x + offestW2.y ; \n" +
-			"b.y += offset ; \n" +
-			"offestW = sin( tempTime*wa.wave_xyz_speed_0.xz + c.xz/ ( 3.14 * wa.wave_xyz_intensity_0.xz) ) * wa.wave_xyz_intensity_0.y ; \n" +
-			"offestW2 = sin( tempTime*wa.wave_xyz_speed_1.xz + c.xz/ ( 3.14 * wa.wave_xyz_intensity_1.xz) ) * wa.wave_xyz_intensity_1.y ; \n" +
-			"offset = offestW.x + offestW.y + offestW2.x + offestW2.y ; \n" +
-			"c.y += offset ; \n" +
-			"vec3 side1 = b - a; \n" +
-			"vec3 side2 = c - a; \n" +
+			"vec3 newPose1 = calcWave2(tempTime,e_position,10.0, 30.0, 20.0,vec3(3.0,0.0,2.0)); \n" +
+			"newPose1 += calcWave2(tempTime,e_position,10.0, 30.0, 20.0,vec3(-1.5,0.0,2.0)); \n" +
+			"newPose1 += calcWave2(tempTime,e_position,30.0,80.0,3.0,vec3(-2.0,0.0,1.0)); \n" +
+			"vec3 p1 = e_position + vec3(1.0,0.0,0.0) ; \n" +
+			"vec3 newPose2 = calcWave2(tempTime,p1,10.0, 30.0, 20.0,vec3(3.0,0.0,2.0)); \n" +
+			"newPose2 += calcWave2(tempTime,p1,10.0, 30.0, 20.0,vec3(-1.5,0.0,2.0)); \n" +
+			"newPose2 += calcWave2(tempTime,p1,30.0,80.0,3.0,vec3(-2.0,0.0,1.0)); \n" +
+			"vec3 p2 = e_position + vec3(0.0,0.0,1.0) ; \n" +
+			"vec3 newPose3 = calcWave2(tempTime,p2,10.0, 30.0, 20.0,vec3(3.0,0.0,2.0)); \n" +
+			"newPose3 += calcWave2(tempTime,p2,10.0, 30.0, 20.0,vec3(-1.5,0.0,2.0)); \n" +
+			"newPose3 += calcWave2(tempTime,p2,30.0,80.0,3.0,vec3(-2.0,0.0,1.0)); \n" +
+			"e_position = newPose1 ; \n" +
+			"vec3 side1 = newPose2 - newPose1; \n" +
+			"vec3 side2 = newPose3 - newPose1; \n" +
 			"vec3 normal = normalize(cross(side1, side2)); \n" +
 			"mat3 normalMatrix = mat3(uniform_NormalMatrix); \n" +
 			"varying_eyeNormal = normalize(normalMatrix*normal); \n" +
+			"varying_eyeNormal = normalize(normalMatrix*vec3(0.0,-1.0,0.0)); \n" +
 			"varying_ViewPose = vec4(e_position, 1.0) ; \n" +
 			"varying_ViewDir = normalize(normalMatrix*(uniform_eyepos.xyz - e_position)) ; \n" +
 			"outPosition = uniform_ModelViewMatrix * vec4(e_position, 1.0) ; \n" +

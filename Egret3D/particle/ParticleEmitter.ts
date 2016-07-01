@@ -389,22 +389,23 @@
             //materialData
             if (this._data.materialData) {
                 //uvRoll
-                var method: MaterialMethodData;
+                var method: MatMethodData;
                 for (method of this._data.materialData.methods) {
-                    if (method.type == MaterialMethodData.lightmapMethod) {
+                    if (method.type == MatMethodData.methodType.lightmapMethod) {
                        
-                    } else if (method.type == MaterialMethodData.uvRollMethod) {
+                    }
+                    else if (method.type == MatMethodData.methodType.uvRollMethod) {
                         var uvNode: ParticleUVRollNode = new ParticleUVRollNode();
                         uvNode.initNode(null, method);
                         nodes.push(uvNode);
                     }
-                    else if (method.type == MaterialMethodData.alphaMaskMethod) {
+                    else if (method.type == MatMethodData.methodType.alphaMaskMethod) {
                         //var maskmapMethod: AlphaMaskMethod = new AlphaMaskMethod();
                         //var lightTexture: ITexture = this._sourceLib.getImage(method.texture);
                         //material.diffusePass.addMethod(maskmapMethod);
                         //maskmapMethod.maskTexture = lightTexture ? lightTexture : CheckerboardTexture.texture;
                     }
-                    else if (method.type == MaterialMethodData.streamerMethod) {
+                    else if (method.type == MatMethodData.methodType.streamerMethod) {
                         //var streamerMethod: StreamerMethod = new StreamerMethod();
                         //var streamerTexture: ITexture = this._sourceLib.getImage(method.texture);
                         //streamerMethod.speedU = method.uSpeed;
