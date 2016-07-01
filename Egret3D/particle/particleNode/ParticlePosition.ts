@@ -119,12 +119,6 @@
                 recordPos.copyFrom(pos);
                 //缩放______________________________________________________
                 pos.multiply(data.property.scale, pos);
-                //旋转______________________________________________________
-                if (data.property.rotation.x != 0 || data.property.rotation.y != 0 || data.property.rotation.z != 0) {
-                    this.rotationMat.identity();
-                    this.rotationMat.rotation(data.property.rotation.x, data.property.rotation.y, data.property.rotation.z);
-                    this.rotationMat.transformVector4(pos, pos);
-                }
 
                 //粒子发射方向
                 var dir: Vector3D = new Vector3D();
@@ -135,9 +129,6 @@
                         dir.setTo(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
                     } else if (this._node.type == ParticleDataShapeType.Cube) {
                         dir.setTo(0, 0, 1, 1);
-                        this.rotationMat.identity();
-                        this.rotationMat.rotation(data.property.rotation.x, data.property.rotation.y, data.property.rotation.z);
-                        this.rotationMat.transformVector4(dir, dir);
                     } else if (this._node.type == ParticleDataShapeType.Sphere) {
                         dir.copyFrom(recordPos);
                     } else if (this._node.type == ParticleDataShapeType.HemiSphere) {
@@ -145,22 +136,10 @@
                     } else if (this._node.type == ParticleDataShapeType.Cone) {
                         dir = coneShape.getDirection(recordPos, dir);
                     }
-
-                    //旋转______________________________________________________
-                    if (data.property.rotation.x != 0 || data.property.rotation.y != 0 || data.property.rotation.z != 0) {
-                        this.rotationMat.identity();
-                        this.rotationMat.rotation(data.property.rotation.x, data.property.rotation.y, data.property.rotation.z);
-                        this.rotationMat.transformVector4(dir, dir);
-                    }
                 }
 
                 dir.normalize();
                 directionArray.push(dir);
-
-                //平移______________________________________________________
-                pos.x += data.property.position.x;
-                pos.y += data.property.position.y;
-                pos.z += data.property.position.z;
                 
                 //创建位置
                 for (var j: number = 0; j < vertices; ++j) {

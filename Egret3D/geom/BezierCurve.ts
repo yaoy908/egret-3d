@@ -245,11 +245,11 @@
             }
             var i: number = 0, count: number = 0;
             for (i = this.posPoints.length / 2, count = BezierData.SegCount; i < count; i++) {
-                this.posPoints.push(new Point(1, 0));
+                this.posPoints.push(new Point(0, 0));
                 this.posPoints.push(new Point(1, 0));
             }
             for (i = this.ctrlPoints.length / 2, count = BezierData.SegCount; i < count; i++) {
-                this.ctrlPoints.push(new Point(1, 0));
+                this.ctrlPoints.push(new Point(0, 0));
                 this.ctrlPoints.push(new Point(1, 0));
             }
         }

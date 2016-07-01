@@ -273,9 +273,22 @@
 
 
             }
+            //unity中的圆筒默认是横着放的yz互换
+            if (this.origPoint) {
+                this.yz_zy(this.origPoint);
+            }
+            for (var i: number = 0, count: number = values.length; i < count; i++) {
+                this.yz_zy(values[i]);
+            }
 
+            //
             return values;
         }
+
+        private yz_zy(v: Vector3D): void {
+            v.setTo(v.x, v.z, v.y, v.w);
+        }
+        
 
         //获取从这个桶里面发射的粒子，沿着桶的发射朝向
         public getDirection(point: Vector3D, dst: Vector3D): Vector3D {

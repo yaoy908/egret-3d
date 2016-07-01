@@ -233,25 +233,25 @@
 
 
 
-        private _particleProperty: Float32Array = new Float32Array(18);
+        private _particleProperty: Float32Array = new Float32Array(22);
         /**
         * @language zh_CN
         * @private 
         */
         public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
-            var scaleData: Vector3D;
+            //var scaleData: Vector3D;
             var rotateData: Quaternion;
             var positionData: Vector3D;
 
             var data: ParticleData = this._emitter.data;
 
             if (data.followTarget && this._emitter.followTarget) {
-                scaleData = this._emitter.followTarget.globalScale;
+                //scaleData = this._emitter.followTarget.globalScale;
                 rotateData = this._emitter.followTarget.globalOrientation;
                 positionData = this._emitter.followTarget.globalPosition;
             }
             else {
-                scaleData = this._emitter.globalScale;
+                //scaleData = this._emitter.globalScale;
                 rotateData = this._emitter.globalOrientation;
                 positionData = this._emitter.globalPosition;
             }
@@ -261,9 +261,9 @@
             this._particleProperty[1] = data.life.loop ? 1 : 0;
             this._particleProperty[2] = data.followTarget ? 1 : 0;
 
-            this._particleProperty[3] = scaleData.x;
-            this._particleProperty[4] = scaleData.y;
-            this._particleProperty[5] = scaleData.z;
+            this._particleProperty[3] = 0;//scaleData.x;
+            this._particleProperty[4] = 0;//scaleData.y;
+            this._particleProperty[5] = 0;//scaleData.z;
             this._particleProperty[6] = rotateData.x;
             this._particleProperty[7] = rotateData.y;
             this._particleProperty[8] = rotateData.z;
@@ -277,6 +277,10 @@
             this._particleProperty[15] = data.life.duration;
             this._particleProperty[16] = data.property.gravity;
             this._particleProperty[17] = (data.moveSpeed.velocityOver && data.moveSpeed.velocityOver.worldSpace) ? 1 : 0;
+            this._particleProperty[18] = (data.moveSpeed.velocityForce && data.moveSpeed.velocityForce.worldSpace) ? 1 : 0;
+            this._particleProperty[19] = data.property.cameraScale;
+            this._particleProperty[20] = data.property.speedScale;
+            this._particleProperty[21] = data.property.lengthScale;
 
             context3DProxy.uniform1fv(usage["uniform_particleState"].uniformIndex, this._particleProperty);
             for (var i: number = 0; i < this.animNodes.length; i++) {
