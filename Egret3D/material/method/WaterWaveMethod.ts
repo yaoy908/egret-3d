@@ -10,7 +10,8 @@
     */
     export class WaterWaveMethod extends MethodBase {
 
-        private _waveData: Float32Array = new Float32Array(12);
+        private _waveVSData: Float32Array = new Float32Array(12);
+        private _waveFSData: Float32Array = new Float32Array(8);
         private _time: number = 0.0;
         private _start: boolean = false;
 
@@ -36,21 +37,34 @@
             this.start();
 
             //---------------
-            this._waveData[0] = this._wave_xyz_intensity_0.x;
-            this._waveData[1] = this._wave_xyz_intensity_0.y;
-            this._waveData[2] = this._wave_xyz_intensity_0.z;
+            this._waveVSData[0] = this._wave_xyz_intensity_0.x;
+            this._waveVSData[1] = this._wave_xyz_intensity_0.y;
+            this._waveVSData[2] = this._wave_xyz_intensity_0.z;
+                      
+            this._waveVSData[3] = this._wave_xyz_intensity_1.x;
+            this._waveVSData[4] = this._wave_xyz_intensity_1.y;
+            this._waveVSData[5] = this._wave_xyz_intensity_1.z;
+                      
+            this._waveVSData[6] = this._wave_xyz_speed_0.x;
+            this._waveVSData[7] = this._wave_xyz_speed_0.y;
+            this._waveVSData[8] = this._wave_xyz_speed_0.z;
+                      
+            this._waveVSData[9] = this._wave_xyz_speed_1.x;
+            this._waveVSData[10] = this._wave_xyz_speed_1.y;
+            this._waveVSData[11] = this._wave_xyz_speed_1.z;
 
-            this._waveData[3] = this._wave_xyz_intensity_1.x;
-            this._waveData[4] = this._wave_xyz_intensity_1.y;
-            this._waveData[5] = this._wave_xyz_intensity_1.z;
+            //0.0/255.0,63.0/255.0,77.0/255.0
+            //71.0/255.0,118.0/255.0,138.0/255.0
+            this._waveFSData[0] = 0.0 / 255.0; 
+            this._waveFSData[1] = 63.0 / 255.0; 
+            this._waveFSData[2] = 77.0 / 255.0; 
+            this._waveFSData[3] = 0.0; 
 
-            this._waveData[6] = this._wave_xyz_speed_0.x;
-            this._waveData[7] = this._wave_xyz_speed_0.y;
-            this._waveData[8] = this._wave_xyz_speed_0.z;
+            this._waveFSData[4] = 71.0 / 255.0;
+            this._waveFSData[5] = 118.0 / 255.0;
+            this._waveFSData[6] = 138.0 / 255.0;
+            this._waveFSData[7] = 0.9; 
 
-            this._waveData[9] = this._wave_xyz_speed_1.x;
-            this._waveData[10] = this._wave_xyz_speed_1.y;
-            this._waveData[11] = this._wave_xyz_speed_1.z;
         }
 
         /**
@@ -104,7 +118,8 @@
         * @param camera3D
         */
         public upload(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
-            usage["waveData"] = context3DProxy.getUniformLocation(usage.program3D, "waveData");
+            usage["waveVSData"] = context3DProxy.getUniformLocation(usage.program3D, "waveVSData");
+            usage["waveFSData"] = context3DProxy.getUniformLocation(usage.program3D, "waveFSData");
             usage["time"] = context3DProxy.getUniformLocation(usage.program3D, "time");
         }
         
@@ -115,7 +130,8 @@
         public activeState(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
             if (this._start) {
                 this._time += delay;
-                context3DProxy.uniform3fv(usage["waveData"], this._waveData);
+                context3DProxy.uniform3fv(usage["waveVSData"], this._waveVSData);
+                context3DProxy.uniform4fv(usage["waveFSData"], this._waveFSData);
                 context3DProxy.uniform1f(usage["time"], this._time);
             }
         }
