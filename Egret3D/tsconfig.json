@@ -155,7 +155,6 @@
         "loader/parser/EPA/EPAVersion.ts",
         "loader/parser/XML/XMLParser.ts",
 
-        "loader/map/DataInfo/SourceDataBase.ts",
         "loader/parser/map/MapLoader.ts",
         "loader/parser/map/MapNodeData.ts",
         "loader/parser/map/MapXmlParser.ts",
@@ -295,21 +294,7 @@
         "post/postPass/BloomPass.ts",
         "post/postPass/GaussPass.ts",
         
-        "post/PostProcessing.ts",
-
-        "loader/map/DataInfo/MaterialMethodData.ts",
-        "loader/map/DataInfo/MaterialSphereData.ts",
-        "loader/map/DataInfo/MeshData.ts",
-        "loader/map/DataInfo/SceneNode.ts",
-        "loader/map/DataInfo/LightData.ts",
-        
-        
-        "loader/map/EgretMapConfig.ts",
-        "loader/map/parse/EgretMaterialMethodParser.ts",
-        "loader/map/parse/EgretMapXmlParser.ts",
-        "loader/map/EgretMapSourceLib.ts",
-        "loader/map/EgretMapLoader.ts"
-        
+        "post/PostProcessing.ts"       
 
 ]      
 }	
