@@ -58,19 +58,79 @@
             this._waveFSData[0] = 0.0 / 255.0; 
             this._waveFSData[1] = 63.0 / 255.0; 
             this._waveFSData[2] = 77.0 / 255.0; 
-            this._waveFSData[3] = 0.0; 
+            this._waveFSData[3] = 1.0; 
 
             this._waveFSData[4] = 71.0 / 255.0;
             this._waveFSData[5] = 118.0 / 255.0;
             this._waveFSData[6] = 138.0 / 255.0;
-            this._waveFSData[7] = 0.9; 
+            this._waveFSData[7] = 1.0; 
 
         }
 
         /**
-         * @language zh_CN
-         * @param texture 
-         */
+        * @language zh_CN
+        * 设置深水颜色
+        * @param color 颜色 a r b g
+        */
+        public set deepWaterColor(color: number) {
+            var a = color >> 24 & 0xff;
+            var r = color >> 16 & 0xff;
+            var g = color >> 8 & 0xff;
+            var b = color & 0xff;
+            this._waveFSData[0] = r / 255.0;
+            this._waveFSData[1] = g / 255.0;
+            this._waveFSData[2] = b / 255.0;
+            this._waveFSData[3] = a / 255.0; 
+        }
+
+
+        /**
+        * @language zh_CN
+        * 获取深水颜色
+        * @param color 颜色 a r b g
+        */
+        public get deepWaterColor():number {
+            var r = this._waveFSData[0] * 255.0;
+            var g = this._waveFSData[1] * 255.0;
+            var b = this._waveFSData[2] * 255.0;
+            var a = this._waveFSData[3] * 255.0;
+            return (a << 24) | (r << 16) | (g << 8) | b; 
+        }
+
+        /**
+        * @language zh_CN
+        * 设置浅水颜色
+        * @param color 颜色
+        */
+        public set shallowWaterColor(color: number) {
+            var a = color >> 24 & 0xff;
+            var r = color >> 16 & 0xff;
+            var g = color >> 8 & 0xff;
+            var b = color & 0xff;
+            this._waveFSData[4] = r / 255.0;
+            this._waveFSData[5] = g / 255.0;
+            this._waveFSData[6] = b / 255.0;
+            this._waveFSData[7] = a / 255.0; 
+        }
+
+        /**
+        * @language zh_CN
+        * 获取浅水颜色
+        * @param color 颜色 a r b g
+        */
+        public get shallowWaterColor(): number {
+            var r = this._waveFSData[4] * 255.0;
+            var g = this._waveFSData[5] * 255.0;
+            var b = this._waveFSData[6] * 255.0;
+            var a = this._waveFSData[7] * 255.0;
+            return (a << 24) | (r << 16) | (g << 8) | b;
+        }
+
+        /**
+        * @language zh_CN
+        * 水贴图
+        * @param texture  水贴图
+        */
         public set waveTexture(texture: ITexture) {
             this._waveTexture = texture;
             if (texture) {

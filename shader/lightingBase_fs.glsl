@@ -6,7 +6,6 @@
 // 　　float Gloss; //表面光泽度
 // 　　float Alpha; //表面透明度
 // };
-
 vec4 LightingBlinnPhong(vec3 lightDir, vec3 lightColor , vec3 normal , vec3 viewDir, float atten){
 	vec3 ambient = materialSource.ambient ; 
 	float NdotL = clamp(dot (normal, lightDir),0.0,1.0); 
@@ -16,6 +15,7 @@ vec4 LightingBlinnPhong(vec3 lightDir, vec3 lightColor , vec3 normal , vec3 view
 	float nh = clamp(dot (normal, h),0.0,1.0); 
 	float specPower = pow (nh, materialSource.shininess ) * materialSource.specularScale ; 
 	vec3 specular = lightColor.xyz * specPower * materialSource.specular ; 
+	specularColor.xyz += specular;
 	vec4 c; 
 	c.rgb = (diffuse+specular+ambient) * (atten * 2.0 ); 
 	c.a = materialSource.alpha + (specPower * atten); 
