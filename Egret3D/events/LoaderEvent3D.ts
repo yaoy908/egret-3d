@@ -23,6 +23,13 @@
          */
         public static LOADER_COMPLETE: string = "onLoadComplete";
 
+        /**
+        * @language zh_CN
+        * 每加载一个资源事件响应
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public static LOADER_COMPLETE_ONE: string = "onLoaderCompleteOne";
 
         /**
         * @language zh_CN
