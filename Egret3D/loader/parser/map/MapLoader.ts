@@ -545,7 +545,7 @@
             this._taskCount--;
             this.taskCurrent++;
 
-            this._event.eventType = LoaderEvent3D.LOADER_COMPLETE_ONCE;
+            this._event.eventType = LoaderEvent3D.LOADER_PROGRESS;
             this._event.target = this;
             this._event.loader = load;
             this._event.data = load;

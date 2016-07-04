@@ -25,14 +25,6 @@
 
         /**
         * @language zh_CN
-        * 每加载一个资源事件响应
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public static LOADER_COMPLETE_ONCE: string = "onLoaderCompleteOnce";
-
-        /**
-        * @language zh_CN
         * LOADER_PROGRESS 常量定义 onLoadProgress 事件对象的 type 属性的值。
         * @version Egret 3.0
         * @platform Web,Native
