@@ -545,6 +545,12 @@
             this._taskCount--;
             this.taskCurrent++;
 
+            this._event.eventType = LoaderEvent3D.LOADER_COMPLETE_ONCE;
+            this._event.target = this;
+            this._event.loader = load;
+            this._event.data = load;
+            this.dispatchEvent(this._event);
+
             //console.log("---" + load.url + "---" + this._taskCount);
             if (this._taskCount <= 0) {
                 this._event.eventType = LoaderEvent3D.LOADER_COMPLETE;
