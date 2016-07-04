@@ -409,7 +409,7 @@
                 var load: URLLoader = this.findLoader(path);
 
                 if (!load) {
-                    this.createLoader(path);
+                    load = this.createLoader(path);
                     load["name"] = eamData["name"];
 
                     var eamnodeDatas: Array<MapNodeData> = [];
@@ -544,6 +544,12 @@
         private processTask(load:URLLoader) {
             this._taskCount--;
             this.taskCurrent++;
+
+            this._event.eventType = LoaderEvent3D.LOADER_COMPLETE_ONCE;
+            this._event.target = this;
+            this._event.loader = load;
+            this._event.data = load;
+            this.dispatchEvent(this._event);
 
             //console.log("---" + load.url + "---" + this._taskCount);
             if (this._taskCount <= 0) {
