@@ -39,6 +39,7 @@
         "events/OrientationEvent3D.ts",
         "events/LoaderEvent3D.ts",
         "events/ParserEvent3D.ts",
+        "events/ParticleEvent3D.ts",
         "events/EventDispatcher.ts",
         "events/EventManager.ts",
 

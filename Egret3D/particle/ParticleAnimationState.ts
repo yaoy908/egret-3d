@@ -234,11 +234,12 @@
 
 
         private _particleProperty: Float32Array = new Float32Array(22);
+        private _fadeOutByZData: Float32Array = new Float32Array(2);
         /**
         * @language zh_CN
         * @private 
         */
-        public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
+        public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, camera3D: Camera3D) {
             //var scaleData: Vector3D;
             var rotateData: Quaternion;
             var positionData: Vector3D;
@@ -283,6 +284,11 @@
             this._particleProperty[21] = data.property.lengthScale;
 
             context3DProxy.uniform1fv(usage["uniform_particleState"].uniformIndex, this._particleProperty);
+
+            this._fadeOutByZData[1] = camera3D.far * 0.5;
+            this._fadeOutByZData[0] = camera3D.far;
+            context3DProxy.uniform2fv(usage["uniform_fadeOutParticleData"].uniformIndex, this._fadeOutByZData);
+
             for (var i: number = 0; i < this.animNodes.length; i++) {
                 this.animNodes[i].activeState(time, animTime, delay, animDelay, usage, geometry, context3DProxy);
             }

@@ -9,7 +9,7 @@
      * @version Egret 3.0
      * @platform Web,Native
      */
-    export class AnimationNode {
+    export class AnimationNode extends EventDispatcher {
         
         /**
         * @language zh_CN

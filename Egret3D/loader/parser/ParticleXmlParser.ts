@@ -75,7 +75,6 @@
             this.parseColorOffset(colorOffset);
             //material
             var material: Node = this.getNode(this._xml, "mat");
-            //this.parseMaterial(material);
             //textureSheet
             var textureSheet: Node = this.getNode(this._xml, "textureSheet");
             this.parseTextureSheet(textureSheet);
@@ -255,7 +254,7 @@
                     shape.coneRadiusBottom = Number(value);
                 } else if (label == "coneRadiusTop") {
                     shape.coneRadiusTop = Number(value);
-                } else if (label == "coneType") {
+                } else if (label == "type") {
                     shape.coneType = ParticleConeShapeType[value];
                 }
             });
@@ -460,17 +459,6 @@
             colorOffset.data = this.parseGradientsColor(itemList, colorOffset.data);
         }
 
-        /**
-        * @private
-        * 解析材质球
-        */
-        //private parseMaterial(node: Node): MaterialSphereData {
-        //    if (node == null)
-        //        return null;
-        //    var material: MaterialSphereData = this._particleData.materialData = EgretMapXmlParser.parseMaterial(node);
-        //    return material;
-        //}
-
 
         /**
         * @private
@@ -610,7 +598,7 @@
             if (obj == null)
                 return null;
             var list: NodeList = obj.getElementsByTagName(name);
-            if (list == null || list.length == null)
+            if (list == null || list.length == 0)
                 return null;
             return list[0];
         }
@@ -623,7 +611,7 @@
             if (obj == null)
                 return null;
             var list: NodeList = obj.getElementsByTagName(name);
-            if(list == null || list.length == null)
+            if(list == null || list.length == 0)
                 return null;
             return list;
         }

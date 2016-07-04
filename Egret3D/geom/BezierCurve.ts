@@ -172,10 +172,7 @@
 
 
 
-        public static dfdf: number = 0;
         private doSampler(): Float32Array {
-            BezierData.dfdf++;
-            console.log("asdfasdf : " + BezierData.dfdf);
             var floats: Array<number> = [];
             var times: Array<number> = [];
 
