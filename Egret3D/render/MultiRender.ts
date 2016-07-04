@@ -53,7 +53,7 @@
                     //ShadowCast.instance.calculateCamera(this._renderItem, camera);
                 }
 
-                this._renderItem.geometry.activeState(time, delay, View3D._contex3DProxy, camera);
+                this._renderItem.geometry.activeState(time, delay, Egret3DCanvas.context3DProxy, camera);
                 for (this._i = 0; this._i < this._renderItem.geometry.subGeometrys.length; this._i++) {
                     var subGeometry = this._renderItem.geometry.subGeometrys[this._i];
                     var matID = subGeometry.matID;

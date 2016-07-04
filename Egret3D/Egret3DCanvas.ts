@@ -261,12 +261,16 @@
             this._enterFrameEvent3D.delay = this._delay;
             this.dispatchEvent(this._enterFrameEvent3D);
 
-            Context3DProxy.gl.enable(ContextConfig.BLEND);
-            Context3DProxy.gl.enable(ContextConfig.CULL_FACE);
+            //Context3DProxy.gl.enable(ContextConfig.BLEND);
+            //Context3DProxy.gl.enable(ContextConfig.CULL_FACE);
+            //Context3DProxy.gl.enable(Context3DProxy.gl.SCISSOR_TEST);
+
+            Egret3DCanvas.context3DProxy.enableBlend();
+            Egret3DCanvas.context3DProxy.enableCullFace();
             Context3DProxy.gl.enable(Context3DProxy.gl.SCISSOR_TEST);
 
-            View3D._contex3DProxy.viewPort(this.canvas3DRectangle.x, this.canvas3DRectangle.y, this.canvas3DRectangle.width, this.canvas3DRectangle.height);
-            View3D._contex3DProxy.setScissorRectangle(this.canvas3DRectangle.x, this.canvas3DRectangle.y, this.canvas3DRectangle.width, this.canvas3DRectangle.height);
+            Egret3DCanvas.context3DProxy.viewPort(this.canvas3DRectangle.x, this.canvas3DRectangle.y, this.canvas3DRectangle.width, this.canvas3DRectangle.height);
+            Egret3DCanvas.context3DProxy.setScissorRectangle(this.canvas3DRectangle.x, this.canvas3DRectangle.y, this.canvas3DRectangle.width, this.canvas3DRectangle.height);
 
             CameraManager.instance.update(this._time, this._delay);
             for (var i: number = 0; i < this._view3DS.length; i++) {
