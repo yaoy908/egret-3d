@@ -409,7 +409,7 @@
                 var load: URLLoader = this.findLoader(path);
 
                 if (!load) {
-                    this.createLoader(path);
+                    load = this.createLoader(path);
                     load["name"] = eamData["name"];
 
                     var eamnodeDatas: Array<MapNodeData> = [];
