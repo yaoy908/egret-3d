@@ -295,6 +295,13 @@
             particleData.materialData = this._mapXmlParser.matDict[nodeData.materialIDs[0]];
             var particleNode: ParticleEmitter = new ParticleEmitter(particleData, geo, new TextureMaterial());
 
+            nodeData.x *= ParticleData.SCALE_VALUE;
+            nodeData.y *= ParticleData.SCALE_VALUE;
+            nodeData.z *= ParticleData.SCALE_VALUE;
+            nodeData.object3d.position.scaleBy(ParticleData.SCALE_VALUE);
+            nodeData.object3d.position = nodeData.object3d.position;
+
+
             particleNode.name = nodeData.object3d.name;
             particleNode.position = nodeData.object3d.position;
             particleNode.orientation = nodeData.object3d.orientation;

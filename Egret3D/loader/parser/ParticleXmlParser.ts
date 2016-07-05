@@ -80,6 +80,10 @@
             this.parseTextureSheet(textureSheet);
 
 
+
+            this._particleData.validate();
+            this._particleData.scaleBy(ParticleData.SCALE_VALUE);
+
             return this._particleData;
         }
 
@@ -423,7 +427,7 @@
         private parseScaleBeizer(node: Node): void {
             if (node == null)
                 return;
-            var scaleBesizer: ParticleDataScaleBezier = this._particleData.scaleBesizer = new ParticleDataScaleBezier();
+            var scaleBesizer: ParticleDataScaleBezier = this._particleData.scaleBezier = new ParticleDataScaleBezier();
             scaleBesizer.data = this.parseBezierData(this.getNode(node, "bezier"));
         }
 

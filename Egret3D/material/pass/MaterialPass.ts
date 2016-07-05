@@ -233,8 +233,6 @@
                     this._vs_shader_methods[ShaderPhaseType.start_vertex] = [];
                     this._vs_shader_methods[ShaderPhaseType.start_vertex].push("particle_vs");
 
-                    this._fs_shader_methods[ShaderPhaseType.start_fragment] = this._fs_shader_methods[ShaderPhaseType.start_fragment] || [];
-                    this._fs_shader_methods[ShaderPhaseType.start_fragment].push("particle_fs");
                     //to change importent
                     this.addShaderPhase( this._passID , animation.particleAnimationController.particleAnimationState.vertex_shaders, this._vs_shader_methods);
                     this.addShaderPhase( this._passID , animation.particleAnimationController.particleAnimationState.fragment_shaders, this._fs_shader_methods);
@@ -375,8 +373,13 @@
             shaderList = this._fs_shader_methods[ShaderPhaseType.end_fragment];
             if (shaderList && shaderList.length > 0)
                 this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
-            else
-                this.addMethodShaders(this._passUsage.fragmentShader, ["end_fs"]);
+            else {
+                if (animation && animation.particleAnimationController) {
+                    this.addMethodShaders(this._passUsage.fragmentShader, ["particle_end_fs"]);
+                } else {
+                    this.addMethodShaders(this._passUsage.fragmentShader, ["end_fs"]);
+                }
+            }
             //---fs---shadering-------------------------------------------------
 
         }

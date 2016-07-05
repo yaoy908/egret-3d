@@ -104,10 +104,10 @@
 
 
         constructor() {
-            
+
         }
 
-        public calc(t:number): number {
+        public calc(t: number): number {
             var value: number = BezierData.calc.calcBezierY(this.posPoints, this.ctrlPoints, t);
             return value;
         }
@@ -122,6 +122,15 @@
             }
 
             return res;
+        }
+
+        public scaleBy(value: number): void {
+            if (this.posPoints.length == 0)
+                return;
+            for (var i: number = 0, count: number = BezierData.SegCount * 2; i < count; i++) {
+                this.posPoints[i].y *= value;
+                this.ctrlPoints[i].y *= value;
+            }
         }
 
         //public compress(): Float32Array {

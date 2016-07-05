@@ -57,7 +57,6 @@
         * @platform Web,Native 
         */
         private buildParticle(): void {
-            this._data.validate();
             if (this._externalGeometry == null) {
                 this.particleGeometryShape = this.createShape();
             } else {
@@ -86,7 +85,7 @@
                 if (this._data.property.renderMode == ParticleRenderModeType.VerticalBillboard) {
                     defaultAxis = Vector3D.Y_AXIS;
                 } else if (this._data.property.renderMode == ParticleRenderModeType.HorizontalBillboard) {
-                    defaultAxis = Vector3D.Z_AXIS;
+                    defaultAxis = Vector3D.Y_AXIS;
                 } else {
                     defaultAxis = Vector3D.Z_AXIS;
                 }
@@ -346,9 +345,9 @@
             }
             
 
-            if (this._data.scaleBesizer) {
+            if (this._data.scaleBezier) {
                 var scaleBesizer: ParticleSizeGlobalNode = new ParticleSizeGlobalNode();
-                scaleBesizer.initNode(this._data.scaleBesizer);
+                scaleBesizer.initNode(this._data.scaleBezier);
                 nodes.push(scaleBesizer);
             }
 

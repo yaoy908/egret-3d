@@ -81,7 +81,11 @@
                 var coneShape: CylinderValueShape = new CylinderValueShape();
                 coneShape.radiusTop = node.coneRadiusTop;
                 coneShape.radiusBottom = node.coneRadiusBottom;
-                coneShape.height = node.coneHeight;
+                if (coneShape.coneType == ParticleConeShapeType.BaseShell) {
+                    coneShape.height = 0;
+                } else {
+                    coneShape.height = node.coneHeight;
+                }
                 coneShape.coneType = node.coneType;
                 this._positions = coneShape;
             }

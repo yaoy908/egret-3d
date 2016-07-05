@@ -129,12 +129,15 @@
         public moveSpeed: ParticleDataMoveSpeed = new ParticleDataMoveSpeed();
 
         public followTarget: ParticleDataFollowTarget;
-        public scaleBesizer: ParticleDataScaleBezier;
+        public scaleBezier: ParticleDataScaleBezier;
         public rotationSpeed: ParticleDataRotationSpeed;
         public colorOffset: ParticleDataColorOffset;
 
         public materialData: MatSphereData;
         public textureSheet: ParticleDataTextureSheet;
+
+
+        public static SCALE_VALUE: number = 100;
         /**
         * @language zh_CN
         * @version Egret 3.0
@@ -154,8 +157,8 @@
             this.moveSpeed.validate();
 
            
-            if (this.scaleBesizer) {
-                this.scaleBesizer.validate();
+            if (this.scaleBezier) {
+                this.scaleBezier.validate();
             }
             if (this.rotationSpeed) {
                 this.rotationSpeed.validate();
@@ -169,6 +172,60 @@
             if (this.textureSheet) {
                 this.textureSheet.validate();
             }
+
+        }
+
+
+
+        public scaleBy(value: number): void {
+            //
+            this.property.bounds.scaleBy(value);
+            this.property.gravity *= value;
+            this.property.position.scaleBy(value);
+
+            //
+            this.shape.cubeW *= value;
+            this.shape.cubeH *= value;
+            this.shape.cubeD *= value;
+
+            this.shape.sphereRadius *= value;
+
+            this.shape.hemiSphereRadius *= value;
+
+            this.shape.coneHeight *= value;
+            this.shape.coneRadiusBottom *= value;
+            this.shape.coneRadiusTop *= value;
+
+            //
+            this.geometry.planeW *= value;
+            this.geometry.planeH *= value;
+
+            this.geometry.cubeW *= value;
+            this.geometry.cubeH *= value;
+            this.geometry.cubeD *= value;
+
+            this.geometry.sphereRadius *= value;
+
+            //
+            this.moveSpeed.max *= value;
+            this.moveSpeed.min *= value;
+            if (this.moveSpeed.bezier1) {
+                this.moveSpeed.bezier1.scaleBy(value);
+            }
+            if (this.moveSpeed.bezier2) {
+                this.moveSpeed.bezier2.scaleBy(value);
+            }
+            if (this.moveSpeed.velocityOver) {
+                this.moveSpeed.velocityOver.scaleBy(value);
+            }
+            if (this.moveSpeed.velocityLimit) {
+                this.moveSpeed.velocityLimit.scaleBy(value);
+            }
+            if (this.moveSpeed.velocityForce) {
+                this.moveSpeed.velocityForce.scaleBy(value);
+            }
+
+            //
 
         }
     }
@@ -618,6 +675,18 @@
             }
 
         }
+
+        public scaleBy(value: number): void {
+            this.min *= value;
+            this.max *= value;
+            if (this.bezier1) {
+                this.bezier1.scaleBy(value);
+            }
+            if (this.bezier2) {
+                this.bezier2.scaleBy(value);
+            }
+
+        }
     }
 
 
@@ -675,6 +744,30 @@
             }
 
         }
+
+        public scaleBy(value: number): void {
+            this.min.scaleBy(value);
+            this.max.scaleBy(value);
+            if (this.xBezier1) {
+                this.xBezier1.scaleBy(value);
+            }
+            if (this.yBezier1) {
+                this.yBezier1.scaleBy(value);
+            }
+            if (this.zBezier1) {
+                this.zBezier1.scaleBy(value);
+            }
+            if (this.xBezier2) {
+                this.xBezier2.scaleBy(value);
+            }
+            if (this.yBezier2) {
+                this.yBezier2.scaleBy(value);
+            }
+            if (this.zBezier2) {
+                this.zBezier2.scaleBy(value);
+            }
+
+        }
     }
 
 
@@ -729,6 +822,30 @@
                 this.xBezier2.validate();
                 this.yBezier2.validate();
                 this.zBezier2.validate();
+            }
+
+        }
+
+        public scaleBy(value: number): void {
+            this.min.scaleBy(value);
+            this.max.scaleBy(value);
+            if (this.xBezier1) {
+                this.xBezier1.scaleBy(value);
+            }
+            if (this.yBezier1) {
+                this.yBezier1.scaleBy(value);
+            }
+            if (this.zBezier1) {
+                this.zBezier1.scaleBy(value);
+            }
+            if (this.xBezier2) {
+                this.xBezier2.scaleBy(value);
+            }
+            if (this.yBezier2) {
+                this.yBezier2.scaleBy(value);
+            }
+            if (this.zBezier2) {
+                this.zBezier2.scaleBy(value);
             }
 
         }

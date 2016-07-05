@@ -829,7 +829,7 @@
                     this.materialData.alphaBlending = true;
                     break;
                 case BlendMode.ALPHA:
-                    this.materialData.blend_src = ContextConfig.SRC_ALPHA;
+                    this.materialData.blend_src = ContextConfig.ONE;
                     this.materialData.blend_dest = ContextConfig.ONE_MINUS_SRC_ALPHA;
                     this.materialData.alphaBlending = true;
                     break;
