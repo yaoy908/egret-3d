@@ -518,7 +518,9 @@
             for (var index in this._passUsage.sampler3DList) {
                 sampler3D = this._passUsage.sampler3DList[index];
                 sampler3D.texture = this._materialData[sampler3D.varName];
-
+                if (!sampler3D.texture) {
+                    continue;
+                }
                 sampler3D.texture.upload(context3DProxy);
                 context3DProxy.setCubeTextureAt(sampler3D.activeTextureIndex, sampler3D.uniformIndex, sampler3D.index, sampler3D.texture.texture3D);
             }
