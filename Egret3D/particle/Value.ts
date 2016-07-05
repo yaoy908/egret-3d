@@ -228,6 +228,7 @@
                         var random: number = Math.random();
                         pos.x *= random;
                         pos.z *= random;
+                        pos.y = Math.random() * this.height - this.height * 0.5;
                     }
                     //体积边缘的壳
                     else if (this.coneType == ParticleConeShapeType.VolumeShell) {
@@ -308,6 +309,7 @@
         }
 
         private yz_zy(v: Vector3D): void {
+            v.y += this.height / 2;
             v.setTo(v.x, v.z, v.y, v.w);
         }
         

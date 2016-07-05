@@ -234,7 +234,7 @@
 
 
         private _particleProperty: Float32Array = new Float32Array(22);
-        private _fadeOutByZData: Float32Array = new Float32Array(2);
+        private _particleFsData: Float32Array = new Float32Array(3);
         /**
         * @language zh_CN
         * @private 
@@ -282,12 +282,15 @@
             this._particleProperty[19] = data.property.cameraScale;
             this._particleProperty[20] = data.property.speedScale;
             this._particleProperty[21] = data.property.lengthScale;
+            
 
             context3DProxy.uniform1fv(usage["uniform_particleState"].uniformIndex, this._particleProperty);
 
-            this._fadeOutByZData[1] = camera3D.far * 0.5;
-            this._fadeOutByZData[0] = camera3D.far;
-            context3DProxy.uniform2fv(usage["uniform_fadeOutParticleData"].uniformIndex, this._fadeOutByZData);
+            this._particleFsData[0] = camera3D.far;
+            this._particleFsData[1] = camera3D.near;
+            this._particleFsData[2] = (this._emitter.material && this._emitter.material.materialData.blendMode == BlendMode.ALPHA) ? 1 : 0;
+
+            context3DProxy.uniform1fv(usage["uniform_particleFsData"].uniformIndex, this._particleFsData);
 
             for (var i: number = 0; i < this.animNodes.length; i++) {
                 this.animNodes[i].activeState(time, animTime, delay, animDelay, usage, geometry, context3DProxy);
