@@ -283,6 +283,8 @@
             for (var i: number = 0; i < nodeDatas.length; ++i) {
                 this.processParticle(particleData, nodeDatas[i]);
             }
+
+            this.processTask(e.loader);
         }
 
         private processParticle(particleData: ParticleData, nodeData: MapNodeData): ParticleEmitter {
@@ -290,6 +292,7 @@
             if (nodeData.geometry) {
                 geo = GeometryUtil.createGemetryForType(nodeData.geometry.type, nodeData.geometry);
             }
+            particleData.materialData = this._mapXmlParser.matDict[nodeData.materialIDs[0]];
             var particleNode: ParticleEmitter = new ParticleEmitter(particleData, geo, new TextureMaterial());
 
             particleNode.name = nodeData.object3d.name;
@@ -298,6 +301,8 @@
             particleNode.scale = nodeData.object3d.scale;
             nodeData.object3d.swapObject(particleNode);
             nodeData.object3d = particleNode;
+
+            particleNode.play();
             this.processMat(nodeData);
 
             return particleNode;
@@ -404,7 +409,7 @@
                 var load: URLLoader = this.findLoader(path);
 
                 if (!load) {
-                    this.createLoader(path);
+                    load = this.createLoader(path);
                     load["name"] = eamData["name"];
 
                     var eamnodeDatas: Array<MapNodeData> = [];
@@ -539,6 +544,12 @@
         private processTask(load:URLLoader) {
             this._taskCount--;
             this.taskCurrent++;
+
+            this._event.eventType = LoaderEvent3D.LOADER_PROGRESS;
+            this._event.target = this;
+            this._event.loader = load;
+            this._event.data = load;
+            this.dispatchEvent(this._event);
 
             //console.log("---" + load.url + "---" + this._taskCount);
             if (this._taskCount <= 0) {
@@ -775,6 +786,13 @@
                 else if (method.type == MatMethodData.methodType.waterWaveMethod) {
                     var waterWaveMethod: WaterWaveMethod = new WaterWaveMethod();
                     material.diffusePass.addMethod(waterWaveMethod);
+                    if (method["deepWaterColor"]) {
+                        waterWaveMethod.deepWaterColor = Number( method["deepWaterColor"]);
+                    }
+
+                    if (method["shallowWaterColor"]) {
+                        waterWaveMethod.shallowWaterColor = Number( method["shallowWaterColor"]);
+                    }
 
                     material.repeat = true;
                 }
@@ -785,10 +803,16 @@
                     waterNormalMethod.normalTextureA = defaultTexture;
                     waterNormalMethod.normalTextureB = defaultTexture;
 
+                    if (method["uScale"] && method["vScale"]) {
+                        waterNormalMethod.setUvScale(Number(method["uScale"]), Number( method["vScale"]));
+                    }
+
+
                     var textureData: any = null;
                     for (var i: number = 0; i < method.texturesData.length; ++i) {
                         textureData = method.texturesData[i];
 
+                        waterNormalMethod.setUvSpeed(i, Number(textureData.uSpeed), Number(textureData.vSpeed));
                         load = this.addMethodImgTask(textureData.path, waterNormalMethod, textureData.attributeName);
                     }
 

@@ -18,8 +18,6 @@
      * @platform Web,Native
      */
     export class View3D {
-        static _contex3DProxy: Context3DProxy = new Context3DProxy();
-
         protected _viewPort: Rectangle = new Rectangle();
         protected _camera: Camera3D;
         protected _scene: Scene3D = new Scene3D();
@@ -427,8 +425,8 @@
             //------------------
             //this._render.update(time, delay, this._entityCollect, this._camera);
 
-            View3D._contex3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
-            View3D._contex3DProxy.setScissorRectangle(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+            Egret3DCanvas.context3DProxy.viewPort(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
+            Egret3DCanvas.context3DProxy.setScissorRectangle(this._viewPort.x, this._viewPort.y, this._viewPort.width, this._viewPort.height);
 
             if (ShadowCast.instance.shadowRender[0]) {
 
@@ -436,31 +434,31 @@
                 var v = new Vector3D(0, -1, -1);
                 MathUtil.CALCULATION_QUATERNION.transformVector(v, ShadowCast.instance.dir);
 
-                ShadowCast.instance.shadowRender[0].draw(time, delay, View3D._contex3DProxy, this._entityCollect, ShadowCast.instance.shadowCamera, this._viewPort, true);
+                ShadowCast.instance.shadowRender[0].draw(time, delay, Egret3DCanvas.context3DProxy, this._entityCollect, ShadowCast.instance.shadowCamera, this._viewPort, true);
             }
 
             if (this._cleanParmerts & Context3DProxy.gl.COLOR_BUFFER_BIT) {
-                View3D._contex3DProxy.clearColor(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w);
+                Egret3DCanvas.context3DProxy.clearColor(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w);
             }
 
-            View3D._contex3DProxy.clear(this._cleanParmerts);
+            Egret3DCanvas.context3DProxy.clear(this._cleanParmerts);
 
             if (this._backImg) {
-                this._backImg.draw(View3D._contex3DProxy);
+                this._backImg.draw(Egret3DCanvas.context3DProxy);
             }
 
             if (this._postList.length > 0){
                 this._postProcessing.postItem = this._postList; 
-                this._postProcessing.drawFrameBuffer(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera, this._viewPort);
+                this._postProcessing.drawFrameBuffer(time, delay, Egret3DCanvas.context3DProxy, this._entityCollect, this._camera, this._viewPort);
                 this._postHUD.diffuseTexture = this._postProcessing.endTexture;
                 //this._postHUD.viewPort = this._viewPort ;
-                this._postHUD.draw(View3D._contex3DProxy);
+                this._postHUD.draw(Egret3DCanvas.context3DProxy);
             } else {
-                this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera, this._viewPort);
+                this._render.draw(time, delay, Egret3DCanvas.context3DProxy, this._entityCollect, this._camera, this._viewPort);
             }
 
             for (var i: number = 0; i < this._huds.length; ++i) {
-                this._huds[i].draw(View3D._contex3DProxy);
+                this._huds[i].draw(Egret3DCanvas.context3DProxy);
             }
         
         }

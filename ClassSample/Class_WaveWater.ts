@@ -31,28 +31,33 @@
 
         private preloadComplete() {
 
-            //var cubeTexture: CubeTexture = CubeTexture.createCubeTexture(
-            //    <HTMLImageElement>document.getElementById("f"),
-            //    <HTMLImageElement>document.getElementById("b"),
-            //    <HTMLImageElement>document.getElementById("l"),
-            //    <HTMLImageElement>document.getElementById("r"),
-            //    <HTMLImageElement>document.getElementById("u"),
-            //    <HTMLImageElement>document.getElementById("d")
-            //);
+            var cubeTexture: CubeTexture = CubeTexture.createCubeTexture(
+                <HTMLImageElement>document.getElementById("f"),
+                <HTMLImageElement>document.getElementById("b"),
+                <HTMLImageElement>document.getElementById("l"),
+                <HTMLImageElement>document.getElementById("r"),
+                <HTMLImageElement>document.getElementById("u"),
+                <HTMLImageElement>document.getElementById("d")
+            );
 
             var waterWaveMethod: WaterWaveMethod = new WaterWaveMethod();
             var waterNormal: WaterNormalMethod = new WaterNormalMethod();
             var envMethod: EnvironmentMethod = new EnvironmentMethod();
 
+            //vec3(42.0 / 255.0, 40.0 / 255.0, 20.0 / 255.0)
+            waterWaveMethod.shallowWaterColor = 0xFF2A2814;
+            waterWaveMethod.deepWaterColor = 0xFF2A2814;
+            waterNormal.setUvScale(4.0,4.0);
+
             this.matPlane = new TextureMaterial();
             this.matPlane.repeat = true;
             this.matPlane.diffusePass.addMethod(waterWaveMethod);
             this.matPlane.diffusePass.addMethod(waterNormal);
-           // this.matPlane.diffusePass.addMethod(envMethod);
+            this.matPlane.diffusePass.addMethod(envMethod);
 
             waterNormal.normalTextureA = CheckerboardTexture.texture;
             waterNormal.normalTextureB = CheckerboardTexture.texture;
-            //envMethod.environmentTexture = cubeTexture;
+            envMethod.environmentTexture = cubeTexture;
 
     
 
@@ -66,24 +71,23 @@
             var lights: LightGroup = new LightGroup();
             var dirLight: DirectLight = new DirectLight(new Vector3D(-0.5, 0.6, 0.2));
             lights.addLight(dirLight);
+
+            var pointLight: PointLight = new PointLight(0xffffff);
+            lights.addLight(pointLight);
+           // pointLight.y = 200.0;
             mesh.lightGroup = lights;
 
 
-            var cmesh: Mesh = new Mesh(new SphereGeometry(2500, 25, 15), new TextureMaterial(CheckerboardTexture.texture));
+
+            var cmesh: Mesh = new Mesh(new SphereGeometry(2500, 25, 15), new CubeTextureMaterial(cubeTexture));
             cmesh.material.cullMode = ContextConfig.FRONT;
             this.view1.addChild3D(cmesh);
-            cmesh.y = 200.0
-
-            var cmesh2: Mesh = new Mesh(new SphereGeometry(2300, 25, 15), new TextureMaterial(CheckerboardTexture.texture));
-            cmesh2.material.cullMode = ContextConfig.FRONT;
-           // this.view1.addChild3D(cmesh2);
-            cmesh2.y = 200.0
-
 
             var loadtex: URLLoader = new URLLoader("resource/effect/water/ocean.png");
             loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadDiffuse, this);
             loadtex["mat"] = this.matPlane;
 
+            //var loadtex: URLLoader = new URLLoader("resource/normal/Metal_SciFiFuelCrate_1k_n.png");
             var loadtex: URLLoader = new URLLoader("resource/effect/water/waterNormal.png");
             loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadNormal_0, this);
             loadtex["mat"] = waterNormal;
@@ -91,15 +95,6 @@
             var loadtex: URLLoader = new URLLoader("resource/effect/water/Waves_backface_normal.jpg");
             loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadNormal_1, this);
             loadtex["mat"] = waterNormal;
-
-            var loadtex: URLLoader = new URLLoader("resource/SkyBox/m_sky_dark_0.png");
-            loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadSky_1_0, this);
-            loadtex["mat"] = cmesh.material;
-
-            var loadtex: URLLoader = new URLLoader("resource/SkyBox/m_sky_dark_mraky_0.png");
-            loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadSky_2_0, this);
-            loadtex["mat"] = cmesh2.material;
-            cmesh2.material.blendMode = BlendMode.ALPHA;
 
         }
 
@@ -113,14 +108,6 @@
 
         protected onLoadNormal_1(e: LoaderEvent3D) {
             e.loader["mat"].normalTextureB = e.loader.data;
-        }
-
-        protected onLoadSky_1_0(e: LoaderEvent3D) {
-            e.loader["mat"].diffuseTexture= e.loader.data;
-        }
-
-        protected onLoadSky_2_0(e: LoaderEvent3D) {
-            e.loader["mat"].diffuseTexture = e.loader.data;
         }
 
         public update(e: Event3D) {

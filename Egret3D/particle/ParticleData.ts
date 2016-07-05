@@ -133,7 +133,7 @@
         public rotationSpeed: ParticleDataRotationSpeed;
         public colorOffset: ParticleDataColorOffset;
 
-        public materialData: MaterialSphereData;
+        public materialData: MatSphereData;
         public textureSheet: ParticleDataTextureSheet;
         /**
         * @language zh_CN
@@ -194,7 +194,6 @@
         public particleCount: number = 10;
 
         public bounds: Vector3D = new Vector3D(10, 10, 10);
-        public blendMode: BlendMode = BlendMode.ADD;
         //初始颜色
         public colorType: number = ParticleBirthColorType.Const;
         public colorConst1: Color = new Color(255, 255, 255, 255);
@@ -212,7 +211,9 @@
 
         //render mode
         public renderMode: number = ParticleRenderModeType.Billboard;
-
+        public cameraScale: number = 0.0;
+        public speedScale: number = 0.0;
+        public lengthScale: number = 1.0;
 
         constructor() {
             super(ParticleDataNodeType.Property);

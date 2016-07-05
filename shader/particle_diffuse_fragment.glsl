@@ -6,6 +6,7 @@ void calcUVCoord(){
 
 }
 
+
 void main() {
     if( diffuseColor.w == 0.0 ){
 		discard;
@@ -14,9 +15,9 @@ void main() {
 	diffuseColor = texture2D(diffuseTexture , uv_0 );
     
     if( diffuseColor.w <= materialSource.cutAlpha ){
-			discard;
+		discard;
 	}else
-			diffuseColor.xyz *= diffuseColor.w ;
+		diffuseColor.xyz *= diffuseColor.w ;
 }
 
 

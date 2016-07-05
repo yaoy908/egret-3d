@@ -232,6 +232,9 @@
                 else if (animation.particleAnimationController) {
                     this._vs_shader_methods[ShaderPhaseType.start_vertex] = [];
                     this._vs_shader_methods[ShaderPhaseType.start_vertex].push("particle_vs");
+
+                    this._fs_shader_methods[ShaderPhaseType.start_fragment] = this._fs_shader_methods[ShaderPhaseType.start_fragment] || [];
+                    this._fs_shader_methods[ShaderPhaseType.start_fragment].push("particle_fs");
                     //to change importent
                     this.addShaderPhase( this._passID , animation.particleAnimationController.particleAnimationState.vertex_shaders, this._vs_shader_methods);
                     this.addShaderPhase( this._passID , animation.particleAnimationController.particleAnimationState.fragment_shaders, this._fs_shader_methods);
