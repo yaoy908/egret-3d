@@ -37,7 +37,7 @@ void updateStretchedBillBoard(vec4 startPos, vec4 newPos){
 
 	vec3 dirStartVector = vec3(0.0, 1.0, 0.0); 
 
-	float added = 0.5 * PI; 
+	float added = -0.5 * PI;//ÈÃÍ¼Æ¬·Åµ¹
 	if(dirVector.x > 0.0){ 
 		dirVector.xy *= -1.0; 
 		added += PI; 
