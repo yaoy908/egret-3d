@@ -220,15 +220,38 @@
                 for (var i: number = 0; i < num; i++) {
                     pos = new Vector3D();
                     angle = Math.random() * 2 * Math.PI;
-                   
+
                     pos.x = Math.sin(angle) * this.radiusBottom;
                     pos.z = Math.cos(angle) * this.radiusBottom;
+                    //体积
                     if (this.coneType == ParticleConeShapeType.Volume) {
                         var random: number = Math.random();
                         pos.x *= random;
-                        pos.y *= random;
+                        pos.z *= random;
+                        pos.y = Math.random() * this.height - this.height * 0.5;
                     }
-                    pos.y = Math.random() * this.height - this.height * 0.5;
+                    //体积边缘的壳
+                    else if (this.coneType == ParticleConeShapeType.VolumeShell) {
+                        pos.y = Math.random() * this.height - this.height * 0.5;
+                    }
+                    //两个底面
+                    else if (this.coneType == ParticleConeShapeType.Base) {
+                        pos.y = this.height * 0.5;
+                        var random: number = Math.random();
+                        if (random > 0.5) {
+                            pos.y *= -1;
+                        }
+                        pos.x *= random;
+                        pos.z *= random;
+                    }
+                    //两个底的圈
+                    else if (this.coneType == ParticleConeShapeType.BaseShell) {
+                        pos.y = this.height * 0.5;
+                        if (Math.random() > 0.5) {
+                            pos.y *= -1;
+                        }
+
+                    }
                     values.push(pos);
                 }
             } else {
@@ -273,9 +296,23 @@
 
 
             }
+            //unity中的圆筒默认是横着放的yz互换
+            if (this.origPoint) {
+                this.yz_zy(this.origPoint);
+            }
+            for (var i: number = 0, count: number = values.length; i < count; i++) {
+                this.yz_zy(values[i]);
+            }
 
+            //
             return values;
         }
+
+        private yz_zy(v: Vector3D): void {
+            v.y += this.height / 2;
+            v.setTo(v.x, v.z, v.y, v.w);
+        }
+        
 
         //获取从这个桶里面发射的粒子，沿着桶的发射朝向
         public getDirection(point: Vector3D, dst: Vector3D): Vector3D {

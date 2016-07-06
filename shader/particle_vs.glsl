@@ -2,7 +2,7 @@ attribute vec4 attribute_color;
 attribute vec3 attribute_offsetPosition;
 
 uniform mat4 uniform_cameraMatrix;
-uniform float uniform_particleState[18];
+uniform float uniform_particleState[22];
 
 uniform mat4 uniform_ViewMatrix;
 
@@ -23,6 +23,7 @@ vec3 followTargetScale = vec3(1.0,1.0,1.0);
 vec4 followTargetRotation = vec4(0.0,0.0,0.0,0.0);
 
 varying vec3 varyingViewDir ;
+varying float varying_posZ;
 
 float discard_particle = 0.0;
 
@@ -54,6 +55,11 @@ struct ParticleStateData{
 	float duration;					//发射器时间
 	float gravity;					//重力大小
 	float velocityOverWorldSpace;	//叠加速度是否为世界空间坐标
+	float velocityForceWorldSpace;	//加速度是否为世界空间坐标
+
+	float cameraScale;
+	float speedScale;
+	float lengthScale;
 };
 
 mat4 buildRotMat4(vec3 rot)
@@ -142,6 +148,10 @@ void main(void) {
 	particleStateData.duration						= uniform_particleState[15];
 	particleStateData.gravity						= uniform_particleState[16];
 	particleStateData.velocityOverWorldSpace		= uniform_particleState[17];
+	particleStateData.velocityForceWorldSpace		= uniform_particleState[18];
+	particleStateData.cameraScale					= uniform_particleState[19];
+	particleStateData.speedScale					= uniform_particleState[20];
+	particleStateData.lengthScale					= uniform_particleState[21];
 
 
 	mat4 modeViewMatrix = uniform_ModelViewMatrix ; 

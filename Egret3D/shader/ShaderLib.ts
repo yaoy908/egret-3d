@@ -324,17 +324,7 @@ module egret3d {
 			"                       \n",
 
 			"environmentDiffuse_vertex":
-			"attribute vec3 attribute_normal; \n" +
-			"attribute vec4 attribute_color; \n" +
-			"varying vec3 varying_ViewDir ; \n" +
-			"uniform mat4 uniform_NormalMatrix; \n" +
 			"void main(){ \n" +
-			"mat3 normalMatrix = mat3(uniform_NormalMatrix); \n" +
-			"varying_eyeNormal = normalize(-attribute_normal); \n" +
-			"varying_ViewPose = vec4(e_position, 1.0) ; \n" +
-			"varying_ViewDir = normalize((uniform_eyepos.xyz - e_position)) ; \n" +
-			"outPosition = uniform_ModelViewMatrix * vec4(e_position, 1.0) ; \n" +
-			"varying_color = attribute_color; \n" +
 			"} \n",
 
 			"environmentMapping_fragment":
@@ -343,7 +333,7 @@ module egret3d {
 			"void main(){ \n" +
 			"vec3 r = reflect(-normalize(varying_ViewDir),  normal  ); \n" +
 			"vec4 reflectiveColor = textureCube(environmentMapTex,r.xyz); \n" +
-			"diffuseColor.xyz = mix( diffuseColor.xyz,reflectiveColor.xyz, reflectValue ); \n" +
+			"diffuseColor.xyz = mix( diffuseColor.xyz,reflectiveColor.xyz, normal.y ); \n" +
 			"} \n" +
 			"          \n",
 
@@ -492,6 +482,28 @@ module egret3d {
 			"color +=     texture2D(diffuseTexture,uv.xy+vec2(0.0, 8.0*d)) * 0.001; \n" +
 			"color /= 8.0; \n" +
 			"gl_FragColor = color + texture2D(colorTexture,uv.xy); \n" +
+			"} \n",
+
+			"hud_cull_fs":
+			"varying vec2 varying_uv0; \n" +
+			"uniform sampler2D diffuseTexture; \n" +
+			"uniform vec2 uv_scale; \n" +
+			"void main(void) { \n" +
+			"vec2 uv_0 = varying_uv0; \n" +
+			"uv_0 *= uv_scale; \n" +
+			"vec4 color = texture2D(diffuseTexture, varying_uv0); \n" +
+			"float mask = 1.0; \n" +
+			"float f = uv_scale.y - varying_uv0.y; \n" +
+			"if (varying_uv0.y < uv_scale.y){ \n" +
+			"if(f < 0.03 && f > 0.0){ \n" +
+			"mask =1.0 - (f / 0.03 * 0.9 + 0.1); \n" +
+			"} \n" +
+			"else{ \n" +
+			"mask = 0.1; \n" +
+			"} \n" +
+			"} \n" +
+			"color.xyz *= mask; \n" +
+			"gl_FragColor  = color; \n" +
 			"} \n",
 
 			"hud_H_fs":
@@ -1797,27 +1809,27 @@ module egret3d {
 			"} \n" +
 			"void main(void){ \n" +
 			"float tempTime = mod(time,100000.0); \n" +
-			"vec2 uvA = uv_0 + uvData[0] * tempTime ; \n" +
-			"vec2 uvB = uv_0 + uvData[1] * tempTime ; \n" +
+			"vec2 uvA = uv_0 * 3.0 + uvData[0] * tempTime * 2.5; \n" +
+			"vec2 uvB = uv_0 * 3.0 + uvData[1] * tempTime * 1.5 ; \n" +
 			"vec3 normalTex_0 = texture2D(normalTextureA,uvA * 2.0 + normal.x*uvData[2].x ).xyz *2.0 - 1.0; \n" +
 			"vec3 normalTex_1 = texture2D(normalTextureB,uvB * 2.0 + normal.z*uvData[2].y ).xyz *2.0 - 1.0; \n" +
 			"normalTex_0.y *= -1.0; \n" +
 			"normalTex_1.y *= -1.0; \n" +
-			"normal.xyz = cross(normal, normalTex_0) * 2.0 ; \n" +
-			"normal.xyz = cross(normal , normalTex_1) * 2.0 ; \n" +
+			"vec3 normalTex_A = tbn( normalTex_0 , normal , -normalize(varying_ViewDir) , uv_0 ); \n" +
+			"vec3 normalTex_B = tbn( normalTex_1 , normal , -normalize(varying_ViewDir) , uv_0 ); \n" +
+			"normal.xyz = normalize(normal + normalTex_A + normalTex_B ) ; \n" +
 			"}  \n",
 
 			"wave_fs":
 			"uniform sampler2D diffuseTexture; \n" +
 			"vec4 diffuseColor ; \n" +
 			"void main(void){ \n" +
-			"light = vec4(1.0,1.0,1.0,1.0); \n" +
-			"diffuseColor = texture2D(diffuseTexture , uv_0 + normal.xz * 0.2 ); \n" +
-			"vec3 deepWaterColor = vec3(0.0/255.0,63.0/255.0,77.0/255.0) * 0.2; \n" +
-			"vec3 shallowWaterColor = vec3(71.0/255.0,118.0/255.0,138.0/255.0) * 2.3; \n" +
-			"float facing = clamp(dot( -varying_ViewDir,normal),0.0,1.0); \n" +
+			"diffuseColor = vec4(50.0/255.0,49.0/255.0,30.0/255.0,1.0); \n" +
+			"vec3 deepWaterColor = vec3(0.0/255.0,63.0/255.0,77.0/255.0) * 0.0; \n" +
+			"vec3 shallowWaterColor = vec3(71.0/255.0,118.0/255.0,138.0/255.0) * 0.5; \n" +
+			"float facing = clamp(dot( -normalize(varying_ViewDir),normal),0.0,1.0); \n" +
 			"vec3 waterColor = mix(shallowWaterColor,deepWaterColor,facing); \n" +
-			"diffuseColor.xyz *= waterColor ; \n" +
+			"diffuseColor.xyz += waterColor ; \n" +
 			"}  \n",
 
 			"wave_vs":
@@ -1834,6 +1846,20 @@ module egret3d {
 			"vec3 wave_xyz_speed_0 ; \n" +
 			"vec3 wave_xyz_speed_1 ; \n" +
 			"}; \n" +
+			"const float pi = 3.14 ; \n" +
+			"vec3 calcWave2( float t , vec3 x, float amplitude, float waveLength ,float angularVelocity ,  vec3 waveDir ){ \n" +
+			"angularVelocity = angularVelocity * 0.1; \n" +
+			"vec3 waveVector = waveDir ; \n" +
+			"float waveNumber = pi / waveLength; \n" +
+			"waveVector *= waveNumber ; \n" +
+			"vec3 temp ; \n" +
+			"float kDotX0SubWt = dot(waveVector , x ) - angularVelocity * t  * 0.001; \n" +
+			"float A = amplitude * sin(kDotX0SubWt) ; \n" +
+			"temp.xz = waveDir.xz * A ; \n" +
+			"temp.y += amplitude * cos(kDotX0SubWt); \n" +
+			"temp = x - temp ; \n" +
+			"return temp ; \n" +
+			"} \n" +
 			"void main(void){ \n" +
 			"wave wa ; \n" +
 			"wa.wave_xyz_intensity_0 = vec3(waveData[0]) ; \n" +
@@ -1841,31 +1867,24 @@ module egret3d {
 			"wa.wave_xyz_speed_0 = vec3(waveData[2]) ; \n" +
 			"wa.wave_xyz_speed_1 = vec3(waveData[3]) ; \n" +
 			"float tempTime = mod( time , 100000.0 ); \n" +
-			"vec2 offestW ; \n" +
-			"vec2 offestW2 ; \n" +
-			"float offset; \n" +
-			"vec3 a = attribute_position ; \n" +
-			"vec3 b = attribute_position + vec3( 1.0,0.0,0.0 ); \n" +
-			"vec3 c = attribute_position + vec3( 0.0,0.0,1.0 ); \n" +
-			"vec4 v1 = texture2D( normalTextureA, varying_uv0 ); \n" +
-			"offestW = sin( tempTime*wa.wave_xyz_speed_0.xz + a.xz/ ( 3.14 * wa.wave_xyz_intensity_0.xz) ) * wa.wave_xyz_intensity_0.y ; \n" +
-			"offestW2 = sin( tempTime*wa.wave_xyz_speed_1.xz + a.xz/ ( 3.14 * wa.wave_xyz_intensity_1.xz) ) * wa.wave_xyz_intensity_1.y ; \n" +
-			"offset = offestW.x + offestW.y + offestW2.x + offestW2.y ; \n" +
-			"a.y += offset ; \n" +
-			"e_position.y = a.y + v1.y ; \n" +
-			"offestW = sin( tempTime*wa.wave_xyz_speed_0.xz + b.xz/ ( 3.14 * wa.wave_xyz_intensity_0.xz) ) * wa.wave_xyz_intensity_0.y ; \n" +
-			"offestW2 = sin( tempTime*wa.wave_xyz_speed_1.xz + b.xz/ ( 3.14 * wa.wave_xyz_intensity_1.xz) ) * wa.wave_xyz_intensity_1.y ; \n" +
-			"offset = offestW.x + offestW.y + offestW2.x + offestW2.y ; \n" +
-			"b.y += offset ; \n" +
-			"offestW = sin( tempTime*wa.wave_xyz_speed_0.xz + c.xz/ ( 3.14 * wa.wave_xyz_intensity_0.xz) ) * wa.wave_xyz_intensity_0.y ; \n" +
-			"offestW2 = sin( tempTime*wa.wave_xyz_speed_1.xz + c.xz/ ( 3.14 * wa.wave_xyz_intensity_1.xz) ) * wa.wave_xyz_intensity_1.y ; \n" +
-			"offset = offestW.x + offestW.y + offestW2.x + offestW2.y ; \n" +
-			"c.y += offset ; \n" +
-			"vec3 side1 = b - a; \n" +
-			"vec3 side2 = c - a; \n" +
+			"vec3 newPose1 = calcWave2(tempTime,e_position,10.0, 30.0, 20.0,vec3(3.0,0.0,2.0)); \n" +
+			"newPose1 += calcWave2(tempTime,e_position,10.0, 30.0, 20.0,vec3(-1.5,0.0,2.0)); \n" +
+			"newPose1 += calcWave2(tempTime,e_position,30.0,80.0,3.0,vec3(-2.0,0.0,1.0)); \n" +
+			"vec3 p1 = e_position + vec3(1.0,0.0,0.0) ; \n" +
+			"vec3 newPose2 = calcWave2(tempTime,p1,10.0, 30.0, 20.0,vec3(3.0,0.0,2.0)); \n" +
+			"newPose2 += calcWave2(tempTime,p1,10.0, 30.0, 20.0,vec3(-1.5,0.0,2.0)); \n" +
+			"newPose2 += calcWave2(tempTime,p1,30.0,80.0,3.0,vec3(-2.0,0.0,1.0)); \n" +
+			"vec3 p2 = e_position + vec3(0.0,0.0,1.0) ; \n" +
+			"vec3 newPose3 = calcWave2(tempTime,p2,10.0, 30.0, 20.0,vec3(3.0,0.0,2.0)); \n" +
+			"newPose3 += calcWave2(tempTime,p2,10.0, 30.0, 20.0,vec3(-1.5,0.0,2.0)); \n" +
+			"newPose3 += calcWave2(tempTime,p2,30.0,80.0,3.0,vec3(-2.0,0.0,1.0)); \n" +
+			"e_position = newPose1 ; \n" +
+			"vec3 side1 = newPose2 - newPose1; \n" +
+			"vec3 side2 = newPose3 - newPose1; \n" +
 			"vec3 normal = normalize(cross(side1, side2)); \n" +
 			"mat3 normalMatrix = mat3(uniform_NormalMatrix); \n" +
 			"varying_eyeNormal = normalize(normalMatrix*normal); \n" +
+			"varying_eyeNormal = normalize(normalMatrix*vec3(0.0,-1.0,0.0)); \n" +
 			"varying_ViewPose = vec4(e_position, 1.0) ; \n" +
 			"varying_ViewDir = normalize(normalMatrix*(uniform_eyepos.xyz - e_position)) ; \n" +
 			"outPosition = uniform_ModelViewMatrix * vec4(e_position, 1.0) ; \n" +

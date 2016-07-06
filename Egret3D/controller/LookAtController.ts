@@ -70,6 +70,7 @@
         */
         public firstCamera: boolean = false;
 
+
         /**
         * @language zh_CN
         * 控制的目标相机，目标对象
@@ -113,6 +114,12 @@
             Input.addEventListener(TouchEvent3D.TOUCH_MOVE, this.touchMove, this);
 
         }
+
+
+        public scaleSpeed(value: number): void {
+            this._speed *= value;
+        }
+
 
         private mouseMove(m: MouseEvent3D) {
             if (this._mouseDown && (this._needctl ? this._ctl : true)) {
@@ -182,6 +189,12 @@
                 case KeyCode.Key_D:///d
                     this._keyArray[3] = true;
                     break;
+                case KeyCode.Key_Q:///q
+                    this._keyArray[4] = true;
+                    break;
+                case KeyCode.Key_E:///e
+                    this._keyArray[5] = true;
+                    break;
                 case KeyCode.Key_Control_L:///d
                     this._ctl = true;
                     break;
@@ -204,6 +217,12 @@
                     break;
                 case KeyCode.Key_D:///d   
                     this._keyArray[3] = false;
+                    break;
+                case KeyCode.Key_Q:///q
+                    this._keyArray[4] = false;
+                    break;
+                case KeyCode.Key_E:///e
+                    this._keyArray[5] = false;
                     break;
                 case KeyCode.Key_Control_L:///d
                     this._ctl = false;
@@ -430,6 +449,32 @@
                     this._tempVec.copyFrom(this._lookAtObject.position.add(this._tempVec));
                     this._lookAtObject.position = this._tempVec;
                 }
+
+
+
+                if (this._keyArray[4]) {
+
+                    this._quaRot.fromEulerAngles(this._rotaAngle.x, this._rotaAngle.y, 0);
+                    this._tempVec.copyFrom(this._quaRot.transformVector(Vector3D.Y_AXIS));
+                    this._tempVec.normalize();
+                    this._tempVec.scaleBy(this._speed);
+                    this._tempVec.copyFrom(this._lookAtObject.position.add(this._tempVec));
+                    this._lookAtObject.position = this._tempVec;
+                }
+
+
+                if (this._keyArray[5]) {
+
+                    this._quaRot.fromEulerAngles(this._rotaAngle.x, this._rotaAngle.y, 0);
+                    this._tempVec.copyFrom(this._quaRot.transformVector(Vector3D.Y_AXIS));
+                    this._tempVec.normalize();
+                    this._tempVec.scaleBy(this._speed);
+                    this._tempVec.copyFrom(this._lookAtObject.position.subtract(this._tempVec));
+                    this._lookAtObject.position = this._tempVec;
+                }
+
+
+
                 this._quaRot.fromEulerAngles(this._rotaAngle.x, this._rotaAngle.y, 0);
                 this._rotaEyesLine.copyFrom(this._quaRot.transformVector(Vector3D.Z_AXIS));
                 this._rotaEyesLine.normalize();

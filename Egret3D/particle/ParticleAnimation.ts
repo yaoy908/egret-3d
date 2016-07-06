@@ -70,7 +70,7 @@
 
         /**
         * @language zh_CN
-        * 动画节点容器
+        * 是否在播放
         * @version Egret 3.0
         * @platform Web,Native
         */
@@ -128,7 +128,7 @@
         */
         public activeState(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
             if (this.particleAnimationState) {
-                this.particleAnimationState.activeState(time, this.animTime, delay, this.delay, usage, geometry, context3DProxy);
+                this.particleAnimationState.activeState(time, this.animTime, delay, this.delay, usage, geometry, context3DProxy, camera3D);
             }
         }
 

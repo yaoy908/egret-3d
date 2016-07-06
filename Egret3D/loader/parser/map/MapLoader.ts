@@ -54,8 +54,11 @@
         public huds: Array<HUD> = new Array<HUD>();
 
         public textures: any = {};
+        public taskTotal: number = 0;
+        public taskCurrent: number = 0;
 
         public view3d: View3D;
+
          /**
          * @language zh_CN
          * 构建一个场景加载对象 构建后直接加载
@@ -87,6 +90,7 @@
             this._pathRoot = path + name + "/";
             this._path = this._pathRoot + mapConfig;
 
+            this.taskTotal++;
 
             var load: URLLoader = this.findLoader(this._path);
             if (!load) {
@@ -112,6 +116,10 @@
         private parseXML(xml: string) {
             var xmlDoc = XMLParser.parse(xml);
             this._mapXmlParser = new MapXmlParser(xmlDoc);
+
+            for (var v in this._mapXmlParser.taskDict) {
+                this.taskTotal++;
+            }
 
             this.createLight();
 
@@ -177,6 +185,28 @@
                             }
                         }
                         break;
+                    case "ParticleEmitter":
+                        if (mapNodeData.path) {
+                            var path: string = this._pathRoot + mapNodeData.path;
+                            var load: URLLoader = this.findLoader(path);
+                            if (!load) {
+                                load = this.createLoader(path);
+
+                                var nodeDatas: Array<MapNodeData> = [];
+                                nodeDatas.push(mapNodeData);
+                                load["particleNodeDatas"] = nodeDatas;
+                                load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onParticleXML, this);
+                            }
+                            else {
+                                var nodeDatas: Array<MapNodeData> = load["particleNodeDatas"];
+                                nodeDatas.push(mapNodeData);
+                                var particleData: ParticleData = load["particleData"];
+                                if (particleData) {
+                                    this.processParticle(particleData, mapNodeData);
+                                }
+                            }
+                        }
+                        break;
                 }
             }
 
@@ -192,7 +222,6 @@
                 else {
 
                 }
-
             }
 
             for (var i: number = 0; i < this._mapXmlParser.hudList.length; ++i) {
@@ -208,6 +237,14 @@
                 hud.rotationZ = hudData.rz;
                 hud.width = hudData.width;
                 hud.height = hudData.height;
+
+                if (hudData.vs) {
+                    hud.vsShader = hudData.vs;
+                }
+
+                if (hudData.fs) {
+                    hud.fsShader = hudData.fs;
+                }
 
                 this.huds.push(hud);
                 hudData.hud = hud;
@@ -234,6 +271,48 @@
                     }
                 }
             }
+        }
+
+        private onParticleXML(e: LoaderEvent3D) {
+            var nodeDatas: Array<MapNodeData> = e.loader["particleNodeDatas"];
+
+            var text: string = e.loader.data;
+            var particleData: ParticleData = new ParticleXmlParser().parse(text);
+            e.loader["particleData"] = particleData;
+
+            for (var i: number = 0; i < nodeDatas.length; ++i) {
+                this.processParticle(particleData, nodeDatas[i]);
+            }
+
+            this.processTask(e.loader);
+        }
+
+        private processParticle(particleData: ParticleData, nodeData: MapNodeData): ParticleEmitter {
+            var geo: Geometry = null;
+            if (nodeData.geometry) {
+                geo = GeometryUtil.createGemetryForType(nodeData.geometry.type, nodeData.geometry);
+            }
+            particleData.materialData = this._mapXmlParser.matDict[nodeData.materialIDs[0]];
+            var particleNode: ParticleEmitter = new ParticleEmitter(particleData, geo, new TextureMaterial());
+
+            nodeData.x *= ParticleData.SCALE_VALUE;
+            nodeData.y *= ParticleData.SCALE_VALUE;
+            nodeData.z *= ParticleData.SCALE_VALUE;
+            nodeData.object3d.position.scaleBy(ParticleData.SCALE_VALUE);
+            nodeData.object3d.position = nodeData.object3d.position;
+
+
+            particleNode.name = nodeData.object3d.name;
+            particleNode.position = nodeData.object3d.position;
+            particleNode.orientation = nodeData.object3d.orientation;
+            particleNode.scale = nodeData.object3d.scale;
+            nodeData.object3d.swapObject(particleNode);
+            nodeData.object3d = particleNode;
+
+            particleNode.play();
+            this.processMat(nodeData);
+
+            return particleNode;
         }
 
         private onXmlLoad(e: LoaderEvent3D) {
@@ -337,7 +416,7 @@
                 var load: URLLoader = this.findLoader(path);
 
                 if (!load) {
-                    this.createLoader(path);
+                    load = this.createLoader(path);
                     load["name"] = eamData["name"];
 
                     var eamnodeDatas: Array<MapNodeData> = [];
@@ -471,6 +550,14 @@
 
         private processTask(load:URLLoader) {
             this._taskCount--;
+            this.taskCurrent++;
+
+            this._event.eventType = LoaderEvent3D.LOADER_PROGRESS;
+            this._event.target = this;
+            this._event.loader = load;
+            this._event.data = load;
+            this.dispatchEvent(this._event);
+
             //console.log("---" + load.url + "---" + this._taskCount);
             if (this._taskCount <= 0) {
                 this._event.eventType = LoaderEvent3D.LOADER_COMPLETE;
@@ -484,6 +571,7 @@
 
                 this.dispatchEvent(this._event);
             }
+
         }
 
         private addImaTask(name:string, type:string, matID:number, mapNodeData:MapNodeData):URLLoader {
@@ -612,113 +700,131 @@
                 material.cutAlpha = matData.cutAlpha;
 
                 material.uvRectangle.copy(matData.uvRectangle);
-                var method: MatMethodData = null;
 
-                for (method of matData.methods) {
-                    if (method.type == MatMethodData.lightmapMethod) {
-                        var lightmapMethod: LightmapMethod = new LightmapMethod(method.usePower);
-                        var lightTexture: ITexture = CheckerboardTexture.texture;
-
-                        var textureData: any = method.texturesData[0];
-
-                        load = this.addMethodImgTask(textureData.path, lightmapMethod, textureData.attributeName);
-                        if (load.data) {
-                            lightTexture = load.data;
-                        }
-
-                        material.diffusePass.addMethod(lightmapMethod);
-                        lightmapMethod.lightTexture = lightTexture;
-                    }
-                    else if (method.type == MatMethodData.uvRollMethod) {
-                        var uvScrollMethod: UVRollMethod = new UVRollMethod();
-                        uvScrollMethod.speedU = method.uSpeed;
-                        uvScrollMethod.speedV = method.vSpeed;
-                        material.repeat = true;
-
-                        uvScrollMethod.start(true);
-                        material.diffusePass.addMethod(uvScrollMethod);
-                    }
-                    else if (method.type == MatMethodData.mulUvRollMethod) {
-
-                        var diffuseTexture1: ITexture = CheckerboardTexture.texture;
-
-                        var uvMethod: MulUVRollMethod = new MulUVRollMethod();
-                        uvMethod.setSpeedU(0, method.uSpeed);
-                        uvMethod.setSpeedV(0, method.vSpeed);
-
-                        var textureData: any = method.texturesData[0];
-
-                        uvMethod.setSpeedU(1, textureData.uSpeed);
-                        uvMethod.setSpeedV(1, textureData.vSpeed);
-
-                        load = this.addMethodImgTask(textureData.path, uvMethod, textureData.attributeName);
-                        if (load.data) {
-                            diffuseTexture1 = load.data;
-                        }
-
-                        material.repeat = true;
-
-                        uvMethod.start(true);
-                        material.diffusePass.addMethod(uvMethod);
-
-                        uvMethod.diffuseTexture1 = diffuseTexture1;
-                    }
-                    else if (method.type == MatMethodData.alphaMaskMethod) {
-                        var maskmapMethod: AlphaMaskMethod = new AlphaMaskMethod();
-                        var maskTexture: ITexture = CheckerboardTexture.texture;
-                        var textureData: any = method.texturesData[0];
-
-                        load = this.addMethodImgTask(textureData.path, maskmapMethod, textureData.attributeName);
-                        if (load.data) {
-                            maskTexture = load.data;
-                        }
-                        material.diffusePass.addMethod(maskmapMethod);
-                        maskmapMethod.maskTexture = maskTexture;
-                    }
-                    else if (method.type == MatMethodData.streamerMethod) {
-                        var streamerMethod: StreamerMethod = new StreamerMethod();
-                        var steamerTexture: ITexture = CheckerboardTexture.texture;
-                        var textureData: any = method.texturesData[0];
-
-                        load = this.addMethodImgTask(textureData.path, streamerMethod, textureData.attributeName);
-                        if (load.data) {
-                            steamerTexture = load.data;
-                        }
-                        streamerMethod.speedU = method.uSpeed;
-                        streamerMethod.speedV = method.vSpeed;
-                        streamerMethod.start(true);
-                        material.diffusePass.addMethod(streamerMethod);
-                        streamerMethod.steamerTexture = steamerTexture;
-                    }
-                    else if (method.type == MatMethodData.terrainARGBMethod) {
-                        var terrainARGBMethod: TerrainARGBMethod = new TerrainARGBMethod(CheckerboardTexture.texture, CheckerboardTexture.texture, CheckerboardTexture.texture, CheckerboardTexture.texture, CheckerboardTexture.texture);
-                        var textureData: any = null;
-                        for (var i: number = 0; i < method.texturesData.length; ++i) {
-                            textureData = method.texturesData[i];
-
-                            load = this.addMethodImgTask(textureData.path, terrainARGBMethod, textureData.attributeName);
-                            if (load.data) {
-                                terrainARGBMethod[textureData.attrName] = load.data;
-                            }
-
-
-                            if (i != 0) {
-                                terrainARGBMethod.setUVTitling(i - 1, textureData.uvTitlingX, textureData.uvTitlingY);
-                            }
-                        }
-
-                        material.diffusePass.addMethod(terrainARGBMethod);
-                    }
-                    else if (method.type == MatMethodData.waterWaveMethod) {
-                        var waterWaveMethod: WaterWaveMethod = new WaterWaveMethod();
-                        material.repeat = true;
-                        material.diffusePass.addMethod(waterWaveMethod);
-                    }
-                }
+                this.processMethod(material, matData);
             }
 
             mesh.lightGroup = this.lightGroup;
 
+        }
+
+        private processMethod(material: MaterialBase, matData: MatSphereData) {
+            var load: URLLoader = null;
+            var method: MatMethodData = null;
+
+            for (method of matData.methods) {
+                var defaultTexture: ITexture = CheckerboardTexture.texture;
+
+                if (method.type == MatMethodData.methodType.lightmapMethod) {
+                    var lightmapMethod: LightmapMethod = new LightmapMethod(method.usePower);
+                    material.diffusePass.addMethod(lightmapMethod);
+                    lightmapMethod.lightTexture = defaultTexture;
+
+                    var textureData: any = method.texturesData[0];
+                    load = this.addMethodImgTask(textureData.path, lightmapMethod, textureData.attributeName);
+                }
+                else if (method.type == MatMethodData.methodType.uvRollMethod) {
+                    var uvScrollMethod: UVRollMethod = new UVRollMethod();
+                    material.diffusePass.addMethod(uvScrollMethod);
+
+                    uvScrollMethod.speedU = method.uSpeed;
+                    uvScrollMethod.speedV = method.vSpeed;
+                    material.repeat = true;
+
+                    uvScrollMethod.start(true);
+                }
+                else if (method.type == MatMethodData.methodType.mulUvRollMethod) {
+
+                    var uvMethod: MulUVRollMethod = new MulUVRollMethod();
+                    material.diffusePass.addMethod(uvMethod);
+
+                    uvMethod.diffuseTexture1 = defaultTexture;
+
+                    uvMethod.setSpeedU(0, method.uSpeed);
+                    uvMethod.setSpeedV(0, method.vSpeed);
+
+                    var textureData: any = method.texturesData[0];
+
+                    uvMethod.setSpeedU(1, textureData.uSpeed);
+                    uvMethod.setSpeedV(1, textureData.vSpeed);
+
+                    load = this.addMethodImgTask(textureData.path, uvMethod, textureData.attributeName);
+
+                    material.repeat = true;
+                    uvMethod.start(true);
+                }
+                else if (method.type == MatMethodData.methodType.alphaMaskMethod) {
+                    var maskmapMethod: AlphaMaskMethod = new AlphaMaskMethod();
+                    material.diffusePass.addMethod(maskmapMethod);
+
+                    maskmapMethod.maskTexture = defaultTexture;
+
+                    var textureData: any = method.texturesData[0];
+
+                    load = this.addMethodImgTask(textureData.path, maskmapMethod, textureData.attributeName);
+                }
+                else if (method.type == MatMethodData.methodType.streamerMethod) {
+                    var streamerMethod: StreamerMethod = new StreamerMethod();
+                    material.diffusePass.addMethod(streamerMethod);
+                    streamerMethod.steamerTexture = defaultTexture;
+                    var textureData: any = method.texturesData[0];
+
+                    load = this.addMethodImgTask(textureData.path, streamerMethod, textureData.attributeName);
+
+                    streamerMethod.speedU = method.uSpeed;
+                    streamerMethod.speedV = method.vSpeed;
+                    streamerMethod.start(true);
+                }
+                else if (method.type == MatMethodData.methodType.terrainARGBMethod) {
+                    var terrainARGBMethod: TerrainARGBMethod = new TerrainARGBMethod(defaultTexture, defaultTexture, defaultTexture, defaultTexture, defaultTexture);
+                    material.diffusePass.addMethod(terrainARGBMethod);
+                    var textureData: any = null;
+                    for (var i: number = 0; i < method.texturesData.length; ++i) {
+                        textureData = method.texturesData[i];
+
+                        load = this.addMethodImgTask(textureData.path, terrainARGBMethod, textureData.attributeName);
+
+                        if (i != 0) {
+                            terrainARGBMethod.setUVTitling(i - 1, textureData.uvTitlingX, textureData.uvTitlingY);
+                        }
+                    }
+
+                }
+                else if (method.type == MatMethodData.methodType.waterWaveMethod) {
+                    var waterWaveMethod: WaterWaveMethod = new WaterWaveMethod();
+                    material.diffusePass.addMethod(waterWaveMethod);
+                    if (method["deepWaterColor"]) {
+                        waterWaveMethod.deepWaterColor = Number( method["deepWaterColor"]);
+                    }
+
+                    if (method["shallowWaterColor"]) {
+                        waterWaveMethod.shallowWaterColor = Number( method["shallowWaterColor"]);
+                    }
+
+                    material.repeat = true;
+                }
+                else if (method.type == MatMethodData.methodType.waterNormalMethod) {
+
+                    var waterNormalMethod: WaterNormalMethod = new WaterNormalMethod();
+                    material.diffusePass.addMethod(waterNormalMethod);
+                    waterNormalMethod.normalTextureA = defaultTexture;
+                    waterNormalMethod.normalTextureB = defaultTexture;
+
+                    if (method["uScale"] && method["vScale"]) {
+                        waterNormalMethod.setUvScale(Number(method["uScale"]), Number( method["vScale"]));
+                    }
+
+
+                    var textureData: any = null;
+                    for (var i: number = 0; i < method.texturesData.length; ++i) {
+                        textureData = method.texturesData[i];
+
+                        waterNormalMethod.setUvSpeed(i, Number(textureData.uSpeed), Number(textureData.vSpeed));
+                        load = this.addMethodImgTask(textureData.path, waterNormalMethod, textureData.attributeName);
+                    }
+
+                }
+            }
         }
         //灯光
         private createLight(): void {

@@ -232,6 +232,7 @@
                 else if (animation.particleAnimationController) {
                     this._vs_shader_methods[ShaderPhaseType.start_vertex] = [];
                     this._vs_shader_methods[ShaderPhaseType.start_vertex].push("particle_vs");
+
                     //to change importent
                     this.addShaderPhase( this._passID , animation.particleAnimationController.particleAnimationState.vertex_shaders, this._vs_shader_methods);
                     this.addShaderPhase( this._passID , animation.particleAnimationController.particleAnimationState.fragment_shaders, this._fs_shader_methods);
@@ -372,8 +373,13 @@
             shaderList = this._fs_shader_methods[ShaderPhaseType.end_fragment];
             if (shaderList && shaderList.length > 0)
                 this.addMethodShaders(this._passUsage.fragmentShader, shaderList);
-            else
-                this.addMethodShaders(this._passUsage.fragmentShader, ["end_fs"]);
+            else {
+                if (animation && animation.particleAnimationController) {
+                    this.addMethodShaders(this._passUsage.fragmentShader, ["particle_end_fs"]);
+                } else {
+                    this.addMethodShaders(this._passUsage.fragmentShader, ["end_fs"]);
+                }
+            }
             //---fs---shadering-------------------------------------------------
 
         }
@@ -515,7 +521,9 @@
             for (var index in this._passUsage.sampler3DList) {
                 sampler3D = this._passUsage.sampler3DList[index];
                 sampler3D.texture = this._materialData[sampler3D.varName];
-
+                if (!sampler3D.texture) {
+                    continue;
+                }
                 sampler3D.texture.upload(context3DProxy);
                 context3DProxy.setCubeTextureAt(sampler3D.activeTextureIndex, sampler3D.uniformIndex, sampler3D.index, sampler3D.texture.texture3D);
             }

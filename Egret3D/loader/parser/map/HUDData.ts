@@ -14,5 +14,7 @@
         public width: number;
         public height: number;
         public hud: HUD;
+        public vs: string;
+        public fs: string;
     }
 }

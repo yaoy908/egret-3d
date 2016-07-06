@@ -16,17 +16,18 @@
     export class LoaderEvent3D extends Event3D {
 
         /**
-         * @language zh_CN
-         * LOADER_COMPLETE 常量定义 onLoadComplete 事件对象的 type 属性的值。
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
+        * @language zh_CN
+        * LOADER_COMPLETE 常量定义 onLoadComplete 事件对象的 type 属性的值。
+        * 加载完成后事件响应
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public static LOADER_COMPLETE: string = "onLoadComplete";
-
 
         /**
         * @language zh_CN
         * LOADER_PROGRESS 常量定义 onLoadProgress 事件对象的 type 属性的值。
+        * 加载过程中事件响应
         * @version Egret 3.0
         * @platform Web,Native
         */
