@@ -32,14 +32,29 @@ module egret3d {
 
         /**
         * @language zh_CN
+        * 动画速率
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public static fps: number = 1000 / 60;
+
+        /**
+        * @language zh_CN
         * 播放速度
         * @version Egret 3.0
         * @platform Web,Native
         */
         public speed: number = 1;
 
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public event3D: Event3D = new Event3D();
+
         public isLoop: boolean = true;
-        public fps: number = 1000 / 60;
         public delay: number;
         private _isPlay: boolean = false;
         private _animTime: number = 0;
@@ -50,11 +65,22 @@ module egret3d {
         private _blendSpeed: number = 300;
         private _blendSkeleton: SkeletonPose = null;
         private _blendList: SkeletonAnimationState[] = [];
+        private _bindList: { [jointIndex: number]: Array<Object3D> } = {};
+        private _temp_quat: Quaternion = new Quaternion();
+        private _temp_vec3: Vector3D = new Vector3D();
+        private _currentFrame: number = 0;
+        private _changeFrameTime: number = 0;
+        private _oldFrameIndex: number = 0;
 
         constructor(skeleton: Skeleton) {
             super();
             this._isPlay = false;
             this._skeleton = skeleton;
+            this._skeletonMatrixData = new Float32Array(this._skeleton.jointNum * 8);
+            for (var i: number = 0; i < this._skeleton.jointNum; ++i) {
+                this._skeletonMatrixData[i * 8 + 3] = 1;
+                this._skeletonMatrixData[i * 8 + 7] = 1;
+            }
         }
 
 
@@ -193,69 +219,48 @@ module egret3d {
         */
         public update(time: number, delay: number, geometry: Geometry): void {
 
-            if (!this._isPlay || this._blendList.length <= 0) {
+            if (!this._isPlay) {
                 return;
             }
 
-            //是否启用融合，并且维护各个动作的融合权重;
-            if (this._blendSpeed <= 0) {
-                if (this._blendList.length > 1) {
-                    this._blendList.splice(0, this._blendList.length - 1);
-                }
+            if (this._blendList.length <= 0) {
+                return;
             }
-            else {
 
-                var blendSpeed: number = delay * this.speed / this._blendSpeed;
+            var mainState: SkeletonAnimationState = this._blendList[this._blendList.length - 1];
 
-                for (var i: number = 0; i < this._blendList.length; ++i) {
+            var delayTime: number = delay * this.speed;
 
-                    var animationState: SkeletonAnimationState = this._blendList[i];
+            this._changeFrameTime += delayTime;
 
-                    if (i != this._blendList.length - 1) {
+            var count: number = Math.floor(Math.abs(this._changeFrameTime / SkeletonAnimation.fps));
+            for (var i: number = 0; i < count; ++i) {
 
-                        animationState.weight = Math.max(0, animationState.weight - blendSpeed);
+                this.event3D.eventType = SkeletonAnimation.EVENT_FRAME_CHANGE;
+                this.event3D.target = this;
+                if (delayTime < 0) {
+                    this.event3D.data = ((this._oldFrameIndex - 1 - i) % mainState.frameNum);
 
-                        if (animationState.weight <= 0) {
-
-                            this._blendList.splice(i, 1); --i;
-
-                            continue;
-                        }
+                    if (this.event3D.data < 0) {
+                        this.event3D.data += mainState.frameNum;
                     }
-                    else {
-                        animationState.weight = Math.min(1, animationState.weight + blendSpeed);
-                    }
-
-                    animationState.timePosition += delay * this.speed;
                 }
-            }
+                else {
+                    this.event3D.data = (this._oldFrameIndex + 1 + i) % mainState.frameNum;
+                }
+                this.dispatchEvent(this.event3D);
 
-            //融合插值;
-            var animationStateA: SkeletonAnimationState = this._blendList[0];
-
-            var currentSkeletonA: SkeletonPose = animationStateA.currentSkeletonPose;
-
-            if (this._blendList.length <= 1) {
-                this._skeletonMatrixData = currentSkeletonA.updateGPUCacheData(this._skeleton);
-            }
-            else {
-
-                var animationStateB: SkeletonAnimationState = this._blendList[1];
-
-                var currentSkeletonB: SkeletonPose = animationStateB.currentSkeletonPose;
-
-                if (!this._blendSkeleton) {
-                    this._blendSkeleton = currentSkeletonA.clone();
+                if (this.event3D.data == (mainState.frameNum - 1)) {
+                    this.event3D.eventType = SkeletonAnimation.EVENT_PLAY_COMPLETE;
+                    this.dispatchEvent(this.event3D);
                 }
 
-                this._blendSkeleton.lerp(currentSkeletonA, currentSkeletonB, animationStateB.weight);
-
-                this._blendSkeleton.resetWorldMatrix();
-
-                this._blendSkeleton.calculateJointWorldMatrix();
-
-                this._skeletonMatrixData = this._blendSkeleton.updateGPUCacheData(this._skeleton);
+                this._changeFrameTime += (delayTime > 0) ? -SkeletonAnimation.fps : SkeletonAnimation.fps;
             }
+
+            this._oldFrameIndex = this.event3D.data;
+
+            this.animTime += delay * this.speed;
         }
 
         /**
@@ -352,13 +357,122 @@ module egret3d {
         */
         public set animTime(value: number) {
 
-            //if (!this._currentAnim) {
-            //    return;
-            //}
+            if (this._blendList.length <= 0) {
+                return;
+            }
 
-            //this._animTime = this._currentAnim.timePosition = value;
+            if (this._blendList[this._blendList.length - 1].timePosition == value) {
+                return;
+            }
 
-            //this._skeletonMatrixData = this._currentAnim.currentSkeletonPose.updateGPUCacheData(this._skeleton);
+            var delay: number = value - this._animTime;
+
+            if (this._blendSpeed <= 0) {
+
+                if (this._blendList.length > 1) {
+                    this._blendList.splice(0, this._blendList.length - 1);
+                }
+
+                this._blendList[0].weight = 1.0;
+
+                this._blendList[0].timePosition += delay;
+            }
+            else {
+
+                var blendSpeed: number = Math.abs(delay / this._blendSpeed);
+
+                for (var i: number = 0; i < this._blendList.length; ++i) {
+
+                    var animationState: SkeletonAnimationState = this._blendList[i];
+
+                    if (i != this._blendList.length - 1) {
+
+                        animationState.weight = Math.max(0, animationState.weight - blendSpeed);
+
+                        if (animationState.weight <= 0) {
+
+                            this._blendList.splice(i, 1); --i;
+
+                            continue;
+                        }
+                    }
+                    else {
+                        animationState.weight = Math.min(1, animationState.weight + blendSpeed);
+                    }
+
+                    animationState.timePosition += delay;
+                }
+            }
+
+
+
+
+
+            this._animTime = this._blendList[this._blendList.length - 1].timePosition;
+
+            var animationStateA: SkeletonAnimationState = this._blendList[0];
+
+            var currentSkeletonA: SkeletonPose = animationStateA.currentSkeletonPose;
+
+            if (this._blendList.length <= 1) {
+
+                currentSkeletonA.updateGPUCacheData(this._skeleton, this._skeletonMatrixData);
+
+                this.updateBindList(currentSkeletonA);
+            }
+            else {
+
+                var animationStateB: SkeletonAnimationState = this._blendList[1];
+
+                var currentSkeletonB: SkeletonPose = animationStateB.currentSkeletonPose;
+
+                if (!this._blendSkeleton) {
+                    this._blendSkeleton = currentSkeletonA.clone();
+                }
+
+                this._blendSkeleton.lerp(currentSkeletonA, currentSkeletonB, animationStateB.weight);
+
+                this._blendSkeleton.resetWorldMatrix();
+
+                this._blendSkeleton.calculateJointWorldMatrix();
+
+                this._blendSkeleton.updateGPUCacheData(this._skeleton, this._skeletonMatrixData);
+
+                this.updateBindList(this._blendSkeleton);
+            }
+        }
+
+        /**
+        * @language zh_CN
+        * 动画时间长度
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get timeLength(): number {
+            if (this._blendList.length <= 0) {
+                return 0;
+            }
+            return this._blendList[this._blendList.length - 1].timeLength;
+        }
+
+        /**
+        * @language zh_CN
+        * 动画帧索引
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get frameIndex(): number {
+            return this.animTime / SkeletonAnimation.fps;
+        }
+
+        /**
+        * @language zh_CN
+        * 动画帧索引
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public set frameIndex(value:number) {
+            this.animTime = value * SkeletonAnimation.fps;
         }
 
         /**
@@ -403,9 +517,70 @@ module egret3d {
         */
         public bindToJointPose(jointName: string, object3D: Object3D): boolean {
 
-            var index: number = this._animStates[0].skeletonAnimationClip.poseArray[0].findJointIndex(jointName);
+            var jointIndex: number = this._animStates[0].skeletonAnimationClip.poseArray[0].findJointIndex(jointName);
+
+            if (jointIndex < 0) {
+                return false;
+            }
+
+            var list: Array<Object3D> = null;
+
+            if (this._bindList[jointIndex]) {
+                list = this._bindList[jointIndex];
+            }
+            else {
+                list = new Array<Object3D>();
+
+                this._bindList[jointIndex] = list;
+            }
+
+            list.push(object3D);
 
             return true;
+        }
+
+        private updateBindList(skeletonPose: SkeletonPose): void {
+
+            var list: Array<Object3D> = null;
+
+            var jointPose: Joint = null;
+
+            var object3D: Object3D = null;
+
+            for (var jointIndex in this._bindList) {
+
+                list = this._bindList[jointIndex];
+
+                if (list.length <= 0)
+                    continue;
+
+                jointPose = skeletonPose.joints[jointIndex];
+
+                if (!jointPose)
+                    continue;
+
+                for (var i: number = 0; i < list.length; i++) {
+
+                    object3D = list[i];
+
+                    this._temp_quat.fromMatrix(jointPose.worldMatrix);
+
+                    this._temp_quat.toEulerAngles(this._temp_vec3);
+
+                    object3D.rotationX = this._temp_vec3.x;
+                    object3D.rotationY = this._temp_vec3.y;
+                    object3D.rotationZ = this._temp_vec3.z;
+
+                    ///object3D.scaleX = jointPose.worldMatrix.scale.x;
+                    ///object3D.scaleY = jointPose.worldMatrix.scale.y;
+                    ///object3D.scaleZ = jointPose.worldMatrix.scale.z;
+
+                    object3D.x = jointPose.worldMatrix.position.x;
+                    object3D.y = jointPose.worldMatrix.position.y;
+                    object3D.z = jointPose.worldMatrix.position.z;
+                }
+            }
+
         }
     }
 }

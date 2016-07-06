@@ -22,6 +22,7 @@ module egret3d {
         private _timePosition: number = 0;
         private _skeletonAnimation: SkeletonAnimation = null;
         private _skeletonAnimationClip: SkeletonAnimationClip = null;
+        
 
         constructor(name: string) {
             this.name = name;
@@ -102,27 +103,38 @@ module egret3d {
                 this._skeletonAnimationClip.poseArray = [];
             }
 
-            var skeletonPoseA: SkeletonPose = null;
+            if (animationClip.poseArray.length < 2) {
+                this._skeletonAnimationClip.poseArray = animationClip.poseArray;
+            }
+            else {
+                var skeletonPoseA: SkeletonPose = animationClip.poseArray[0];
 
-            var skeletonPoseB: SkeletonPose = null;
+                var skeletonPoseB: SkeletonPose = animationClip.poseArray[1];
 
-            for (var i: number = 1; i < animationClip.poseArray.length; ++i) {
+                var nCount: number = Math.round((skeletonPoseB.frameTime - skeletonPoseA.frameTime) / SkeletonAnimation.fps);
 
-                skeletonPoseA = animationClip.poseArray[i - 1];
-
-                skeletonPoseB = animationClip.poseArray[i];
-
-                var nCount: number = 2;//Math.floor((skeletonPoseB.frameTime - skeletonPoseA.frameTime) / this._skeletonAnimation.fps);
-
-                for (var j: number = 0; j < nCount; j++) {
-
-                    var skeletonPose: SkeletonPose = new SkeletonPose();
-
-                    skeletonPose.lerp(skeletonPoseA, skeletonPoseB, j / nCount);
-
-                    this._skeletonAnimationClip.poseArray.push(skeletonPose);
+                if (nCount <= 1) {
+                    this._skeletonAnimationClip.poseArray = animationClip.poseArray;
                 }
-                
+                else {
+                    for (var i: number = 1; i < animationClip.poseArray.length; ++i) {
+
+                        skeletonPoseA = animationClip.poseArray[i - 1];
+
+                        skeletonPoseB = animationClip.poseArray[i];
+
+                        for (var j: number = 0; j < nCount; j++) {
+
+                            var skeletonPose: SkeletonPose = new SkeletonPose();
+
+                            skeletonPose.lerp(skeletonPoseA, skeletonPoseB, j / nCount);
+
+                            this._skeletonAnimationClip.poseArray.push(skeletonPose);
+                        }
+                    }
+
+                    this._skeletonAnimationClip.poseArray.push(animationClip.poseArray[animationClip.poseArray.length - 1].clone());
+                }
             }
 
             this._timeLength = this._skeletonAnimationClip.poseArray[this._skeletonAnimationClip.poseArray.length - 1].frameTime;
@@ -167,12 +179,10 @@ module egret3d {
                 if (this._timePosition < 0) {
 
                     this._timePosition = 0;
-
                 }
                 else if (this._timePosition > this._timeLength) {
 
                     this._timePosition = this._timeLength;
-
                 }
             }
         }
@@ -194,7 +204,20 @@ module egret3d {
         * @platform Web,Native
         */
         public get currentFrameIndex(): number {
-            return Math.floor(this._timePosition / this._skeletonAnimation.fps);
+            return Math.floor(this._timePosition / SkeletonAnimation.fps);
+        }
+
+        /**
+        * @language zh_CN
+        * 获取帧数量
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get frameNum(): number {
+            if (!this._skeletonAnimationClip) {
+                return 0;
+            }
+            return this._skeletonAnimationClip.poseArray.length;
         }
 
         /**
