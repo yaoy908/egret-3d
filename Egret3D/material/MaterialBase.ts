@@ -824,7 +824,7 @@
                     this.materialData.alphaBlending = true;
                     break;
                 case BlendMode.ADD:
-                    this.materialData.blend_src = ContextConfig.SRC_ALPHA;
+                    this.materialData.blend_src = ContextConfig.SRC_COLOR;
                     this.materialData.blend_dest = ContextConfig.ONE;
                     this.materialData.alphaBlending = true;
                     break;
