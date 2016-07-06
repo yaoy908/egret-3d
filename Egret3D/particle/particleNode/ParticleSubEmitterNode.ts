@@ -62,7 +62,7 @@
         private timeIndex: number = 0;
         private count: number = 0;
         private position: Vector3D = new Vector3D();
-        private event: ParticleEvent3D = new ParticleEvent3D(ParticleEvent3D.EMIT_SUB_PARTICLE);
+        private event: ParticleEvent3D = new ParticleEvent3D(ParticleEvent3D.EMIT_PARTICLE_BIRTH);
         /**
         * @language zh_CN
         * @param animTime 动画当前时间（单位为ms）

@@ -137,7 +137,7 @@
         public textureSheet: ParticleDataTextureSheet;
 
 
-        public static SCALE_VALUE: number = 100;
+        public static SCALE_VALUE: number = 1;
         /**
         * @language zh_CN
         * @version Egret 3.0
