@@ -36,7 +36,7 @@ void main() {
 		//alpha mode
 		outColor.xyz *= outColor.w * varying_color.w;
 	}else{
-		fadeOutParticleByZ(0.6, 1.0);
+		//fadeOutParticleByZ(0.6, 1.0);
 	}
     gl_FragColor = outColor * varying_color;
 }
