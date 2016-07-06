@@ -16,24 +16,57 @@ mat4 buildMat4(int index){
 
   vec4 translation = uniform_PoseMatrix[index * 2 + 1];
 
+//  float xx = quat.x * quat.x;
+//  float xy = quat.x * quat.y;
+//  float xz = quat.x * quat.z;
+//  float xw = quat.x * quat.w;
+//
+//  float yy = quat.y * quat.y;
+//  float yz = quat.y * quat.z;
+//  float yw = quat.y * quat.w;
+//
+//  float zz = quat.z * quat.z;
+//  float zw = quat.z * quat.w;
+//
+//  mat4 matrix = mat4(
+//	   1.0 - 2.0 * (yy + zz),		2.0 * (xy + zw),		2.0 * (xz - yw),		0,
+//	   2.0 * (xy - zw),				1.0 - 2.0 * (xx + zz),	2.0 * (yz + xw),		0,
+//	   2.0 * (xz + yw),				2.0 * (yz - xw),		1.0 - 2.0 * (xx + yy),	0,
+//	   translation.x,				translation.y,			translation.z,			1
+//   );
+
+
+  float xy2 = 2.0 * quat.x * quat.y;
+  float xz2 = 2.0 * quat.x * quat.z;
+  float xw2 = 2.0 * quat.x * quat.w;
+  float yz2 = 2.0 * quat.y * quat.z;
+  float yw2 = 2.0 * quat.y * quat.w;
+  float zw2 = 2.0 * quat.z * quat.w;
   float xx = quat.x * quat.x;
-  float xy = quat.x * quat.y;
-  float xz = quat.x * quat.z;
-  float xw = quat.x * quat.w;
-
   float yy = quat.y * quat.y;
-  float yz = quat.y * quat.z;
-  float yw = quat.y * quat.w;
-
   float zz = quat.z * quat.z;
-  float zw = quat.z * quat.w;
+  float ww = quat.w * quat.w;
 
-   return mat4(
-	   1.0 - 2.0 * (yy + zz),		2.0 * (xy + zw),		2.0 * (xz - yw),		0,
-	   2.0 * (xy - zw),				1.0 - 2.0 * (xx + zz),	2.0 * (yz + xw),		0,
-	   2.0 * (xz + yw),				2.0 * (yz - xw),		1.0 - 2.0 * (xx + yy),	0,
-	   translation.x,				translation.y,			translation.z,			1
+  mat4 matrix = mat4(
+	   xx - yy - zz + ww, xy2 + zw2, xz2 - yw2, 0,
+	   xy2 - zw2, -xx + yy - zz + ww, yz2 + xw2, 0,
+	   xz2 + yw2, yz2 - xw2, -xx - yy + zz + ww, 0,
+	   translation.x, translation.y, translation.z, 1
    );
+
+//   matrix[0].x *= translation.w;
+//   matrix[0].y *= translation.w;
+//   matrix[0].z *= translation.w;
+//
+//   matrix[1].x *= translation.w;
+//   matrix[1].y *= translation.w;
+//   matrix[1].z *= translation.w;
+//
+//   matrix[2].x *= translation.w;
+//   matrix[2].y *= translation.w;
+//   matrix[2].z *= translation.w;
+
+   return matrix;
 }
 
 void main(void){
