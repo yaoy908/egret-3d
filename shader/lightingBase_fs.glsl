@@ -21,3 +21,7 @@ vec4 LightingBlinnPhong(vec3 lightDir, vec3 lightColor , vec3 normal , vec3 view
 	c.a = materialSource.alpha + (specPower * atten); 
 	return c;  
 }
+
+void main(void) {
+	light.xyzw = vec4(0.0,0.0,0.0,1.0) ;
+}
