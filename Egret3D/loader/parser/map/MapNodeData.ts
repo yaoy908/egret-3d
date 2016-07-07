@@ -20,7 +20,7 @@
 
         public path: string = "";
 
-        public fov: number = 0.0;
+        public fov: number = 0.0; 
 
         public clipNear: number = 0.0;
 
