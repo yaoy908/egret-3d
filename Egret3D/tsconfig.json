@@ -236,6 +236,8 @@
         "particle/particleNode/ParticleRotationTwoBezierNode.ts",
         "particle/particleNode/ParticleTextureSheetNode.ts",
         "particle/particleNode/ParticleUVRollNode.ts",
+        "particle/particleNode/ParticleSubEmitterNode.ts",
+        
         
         "particle/ParticleAnimationState.ts",
         "particle/ParticleAnimation.ts",

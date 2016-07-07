@@ -26,6 +26,18 @@
 
     /**
     * @language zh_CN
+    * 子发射器阶段
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export enum ParticleDataSubEmitterPhase {
+        BIRTH,
+        COLLISION,
+        DEATH
+    }
+
+    /**
+    * @language zh_CN
     * 粒子数据类型
     * @version Egret 3.0
     * @platform Web,Native
@@ -135,7 +147,6 @@
 
         public materialData: MatSphereData;
         public textureSheet: ParticleDataTextureSheet;
-
 
         public static SCALE_VALUE: number = 1;
         /**
@@ -1000,7 +1011,7 @@
         * randomRow 是否随机单行
         */
         public randomRow: boolean = false;
-        
+
         /**
         * @language zh_CN
         * row 指定锁定第几行播放
@@ -1090,10 +1101,6 @@
 
         }
     }
-
-
-
-
 
 
 
