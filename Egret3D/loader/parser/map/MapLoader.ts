@@ -560,6 +560,23 @@
 
             //console.log("---" + load.url + "---" + this._taskCount);
             if (this._taskCount <= 0) {
+
+                for (var i: number = 0; i < this._mapXmlParser.nodeList.length; i++) {
+                    var mapNodeData: MapNodeData = this._mapXmlParser.nodeList[i];
+                    
+                    if (mapNodeData.object3d instanceof ParticleEmitter) {
+                        var patEmitter: ParticleEmitter = <ParticleEmitter>mapNodeData.object3d;
+                        for (var j: number = 0; j < mapNodeData.childs.length; ++j) {
+                            var childData: any = mapNodeData.childs[j];
+                            var childPatEmitter: Object3D = this.container.findObject3D(childData.name);
+                            if (childPatEmitter instanceof ParticleEmitter) {
+                                patEmitter.addSubEmitter(Number(ParticleDataSubEmitterPhase[childData.phase]), <ParticleEmitter>childPatEmitter);
+                            }
+                        }
+                    }
+
+                }
+
                 this._event.eventType = LoaderEvent3D.LOADER_COMPLETE;
                 this._event.target = this;
 

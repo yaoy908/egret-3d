@@ -163,5 +163,7 @@
         * @platform Web,Native
         */
         public object3d: Object3D;
+
+        public childs: Array<any> = [];
     }
 }

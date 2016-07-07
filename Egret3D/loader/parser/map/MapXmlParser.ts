@@ -335,6 +335,14 @@
                     }
                     data.geometry = geo;
                 }
+                else if (nodeName == "sub") {
+                    var childData: any = {};
+                    for (var j: number = 0; j < item.attributes.length; ++j) {
+                        attr = item.attributes[j];
+                        childData[attr.name] = attr.value;
+                    }
+                    data.childs.push(childData);
+                }
                 //else if (nodeName == "lightIds") {
                 //    if (item.textContent == null || item.textContent == "") {
                 //        data.lightIds = [];
