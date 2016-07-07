@@ -234,11 +234,12 @@
 
 
         private _particleProperty: Float32Array = new Float32Array(22);
+        private _particleFsData: Float32Array = new Float32Array(3);
         /**
         * @language zh_CN
         * @private 
         */
-        public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
+        public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, camera3D: Camera3D) {
             //var scaleData: Vector3D;
             var rotateData: Quaternion;
             var positionData: Vector3D;
@@ -261,9 +262,9 @@
             this._particleProperty[1] = data.life.loop ? 1 : 0;
             this._particleProperty[2] = data.followTarget ? 1 : 0;
 
-            this._particleProperty[3] = 0;//scaleData.x;
-            this._particleProperty[4] = 0;//scaleData.y;
-            this._particleProperty[5] = 0;//scaleData.z;
+            this._particleProperty[3] = 1;//scaleData.x;
+            this._particleProperty[4] = 1;//scaleData.y;
+            this._particleProperty[5] = 1;//scaleData.z;
             this._particleProperty[6] = rotateData.x;
             this._particleProperty[7] = rotateData.y;
             this._particleProperty[8] = rotateData.z;
@@ -281,8 +282,16 @@
             this._particleProperty[19] = data.property.cameraScale;
             this._particleProperty[20] = data.property.speedScale;
             this._particleProperty[21] = data.property.lengthScale;
+            
 
             context3DProxy.uniform1fv(usage["uniform_particleState"].uniformIndex, this._particleProperty);
+
+            this._particleFsData[0] = camera3D.far;
+            this._particleFsData[1] = camera3D.near;
+            this._particleFsData[2] = (this._emitter.material && this._emitter.material.materialData.blendMode == BlendMode.ALPHA) ? 1 : 0;
+
+            context3DProxy.uniform1fv(usage["uniform_particleFsData"].uniformIndex, this._particleFsData);
+
             for (var i: number = 0; i < this.animNodes.length; i++) {
                 this.animNodes[i].activeState(time, animTime, delay, animDelay, usage, geometry, context3DProxy);
             }

@@ -128,7 +128,7 @@
         */
         public activeState(time: number, delay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy, modeltransform: Matrix4_4, camera3D: Camera3D) {
             if (this.particleAnimationState) {
-                this.particleAnimationState.activeState(time, this.animTime, delay, this.delay, usage, geometry, context3DProxy);
+                this.particleAnimationState.activeState(time, this.animTime, delay, this.delay, usage, geometry, context3DProxy, camera3D);
             }
         }
 

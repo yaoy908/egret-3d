@@ -295,6 +295,13 @@
             particleData.materialData = this._mapXmlParser.matDict[nodeData.materialIDs[0]];
             var particleNode: ParticleEmitter = new ParticleEmitter(particleData, geo, new TextureMaterial());
 
+            nodeData.x *= ParticleData.SCALE_VALUE;
+            nodeData.y *= ParticleData.SCALE_VALUE;
+            nodeData.z *= ParticleData.SCALE_VALUE;
+            nodeData.object3d.position.scaleBy(ParticleData.SCALE_VALUE);
+            nodeData.object3d.position = nodeData.object3d.position;
+
+
             particleNode.name = nodeData.object3d.name;
             particleNode.position = nodeData.object3d.position;
             particleNode.orientation = nodeData.object3d.orientation;
@@ -409,7 +416,7 @@
                 var load: URLLoader = this.findLoader(path);
 
                 if (!load) {
-                    this.createLoader(path);
+                    load = this.createLoader(path);
                     load["name"] = eamData["name"];
 
                     var eamnodeDatas: Array<MapNodeData> = [];
@@ -544,6 +551,12 @@
         private processTask(load:URLLoader) {
             this._taskCount--;
             this.taskCurrent++;
+
+            this._event.eventType = LoaderEvent3D.LOADER_PROGRESS;
+            this._event.target = this;
+            this._event.loader = load;
+            this._event.data = load;
+            this.dispatchEvent(this._event);
 
             //console.log("---" + load.url + "---" + this._taskCount);
             if (this._taskCount <= 0) {
@@ -691,8 +704,9 @@
                 this.processMethod(material, matData);
             }
 
-            mesh.lightGroup = this.lightGroup;
-
+            if (typeof mesh != "ParticleEmitter") {
+                mesh.lightGroup = this.lightGroup;
+            }
         }
 
         private processMethod(material: MaterialBase, matData: MatSphereData) {

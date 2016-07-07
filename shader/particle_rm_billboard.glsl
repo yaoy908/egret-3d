@@ -1,4 +1,4 @@
-mat4 getRenderModeMatrix(mat4 cameraMatrix) {
+mat4 getRenderModeMatrix(mat4 cameraMatrix, mat4 modelMatrix) {
 	mat4 matrix = mat4(
 		cameraMatrix[0],
 		cameraMatrix[1],

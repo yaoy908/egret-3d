@@ -93,7 +93,15 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        SCREEN
+        SCREEN,
+        /**
+        * @language zh_CN
+        * 将显示对象的原色值添加到它的背景颜色中(较ADD稍微暗一些)，上限值为 0xFF。
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        SOFT_ADD,
+
     }
     /**
      * @class egret3d.ContextSamplerType

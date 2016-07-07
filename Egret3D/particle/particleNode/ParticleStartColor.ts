@@ -99,7 +99,7 @@
             if (this._node.colorType == ParticleBirthColorType.Const) {
                 c1.copyFrom(this._node.colorConst1);
             } else if (this._node.colorType == ParticleBirthColorType.RandomConst) {
-                c1.randomColor(this._node.colorConst1, this._node.colorConst2);
+                c1.randomColor(this._node.colorConst1, this._node.colorConst2, true);
             } else if (this._node.colorType == ParticleBirthColorType.OneGradients) {
                 this._node.colorGradients1.lerpColor(t, c1);
             } else if (this._node.colorType == ParticleBirthColorType.TwoGradients) {

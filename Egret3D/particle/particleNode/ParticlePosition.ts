@@ -47,7 +47,7 @@
                 renderMode_vs = "particle_rm_billboard";
             } else if (renderMode == ParticleRenderModeType.StretchedBillboard) {
                 renderMode_vs = "particle_rm_stretched";
-            } else if (renderMode == ParticleRenderModeType.Mesh) {
+            } else {
                 renderMode_vs = "particle_rm_mesh";
             }
             this.vertex_ShaderName[ShaderPhaseType.local_vertex] = this.vertex_ShaderName[ShaderPhaseType.local_vertex] || [];
@@ -81,11 +81,29 @@
                 var coneShape: CylinderValueShape = new CylinderValueShape();
                 coneShape.radiusTop = node.coneRadiusTop;
                 coneShape.radiusBottom = node.coneRadiusBottom;
-                coneShape.height = node.coneHeight;
+                if (coneShape.coneType == ParticleConeShapeType.BaseShell) {
+                    coneShape.height = 0;
+                } else {
+                    coneShape.height = node.coneHeight;
+                }
+                coneShape.coneType = node.coneType;
                 this._positions = coneShape;
             }
 
         }
+
+
+        /**
+        * @language zh_CN
+        * 获取位置节点在geometry的顶点数据中偏移量
+        * @return number
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get offsetIndex(): number {
+            return this.attribute_offsetPosition.offsetIndex;
+        }
+
 
         /**
         * @private

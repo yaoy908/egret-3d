@@ -108,7 +108,10 @@
 
                 if (mapNodeData.type == "Camera3D") {
                     var camera: Camera3D = new Camera3D();
-                    camera.fieldOfView = Number(mapNodeData.fov);
+                    camera.fieldOfView = mapNodeData.fov;
+                    camera.near = mapNodeData.clipNear;
+                    camera.far = mapNodeData.clipFar;
+
                     mapNodeData.object3d = camera;
 
                 }
@@ -257,7 +260,13 @@
 
             for (var i: number = 0; i < node.attributes.length; ++i) {
                 attr = node.attributes[i];
-                data[attr.nodeName] = attr.value;
+                var v: string = typeof data[attr.name];
+                if (v == "number") {
+                    data[attr.name] = Number(attr.value);
+                }
+                else {
+                    data[attr.name] = attr.value;
+                }
             }
 
             var item: Node;

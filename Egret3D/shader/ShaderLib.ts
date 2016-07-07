@@ -1648,21 +1648,23 @@ module egret3d {
 			"mat4 buildMat4(int index){ \n" +
 			"vec4 quat = uniform_PoseMatrix[index * 2 + 0]; \n" +
 			"vec4 translation = uniform_PoseMatrix[index * 2 + 1]; \n" +
+			"float xy2 = 2.0 * quat.x * quat.y; \n" +
+			"float xz2 = 2.0 * quat.x * quat.z; \n" +
+			"float xw2 = 2.0 * quat.x * quat.w; \n" +
+			"float yz2 = 2.0 * quat.y * quat.z; \n" +
+			"float yw2 = 2.0 * quat.y * quat.w; \n" +
+			"float zw2 = 2.0 * quat.z * quat.w; \n" +
 			"float xx = quat.x * quat.x; \n" +
-			"float xy = quat.x * quat.y; \n" +
-			"float xz = quat.x * quat.z; \n" +
-			"float xw = quat.x * quat.w; \n" +
 			"float yy = quat.y * quat.y; \n" +
-			"float yz = quat.y * quat.z; \n" +
-			"float yw = quat.y * quat.w; \n" +
 			"float zz = quat.z * quat.z; \n" +
-			"float zw = quat.z * quat.w; \n" +
-			"return mat4( \n" +
-			"1.0 - 2.0 * (yy + zz),		2.0 * (xy + zw),		2.0 * (xz - yw),		0, \n" +
-			"2.0 * (xy - zw),				1.0 - 2.0 * (xx + zz),	2.0 * (yz + xw),		0, \n" +
-			"2.0 * (xz + yw),				2.0 * (yz - xw),		1.0 - 2.0 * (xx + yy),	0, \n" +
-			"translation.x,				translation.y,			translation.z,			1 \n" +
+			"float ww = quat.w * quat.w; \n" +
+			"mat4 matrix = mat4( \n" +
+			"xx - yy - zz + ww, xy2 + zw2, xz2 - yw2, 0, \n" +
+			"xy2 - zw2, -xx + yy - zz + ww, yz2 + xw2, 0, \n" +
+			"xz2 + yw2, yz2 - xw2, -xx - yy + zz + ww, 0, \n" +
+			"translation.x, translation.y, translation.z, 1 \n" +
 			"); \n" +
+			"return matrix; \n" +
 			"} \n" +
 			"void main(void){ \n" +
 			"e_boneIndex = attribute_boneIndex; \n" +

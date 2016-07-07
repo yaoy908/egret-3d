@@ -10,53 +10,21 @@
     */
     export class MapNodeData {
 
-        /**
-         * @language zh_CN
-         * 对象类型
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public type: string;
+        public type: string = "";
 
-        /**
-         * @language zh_CN
-         * 实例ID
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public insID: string;
+        public insID: string = "";
 
-        /**
-         * @language zh_CN
-         * 父亲实例ID
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public parent: string;
+        public parent: string = "";
 
-        /**
-         * @language zh_CN
-         * 对象名字
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public name: string;
+        public name: string = "";
 
-        /**
-         * @language zh_CN
-         * 对象路径
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
-        public path: string;
+        public path: string = "";
 
-        /**
-        * @language zh_CN
-        * fov
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public fov: string;
+        public fov: number = 0.0; 
+
+        public clipNear: number = 0.0;
+
+        public clipFar: number = 0.0;
 
         /**
          * @language zh_CN

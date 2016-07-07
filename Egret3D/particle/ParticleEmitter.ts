@@ -11,6 +11,7 @@
     export class ParticleEmitter extends Mesh {
 
         private _timeNode: ParticleTime;
+        private _positionNode: ParticlePosition;
 
         private particleGeometryShape: Geometry;
         private particleAnimation: ParticleAnimation;
@@ -56,7 +57,6 @@
         * @platform Web,Native 
         */
         private buildParticle(): void {
-            this._data.validate();
             if (this._externalGeometry == null) {
                 this.particleGeometryShape = this.createShape();
             } else {
@@ -81,7 +81,16 @@
             var geo: Geometry;
             var geomData: ParticleDataGeometry = this._data.geometry;
             if (geomData.type == ParticleGeometryType.Plane) {
-                geo = new PlaneGeometry(geomData.planeW, geomData.planeH, 1, 1, 1, 1, Vector3D.Z_AXIS);
+                var defaultAxis: Vector3D = Vector3D.Z_AXIS;
+                if (this._data.property.renderMode == ParticleRenderModeType.VerticalBillboard) {
+                    defaultAxis = Vector3D.Y_AXIS;
+                } else if (this._data.property.renderMode == ParticleRenderModeType.HorizontalBillboard) {
+                    defaultAxis = Vector3D.Y_AXIS;
+                } else {
+                    defaultAxis = Vector3D.Z_AXIS;
+                }
+                geo = new PlaneGeometry(geomData.planeW, geomData.planeH, 1, 1, 1, 1, defaultAxis);
+
             } else if (geomData.type == ParticleGeometryType.Cube) {
                 geo = new CubeGeometry(geomData.cubeW, geomData.cubeH, geomData.cubeD);
             } else if (geomData.type == ParticleGeometryType.Sphere) {
@@ -105,6 +114,15 @@
             return this._timeNode;
         }
 
+        /**
+        * @language zh_CN
+        * 获取位置节点
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get positionNode(): ParticlePosition {
+            return this._positionNode;
+        }
 
         /**
         * @language zh_CN
@@ -327,9 +345,9 @@
             }
             
 
-            if (this._data.scaleBesizer) {
+            if (this._data.scaleBezier) {
                 var scaleBesizer: ParticleSizeGlobalNode = new ParticleSizeGlobalNode();
-                scaleBesizer.initNode(this._data.scaleBesizer);
+                scaleBesizer.initNode(this._data.scaleBezier);
                 nodes.push(scaleBesizer);
             }
 

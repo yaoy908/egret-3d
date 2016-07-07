@@ -117,28 +117,28 @@
 
             this._camera.tap(CameraType.VR, VRType.left);
 
-            View3D._contex3DProxy.viewPort(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
-            View3D._contex3DProxy.setScissorRectangle(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
+            Egret3DCanvas.context3DProxy.viewPort(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
+            Egret3DCanvas.context3DProxy.setScissorRectangle(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
 
             if (this._cleanParmerts & Context3DProxy.gl.COLOR_BUFFER_BIT) {
-                View3D._contex3DProxy.clearColor(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w);
+                Egret3DCanvas.context3DProxy.clearColor(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w);
             }
-            View3D._contex3DProxy.clear(this._cleanParmerts);
-            this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera);
+            Egret3DCanvas.context3DProxy.clear(this._cleanParmerts);
+            this._render.draw(time, delay, Egret3DCanvas.context3DProxy, this._entityCollect, this._camera);
 
 
             viewPort = this.rightViewPort;
             this._camera.viewPort = viewPort;
             this._camera.tap(CameraType.VR, VRType.right);
 
-            View3D._contex3DProxy.viewPort(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
-            View3D._contex3DProxy.setScissorRectangle(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
+            Egret3DCanvas.context3DProxy.viewPort(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
+            Egret3DCanvas.context3DProxy.setScissorRectangle(viewPort.x, viewPort.y, viewPort.width, viewPort.height);
 
             if (this._cleanParmerts & Context3DProxy.gl.COLOR_BUFFER_BIT) {
-                View3D._contex3DProxy.clearColor(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w);
+                Egret3DCanvas.context3DProxy.clearColor(this._backColor.x, this._backColor.y, this._backColor.z, this._backColor.w);
             }
-            View3D._contex3DProxy.clear(this._cleanParmerts);
-            this._render.draw(time, delay, View3D._contex3DProxy, this._entityCollect, this._camera);
+            Egret3DCanvas.context3DProxy.clear(this._cleanParmerts);
+            this._render.draw(time, delay, Egret3DCanvas.context3DProxy, this._entityCollect, this._camera);
         }
                 
         /**

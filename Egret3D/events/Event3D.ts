@@ -9,21 +9,21 @@
    */
     export class Event3D {
 
-        /**
-        * @language zh_CN
-        * COMPLETE 常量定义 相关完成事件。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        static COMPLETE: string = "complete";
+        ///**
+        //* @language zh_CN
+        //* COMPLETE 常量定义 相关完成事件。
+        //* @version Egret 3.0
+        //* @platform Web,Native
+        //*/
+        //static COMPLETE: string = "complete";
 
-        /**
-        * @language zh_CN
-        * CHANGE_PROPERTY 常量定义 changeProperty 事件对象的 type 属性的值。
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        static CHANGE: string = "change";
+        ///**
+        //* @language zh_CN
+        //* CHANGE_PROPERTY 常量定义 changeProperty 事件对象的 type 属性的值。
+        //* @version Egret 3.0
+        //* @platform Web,Native
+        //*/
+        //static CHANGE: string = "change";
 
         /**
         * @language zh_CN

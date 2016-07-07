@@ -17,21 +17,21 @@ module egret3d {
         */
         public frameTime: number;
 
-        /**
-        * @language zh_CN
-        * GPU所需的骨骼缓存数据
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public cacheData: Float32Array;
+        ///**
+        //* @language zh_CN
+        //* GPU所需的骨骼缓存数据
+        //* @version Egret 3.0
+        //* @platform Web,Native
+        //*/
+        //public cacheData: Float32Array;
 
-        /**
-        * @language zh_CN
-        * GPU所需的骨骼缓存数据是否有效
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public cacheDataValid: boolean;
+        ///**
+        //* @language zh_CN
+        //* GPU所需的骨骼缓存数据是否有效
+        //* @version Egret 3.0
+        //* @platform Web,Native
+        //*/
+        //public cacheDataValid: boolean;
 
         private _temp_q0: Quaternion = new Quaternion();
         private _temp_q1: Quaternion = new Quaternion();
@@ -104,22 +104,38 @@ module egret3d {
 
                 if (joint.worldMatrixValid) {
 
-                    this._temp_q0.fromMatrix(jointA.worldMatrix);
-                    this._temp_q1.fromMatrix(jointB.worldMatrix);
-                    this._temp_q2.lerp(this._temp_q0, this._temp_q1, t);
+                    //pos rot scale
+                    var decomposeA: Vector3D[] = jointA.worldMatrix.decompose(Orientation3D.QUATERNION);
+                    var decomposeB: Vector3D[] = jointB.worldMatrix.decompose(Orientation3D.QUATERNION);
 
-                    jointA.worldMatrix.copyRowTo(3, this._temp_v0);
-                    jointB.worldMatrix.copyRowTo(3, this._temp_v1);
-                    this._temp_v2.lerp(this._temp_v0, this._temp_v1, t);
+                    //pos;
+                    this._temp_v0.lerp(decomposeA[0], decomposeB[0], t);
+                    //rot;
+                    this._temp_q1.x = decomposeA[1].x;
+                    this._temp_q1.y = decomposeA[1].y;
+                    this._temp_q1.z = decomposeA[1].z;
+                    this._temp_q1.w = decomposeA[1].w;
+                    this._temp_q2.x = decomposeB[1].x;
+                    this._temp_q2.y = decomposeB[1].y;
+                    this._temp_q2.z = decomposeB[1].z;
+                    this._temp_q2.w = decomposeB[1].w;
+                    this._temp_q0.lerp(this._temp_q1, this._temp_q2, t);
+                    //scale;
+                    this._temp_v1.lerp(decomposeA[2], decomposeB[2], t);
 
-                    this._temp_q2.toMatrix3D(joint.worldMatrix);
-                    joint.worldMatrix.rawData[12] = this._temp_v2.x;
-                    joint.worldMatrix.rawData[13] = this._temp_v2.y;
-                    joint.worldMatrix.rawData[14] = this._temp_v2.z;
+                    joint.worldMatrix.makeTransform(this._temp_v0, this._temp_v1, this._temp_q0);
                 }
 
                 this.joints.push(joint);
+
+                //this.joints.push(jointA.clone());
+
+                //this.joints[i].worldMatrix.copyFrom(jointA.worldMatrix);
+
+                //this.joints[i].worldMatrixValid = jointA.worldMatrixValid;
             }
+
+            //this.calculateJointWorldMatrix();
 
             return this;
         }
@@ -167,15 +183,7 @@ module egret3d {
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public updateGPUCacheData(skeleton: Skeleton): Float32Array {
-
-            if (this.cacheDataValid) {
-                return this.cacheData;
-            }
-
-            if (!this.cacheData) {
-                this.cacheData = new Float32Array(skeleton.jointNum * 8);
-            }
+        public updateGPUCacheData(skeleton: Skeleton, skeletonMatrixData:Float32Array): Float32Array {
 
             var jointMatrix: Matrix4_4 = new Matrix4_4();
 
@@ -190,26 +198,25 @@ module egret3d {
 
                     jointMatrix.append(this.joints[j].worldMatrix);
 
-                    this._temp_q0.fromMatrix(jointMatrix);
+                    var test: Vector3D[] = jointMatrix.decompose(Orientation3D.QUATERNION);
 
-                    this.cacheData[i * 8 + 0] = this._temp_q0.x;
-                    this.cacheData[i * 8 + 1] = this._temp_q0.y;
-                    this.cacheData[i * 8 + 2] = this._temp_q0.z;
-                    this.cacheData[i * 8 + 3] = this._temp_q0.w;
+                    skeletonMatrixData[i * 8 + 0] = test[1].x;
+                    skeletonMatrixData[i * 8 + 1] = test[1].y;
+                    skeletonMatrixData[i * 8 + 2] = test[1].z;
+                    skeletonMatrixData[i * 8 + 3] = test[1].w;
 
-                    this.cacheData[i * 8 + 4] = jointMatrix.rawData[12];
-                    this.cacheData[i * 8 + 5] = jointMatrix.rawData[13];
-                    this.cacheData[i * 8 + 6] = jointMatrix.rawData[14];
-                    this.cacheData[i * 8 + 7] = 1;
+                    skeletonMatrixData[i * 8 + 4] = test[0].x;
+                    skeletonMatrixData[i * 8 + 5] = test[0].y;
+                    skeletonMatrixData[i * 8 + 6] = test[0].z;
+
+                    skeletonMatrixData[i * 8 + 7] = 1;
 
                     break;
                 }
 
             }
 
-            this.cacheDataValid = true;
-
-            return this.cacheData;
+            return skeletonMatrixData;
         }
 
         /**
@@ -261,8 +268,6 @@ module egret3d {
             for (var i: number = 0; i < this.joints.length; i++) {
                 this.joints[i].worldMatrixValid = false;
             }
-
-            this.cacheDataValid = false;
         }
     }
 }

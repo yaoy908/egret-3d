@@ -272,12 +272,13 @@
 
         private synthesisShader(content: GLSL.ShaderContent, shaderBase:ShaderBase) {
             var i: number; 
-            var source: string = "precision highp float;            \t\n";
+            var source: string = "";
 
             for (i = 0; i < content.extensionList.length; i++) {
                 source += ShaderUtil.connectExtension(content.extensionList[i]);
             }
 
+            source += "precision highp float;            \t\n";
             ///var attribute
             for (i = 0; i < content.attributeList.length; i++) {
                 source += ShaderUtil.connectAtt(content.attributeList[i]);

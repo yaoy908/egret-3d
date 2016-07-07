@@ -140,7 +140,12 @@
         private createBornTimeConst(count:number, emission:ParticleDataEmission): Array<number> {
             var bornTimeArray: Array<number> = [];
             
-            var speace: number = 1 / emission.rate;
+            var speace: number;
+            if (emission.rate <= 0) {
+                speace = 3600;
+            }else {
+                speace = 1 / emission.rate;
+            }
             for (var i: number = 0; i < count; i++) {
                 bornTimeArray.push(i * speace + speace);//i + 1
             }
