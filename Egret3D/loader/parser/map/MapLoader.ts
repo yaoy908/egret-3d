@@ -704,8 +704,9 @@
                 this.processMethod(material, matData);
             }
 
-            mesh.lightGroup = this.lightGroup;
-
+            if (typeof mesh != "ParticleEmitter") {
+                mesh.lightGroup = this.lightGroup;
+            }
         }
 
         private processMethod(material: MaterialBase, matData: MatSphereData) {
