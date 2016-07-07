@@ -140,11 +140,15 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public play(animName?: string, speed?: number, prewarm:boolean = true ) {
+        public play(animName?: string, speed: number = 1, reset: boolean = true, prewarm: boolean = true): void {
             this._play = true;
+            if (reset) {
+                this.animTime = 0;
+            }
             if (prewarm){
                 this.animTime = this.particleAnimationState.loopTime;
             }
+
             this.delay = 0;
         }
 

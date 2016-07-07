@@ -115,12 +115,12 @@
             }
 
             //animTime += delay;
-
             var index: number = 0;
             var vertices: number = geometry.vertexCount / this.count;
             var particleIndex: number = 0;
 
             var positionOffsetIndex: number = this._animationState.emitter.positionNode.offsetIndex;
+            var timeOffsetIndex: number = this._animationState.emitter.timeNode.offsetIndex;
             var particleTime: number = animTime * 0.001 - this._animationState.emitter.data.life.delay;
 
             //没有跟随对象，使用自己
@@ -128,7 +128,7 @@
             for (var i: number = 0; i < this.count; ++i) {
 
                 particleIndex = i * vertices;
-                this.timeIndex = particleIndex * geometry.vertexAttLength + positionOffsetIndex;
+                this.timeIndex = particleIndex * geometry.vertexAttLength + timeOffsetIndex;
 
                 this.bornTime = geometry.verticesData[this.timeIndex + 0];          //出生时间
                 this.life = geometry.verticesData[this.timeIndex + 1];              //单次生命周期时间
@@ -140,9 +140,9 @@
                     //粒子超时了，并且不需要继续循环
                     if (particleTime > (this.bornTime + this.life) && !loop)
                         continue;
-
                     curCircleIndex = Math.floor((particleTime - this.bornTime) / this._animationState.loopTime);
                     if (curCircleIndex != this._lifeCircles[i]) {
+                        index = particleIndex * geometry.vertexAttLength + positionOffsetIndex;
                         this._lifeCircles[i] = curCircleIndex;
                         //position
                         this.position.x = geometry.verticesData[index + 0];
@@ -150,7 +150,6 @@
                         this.position.z = geometry.verticesData[index + 2];
 
                         this.emitParticleAtPhase(this._birthPhase, this.position);
-
                     }
                 }
             }
@@ -158,7 +157,7 @@
         }
 
 
-
+        private _added: boolean = false;
         private emitParticleAtPhase(phase: ParticleSubEmitterNodePhase, pos:Vector3D): void {
             var bakEmiter: ParticleEmitter;
             var bakEmitters: ParticleEmitter[] = phase.playing.getKeys();
@@ -171,16 +170,17 @@
                 bakEmiter = bakEmitters[i];
                 
                 recycleArr = phase.recycle.getValueByKey(bakEmiter);
+                playingArr = phase.playing.getValueByKey(bakEmiter);
                 newParticle = recycleArr.shift();
                 if (newParticle == null) {
-                    newParticle = new ParticleEmitter(bakEmiter.data, bakEmiter.geometry, bakEmiter.material);
+                    newParticle = new ParticleEmitter(bakEmiter.data, null, bakEmiter.material);
                 }
                 playingArr.push(newParticle);
                 newParticle.play();
-                this._parent.addChild(newParticle);
+                pos.add(bakEmiter.globalPosition);
                 newParticle.position = pos;
-
-                console.log("子发射器发射粒子！！！！");
+                this._parent.addChild(newParticle);
+                
                 
             }
         }
@@ -216,7 +216,6 @@
                         tempParticle.stop();
                         this._parent.removeChild(tempParticle);
                         recycleArr.push(tempParticle);
-                        console.log("子发射器回收粒子！！！！");
                     }
                 }
 

@@ -101,7 +101,15 @@
                 } else {
                     defaultAxis = Vector3D.Z_AXIS;
                 }
-                geo = new PlaneGeometry(geomData.planeW, geomData.planeH, 1, 1, 1, 1, defaultAxis);
+                var wCenter: boolean = true;
+                var hCenter: boolean = true;
+
+                if (this._data.property.renderMode == ParticleRenderModeType.StretchedBillboard) {
+                    //需要偏移一半位置
+                    wCenter = false;
+                    hCenter = true;
+                }
+                geo = new PlaneGeometry(geomData.planeW, geomData.planeH, 1, 1, 1, 1, defaultAxis, wCenter, hCenter);
 
             } else if (geomData.type == ParticleGeometryType.Cube) {
                 geo = new CubeGeometry(geomData.cubeW, geomData.cubeH, geomData.cubeD);
@@ -198,10 +206,9 @@
         */
         public play(prewarm: boolean = false) {
             if (prewarm) {
-                this.animation.animTime = this._particleState.loopTime;
-                this.animation.play("", 1.0, false);
+                this.animation.play("", 1.0, false, true);
             } else {
-                this.animation.play();
+                this.animation.play("", 1.0, true, false);
             }
         }
 

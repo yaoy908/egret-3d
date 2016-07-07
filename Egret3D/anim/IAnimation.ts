@@ -79,10 +79,11 @@
         * 播放动画
         * @param animName 动画名称
         * @param speed 播放速度（默认为1）
+        * @param prewarm 是否预热
         * @version Egret 3.0
         * @platform Web,Native
         */
-        play(animName?: string, speed?: number , reset?:boolean ): void;
+        play(animName: string, speed:number, reset: boolean, prewarm:boolean): void;
 
         /**
         * @language zh_CN

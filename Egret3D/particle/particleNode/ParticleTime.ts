@@ -142,7 +142,7 @@
             
             var speace: number;
             if (emission.rate <= 0) {
-                speace = 3600;
+                speace = 60;
             }else {
                 speace = 1 / emission.rate;
             }

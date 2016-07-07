@@ -479,7 +479,7 @@
                 }
             }
             if (this.autoPlayAnimation) {
-                mesh.animation.play(clip.animationName);
+                mesh.animation.play(clip.animationName, 1.0, false, false);
             }
             this.processTask(e.loader);
         }
