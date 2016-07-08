@@ -32,6 +32,8 @@
         "geom/ColorTransform.ts",
         "events/PickResult.ts",
         "events/Event3D.ts",
+        "events/PropertyAnimEvent3D.ts",
+        "events/SkeletonAnimationEvent3D.ts",
         "events/MouseEvent3D.ts",
         "events/TouchEvent3D.ts",
         "events/PickEvent3D.ts",

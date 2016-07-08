@@ -16,22 +16,6 @@ module egret3d {
 
         /**
         * @language zh_CN
-        * 动画播放完一个周期的事件
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public static EVENT_PLAY_COMPLETE: string = "event_play_complete";
-
-        /**
-        * @language zh_CN
-        * 动画帧更改的事件
-        * @version Egret 3.0
-        * @platform Web,Native
-        */
-        public static EVENT_FRAME_CHANGE: string = "event_frame_change";
-
-        /**
-        * @language zh_CN
         * 动画速率
         * @version Egret 3.0
         * @platform Web,Native
@@ -241,7 +225,7 @@ module egret3d {
 
             for (var i: number = 0; i < count; ++i) {
 
-                this.event3D.eventType = SkeletonAnimation.EVENT_FRAME_CHANGE;
+                this.event3D.eventType = SkeletonAnimationEvent3D.EVENT_FRAME_CHANGE;
                 this.event3D.target = this;
 
                 if (delayTime < 0) {
@@ -260,7 +244,7 @@ module egret3d {
 
                 if (this.event3D.data == (mainState.frameNum - 1)) {
 
-                    this.event3D.eventType = SkeletonAnimation.EVENT_PLAY_COMPLETE;
+                    this.event3D.eventType = SkeletonAnimationEvent3D.EVENT_PLAY_COMPLETE;
 
                     this.dispatchEvent(this.event3D);
                 }
