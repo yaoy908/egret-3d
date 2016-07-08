@@ -16,6 +16,14 @@ module egret3d {
 
         /**
         * @language zh_CN
+        * 动画播放完一个周期的事件
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public static EVENT_PLAY_COMPLETE: string = "event_play_complete";
+
+        /**
+        * @language zh_CN
         * 播放速度
         * @version Egret 3.0
         * @platform Web,Native
@@ -27,6 +35,9 @@ module egret3d {
         private _timePosition: number = 0;
         private _target: Object3D;
         private _totalTime: number = 0;
+        private _changeFrameTime: number = 0;
+        private _oldFrameIndex: number = 0;
+        private _event3D: Event3D = new Event3D();
 
         public constructor() {
             super();
@@ -235,12 +246,24 @@ module egret3d {
 
                     this._timePosition = 0;
 
+                    this._event3D.eventType = PropertyAnim.EVENT_PLAY_COMPLETE;
+
+                    this._event3D.target = this;
+
+                    this.dispatchEvent(this._event3D);
+
                     this.stop();
 
                 }
                 else if (this._timePosition > this._totalTime) {
 
                     this._timePosition = this._totalTime;
+
+                    this._event3D.eventType = PropertyAnim.EVENT_PLAY_COMPLETE;
+
+                    this._event3D.target = this;
+
+                    this.dispatchEvent(this._event3D);
 
                     this.stop();
 
@@ -343,7 +366,18 @@ module egret3d {
                 return;
             }
 
+            var beginTime: number = this.timePosition;
+
             this.timePosition += delay * this.speed;
+
+            if (this.timePosition < beginTime) {
+
+                this._event3D.eventType = PropertyAnim.EVENT_PLAY_COMPLETE;
+
+                this._event3D.target = this;
+
+                this.dispatchEvent(this._event3D);
+            }
         }
 
         /**
