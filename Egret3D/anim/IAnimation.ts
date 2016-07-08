@@ -83,7 +83,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        play(animName: string, speed:number, reset: boolean, prewarm:boolean): void;
+        play(animName?: string, speed?:number, reset?: boolean, prewarm?:boolean): void;
 
         /**
         * @language zh_CN
