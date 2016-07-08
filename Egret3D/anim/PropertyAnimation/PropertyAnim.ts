@@ -12,7 +12,7 @@ module egret3d {
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class PropertyAnim extends EventDispatcher {
+    export class PropertyAnim extends EventDispatcher  {
 
         /**
         * @language zh_CN
@@ -21,9 +21,10 @@ module egret3d {
         * @platform Web,Native
         */
         public speed: number = 1;
+        public isLoop: boolean = true;
         private _propertyArray: PropertyData[] = [];
         private _play: boolean = false;
-        private _time: number = 0;
+        private _timePosition: number = 0;
         private _target: Object3D;
         private _totalTime: number = 0;
 
@@ -70,6 +71,8 @@ module egret3d {
             propertyData.keyFrames = keyFrames;
             propertyData.property = property;
             propertyData.target = this._target;
+            propertyData.isLoop = true;
+            propertyData.timePosition = 0;
             this._propertyArray.push(propertyData);
 
             for (var i = 0; i < keyFrames.length - 1; i++) {
@@ -106,6 +109,31 @@ module egret3d {
                     this._propertyArray.splice(i, 1);
 
                     return propertyData.keyFrames;
+                }
+            }
+        }
+
+        /**
+        * @language zh_CN
+        * 设置属性是否循环播放
+        * @prame property 属性名
+        * @prame isLoop 是否循环播放
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public setPropertyLoop(property: string, isLoop: boolean): void {
+
+            var propertyData: PropertyData = null;
+
+            for (var i = 0; i < this._propertyArray.length; i++) {
+
+                if (this._propertyArray[i].property == property) {
+
+                    propertyData = this._propertyArray[i];
+
+                    propertyData.isLoop = isLoop;
+
+                    break;
                 }
             }
         }
@@ -157,7 +185,11 @@ module egret3d {
 
             this._play = true;
 
-            this._time = 0;
+            this._timePosition = 0;
+
+            for (var i = 0; i < this._propertyArray.length; i++) {
+                this._propertyArray[i].timePosition = 0;
+            }
         }
 
         /**
@@ -176,12 +208,45 @@ module egret3d {
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public set timePosition(time: number) {
-            if (time < 0) {
-                time = this._totalTime + time;
+        public set timePosition(value: number) {
+
+            if (value == this._timePosition) {
+                return;
             }
 
-            this._time = time % this._totalTime;
+            var delay: number = value - this._timePosition;
+
+            this._timePosition = value;
+
+            if (this.isLoop) {
+
+                this._timePosition = value % this._totalTime;
+
+                if (this._timePosition < 0) {
+
+                    this._timePosition += this._totalTime;
+
+                }
+
+            }
+            else {
+
+                if (this._timePosition < 0) {
+
+                    this._timePosition = 0;
+
+                    this.stop();
+
+                }
+                else if (this._timePosition > this._totalTime) {
+
+                    this._timePosition = this._totalTime;
+
+                    this.stop();
+
+                }
+
+            }
 
             if (!this._target) {
                 return;
@@ -197,11 +262,47 @@ module egret3d {
 
                 keyFrames = propertyData.keyFrames;
 
+                var valueTime = propertyData.timePosition + delay;
+
+                if (valueTime == propertyData.timePosition) {
+                    continue;
+                }
+
+                var timeLength: number = keyFrames[keyFrames.length - 1].end.x;
+
+                propertyData.timePosition = valueTime;
+
+                if (propertyData.isLoop) {
+
+                    propertyData.timePosition = value % timeLength;
+
+                    if (propertyData.timePosition < 0) {
+
+                        propertyData.timePosition += timeLength;
+
+                    }
+                }
+                else {
+
+                    if (propertyData.timePosition < 0) {
+
+                        propertyData.timePosition = 0;
+
+                        continue;
+                    }
+                    else if (propertyData.timePosition > timeLength) {
+
+                        propertyData.timePosition = timeLength;
+
+                        continue;
+                    }
+                }
+
                 for (var j = 0; j < keyFrames.length - 1; j++) {
 
-                    if (keyFrames[j].start.x <= this._time && keyFrames[j].end.x > this._time) {
+                    if (keyFrames[j].start.x <= propertyData.timePosition && keyFrames[j].end.x > propertyData.timePosition) {
 
-                        propertyData.target[propertyData.name] = keyFrames[j].calculateValue(this._time);
+                        propertyData.target[propertyData.name] = keyFrames[j].calculateValue(propertyData.timePosition);
 
                         break;
                     }
@@ -216,7 +317,7 @@ module egret3d {
         * @platform Web,Native
         */
         public get timePosition(): number {
-            return this._time;
+            return this._timePosition;
         }
 
         /**
@@ -266,9 +367,11 @@ module egret3d {
     * @platform Web,Native
     */
     class PropertyData {
-        public keyFrames: AnimCurve[];
-        public property: string;
-        public name: string;
         public target: any;
+        public name: string;
+        public isLoop: boolean;
+        public property: string;
+        public timePosition: number;
+        public keyFrames: AnimCurve[];
     }
 }

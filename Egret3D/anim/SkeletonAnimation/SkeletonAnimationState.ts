@@ -179,10 +179,18 @@ module egret3d {
                 if (this._timePosition < 0) {
 
                     this._timePosition = 0;
+
+                    if (this.name == this._skeletonAnimation.currentAnimName) {
+                        this._skeletonAnimation.stop();
+                    }
                 }
                 else if (this._timePosition > this._timeLength) {
 
                     this._timePosition = this._timeLength;
+
+                    if (this.name == this._skeletonAnimation.currentAnimName) {
+                        this._skeletonAnimation.stop();
+                    }
                 }
             }
         }

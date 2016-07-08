@@ -56,6 +56,7 @@ module egret3d {
 
         public isLoop: boolean = true;
         public delay: number;
+        private _currentAnimName: string;
         private _isPlay: boolean = false;
         private _animTime: number = 0;
         private _skeleton: Skeleton = null;
@@ -175,12 +176,14 @@ module egret3d {
                 return;
             }
 
+            this._currentAnimName = animName;
+
             this._blendList.push(playSkeletonAnimationState);
 
             playSkeletonAnimationState.weight = this._blendList.length > 1 ? 0 : 1;
 
             if (reset) {
-                playSkeletonAnimationState.timePosition = 0;
+                this._animTime = playSkeletonAnimationState.timePosition = 0;
             }
 
             this.speed = speed;
@@ -234,11 +237,14 @@ module egret3d {
             this._changeFrameTime += delayTime;
 
             var count: number = Math.floor(Math.abs(this._changeFrameTime / SkeletonAnimation.fps));
+
             for (var i: number = 0; i < count; ++i) {
 
                 this.event3D.eventType = SkeletonAnimation.EVENT_FRAME_CHANGE;
                 this.event3D.target = this;
+
                 if (delayTime < 0) {
+
                     this.event3D.data = ((this._oldFrameIndex - 1 - i) % mainState.frameNum);
 
                     if (this.event3D.data < 0) {
@@ -248,10 +254,13 @@ module egret3d {
                 else {
                     this.event3D.data = (this._oldFrameIndex + 1 + i) % mainState.frameNum;
                 }
+
                 this.dispatchEvent(this.event3D);
 
                 if (this.event3D.data == (mainState.frameNum - 1)) {
+
                     this.event3D.eventType = SkeletonAnimation.EVENT_PLAY_COMPLETE;
+
                     this.dispatchEvent(this.event3D);
                 }
 
@@ -281,9 +290,7 @@ module egret3d {
             if (usage.uniform_time) {
                 context3DProxy.uniform1f(usage.uniform_time.uniformIndex, this.animTime);
             }
-            if (this._skeletonMatrixData) {
-                context3DProxy.uniform4fv(usage.uniform_PoseMatrix.uniformIndex, this._skeletonMatrixData);
-            }
+            context3DProxy.uniform4fv(usage.uniform_PoseMatrix.uniformIndex, this._skeletonMatrixData);
         }
 
         /**
@@ -493,6 +500,16 @@ module egret3d {
         */
         public set blendSpeed(value: number) {
             this._blendSpeed = Math.max(value, 0);
+        }
+
+        /**
+        * @language zh_CN
+        * 当前播放的动画名称
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get currentAnimName(): string {
+            return this._currentAnimName;
         }
 
         /**
