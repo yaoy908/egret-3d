@@ -125,6 +125,7 @@
                     mapNodeData.object3d = new Object3D();
                 }
                 mapNodeData.object3d.name = mapNodeData.name;
+                mapNodeData.object3d.visible = mapNodeData.visible;
                 mapNodeData.object3d.position = new Vector3D(mapNodeData.x, mapNodeData.y, mapNodeData.z);
                 mapNodeData.object3d.orientation = new Quaternion(mapNodeData.rx, mapNodeData.ry, mapNodeData.rz, mapNodeData.rw);
                 mapNodeData.object3d.scale = new Vector3D(mapNodeData.sx, mapNodeData.sy, mapNodeData.sz);
@@ -264,7 +265,10 @@
                 if (v == "number") {
                     data[attr.name] = Number(attr.value);
                 }
-                else {
+                else if (v == "boolean") {
+                    data[attr.name] = (attr.value == "true") ? true : false;
+                }
+                else  {
                     data[attr.name] = attr.value;
                 }
             }

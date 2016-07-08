@@ -66,6 +66,8 @@
          */
         public billboard: boolean = false;
 
+        public visible: boolean = true;
+
         /**
          * @language zh_CN
          * 坐标x

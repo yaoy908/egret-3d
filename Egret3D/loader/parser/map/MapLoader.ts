@@ -299,20 +299,23 @@
             nodeData.y *= ParticleData.SCALE_VALUE;
             nodeData.z *= ParticleData.SCALE_VALUE;
             nodeData.object3d.position.scaleBy(ParticleData.SCALE_VALUE);
-            nodeData.object3d.position = nodeData.object3d.position;
 
-
-            particleNode.name = nodeData.object3d.name;
-            particleNode.position = nodeData.object3d.position;
-            particleNode.orientation = nodeData.object3d.orientation;
-            particleNode.scale = nodeData.object3d.scale;
-            nodeData.object3d.swapObject(particleNode);
-            nodeData.object3d = particleNode;
+            this.processObject3d(nodeData, particleNode);
 
             particleNode.play();
             this.processMat(nodeData);
 
             return particleNode;
+        }
+
+        private processObject3d(nodeData: MapNodeData, object3d: Object3D) {
+            object3d.name = nodeData.object3d.name;
+            object3d.visible = nodeData.object3d.visible;
+            object3d.position = nodeData.object3d.position;
+            object3d.orientation = nodeData.object3d.orientation;
+            object3d.scale = nodeData.object3d.scale;
+            nodeData.object3d.swapObject(object3d);
+            nodeData.object3d = object3d;
         }
 
         private onXmlLoad(e: LoaderEvent3D) {
@@ -389,22 +392,16 @@
         }
 
         private processHeightMesh(mapNodeData: MapNodeData, mesh: Mesh) {
-            mesh.name = mapNodeData.object3d.name;
-            mesh.position = mapNodeData.object3d.position;
-            mesh.orientation = mapNodeData.object3d.orientation;
-            mesh.scale = mapNodeData.object3d.scale;
-            mapNodeData.object3d.swapObject(mesh);
-            mapNodeData.object3d = mesh;
+
+            this.processObject3d(mapNodeData, mesh);
+
             this.processMat(mapNodeData);
         }
 
         private processMesh(mapNodeData: MapNodeData, mesh: Mesh) {
-            mesh.name = mapNodeData.object3d.name;
-            mesh.position = mapNodeData.object3d.position;
-            mesh.orientation = mapNodeData.object3d.orientation;
-            mesh.scale = mapNodeData.object3d.scale;
-            mapNodeData.object3d.swapObject(mesh);
-            mapNodeData.object3d = mesh;
+
+            this.processObject3d(mapNodeData, mesh);
+
             this.processMat(mapNodeData);
 
             for (var j: number = 0; j < mapNodeData.skinClips.length; j++) {
