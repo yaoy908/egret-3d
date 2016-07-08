@@ -16281,9 +16281,12 @@ var egret3d;
             other.childs.length = 0;
             for (var i = 0; i < this.childs.length; ++i) {
                 other.childs[i] = this.childs[i];
+                other.childs[i].parent = other;
             }
+            this.childs.length = 0;
             for (var i = 0; i < childs.length; ++i) {
                 this.childs[i] = childs[i];
+                this.childs[i].parent = this;
             }
             this.updateTransformChange(true);
             other.updateTransformChange(true);
