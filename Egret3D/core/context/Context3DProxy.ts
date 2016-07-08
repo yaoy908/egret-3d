@@ -305,6 +305,7 @@
             if (texture.internalFormat == InternalFormat.ImageData) {
                 
                 Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, 0, Context3DProxy.gl.RGBA, Context3DProxy.gl.RGBA, Context3DProxy.gl.UNSIGNED_BYTE, texture.imageData);
+                delete texture.imageData;
             }
             else if (texture.internalFormat == InternalFormat.CompressData) {
                 this.upLoadCompressedTexture2D(mipLevel, texture);
