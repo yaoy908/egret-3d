@@ -111,6 +111,7 @@
                 } else {
                     lifeTime = lifeArray[i];
                 }
+                maxLife = Math.max(maxLife, lifeTime);
 
                 for (var j: number = 0; j < vertices; ++j) {
                     index = i * vertices + j;
@@ -119,7 +120,6 @@
                     geometry.verticesData[index + 0] = bornTime;                        //出生时间
                     geometry.verticesData[index + 1] = lifeTime;                            //单次生命周期时间
                     geometry.verticesData[index + 2] = i;                                   //下标
-                    maxLife = Math.max(maxLife, lifeTime);
                 }
             }
 

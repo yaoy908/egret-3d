@@ -68,7 +68,7 @@
                                                 
         /**
         * @language zh_CN
-        * 粒子走完一轮所需要的总时间
+        * 粒子走完一轮所需要的总时间(秒)
         * @version Egret 3.0
         * @platform Web,Native
         */
