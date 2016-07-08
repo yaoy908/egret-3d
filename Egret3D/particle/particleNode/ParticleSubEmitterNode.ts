@@ -13,29 +13,60 @@
 
         /**
         * @language zh_CN
-        * 跟随目标
+        * 子发射器
         * @version Egret 3.0
         * @platform Web,Native
         */
-      
-       
-        private particleAnimationState: ParticleAnimationState;
-        private lifeCircles: Array<number>;
+        private _animationState: ParticleAnimationState;
+        private _lifeCircles: Array<number>;
 
+        private _birthPhase: ParticleSubEmitterNodePhase;
+        private _collisionPhase: ParticleSubEmitterNodePhase;
+        private _deathPhase: ParticleSubEmitterNodePhase;
+
+        private _parent: Object3D;
+        private _empty: boolean = true;
         constructor() {
             super();
+            this._birthPhase = new ParticleSubEmitterNodePhase(ParticleDataSubEmitterPhase.BIRTH);
+            this._collisionPhase = new ParticleSubEmitterNodePhase(ParticleDataSubEmitterPhase.COLLISION);
+            this._deathPhase = new ParticleSubEmitterNodePhase(ParticleDataSubEmitterPhase.DEATH);
             this.name = "ParticleSubEmitterNode";
         }
 
         /**
         * @language zh_CN
-        * 填充粒子跟随属性
+        * 填充粒子属性
         * @param data ParticleDataNode 粒子数据来源
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public initNode(data: ParticleDataNode): void {
-            var node: ParticleDataFollowTarget = <ParticleDataFollowTarget>data;
+        public initNode(data: ParticleDataNode, parent:any = null): void {
+            this._parent = parent;
+        }
+
+
+        /**
+        * @language zh_CN
+        * 导入新的子粒子发射
+        * @param subEmitter ParticleEmitter 子发射器
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public importSubEmitter(phase: number, subEmitter: ParticleEmitter): void {
+            var nodePhase: ParticleSubEmitterNodePhase;
+            if (phase == ParticleDataSubEmitterPhase.BIRTH) {
+                nodePhase = this._birthPhase;
+            } else if (phase == ParticleDataSubEmitterPhase.COLLISION) {
+                nodePhase = this._collisionPhase;
+            } else if (phase == ParticleDataSubEmitterPhase.DEATH) {
+                nodePhase = this._deathPhase;
+            }
+
+            if (nodePhase) {
+                this._empty = false;
+                nodePhase.importSubEmitter(subEmitter);
+            }
         }
 
         /**
@@ -48,11 +79,11 @@
         */
         public build(geometry: Geometry, count: number) {
             this.count = count;
-            this.particleAnimationState = <ParticleAnimationState>this.state;
+            this._animationState = <ParticleAnimationState>this.state;
             //先重置成-1，然后每帧检测每个粒子的上一帧的所属出身次数和下一帧的出身次数，判定是否要刷新他的初始位置
-            this.lifeCircles = [];
+            this._lifeCircles = [];
             for (var i: number = 0; i < this.count; i++) {
-                this.lifeCircles[i] = -1;
+                this._lifeCircles[i] = -1;
             }
         }
 
@@ -62,7 +93,6 @@
         private timeIndex: number = 0;
         private count: number = 0;
         private position: Vector3D = new Vector3D();
-        private event: ParticleEvent3D = new ParticleEvent3D(ParticleEvent3D.EMIT_SUB_PARTICLE);
         /**
         * @language zh_CN
         * @param animTime 动画当前时间（单位为ms）
@@ -73,31 +103,32 @@
         * @platform Web,Native
         */
         public update(animTime: number, delay: number, geometry: Geometry) {
-
+            if (this._empty)
+                return;
+            //回收已经可以结束的子特效
+            this.recycleParticle();
             //非循环的粒子生命周期达上限
-            var loop: boolean = this.particleAnimationState.emitter.data.life.loop;
-            var maxLife: number = this.particleAnimationState.loopTime + this.particleAnimationState.emitter.data.life.duration;
+            var loop: boolean = this._animationState.emitter.data.life.loop;
+            var maxLife: number = this._animationState.loopTime + this._animationState.emitter.data.life.duration;
             if (!loop && (animTime * 0.001 >= maxLife)) {
                 return;
             }
 
             //animTime += delay;
-
-
             var index: number = 0;
             var vertices: number = geometry.vertexCount / this.count;
             var particleIndex: number = 0;
-            var changed: boolean = false;
 
-            var positionOffsetIndex: number = this.particleAnimationState.emitter.positionNode.offsetIndex;
-            var particleTime: number = animTime * 0.001 - this.particleAnimationState.emitter.data.life.delay;
+            var positionOffsetIndex: number = this._animationState.emitter.positionNode.offsetIndex;
+            var timeOffsetIndex: number = this._animationState.emitter.timeNode.offsetIndex;
+            var particleTime: number = animTime * 0.001 - this._animationState.emitter.data.life.delay;
 
             //没有跟随对象，使用自己
-            var followTarget: Object3D = this.particleAnimationState.followTarget || this.particleAnimationState.emitter;
+            var followTarget: Object3D = this._animationState.followTarget || this._animationState.emitter;
             for (var i: number = 0; i < this.count; ++i) {
 
                 particleIndex = i * vertices;
-                this.timeIndex = particleIndex * geometry.vertexAttLength + positionOffsetIndex;
+                this.timeIndex = particleIndex * geometry.vertexAttLength + timeOffsetIndex;
 
                 this.bornTime = geometry.verticesData[this.timeIndex + 0];          //出生时间
                 this.life = geometry.verticesData[this.timeIndex + 1];              //单次生命周期时间
@@ -109,28 +140,87 @@
                     //粒子超时了，并且不需要继续循环
                     if (particleTime > (this.bornTime + this.life) && !loop)
                         continue;
-
-                    curCircleIndex = Math.floor((particleTime - this.bornTime) / this.particleAnimationState.loopTime);
-                    if (curCircleIndex != this.lifeCircles[i]) {
-                        this.lifeCircles[i] = curCircleIndex;
-                        changed = true;
+                    curCircleIndex = Math.floor((particleTime - this.bornTime) / this._animationState.loopTime);
+                    if (curCircleIndex != this._lifeCircles[i]) {
+                        index = particleIndex * geometry.vertexAttLength + positionOffsetIndex;
+                        this._lifeCircles[i] = curCircleIndex;
                         //position
                         this.position.x = geometry.verticesData[index + 0];
                         this.position.y = geometry.verticesData[index + 1];
                         this.position.z = geometry.verticesData[index + 2];
 
-                        this.event.target = this;
-                        this.event.position = this.position;
-                        this.dispatchEvent(this.event);
+                        this.emitParticleAtPhase(this._birthPhase, this.position);
                     }
                 }
             }
 
-
         }
 
 
-        
+        private _added: boolean = false;
+        private emitParticleAtPhase(phase: ParticleSubEmitterNodePhase, pos:Vector3D): void {
+            var bakEmiter: ParticleEmitter;
+            var bakEmitters: ParticleEmitter[] = phase.playing.getKeys();
+
+            var playingArr: ParticleEmitter[];
+            var recycleArr: ParticleEmitter[];
+            var newParticle: ParticleEmitter;
+
+            for (var i: number = 0, count: number = bakEmitters.length; i < count; i++) {
+                bakEmiter = bakEmitters[i];
+                
+                recycleArr = phase.recycle.getValueByKey(bakEmiter);
+                playingArr = phase.playing.getValueByKey(bakEmiter);
+                newParticle = recycleArr.shift();
+                if (newParticle == null) {
+                    newParticle = new ParticleEmitter(bakEmiter.data, null, bakEmiter.material);
+                }
+                playingArr.push(newParticle);
+                newParticle.play();
+                pos.add(bakEmiter.globalPosition);
+                newParticle.position = pos;
+                this._parent.addChild(newParticle);
+                
+                
+            }
+        }
+
+
+
+        private recycleParticle(): void {
+            this.recycleParticleAtPhase(this._birthPhase);
+            this.recycleParticleAtPhase(this._collisionPhase);
+            this.recycleParticleAtPhase(this._deathPhase);
+        }
+
+        private recycleParticleAtPhase(phaseNode: ParticleSubEmitterNodePhase): void {
+            var bakEmiter: ParticleEmitter;
+
+            var playingArr: ParticleEmitter[];
+            var recycleArr: ParticleEmitter[];
+            var tempParticle: ParticleEmitter;
+            var j: number;
+            var jCount: number;
+
+            var bakEmitters: ParticleEmitter[] = phaseNode.playing.getKeys();
+
+            for (var i: number = 0, count: number = bakEmitters.length; i < count; i++) {
+                bakEmiter = bakEmitters[i];
+                playingArr = phaseNode.playing.getValueByKey(bakEmiter);
+                recycleArr = phaseNode.recycle.getValueByKey(bakEmiter);
+
+                for (j = playingArr.length - 1; j >= 0; j--) {
+                    tempParticle = playingArr[j];
+                    if (tempParticle.loopProgress > 1) {
+                        playingArr.splice(j, 1);
+                        tempParticle.stop();
+                        this._parent.removeChild(tempParticle);
+                        recycleArr.push(tempParticle);
+                    }
+                }
+
+            }
+        }
 
         /**
         * @private
@@ -138,6 +228,29 @@
         public activeState(time: number, animTime: number, delay: number, animDelay: number, usage: PassUsage, geometry: SubGeometry, context3DProxy: Context3DProxy) {
 
         }
+    }
+
+
+
+
+
+
+    export class ParticleSubEmitterNodePhase{
+
+        public playing: DoubleArray = new DoubleArray();
+        public recycle: DoubleArray = new DoubleArray();
+
+        constructor(phase:number){
+
+        }
+
+        public importSubEmitter(subEmitter: ParticleEmitter): void {
+            if (this.playing.getKeys().indexOf(subEmitter) >= 0)
+                return;
+            this.playing.put(subEmitter, []);
+            this.recycle.put(subEmitter, []);
+        }
+
     }
 
 } 

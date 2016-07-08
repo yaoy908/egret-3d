@@ -158,10 +158,11 @@ module egret3d {
         * @param animName 动画名称
         * @param speed 播放速度
         * @param reset 是否重置
+        * @param prewarm 是否预热
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public play(animName?: string, speed: number = 1, reset: boolean = true): void {
+        public play(animName?: string, speed: number = 1, reset: boolean = true, prewarm:boolean = true): void {
 
             var playSkeletonAnimationState: SkeletonAnimationState = null;
 

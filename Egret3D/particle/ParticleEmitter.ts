@@ -16,6 +16,7 @@
         private particleGeometryShape: Geometry;
         private particleAnimation: ParticleAnimation;
         private _particleState: ParticleAnimationState; 
+        private _subEmitterNode: ParticleSubEmitterNode;
         private _isEmitterDirty: boolean = true;
 
         private _userNodes: AnimationNode[] = [];
@@ -33,19 +34,30 @@
         * @platform Web,Native 
         */
         constructor(data:ParticleData, geo: Geometry = null, material: MaterialBase = null) {
-            super(null, material );
+            super(null, material);
+            
             this._data = data;
             this._externalGeometry = geo;
            
             this.animation = this.particleAnimation = new ParticleAnimation(this);
             this.animation.particleAnimationController = this.particleAnimation;
             this._particleState = this.particleAnimation.particleAnimationState ;
-
+            
             this.particleAnimation.emit = this;
+
 
             this.buildParticle();
         }
 
+
+        /**
+        * @private
+        * 添加子发射器
+        */
+        public addSubEmitter(phase: number, subEmitter: ParticleEmitter): void {
+            subEmitter.animation.stop();
+            this._subEmitterNode.importSubEmitter(phase, subEmitter);
+        }
         /**
         * @language zh_CN
         * @private
@@ -89,7 +101,15 @@
                 } else {
                     defaultAxis = Vector3D.Z_AXIS;
                 }
-                geo = new PlaneGeometry(geomData.planeW, geomData.planeH, 1, 1, 1, 1, defaultAxis);
+                var wCenter: boolean = true;
+                var hCenter: boolean = true;
+
+                if (this._data.property.renderMode == ParticleRenderModeType.StretchedBillboard) {
+                    //需要偏移一半位置
+                    wCenter = false;
+                    hCenter = true;
+                }
+                geo = new PlaneGeometry(geomData.planeW, geomData.planeH, 1, 1, 1, 1, defaultAxis, wCenter, hCenter);
 
             } else if (geomData.type == ParticleGeometryType.Cube) {
                 geo = new CubeGeometry(geomData.cubeW, geomData.cubeH, geomData.cubeD);
@@ -186,12 +206,24 @@
         */
         public play(prewarm: boolean = false) {
             if (prewarm) {
-                this.animation.animTime = this._particleState.loopTime;
-                this.animation.play("", 1.0, false);
+                this.animation.play("", 1.0, false, true);
             } else {
-                this.animation.play();
+                this.animation.play("", 1.0, true, false);
             }
         }
+
+
+        /**
+        * @language zh_CN
+        * 结束播放粒子
+        * @version Egret 3.0
+        * @platform Web,Native 
+        */
+        public stop(): void {
+            this.animation.stop();
+        }
+
+
 
         /**
         * @private
@@ -259,17 +291,22 @@
             this._timeNode = new ParticleTime();
             this._timeNode.initNode(this._data.life);
             nodes.push(this._timeNode);
-
            
             //position
-            var positionNode: ParticlePosition = new ParticlePosition();
-            positionNode.initNode(this._data.shape, this._data.property);
-            nodes.push(positionNode);
+            this._positionNode = new ParticlePosition();
+            this._positionNode.initNode(this._data.shape, this._data.property);
+            nodes.push(this._positionNode);
 
             //speed(依赖于position)
             var speedNode: ParticleVelocityNode = new ParticleVelocityNode();
             speedNode.initNode(this._data.moveSpeed);
             nodes.push(speedNode);
+
+            //subEmitter
+            this._subEmitterNode = new ParticleSubEmitterNode();
+            this._subEmitterNode.initNode(null, this);
+            this.particleAnimation.particleAnimationState.addNode(this._subEmitterNode);
+
 
             //velocity
             var velocityOver: VelocityOverLifeTimeData = this._data.moveSpeed.velocityOver;
@@ -361,9 +398,9 @@
                     rotateOneBezier.initNode(this._data.rotationSpeed);
                     nodes.push(rotateOneBezier);
                 } else if (this._data.rotationSpeed.type == ParticleValueType.TwoBezier) {
-                    var rotatTwoBezier: ParticleRotationTwoBezierNode = new ParticleRotationTwoBezierNode();
-                    rotatTwoBezier.initNode(this._data.rotationSpeed);
-                    nodes.push(rotatTwoBezier);
+                    var rotateTwoBezier: ParticleRotationTwoBezierNode = new ParticleRotationTwoBezierNode();
+                    rotateTwoBezier.initNode(this._data.rotationSpeed);
+                    nodes.push(rotateTwoBezier);
                 }
                
             }
@@ -412,6 +449,7 @@
                 nodes.push(textureSheet);
             }
 
+            //
             for (var i: number = 0, count: number = nodes.length; i < count; i++) {
                 this.particleAnimation.particleAnimationState.addNode(nodes[i]);
             }
@@ -445,6 +483,19 @@
             b.fillBox(new Vector3D(-vector.x / 2, -vector.y / 2, -vector.z / 2), new Vector3D(vector.x / 2, vector.y / 2, vector.z / 2));
             this.bound = b;
             this.initAABB();
+        }
+
+        /**
+        * @language zh_CN
+        * @public
+        * 循环完毕的次数，用于检测是否单个循环结束
+        * @return number 循环次数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+
+        public get loopProgress(): number {
+            return this.animation.animTime / this._particleState.loopTime;
         }
 
         /**

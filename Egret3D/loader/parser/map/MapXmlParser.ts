@@ -108,7 +108,10 @@
 
                 if (mapNodeData.type == "Camera3D") {
                     var camera: Camera3D = new Camera3D();
-                    camera.fieldOfView = Number(mapNodeData.fov);
+                    camera.fieldOfView = mapNodeData.fov;
+                    camera.near = mapNodeData.clipNear;
+                    camera.far = mapNodeData.clipFar;
+
                     mapNodeData.object3d = camera;
 
                 }
@@ -257,7 +260,13 @@
 
             for (var i: number = 0; i < node.attributes.length; ++i) {
                 attr = node.attributes[i];
-                data[attr.nodeName] = attr.value;
+                var v: string = typeof data[attr.name];
+                if (v == "number") {
+                    data[attr.name] = Number(attr.value);
+                }
+                else {
+                    data[attr.name] = attr.value;
+                }
             }
 
             var item: Node;
@@ -325,6 +334,14 @@
                         }
                     }
                     data.geometry = geo;
+                }
+                else if (nodeName == "sub") {
+                    var childData: any = {};
+                    for (var j: number = 0; j < item.attributes.length; ++j) {
+                        attr = item.attributes[j];
+                        childData[attr.name] = attr.value;
+                    }
+                    data.childs.push(childData);
                 }
                 //else if (nodeName == "lightIds") {
                 //    if (item.textContent == null || item.textContent == "") {

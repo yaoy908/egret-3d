@@ -15,6 +15,15 @@
      */
     export class PlaneGeometry extends Geometry {
 
+        /**
+        * @private
+        */
+        private _wCenter: boolean;
+        /**
+        * @private
+        */
+        private _hCenter: boolean;
+
 
         private _segmentsW: number = 1;
         /**
@@ -75,8 +84,12 @@
         * @param uScale U缩放
         * @param vScale V缩放
         * @param aixs 平面的朝向 默认参数为Vector3D.Y_AXIS
+        * @param wCenter 是否width以中心位置为(0,0)点
+        * @param hCenter 是否height以中心位置为(0,0)点
         */
-        constructor(width: number = 500, height: number = 500, segmentsW: number = 1, segmentsH: number = 1, uScale: number = 1, vScale: number = 1, aixs: Vector3D = Vector3D.Y_AXIS) {
+        constructor(width: number = 500, height: number = 500, segmentsW: number = 1, segmentsH: number = 1, uScale: number = 1, vScale: number = 1, aixs: Vector3D = Vector3D.Y_AXIS,
+            wCenter: boolean = true, hCenter: boolean = true) {
+
             super();
             this._width = width;
             this._height = height;
@@ -84,7 +97,8 @@
             this._segmentsH = segmentsH;
             this._scaleU = uScale;
             this._scaleV = vScale;
-
+            this._wCenter = wCenter;
+            this._hCenter = hCenter;
             this.buildGeometry(aixs);
         }
 
@@ -112,7 +126,12 @@
                 for (var xi: number = 0; xi <= this._segmentsW; ++xi) {
                     x = (xi / this._segmentsW - .5) * this._width;
                     y = (yi / this._segmentsH - .5) * this._height;
-
+                    if (this._wCenter == false) {
+                        x += this._width / 2;
+                    }
+                    if (this._hCenter == false) {
+                        y += this._height / 2;
+                    }
                     switch (aixs) {
                         case Vector3D.Y_AXIS:
                             this.verticesData[index++] = x;
