@@ -296,7 +296,7 @@
             }
             else {
 
-                var path: string = this._pathRoot + nodeData.path;
+                var path: string = this._pathRoot + particleData.shape.meshFile;
                 var load: URLLoader = this.findLoader(path);
                 if (!load) {
                     load = this.createLoader(path);
@@ -312,7 +312,7 @@
                     load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onParticleEsmLoad, this);
                 }
                 else {
-                    var parData: any = load["particleDatas"];
+                    var particleDatas: any = load["particleDatas"];
 
                     var parData: any = {};
                     parData.particle = particleData;
@@ -331,7 +331,7 @@
 
         private processParticleGeometry(particleData: ParticleData, nodeData: MapNodeData) {
             particleData.materialData = this._mapXmlParser.matDict[nodeData.materialIDs[0]];
-            var particleNode: ParticleEmitter = new ParticleEmitter(particleData, particleData.shape.geometry, new TextureMaterial());
+            var particleNode: ParticleEmitter = new ParticleEmitter(particleData, null, new TextureMaterial());
 
             nodeData.x *= ParticleData.SCALE_VALUE;
             nodeData.y *= ParticleData.SCALE_VALUE;
@@ -499,7 +499,7 @@
 
             var parData: any = load["particleDatas"];
 
-            for (var i: number = 0; i < parData.lenght; ++i) {
+            for (var i: number = 0; i < parData.length; ++i) {
                 var parData: any = parData[i];
                 var particle: ParticleData = parData.particle;
                 var nodeData: MapNodeData = parData.nodeData;

@@ -265,12 +265,20 @@
                     shape.coneRadiusTop = Number(value);
                 } else if (label == "type") {
                     shape.coneType = ParticleConeShapeType[value];
-                } else if (label == "meshType") {
-                    shape.meshType = ParticleMeshShapeType[value];
-                } else if (label == "meshFile") {
-                    shape.meshFile = value;
                 }
             });
+
+            //meshType
+            var meshType: Node = this.getNode(node, "meshType");
+            if (meshType) {
+                shape.meshType = ParticleMeshShapeType[meshType.textContent];
+            }
+
+            //meshFile
+            var meshFile: Node = this.getNode(node, "meshFile");
+            if (meshFile) {
+                shape.meshFile = meshFile.textContent;
+            }
         }
         /**
          * @private
