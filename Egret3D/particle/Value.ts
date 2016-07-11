@@ -563,6 +563,51 @@
             return values;
         }
     }
+
+
+    /**
+     * @private
+     */
+    export class Mesh3DValueShape extends ValueShape {
+        public valueType: ValueType = ValueType.vec3;
+
+        public geometry: Geometry;
+        public type: number = ParticleMeshShapeType.Edge;
+        /**
+        * @language zh_CN
+        * @param num 
+        * @param parameters [width, height, depth]
+        * @returns Vector3D[] 
+        */
+        public calculate(num: number): any {
+            var values: Vector3D[] = [];
+            if (this.type == ParticleMeshShapeType.Edge) {
+                this.edgePosition(values, num);
+            } else if (this.type == ParticleMeshShapeType.Triangle) {
+                this.trianglePosition(values, num);
+            } else if (this.type == ParticleMeshShapeType.Vertex) {
+                this.vertexPosition(values, num);
+            }
+            return values;
+        }
+
+
+        private edgePosition(values:Vector3D[], num:number): void {
+            var val: Vector3D;
+            for (var i: number = 0; i < num; i++) {
+                val = new Vector3D();
+            }
+        }
+
+        private trianglePosition(values: Vector3D[], num: number): void {
+        }
+
+        private vertexPosition(values: Vector3D[], num: number): void {
+
+        }
+    }
+
+
                 
     /**
     * @private

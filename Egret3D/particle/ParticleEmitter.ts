@@ -495,7 +495,7 @@
         */
 
         public get loopProgress(): number {
-            return this.animation.animTime / (this._particleState.loopTime * 1000);
+            return this.animation.animTime / (this._particleState.circleTime * 1000);
         }
 
         /**

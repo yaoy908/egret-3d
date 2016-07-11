@@ -107,14 +107,14 @@
                     frameStart = 0;
                 } else {
                     if (this._sheetData.randomRow) {
-                        frameStart = Math.floor(this._sheetData.tileX * Math.random()) * this._sheetData.tileY;
+                        frameStart = Math.floor(this._sheetData.tileY * Math.random()) * this._sheetData.tileX;
                     } else {
-                        frameStart = this._sheetData.row * this._sheetData.tileY;
+                        frameStart = this._sheetData.row * this._sheetData.tileX;
                     }
                 }
                 //frame const
-                if (this._sheetData.frameType == ParticleValueType.Const || ParticleValueType.RandomConst) {
-                    var frameConst: number = (this._sheetData.max - this._sheetData.min) * Math.random() + this._sheetData.min;
+                if (this._sheetData.frameType == ParticleValueType.Const || this._sheetData.frameType == ParticleValueType.RandomConst) {
+                    frameConst = (this._sheetData.max - this._sheetData.min) * Math.random() + this._sheetData.min;
                     frameConst = Math.floor(frameConst);
                 } else {
                     frameConst = 0;

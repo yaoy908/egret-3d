@@ -127,9 +127,10 @@
             if (bornTime > maxLife) {
                 loopTime = bornTime;
             }
-
-            //粒子一个完整的周期为最后一个粒子走完周期
+            //对于每个面片而言，取摩的时间（周期）
             this._animationState.loopTime = loopTime;
+            //最后一个面片消失的时间
+            this._animationState.circleTime = this._animationState.emitter.data.life.delay + lifeTime + bornTime;
 
         }
 
