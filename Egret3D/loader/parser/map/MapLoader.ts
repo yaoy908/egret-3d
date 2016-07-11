@@ -288,12 +288,50 @@
         }
 
         private processParticle(particleData: ParticleData, nodeData: MapNodeData): ParticleEmitter {
-            var geo: Geometry = null;
-            if (nodeData.geometry) {
-                geo = GeometryUtil.createGemetryForType(nodeData.geometry.type, nodeData.geometry);
+            if (!particleData.shape.meshFile) {
+                if (nodeData.geometry) {
+                    particleData.shape.geometry = GeometryUtil.createGemetryForType(nodeData.geometry.type, nodeData.geometry);
+                }
+                this.processParticleGeometry(particleData, nodeData);
             }
+            else {
+
+                var path: string = this._pathRoot + nodeData.path;
+                var load: URLLoader = this.findLoader(path);
+                if (!load) {
+                    load = this.createLoader(path);
+
+                    var particleDatas: any = [];
+
+                    var parData: any = {};
+                    parData.particle = particleData;
+                    parData.nodeData = nodeData;
+                    particleDatas.push(parData);
+
+                    load["particleDatas"] = particleDatas;
+                    load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onParticleEsmLoad, this);
+                }
+                else {
+                    var parData: any = load["particleDatas"];
+
+                    var parData: any = {};
+                    parData.particle = particleData;
+                    parData.nodeData = nodeData;
+                    particleDatas.push(parData);
+
+                    if (load.data) {
+                        particleData.shape.geometry = load.data;
+                        this.processParticleGeometry(particleData, nodeData);
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private processParticleGeometry(particleData: ParticleData, nodeData: MapNodeData) {
             particleData.materialData = this._mapXmlParser.matDict[nodeData.materialIDs[0]];
-            var particleNode: ParticleEmitter = new ParticleEmitter(particleData, geo, new TextureMaterial());
+            var particleNode: ParticleEmitter = new ParticleEmitter(particleData, particleData.shape.geometry, new TextureMaterial());
 
             nodeData.x *= ParticleData.SCALE_VALUE;
             nodeData.y *= ParticleData.SCALE_VALUE;
@@ -304,8 +342,6 @@
 
             particleNode.play();
             this.processMat(nodeData);
-
-            return particleNode;
         }
 
         private processObject3d(nodeData: MapNodeData, object3d: Object3D) {
@@ -454,6 +490,22 @@
             }
 
             this.processTask(e.loader);
+        }
+
+
+        private onParticleEsmLoad(e: LoaderEvent3D) {
+
+            var load: URLLoader = e.loader;
+
+            var parData: any = load["particleDatas"];
+
+            for (var i: number = 0; i < parData.lenght; ++i) {
+                var parData: any = parData[i];
+                var particle: ParticleData = parData.particle;
+                var nodeData: MapNodeData = parData.nodeData;
+                particle.shape.geometry = load.data;
+                this.processParticleGeometry(particle, nodeData);
+            }
         }
 
         private onEamLoad(e: LoaderEvent3D) {
