@@ -506,6 +506,8 @@
                 particle.shape.geometry = load.data;
                 this.processParticleGeometry(particle, nodeData);
             }
+
+            this.processTask(e.loader);
         }
 
         private onEamLoad(e: LoaderEvent3D) {
