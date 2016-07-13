@@ -489,12 +489,12 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public upload(context3DProxy: Context3DProxy) {
+        public upload(context3DProxy: Context3DProxy, drawType: number = Context3DProxy.gl.STATIC_DRAW ) {
             if (!this.sharedIndexBuffer && !this.sharedVertexBuffer) {
                 this.sharedIndexBuffer = context3DProxy.creatIndexBuffer(this.indexData);
-                this.sharedVertexBuffer = context3DProxy.creatVertexBuffer(this.verticesData);
+                this.sharedVertexBuffer = context3DProxy.creatVertexBuffer(this.verticesData,drawType);
             } else {
-                (<Float32Array>this.sharedVertexBuffer.arrayBuffer).set(this.verticesData);
+                this.sharedVertexBuffer.arrayBuffer.set(this.verticesData);
                 context3DProxy.uploadVertexBuffer(this.sharedVertexBuffer);
             }
         }

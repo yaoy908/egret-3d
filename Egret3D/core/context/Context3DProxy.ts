@@ -243,6 +243,7 @@
             var vb: VertexBuffer3D = new VertexBuffer3D(vertexBuffer);
             vb.arrayBuffer = vertexDataArray;
 
+            vertexData.splice(0, vertexData.length);
             return vb;
         }
 
@@ -970,8 +971,8 @@
         * @platform Web,Native
         */
         public enableBlend() {
-            if (this.BLEND) return;
-            this.BLEND = true;
+            //if (this.BLEND) return;
+            //this.BLEND = true;
             Context3DProxy.gl.enable(ContextConfig.BLEND);
         }
 
@@ -982,8 +983,8 @@
         * @platform Web,Native
         */
         public disableBlend() {
-            if (!this.BLEND) return;
-            this.BLEND = false;
+            //if (!this.BLEND) return;
+            //this.BLEND = false;
             Context3DProxy.gl.disable(ContextConfig.BLEND);
         }
 

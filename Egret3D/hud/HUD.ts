@@ -10,7 +10,7 @@
     * @version Egret 3.0
     * @platform Web,Native
     */
-    export class HUD {
+     export class HUD {
 
         private static singleQuadData: Array<number> = [
             -1.0, -1.0, 0.0, 0.0, 1.0,
@@ -74,7 +74,6 @@
         public fsShader: string = "hud_V_fs" ;
 
         protected _passUsage: PassUsage = new PassUsage();
-
         protected _attList: Array<GLSL.Attribute> = new Array<GLSL.Attribute>();
 
 

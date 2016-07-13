@@ -34,7 +34,7 @@
         * @language zh_CN
         * @private
         */
-        public arrayBuffer: ArrayBuffer;
+        public arrayBuffer: Float32Array;
 
         /**
         * @language zh_CN
