@@ -208,6 +208,11 @@
                             }
                             else {
                                 var nodeDatas: Array<MapNodeData> = load["particleNodeDatas"];
+                                if (!nodeDatas) {
+                                    nodeDatas = [];
+                                    load["particleNodeDatas"] = nodeDatas;
+                                }
+
                                 nodeDatas.push(mapNodeData);
                                 var particleData: ParticleData = load["particleData"];
                                 if (particleData) {
@@ -225,7 +230,6 @@
                 var textureLoad: URLLoader = this.findLoader(path);
                 if (!textureLoad) {
                     textureLoad = this.createLoader(path);
-                    textureLoad["name"] = data.name;
                     var textureNames: any = [];
                     textureLoad["textureNames"] = textureNames;
                     textureNames.push(data.name);
@@ -449,67 +453,6 @@
             this.processTask(load);
         }
 
-
-        //private onHeightTextureLoad(e: LoaderEvent3D) {
-        //    var heightImgload: URLLoader = e.loader;
-        //    var nodeDatas: Array<MapNodeData> = heightImgload["heightNodeDatas"];
-
-        //    for (var i: number = 0; i < nodeDatas.length; ++i) {
-        //        var mapNodeData: MapNodeData = nodeDatas[i];
-        //        var geometry: any = mapNodeData.geometry;
-        //        var envHeightGeometry: ElevationGeometry = new ElevationGeometry(heightImgload.data, geometry.width, geometry.height, geometry.depth, geometry.segmentsW, geometry.segmentsH);
-        //        var mesh: Mesh = new Mesh(envHeightGeometry, new TextureMaterial(heightImgload.data));
-        //        this.processHeightMesh(mapNodeData, mesh);
-        //        this.doLoadEpa(mapNodeData);
-        //    }
-
-        //    this.processTask(heightImgload);
-        //}
-
-        //private onImgLoad(e: LoaderEvent3D) {
-        //    var load: URLLoader = e.loader;
-
-        //    var textureDatas: any = load["textureDatas"];
-        //    var textureData: any = {};
-        //    var mesh: Mesh = null;
-        //    var mat: MaterialBase = null;
-        //    for (var i: number = 0; i < textureDatas.length; ++i) {
-
-        //        textureData = textureDatas[i];
-        //        var mapNodeData: MapNodeData = textureData.mapNodeData;
-        //        mesh = <Mesh>mapNodeData.object3d;
-        //        mat = mesh.getMaterial(textureData.matID);
-
-        //        mat[textureData.type] = load.data;
-        //    }
-
-        //    this.processTask(load);
-        //}
-
-        //private onImgMethodLoad(e: LoaderEvent3D) {
-        //    var load: URLLoader = e.loader;
-
-        //    var methodDatas: any = load["methodDatas"];
-        //    var methodData: any = {};
-
-        //    for (var i: number = 0; i < methodDatas.length; ++i) {
-        //        methodData = methodDatas[i];
-
-        //        methodData.method[methodData.textureName] = load.data;
-        //    }
-
-        //    this.processTask(load);
-        //}
-
-        //private onHudLoad(e: LoaderEvent3D) {
-        //    var hudDatas: Array<HUDData> = e.loader["hudDatas"];
-        //    for (var i: number = 0; i < hudDatas.length; ++i) {
-        //        var hudData: HUDData = hudDatas[i];
-        //        hudData.hud.diffuseTexture = e.loader.data;
-        //    }
-        //    this.processTask(e.loader);
-        //}
-
         private doLoadEpa(mapNodeData: MapNodeData) {
 
             if (mapNodeData.propertyAnims) {
@@ -528,6 +471,10 @@
                     }
                     else {
                         var nodeDatas: Array<MapNodeData> = epaload["epanodeData"];
+                        if (!nodeDatas) {
+                            nodeDatas = [];
+                            epaload["epanodeData"] = nodeDatas;
+                        }
                         nodeDatas.push(mapNodeData);
 
                         if (epaload.data) {
@@ -582,6 +529,12 @@
                 }
                 else {
                     var eamnodeDatas: Array<MapNodeData> = load["eamnodeData"];
+                    if (!eamnodeDatas) {
+                        eamnodeDatas = [];
+                        load["eamnodeData"] = eamnodeDatas;
+                    }
+
+
                     eamnodeDatas.push(mapNodeData);
 
                     if (load.data) {
@@ -617,7 +570,7 @@
             }
 
             var parDataList: any = load["particleDatas"];
-            if (parData) {
+            if (parDataList) {
                 for (var i: number = 0; i < parDataList.length; ++i) {
                     var parData: any = parDataList[i];
                     var particle: ParticleData = parData.particle;
@@ -629,24 +582,6 @@
 
             this.processTask(load);
         }
-
-
-        //private onParticleEsmLoad(e: LoaderEvent3D) {
-
-        //    var load: URLLoader = e.loader;
-
-        //    var parData: any = load["particleDatas"];
-
-        //    for (var i: number = 0; i < parData.length; ++i) {
-        //        var parData: any = parData[i];
-        //        var particle: ParticleData = parData.particle;
-        //        var nodeData: MapNodeData = parData.nodeData;
-        //        particle.shape.geometry = load.data;
-        //        this.processParticleGeometry(particle, nodeData);
-        //    }
-
-        //    this.processTask(e.loader);
-        //}
 
         private onEamLoad(e: LoaderEvent3D) {
 

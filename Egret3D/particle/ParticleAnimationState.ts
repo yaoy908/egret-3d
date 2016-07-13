@@ -295,10 +295,9 @@
 
             this._particleFsData[0] = camera3D.far;
             this._particleFsData[1] = camera3D.near;
-            this._particleFsData[2] = (this._emitter.material && this._emitter.material.materialData.blendMode == BlendMode.ALPHA) ? 1 : 0;
-
+            this._particleFsData[2] = this._emitter.material.materialData.blendMode;
             context3DProxy.uniform1fv(usage["uniform_particleFsData"].uniformIndex, this._particleFsData);
-
+           
             for (var i: number = 0; i < this.animNodes.length; i++) {
                 this.animNodes[i].activeState(time, animTime, delay, animDelay, usage, geometry, context3DProxy);
             }

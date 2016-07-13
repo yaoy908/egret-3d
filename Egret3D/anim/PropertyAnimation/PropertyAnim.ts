@@ -78,7 +78,7 @@ module egret3d {
             propertyData.timePosition = 0;
             this._propertyArray.push(propertyData);
 
-            for (var i = 0; i < keyFrames.length - 1; i++) {
+            for (var i = 0; i < keyFrames.length; i++) {
 
                 if (keyFrames[i].end.x > this._totalTime) {
 

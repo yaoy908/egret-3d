@@ -96,48 +96,56 @@ module egret3d {
         */
         public addAnimationClip(animationClip: SkeletonAnimationClip): void {
 
-            if (!this._skeletonAnimationClip) {
-                this._skeletonAnimationClip = new SkeletonAnimationClip();
+            if (animationClip.sourceData) {
+                this._skeletonAnimationClip = animationClip;
+
+                this._timeLength = this._skeletonAnimationClip.timeLength;
             }
             else {
-                this._skeletonAnimationClip.poseArray = [];
-            }
 
-            if (animationClip.poseArray.length < 2) {
-                this._skeletonAnimationClip.poseArray = animationClip.poseArray;
-            }
-            else {
-                var skeletonPoseA: SkeletonPose = animationClip.poseArray[0];
+                if (!this._skeletonAnimationClip) {
+                    this._skeletonAnimationClip = new SkeletonAnimationClip();
+                }
+                else {
+                    this._skeletonAnimationClip.poseArray = [];
+                }
 
-                var skeletonPoseB: SkeletonPose = animationClip.poseArray[1];
-
-                var nCount: number = Math.round((skeletonPoseB.frameTime - skeletonPoseA.frameTime) / SkeletonAnimation.fps);
-
-                if (nCount <= 1) {
+                if (animationClip.poseArray.length < 2) {
                     this._skeletonAnimationClip.poseArray = animationClip.poseArray;
                 }
                 else {
-                    for (var i: number = 1; i < animationClip.poseArray.length; ++i) {
+                    var skeletonPoseA: SkeletonPose = animationClip.poseArray[0];
 
-                        skeletonPoseA = animationClip.poseArray[i - 1];
+                    var skeletonPoseB: SkeletonPose = animationClip.poseArray[1];
 
-                        skeletonPoseB = animationClip.poseArray[i];
+                    var nCount: number = Math.round((skeletonPoseB.frameTime - skeletonPoseA.frameTime) / SkeletonAnimation.fps);
 
-                        for (var j: number = 0; j < nCount; j++) {
-
-                            var skeletonPose: SkeletonPose = new SkeletonPose();
-
-                            skeletonPose.lerp(skeletonPoseA, skeletonPoseB, j / nCount);
-
-                            this._skeletonAnimationClip.poseArray.push(skeletonPose);
-                        }
+                    if (nCount <= 1) {
+                        this._skeletonAnimationClip.poseArray = animationClip.poseArray;
                     }
+                    else {
+                        for (var i: number = 1; i < animationClip.poseArray.length; ++i) {
 
-                    this._skeletonAnimationClip.poseArray.push(animationClip.poseArray[animationClip.poseArray.length - 1].clone());
+                            skeletonPoseA = animationClip.poseArray[i - 1];
+
+                            skeletonPoseB = animationClip.poseArray[i];
+
+                            for (var j: number = 0; j < nCount; j++) {
+
+                                var skeletonPose: SkeletonPose = new SkeletonPose();
+
+                                skeletonPose.lerp(skeletonPoseA, skeletonPoseB, j / nCount);
+
+                                this._skeletonAnimationClip.poseArray.push(skeletonPose);
+                            }
+                        }
+
+                        this._skeletonAnimationClip.poseArray.push(animationClip.poseArray[animationClip.poseArray.length - 1].clone());
+                    }
                 }
-            }
 
-            this._timeLength = this._skeletonAnimationClip.poseArray[this._skeletonAnimationClip.poseArray.length - 1].frameTime;
+                this._timeLength = this._skeletonAnimationClip.poseArray[this._skeletonAnimationClip.poseArray.length - 1].frameTime;
+            }
         }
 
         /**
@@ -202,7 +210,7 @@ module egret3d {
         * @platform Web,Native
         */
         public get currentSkeletonPose(): SkeletonPose {
-            return this._skeletonAnimationClip.poseArray[this.currentFrameIndex];
+            return this._skeletonAnimationClip.getSkeletonPose(this.currentFrameIndex);
         }
 
         /**
@@ -225,7 +233,7 @@ module egret3d {
             if (!this._skeletonAnimationClip) {
                 return 0;
             }
-            return this._skeletonAnimationClip.poseArray.length;
+            return this._skeletonAnimationClip.frameCount;
         }
 
         /**
@@ -235,7 +243,7 @@ module egret3d {
         * @platform Web,Native
         */
         public getSkeletonPose(index: number): SkeletonPose {
-            return this._skeletonAnimationClip.poseArray[index];
+            return this._skeletonAnimationClip.getSkeletonPose(index);
         }
 
         /**

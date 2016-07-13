@@ -146,7 +146,15 @@ module egret3d {
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public play(animName?: string, speed: number = 1, reset: boolean = true, prewarm:boolean = true): void {
+        public play(animName?: string, speed: number = 1, reset: boolean = true, prewarm: boolean = true): void {
+
+            if (this._animStates.length <= 0) {
+                return;
+            }
+
+            if (!animName) {
+                animName = this._animStates[0].name;
+            }
 
             var playSkeletonAnimationState: SkeletonAnimationState = null;
 
@@ -519,7 +527,7 @@ module egret3d {
         */
         public bindToJointPose(jointName: string, object3D: Object3D): boolean {
 
-            var jointIndex: number = this._animStates[0].skeletonAnimationClip.poseArray[0].findJointIndex(jointName);
+            var jointIndex: number = this._animStates[0].skeletonAnimationClip.findJointIndex(jointName);
 
             if (jointIndex < 0) {
                 return false;

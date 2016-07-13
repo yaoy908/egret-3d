@@ -22,8 +22,7 @@
         * @platform Web,Native
         */
         public rawData: Float32Array;
-        private result: Float32Array = new Float32Array(16);
-        private m: Float32Array = new Float32Array(16);
+        private static result: Float32Array = new Float32Array(16);
         /**
         * @language zh_CN
         * 构造
@@ -86,7 +85,7 @@
         * @platform Web,Native
         */
         public multiply(mat4: Matrix4_4) {
-            var a = this.rawData, b = mat4.rawData, r = this.result;
+            var a = this.rawData, b = mat4.rawData, r = Matrix4_4.result;
 
             r[0] = a[0] * b[0] + a[1] * b[4] + a[2] * b[8] + a[3] * b[12];
             r[1] = a[0] * b[1] + a[1] * b[5] + a[2] * b[9] + a[3] * b[13];
@@ -742,18 +741,21 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public decompose(orientationStyle: string = "eulerAngles"): Vector3D[] {
+        public decompose(orientationStyle: string = "eulerAngles", target: Vector3D[] = null): Vector3D[] {
             var q: Quaternion = MathUtil.CALCULATION_QUATERNION;
-            var vec: Vector3D[] = [];
+            var vec: Vector3D[] = target ? target : [new Vector3D(), new Vector3D(), new Vector3D()];
             var m = this.clone();
             var mr = m.rawData;
 
-            var pos: Vector3D = new Vector3D(mr[12], mr[13], mr[14]);
+            var pos: Vector3D = vec[0];
+            pos.x = mr[12];
+            pos.y = mr[13];
+            pos.z = mr[14];
             mr[12] = 0;
             mr[13] = 0;
             mr[14] = 0;
 
-            var scale: Vector3D = new Vector3D();
+            var scale: Vector3D = vec[2];
 
             scale.x = Math.sqrt(mr[0] * mr[0] + mr[1] * mr[1] + mr[2] * mr[2]);
             scale.y = Math.sqrt(mr[4] * mr[4] + mr[5] * mr[5] + mr[6] * mr[6]);
@@ -772,7 +774,7 @@
             mr[9] /= scale.z;
             mr[10] /= scale.z;
 
-            var rot = new Vector3D();
+            var rot = vec[1];
 
             switch (orientationStyle) {
                 case Orientation3D.AXIS_ANGLE:
@@ -1177,7 +1179,6 @@
         }
 
 
-        private oRawData: Float32Array = new Float32Array(16);
                 
         /**
         * @language zh_CN
@@ -1187,22 +1188,22 @@
         */
         public transpose() {
            
-            for (var i: number = 0; i < this.oRawData.length; i++ ){
-                this.oRawData[i] = this.rawData[i] ;
+            for (var i: number = 0; i < Matrix4_4.result.length; i++ ){
+                Matrix4_4.result[i] = this.rawData[i] ;
             }
 
-            this.rawData[1] = this.oRawData[4];
-            this.rawData[2] = this.oRawData[8];
-            this.rawData[3] = this.oRawData[12];
-            this.rawData[4] = this.oRawData[1];
-            this.rawData[6] = this.oRawData[9];
-            this.rawData[7] = this.oRawData[13];
-            this.rawData[8] = this.oRawData[2];
-            this.rawData[9] = this.oRawData[6];
-            this.rawData[11] = this.oRawData[14];
-            this.rawData[12] = this.oRawData[3];
-            this.rawData[13] = this.oRawData[7];
-            this.rawData[14] = this.oRawData[11];
+            this.rawData[1] = Matrix4_4.result[4];
+            this.rawData[2] = Matrix4_4.result[8];
+            this.rawData[3] = Matrix4_4.result[12];
+            this.rawData[4] = Matrix4_4.result[1];
+            this.rawData[6] = Matrix4_4.result[9];
+            this.rawData[7] = Matrix4_4.result[13];
+            this.rawData[8] = Matrix4_4.result[2];
+            this.rawData[9] = Matrix4_4.result[6];
+            this.rawData[11] = Matrix4_4.result[14];
+            this.rawData[12] = Matrix4_4.result[3];
+            this.rawData[13] = Matrix4_4.result[7];
+            this.rawData[14] = Matrix4_4.result[11];
         }
                         
         /**

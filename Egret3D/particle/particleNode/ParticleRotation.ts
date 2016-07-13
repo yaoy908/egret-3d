@@ -61,6 +61,7 @@
             var timeIndex: number;
             var bornTime: number;
 
+            var renderMode: number = this._animationState.emitter.data.property.renderMode;
 
             for (var i: number = 0; i < count; ++i) {
 
@@ -82,7 +83,11 @@
 
 
                 this.rotationMat.identity();
-                this.rotationMat.rotation(0, 0, rot);
+                if (renderMode == ParticleRenderModeType.VerticalBillboard || renderMode == ParticleRenderModeType.HorizontalBillboard) {
+                    this.rotationMat.rotation(0, rot, 0);
+                } else {
+                    this.rotationMat.rotation(0, 0, rot);
+                }
                 for (var j: number = 0; j < vertices; ++j) {
                     index = i * vertices + j;
                     index = index * geometry.vertexAttLength ;

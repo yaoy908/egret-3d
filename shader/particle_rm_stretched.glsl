@@ -8,22 +8,20 @@ mat4 getRenderModeMatrix(mat4 cameraMatrix, mat4 modelMatrix) {
 }
 
 
-void updateStretchedBillBoard(vec4 startPos, vec4 newPos){
+float updateStretchedBillBoard(vec4 startPos, vec4 newPos){
 	localPosition.x *= particleStateData.lengthScale; 
 	mat4 temp = uniform_ProjectionMatrix * uniform_ViewMatrix;
 	startPos = temp * startPos; 
 	newPos = temp * newPos; 
 
 	vec3 dirVector = newPos.xyz - startPos.xyz;
-	if(dirVector.x == 0.0 && dirVector.y == 0.0 && dirVector.z == 0.0){ 
-		dirVector = attribute_offsetPosition; 
-	} 
-	if(dirVector.x == 0.0 && dirVector.y == 0.0 && dirVector.z == 0.0){ 
-		return; 
-	} 
-
+	
 	float scaleBefore = dirVector.x * dirVector.x + dirVector.y * dirVector.y + dirVector.z * dirVector.z; 
-	scaleBefore = sqrt(scaleBefore); 
+	scaleBefore = sqrt(scaleBefore);
+	//too small cannot calc direction;
+	if(scaleBefore < Tiny){
+		return 0.0;
+	}
 	float scaleAfter = dirVector.x * dirVector.x + dirVector.y * dirVector.y; 
 	scaleAfter = sqrt(scaleAfter); 
 	scaleAfter = scaleAfter / scaleBefore; 
@@ -47,5 +45,6 @@ void updateStretchedBillBoard(vec4 startPos, vec4 newPos){
 	temp = buildRotMat4(vec3(0.0, 0.0, angle)); 
 	localPosition = temp * localPosition;
 
+	return 1.0;
 
 }

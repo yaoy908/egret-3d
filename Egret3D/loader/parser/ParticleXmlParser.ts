@@ -187,7 +187,7 @@
             if (bursts) {
                 emission.bursts = [];
                 var itemList: NodeList = this.getNodeList(bursts, "item");
-                for (i = 0, count = itemList.length; i < count; i++) {
+                for (i = 0, count = itemList ? itemList.length : 0; i < count; i++) {
                     item = itemList[i];
                     pt = new Point();
                     emission.bursts.push(pt);
@@ -517,7 +517,7 @@
             var pt: Point;
             var color: Color;
             var time: number;
-            for (i = 0, count = itemList.length; i < count; i++) {
+            for (i = 0, count = itemList ? itemList.length : 0; i < count; i++) {
                 item = itemList[i];
                 this.eachAttr(item, function (label: string, value: string): void {
                     if (label == "time") {
@@ -536,7 +536,7 @@
                 return a - b;
             });
 
-            for (i = 0, count = dst.times.length; i < count; i++) {
+            for (i = 0, count = dst ? dst.times.length : 0; i < count; i++) {
                 var index: number = sortTimes.indexOf(dst.times[i]);
                 dst.colors[i] = sortColors[index];
             }
@@ -563,7 +563,7 @@
             var count: number = 0;
             var pt: Point;
 
-            for (i = 0, count = posList.length; i < count; i++) {
+            for (i = 0, count = posList ? posList.length : 0; i < count; i++) {
                 item = posList[i];
                 pt = new Point();
                 bzData.posPoints.push(pt);
@@ -576,7 +576,7 @@
                 });
             }
 
-            for (i = 0, count = ctrlList.length; i < count; i++) {
+            for (i = 0, count = ctrlList ? ctrlList.length : 0; i < count; i++) {
                 item = ctrlList[i];
                 pt = new Point();
                 bzData.ctrlPoints.push(pt);
