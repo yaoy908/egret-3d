@@ -10,7 +10,8 @@ const float PI = 3.1415926 ;
 float currentTime = 0.0;
 float totalTime = 0.0;
 
-const float TrueOrFalse = 0.55555;
+const float TrueOrFalse = 0.5;
+const float Tiny = 0.0001;
 vec4 localPosition = vec4(0.0,0.0,0.0,1.0);
 vec3 velocityBaseVec3 = vec3(0.0,0.0,0.0);
 vec3 velocityOverVec3 = vec3(0.0,0.0,0.0);
@@ -23,7 +24,6 @@ vec3 followTargetScale = vec3(1.0,1.0,1.0);
 vec4 followTargetRotation = vec4(0.0,0.0,0.0,0.0);
 
 varying vec3 varyingViewDir ;
-varying float varying_posZ;
 
 float discard_particle = 0.0;
 

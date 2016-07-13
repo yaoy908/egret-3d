@@ -16,8 +16,7 @@ void main() {
     
     if( diffuseColor.w <= materialSource.cutAlpha ){
 		discard;
-	}else
-		diffuseColor.xyz *= diffuseColor.w ;
+	}
 }
 
 
