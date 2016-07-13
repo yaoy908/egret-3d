@@ -88,6 +88,11 @@
                 }
                 coneShape.coneType = node.coneType;
                 this._positions = coneShape;
+            } else if (node.type == ParticleDataShapeType.Mesh) {
+                var meshShape: Mesh3DValueShape = new Mesh3DValueShape();
+                meshShape.geometry = node.geometry;
+                meshShape.type = node.meshType;
+                this._positions = meshShape;
             }
 
         }

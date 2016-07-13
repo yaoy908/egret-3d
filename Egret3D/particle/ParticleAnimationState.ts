@@ -68,12 +68,19 @@
                                                 
         /**
         * @language zh_CN
-        * 粒子走完一轮所需要的总时间
+        * 对于每个面片而言周期时间
         * @version Egret 3.0
         * @platform Web,Native
         */
         public loopTime: number = 0;
-                                                        
+
+        /**
+        * @language zh_CN
+        * 粒子走完一轮所需要的总时间(秒)
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public circleTime: number = 0;
 
         /**
         * @language zh_CN

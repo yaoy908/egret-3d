@@ -19,7 +19,7 @@ vec2 getSheetOffset(float frame, float tileX, float tileY)
 }
 
 void calcUVCoord() {
-	vec2 rectUV = vec2(1.0 / uniform_textureSheet[1], 1.0 / uniform_textureSheet[0]);
+	vec2 rectUV = vec2(1.0 / uniform_textureSheet[0], 1.0 / uniform_textureSheet[1]);
 	uv_0.xy *= rectUV;
 	
 	float frame = varying_textureSheetData.x + varying_textureSheetData.y;

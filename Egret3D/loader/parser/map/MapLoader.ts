@@ -142,12 +142,17 @@
                                 esmload = this.createLoader(path);
 
                                 var nodeDatas: Array<MapNodeData> = [];
-                                nodeDatas.push(mapNodeData);
                                 esmload["esmnodeData"] = nodeDatas;
+
+                                nodeDatas.push(mapNodeData);
                                 esmload.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onEsmLoad, this);
                             }
                             else {
                                 var nodeDatas: Array<MapNodeData> = esmload["esmnodeData"];
+                                if (!nodeDatas) {
+                                    nodeDatas = [];
+                                    esmload["esmnodeData"] = nodeDatas;
+                                }
                                 nodeDatas.push(mapNodeData);
 
                                 if (esmload.data) {
@@ -169,10 +174,14 @@
                                 var nodeDatas: Array<MapNodeData> = [];
                                 nodeDatas.push(mapNodeData);
                                 heightImgload["heightNodeDatas"] = nodeDatas;
-                                heightImgload.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onHeightTextureLoad, this);
+                                heightImgload.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onTexture, this);
                             }
                             else {
                                 var nodeDatas: Array<MapNodeData> = heightImgload["heightNodeDatas"];
+                                if (!nodeDatas) {
+                                    nodeDatas = [];
+                                    heightImgload["heightNodeDatas"] = nodeDatas;
+                                }
                                 nodeDatas.push(mapNodeData);
 
                                 var geo: any = mapNodeData.geometry;
@@ -199,6 +208,11 @@
                             }
                             else {
                                 var nodeDatas: Array<MapNodeData> = load["particleNodeDatas"];
+                                if (!nodeDatas) {
+                                    nodeDatas = [];
+                                    load["particleNodeDatas"] = nodeDatas;
+                                }
+
                                 nodeDatas.push(mapNodeData);
                                 var particleData: ParticleData = load["particleData"];
                                 if (particleData) {
@@ -216,11 +230,23 @@
                 var textureLoad: URLLoader = this.findLoader(path);
                 if (!textureLoad) {
                     textureLoad = this.createLoader(path);
-                    textureLoad["name"] = data.name;
+                    var textureNames: any = [];
+                    textureLoad["textureNames"] = textureNames;
+                    textureNames.push(data.name);
+
                     textureLoad.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onTexture, this);
                 }
                 else {
+                    var textureNames: any = textureLoad["textureNames"];
+                    if (!textureNames) {
+                        textureNames = [];
+                        textureLoad["textureNames"] = textureNames;
+                    }
+                    textureNames.push(data.name);
 
+                    if (textureLoad.data) {
+                        this.textures[data.name] = textureLoad.data;
+                    }
                 }
             }
 
@@ -260,10 +286,14 @@
                     var hudDatas: Array<HUDData> = [];
                     hudDatas.push(hudData);
                     hudLoad["hudDatas"] = hudDatas;
-                    hudLoad.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onHudLoad, this);
+                    hudLoad.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onTexture, this);
                 }
                 else {
                     var hudDatas: Array<HUDData> = hudLoad["hudDatas"];
+                    if (!hudDatas) {
+                        hudDatas = [];
+                        hudLoad["hudDatas"] = hudDatas;
+                    }
                     hudDatas.push(hudData);
 
                     if (hudLoad.data) {
@@ -288,31 +318,74 @@
         }
 
         private processParticle(particleData: ParticleData, nodeData: MapNodeData): ParticleEmitter {
-            var geo: Geometry = null;
-            if (nodeData.geometry) {
-                geo = GeometryUtil.createGemetryForType(nodeData.geometry.type, nodeData.geometry);
+            if (!particleData.shape.meshFile) {
+                if (nodeData.geometry) {
+                    particleData.shape.geometry = GeometryUtil.createGemetryForType(nodeData.geometry.type, nodeData.geometry);
+                }
+                this.processParticleGeometry(particleData, nodeData);
             }
+            else {
+
+                var path: string = this._pathRoot + particleData.shape.meshFile;
+                var load: URLLoader = this.findLoader(path);
+                if (!load) {
+                    load = this.createLoader(path);
+
+                    var particleDatas: any = [];
+                    load["particleDatas"] = particleDatas;
+
+                    var parData: any = {};
+                    parData.particle = particleData;
+                    parData.nodeData = nodeData;
+                    particleDatas.push(parData);
+
+                    load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onEsmLoad, this);
+                }
+                else {
+                    var particleDatas: any = load["particleDatas"];
+                    if (!particleDatas) {
+                        particleDatas = [];
+                        load["particleDatas"] = particleDatas;
+                    }
+
+                    var parData: any = {};
+                    parData.particle = particleData;
+                    parData.nodeData = nodeData;
+                    particleDatas.push(parData);
+
+                    if (load.data) {
+                        particleData.shape.geometry = load.data;
+                        this.processParticleGeometry(particleData, nodeData);
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private processParticleGeometry(particleData: ParticleData, nodeData: MapNodeData) {
             particleData.materialData = this._mapXmlParser.matDict[nodeData.materialIDs[0]];
-            var particleNode: ParticleEmitter = new ParticleEmitter(particleData, geo, new TextureMaterial());
+            var particleNode: ParticleEmitter = new ParticleEmitter(particleData, null, new TextureMaterial());
 
             nodeData.x *= ParticleData.SCALE_VALUE;
             nodeData.y *= ParticleData.SCALE_VALUE;
             nodeData.z *= ParticleData.SCALE_VALUE;
             nodeData.object3d.position.scaleBy(ParticleData.SCALE_VALUE);
-            nodeData.object3d.position = nodeData.object3d.position;
 
-
-            particleNode.name = nodeData.object3d.name;
-            particleNode.position = nodeData.object3d.position;
-            particleNode.orientation = nodeData.object3d.orientation;
-            particleNode.scale = nodeData.object3d.scale;
-            nodeData.object3d.swapObject(particleNode);
-            nodeData.object3d = particleNode;
+            this.processObject3d(nodeData, particleNode);
 
             particleNode.play();
             this.processMat(nodeData);
+        }
 
-            return particleNode;
+        private processObject3d(nodeData: MapNodeData, object3d: Object3D) {
+            object3d.name = nodeData.object3d.name;
+            object3d.visible = nodeData.object3d.visible;
+            object3d.position = nodeData.object3d.position;
+            object3d.orientation = nodeData.object3d.orientation;
+            object3d.scale = nodeData.object3d.scale;
+            nodeData.object3d.swapObject(object3d);
+            nodeData.object3d = object3d;
         }
 
         private onXmlLoad(e: LoaderEvent3D) {
@@ -321,18 +394,63 @@
         }
 
         private onTexture(e: LoaderEvent3D) {
-            var textureLoad: URLLoader = e.loader;
-            this.textures[textureLoad["name"]] = textureLoad.data;
-            this.processTask(textureLoad);
-        }
+            var load: URLLoader = e.loader;
 
-        private onHudLoad(e: LoaderEvent3D) {
-            var hudDatas: Array<HUDData> = e.loader["hudDatas"];
-            for (var i: number = 0; i < hudDatas.length; ++i) {
-                var hudData: HUDData = hudDatas[i];
-                hudData.hud.diffuseTexture = e.loader.data;
+            var textureNames: any = load["textureNames"];
+            if (textureNames) {
+                for (var i: number = 0; i < textureNames.length; ++i) {
+                    this.textures[textureNames[i]] = load.data;
+                }
             }
-            this.processTask(e.loader);
+
+            var textureDatas: any = load["textureDatas"];
+            if (textureDatas) {
+                var textureData: any = {};
+                var mesh: Mesh = null;
+                var mat: MaterialBase = null;
+                for (var i: number = 0; i < textureDatas.length; ++i) {
+
+                    textureData = textureDatas[i];
+                    var mapNodeData: MapNodeData = textureData.mapNodeData;
+                    mesh = <Mesh>mapNodeData.object3d;
+                    mat = mesh.getMaterial(textureData.matID);
+
+                    mat[textureData.type] = load.data;
+                }
+            }
+
+            var methodDatas: any = load["methodDatas"];
+            if (methodDatas) {
+                var methodData: any = {};
+
+                for (var i: number = 0; i < methodDatas.length; ++i) {
+                    methodData = methodDatas[i];
+
+                    methodData.method[methodData.textureName] = load.data;
+                }
+            }
+
+            var nodeDatas: Array<MapNodeData> = load["heightNodeDatas"];
+            if (nodeDatas) {
+                for (var i: number = 0; i < nodeDatas.length; ++i) {
+                    var mapNodeData: MapNodeData = nodeDatas[i];
+                    var geometry: any = mapNodeData.geometry;
+                    var envHeightGeometry: ElevationGeometry = new ElevationGeometry(load.data, geometry.width, geometry.height, geometry.depth, geometry.segmentsW, geometry.segmentsH);
+                    var mesh: Mesh = new Mesh(envHeightGeometry, new TextureMaterial(load.data));
+                    this.processHeightMesh(mapNodeData, mesh);
+                    this.doLoadEpa(mapNodeData);
+                }
+            }
+
+            var hudDatas: Array<HUDData> = load["hudDatas"];
+            if (hudDatas) {
+                for (var i: number = 0; i < hudDatas.length; ++i) {
+                    var hudData: HUDData = hudDatas[i];
+                    hudData.hud.diffuseTexture = load.data;
+                }
+            }
+           
+            this.processTask(load);
         }
 
         private doLoadEpa(mapNodeData: MapNodeData) {
@@ -353,6 +471,10 @@
                     }
                     else {
                         var nodeDatas: Array<MapNodeData> = epaload["epanodeData"];
+                        if (!nodeDatas) {
+                            nodeDatas = [];
+                            epaload["epanodeData"] = nodeDatas;
+                        }
                         nodeDatas.push(mapNodeData);
 
                         if (epaload.data) {
@@ -372,39 +494,18 @@
             }
         }
 
-        private onHeightTextureLoad(e: LoaderEvent3D) {
-            var heightImgload: URLLoader = e.loader;
-            var nodeDatas: Array<MapNodeData> = heightImgload["heightNodeDatas"];
-
-            for (var i: number = 0; i < nodeDatas.length; ++i) {
-                var mapNodeData: MapNodeData = nodeDatas[i];
-                var geometry: any = mapNodeData.geometry;
-                var envHeightGeometry: ElevationGeometry = new ElevationGeometry(heightImgload.data, geometry.width, geometry.height, geometry.depth, geometry.segmentsW, geometry.segmentsH);
-                var mesh: Mesh = new Mesh(envHeightGeometry, new TextureMaterial(heightImgload.data));
-                this.processHeightMesh(mapNodeData, mesh);
-                this.doLoadEpa(mapNodeData);
-            }
-
-            this.processTask(heightImgload);
-        }
 
         private processHeightMesh(mapNodeData: MapNodeData, mesh: Mesh) {
-            mesh.name = mapNodeData.object3d.name;
-            mesh.position = mapNodeData.object3d.position;
-            mesh.orientation = mapNodeData.object3d.orientation;
-            mesh.scale = mapNodeData.object3d.scale;
-            mapNodeData.object3d.swapObject(mesh);
-            mapNodeData.object3d = mesh;
+
+            this.processObject3d(mapNodeData, mesh);
+
             this.processMat(mapNodeData);
         }
 
         private processMesh(mapNodeData: MapNodeData, mesh: Mesh) {
-            mesh.name = mapNodeData.object3d.name;
-            mesh.position = mapNodeData.object3d.position;
-            mesh.orientation = mapNodeData.object3d.orientation;
-            mesh.scale = mapNodeData.object3d.scale;
-            mapNodeData.object3d.swapObject(mesh);
-            mapNodeData.object3d = mesh;
+
+            this.processObject3d(mapNodeData, mesh);
+
             this.processMat(mapNodeData);
 
             for (var j: number = 0; j < mapNodeData.skinClips.length; j++) {
@@ -428,6 +529,12 @@
                 }
                 else {
                     var eamnodeDatas: Array<MapNodeData> = load["eamnodeData"];
+                    if (!eamnodeDatas) {
+                        eamnodeDatas = [];
+                        load["eamnodeData"] = eamnodeDatas;
+                    }
+
+
                     eamnodeDatas.push(mapNodeData);
 
                     if (load.data) {
@@ -439,24 +546,41 @@
         }
 
         private onEsmLoad(e: LoaderEvent3D) {
-            var nodeDatas: Array<MapNodeData> = e.loader["esmnodeData"];
-            var mesh: Mesh = new Mesh(e.loader.data, new TextureMaterial());
 
-            var cloneMesh: Mesh = mesh;
-            for (var i: number = 0; i < nodeDatas.length; ++i) {
-                var mapNodeData: MapNodeData = nodeDatas[i];
-                if (cloneMesh) {
-                    this.processMesh(mapNodeData, cloneMesh);
-                    this.doLoadEpa(mapNodeData);
+            var load: URLLoader = e.loader;
 
-                    if (i == nodeDatas.length - 1) {
-                        break;
+            var nodeDatas: Array<MapNodeData> = load["esmnodeData"];
+
+            if (nodeDatas) {
+                var mesh: Mesh = new Mesh(load.data, new TextureMaterial());
+
+                var cloneMesh: Mesh = mesh;
+                for (var i: number = 0; i < nodeDatas.length; ++i) {
+                    var mapNodeData: MapNodeData = nodeDatas[i];
+                    if (cloneMesh) {
+                        this.processMesh(mapNodeData, cloneMesh);
+                        this.doLoadEpa(mapNodeData);
+
+                        if (i == nodeDatas.length - 1) {
+                            break;
+                        }
+                        cloneMesh = mesh.clone();
                     }
-                    cloneMesh = mesh.clone();
                 }
             }
 
-            this.processTask(e.loader);
+            var parDataList: any = load["particleDatas"];
+            if (parData) {
+                for (var i: number = 0; i < parDataList.length; ++i) {
+                    var parData: any = parDataList[i];
+                    var particle: ParticleData = parData.particle;
+                    var nodeData: MapNodeData = parData.nodeData;
+                    particle.shape.geometry = load.data;
+                    this.processParticleGeometry(particle, nodeData);
+                }
+            }
+
+            this.processTask(load);
         }
 
         private onEamLoad(e: LoaderEvent3D) {
@@ -504,42 +628,7 @@
             
             this.processTask(e.loader);
         }
-
-        private onImgLoad(e: LoaderEvent3D) {
-            var load: URLLoader = e.loader;
-
-            var textureDatas: any = load["textureDatas"];
-            var textureData: any = {};
-            var mesh: Mesh = null;
-            var mat: MaterialBase = null;
-            for (var i: number = 0; i < textureDatas.length; ++i) {
-
-                textureData = textureDatas[i];
-                var mapNodeData: MapNodeData = textureData.mapNodeData;
-                mesh = <Mesh>mapNodeData.object3d;
-                mat = mesh.getMaterial(textureData.matID);
-
-                mat[textureData.type] = load.data;
-            }
-
-            this.processTask(load);
-        }
-
-        private onImgMethodLoad(e: LoaderEvent3D) {
-            var load: URLLoader = e.loader;
-
-            var methodDatas: any = load["methodDatas"];
-            var methodData: any = {};
-
-            for (var i: number = 0; i < methodDatas.length; ++i) {
-                methodData = methodDatas[i];
-
-                methodData.method[methodData.textureName] = load.data;
-            }
-
-            this.processTask(load);
-        }
-
+        
         private createLoader(path: string): URLLoader {
             var load: URLLoader = new URLLoader(path);
             this.addLoader(load);
@@ -601,19 +690,23 @@
                 load = this.createLoader(path);
 
                 var textureDatas: any = [];
+                load["textureDatas"] = textureDatas;
+
                 var textureData: any = {};
 
                 textureData.type = type;
                 textureData.matID = matID;
                 textureData.mapNodeData = mapNodeData;
                 textureDatas.push(textureData);
-                load["textureDatas"] = textureDatas;
 
-                load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onImgLoad, this);
+                load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onTexture, this);
             }
             else {
-
                 var textureDatas: any = load["textureDatas"];
+                if (!textureDatas) {
+                    textureDatas = [];
+                    load["textureDatas"] = textureDatas;
+                }
 
                 var textureData: any = {};
                 textureData.type = type;
@@ -625,7 +718,6 @@
 
             return load;
         }
-
 
         private addMethodImgTask(name:string, method:MethodBase, textureName:string): URLLoader {
             var path: string = this._pathRoot + name;
@@ -641,10 +733,14 @@
                 methodDatas.push(methodData);
 
                 load["methodDatas"] = methodDatas;
-                load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onImgMethodLoad, this);
+                load.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onTexture, this);
             }
             else {
                 var methodDatas: any = load["methodDatas"];
+                if (!methodDatas) {
+                    methodDatas = [];
+                    load["methodDatas"] = methodDatas;
+                }
                 var methodData: any = {};
                 methodData.method = method;
                 methodData.textureName = textureName;

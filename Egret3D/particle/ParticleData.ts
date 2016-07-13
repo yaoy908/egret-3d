@@ -104,6 +104,19 @@
         Sphere,
         HemiSphere,
         Cone,
+        Mesh,
+    }
+
+    /**
+    * @language zh_CN
+    * 外置模型发射器类型
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export enum ParticleMeshShapeType {
+        Vertex,
+        Triangle,
+        Edge,
     }
 
 
@@ -268,6 +281,8 @@
         public colorConst2: Color = new Color(255, 255, 255, 255);
         public colorGradients1: ColorGradients;
         public colorGradients2: ColorGradients;
+        //颜色矫正
+        public tintColor: Color = new Color(128, 128, 128, 128);
         //重力
         public gravity: number = 0;
         //是否预热
@@ -429,6 +444,11 @@
         public coneRadiusBottom: number = 2;
         public coneRadiusTop: number = 4;
         public coneType: number = ParticleConeShapeType.Volume;
+
+        //mesh类型发射器的类型
+        public meshType: number = ParticleMeshShapeType.Vertex;
+        public meshFile: string;
+        public geometry: Geometry;
 
         constructor() {
             super(ParticleDataNodeType.Shape);
