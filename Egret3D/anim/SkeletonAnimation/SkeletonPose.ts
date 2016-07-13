@@ -1,4 +1,17 @@
 module egret3d {
+
+    /**
+    * @language zh_CN
+    * @class egret3d.SkeletonPose
+    * @classdesc
+    * SkeletonPose 类为单帧骨架动画数据，若干个SkeletonPose组合成SkeletonAnimationClip， 做为骨骼骨架序列数据
+    * 
+    * @version Egret 3.0
+    * @platform Web,Native
+    * @includeExample animation/skeletonAnimation/SkeletonPose.ts
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class SkeletonPose {
 
         /**
@@ -17,28 +30,15 @@ module egret3d {
         */
         public frameTime: number;
 
-        ///**
-        //* @language zh_CN
-        //* GPU所需的骨骼缓存数据
-        //* @version Egret 3.0
-        //* @platform Web,Native
-        //*/
-        //public cacheData: Float32Array;
-
-        ///**
-        //* @language zh_CN
-        //* GPU所需的骨骼缓存数据是否有效
-        //* @version Egret 3.0
-        //* @platform Web,Native
-        //*/
-        //public cacheDataValid: boolean;
-
-        private _temp_q0: Quaternion = new Quaternion();
-        private _temp_q1: Quaternion = new Quaternion();
-        private _temp_q2: Quaternion = new Quaternion();
-        private _temp_v0: Vector3D = new Vector3D();
-        private _temp_v1: Vector3D = new Vector3D();
-        private _temp_v2: Vector3D = new Vector3D();
+        private static _temp_v0: Vector3D = new Vector3D();
+        private static _temp_v1: Vector3D = new Vector3D();
+        private static _temp_v2: Vector3D = new Vector3D();
+        private static _temp_q0: Quaternion = new Quaternion();
+        private static _temp_q1: Quaternion = new Quaternion();
+        private static _temp_q2: Quaternion = new Quaternion();
+        private static _temp_jointMatrix: Matrix4_4 = new Matrix4_4();
+        private static _temp_matrixDecomposeA: Vector3D[] = [new Vector3D(), new Vector3D(), new Vector3D()];
+        private static _temp_matrixDecomposeB: Vector3D[] = [new Vector3D(), new Vector3D(), new Vector3D()];
 
         constructor() {
         }
@@ -105,25 +105,25 @@ module egret3d {
                 if (joint.worldMatrixValid) {
 
                     //pos rot scale
-                    var decomposeA: Vector3D[] = jointA.worldMatrix.decompose(Orientation3D.QUATERNION);
-                    var decomposeB: Vector3D[] = jointB.worldMatrix.decompose(Orientation3D.QUATERNION);
+                    var decomposeA: Vector3D[] = jointA.worldMatrix.decompose(Orientation3D.QUATERNION, SkeletonPose._temp_matrixDecomposeA);
+                    var decomposeB: Vector3D[] = jointB.worldMatrix.decompose(Orientation3D.QUATERNION, SkeletonPose._temp_matrixDecomposeB);
 
                     //pos;
-                    this._temp_v0.lerp(decomposeA[0], decomposeB[0], t);
+                    SkeletonPose._temp_v0.lerp(decomposeA[0], decomposeB[0], t);
                     //rot;
-                    this._temp_q1.x = decomposeA[1].x;
-                    this._temp_q1.y = decomposeA[1].y;
-                    this._temp_q1.z = decomposeA[1].z;
-                    this._temp_q1.w = decomposeA[1].w;
-                    this._temp_q2.x = decomposeB[1].x;
-                    this._temp_q2.y = decomposeB[1].y;
-                    this._temp_q2.z = decomposeB[1].z;
-                    this._temp_q2.w = decomposeB[1].w;
-                    this._temp_q0.lerp(this._temp_q1, this._temp_q2, t);
+                    SkeletonPose._temp_q1.x = decomposeA[1].x;
+                    SkeletonPose._temp_q1.y = decomposeA[1].y;
+                    SkeletonPose._temp_q1.z = decomposeA[1].z;
+                    SkeletonPose._temp_q1.w = decomposeA[1].w;
+                    SkeletonPose._temp_q2.x = decomposeB[1].x;
+                    SkeletonPose._temp_q2.y = decomposeB[1].y;
+                    SkeletonPose._temp_q2.z = decomposeB[1].z;
+                    SkeletonPose._temp_q2.w = decomposeB[1].w;
+                    SkeletonPose._temp_q0.lerp(SkeletonPose._temp_q1, SkeletonPose._temp_q2, t);
                     //scale;
-                    this._temp_v1.lerp(decomposeA[2], decomposeB[2], t);
+                    SkeletonPose._temp_v1.lerp(decomposeA[2], decomposeB[2], t);
 
-                    joint.worldMatrix.makeTransform(this._temp_v0, this._temp_v1, this._temp_q0);
+                    joint.worldMatrix.makeTransform(SkeletonPose._temp_v0, SkeletonPose._temp_v1, SkeletonPose._temp_q0);
                 }
 
                 this.joints.push(joint);
@@ -185,8 +185,6 @@ module egret3d {
         */
         public updateGPUCacheData(skeleton: Skeleton, skeletonMatrixData:Float32Array): Float32Array {
 
-            var jointMatrix: Matrix4_4 = new Matrix4_4();
-
             for (var i: number = 0; i < skeleton.joints.length; ++i) {
 
                 for (var j: number = 0; j < this.joints.length; ++j) {
@@ -194,11 +192,11 @@ module egret3d {
                     if (skeleton.joints[i].name != this.joints[j].name)
                         continue;
 
-                    jointMatrix.copyFrom(skeleton.joints[i].inverseMatrix);
+                    SkeletonPose._temp_jointMatrix.copyFrom(skeleton.joints[i].inverseMatrix);
 
-                    jointMatrix.append(this.joints[j].worldMatrix);
+                    SkeletonPose._temp_jointMatrix.append(this.joints[j].worldMatrix);
 
-                    var test: Vector3D[] = jointMatrix.decompose(Orientation3D.QUATERNION);
+                    var test: Vector3D[] = SkeletonPose._temp_jointMatrix.decompose(Orientation3D.QUATERNION, SkeletonPose._temp_matrixDecomposeA);
 
                     skeletonMatrixData[i * 8 + 0] = test[1].x;
                     skeletonMatrixData[i * 8 + 1] = test[1].y;
@@ -246,6 +244,9 @@ module egret3d {
         * @platform Web,Native
         */
         public findJointIndex(name: string): number {
+
+            if ("" == name)
+                return -1;
 
             for (var i: number = 0; i < this.joints.length; i++) {
                 if (this.joints[i].name == name)

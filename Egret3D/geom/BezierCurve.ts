@@ -94,8 +94,14 @@
 
     }
 
-
-
+    /**
+    * @private
+    * @language zh_CN
+    * @class egret3d.BezierData
+    * @classdesc
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
     export class BezierData {
         public static SegCount: number = 2;//四段贝塞尔曲线
         public posPoints: Array<Point> = [];

@@ -244,20 +244,20 @@
         * 计算摄像机的射线
         * @param width 视口宽
         * @param height 视口高
-        * @param viewMat 相机视图矩阵
+        * @param modleMat 相机世界矩阵
         * @param projMat 相机投影矩阵
         * @param x 鼠标x
         * @param y 鼠标y
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public CalculateAndTransformRay(width: number, height: number, viewMat: Matrix4_4, projMat: Matrix4_4, x: number, y: number) {
+        public CalculateAndTransformRay(width: number, height: number, modleMat: Matrix4_4, projMat: Matrix4_4, x: number, y: number) {
             this.reset();
             this.dir.x = (2.0 * x / width - 1.0) / projMat.rawData[0];
             this.dir.y = (-2.0 * y / height + 1.0) / projMat.rawData[5];
             this.dir.z = 1.0;
 
-            this.invViewMat.copyFrom(viewMat);
+            this.invViewMat.copyFrom(modleMat);
             this.origin.copyFrom(this.invViewMat.transformVector(this.origin));
             this.dir.copyFrom(this.invViewMat.deltaTransformVector(this.dir));
             this.dir.normalize();
