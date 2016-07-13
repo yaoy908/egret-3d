@@ -78,7 +78,7 @@
 
                 skeletonPose.calculateJointWorldMatrix();
 
-                skeletonAnimationClip.poseArray.push(skeletonPose);
+                skeletonAnimationClip.addSkeletonPose(skeletonPose);
             }
 
             return skeletonAnimationClip;
@@ -113,51 +113,63 @@
             //读取数量;
             var nCount: number = bytes.readInt();
 
-            var orientation: Quaternion = new Quaternion();
+            //流数据;
+            if (boneCount * frameCount >= 10000) {
+                skeletonAnimationClip.sampling = sampling;
+                skeletonAnimationClip.boneCount = boneCount;
+                skeletonAnimationClip.frameDataOffset = bytes.position;
+                skeletonAnimationClip.sourceData = bytes;
+                skeletonAnimationClip.buildInitialSkeleton(boneNameArray, parentBoneNameArray, nCount);
+            }
+            else {
 
-            var scale: Vector3D = new Vector3D();
+                var orientation: Quaternion = new Quaternion();
 
-            var translation: Vector3D = new Vector3D();
+                var scale: Vector3D = new Vector3D();
 
-            for (var i: number = 0; i < nCount; i++) {
+                var translation: Vector3D = new Vector3D();
 
-                var skeletonPose: SkeletonPose = new SkeletonPose();
+                for (var i: number = 0; i < nCount; i++) {
 
-                //读取该帧时刻;
-                skeletonPose.frameTime = bytes.readInt() / 60 / 80 * 1000;
+                    var skeletonPose: SkeletonPose = new SkeletonPose();
 
-                for (var j: number = 0; j < boneCount; j++) {
+                    //读取该帧时刻;
+                    skeletonPose.frameTime = bytes.readInt() / 60 / 80 * 1000;
 
-                    var jointPose: Joint = new Joint(boneNameArray[j]);
+                    for (var j: number = 0; j < boneCount; j++) {
 
-                    jointPose.parent = parentBoneNameArray[j];
+                        var jointPose: Joint = new Joint(boneNameArray[j]);
 
-                    jointPose.parentIndex = skeletonPose.findJointIndex(jointPose.parent);
+                        jointPose.parent = parentBoneNameArray[j];
 
-                    //读取旋转四元数分量;
-                    orientation.x = bytes.readFloat();
-                    orientation.y = bytes.readFloat();
-                    orientation.z = bytes.readFloat();
-                    orientation.w = bytes.readFloat();
+                        jointPose.parentIndex = skeletonPose.findJointIndex(jointPose.parent);
 
-                    //读取缩放分量;
-                    scale.x = bytes.readFloat();
-                    scale.y = bytes.readFloat();
-                    scale.z = bytes.readFloat();
+                        //读取旋转四元数分量;
+                        orientation.x = bytes.readFloat();
+                        orientation.y = bytes.readFloat();
+                        orientation.z = bytes.readFloat();
+                        orientation.w = bytes.readFloat();
 
-                    //读取平移分量;
-                    translation.x = bytes.readFloat();
-                    translation.y = bytes.readFloat();
-                    translation.z = bytes.readFloat();
+                        //读取缩放分量;
+                        scale.x = bytes.readFloat();
+                        scale.y = bytes.readFloat();
+                        scale.z = bytes.readFloat();
 
-                    jointPose.buildLocalMatrix(scale, orientation, translation);
+                        //读取平移分量;
+                        translation.x = bytes.readFloat();
+                        translation.y = bytes.readFloat();
+                        translation.z = bytes.readFloat();
 
-                    skeletonPose.joints.push(jointPose);
+                        jointPose.buildLocalMatrix(scale, orientation, translation);
+
+                        skeletonPose.joints.push(jointPose);
+                    }
+
+                    skeletonPose.calculateJointWorldMatrix();
+
+                    skeletonAnimationClip.poseArray.push(skeletonPose);
                 }
 
-                skeletonPose.calculateJointWorldMatrix();
-                
-                skeletonAnimationClip.poseArray.push(skeletonPose);
             }
 
             return skeletonAnimationClip;

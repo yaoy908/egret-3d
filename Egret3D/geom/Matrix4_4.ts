@@ -741,18 +741,21 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public decompose(orientationStyle: string = "eulerAngles"): Vector3D[] {
+        public decompose(orientationStyle: string = "eulerAngles", target: Vector3D[] = null): Vector3D[] {
             var q: Quaternion = MathUtil.CALCULATION_QUATERNION;
-            var vec: Vector3D[] = [];
+            var vec: Vector3D[] = target ? target : [new Vector3D(), new Vector3D(), new Vector3D()];
             var m = this.clone();
             var mr = m.rawData;
 
-            var pos: Vector3D = new Vector3D(mr[12], mr[13], mr[14]);
+            var pos: Vector3D = vec[0];
+            pos.x = mr[12];
+            pos.y = mr[13];
+            pos.z = mr[14];
             mr[12] = 0;
             mr[13] = 0;
             mr[14] = 0;
 
-            var scale: Vector3D = new Vector3D();
+            var scale: Vector3D = vec[2];
 
             scale.x = Math.sqrt(mr[0] * mr[0] + mr[1] * mr[1] + mr[2] * mr[2]);
             scale.y = Math.sqrt(mr[4] * mr[4] + mr[5] * mr[5] + mr[6] * mr[6]);
@@ -771,7 +774,7 @@
             mr[9] /= scale.z;
             mr[10] /= scale.z;
 
-            var rot = new Vector3D();
+            var rot = vec[1];
 
             switch (orientationStyle) {
                 case Orientation3D.AXIS_ANGLE:
