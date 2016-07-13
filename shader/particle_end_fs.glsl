@@ -1,4 +1,7 @@
-//uniform float uniform_particleFsData[3];
+//near
+//far
+//blendMode
+uniform float uniform_particleFsData[3];
 void main() {
 	outColor.xyz = diffuseColor.xyz * materialSource.diffuse * varying_color.xyz ;
 	outColor.w = materialSource.alpha * diffuseColor.w * varying_color.w;
