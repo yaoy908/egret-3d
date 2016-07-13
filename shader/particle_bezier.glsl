@@ -1,4 +1,5 @@
 vec2 bzData[20];
+const float Tiny = 0.0001;
 void dcpBezier(float bezierData[22], float tTotal) 
 { 
 	float timeNow = 0.0; 
@@ -34,7 +35,7 @@ float calcBezierArea(float tCurrent){
 		t0 = bzData[i].x;
 		t1 = bzData[i + 1].x;
 		deltaTime = t1 - t0;
-		if(deltaTime > 0.0001)
+		if(deltaTime > Tiny)
 		{
 			a_deltaTime = 0.5 * (v1 - v0);
 			if(tCurrent >= t1){
@@ -78,7 +79,7 @@ float calcBezierSize(float tCurrent){
 		t0 = bzData[i].x;
 		t1 = bzData[i + 1].x;
 		deltaTime = t1 - t0;
-		if(deltaTime > 0.0001)
+		if(deltaTime > Tiny)
 		{
 			if(tCurrent <= t1){
 				v = (y1 - y0) / deltaTime;

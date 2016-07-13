@@ -28,7 +28,7 @@ vec3 calcParticleMove(vec3 distanceXYZ){
 		vec3 temp = distanceXYZ * distanceXYZ;
 		float distanceCurrent = sqrt(temp.x + temp.y + temp.z);
 		float distanceLimit = velocityLimitVec2.x;
-		if(distanceLimit < 0.0001){
+		if(distanceLimit < Tiny){
 			return vec3(0.0);
 		}
 		if(distanceCurrent > distanceLimit){
@@ -43,12 +43,11 @@ mat4 getRenderModeMatrix(mat4 cameraMatrix, mat4 modelMatrix){
 }
 
 //rewrite by stretched
-void updateStretchedBillBoard(vec4 startPos, vec4 newPos){
-		
+float updateStretchedBillBoard(vec4 startPos, vec4 newPos){
+	return 1.0;	
 }
 
 void main(void) {
-	vec4 emitterBirthPos;
 	if(discard_particle > TrueOrFalse){ 
 		outPosition = vec4(0.0,0.0,0.0,0.0); 
 	}else{
@@ -118,17 +117,16 @@ void main(void) {
 		vec3 origPosition = position_emitter;
 		position_emitter += velocityMultiVec3; 
 
-		updateStretchedBillBoard(vec4(origPosition, 1.0), vec4(position_emitter, 1.0));
-		//
-		mat4 billboardMatrix = getRenderModeMatrix(uniform_cameraMatrix, modelMatrix);
-		outPosition = billboardMatrix * localPosition;
-		outPosition.xyz += position_emitter.xyz;
-		outPosition = uniform_ViewMatrix * outPosition;
-
-		emitterBirthPos = uniform_ViewMatrix * vec4(position_emitter, 1.0);
+		float dirEnable = updateStretchedBillBoard(vec4(origPosition, 1.0), vec4(position_emitter, 1.0));
+		if(dirEnable > TrueOrFalse){
+			mat4 billboardMatrix = getRenderModeMatrix(uniform_cameraMatrix, modelMatrix);
+			outPosition = billboardMatrix * localPosition;
+			outPosition.xyz += position_emitter.xyz;
+			outPosition = uniform_ViewMatrix * outPosition;
+		}else{
+			outPosition = vec4(0.0,0.0,0.0,0.0); 
+		}
 	}
-	varying_posZ = emitterBirthPos.z;
-
 	gl_Position = uniform_ProjectionMatrix * outPosition ; 
 }
 	

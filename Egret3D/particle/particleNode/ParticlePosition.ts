@@ -158,6 +158,8 @@
                         dir.copyFrom(recordPos);
                     } else if (this._node.type == ParticleDataShapeType.Cone) {
                         dir = coneShape.getDirection(recordPos, dir);
+                    } else if (this._node.type == ParticleDataShapeType.Mesh) {
+                        dir.setTo(0, 0, 1, 1);
                     }
                 }
 

@@ -234,23 +234,15 @@
                     else if (this.coneType == ParticleConeShapeType.VolumeShell) {
                         pos.y = Math.random() * this.height - this.height * 0.5;
                     }
-                    //两个底面
+                    //底面
                     else if (this.coneType == ParticleConeShapeType.Base) {
-                        pos.y = this.height * 0.5;
-                        var random: number = Math.random();
-                        if (random > 0.5) {
-                            pos.y *= -1;
-                        }
+                        pos.y = -this.height * 0.5;
                         pos.x *= random;
                         pos.z *= random;
                     }
-                    //两个底的圈
+                    //底的圈
                     else if (this.coneType == ParticleConeShapeType.BaseShell) {
-                        pos.y = this.height * 0.5;
-                        if (Math.random() > 0.5) {
-                            pos.y *= -1;
-                        }
-
+                        pos.y = -this.height * 0.5;
                     }
                     values.push(pos);
                 }
@@ -269,7 +261,16 @@
                 for (var i: number = 0; i < num; i++) {
                     pos = new Vector3D();
                     angle = Math.random() * 2 * Math.PI;
-                    pos.y = Math.random() * this.height - this.height * 0.5;
+                    if (this.coneType == ParticleConeShapeType.Base) {
+                        pos.y = - this.height * 0.5;
+                    } else if (this.coneType == ParticleConeShapeType.BaseShell) {
+                        pos.y = - this.height * 0.5;
+                    } else if (this.coneType == ParticleConeShapeType.Volume) {
+                        pos.y = Math.random() * this.height - this.height * 0.5;
+                    } else if (this.coneType == ParticleConeShapeType.VolumeShell) {
+                        pos.y = Math.random() * this.height - this.height * 0.5;
+                    }
+
 
                     targetR = Math.abs(pos.y - this.origPoint.y);//点到原点的y距离
 
@@ -285,10 +286,10 @@
 
                     pos.x = Math.sin(angle) * targetR;
                     pos.z = Math.cos(angle) * targetR;
-                    if (this.coneType == ParticleConeShapeType.Volume) {
+                    if (this.coneType == ParticleConeShapeType.Volume || this.coneType == ParticleConeShapeType.Base) {
                         var random: number = Math.random();
                         pos.x *= random;
-                        pos.y *= random;
+                        pos.z *= random;
                     }
 
                     values.push(pos);
@@ -598,9 +599,7 @@
 
         private edgePosition(values:Vector3D[], num:number): void {
             var val: Vector3D;
-            var index: number = 0;
             var triangleCount: number = this.geometry.indexData.length / 3;
-            var verticesData: number[] = this.geometry.verticesData;
             var vc1: Vector3D;
             var vc2: Vector3D;
             var random: number;
@@ -647,10 +646,80 @@
         }
 
         private trianglePosition(values: Vector3D[], num: number): void {
+            var val: Vector3D;
+            var triangleCount: number = this.geometry.indexData.length / 3;
+            var vc1: Vector3D = new Vector3D();
+            var vc2: Vector3D = new Vector3D();
+            var random: number;
+
+            var xyz: number[] = [];
+            for (var i: number = 0; i < num; i++) {
+                val = new Vector3D();
+                values.push(val);
+
+                var index0: number = 3 * Math.floor(triangleCount * Math.random());//第n个三角形
+                var index1: number = index0 + 1;
+                var index2: number = index0 + 2;
+
+                xyz.length = 0;
+                //获取三角形的三个顶点
+                this.geometry.getVertexForIndex(index0 + 0, VertexFormat.VF_POSITION, xyz);
+                Mesh3DValueShape.vct1.setTo(xyz[0], xyz[1], xyz[2]);
+
+                this.geometry.getVertexForIndex(index0 + 1, VertexFormat.VF_POSITION, xyz);
+                Mesh3DValueShape.vct2.setTo(xyz[0], xyz[1], xyz[2]);
+
+                this.geometry.getVertexForIndex(index0 + 2, VertexFormat.VF_POSITION, xyz);
+                Mesh3DValueShape.vct3.setTo(xyz[0], xyz[1], xyz[2]);
+
+
+                //在两条边上分别随机一个位置
+                vc1.lerp(Mesh3DValueShape.vct1, Mesh3DValueShape.vct2, Math.random());
+                vc2.lerp(Mesh3DValueShape.vct2, Mesh3DValueShape.vct3, Math.random());
+                //连接两个随机位置的线段，之间随机一个位置
+                val.lerp(vc1, vc2, Math.random());
+
+
+            }
         }
 
         private vertexPosition(values: Vector3D[], num: number): void {
-           
+            var val: Vector3D;
+            var triangleCount: number = this.geometry.indexData.length / 3;
+            var random: number;
+
+            var xyz: number[] = [];
+            for (var i: number = 0; i < num; i++) {
+                val = new Vector3D();
+                values.push(val);
+
+                var index0: number = 3 * Math.floor(triangleCount * Math.random());//第n个三角形
+                var index1: number = index0 + 1;
+                var index2: number = index0 + 2;
+
+                xyz.length = 0;
+                //获取三角形的三个顶点
+                this.geometry.getVertexForIndex(index0 + 0, VertexFormat.VF_POSITION, xyz);
+                Mesh3DValueShape.vct1.setTo(xyz[0], xyz[1], xyz[2]);
+
+                this.geometry.getVertexForIndex(index0 + 1, VertexFormat.VF_POSITION, xyz);
+                Mesh3DValueShape.vct2.setTo(xyz[0], xyz[1], xyz[2]);
+
+                this.geometry.getVertexForIndex(index0 + 2, VertexFormat.VF_POSITION, xyz);
+                Mesh3DValueShape.vct3.setTo(xyz[0], xyz[1], xyz[2]);
+
+
+                //在三角形上获得一条边
+                random = Math.random();
+                if (random < 0.333) {
+                    val.copyFrom(Mesh3DValueShape.vct1);
+                } else if (random < 0.666) {
+                    val.copyFrom(Mesh3DValueShape.vct2);
+                } else {
+                    val.copyFrom(Mesh3DValueShape.vct3);
+                }
+
+            }
         }
 
 
