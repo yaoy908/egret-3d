@@ -570,7 +570,7 @@
             }
 
             var parDataList: any = load["particleDatas"];
-            if (parData) {
+            if (parDataList) {
                 for (var i: number = 0; i < parDataList.length; ++i) {
                     var parData: any = parDataList[i];
                     var particle: ParticleData = parData.particle;
