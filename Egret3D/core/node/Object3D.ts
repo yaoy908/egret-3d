@@ -1157,6 +1157,14 @@
         * @platform Web,Native
         */
         public addChild(child: Object3D): Object3D {
+            if (child.parent) {
+                throw Error("This object is already the other child object.");
+            }
+
+            if (this.childs.indexOf(child) >= 0) {
+                throw Error("The same child object has been added.");
+            }
+
             this.childs.push(child);
             Object3D.renderListChange = true;
 
