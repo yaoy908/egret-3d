@@ -1,6 +1,7 @@
 uniform sampler2D diffuseTexture;
 uniform vec3 uniform_eyepos; 
 uniform vec4 waveFSData[2]; 
+uniform mat4 uniform_NormalMatrix;
 
 vec4 diffuseColor ;
 void main(void){
