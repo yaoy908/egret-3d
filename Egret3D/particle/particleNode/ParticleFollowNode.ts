@@ -125,7 +125,7 @@
 
             var timeOffsetIndex: number = this.particleAnimationState.emitter.timeNode.offsetIndex;
             var particleTime: number = animTime * 0.001 - this.particleAnimationState.emitter.data.life.delay;
-            
+            var verticesData: any = geometry.sharedVertexBuffer ? geometry.sharedVertexBuffer.arrayBuffer : geometry.verticesData;
             //没有跟随对象，使用自己
             var followTarget: Object3D = this.particleAnimationState.followTarget || this.particleAnimationState.emitter;
             for (var i: number = 0; i < this.count; ++i) {
@@ -133,9 +133,9 @@
                 particleIndex = i * vertices;
                 this.timeIndex = particleIndex * geometry.vertexAttLength + timeOffsetIndex;
 
-                this.bornTime = geometry.verticesData[this.timeIndex + 0];          //出生时间
-                this.life = geometry.verticesData[this.timeIndex + 1];              //单次生命周期时间
-                //this.id = geometry.verticesData[this.timeIndex + 2];                //下标(i)
+                this.bornTime = verticesData[this.timeIndex + 0];          //出生时间
+                this.life = verticesData[this.timeIndex + 1];              //单次生命周期时间
+                //this.id = array32[this.timeIndex + 2];                //下标(i)
 
                 var curCircleIndex: number = -1;
                 
@@ -153,35 +153,35 @@
                             index = particleIndex + j;
                             index = index * geometry.vertexAttLength + this.attribute_followPosition.offsetIndex;
                             if (true) {
-                                geometry.verticesData[index + 0] = followTarget.globalPosition.x;
-                                geometry.verticesData[index + 1] = followTarget.globalPosition.y;
-                                geometry.verticesData[index + 2] = followTarget.globalPosition.z;
+                                verticesData[index + 0] = followTarget.globalPosition.x;
+                                verticesData[index + 1] = followTarget.globalPosition.y;
+                                verticesData[index + 2] = followTarget.globalPosition.z;
                             }
                             //rotation
                             index = particleIndex + j;
                             index = index * geometry.vertexAttLength + this.attribute_followRotation.offsetIndex;
                             if (this._followRotation) {
-                                geometry.verticesData[index + 0] = followTarget.globalOrientation.x;
-                                geometry.verticesData[index + 1] = followTarget.globalOrientation.y;
-                                geometry.verticesData[index + 2] = followTarget.globalOrientation.z;
-                                geometry.verticesData[index + 3] = followTarget.globalOrientation.w;
+                                verticesData[index + 0] = followTarget.globalOrientation.x;
+                                verticesData[index + 1] = followTarget.globalOrientation.y;
+                                verticesData[index + 2] = followTarget.globalOrientation.z;
+                                verticesData[index + 3] = followTarget.globalOrientation.w;
                             } else {
-                                geometry.verticesData[index + 0] = 0;
-                                geometry.verticesData[index + 1] = 0;
-                                geometry.verticesData[index + 2] = 0;
-                                geometry.verticesData[index + 3] = 0;
+                                verticesData[index + 0] = 0;
+                                verticesData[index + 1] = 0;
+                                verticesData[index + 2] = 0;
+                                verticesData[index + 3] = 0;
                             }
                             //scale
                             index = particleIndex + j;
                             index = index * geometry.vertexAttLength + this.attribute_followScale.offsetIndex;
                             if (this._followScale) {
-                                geometry.verticesData[index + 0] = followTarget.globalScaleX;
-                                geometry.verticesData[index + 1] = followTarget.globalScaleY;
-                                geometry.verticesData[index + 2] = followTarget.globalScaleZ;
+                                verticesData[index + 0] = followTarget.globalScaleX;
+                                verticesData[index + 1] = followTarget.globalScaleY;
+                                verticesData[index + 2] = followTarget.globalScaleZ;
                             } else {
-                                geometry.verticesData[index + 0] = 0;
-                                geometry.verticesData[index + 1] = 0;
-                                geometry.verticesData[index + 2] = 0;
+                                verticesData[index + 0] = 0;
+                                verticesData[index + 1] = 0;
+                                verticesData[index + 2] = 0;
                             }
 
                         }

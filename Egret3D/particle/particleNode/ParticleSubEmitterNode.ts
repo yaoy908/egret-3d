@@ -122,7 +122,7 @@
             var positionOffsetIndex: number = this._animationState.emitter.positionNode.offsetIndex;
             var timeOffsetIndex: number = this._animationState.emitter.timeNode.offsetIndex;
             var particleTime: number = animTime * 0.001 - this._animationState.emitter.data.life.delay;
-
+            var verticesData: any = geometry.sharedVertexBuffer ? geometry.sharedVertexBuffer.arrayBuffer : geometry.verticesData;
             //没有跟随对象，使用自己
             var followTarget: Object3D = this._animationState.followTarget || this._animationState.emitter;
             for (var i: number = 0; i < this.count; ++i) {
@@ -130,9 +130,9 @@
                 particleIndex = i * vertices;
                 this.timeIndex = particleIndex * geometry.vertexAttLength + timeOffsetIndex;
 
-                this.bornTime = geometry.verticesData[this.timeIndex + 0];          //出生时间
-                this.life = geometry.verticesData[this.timeIndex + 1];              //单次生命周期时间
-                //this.id = geometry.verticesData[this.timeIndex + 2];                //下标(i)
+                this.bornTime = verticesData[this.timeIndex + 0];          //出生时间
+                this.life = verticesData[this.timeIndex + 1];              //单次生命周期时间
+                //this.id = array32[this.timeIndex + 2];                //下标(i)
 
                 var curCircleIndex: number = -1;
 
@@ -145,9 +145,9 @@
                         index = particleIndex * geometry.vertexAttLength + positionOffsetIndex;
                         this._lifeCircles[i] = curCircleIndex;
                         //position
-                        this.position.x = geometry.verticesData[index + 0];
-                        this.position.y = geometry.verticesData[index + 1];
-                        this.position.z = geometry.verticesData[index + 2];
+                        this.position.x = verticesData[index + 0];
+                        this.position.y = verticesData[index + 1];
+                        this.position.z = verticesData[index + 2];
 
                         this.emitParticleAtPhase(this._birthPhase, this.position);
                     }
