@@ -308,6 +308,8 @@
 
             var text: string = e.loader.data;
             var particleData: ParticleData = new ParticleXmlParser().parse(text);
+            particleData.fileUrl = e.loader.url;
+            particleData.fileName = e.loader.fileName;
             e.loader["particleData"] = particleData;
 
             for (var i: number = 0; i < nodeDatas.length; ++i) {

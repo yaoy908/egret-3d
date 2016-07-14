@@ -144,6 +144,9 @@
      */
     export class ParticleData {
 
+        public fileUrl: string;
+        public fileName: string;
+
         public property: ParticleDataProperty = new ParticleDataProperty();
         public emission: ParticleDataEmission = new ParticleDataEmission();
         public life: ParticleDataLife = new ParticleDataLife();
