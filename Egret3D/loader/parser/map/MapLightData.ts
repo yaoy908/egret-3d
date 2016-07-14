@@ -11,7 +11,7 @@
     */
     export class MapLightData {
 
-        public id: string = "";
+        public id: number = 0;
         /**
          * @language zh_CN
          * 灯光类型
