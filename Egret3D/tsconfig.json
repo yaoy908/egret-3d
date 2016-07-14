@@ -183,6 +183,7 @@
         "material/method/LightMapMethod.ts",
         "material/method/PlantDistortedMethod.ts",
         "material/method/AlphaMaskMethod.ts",
+        "material/method/AOMapMethod.ts",
         "material/method/ColorTransformMethod.ts",
         "material/method/ColorGradientsMethod.ts",
         "material/method/StreamerMethod.ts",

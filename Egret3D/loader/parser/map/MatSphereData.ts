@@ -192,6 +192,8 @@
          */
         public methods: MatMethodData[] = [];
 
+        public lightIds: Array<number> = [];
+
         /**
          * @language zh_CN
          * 材质球uv区域

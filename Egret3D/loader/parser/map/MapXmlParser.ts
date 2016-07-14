@@ -220,6 +220,14 @@
                 else if (nodeName == "blendMode") {
                     data[item.nodeName] = BlendMode[item.textContent];
                 }
+                else if (nodeName == "lightIds") {
+                    if (item.textContent) {
+                        var splits: string[] = item.textContent.split(",");
+                        for (var j: number = 0; j < splits.length; ++j) {
+                            data.lightIds.push(Number(splits[j]));
+                        }
+                    }
+                }
                 else {
                     var v: string = typeof data[item.nodeName];
                     if (v == "string") {
@@ -419,7 +427,12 @@
 
                         for (var iii: number = 0; iii < item0.attributes.length; ++iii) {
                             attr = item0.attributes[iii];
-                            lightData[attr.name] = attr.value;
+                            if (attr.name == "id") {
+                                lightData[attr.name] = Number(attr.value);
+                            }
+                            else {
+                                lightData[attr.name] = attr.value;
+                            }
                         }
 
                         this.lightDict[lightData.id] = lightData;
