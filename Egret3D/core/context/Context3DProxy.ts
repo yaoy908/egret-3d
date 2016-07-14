@@ -21,6 +21,7 @@
     */
     export class Context3DProxy {
        
+
         /**
          * @language zh_CN
          * @private
@@ -242,6 +243,8 @@
             var vb: VertexBuffer3D = new VertexBuffer3D(vertexBuffer);
             vb.arrayBuffer = vertexDataArray;
 
+           // vertexData.splice(0, vertexData.length);
+            //vertexData.splice(0, vertexData.length);
             return vb;
         }
 

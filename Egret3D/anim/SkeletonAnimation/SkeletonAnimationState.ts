@@ -189,7 +189,12 @@ module egret3d {
                     this._timePosition = 0;
 
                     if (this.name == this._skeletonAnimation.currentAnimName) {
+
                         this._skeletonAnimation.stop();
+
+                        this._skeletonAnimation.event3D.target = this._skeletonAnimation;
+                        this._skeletonAnimation.event3D.eventType = SkeletonAnimationEvent3D.EVENT_PLAY_COMPLETE;
+                        this._skeletonAnimation.dispatchEvent(this._skeletonAnimation.event3D);
                     }
                 }
                 else if (this._timePosition > this._timeLength) {
@@ -197,7 +202,12 @@ module egret3d {
                     this._timePosition = this._timeLength;
 
                     if (this.name == this._skeletonAnimation.currentAnimName) {
+
                         this._skeletonAnimation.stop();
+
+                        this._skeletonAnimation.event3D.target = this._skeletonAnimation;
+                        this._skeletonAnimation.event3D.eventType = SkeletonAnimationEvent3D.EVENT_PLAY_COMPLETE;
+                        this._skeletonAnimation.dispatchEvent(this._skeletonAnimation.event3D);
                     }
                 }
             }

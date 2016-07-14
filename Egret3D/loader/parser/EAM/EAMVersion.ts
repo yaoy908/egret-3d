@@ -114,7 +114,7 @@
             var nCount: number = bytes.readInt();
 
             //流数据;
-            if (boneCount * frameCount >= 10000) {
+            if (boneCount * frameCount >= 10000 && false) {
                 skeletonAnimationClip.sampling = sampling;
                 skeletonAnimationClip.boneCount = boneCount;
                 skeletonAnimationClip.frameDataOffset = bytes.position;
@@ -167,7 +167,7 @@
 
                     skeletonPose.calculateJointWorldMatrix();
 
-                    skeletonAnimationClip.poseArray.push(skeletonPose);
+                    skeletonAnimationClip.addSkeletonPose(skeletonPose);
                 }
 
             }
