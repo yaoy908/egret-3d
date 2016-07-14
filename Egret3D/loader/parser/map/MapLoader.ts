@@ -45,8 +45,8 @@
         private _path: string = "";
         private _mapXmlParser: MapXmlParser = null;
 
-        private static _loaderDict: any = {};
         private static _assetMgr: AssetManager = new AssetManager();
+        private _textures: any = {};
 
         private _taskCount: number = 0;
         private _event: LoaderEvent3D = new LoaderEvent3D();
@@ -54,7 +54,6 @@
 
         public huds: Array<HUD> = new Array<HUD>();
 
-        public textures: any = {};
         public taskTotal: number = 0;
         public taskCurrent: number = 0;
 
@@ -75,18 +74,28 @@
             if (name) {
                 this.load(name, mapConfig, path);
             }
-           
         }
 
-         /**
-         * @language zh_CN
-         * 加载场景
-         * @param name 场景名字
-         * @param mapConfig 场景配置文件 默认为"MapConfig.xml"
-         * @param path 场景文件路径 默认"resource/scene/"
-         * @version Egret 3.0
-         * @platform Web,Native
-         */
+        /**
+        * @language zh_CN
+        * 查找贴图
+        * @param name 贴图名字
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public findTexture(name: string): ITexture {
+            return this._textures[name];
+        }
+
+        /**
+        * @language zh_CN
+        * 加载场景
+        * @param name 场景名字
+        * @param mapConfig 场景配置文件 默认为"MapConfig.xml"
+        * @param path 场景文件路径 默认"resource/scene/"
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public load(name: string, mapConfig: string = "MapConfig.xml", path: string = "resource/scene/") {
             this._pathRoot = path + name + "/";
             this._path = this._pathRoot + mapConfig;
@@ -187,7 +196,7 @@
                 var path: string = this._pathRoot + data.path;
                 var textureLoad: URLLoader = MapLoader._assetMgr.dispatchTask(path);
                 if (textureLoad.data) {
-                    this.textures[data.name] = textureLoad.data;
+                    this._textures[data.name] = textureLoad.data;
                 }
                 else {
                     this.addTask(textureLoad);
@@ -317,8 +326,7 @@
         }
 
         private onTexture(load: URLLoader, name: string) {
-            this.textures[name] = load.data;
-
+            this._textures[name] = load.data;
             this.processTask(load);
         }
 
