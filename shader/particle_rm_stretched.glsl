@@ -10,7 +10,7 @@ mat4 getRenderModeMatrix(mat4 cameraMatrix, mat4 modelMatrix) {
 
 float updateStretchedBillBoard(vec4 startPos, vec4 newPos){
 	localPosition.x *= particleStateData.lengthScale; 
-	mat4 temp = uniform_ProjectionMatrix * uniform_ViewMatrix;
+	mat4 temp = uniform_ViewMatrix;
 	startPos = temp * startPos; 
 	newPos = temp * newPos; 
 
