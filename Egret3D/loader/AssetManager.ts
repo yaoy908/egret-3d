@@ -48,6 +48,7 @@
                     var assetEvent: AssetEvent = assetEventList[i];
                     assetEvent.callback.call(assetEvent.thisObject, e.loader, assetEvent.param);
                 }
+                assetEventList.length = 0;
             }
         }
     }
