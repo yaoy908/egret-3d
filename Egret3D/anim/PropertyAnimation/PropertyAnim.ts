@@ -382,6 +382,7 @@ module egret3d {
         public clone(): PropertyAnim {
             var pro: PropertyAnim = new PropertyAnim();
             pro._propertyArray = this._propertyArray;
+            pro._totalTime = this._totalTime;
             return pro;
         }
     }
