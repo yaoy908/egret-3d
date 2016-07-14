@@ -141,6 +141,10 @@
 
         "input/input.ts",
         "input/OrientationController.ts",
+
+        "loader/URLLoader.ts",
+        "loader/AssetManager.ts",
+
         "loader/parser/DDS.ts",
         "loader/parser/DDSParser.ts",
         "loader/parser/PVR.ts",
@@ -167,7 +171,7 @@
         "loader/parser/map/HUDData.ts",
 
         "loader/parser/ParserUtils.ts",
-        "loader/URLLoader.ts",
+
 
         "material/pass/MethodData.ts",
         "material/method/MethodBase.ts",
