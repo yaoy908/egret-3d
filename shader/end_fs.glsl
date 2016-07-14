@@ -5,8 +5,8 @@ vec4 light ;
 
 
 void main() {
-    diffuseColor.xyz = diffuseColor.xyz ;
-	outColor.xyz = light.xyz * diffuseColor.xyz * materialSource.diffuse ;
-	outColor.w = materialSource.alpha * diffuseColor.w ;
-    gl_FragColor = outColor * varying_color;
+	outColor.xyz = light.xyz * diffuseColor.xyz * materialSource.diffuse * varying_color.xyz;
+	outColor.w = materialSource.alpha * diffuseColor.w * varying_color.w;
+	outColor.xyz *= outColor.w;
+    gl_FragColor = outColor;
 }
