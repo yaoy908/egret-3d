@@ -201,6 +201,7 @@
             }
             else {
                 this._box0.copyVertex(this);
+                this._box0.owner = this.owner;
             }
 
             this._box0.calculateTransform();
@@ -211,6 +212,7 @@
             }
             else {
                 this._box1.copyVertex(this);
+                this._box1.owner = target.owner;
             }
             this._box1.calculateTransform();
             this._box1.updateAABB();

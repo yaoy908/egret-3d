@@ -47,7 +47,7 @@ module egret3d {
         private _animStateNames: string[] = [];
         private _animStates: SkeletonAnimationState[] = [];
         private _skeletonMatrixData: Float32Array = null;
-        private _blendSpeed: number = 0;//300;
+        private _blendSpeed: number = 300;
         private _blendSkeleton: SkeletonPose = null;
         private _blendList: SkeletonAnimationState[] = [];
         private _bindList: { [jointIndex: number]: Array<Object3D> } = {};
@@ -421,9 +421,6 @@ module egret3d {
             }
 
 
-
-
-
             this._animTime = this._blendList[this._blendList.length - 1].timePosition;
 
             var animationStateA: SkeletonAnimationState = this._blendList[0];
@@ -433,6 +430,8 @@ module egret3d {
             if (this._blendList.length <= 1) {
 
                 this.updateBindList(currentSkeletonA);
+
+                this.updateMovePos(currentSkeletonA);
 
                 currentSkeletonA.updateGPUCacheData(this._skeleton, this._skeletonMatrixData, this._movePosition);
             }
@@ -453,6 +452,8 @@ module egret3d {
                 this._blendSkeleton.calculateJointWorldMatrix();
 
                 this.updateBindList(this._blendSkeleton);
+
+                this.updateMovePos(this._blendSkeleton);
 
                 this._blendSkeleton.updateGPUCacheData(this._skeleton, this._skeletonMatrixData, this._movePosition);
             }
@@ -623,6 +624,10 @@ module egret3d {
                     object3D.z = jointPose.worldMatrix.position.z;
                 }
             }
+        }
+
+        private updateMovePos(skeletonPose: SkeletonPose): void {
+            var jointPose: Joint = null;
 
             if (this._movePosIndex != -1) {
 
@@ -645,5 +650,6 @@ module egret3d {
                 this._movePosition.copyFrom(jointPose.worldMatrix.position);
             }
         }
+
     }
 }

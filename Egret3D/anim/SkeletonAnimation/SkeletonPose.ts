@@ -204,7 +204,7 @@ module egret3d {
                     skeletonMatrixData[i * 8 + 3] = test[1].w;
 
                     skeletonMatrixData[i * 8 + 4] = test[0].x - offset.x;
-                    skeletonMatrixData[i * 8 + 5] = test[0].y;// - offset.y;
+                    skeletonMatrixData[i * 8 + 5] = test[0].y - offset.y;
                     skeletonMatrixData[i * 8 + 6] = test[0].z - offset.z;
 
                     skeletonMatrixData[i * 8 + 7] = 1;
