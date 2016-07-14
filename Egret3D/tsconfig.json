@@ -176,6 +176,7 @@
         "material/pass/MethodData.ts",
         "material/method/MethodBase.ts",
         "material/method/TerrainARGBMethod.ts",
+        "material/method/FogMethod.ts",
         "material/method/LineFogMethod.ts",
         "material/method/UVRollMethod.ts",
         "material/method/MulUVRollMethod.ts",
