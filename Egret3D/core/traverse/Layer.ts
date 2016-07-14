@@ -13,8 +13,8 @@
     */
     export class Layer {
         
-      //  public static layerType: string[] = ["normalObject", "alphaObject", "effect", "gui"];
-        public static layerType: string[] = ["gui", "effect", "alphaObject", "normalObject"];
+        public static layerType: string[] = ["normalObject", "alphaObject", "effect", "gui"];
+        //  public static layerType: string[] = ["gui", "effect", "alphaObject", "normalObject"];
         public static layerTypeThan: number[] = [3, 2, 1, 0];
         public static layerNumber: number = 5 ; 
         ///**
