@@ -130,7 +130,10 @@
             this._animationState = <ParticleAnimationState>this.state;
             var posArray: Vector3D[] = this._positions.calculate(count);
             var directionArray: Vector3D[] = this._animationState.directionArray = [];
-
+            var meshNormalArray: Vector3D[];
+            if (this._node.type == ParticleDataShapeType.Mesh) {
+                meshNormalArray = (<Mesh3DValueShape>this._positions).normalList;
+            }
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
             var data: ParticleData = this._animationState.emitter.data;
@@ -159,7 +162,7 @@
                     } else if (this._node.type == ParticleDataShapeType.Cone) {
                         dir = coneShape.getDirection(recordPos, dir);
                     } else if (this._node.type == ParticleDataShapeType.Mesh) {
-                        dir.setTo(0, 0, 1, 1);
+                        dir.copyFrom(meshNormalArray[i]);
                     }
                 }
 

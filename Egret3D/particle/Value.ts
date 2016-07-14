@@ -575,7 +575,7 @@
         private static vct3: Vector3D = new Vector3D();
 
         public valueType: ValueType = ValueType.vec3;
-
+        public normalList: Vector3D[] = [];
         public geometry: Geometry;
         public type: number = ParticleMeshShapeType.Edge;
         /**
@@ -599,6 +599,7 @@
 
         private edgePosition(values:Vector3D[], num:number): void {
             var val: Vector3D;
+            var normal: Vector3D;
             var triangleCount: number = this.geometry.indexData.length / 3;
             var vc1: Vector3D;
             var vc2: Vector3D;
@@ -608,23 +609,27 @@
             for (var i: number = 0; i < num; i++) {
                 val = new Vector3D();
                 values.push(val);
+               
 
                 var index0: number = 3 * Math.floor(triangleCount * Math.random());//第n个三角形
                 var index1: number = index0 + 1;
                 var index2: number = index0 + 2;
 
-                xyz.length = 0;
                 //获取三角形的三个顶点
+                xyz.length = 0;
                 this.geometry.getVertexForIndex(index0 + 0, VertexFormat.VF_POSITION, xyz);
                 Mesh3DValueShape.vct1.setTo(xyz[0], xyz[1], xyz[2]);
 
+                xyz.length = 0;
                 this.geometry.getVertexForIndex(index0 + 1, VertexFormat.VF_POSITION, xyz);
                 Mesh3DValueShape.vct2.setTo(xyz[0], xyz[1], xyz[2]);
 
+                xyz.length = 0;
                 this.geometry.getVertexForIndex(index0 + 2, VertexFormat.VF_POSITION, xyz);
                 Mesh3DValueShape.vct3.setTo(xyz[0], xyz[1], xyz[2]);
 
-              
+                normal = this.calcNormal(Mesh3DValueShape.vct1, Mesh3DValueShape.vct2, Mesh3DValueShape.vct3);
+                this.normalList.push(normal);
                 //在三角形上获得一条边
                 random = Math.random();
                 if (random < 0.333) {
@@ -647,6 +652,8 @@
 
         private trianglePosition(values: Vector3D[], num: number): void {
             var val: Vector3D;
+            var normal: Vector3D;
+
             var triangleCount: number = this.geometry.indexData.length / 3;
             var vc1: Vector3D = new Vector3D();
             var vc2: Vector3D = new Vector3D();
@@ -661,18 +668,21 @@
                 var index1: number = index0 + 1;
                 var index2: number = index0 + 2;
 
-                xyz.length = 0;
                 //获取三角形的三个顶点
+                xyz.length = 0;
                 this.geometry.getVertexForIndex(index0 + 0, VertexFormat.VF_POSITION, xyz);
                 Mesh3DValueShape.vct1.setTo(xyz[0], xyz[1], xyz[2]);
 
+                xyz.length = 0;
                 this.geometry.getVertexForIndex(index0 + 1, VertexFormat.VF_POSITION, xyz);
                 Mesh3DValueShape.vct2.setTo(xyz[0], xyz[1], xyz[2]);
 
+                xyz.length = 0;
                 this.geometry.getVertexForIndex(index0 + 2, VertexFormat.VF_POSITION, xyz);
                 Mesh3DValueShape.vct3.setTo(xyz[0], xyz[1], xyz[2]);
 
-
+                normal = this.calcNormal(Mesh3DValueShape.vct1, Mesh3DValueShape.vct2, Mesh3DValueShape.vct3);
+                this.normalList.push(normal);
                 //在两条边上分别随机一个位置
                 vc1.lerp(Mesh3DValueShape.vct1, Mesh3DValueShape.vct2, Math.random());
                 vc2.lerp(Mesh3DValueShape.vct2, Mesh3DValueShape.vct3, Math.random());
@@ -685,6 +695,8 @@
 
         private vertexPosition(values: Vector3D[], num: number): void {
             var val: Vector3D;
+            var normal: Vector3D;
+
             var triangleCount: number = this.geometry.indexData.length / 3;
             var random: number;
 
@@ -697,18 +709,22 @@
                 var index1: number = index0 + 1;
                 var index2: number = index0 + 2;
 
-                xyz.length = 0;
                 //获取三角形的三个顶点
+                xyz.length = 0;
                 this.geometry.getVertexForIndex(index0 + 0, VertexFormat.VF_POSITION, xyz);
                 Mesh3DValueShape.vct1.setTo(xyz[0], xyz[1], xyz[2]);
 
+                xyz.length = 0;
                 this.geometry.getVertexForIndex(index0 + 1, VertexFormat.VF_POSITION, xyz);
                 Mesh3DValueShape.vct2.setTo(xyz[0], xyz[1], xyz[2]);
 
+                xyz.length = 0;
                 this.geometry.getVertexForIndex(index0 + 2, VertexFormat.VF_POSITION, xyz);
                 Mesh3DValueShape.vct3.setTo(xyz[0], xyz[1], xyz[2]);
 
-
+                normal = this.calcNormal(Mesh3DValueShape.vct1, Mesh3DValueShape.vct2, Mesh3DValueShape.vct3);
+                this.normalList.push(normal);
+                
                 //在三角形上获得一条边
                 random = Math.random();
                 if (random < 0.333) {
@@ -722,7 +738,16 @@
             }
         }
 
-
+        private static crsVector1: Vector3D = new Vector3D();
+        private static crsVector2: Vector3D = new Vector3D();
+        private normal: Vector3D;
+        private calcNormal(pt0: Vector3D, pt1: Vector3D, pt2: Vector3D): Vector3D {
+            Mesh3DValueShape.crsVector1.setTo(pt1.x - pt0.x, pt1.y - pt0.y, pt1.z - pt0.z);
+            Mesh3DValueShape.crsVector2.setTo(pt2.x - pt0.x, pt2.y - pt0.y, pt2.z - pt0.z);
+            this.normal = Mesh3DValueShape.crsVector1.crossProduct(Mesh3DValueShape.crsVector2);
+            this.normal.normalize();
+            return this.normal;
+        }
         
     }
 
