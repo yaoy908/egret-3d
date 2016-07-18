@@ -15,8 +15,11 @@
     export class EntityCollect extends CollectBase {
 
 
-        private _normalRenderItems: Array<IRender> = [] ;
-        private _alphaRenderItems: Array<IRender> = [] ;
+        //private _normalRenderItems: Array<IRender> = [] ;
+        //private _alphaRenderItems: Array<IRender> = [];
+        //private _uiRenderItems: Array<IRender> = [] ;
+       
+        private _softRenderItems: { [key: string]: IRender[] } = {};
 
         /**
         * @language zh_CN
@@ -54,31 +57,24 @@
                 if (!camera.isVisibleToCamera(renderItem)) {
                     return;
                 }
-               // this.renderList.push(renderItem);
             }
 
-            if (renderItem.material != null && renderItem.material.materialData.alphaBlending) {
-                //layer.alphaObjects.push(renderItem);
-                this._alphaRenderItems.push(renderItem);
-            }
-            else {
-                this._normalRenderItems.push(renderItem);
+            if (renderItem.material) {
+                if (renderItem.tag.name == "normalObject" && renderItem.material.materialData.alphaBlending) {
+                    this._softRenderItems["alphaObject"].push(renderItem);
+                }
+                else {
+                    for (var i: number = 0; i < Layer.layerNumber; i++) {
+                        if (renderItem.tag.name == Layer.layerType[i]) {
+                            this._softRenderItems[Layer.layerType[i]].push(renderItem);
+                        }
+                    }
+                }
             }
 
             if (renderItem.enablePick) {
                 this.mousePickList.push(renderItem);
             }
-
-            //var layer: Layer = this.findLayer(renderItem);
-            //var tag: Tag = this.findTag(renderItem);
-
-            //if (renderItem.material != null && renderItem.material.materialData.alphaBlending) {
-            //    //layer.alphaObjects.push(renderItem);
-            //    this._alphaRenderItems.push(renderItem);
-            //}
-            //else {
-            //    this._normalRenderItems.push(renderItem);
-            //}
         }
                 
         /**
@@ -90,16 +86,16 @@
         */
         public update(camera: Camera3D) {
             super.update(camera);
-            this._normalRenderItems.length = 0;
-            this._alphaRenderItems.length = 0;
+      
+            this.clearLayerList();
+
             this.renderList.length = 0;
             this.mousePickList.length = 0;
-            this.clearLayerList();
 
             if (this.rootScene.quad) {
                 var box: BoundBox = camera.frustum.box;
                 var quadList: Array<IQuadNode> = this.rootScene.quad.getNodesByAABB(box.min.x, box.min.z, box.max.x, box.max.z);
-                //var time3: number = new Date().getTime();
+                 
                 this.appendQuadList(quadList, camera);
                 //var time4: number = new Date().getTime();
                 //console.log("200/" + quadList.length + "/" + this.renderList.length, "time:" + (time2 - time1) + "/" + (time4 - time2) + "(" + (time3 - time2) + "," + (time4 - time3) + ")");
@@ -108,26 +104,13 @@
                 this.applyRender(this.rootScene.root, camera);
             }
 
-            for (var i: number = 0; i < this._normalRenderItems.length; ++i) {
-                this.renderList.push(this._normalRenderItems[i]);
+            var listLen: number;
+            for (var j: number = 0; j < Layer.layerType.length; j++) {
+                listLen = this._softRenderItems[Layer.layerType[j]].length
+                for (var i: number = 0; i < listLen; i++) {
+                    this.renderList.push( this._softRenderItems[Layer.layerType[j]][i] );
+                }
             }
-            for (var i: number = 0; i < this._alphaRenderItems.length; ++i) {
-                this.renderList.push(this._alphaRenderItems[i]);
-            }
-
-            //for (var i: number = 0; i < this._layerTags.length; ++i) {
-            //    this._layerTags[i].clearDepth = true;
-            //    for (var j: number = 0; j < this._layerTags[i].layers.length; ++j) {
-            //        for (var k: number = 0; k < this._layerTags[i].layers[j].objects.length; ++k) {
-            //            this.renderList.push(this._layerTags[i].layers[j].objects[k]);
-            //        }
-
-            //        this._layerTags[i].layers[j].alphaObjects.sort((a: Object3D, b: Object3D) => this.sort(a, b, camera));
-            //        for (var k: number = 0; k < this._layerTags[i].layers[j].alphaObjects.length; ++k) {
-            //            this.renderList.push(this._layerTags[i].layers[j].alphaObjects[k]);
-            //        }
-            //    }
-            //}
         }
 
         /**
@@ -170,12 +153,13 @@
         //}
 
         protected clearLayerList() {
-            //for (var i: number = 0; i < this._tags.length; ++i) {
-            //    for (var j: number = 0; j < this._tags[i].layers.length; ++j) {
-            //        this._tags[i].layers[j].objects.length = 0;
-            //        this._tags[i].layers[j].alphaObjects.length = 0;
-            //    }
-            //}
+            for (var i: number = 0; i < Layer.layerType.length; i++) {
+                if (!this._softRenderItems[Layer.layerType[i]]) {
+                    this._softRenderItems[Layer.layerType[i]] = [];
+                }
+                else
+                    this._softRenderItems[Layer.layerType[i]].length = 0;
+            }
         }
 
         protected sort(a: Object3D, b: Object3D, camera: Camera3D) {

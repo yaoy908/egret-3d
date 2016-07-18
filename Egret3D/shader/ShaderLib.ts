@@ -306,7 +306,7 @@ module egret3d {
 			"vec4 ambientColor; \n" +
 			"vec4 light ; \n" +
 			"void main() { \n" +
-			"diffuseColor.xyz = materialSource.diffuse.xyz * diffuseColor.xyz ; \n" +
+			"diffuseColor.xyz = diffuseColor.xyz ; \n" +
 			"outColor.xyz = light.xyz * diffuseColor.xyz * materialSource.diffuse ; \n" +
 			"outColor.w = materialSource.alpha * diffuseColor.w ; \n" +
 			"gl_FragColor = outColor * varying_color; \n" +
@@ -573,7 +573,9 @@ module egret3d {
 			"struct Fog{ \n" +
 			"vec3 fogColor  ; \n" +
 			"float globalDensity ; \n" +
-			"vec3 distance ; \n" +
+			"float fogStartDistance ; \n" +
+			"float fogFarDistance ; \n" +
+			"float fogAlpha ; \n" +
 			"}; \n" +
 			"varying vec4 varying_pos; \n" +
 			"uniform float uniform_globalFog[7]; \n" +
@@ -581,11 +583,12 @@ module egret3d {
 			"Fog fog; \n" +
 			"fog.fogColor = vec3(uniform_globalFog[0],uniform_globalFog[1],uniform_globalFog[2]); \n" +
 			"fog.globalDensity = uniform_globalFog[3]; \n" +
-			"fog.distance = vec2(uniform_globalFog[4], uniform_globalFog[5]); \n" +
-			"float dist = abs( varying_ViewPose.z ); \n" +
-			"float fogFactor = ( fog.distance.y - dist) / (fog.distance.y - fog.distance.x); \n" +
-			"fogFactor = clamp( fogFactor, 0.0, 1.0 ); \n" +
-			"diffuseColor.xyz = mix( fog.fogColor, diffuseColor.xyz, fogFactor ); \n" +
+			"fog.fogStartDistance = uniform_globalFog[4] ; \n" +
+			"fog.fogFarDistance = uniform_globalFog[5] ; \n" +
+			"fog.fogAlpha = uniform_globalFog[6] ; \n" +
+			"float d = varying_pos.z ; \n" +
+			"float distFog = max( 0.0 , d -  fog.fogStartDistance ) ; \n" +
+			"diffuseColor.xyz = mix( diffuseColor.xyz,fog.fogColor, clamp(distFog/fog.fogFarDistance,0.0,1.0) * fog.fogAlpha ) ; \n" +
 			"} \n",
 
 			"matCapPass_vs":
@@ -702,6 +705,7 @@ module egret3d {
 
 			"particle_bezier":
 			"vec2 bzData[20]; \n" +
+			"const float Tiny = 0.0001; \n" +
 			"void dcpBezier(float bezierData[22], float tTotal) \n" +
 			"{ \n" +
 			"float timeNow = 0.0; \n" +
@@ -732,7 +736,7 @@ module egret3d {
 			"t0 = bzData[i].x; \n" +
 			"t1 = bzData[i + 1].x; \n" +
 			"deltaTime = t1 - t0; \n" +
-			"if(deltaTime > 0.0001) \n" +
+			"if(deltaTime > Tiny) \n" +
 			"{ \n" +
 			"a_deltaTime = 0.5 * (v1 - v0); \n" +
 			"if(tCurrent >= t1){ \n" +
@@ -764,7 +768,7 @@ module egret3d {
 			"t0 = bzData[i].x; \n" +
 			"t1 = bzData[i + 1].x; \n" +
 			"deltaTime = t1 - t0; \n" +
-			"if(deltaTime > 0.0001) \n" +
+			"if(deltaTime > Tiny) \n" +
 			"{ \n" +
 			"if(tCurrent <= t1){ \n" +
 			"v = (y1 - y0) / deltaTime; \n" +
@@ -838,36 +842,17 @@ module egret3d {
 			"diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
 			"if( diffuseColor.w <= materialSource.cutAlpha ){ \n" +
 			"discard; \n" +
-			"}else \n" +
-			"diffuseColor.xyz *= diffuseColor.w ; \n" +
+			"} \n" +
 			"} \n",
 
 			"particle_end_fs":
-			"vec4 diffuseColor ; \n" +
 			"uniform float uniform_particleFsData[3]; \n" +
-			"varying float varying_posZ; \n" +
-			"void fadeOutParticleByZ(float scaleFrom, float scaleTo){ \n" +
-			"float threshold = uniform_particleFsData[0] * scaleFrom; \n" +
-			"if(varying_posZ < threshold) \n" +
-			"return; \n" +
-			"threshold = uniform_particleFsData[0] * scaleTo; \n" +
-			"if(varying_posZ > threshold){ \n" +
-			"discard; \n" +
-			"} \n" +
-			"float fadeAlpha = (threshold - varying_posZ) / threshold; \n" +
-			"fadeAlpha = clamp(fadeAlpha, 0.0, 1.0); \n" +
-			"outColor.w *= fadeAlpha; \n" +
-			"if( diffuseColor.w <= materialSource.cutAlpha ){ \n" +
-			"discard; \n" +
-			"} \n" +
-			"} \n" +
 			"void main() { \n" +
-			"outColor.xyz = diffuseColor.xyz * materialSource.diffuse ; \n" +
-			"outColor.w = materialSource.alpha * diffuseColor.w ; \n" +
-			"if(uniform_particleFsData[2] > TrueOrFalse){ \n" +
-			"outColor.xyz *= outColor.w * varying_color.w; \n" +
-			"} \n" +
-			"gl_FragColor = outColor * varying_color; \n" +
+			"outColor.xyz = diffuseColor.xyz * materialSource.diffuse * varying_color.xyz ; \n" +
+			"outColor.w = materialSource.alpha * diffuseColor.w * varying_color.w; \n" +
+			"outColor.xyz *= outColor.w; \n" +
+			"outColor.xyz *= 1.8; \n" +
+			"gl_FragColor = outColor; \n" +
 			"} \n",
 
 			"particle_end_vs":
@@ -893,7 +878,7 @@ module egret3d {
 			"vec3 temp = distanceXYZ * distanceXYZ; \n" +
 			"float distanceCurrent = sqrt(temp.x + temp.y + temp.z); \n" +
 			"float distanceLimit = velocityLimitVec2.x; \n" +
-			"if(distanceLimit < 0.0001){ \n" +
+			"if(distanceLimit < Tiny){ \n" +
 			"return vec3(0.0); \n" +
 			"} \n" +
 			"if(distanceCurrent > distanceLimit){ \n" +
@@ -905,10 +890,10 @@ module egret3d {
 			"mat4 getRenderModeMatrix(mat4 cameraMatrix, mat4 modelMatrix){ \n" +
 			"return cameraMatrix; \n" +
 			"} \n" +
-			"void updateStretchedBillBoard(vec4 startPos, vec4 newPos){ \n" +
+			"float updateStretchedBillBoard(vec4 startPos, vec4 newPos){ \n" +
+			"return 1.0; \n" +
 			"} \n" +
 			"void main(void) { \n" +
-			"vec4 emitterBirthPos; \n" +
 			"if(discard_particle > TrueOrFalse){ \n" +
 			"outPosition = vec4(0.0,0.0,0.0,0.0); \n" +
 			"}else{ \n" +
@@ -945,14 +930,16 @@ module egret3d {
 			"velocityMultiVec3.y -= 4.9 * currentTime * currentTime * particleStateData.gravity; \n" +
 			"vec3 origPosition = position_emitter; \n" +
 			"position_emitter += velocityMultiVec3; \n" +
-			"updateStretchedBillBoard(vec4(origPosition, 1.0), vec4(position_emitter, 1.0)); \n" +
+			"float dirEnable = updateStretchedBillBoard(vec4(origPosition, 1.0), vec4(position_emitter, 1.0)); \n" +
+			"if(dirEnable > TrueOrFalse){ \n" +
 			"mat4 billboardMatrix = getRenderModeMatrix(uniform_cameraMatrix, modelMatrix); \n" +
 			"outPosition = billboardMatrix * localPosition; \n" +
 			"outPosition.xyz += position_emitter.xyz; \n" +
 			"outPosition = uniform_ViewMatrix * outPosition; \n" +
-			"emitterBirthPos = uniform_ViewMatrix * vec4(position_emitter, 1.0); \n" +
+			"}else{ \n" +
+			"outPosition = vec4(0.0,0.0,0.0,0.0); \n" +
 			"} \n" +
-			"varying_posZ = emitterBirthPos.z; \n" +
+			"} \n" +
 			"gl_Position = uniform_ProjectionMatrix * outPosition ; \n" +
 			"} \n" +
 			"	 \n",
@@ -996,20 +983,17 @@ module egret3d {
 			"vec4(0.0, 0.0, 1.0, 1.0)); \n" +
 			"return matrix; \n" +
 			"} \n" +
-			"void updateStretchedBillBoard(vec4 startPos, vec4 newPos){ \n" +
+			"float updateStretchedBillBoard(vec4 startPos, vec4 newPos){ \n" +
 			"localPosition.x *= particleStateData.lengthScale; \n" +
 			"mat4 temp = uniform_ProjectionMatrix * uniform_ViewMatrix; \n" +
 			"startPos = temp * startPos; \n" +
 			"newPos = temp * newPos; \n" +
 			"vec3 dirVector = newPos.xyz - startPos.xyz; \n" +
-			"if(dirVector.x == 0.0 && dirVector.y == 0.0 && dirVector.z == 0.0){ \n" +
-			"dirVector = attribute_offsetPosition; \n" +
-			"} \n" +
-			"if(dirVector.x == 0.0 && dirVector.y == 0.0 && dirVector.z == 0.0){ \n" +
-			"return; \n" +
-			"} \n" +
 			"float scaleBefore = dirVector.x * dirVector.x + dirVector.y * dirVector.y + dirVector.z * dirVector.z; \n" +
 			"scaleBefore = sqrt(scaleBefore); \n" +
+			"if(scaleBefore < Tiny){ \n" +
+			"return 0.0; \n" +
+			"} \n" +
 			"float scaleAfter = dirVector.x * dirVector.x + dirVector.y * dirVector.y; \n" +
 			"scaleAfter = sqrt(scaleAfter); \n" +
 			"scaleAfter = scaleAfter / scaleBefore; \n" +
@@ -1028,6 +1012,7 @@ module egret3d {
 			"float angle = acos(acosValue) + added; \n" +
 			"temp = buildRotMat4(vec3(0.0, 0.0, angle)); \n" +
 			"localPosition = temp * localPosition; \n" +
+			"return 1.0; \n" +
 			"} \n",
 
 			"particle_rotationConst":
@@ -1083,7 +1068,7 @@ module egret3d {
 			"return ret; \n" +
 			"} \n" +
 			"void calcUVCoord() { \n" +
-			"vec2 rectUV = vec2(1.0 / uniform_textureSheet[1], 1.0 / uniform_textureSheet[0]); \n" +
+			"vec2 rectUV = vec2(1.0 / uniform_textureSheet[0], 1.0 / uniform_textureSheet[1]); \n" +
 			"uv_0.xy *= rectUV; \n" +
 			"float frame = varying_textureSheetData.x + varying_textureSheetData.y; \n" +
 			"frame = clamp(frame, uniform_textureSheet[3], uniform_textureSheet[4]); \n" +
@@ -1105,7 +1090,7 @@ module egret3d {
 			"return ret; \n" +
 			"} \n" +
 			"void calcUVCoord() { \n" +
-			"vec2 rectUV = vec2(1.0 / uniform_textureSheet[1], 1.0 / uniform_textureSheet[0]); \n" +
+			"vec2 rectUV = vec2(1.0 / uniform_textureSheet[0], 1.0 / uniform_textureSheet[1]); \n" +
 			"uv_0.xy *= rectUV; \n" +
 			"float frame = varying_textureSheetData.x + varying_textureSheetData.y; \n" +
 			"float currentTime = varying_particleData.x * uniform_textureSheet[2]; \n" +
@@ -1154,10 +1139,8 @@ module egret3d {
 			"	 \n",
 
 			"particle_time_fs":
-			"const float TrueOrFalse = 0.55555; \n" +
 			"varying vec3 varying_particleData; \n" +
 			"void main(void) { \n" +
-			"light = vec4(1.0,1.0,1.0,1.0); \n" +
 			"} \n",
 
 			"particle_time_vs":
@@ -1458,7 +1441,8 @@ module egret3d {
 			"const float PI = 3.1415926 ; \n" +
 			"float currentTime = 0.0; \n" +
 			"float totalTime = 0.0; \n" +
-			"const float TrueOrFalse = 0.55555; \n" +
+			"const float TrueOrFalse = 0.5; \n" +
+			"const float Tiny = 0.0001; \n" +
 			"vec4 localPosition = vec4(0.0,0.0,0.0,1.0); \n" +
 			"vec3 velocityBaseVec3 = vec3(0.0,0.0,0.0); \n" +
 			"vec3 velocityOverVec3 = vec3(0.0,0.0,0.0); \n" +
@@ -1469,7 +1453,6 @@ module egret3d {
 			"vec3 followTargetScale = vec3(1.0,1.0,1.0); \n" +
 			"vec4 followTargetRotation = vec4(0.0,0.0,0.0,0.0); \n" +
 			"varying vec3 varyingViewDir ; \n" +
-			"varying float varying_posZ; \n" +
 			"float discard_particle = 0.0; \n" +
 			"ParticleStateData particleStateData; \n" +
 			"void e_discard(){ \n" +
@@ -1880,6 +1863,49 @@ module egret3d {
 			"diffuseColor.xyz *= waterColor ; \n" +
 			"}  \n",
 
+			"wave_vs.2":
+			"attribute vec3 attribute_normal; \n" +
+			"attribute vec4 attribute_color; \n" +
+			"varying vec3 varying_ViewDir ; \n" +
+			"uniform mat4 uniform_NormalMatrix; \n" +
+			"uniform vec3 waveData[4]; \n" +
+			"uniform float time ; \n" +
+			"uniform sampler2D waveTexture; \n" +
+			"struct wave{ \n" +
+			"vec3 wave_xyz_intensity_0 ; \n" +
+			"vec3 wave_xyz_intensity_1 ; \n" +
+			"vec3 wave_xyz_speed_0 ; \n" +
+			"vec3 wave_xyz_speed_1 ; \n" +
+			"}; \n" +
+			"const float pi = 3.14 ; \n" +
+			"vec3 calcWave(vec2 X,float t,float A,vec2 K,float L) \n" +
+			"{ \n" +
+			"vec3 wave; \n" +
+			"float k = 2.0*pi/L; \n" +
+			"float W = sqrt(9.8*k); \n" +
+			"wave.xz = -((K/k)*A*sin(dot(K,X)-W*t)); \n" +
+			"wave.y = A*cos(dot(K,X)-W*t)/2.0-A/2.0; \n" +
+			"return wave; \n" +
+			"} \n" +
+			"void main(void){ \n" +
+			"vec2 bumpCoord1 = varying_uv0 + time *0.02 * 0.0001 ; \n" +
+			"vec2 bumpCoord2 = varying_uv0 * 2.0 + time * 0.02 * 0.0001; \n" +
+			"vec2 bumpCoord3 = varying_uv0 / 2.0 + time * 0.01 * 0.0001; \n" +
+			"vec3 vBumpTexA = texture2D(waveTexture, bumpCoord1).xyz; \n" +
+			"vec3 vBumpTexB = texture2D(waveTexture, bumpCoord2).xyz; \n" +
+			"vec3 vBumpTexC = texture2D(waveTexture, bumpCoord3).xyz; \n" +
+			"vec3 vBumpTex = normalize(2.0 * (vBumpTexA.xyz + vBumpTexB.xyz+vBumpTexC.xyz) - 3.0); \n" +
+			"vec3 wave = calcWave(e_position.xz,time*0.001,100.0,vec2(0.00001,0.1),5.0).xyz ; \n" +
+			"vec3 wave2 = calcWave(e_position.xz,time*0.001,-100.0,vec2(1.0,1.4),5.0).xyz ; \n" +
+			"e_position.y += vBumpTex.y * 50.0 ; \n" +
+			"mat3 normalMatrix = mat3(uniform_NormalMatrix); \n" +
+			"varying_eyeNormal = normalize(-attribute_normal); \n" +
+			"varying_ViewPose = vec4(e_position, 1.0) ; \n" +
+			"varying_ViewDir = normalize((uniform_eyepos.xyz - e_position)) ; \n" +
+			"outPosition = uniform_ModelViewMatrix * vec4(e_position, 1.0) ; \n" +
+			"varying_color = attribute_color; \n" +
+			"}  \n",
+
 			"wave_vs":
 			"#define VERTEX_TEXTURES \n" +
 			"attribute vec3 attribute_normal; \n" +
@@ -1915,9 +1941,9 @@ module egret3d {
 			"wa.wave_xyz_speed_0 = vec3(waveVSData[2]) ; \n" +
 			"wa.wave_xyz_speed_1 = vec3(waveVSData[3]) ; \n" +
 			"float tempTime = mod( time , 1000000.0 ); \n" +
-			"vec3 newPose1 = calcWave2(tempTime,e_position,40.0, 500.0, 20.0,vec3(1.0,0.0,1.0)); \n" +
-			"newPose1 += calcWave2(tempTime,e_position,15.0, 50.0, 20.0,vec3(1.0,0.0,-0.5)); \n" +
-			"newPose1 += calcWave2(tempTime,e_position,15.0, 50.0, 20.0,vec3(1.0,0.0,-0.5)); \n" +
+			"vec3 newPose1 = calcWave2(tempTime,e_position,60.0, 500.0, 20.0,vec3(1.0,0.0,1.0)); \n" +
+			"newPose1 += calcWave2(tempTime,e_position,130.0, 50.0, 20.0,vec3(1.0,0.0,-0.5)); \n" +
+			"newPose1 += calcWave2(tempTime,e_position,90.0, 80.0, 20.0,vec3(1.0,0.0,-1.5)); \n" +
 			"e_position = newPose1 ; \n" +
 			"mat3 normalMatrix = mat3(uniform_NormalMatrix); \n" +
 			"varying_eyeNormal = normalize(-attribute_normal); \n" +

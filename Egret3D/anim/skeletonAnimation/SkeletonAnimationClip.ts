@@ -41,7 +41,12 @@ module egret3d {
 
         public findJointIndex(name: string): number {
             if (!this._skeletonPose) {
-                return -1;
+
+                if (this.poseArray.length <= 0) {
+                    return -1;
+                }
+
+                return this.poseArray[0].findJointIndex(name);
             }
 
             return this._skeletonPose.findJointIndex(name);

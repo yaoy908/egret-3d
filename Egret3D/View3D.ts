@@ -18,6 +18,10 @@
      * @platform Web,Native
      */
     export class View3D {
+
+        //public stage: Stage = new Stage();
+        //protected _QuadPool: QuadPool = new QuadPool();
+
         protected _viewPort: Rectangle = new Rectangle();
         protected _camera: Camera3D;
         protected _scene: Scene3D = new Scene3D();

@@ -56,6 +56,10 @@ module egret3d {
         private _currentFrame: number = 0;
         private _changeFrameTime: number = 0;
         private _oldFrameIndex: number = 0;
+        private _movePosIndex: number = -1;
+        private _movePosObject3D: Object3D = null;
+        private _movePosition: Vector3D = new Vector3D();
+        private _resetMovePos: boolean = true;
 
         constructor(skeleton: Skeleton) {
             super();
@@ -179,9 +183,19 @@ module egret3d {
                 this._animTime = playSkeletonAnimationState.timePosition = 0;
             }
 
+            this._changeFrameTime = playSkeletonAnimationState.timePosition;
+
+            this._oldFrameIndex = Math.floor(this._changeFrameTime / SkeletonAnimation.fps);
+
             this.speed = speed;
 
             this._isPlay = true;
+
+            this._resetMovePos = true;
+
+            if (this._movePosIndex != -1) {
+                this._movePosition.copyFrom(playSkeletonAnimationState.getSkeletonPose(0).joints[this._movePosIndex].worldMatrix.position);
+            }
         }
 
         /**
@@ -250,12 +264,12 @@ module egret3d {
 
                 this.dispatchEvent(this.event3D);
 
-                if (this.event3D.data == (mainState.frameNum - 1)) {
+                //if (this.event3D.data == (mainState.frameNum - 1)) {
 
-                    this.event3D.eventType = SkeletonAnimationEvent3D.EVENT_PLAY_COMPLETE;
+                //    this.event3D.eventType = SkeletonAnimationEvent3D.EVENT_PLAY_COMPLETE;
 
-                    this.dispatchEvent(this.event3D);
-                }
+                //    this.dispatchEvent(this.event3D);
+                //}
 
                 this._changeFrameTime += (delayTime > 0) ? -SkeletonAnimation.fps : SkeletonAnimation.fps;
             }
@@ -400,12 +414,11 @@ module egret3d {
                         animationState.weight = Math.min(1, animationState.weight + blendSpeed);
                     }
 
-                    animationState.timePosition += delay;
+                    //animationState.timePosition += delay;
                 }
+
+                this._blendList[this._blendList.length - 1].timePosition += delay;
             }
-
-
-
 
 
             this._animTime = this._blendList[this._blendList.length - 1].timePosition;
@@ -416,9 +429,11 @@ module egret3d {
 
             if (this._blendList.length <= 1) {
 
-                currentSkeletonA.updateGPUCacheData(this._skeleton, this._skeletonMatrixData);
-
                 this.updateBindList(currentSkeletonA);
+
+                this.updateMovePos(currentSkeletonA);
+
+                currentSkeletonA.updateGPUCacheData(this._skeleton, this._skeletonMatrixData, this._movePosition);
             }
             else {
 
@@ -436,9 +451,11 @@ module egret3d {
 
                 this._blendSkeleton.calculateJointWorldMatrix();
 
-                this._blendSkeleton.updateGPUCacheData(this._skeleton, this._skeletonMatrixData);
-
                 this.updateBindList(this._blendSkeleton);
+
+                this.updateMovePos(this._blendSkeleton);
+
+                this._blendSkeleton.updateGPUCacheData(this._skeleton, this._skeletonMatrixData, this._movePosition);
             }
         }
 
@@ -549,6 +566,23 @@ module egret3d {
             return true;
         }
 
+        public setMovePosJointName(jointName: string, target:Object3D): boolean {
+
+            var jointIndex: number = this._animStates[0].skeletonAnimationClip.findJointIndex(jointName);
+
+            if (jointIndex < 0) {
+                return false;
+            }
+
+            this._movePosIndex = jointIndex;
+
+            this._movePosObject3D = target;
+
+            this._resetMovePos = true;
+
+            return true;
+        }
+
         private updateBindList(skeletonPose: SkeletonPose): void {
 
             var list: Array<Object3D> = null;
@@ -590,7 +624,32 @@ module egret3d {
                     object3D.z = jointPose.worldMatrix.position.z;
                 }
             }
-
         }
+
+        private updateMovePos(skeletonPose: SkeletonPose): void {
+            var jointPose: Joint = null;
+
+            if (this._movePosIndex != -1) {
+
+                jointPose = skeletonPose.joints[this._movePosIndex];
+
+                if (this._resetMovePos) {
+                    this._resetMovePos = false;
+                }
+                else if (this._movePosObject3D) {
+                    this._movePosition.x = jointPose.worldMatrix.position.x - this._movePosition.x;
+                    this._movePosition.y = 0;
+                    this._movePosition.z = jointPose.worldMatrix.position.z - this._movePosition.z;
+
+                    this._movePosObject3D.orientation.transformVector(this._movePosition, this._movePosition);
+
+                    this._movePosObject3D.x -= this._movePosition.x;
+                    this._movePosObject3D.z -= this._movePosition.z;
+                }
+
+                this._movePosition.copyFrom(jointPose.worldMatrix.position);
+            }
+        }
+
     }
 }

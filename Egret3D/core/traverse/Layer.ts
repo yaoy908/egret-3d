@@ -1,6 +1,6 @@
 ﻿module egret3d {
 
-
+    //export enum layerTypes { gui, effect, alphaObject, normalObject };
     /**
     * @private
     * @class egret3d.Layer
@@ -12,18 +12,21 @@
     * @platform Web,Native
     */
     export class Layer {
-  
+        
+        public static layerType: string[] = ["normalObject", "alphaObject", "effect", "gui"];
+        //  public static layerType: string[] = ["gui", "effect", "alphaObject", "normalObject"];
+        public static layerTypeThan: number[] = [3, 2, 1, 0];
+        public static layerNumber: number = 5 ; 
+        ///**
+        //* @language zh_CN
+        //* 是否清理深度
+        //*/
+        //public clearDepth: boolean = false;
 
-        /**
-        * @language zh_CN
-        * 是否清理深度
-        */
-        public clearDepth: boolean = false;
-
-        /**
-        * @language zh_CN
-        * 层级清理深度状态
-        */
-        public cleanState: boolean = true; 
+        ///**
+        //* @language zh_CN
+        //* 层级清理深度状态
+        //*/
+        //public cleanState: boolean = true; 
     }
 } 

@@ -44,7 +44,7 @@
             this._particleState = this.particleAnimation.particleAnimationState ;
             
             this.particleAnimation.emit = this;
-
+            this.tag.name = "effect";
 
             this.buildParticle();
         }

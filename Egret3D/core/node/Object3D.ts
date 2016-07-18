@@ -29,6 +29,7 @@
         */
         UVPick
     };
+
     /**
     * @class egret3d.Object3D
     * @classdesc
@@ -133,7 +134,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public tag: Tag; 
+        public tag: Tag = new Tag(); 
 
         /**
         * @language zh_CN

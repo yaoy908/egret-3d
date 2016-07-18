@@ -50,7 +50,6 @@
 
         private _taskCount: number = 0;
         private _event: LoaderEvent3D = new LoaderEvent3D();
-        public lightGroup: LightGroup = new LightGroup();
 
         public huds: Array<HUD> = new Array<HUD>();
 
@@ -58,6 +57,8 @@
         public taskCurrent: number = 0;
 
         public view3d: View3D;
+
+        public lightDict: any = {};
 
          /**
          * @language zh_CN
@@ -599,12 +600,27 @@
 
                 material.uvRectangle.copy(matData.uvRectangle);
 
+                var lightGroup: LightGroup = new LightGroup();
+
+                for (var j: number = 0; j < matData.lightIds.length; ++j) {
+                    var light: LightBase = this.lightDict[matData.lightIds[j]];
+                    if (light) {
+                        lightGroup.addLight(light);
+                    }
+                }
+
+                if (lightGroup.lightNum > 0) {
+                    material.lightGroup = lightGroup;
+                }
+
                 this.processMethod(material, matData);
             }
 
-            if (typeof mesh != "ParticleEmitter") {
-                mesh.lightGroup = this.lightGroup;
-            }
+            //if (typeof mesh != "ParticleEmitter") {
+            //    if (this.lightGroup.lightNum > 0) {
+            //        mesh.lightGroup = this.lightGroup;
+            //    }
+            //}
         }
 
         private processMethod(material: MaterialBase, matData: MatSphereData) {
@@ -734,18 +750,18 @@
 
                 if (mapLightData.type == LightType.directlight && this._mapXmlParser.directLight) {
                     var dirLight: DirectLight = new DirectLight(mapLightData.direction);
-                    dirLight.lightId = Number(mapLightData.id);
+                    dirLight.lightId = mapLightData.id;
                     dirLight.diffuse = mapLightData.diffuseColor;
 
                     dirLight.ambient = mapLightData.ambientColor;
                     dirLight.halfIntensity = mapLightData.halfIntensity;
                     dirLight.intensity = mapLightData.intensity;
 
-                    this.lightGroup.addLight(dirLight);
+                    this.lightDict[mapLightData.id] = dirLight;
 
                 } else if (mapLightData.type == LightType.pointlight && this._mapXmlParser.pointLight) {
                     var pLight: PointLight = new PointLight(0);
-                    pLight.lightId = Number(mapLightData.id);
+                    pLight.lightId = mapLightData.id;
                     pLight.position = mapLightData.position;
 
                     pLight.ambient = mapLightData.ambientColor;
@@ -754,7 +770,8 @@
 
                     pLight.falloff = mapLightData.falloff;
                     pLight.intensity = mapLightData.intensity;
-                    this.lightGroup.addLight(pLight);
+
+                    this.lightDict[mapLightData.id] = pLight;
                 }
             }
 
