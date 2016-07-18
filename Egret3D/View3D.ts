@@ -419,6 +419,21 @@
             this._camera.viewPort = this._viewPort;
             this._entityCollect.update(this._camera);
 
+            var len = "Entity: " + this._entityCollect.renderList.length.toString();
+            egret3d.Egret3DState.showDataInfo(len);
+
+            var len = "normalObject: " + this._entityCollect._softRenderItems["normalObject"].length.toString();
+            egret3d.Egret3DState.showDataInfo(len);
+
+            var len = "alphaObject: " + this._entityCollect._softRenderItems["alphaObject"].length.toString();
+            egret3d.Egret3DState.showDataInfo(len);
+
+            var len = "effect: " + this._entityCollect._softRenderItems["effect"].length.toString();
+            egret3d.Egret3DState.showDataInfo(len);
+
+            var len = "gui: " + this._entityCollect._softRenderItems["gui"].length.toString();
+            egret3d.Egret3DState.showDataInfo(len);
+
             //------------------
             this.updateObject3D(this._scene.root, time, delay);
             //this._numberEntity = this._entityCollect.renderList.length;

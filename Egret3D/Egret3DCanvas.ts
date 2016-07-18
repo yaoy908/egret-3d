@@ -255,7 +255,7 @@
             this._timeDate = new Date();
             this._delay = this._timeDate.getTime() - this._time;
             this._time = this._timeDate.getTime();
-
+            Egret3DState.showTime( this._time , this._delay );
 
             this._enterFrameEvent3D.time += this._time;
             this._enterFrameEvent3D.delay = this._delay;

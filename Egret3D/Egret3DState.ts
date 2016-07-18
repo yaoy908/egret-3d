@@ -1,5 +1,14 @@
 ﻿module egret3d {
 
+    class FPSInfo{
+
+        private timeNumber: number = 0;
+        private delayNumber: number = 0;
+        private countFrame: number = 60;
+
+        private 
+    }
+
     /**
      * @private
      */
@@ -29,21 +38,22 @@
             Egret3DState._dataInfo.style.color = "lightblue";
             Egret3DState._objectInfo.style.color = "lightblue";
 
-            Egret3DState._info.innerText = "Egret3D Debug State" ; 
+            Egret3DState._info.innerText = " Egret3D Debug State" ; 
         }
 
         public static showTime( time:number , delay:number ) {
             if (!Egret3DState.use) Egret3DState.initState();
-
-            Egret3DState._time.innerText = time.toString() + "/" + delay.toString(); 
+            Egret3DState._dataInfo.innerText = " ";
+            Egret3DState._time.innerText = " " + Math.ceil(1000 / delay).toString() + " fps/" + delay.toString() + " delay";
         }
 
         public static showDataInfo(...data) {
             if (!Egret3DState.use) Egret3DState.initState();
-            Egret3DState._dataInfo.innerText = "";
+           // Egret3DState._dataInfo.innerText = "";
             var d: any;
             for (d in data) {
-                Egret3DState._dataInfo.innerText += data[d].toString() + "/r/t"  ;
+                if (data[d])
+                    Egret3DState._dataInfo.innerText += data[d].toString() + "\r\t"  ;
             }
         }
     }

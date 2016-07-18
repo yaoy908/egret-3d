@@ -27,7 +27,7 @@
         */
         public static texture: CheckerboardTexture = new CheckerboardTexture();
 
-        private _pixelArray: Uint8Array;
+        private _pixelArray: Float32Array;
 
         /**
         * @language zh_CN
@@ -52,12 +52,13 @@
                 this.texture2D = context3D.creatTexture2D();
                 this.texture2D.border = 0; 
                 this.texture2D.internalFormat = InternalFormat.PixelArray;
-                this.texture2D.colorFormat = ContextConfig.ColorFormat_RGBA8888;
+                this.texture2D.colorFormat = Context3DProxy.gl.RGBA;
                 this.texture2D.smooth = this.smooth; 
                 this.texture2D.useMipmap = this.useMipmap; 
                 this.texture2D.mimapData = new Array<MipmapData>();
                 this.texture2D.mimapData.push(new MipmapData(this._pixelArray, this.width, this.height));
                 this.texture2D.useMipmap = false;
+                this.texture2D.dataFormat = Context3DProxy.gl.FLOAT ;
                 context3D.upLoadTextureData(0, this.texture2D);
             }
         }
@@ -65,7 +66,7 @@
         private buildCheckerboard(): void {
             if (!this._pixelArray) {
 
-                this._pixelArray = new Uint8Array(this.width * this.height * 4);
+                this._pixelArray = new Float32Array(this.width * this.height * 4);
 
                 var colors: Color[] = [Color.black(), Color.white()];
 
@@ -87,10 +88,10 @@
                             colorIndex = 0;
                         }
 
-                        this._pixelArray[(y * (this.width * 4) + x * 4) + 0] = colors[colorIndex].r;
-                        this._pixelArray[(y * (this.width * 4) + x * 4) + 1] = colors[colorIndex].g;
-                        this._pixelArray[(y * (this.width * 4) + x * 4) + 2] = colors[colorIndex].b;
-                        this._pixelArray[(y * (this.width * 4) + x * 4) + 3] = colors[colorIndex].a;
+                        this._pixelArray[(y * (this.width * 4) + x * 4) + 0] = x * y / (32*32) ;
+                        this._pixelArray[(y * (this.width * 4) + x * 4) + 1] = x * y / (32*32) ;
+                        this._pixelArray[(y * (this.width * 4) + x * 4) + 2] = x * y / (32*32) ;
+                        this._pixelArray[(y * (this.width * 4) + x * 4) + 3] = x * y / (32*32) ;
                     }
                 }
             }

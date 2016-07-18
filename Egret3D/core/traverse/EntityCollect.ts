@@ -19,7 +19,7 @@
         //private _alphaRenderItems: Array<IRender> = [];
         //private _uiRenderItems: Array<IRender> = [] ;
        
-        private _softRenderItems: { [key: string]: IRender[] } = {};
+        public _softRenderItems: { [key: string]: IRender[] } = {};
 
         /**
         * @language zh_CN

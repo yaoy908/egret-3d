@@ -42,6 +42,12 @@
         /**
         * @language zh_CN
         * @private
+        */
+        public dataFormat: number;
+
+        /**
+        * @language zh_CN
+        * @private
         * 纹理贴图标准的格式
         */
         public internalFormat: InternalFormat;
@@ -123,6 +129,7 @@
             this.useMipmap = true;
             this.imageData = null;
             this.colorFormat = ContextConfig.ColorFormat_RGBA8888;
+            this.dataFormat = Context3DProxy.gl.UNSIGNED_BYTE;
             this.internalFormat = InternalFormat.PixelArray;
             this.mimapData = new Array<MipmapData>();
         }
