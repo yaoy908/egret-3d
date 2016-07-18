@@ -14,13 +14,14 @@
     */
     export class EntityCollect extends CollectBase {
 
-
-        //private _normalRenderItems: Array<IRender> = [] ;
-        //private _alphaRenderItems: Array<IRender> = [];
-        //private _uiRenderItems: Array<IRender> = [] ;
-       
-        public _softRenderItems: { [key: string]: IRender[] } = {};
-
+        public softRenderItems: { [key: string]: IRender[] } = {};
+        public numberVertex: number = 0;
+        public numberFace: number = 0;
+        public numberDraw: number = 0;
+        public numberSkin: number = 0;
+        public numberAnimation: number = 0;
+        public numberParticle: number = 0;
+        
         /**
         * @language zh_CN
         * constructor
@@ -61,15 +62,29 @@
 
             if (renderItem.material) {
                 if (renderItem.tag.name == "normalObject" && renderItem.material.materialData.alphaBlending) {
-                    this._softRenderItems["alphaObject"].push(renderItem);
+                    this.softRenderItems["alphaObject"].push(renderItem);
                 }
                 else {
                     for (var i: number = 0; i < Layer.layerNumber; i++) {
                         if (renderItem.tag.name == Layer.layerType[i]) {
-                            this._softRenderItems[Layer.layerType[i]].push(renderItem);
+                            this.softRenderItems[Layer.layerType[i]].push(renderItem);
                         }
                     }
                 }
+
+                if (Egret3DEngine.debug) {
+                    this.numberFace += renderItem.geometry.faceCount;
+                    this.numberVertex += renderItem.geometry.vertexCount;
+                    this.numberDraw += 1;
+
+                    if (renderItem.animation)
+                        this.numberSkin += 1;
+                    if (renderItem.proAnimation)
+                        this.numberAnimation += 1;
+                    if (renderItem.type == "particleEmit")
+                        this.numberParticle += 1;
+                }
+
             }
 
             if (renderItem.enablePick) {
@@ -86,7 +101,14 @@
         */
         public update(camera: Camera3D) {
             super.update(camera);
-      
+
+            this.numberFace = 0 ;
+            this.numberVertex = 0;
+            this.numberDraw = 0;
+            this.numberSkin = 0;
+            this.numberAnimation = 0;
+            this.numberParticle = 0 ;
+            
             this.clearLayerList();
 
             this.renderList.length = 0;
@@ -106,9 +128,9 @@
 
             var listLen: number;
             for (var j: number = 0; j < Layer.layerType.length; j++) {
-                listLen = this._softRenderItems[Layer.layerType[j]].length
+                listLen = this.softRenderItems[Layer.layerType[j]].length
                 for (var i: number = 0; i < listLen; i++) {
-                    this.renderList.push( this._softRenderItems[Layer.layerType[j]][i] );
+                    this.renderList.push(this.softRenderItems[Layer.layerType[j]][i] );
                 }
             }
         }
@@ -154,11 +176,11 @@
 
         protected clearLayerList() {
             for (var i: number = 0; i < Layer.layerType.length; i++) {
-                if (!this._softRenderItems[Layer.layerType[i]]) {
-                    this._softRenderItems[Layer.layerType[i]] = [];
+                if (!this.softRenderItems[Layer.layerType[i]]) {
+                    this.softRenderItems[Layer.layerType[i]] = [];
                 }
                 else
-                    this._softRenderItems[Layer.layerType[i]].length = 0;
+                    this.softRenderItems[Layer.layerType[i]].length = 0;
             }
         }
 
