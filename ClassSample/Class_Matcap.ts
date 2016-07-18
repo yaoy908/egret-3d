@@ -72,8 +72,8 @@
                     mesh.addSubMaterial(i, mat);
                 }
 
-                //var loadtex: URLLoader = new URLLoader("resource/gray.png");
-                var loadtex: URLLoader = new URLLoader("resource/basier/" + sub.textureDiffuse);
+                var loadtex: URLLoader = new URLLoader("resource/gray.png");
+                //var loadtex: URLLoader = new URLLoader("resource/basier/" + sub.textureDiffuse);
                 loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
                 loadtex["mat"] = mat;
                 mat.ambientColor = 0xffffff;
@@ -82,11 +82,10 @@
                 loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadNormalTexture, this);
                 loadtex["mat"] = mat;
 
-                var loadtex: URLLoader = new URLLoader("resource/matcap/12719-ambientocclusion.jpg");
+                var loadtex: URLLoader = new URLLoader("resource/matcap/red.jpg");  
                 loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadMatCapTexture, this);
                 loadtex["mat"] = mat;
             }
-
         }
 
         protected onLoadTexture(e: LoaderEvent3D) {
