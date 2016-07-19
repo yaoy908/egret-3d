@@ -140,6 +140,51 @@
 
         /**
          * @language zh_CN
+         * 设置是否开启深度测试
+         * @param texture ITexture
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public set depth(v: boolean) {
+            this.materialData.depthTest = v;
+        }
+
+         /**
+         * @language zh_CN
+         * 返回深度测试
+         * @param texture ITexture
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public get depth(): boolean {
+            return this.materialData.depthTest;
+        }
+
+        /**
+         * @language zh_CN
+         * 设置是否开启深度测试方式
+         * @param texture ITexture
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public set depthMode(v: boolean) {
+            this.materialData.depthMode = v;
+        }
+
+        /**
+        * @language zh_CN
+        * 返回深度测试方式
+        * @param texture ITexture
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get depthMode(): boolean {
+            return this.materialData.depthMode;
+        }
+
+
+        /**
+         * @language zh_CN
          * 设置材质 diffuseTexture 。
          * 设置材质球的漫反射贴图。
          * @param texture ITexture
@@ -433,6 +478,32 @@
          */
         public get alpha(): number {
             return this.materialData.alpha;
+        }
+
+        /**
+       * @language zh_CN
+       * 设置材质 的alphaBlending 值。
+       * 设置 材质球的的alpha是否进行深度排序
+       * @param value {Number}
+       * @version Egret 3.0
+       * @platform Web,Native
+       */
+        public set alphaBlending(value: boolean) {
+            if (this.materialData.alphaBlending != value) {
+                this.materialData.alphaBlending = value;
+                this.materialData.materialDataNeedChange = true;
+            }
+        }
+
+        /**
+         * @language zh_CN
+         * 返回 alphaBlending 颜色
+         * @returns {Number}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public get alphaBlending(): boolean {
+            return this.materialData.alphaBlending;
         }
 
         /**

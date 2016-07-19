@@ -255,6 +255,15 @@
 
         /**
         * @language zh_CN
+        * 深度测试模式
+        * @default true
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public depthMode: number = 0;
+
+        /**
+        * @language zh_CN
         * 是否平滑 。
         * @default true
         * @version Egret 3.0
