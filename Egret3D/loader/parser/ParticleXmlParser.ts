@@ -106,9 +106,9 @@
             var colorConst2: Node = this.getNode(node, "colorConst2");
             var gradients1: Node = this.getNode(node, "colorGradients1");
             var gradients2: Node = this.getNode(node, "colorGradients2");
+            //tint color
             var tintColor: Node = this.getNode(node, "tintColor");
             this.parseColorProperty(property, colorConst1, colorConst2, gradients1, gradients2, tintColor);
-            //tint color
             //gravity
             property.gravity = Number(this.getNode(node, "gravity").textContent);
             //transform
@@ -140,6 +140,11 @@
             var speedScale: Node = this.getNode(render, "speedScale");
             if (speedScale) {
                 property.speedScale = Number(speedScale.textContent);
+            }
+            //meshFile
+            var meshFile: Node = this.getNode(render, "meshFile");
+            if (meshFile) {
+                property.meshFile = meshFile.textContent;
             }
 
             //fudge
@@ -318,8 +323,7 @@
          */
         private parseGeometry(node: Node): void {
             var geometry: ParticleDataGeometry = this._particleData.geometry;
-            geometry.type = ParticleGeometryType[this.getNode(node, "type").textContent];
-
+            
             var plane: Node = this.getNode(node, "plane");
             this.eachAttr(plane, function (label: string, value: string): void {
                 if (label == "width") {
@@ -328,30 +332,7 @@
                     geometry.planeH = Number(value);
                 }
             });
-
-            var cube: Node = this.getNode(node, "cube");
-            this.eachAttr(cube, function (label: string, value: string): void {
-                if (label == "width") {
-                    geometry.cubeW = Number(value);
-                } else if (label == "height") {
-                    geometry.cubeH = Number(value);
-                } else if (label == "depth") {
-                    geometry.cubeD = Number(value);
-                }
-            });
-
-            var sphere: Node = this.getNode(node, "sphere");
-            this.eachAttr(sphere, function (label: string, value: string): void {
-                if (label == "radius") {
-                    geometry.sphereRadius = Number(value);
-                } else if (label == "segmentW") {
-                    geometry.sphereSegW = Number(value);
-                } else if (label == "segmentH") {
-                    geometry.sphereSegH = Number(value);
-                }
-            });
-
-
+            
         }
 
 

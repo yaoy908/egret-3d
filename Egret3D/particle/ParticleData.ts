@@ -49,19 +49,6 @@
         TwoBezier,
     }
 
-    /**
-    * @language zh_CN
-    * 粒子的几何形状
-    * @version Egret 3.0
-    * @platform Web,Native
-    */
-    export enum ParticleGeometryType {
-        External,
-        Plane,
-        Cube,
-        Sphere,
-    }
-
 
     /**
     * @language zh_CN
@@ -227,12 +214,6 @@
             this.geometry.planeW *= value;
             this.geometry.planeH *= value;
 
-            this.geometry.cubeW *= value;
-            this.geometry.cubeH *= value;
-            this.geometry.cubeD *= value;
-
-            this.geometry.sphereRadius *= value;
-
             //
             this.moveSpeed.max *= value;
             this.moveSpeed.min *= value;
@@ -301,6 +282,9 @@
         public cameraScale: number = 0.0;
         public speedScale: number = 0.0;
         public lengthScale: number = 1.0;
+
+        public meshFile: string;
+        public geometry: Geometry;
 
         constructor() {
             super(ParticleDataNodeType.Property);
@@ -566,56 +550,23 @@
 
 
     export class ParticleDataGeometry extends ParticleDataNode {
-
-
-
         //粒子模型
-        public type: number = ParticleGeometryType.Plane;
         public planeW: number = 10;
         public planeH: number = 10;
-
-        public cubeW: number = 10;
-        public cubeH: number = 10;
-        public cubeD: number = 10;
-
-        public sphereRadius: number = 10;
-        public sphereSegW: number = 6;
-        public sphereSegH: number = 6;
 
         constructor() {
             super(ParticleDataNodeType.Geometry);
         }
+
         public validate(): void {
-            if (this.type == ParticleGeometryType.External)
-                return;
-            if (this.type == ParticleGeometryType.Plane) {
+           
                 if (this.planeW < 0) {
                     this.planeW = 10;
                 }
                 if (this.planeH < 0) {
                     this.planeH = 10;
                 }
-            } else if (this.type == ParticleGeometryType.Cube) {
-                if (this.cubeW < 0) {
-                    this.cubeW = 10;
-                }
-                if (this.cubeH < 0) {
-                    this.cubeH = 10;
-                }
-                if (this.cubeD < 0) {
-                    this.cubeD = 10;
-                }
-            } else if (this.type == ParticleGeometryType.Sphere) {
-                if (this.sphereRadius < 0) {
-                    this.sphereRadius = 10;
-                }
-                if (this.sphereSegW < 0) {
-                    this.sphereSegW = 4;
-                }
-                if (this.sphereSegH < 0) {
-                    this.sphereSegH = 4;
-                }
-            }
+           
 
         }
     }
