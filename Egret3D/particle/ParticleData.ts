@@ -295,6 +295,7 @@
         public scale: Vector3D = new Vector3D(1, 1, 1, 1);
         public position: Vector3D = new Vector3D(0, 0, 0, 1);
 
+        public sortingFudge: number = 0;
         //render mode
         public renderMode: number = ParticleRenderModeType.Billboard;
         public cameraScale: number = 0.0;
@@ -392,6 +393,12 @@
             super(ParticleDataNodeType.Life);
         }
         public validate(): void {
+            if (this.max <= 0) {
+                this.max = 1;
+            }
+            if (this.min > this.max) {
+                this.min = this.max;
+            }
             //life
             if (this.type == ParticleValueType.Const) {
                 this.min = this.max;
@@ -525,8 +532,8 @@
     export class ParticleDataScaleBirth extends ParticleDataNode {
         //初始缩放值
         public type: number = ParticleValueType.Const;
-        public max: number = 0;
-        public min: number = 0;
+        public max: number = 1;
+        public min: number = 1;
         public bezier1: BezierData;
         public bezier2: BezierData;
         constructor() {

@@ -142,6 +142,11 @@
                 property.speedScale = Number(speedScale.textContent);
             }
 
+            //fudge
+            var sortingFudge: Node = this.getNode(render, "sortingFudge");
+            if (sortingFudge) {
+                property.sortingFudge = Number(sortingFudge.textContent);
+            }
         }
 
         /**
