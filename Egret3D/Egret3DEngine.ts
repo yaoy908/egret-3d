@@ -8,6 +8,7 @@
      * 引擎库前期加载设置，开发中加载未压缩的编译引擎
      */
     export class Egret3DEngine {
+        public static debug: boolean = true;
         private static djs: string = "" ;
         private static scriptSource: Array<string>;
         private static importList: Array<string> = new Array<string>();

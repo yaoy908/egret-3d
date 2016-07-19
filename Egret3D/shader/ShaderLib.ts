@@ -234,14 +234,10 @@ module egret3d {
 			"uniform sampler2D diffuseTexture; \n" +
 			"vec4 diffuseColor ; \n" +
 			"void main() { \n" +
-			"if( diffuseColor.w == 0.0 ){ \n" +
-			"discard; \n" +
-			"} \n" +
 			"diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
 			"if( diffuseColor.w <= materialSource.cutAlpha ){ \n" +
 			"discard; \n" +
-			"}else \n" +
-			"diffuseColor.xyz *= diffuseColor.w ; \n" +
+			"} \n" +
 			"} \n",
 
 			"diffuse_vertex":
@@ -306,10 +302,10 @@ module egret3d {
 			"vec4 ambientColor; \n" +
 			"vec4 light ; \n" +
 			"void main() { \n" +
-			"diffuseColor.xyz = diffuseColor.xyz ; \n" +
-			"outColor.xyz = light.xyz * diffuseColor.xyz * materialSource.diffuse ; \n" +
-			"outColor.w = materialSource.alpha * diffuseColor.w ; \n" +
-			"gl_FragColor = outColor * varying_color; \n" +
+			"outColor.xyz = light.xyz * diffuseColor.xyz * materialSource.diffuse * varying_color.xyz; \n" +
+			"outColor.w = materialSource.alpha * diffuseColor.w * varying_color.w; \n" +
+			"outColor.xyz *= outColor.w; \n" +
+			"gl_FragColor = outColor; \n" +
 			"} \n",
 
 			"end_vs":
@@ -556,7 +552,7 @@ module egret3d {
 			"uniform sampler2D lightTexture ; \n" +
 			"varying vec2 varying_uv1 ; \n" +
 			"void main(void){ \n" +
-			"vec3 lightmap = texture2D( lightTexture , varying_uv1 ).xyz * 1.5; \n" +
+			"vec3 lightmap = texture2D( lightTexture , varying_uv1 ).xyz * 2.8; \n" +
 			"diffuseColor.xyz *= lightmap ; \n" +
 			"specularColor.xyz *= lightmap; \n" +
 			"} \n",
@@ -565,7 +561,7 @@ module egret3d {
 			"uniform sampler2D lightTexture ; \n" +
 			"varying vec2 varying_uv1 ; \n" +
 			"void main(void){ \n" +
-			"vec3 lightmap = texture2D( lightTexture , varying_uv1 ).xyz * 1.5; \n" +
+			"vec3 lightmap = texture2D( lightTexture , varying_uv1 ).xyz * 2.8; \n" +
 			"diffuseColor.xyz *= lightmap ; \n" +
 			"} \n",
 
@@ -848,10 +844,14 @@ module egret3d {
 			"particle_end_fs":
 			"uniform float uniform_particleFsData[3]; \n" +
 			"void main() { \n" +
+			"float blendMode = uniform_particleFsData[2]; \n" +
 			"outColor.xyz = diffuseColor.xyz * materialSource.diffuse * varying_color.xyz ; \n" +
 			"outColor.w = materialSource.alpha * diffuseColor.w * varying_color.w; \n" +
 			"outColor.xyz *= outColor.w; \n" +
+			"if(blendMode == 0.0 || blendMode == 2.0 || blendMode == 8.0){ \n" +
+			"}else{ \n" +
 			"outColor.xyz *= 1.8; \n" +
+			"} \n" +
 			"gl_FragColor = outColor; \n" +
 			"} \n",
 
@@ -985,7 +985,7 @@ module egret3d {
 			"} \n" +
 			"float updateStretchedBillBoard(vec4 startPos, vec4 newPos){ \n" +
 			"localPosition.x *= particleStateData.lengthScale; \n" +
-			"mat4 temp = uniform_ProjectionMatrix * uniform_ViewMatrix; \n" +
+			"mat4 temp = uniform_ViewMatrix; \n" +
 			"startPos = temp * startPos; \n" +
 			"newPos = temp * newPos; \n" +
 			"vec3 dirVector = newPos.xyz - startPos.xyz; \n" +
@@ -1766,7 +1766,6 @@ module egret3d {
 			"void main() { \n" +
 			"uv_0.xy += vec2(uvRoll[0],uvRoll[1]); \n" +
 			"diffuseColor = texture2D(diffuseTexture , uv_0 ); \n" +
-			"diffuseColor.xyz = clamp(diffuseColor.xyz / diffuseColor.w,0.0,1.0); \n" +
 			"} \n",
 
 			"uvSpriteSheet_fs":
@@ -1852,6 +1851,7 @@ module egret3d {
 			"uniform sampler2D diffuseTexture; \n" +
 			"uniform vec3 uniform_eyepos; \n" +
 			"uniform vec4 waveFSData[2]; \n" +
+			"uniform mat4 uniform_NormalMatrix; \n" +
 			"vec4 diffuseColor ; \n" +
 			"void main(void){ \n" +
 			"vec3 ViewDir = (mat3(uniform_NormalMatrix)*(uniform_eyepos.xyz - varying_ViewPose.xyz)) ; \n" +

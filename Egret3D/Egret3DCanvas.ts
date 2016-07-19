@@ -35,6 +35,7 @@
 
         protected _time: number = 0;
         protected _delay: number = 0;
+        protected _renderer: number = 0;
         protected _timeDate: Date = null;
         protected _envetManager: EventManager;
 
@@ -256,7 +257,6 @@
             this._delay = this._timeDate.getTime() - this._time;
             this._time = this._timeDate.getTime();
 
-
             this._enterFrameEvent3D.time += this._time;
             this._enterFrameEvent3D.delay = this._delay;
             this.dispatchEvent(this._enterFrameEvent3D);
@@ -275,6 +275,13 @@
             CameraManager.instance.update(this._time, this._delay);
             for (var i: number = 0; i < this._view3DS.length; i++) {
                 this._view3DS[i].update(this._time, this._delay);
+            }
+
+            if (Egret3DEngine.debug) {
+                this._renderer = (new Date().getTime() - this._time) ;
+                Egret3DState.showTime(this._time, this._delay);
+                egret3d.Egret3DState.showDataInfo("renderer: " + this._renderer.toString() + " ms");
+                egret3d.Egret3DState.show();
             }
 
             requestAnimationFrame((delay) => this.update(delay));

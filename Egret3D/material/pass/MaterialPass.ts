@@ -474,6 +474,8 @@
                 context3DProxy.depthFunc(ContextConfig.LEQUAL);
             }
 
+            //Context3DProxy.gl.clearColor(0.0,0.0,0.0,1.0);
+            //Context3DProxy.gl.stencilOp(Context3DProxy.gl.BACK, Context3DProxy.gl.KEEP, Context3DProxy.gl.KEEP);
             context3DProxy.setCulling(this._materialData.cullFrontOrBack);
 
             if (this._materialData.bothside) {

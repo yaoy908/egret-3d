@@ -42,6 +42,14 @@
         */
         public material: MaterialBase;
 
+         /**
+        * @language zh_CN
+        * 对象类型。</p>
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public type: string ="" ;
+
         /**
         * @private
         * @version Egret 3.0

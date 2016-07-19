@@ -344,6 +344,16 @@
 
         /**
         * @language zh_CN
+        * 获取模型面数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get faceCount(): number {
+            return this.indexData.length / 3;
+        }
+
+        /**
+        * @language zh_CN
         * @private
         */
         public buildDefaultSubGeometry() {

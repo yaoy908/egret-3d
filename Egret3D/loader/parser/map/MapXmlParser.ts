@@ -45,7 +45,7 @@
             var count: number = 0;
             for (i = 0, count = node.childNodes.length; i < count; i++) {
                 item = node.childNodes[i];
-                if (item.nodeName == "#text")
+                if (this.nodeFilter(item))
                     continue;
 
                 var data: any = {};
@@ -147,7 +147,7 @@
             for (var i = 0, count = node.childNodes.length; i < count; i++) {
                 item = node.childNodes[i];
                 nodeName = item.nodeName;
-                if (nodeName == "#text")
+                if (this.nodeFilter(item))
                     continue;
                 method = new MatMethodData();
                 method.type = nodeName;
@@ -171,7 +171,7 @@
 
                 for (var j: number = 0; j < item.childNodes.length; ++j) {
                     var textureItem: Node = item.childNodes[j];
-                    if (textureItem.nodeName == "#text") {
+                    if (this.nodeFilter(textureItem)) {
                         continue;
                     }
                     var textureData: any = {};
@@ -205,7 +205,7 @@
             for (var i = 0, count = node.childNodes.length; i < count; i++) {
                 item = node.childNodes[i];
                 nodeName = item.nodeName;
-                if (nodeName == "#text") {
+                if (this.nodeFilter(item)) {
                     continue;
                 }
 
@@ -288,7 +288,7 @@
             for (i = 0, count = node.childNodes.length; i < count; i++) {
                 item = node.childNodes[i];
                 nodeName = item.nodeName;
-                if (nodeName == "#text") {
+                if (this.nodeFilter(item)) {
                     continue;
                 }
                 if (nodeName == "pos") {
@@ -419,7 +419,7 @@
                 item = environment[i];
                 for (var ii: number = 0; ii < item.childNodes.length; ++ii) {
                     item0 = item.childNodes[ii];
-                    if (item0.nodeName == "#text")
+                    if (this.nodeFilter(item0))
                         continue;
                     if (item0.nodeName == "light") {
 
@@ -440,7 +440,7 @@
                         for (var iii: number = 0; iii < item0.childNodes.length; ++iii) {
                             item1 = item0.childNodes[iii];
 
-                            if (item1.nodeName == "#text") {
+                            if (this.nodeFilter(item1)) {
                                 continue;
                             }
 
@@ -494,7 +494,7 @@
             for (i = 0, count = node.childNodes.length; i < count; i++) {
                 item = node.childNodes[i];
                 nodeName = item.nodeName;
-                if (nodeName == "#text") {
+                if (this.nodeFilter(item)) {
                     continue;
                 }
                 for (var j: number = 0; j < item.attributes.length; ++j) {
@@ -568,6 +568,10 @@
             if (data.path) {
                 this.taskDict[data.path] = 0;
             }
+        }
+
+        private nodeFilter(node: Node): boolean {
+            return node.nodeName == "#text" || node.nodeName == "#comment";
         }
     }
 }

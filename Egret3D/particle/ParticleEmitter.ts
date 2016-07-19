@@ -35,7 +35,10 @@
         */
         constructor(data:ParticleData, geo: Geometry = null, material: MaterialBase = null) {
             super(null, material);
-            
+
+            this.tag.name = "effect";
+            this.type = "particleEmit";
+
             this._data = data;
             this._externalGeometry = geo;
            
@@ -44,8 +47,7 @@
             this._particleState = this.particleAnimation.particleAnimationState ;
             
             this.particleAnimation.emit = this;
-            this.tag.name = "effect";
-
+   
             this.buildParticle();
         }
 

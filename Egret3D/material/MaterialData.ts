@@ -478,6 +478,7 @@
          * @language zh_CN
          */
         public materialSourceData: Float32Array = new Float32Array(20);//20
+        public materialSourceData2: Float32Array = new Float32Array(20);//20
         /**
          * @language zh_CN
          */
