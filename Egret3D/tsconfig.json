@@ -299,6 +299,7 @@
         "View3D.ts",
         "VRView3D.ts",
         "Egret3DCanvas.ts",
+        "Egret3DEngine.ts",
         
         "post/IPost.ts",
         "post/postPass/MainPass.ts",
