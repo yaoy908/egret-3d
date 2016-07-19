@@ -163,11 +163,11 @@
         /**
          * @language zh_CN
          * 设置是否开启深度测试方式
-         * @param texture ITexture
+         * @param v 模式
          * @version Egret 3.0
          * @platform Web,Native
          */
-        public set depthMode(v: boolean) {
+        public set depthMode(v: number) {
             this.materialData.depthMode = v;
         }
 
@@ -178,7 +178,7 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public get depthMode(): boolean {
+        public get depthMode(): number {
             return this.materialData.depthMode;
         }
 
