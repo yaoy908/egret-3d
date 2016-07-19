@@ -6,11 +6,12 @@
         private averageDelay: number = 0;
 
         private delayNumber: number = 0;
-        private countFrame: number = 60;
+        private countFrame: number = 30;
 
         public update(time: number, delay: number):string {
             this.delayNumber += delay - 1; 
-            if (this.delayNumber > this.countFrame * FPSInfo.fps) {
+            if (this.countFrame-- == 0) {
+                this.countFrame = 30;
                 this.averageDelay = Math.floor(this.delayNumber / this.countFrame);
                 this.averageFPS = Math.floor(1000 / this.averageDelay);
                 this.averageFPS = Math.min(this.averageFPS,60);

@@ -59,7 +59,7 @@
             bezier.ctrlPoints.push(new Point(1.0, 0.2));
             data.scaleBesizer = sizeBezier;
 
-            this.particle = new ParticleEmitter(data, null, mat);
+            this.particle = new ParticleEmitter(data, mat);
 
             
 

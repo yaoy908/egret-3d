@@ -818,6 +818,7 @@ module egret3d {
 			"float len = nextSegment - startSegment ; \n" +
 			"float ws = ( progress - startSegment ) / len ; \n" +
 			"vec4 color = mix(vec4(unpack_color(startColor).xyz,startAlpha / 256.0),vec4(unpack_color(nextColor).xyz, nextAlpha / 256.0),ws) ; \n" +
+			"color.w = clamp(color.w,0.0,1.0); \n" +
 			"diffuseColor *= color; \n" +
 			"} \n",
 

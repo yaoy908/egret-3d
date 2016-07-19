@@ -289,7 +289,7 @@
 
         private processParticleGeometry(particleData: ParticleData, nodeData: MapNodeData) {
             particleData.materialData = this._mapXmlParser.matDict[nodeData.materialIDs[0]];
-            var particleNode: ParticleEmitter = new ParticleEmitter(particleData, null, new TextureMaterial());
+            var particleNode: ParticleEmitter = new ParticleEmitter(particleData, new TextureMaterial());
 
             nodeData.x *= ParticleData.SCALE_VALUE;
             nodeData.y *= ParticleData.SCALE_VALUE;

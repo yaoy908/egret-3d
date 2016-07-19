@@ -51,6 +51,8 @@
             property.colorConst2.setTo(255, 255, 255, 255);
             //property.gravity = 10;
 
+            property.renderMode = ParticleRenderModeType.StretchedBillboard;
+
             var speed: ParticleDataMoveSpeed = data.moveSpeed;
             speed.max = 50;
             speed.min = 50;
@@ -133,8 +135,9 @@
             colorOffset.data.times.push(0.7);
             colorOffset.data.times.push(1.0);
 
+            mat.blendMode = BlendMode.ALPHA;
 
-            this.particle = new ParticleEmitter(data, null, mat);
+            this.particle = new ParticleEmitter(data, mat);
 
             this.view1.addChild3D(new AxisMesh(200));
 
@@ -152,7 +155,7 @@
             document.body.appendChild(vv);
             vv.onmousedown = (e: MouseEvent) => this.mouseDown(e);
 
-            var loadtex: URLLoader = new URLLoader("resource/effect/rect.png");
+            var loadtex: URLLoader = new URLLoader("resource/effect/line_0010.png");
             loadtex.addEventListener(LoaderEvent3D.LOADER_COMPLETE, this.onLoadTexture, this);
             loadtex["mat"] = mat;
         }

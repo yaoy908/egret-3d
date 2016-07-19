@@ -135,7 +135,7 @@
 
                 this.bornTime = verticesData[this.timeIndex + 0];          //出生时间
                 this.life = verticesData[this.timeIndex + 1];              //单次生命周期时间
-                //this.id = array32[this.timeIndex + 2];                //下标(i)
+                //this.id = verticesData[this.timeIndex + 2];                //下标(i)
 
                 var curCircleIndex: number = -1;
                 

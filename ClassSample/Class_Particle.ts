@@ -51,7 +51,7 @@
             moveSpeed.min = 50;
             data.moveSpeed = moveSpeed;
 
-            this.particle = new ParticleEmitter(data, null, mat);
+            this.particle = new ParticleEmitter(data, mat);
 
             
             this.particle.play();

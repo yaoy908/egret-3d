@@ -21,7 +21,7 @@
             view1.backImage = tex;
 
             this.cameraCrl = new LookAtController(this.view1.camera3D, new Object3D());
-            this.cameraCrl.distance = 1000;
+            this.cameraCrl.distance = 2000;
                       
 
             this.cube = new Mesh( new CubeGeometry(10,10,10) , null );
@@ -34,7 +34,7 @@
             var data: ParticleData = new ParticleData();
             data.followTarget = new ParticleDataFollowTarget();
 
-            data.property.particleCount = 200;
+            data.property.particleCount = 100;
             data.shape.type = ParticleDataShapeType.Point;
 
             var moveSpeed: ParticleDataMoveSpeed = new ParticleDataMoveSpeed();
@@ -43,10 +43,10 @@
             data.moveSpeed = moveSpeed;
 
             var lifeData: ParticleDataLife = data.life;
-            lifeData.duration = 6;
+            lifeData.duration = 60;
 
             var emission: ParticleDataEmission = data.emission;
-            emission.rate = 10;
+            emission.rate = 100;
             emission.bursts = [];
 
             
@@ -54,8 +54,9 @@
             emission.bursts.push(new Point(2.0, 20));
             emission.bursts.push(new Point(4.5, 45));
 
-
-            this.particle = new ParticleEmitter(data, null, mat);
+            data.validate();
+            mat.blendMode = BlendMode.ADD;
+            this.particle = new ParticleEmitter(data, mat);
 
             
 
