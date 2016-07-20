@@ -76,15 +76,31 @@
         */
         public register() {
 
-            var ext: any = Context3DProxy.gl.getExtension('WEBGL_compressed_texture_s3tc');
-            var OES_texture_float_linear = Context3DProxy.gl.getExtension("OES_texture_float_linear");
-            var OES_texture_float = Context3DProxy.gl.getExtension("OES_texture_float");
-            var OES_texture_half_float = Context3DProxy.gl.getExtension("OES_texture_half_float");
-            var OES_texture_half_float_linear = Context3DProxy.gl.getExtension("OES_texture_half_float_linear");
-            var OES_standard_derivatives = Context3DProxy.gl.getExtension("OES_standard_derivatives");
-            var GL_OES_standard_derivatives = Context3DProxy.gl.getExtension("GL_OES_standard_derivatives");
-            var WEBGL_draw_buffers = Context3DProxy.gl.getExtension("WEBGL_draw_buffers");
-            var WEBGL_depth_texture = Context3DProxy.gl.getExtension("WEBGL_depth_texture");
+    
+
+            var extension;
+            extension = Context3DProxy.gl.getExtension('WEBGL_depth_texture') || Context3DProxy.gl.getExtension('MOZ_WEBGL_depth_texture') || Context3DProxy.gl.getExtension('WEBKIT_WEBGL_depth_texture');
+            extension = Context3DProxy.gl.getExtension('EXT_texture_filter_anisotropic') || Context3DProxy.gl.getExtension('MOZ_EXT_texture_filter_anisotropic') || Context3DProxy.gl.getExtension('WEBKIT_EXT_texture_filter_anisotropic');
+            extension = Context3DProxy.gl.getExtension('WEBGL_compressed_texture_s3tc') || Context3DProxy.gl.getExtension('MOZ_WEBGL_compressed_texture_s3tc') || Context3DProxy.gl.getExtension('WEBKIT_WEBGL_compressed_texture_s3tc');
+            extension = Context3DProxy.gl.getExtension('WEBGL_compressed_texture_pvrtc') || Context3DProxy.gl.getExtension('WEBKIT_WEBGL_compressed_texture_pvrtc');
+            extension = Context3DProxy.gl.getExtension('WEBGL_compressed_texture_etc1');
+            extension = Context3DProxy.gl.getExtension('OES_element_index_uint');
+
+            extension =  Context3DProxy.gl.getExtension('WEBGL_compressed_texture_s3tc');
+            extension =  Context3DProxy.gl.getExtension("OES_texture_float_linear");
+            extension = Context3DProxy.gl.getExtension("OES_texture_float");
+            extension = Context3DProxy.gl.getExtension("OES_texture_half_float");
+            extension = Context3DProxy.gl.getExtension("OES_texture_half_float_linear");
+            extension = Context3DProxy.gl.getExtension("OES_standard_derivatives");
+            extension = Context3DProxy.gl.getExtension("GL_OES_standard_derivatives");
+            extension = Context3DProxy.gl.getExtension("WEBGL_draw_buffers");
+            extension = Context3DProxy.gl.getExtension("WEBGL_depth_texture");
+            extension = Context3DProxy.gl.getExtension("WEBGL_lose_context");
+            //WEBGL_color_buffer_float
+            //EXT_color_buffer_half_float
+            //EXT_texture_filter_anisotropic
+            //EXT_frag_depth
+            //EXT_shader_texture_lod
 
             ContextConfig.BLEND = Context3DProxy.gl.BLEND;
 
@@ -125,11 +141,11 @@
 
             ContextConfig.LEQUAL = Context3DProxy.gl.LEQUAL;
 
-            if (ext) {
-                ContextConfig.ColorFormat_DXT1_RGB = ext.COMPRESSED_RGB_S3TC_DXT1_EXT;
-                ContextConfig.ColorFormat_DXT1_RGBA = ext.COMPRESSED_RGBA_S3TC_DXT1_EXT;
-                ContextConfig.ColorFormat_DXT3_RGBA = ext.COMPRESSED_RGBA_S3TC_DXT3_EXT;
-                ContextConfig.ColorFormat_DXT5_RGBA = ext.COMPRESSED_RGBA_S3TC_DXT5_EXT;
+            if (extension) {
+                ContextConfig.ColorFormat_DXT1_RGB = extension.COMPRESSED_RGB_S3TC_DXT1_EXT;
+                ContextConfig.ColorFormat_DXT1_RGBA = extension.COMPRESSED_RGBA_S3TC_DXT1_EXT;
+                ContextConfig.ColorFormat_DXT3_RGBA = extension.COMPRESSED_RGBA_S3TC_DXT3_EXT;
+                ContextConfig.ColorFormat_DXT5_RGBA = extension.COMPRESSED_RGBA_S3TC_DXT5_EXT;
             }
 
             ContextSamplerType.TEXTURE_0 = Context3DProxy.gl.TEXTURE0;
@@ -260,21 +276,6 @@
             Context3DProxy.gl.bufferData(Context3DProxy.gl.ARRAY_BUFFER, vertexBuffer3D.arrayBuffer, Context3DProxy.gl.DYNAMIC_DRAW);
         }
 
-        /// public upLoadTextureData(mipLevel: number, texture: Texture2D , data:any ) {
-        ///     /// 启用二维纹理
-        ///     ///Context3DProxy.gl.enable( Context3DProxy.gl.TEXTURE );
-        ///     Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture.texture2D);
-        ///     ///if (typeof (data) == HTMLImageElement) {
-        ///     /// Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, mipLevel, Context3DProxy.gl.RGBA, Context3DProxy.gl.RGBA, Context3DProxy.gl.UNSIGNED_BYTE, data);
-        ///     ///}
-        ///     Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, mipLevel, Context3DProxy.gl.RGBA, 128, 128, 0, Context3DProxy.gl.RGBA, Context3DProxy.gl.UNSIGNED_BYTE, data ) ;
-        ///
-        ///     Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, Context3DProxy.gl.NEAREST);
-        ///     Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MAG_FILTER, Context3DProxy.gl.NEAREST);
-        ///     Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_S, Context3DProxy.gl.REPEAT);
-        ///     Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_T, Context3DProxy.gl.REPEAT);
-        /// }
-
         /**
         * @language zh_CN
         * 设置2D纹理状态 来确定贴图的采样方式
@@ -285,11 +286,8 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public setTexture2DSamplerState(min_filter: number, mag_filter: number, wrap_u_filter: number, wrap_v_filter: number) {
-            Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, min_filter);
-            Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MAG_FILTER, mag_filter);
-            Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_S, wrap_u_filter);
-            Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_T, wrap_v_filter);
+        public texParameteri(target: number, pname: number, param: number) {
+            Context3DProxy.gl.texParameteri(target, pname, param);
         }
 
         /**
@@ -300,38 +298,24 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        public upLoadTextureData(mipLevel: number, texture: Texture2D) {
-            Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture.texture);
+        public upLoadTextureData(mipLevel: number, texture: ITexture) {
+            Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture.texture2D.textureBuffer );
 
-            Context3DProxy.gl.pixelStorei(Context3DProxy.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
-            if (texture.internalFormat == InternalFormat.ImageData) {
-                
-                Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, 0, Context3DProxy.gl.RGBA, Context3DProxy.gl.RGBA, Context3DProxy.gl.UNSIGNED_BYTE, texture.imageData);
-                delete texture.imageData;
+            if (texture.texture2D.internalFormat == InternalFormat.ImageData) {
+                Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, 0, Context3DProxy.gl.RGBA, Context3DProxy.gl.RGBA, texture.texture2D.dataFormat, texture.texture2D.imageData);
+                delete texture.texture2D.imageData;
             }
-            else if (texture.internalFormat == InternalFormat.CompressData) {
-                this.upLoadCompressedTexture2D(mipLevel, texture);
+            else if (texture.texture2D.internalFormat == InternalFormat.CompressData) {
+                this.upLoadCompressedTexture2D(mipLevel, texture.texture2D);
                
             }
-            else if (texture.internalFormat == InternalFormat.PixelArray) {
-                Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, mipLevel, texture.colorFormat, texture.mimapData[mipLevel].width, texture.mimapData[mipLevel].height, texture.border, texture.colorFormat, Context3DProxy.gl.UNSIGNED_BYTE, texture.mimapData[mipLevel].data);
+            else if (texture.texture2D.internalFormat == InternalFormat.PixelArray) {
+                Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, mipLevel, texture.texture2D.colorFormat, texture.texture2D.mimapData[mipLevel].width, texture.texture2D.mimapData[mipLevel].height, texture.texture2D.border, texture.texture2D.colorFormat, texture.texture2D.dataFormat, texture.texture2D.mimapData[mipLevel].data);
             }
-
-            //Context3DProxy.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL
-            //Context3DProxy.gl.pixelStorei(Context3DProxy.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
-            if (texture.useMipmap)
+            if( texture.useMipmap )
                 Context3DProxy.gl.generateMipmap(Context3DProxy.gl.TEXTURE_2D);
 
-            var min_filter: number = (texture.smooth && texture.useMipmap) ? Context3DProxy.gl.LINEAR_MIPMAP_LINEAR : Context3DProxy.gl.LINEAR;
-            var mag_filter: number = texture.smooth? Context3DProxy.gl.LINEAR : Context3DProxy.gl.LINEAR;
-
-            var wrap_u_filter: number = true ? Context3DProxy.gl.REPEAT : Context3DProxy.gl.CLAMP_TO_EDGE;
-            var wrap_v_filter: number = true ? Context3DProxy.gl.REPEAT : Context3DProxy.gl.CLAMP_TO_EDGE　;
-
-            Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, min_filter);
-            Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MAG_FILTER, mag_filter);
-            Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_S, wrap_u_filter);
-            Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_WRAP_T, wrap_v_filter);
+            //texture.activeState( this );
         }
 
         /**
@@ -354,7 +338,7 @@
         */
         public creatTexture2D(): Texture2D {
             var texture: Texture2D = new Texture2D();
-            texture.texture = Context3DProxy.gl.createTexture();
+            texture.textureBuffer = Context3DProxy.gl.createTexture();
             return texture;
         }
 
@@ -445,7 +429,7 @@
             var depthRenderbuffer = Context3DProxy.gl.createRenderbuffer();
 
 
-            Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture2D.texture);
+            Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture2D.textureBuffer);
 
             var float: Float32Array = new Float32Array(32 * 32 * 4);
             for (var i: number = 0; i < 32 * 32; i++) {
@@ -477,7 +461,7 @@
             //Context3DProxy.gl.generateMipmap(Context3DProxy.gl.TEXTURE_2D);  
 
             Context3DProxy.gl.bindFramebuffer(Context3DProxy.gl.FRAMEBUFFER, rttframeBuffer);
-            Context3DProxy.gl.framebufferTexture2D(Context3DProxy.gl.FRAMEBUFFER, Context3DProxy.gl.COLOR_ATTACHMENT0, Context3DProxy.gl.TEXTURE_2D, texture2D.texture, 0);
+            Context3DProxy.gl.framebufferTexture2D(Context3DProxy.gl.FRAMEBUFFER, Context3DProxy.gl.COLOR_ATTACHMENT0, Context3DProxy.gl.TEXTURE_2D, texture2D.textureBuffer, 0);
 
             ///配置渲染缓冲 
             Context3DProxy.gl.bindRenderbuffer(Context3DProxy.gl.RENDERBUFFER, depthRenderbuffer);
@@ -516,7 +500,7 @@
             Context3DProxy.gl.clearColor(0, 0, 0, 1);
             Context3DProxy.gl.clear(Context3DProxy.gl.COLOR_BUFFER_BIT | Context3DProxy.gl.DEPTH_BUFFER_BIT);
 
-            Context3DProxy.gl.framebufferTexture2D(Context3DProxy.gl.FRAMEBUFFER, Context3DProxy.gl.COLOR_ATTACHMENT0, Context3DProxy.gl.TEXTURE_2D, texture.texture, 0);
+            Context3DProxy.gl.framebufferTexture2D(Context3DProxy.gl.FRAMEBUFFER, Context3DProxy.gl.COLOR_ATTACHMENT0, Context3DProxy.gl.TEXTURE_2D, texture.textureBuffer, 0);
             Context3DProxy.gl.framebufferRenderbuffer(Context3DProxy.gl.FRAMEBUFFER, Context3DProxy.gl.DEPTH_ATTACHMENT, Context3DProxy.gl.RENDERBUFFER, texture.renderbuffer);
        
         }
@@ -1160,7 +1144,7 @@
         */
         public setTexture2DAt(samplerIndex: number, uniLocation: number, index: number, texture: Texture2D) {
             Context3DProxy.gl.activeTexture(samplerIndex);
-            Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture.texture);
+            Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture.textureBuffer);
             Context3DProxy.gl.uniform1i(uniLocation, index);
         }
 

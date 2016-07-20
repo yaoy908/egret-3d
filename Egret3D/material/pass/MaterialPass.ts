@@ -411,6 +411,9 @@
             for (var index in this._passUsage.sampler2DList) {
                 sampler2D = this._passUsage.sampler2DList[index];
                 sampler2D.uniformIndex = context3DProxy.getUniformLocation(this._passUsage.program3D, sampler2D.varName);
+
+                sampler2D.texture = this._materialData[sampler2D.varName];
+    
             }
 
             var sampler3D: GLSL.Sampler2D;
@@ -474,6 +477,8 @@
                 context3DProxy.depthFunc(ContextConfig.LEQUAL);
             }
 
+            //Context3DProxy.gl.clearColor(0.0,0.0,0.0,1.0);
+            //Context3DProxy.gl.stencilOp(Context3DProxy.gl.BACK, Context3DProxy.gl.KEEP, Context3DProxy.gl.KEEP);
             context3DProxy.setCulling(this._materialData.cullFrontOrBack);
 
             if (this._materialData.bothside) {
@@ -506,14 +511,14 @@
                 }
                 sampler2D.texture.upload(context3DProxy);
                 context3DProxy.setTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index, sampler2D.texture.texture2D);
-                if (this._materialData.materialDataNeedChange) {
-                    var min_filter: number = (this._materialData.smooth && sampler2D.texture.texture2D.useMipmap) ? Context3DProxy.gl.LINEAR_MIPMAP_LINEAR : Context3DProxy.gl.LINEAR;
-                    var mag_filter: number = this._materialData.smooth ? Context3DProxy.gl.LINEAR : Context3DProxy.gl.LINEAR;
 
-                    var wrap_u_filter: number = this._materialData.repeat ? Context3DProxy.gl.REPEAT : Context3DProxy.gl.CLAMP_TO_EDGE;
-                    var wrap_v_filter: number = this._materialData.repeat ? Context3DProxy.gl.REPEAT : Context3DProxy.gl.CLAMP_TO_EDGE　;
-                    context3DProxy.setTexture2DSamplerState(min_filter, mag_filter, wrap_u_filter, wrap_v_filter);
-                    this._materialData.materialDataNeedChange = false;
+                if (this._materialData.textureStateChage ){
+                    sampler2D.texture.useMipmap = this._materialData.useMipmap;
+                    sampler2D.texture.repeat = this._materialData.repeat;
+                    sampler2D.texture.smooth = this._materialData.smooth;
+
+                    sampler2D.texture.activeState(context3DProxy);
+                    this._materialData.textureStateChage = false; 
                 }
             }
 

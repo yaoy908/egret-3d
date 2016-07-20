@@ -13,7 +13,7 @@
         private _timeNode: ParticleTime;
         private _positionNode: ParticlePosition;
 
-        private particleGeometryShape: Geometry;
+        private _geometryShape: Geometry;
         private particleAnimation: ParticleAnimation;
         private _particleState: ParticleAnimationState; 
         private _subEmitterNode: ParticleSubEmitterNode;
@@ -33,19 +33,21 @@
         * @version Egret 3.0
         * @platform Web,Native 
         */
-        constructor(data:ParticleData, geo: Geometry = null, material: MaterialBase = null) {
+        constructor(data:ParticleData, material: MaterialBase = null) {
             super(null, material);
-            
+
+            this.tag.name = "effect";
+            this.type = "particleEmit";
+
             this._data = data;
-            this._externalGeometry = geo;
+            this._externalGeometry = data.property.geometry;
            
             this.animation = this.particleAnimation = new ParticleAnimation(this);
             this.animation.particleAnimationController = this.particleAnimation;
             this._particleState = this.particleAnimation.particleAnimationState ;
             
             this.particleAnimation.emit = this;
-            this.tag.name = "effect";
-
+   
             this.buildParticle();
         }
 
@@ -70,9 +72,9 @@
         */
         private buildParticle(): void {
             if (this._externalGeometry == null) {
-                this.particleGeometryShape = this.createShape();
+                this._geometryShape = this.createPlane();
             } else {
-                this.particleGeometryShape = this._externalGeometry;
+                this._geometryShape = this._externalGeometry;
             }
 
             this.initialize();
@@ -89,33 +91,28 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
-        private createShape(): Geometry {
+        private createPlane(): Geometry {
             var geo: Geometry;
             var geomData: ParticleDataGeometry = this._data.geometry;
-            if (geomData.type == ParticleGeometryType.Plane) {
-                var defaultAxis: Vector3D = Vector3D.Z_AXIS;
-                if (this._data.property.renderMode == ParticleRenderModeType.VerticalBillboard) {
-                    defaultAxis = Vector3D.Y_AXIS;
-                } else if (this._data.property.renderMode == ParticleRenderModeType.HorizontalBillboard) {
-                    defaultAxis = Vector3D.Y_AXIS;
-                } else {
-                    defaultAxis = Vector3D.Z_AXIS;
-                }
-                var wCenter: boolean = true;
-                var hCenter: boolean = true;
-
-                if (this._data.property.renderMode == ParticleRenderModeType.StretchedBillboard) {
-                    //需要偏移一半位置
-                    wCenter = false;
-                    hCenter = true;
-                }
-                geo = new PlaneGeometry(geomData.planeW, geomData.planeH, 1, 1, 1, 1, defaultAxis, wCenter, hCenter);
-
-            } else if (geomData.type == ParticleGeometryType.Cube) {
-                geo = new CubeGeometry(geomData.cubeW, geomData.cubeH, geomData.cubeD);
-            } else if (geomData.type == ParticleGeometryType.Sphere) {
-                geo = new SphereGeometry(geomData.sphereRadius, geomData.sphereSegW, geomData.sphereSegH);
+            
+            var defaultAxis: Vector3D = Vector3D.Z_AXIS;
+            if (this._data.property.renderMode == ParticleRenderModeType.VerticalBillboard) {
+                defaultAxis = Vector3D.Y_AXIS;
+            } else if (this._data.property.renderMode == ParticleRenderModeType.HorizontalBillboard) {
+                defaultAxis = Vector3D.Y_AXIS;
+            } else {
+                defaultAxis = Vector3D.Z_AXIS;
             }
+            var wCenter: boolean = true;
+            var hCenter: boolean = true;
+
+            if (this._data.property.renderMode == ParticleRenderModeType.StretchedBillboard) {
+                //需要偏移一半位置
+                wCenter = false;
+                hCenter = true;
+            }
+
+            geo = new PlaneGeometry(geomData.planeW, geomData.planeH, 1, 1, 1, 1, defaultAxis, wCenter, hCenter);
             return geo;
         }
 
@@ -236,7 +233,7 @@
 
             this.geometry = new Geometry();
             this.geometry.buildDefaultSubGeometry();
-            this.geometry.subGeometrys[0].count = count * this.particleGeometryShape.indexData.length;
+            this.geometry.subGeometrys[0].count = count * this._geometryShape.indexData.length;
 
 
             //根据 模型形状初始化 
@@ -253,16 +250,16 @@
 
             this.geometry.verticesData = new Array<number>();
             for (var i: number = 0; i < count; ++i) {
-                for (var j: number = 0; j < this.particleGeometryShape.vertexCount; ++j) {
+                for (var j: number = 0; j < this._geometryShape.vertexCount; ++j) {
 
                     for (var k: number = 0; k < this.geometry.vertexAttLength; ++k) {
                         this.geometry.verticesData.push(0);
                     }
 
-                    vertexIndex = i * this.particleGeometryShape.vertexCount + j;
+                    vertexIndex = i * this._geometryShape.vertexCount + j;
                     vertexArray.length = 0;
 
-                    this.particleGeometryShape.getVertexForIndex(j, this.geometry.vertexFormat, vertexArray);
+                    this._geometryShape.getVertexForIndex(j, this.geometry.vertexFormat, vertexArray);
 
                     for (var k: number = 0; k < vertexArray.length; ++k) {
                         this.geometry.verticesData[vertexIndex * this.geometry.vertexAttLength + k] = vertexArray[k];
@@ -272,8 +269,8 @@
 
             this.geometry.indexData = new Array<number>();
             for (var i: number = 0; i < count; ++i) {
-                for (var j: number = 0; j < this.particleGeometryShape.indexData.length; ++j) {
-                    this.geometry.indexData[i * this.particleGeometryShape.indexData.length + j] = this.particleGeometryShape.indexData[j] + i * this.particleGeometryShape.vertexCount;
+                for (var j: number = 0; j < this._geometryShape.indexData.length; ++j) {
+                    this.geometry.indexData[i * this._geometryShape.indexData.length + j] = this._geometryShape.indexData[j] + i * this._geometryShape.vertexCount;
                 }
             }
 

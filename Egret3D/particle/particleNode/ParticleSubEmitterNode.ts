@@ -160,7 +160,7 @@
         private _added: boolean = false;
         private _orientation: Quaternion = new Quaternion();
         private emitParticleAtPhase(phase: ParticleSubEmitterNodePhase, pos:Vector3D): void {
-            var bakEmiter: ParticleEmitter;
+            var bakEmitter: ParticleEmitter;
             var bakEmitters: ParticleEmitter[] = phase.playing.getKeys();
 
             var playingArr: ParticleEmitter[];
@@ -169,13 +169,13 @@
             this._orientation.copyFrom(this._parent.orientation);
             this._orientation.w *= -1;
             for (var i: number = 0, count: number = bakEmitters.length; i < count; i++) {
-                bakEmiter = bakEmitters[i];
+                bakEmitter = bakEmitters[i];
                 
-                recycleArr = phase.recycle.getValueByKey(bakEmiter);
-                playingArr = phase.playing.getValueByKey(bakEmiter);
+                recycleArr = phase.recycle.getValueByKey(bakEmitter);
+                playingArr = phase.playing.getValueByKey(bakEmitter);
                 newParticle = recycleArr.shift();
                 if (newParticle == null) {
-                    newParticle = new ParticleEmitter(bakEmiter.data, null, bakEmiter.material);
+                    newParticle = new ParticleEmitter(bakEmitter.data, bakEmitter.material);
                 }
                 playingArr.push(newParticle);
                 newParticle.play();

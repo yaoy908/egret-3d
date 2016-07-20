@@ -112,7 +112,7 @@
 
                 this.context.drawImage(this.video, 0, 0, this.width, this.height);
                 Context3DProxy.gl.pixelStorei(Context3DProxy.gl.UNPACK_ALIGNMENT, 1)
-                Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, this.texture2D.texture);
+                Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, this.texture2D.textureBuffer);
                 Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, 0, Context3DProxy.gl.RGB, Context3DProxy.gl.RGB, Context3DProxy.gl.UNSIGNED_BYTE, this.tmpCanvas );
 
                 Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, Context3DProxy.gl.LINEAR);
@@ -126,7 +126,7 @@
                 this.context.drawImage(this.video, 0, 0, this.width, this.height);
 
                 Context3DProxy.gl.pixelStorei(Context3DProxy.gl.UNPACK_ALIGNMENT, 1)
-                Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, this.texture2D.texture);
+                Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, this.texture2D.textureBuffer);
                 Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, 0, Context3DProxy.gl.RGB, Context3DProxy.gl.RGB, Context3DProxy.gl.UNSIGNED_BYTE, this.tmpCanvas);
 
                 Context3DProxy.gl.texParameteri(Context3DProxy.gl.TEXTURE_2D, Context3DProxy.gl.TEXTURE_MIN_FILTER, Context3DProxy.gl.LINEAR);

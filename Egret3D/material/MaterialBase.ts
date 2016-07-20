@@ -140,6 +140,51 @@
 
         /**
          * @language zh_CN
+         * 设置是否开启深度测试
+         * @param texture ITexture
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public set depth(v: boolean) {
+            this.materialData.depthTest = v;
+        }
+
+         /**
+         * @language zh_CN
+         * 返回深度测试
+         * @param texture ITexture
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public get depth(): boolean {
+            return this.materialData.depthTest;
+        }
+
+        /**
+         * @language zh_CN
+         * 设置是否开启深度测试方式
+         * @param v 模式
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public set depthMode(v: number) {
+            this.materialData.depthMode = v;
+        }
+
+        /**
+        * @language zh_CN
+        * 返回深度测试方式
+        * @param texture ITexture
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get depthMode(): number {
+            return this.materialData.depthMode;
+        }
+
+
+        /**
+         * @language zh_CN
          * 设置材质 diffuseTexture 。
          * 设置材质球的漫反射贴图。
          * @param texture ITexture
@@ -436,6 +481,32 @@
         }
 
         /**
+       * @language zh_CN
+       * 设置材质 的alphaBlending 值。
+       * 设置 材质球的的alpha是否进行深度排序
+       * @param value {Number}
+       * @version Egret 3.0
+       * @platform Web,Native
+       */
+        public set alphaBlending(value: boolean) {
+            if (this.materialData.alphaBlending != value) {
+                this.materialData.alphaBlending = value;
+                this.materialData.materialDataNeedChange = true;
+            }
+        }
+
+        /**
+         * @language zh_CN
+         * 返回 alphaBlending 颜色
+         * @returns {Number}
+         * @version Egret 3.0
+         * @platform Web,Native
+         */
+        public get alphaBlending(): boolean {
+            return this.materialData.alphaBlending;
+        }
+
+        /**
          * @language zh_CN
          * 设置材质 specularLevel 值。
          * 设置材质球的材质球的高光强度
@@ -716,7 +787,9 @@
          */
         public set smooth(val: boolean) {
             this.materialData.smooth = val;
+            this.materialData.textureStateChage = true; 
         }
+
         /**
         * @language zh_CN
         * 返回材质 smooth 值。
@@ -728,6 +801,7 @@
         public get smooth(): boolean {
             return this.materialData.smooth;
         }
+
         /**
          * @language zh_CN
          * 设置材质 repeat 值。
@@ -738,7 +812,9 @@
          */
         public set repeat(val: boolean) {
             this.materialData.repeat = val;
+            this.materialData.textureStateChage = true; 
         }
+
         /**
         * @language zh_CN
         * 返回材质 repeat 值。
@@ -750,6 +826,7 @@
         public get repeat(): boolean {
             return this.materialData.repeat;
         }
+
         /**
         * @language zh_CN
         * 设置材质 bothside 值。
@@ -759,9 +836,12 @@
         * @platform Web,Native
         */
         public set bothside(val: boolean) {
+            this.materialData.textureStateChage = true; 
             this.materialData.bothside = val;
         }
+
         /**
+
         * @language zh_CN
         * 返回材质 bothside 值。
        * 返回是否显示双面的开关。
@@ -781,6 +861,7 @@
        * @platform Web,Native
        */
         public set cullMode(value: number) {
+            this.materialData.textureStateChage = true; 
             this.materialData.cullFrontOrBack = value;
         }
 
@@ -804,12 +885,13 @@
          * @platform Web,Native
          */
         public set blendMode(value: BlendMode) {
+            this.materialData.textureStateChage = true; 
             this.materialData.blendMode = value;
             switch (value) {
             //his.materialData.blend_src = ContextConfig.SRC_ALPHA; 透明
             //this.materialData.blend_dest = ContextConfig.SRC_COLOR;
                 case BlendMode.NORMAL:
-                    this.materialData.blend_src = ContextConfig.SRC_ALPHA;
+                    this.materialData.blend_src = ContextConfig.ONE;
                     this.materialData.blend_dest = ContextConfig.ONE_MINUS_SRC_ALPHA;
                     this.materialData.alphaBlending = false;
                     break;
@@ -850,7 +932,7 @@
                 return;
             }
             this.materialData.specularLevel = value;
-            this.materialData.materialDataNeedChange = true;
+            this.materialData.textureStateChage = true;
         }
 
         public get pointSize(): number {

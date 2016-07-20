@@ -133,9 +133,15 @@
         public scaleBy(value: number): void {
             if (this.posPoints.length == 0)
                 return;
-            for (var i: number = 0, count: number = BezierData.SegCount * 2; i < count; i++) {
-                this.posPoints[i].y *= value;
-                this.ctrlPoints[i].y *= value;
+            if (this.posPoints) {
+                for (var i: number = 0, count: number = this.posPoints.length; i < count; i++) {
+                    this.posPoints[i].y *= value;
+                }
+            }
+            if (this.ctrlPoints) {
+                for (var i: number = 0, count: number = this.ctrlPoints.length; i < count; i++) {
+                    this.ctrlPoints[i].y *= value;
+                }
             }
         }
 

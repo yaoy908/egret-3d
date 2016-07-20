@@ -68,7 +68,7 @@
 
             
 
-            this.particle = new ParticleEmitter(data, null, mat);
+            this.particle = new ParticleEmitter(data, mat);
 
             
 

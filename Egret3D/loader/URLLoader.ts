@@ -135,6 +135,14 @@
         public static DATAFORMAT_PVR: string = "pvr";
 
         /**
+        * @private
+        * @language zh_CN
+        * 以pvr格式接收加载的数据
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public static DATAFORMAT_HDR: string = "hdr";
+        /**
          * @language zh_CN
          * 构造函数
          * @param url 加载数据的地址.如果参数不为空的话.将直接开始加载
@@ -190,6 +198,9 @@
                         break;
                     case ".jpg":
                         this._dataformat = URLLoader.DATAFORMAT_BITMAP;
+                        break;
+                    case ".hdr":
+                        this._dataformat = URLLoader.DATAFORMAT_HDR;
                         break;
                     case "glsl":
                         this._dataformat = URLLoader.DATAFORMAT_TEXT;
@@ -359,20 +370,17 @@
                 case URLLoader.DATAFORMAT_TGA:
                     this.data = TGAParser.parse(this._xhr.response);
                     break;
+                case URLLoader.DATAFORMAT_HDR:
+                    this.data = HDRParser.parse(this._xhr.response);
+                    break;
                 case URLLoader.DATAFORMAT_ESM:
-                    var geomtry: Geometry = ESMParser.parse(this._xhr.response);
-
-                    this.data = geomtry;
+                    this.data = ESMParser.parse(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_EAM:
-                    var skeletonAnimationClip: SkeletonAnimationClip = EAMParser.parse(this._xhr.response);
-
-                    this.data = skeletonAnimationClip;
+                    this.data = EAMParser.parse(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_ECA:
-                    var cameraAnimationController: CameraAnimationController = ECAParser.parse(this._xhr.response);
-
-                    this.data = cameraAnimationController;
+                    this.data = ECAParser.parse(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_EPA:
                     this.data = EPAParser.parse(this._xhr.response);
@@ -417,6 +425,7 @@
 
         protected onLoad(img: HTMLImageElement) {
             this.data = new ImageTexture(img);
+
             this.doLoadComplete();
         }
 
@@ -425,6 +434,7 @@
             this._event.eventType = LoaderEvent3D.LOADER_COMPLETE;
             this._event.target = this;
             this._event.loader = this;
+            this._event.data = this.data;
             this.dispatchEvent(this._event);
         }
     }

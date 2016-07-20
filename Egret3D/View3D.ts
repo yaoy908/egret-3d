@@ -419,6 +419,22 @@
             this._camera.viewPort = this._viewPort;
             this._entityCollect.update(this._camera);
 
+            if (Egret3DEngine.debug) {
+
+                egret3d.Egret3DState.showDataInfo("drawCall : " + this._entityCollect.numberDraw.toString());
+                egret3d.Egret3DState.showDataInfo("vertex : " + this._entityCollect.numberVertex.toString());
+                egret3d.Egret3DState.showDataInfo("tris : " + this._entityCollect.numberFace.toString());
+                egret3d.Egret3DState.showDataInfo("skin : " + this._entityCollect.numberSkin.toString());
+                egret3d.Egret3DState.showDataInfo("proAnim : " + this._entityCollect.numberAnimation.toString());
+                egret3d.Egret3DState.showDataInfo("particleEmiter : " + this._entityCollect.numberParticle.toString());
+
+                var len: string;
+                for (var i: number = 0; i < Layer.layerType.length; i++) {
+                    len = Layer.layerType[i] + " layer: " + this._entityCollect.softRenderItems[Layer.layerType[i]].length.toString();
+                    egret3d.Egret3DState.showDataInfo(len);
+                }
+            }
+
             //------------------
             this.updateObject3D(this._scene.root, time, delay);
             //this._numberEntity = this._entityCollect.renderList.length;

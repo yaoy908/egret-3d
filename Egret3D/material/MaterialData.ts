@@ -81,7 +81,16 @@
         * @platform Web,Native
         */
         public drawMode: number = DrawMode.TRIANGLES; 
-  
+
+        /**
+        * @language zh_CN
+        * 渲染模式。
+        * @default DrawMode.TRIANGLES
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public useMipmap: boolean = true;
+
         /**
         * @language zh_CN
         * 阴影贴图。
@@ -252,6 +261,15 @@
         * @platform Web,Native
         */
         public depthTest: boolean = true;
+
+        /**
+        * @language zh_CN
+        * 深度测试模式
+        * @default true
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public depthMode: number = 0;
 
         /**
         * @language zh_CN
@@ -466,6 +484,15 @@
 
         /**
         * @language zh_CN
+        * 纹理状态需要更新。
+        * @default false
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public textureStateChage: boolean = true; 
+
+        /**
+        * @language zh_CN
         * cullFrontOrBack。
         * @default Egret3DDrive.BACK
         * @version Egret 3.0
@@ -478,6 +505,7 @@
          * @language zh_CN
          */
         public materialSourceData: Float32Array = new Float32Array(20);//20
+        public materialSourceData2: Float32Array = new Float32Array(20);//20
         /**
          * @language zh_CN
          */

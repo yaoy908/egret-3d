@@ -107,7 +107,7 @@
             colorOffset.data.times.push(1.0);
 
 
-            this.particle = new ParticleEmitter(data, null, mat);
+            this.particle = new ParticleEmitter(data, mat);
 
             this.view1.addChild3D(new AxisMesh(200));
 
