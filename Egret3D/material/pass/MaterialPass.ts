@@ -512,15 +512,13 @@
                 sampler2D.texture.upload(context3DProxy);
                 context3DProxy.setTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index, sampler2D.texture.texture2D);
 
-               // if (this._materialData.textureStateChage) {
-                    if (sampler2D.texture.useMipmap)
-                        sampler2D.texture.useMipmap = this._materialData.useMipmap  ;
-                    sampler2D.texture.repeat = this._materialData.repeat;
-                    sampler2D.texture.smooth = this._materialData.smooth;
+                if (sampler2D.texture.useMipmap)
+                    sampler2D.texture.useMipmap = this._materialData.useMipmap;
+                sampler2D.texture.repeat = this._materialData.repeat;
+                sampler2D.texture.smooth = this._materialData.smooth;
 
-                    sampler2D.texture.activeState(context3DProxy);
-                    this._materialData.textureStateChage = false; 
-               // }
+                sampler2D.texture.activeState(context3DProxy);
+                this._materialData.textureStateChage = false; 
             }
 
             var sampler3D: GLSL.Sampler3D;
