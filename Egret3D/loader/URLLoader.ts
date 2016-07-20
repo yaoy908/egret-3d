@@ -425,6 +425,7 @@
 
         protected onLoad(img: HTMLImageElement) {
             this.data = new ImageTexture(img);
+
             this.doLoadComplete();
         }
 
@@ -433,6 +434,7 @@
             this._event.eventType = LoaderEvent3D.LOADER_COMPLETE;
             this._event.target = this;
             this._event.loader = this;
+            this._event.data = this.data;
             this.dispatchEvent(this._event);
         }
     }

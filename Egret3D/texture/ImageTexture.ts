@@ -61,10 +61,9 @@
                 this.texture2D = context3D.creatTexture2D();
                 this.texture2D.internalFormat = InternalFormat.ImageData;
                 this.texture2D.imageData = this.imageData;
-                this.texture2D.useMipmap = this.useMipmap;
-                this.texture2D.smooth = this.smooth;
+              
                 this.texture2D.colorFormat = ContextConfig.ColorFormat_RGBA8888;
-                context3D.upLoadTextureData(0, this.texture2D);
+                context3D.upLoadTextureData(0, this );
             }
         }
 
@@ -77,7 +76,7 @@
         * @platform Web,Native
         */
         public uploadForcing(context3D: Context3DProxy) {
-            context3D.upLoadTextureData(0, this.texture2D);
+            context3D.upLoadTextureData(0, this );
         }
     }
 }

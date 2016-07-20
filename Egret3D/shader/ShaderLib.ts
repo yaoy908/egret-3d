@@ -551,18 +551,32 @@ module egret3d {
 			"lightMapSpecularPower_fs":
 			"uniform sampler2D lightTexture ; \n" +
 			"varying vec2 varying_uv1 ; \n" +
+			"vec4 decode_hdr( vec4 data ){ \n" +
+			"vec4 res = data ; \n" +
+			"res.xyz *= pow(2.0,data.w * 256.0 - 128.0); \n" +
+			"return res ; \n" +
+			"} \n" +
 			"void main(void){ \n" +
-			"vec3 lightmap = texture2D( lightTexture , varying_uv1 ).xyz * 2.8; \n" +
-			"diffuseColor.xyz *= lightmap ; \n" +
-			"specularColor.xyz *= lightmap; \n" +
+			"vec4 lightmap = texture2D( lightTexture , varying_uv1 ); \n" +
+			"lightmap.xyz = decode_hdr(lightmap).xyz; \n" +
+			"lightmap.xyz = pow( 1.0 * lightmap.xyz, vec3(0.80)) ; \n" +
+			"diffuseColor.xyz *= lightmap.xyz ; \n" +
+			"specularColor.xyz *= lightmap.xyz ; \n" +
 			"} \n",
 
 			"lightMap_fs":
 			"uniform sampler2D lightTexture ; \n" +
 			"varying vec2 varying_uv1 ; \n" +
+			"vec4 decode_hdr( vec4 data ){ \n" +
+			"vec4 res = data ; \n" +
+			"res.xyz *= pow(2.0,data.w * 256.0 - 128.0); \n" +
+			"return res ; \n" +
+			"} \n" +
 			"void main(void){ \n" +
-			"vec3 lightmap = texture2D( lightTexture , varying_uv1 ).xyz * 2.8; \n" +
-			"diffuseColor.xyz *= lightmap ; \n" +
+			"vec4 lightmap = texture2D( lightTexture , varying_uv1 ); \n" +
+			"lightmap.xyz = decode_hdr(lightmap).xyz; \n" +
+			"lightmap.xyz = pow( 1.0 * lightmap.xyz, vec3(0.80)) ; \n" +
+			"diffuseColor.xyz *= lightmap.xyz ; \n" +
 			"} \n",
 
 			"lineFog":
@@ -849,10 +863,6 @@ module egret3d {
 			"outColor.xyz = diffuseColor.xyz * materialSource.diffuse * varying_color.xyz ; \n" +
 			"outColor.w = materialSource.alpha * diffuseColor.w * varying_color.w; \n" +
 			"outColor.xyz *= outColor.w; \n" +
-			"if(blendMode == 0.0 || blendMode == 2.0 || blendMode == 8.0){ \n" +
-			"}else{ \n" +
-			"outColor.xyz *= 1.8; \n" +
-			"} \n" +
 			"gl_FragColor = outColor; \n" +
 			"} \n",
 
@@ -985,11 +995,14 @@ module egret3d {
 			"return matrix; \n" +
 			"} \n" +
 			"float updateStretchedBillBoard(vec4 startPos, vec4 newPos){ \n" +
-			"localPosition.x *= particleStateData.lengthScale; \n" +
+			"vec3 dirVector = newPos.xyz - startPos.xyz; \n" +
+			"float lengthScale = particleStateData.lengthScale; \n" +
+			"float speedScale = dirVector.x * dirVector.x + dirVector.y * dirVector.y + dirVector.z * dirVector.z; \n" +
+			"speedScale = sqrt(speedScale) * 0.01 / currentTime; \n" +
+			"localPosition.x *= particleStateData.lengthScale + speedScale * particleStateData.speedScale; \n" +
 			"mat4 temp = uniform_ViewMatrix; \n" +
 			"startPos = temp * startPos; \n" +
 			"newPos = temp * newPos; \n" +
-			"vec3 dirVector = newPos.xyz - startPos.xyz; \n" +
 			"float scaleBefore = dirVector.x * dirVector.x + dirVector.y * dirVector.y + dirVector.z * dirVector.z; \n" +
 			"scaleBefore = sqrt(scaleBefore); \n" +
 			"if(scaleBefore < Tiny){ \n" +

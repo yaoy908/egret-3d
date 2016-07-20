@@ -787,7 +787,9 @@
          */
         public set smooth(val: boolean) {
             this.materialData.smooth = val;
+            this.materialData.textureStateChage = true; 
         }
+
         /**
         * @language zh_CN
         * 返回材质 smooth 值。
@@ -799,6 +801,7 @@
         public get smooth(): boolean {
             return this.materialData.smooth;
         }
+
         /**
          * @language zh_CN
          * 设置材质 repeat 值。
@@ -809,7 +812,9 @@
          */
         public set repeat(val: boolean) {
             this.materialData.repeat = val;
+            this.materialData.textureStateChage = true; 
         }
+
         /**
         * @language zh_CN
         * 返回材质 repeat 值。
@@ -821,6 +826,7 @@
         public get repeat(): boolean {
             return this.materialData.repeat;
         }
+
         /**
         * @language zh_CN
         * 设置材质 bothside 值。
@@ -830,9 +836,12 @@
         * @platform Web,Native
         */
         public set bothside(val: boolean) {
+            this.materialData.textureStateChage = true; 
             this.materialData.bothside = val;
         }
+
         /**
+
         * @language zh_CN
         * 返回材质 bothside 值。
        * 返回是否显示双面的开关。
@@ -852,6 +861,7 @@
        * @platform Web,Native
        */
         public set cullMode(value: number) {
+            this.materialData.textureStateChage = true; 
             this.materialData.cullFrontOrBack = value;
         }
 
@@ -875,6 +885,7 @@
          * @platform Web,Native
          */
         public set blendMode(value: BlendMode) {
+            this.materialData.textureStateChage = true; 
             this.materialData.blendMode = value;
             switch (value) {
             //his.materialData.blend_src = ContextConfig.SRC_ALPHA; 透明
@@ -921,7 +932,7 @@
                 return;
             }
             this.materialData.specularLevel = value;
-            this.materialData.materialDataNeedChange = true;
+            this.materialData.textureStateChage = true;
         }
 
         public get pointSize(): number {

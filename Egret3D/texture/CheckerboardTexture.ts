@@ -53,13 +53,11 @@
                 this.texture2D.border = 0; 
                 this.texture2D.internalFormat = InternalFormat.PixelArray;
                 this.texture2D.colorFormat = Context3DProxy.gl.RGBA;
-                this.texture2D.smooth = this.smooth; 
-                this.texture2D.useMipmap = this.useMipmap; 
                 this.texture2D.mimapData = new Array<MipmapData>();
                 this.texture2D.mimapData.push(new MipmapData(this._pixelArray, this.width, this.height));
-                this.texture2D.useMipmap = false;
+                this.useMipmap = false;
                 this.texture2D.dataFormat = Context3DProxy.gl.FLOAT ;
-                context3D.upLoadTextureData(0, this.texture2D);
+                context3D.upLoadTextureData(0, this );
             }
         }
 
