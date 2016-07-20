@@ -484,6 +484,15 @@
 
         /**
         * @language zh_CN
+        * 纹理状态需要更新。
+        * @default false
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public textureStateChage: boolean = true; 
+
+        /**
+        * @language zh_CN
         * cullFrontOrBack。
         * @default Egret3DDrive.BACK
         * @version Egret 3.0

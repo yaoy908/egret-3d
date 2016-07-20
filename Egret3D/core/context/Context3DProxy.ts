@@ -302,7 +302,6 @@
             Context3DProxy.gl.bindTexture(Context3DProxy.gl.TEXTURE_2D, texture.texture2D.textureBuffer );
 
             if (texture.texture2D.internalFormat == InternalFormat.ImageData) {
-                
                 Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, 0, Context3DProxy.gl.RGBA, Context3DProxy.gl.RGBA, texture.texture2D.dataFormat, texture.texture2D.imageData);
                 delete texture.texture2D.imageData;
             }
@@ -313,8 +312,10 @@
             else if (texture.texture2D.internalFormat == InternalFormat.PixelArray) {
                 Context3DProxy.gl.texImage2D(Context3DProxy.gl.TEXTURE_2D, mipLevel, texture.texture2D.colorFormat, texture.texture2D.mimapData[mipLevel].width, texture.texture2D.mimapData[mipLevel].height, texture.texture2D.border, texture.texture2D.colorFormat, texture.texture2D.dataFormat, texture.texture2D.mimapData[mipLevel].data);
             }
+            if( texture.useMipmap )
+                Context3DProxy.gl.generateMipmap(Context3DProxy.gl.TEXTURE_2D);
 
-            texture.activeState( this );
+            //texture.activeState( this );
         }
 
         /**

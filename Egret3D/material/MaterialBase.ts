@@ -787,6 +787,7 @@
          */
         public set smooth(val: boolean) {
             this.materialData.smooth = val;
+            this.materialData.textureStateChage = true; 
         }
 
         /**
@@ -811,6 +812,7 @@
          */
         public set repeat(val: boolean) {
             this.materialData.repeat = val;
+            this.materialData.textureStateChage = true; 
         }
 
         /**
@@ -834,6 +836,7 @@
         * @platform Web,Native
         */
         public set bothside(val: boolean) {
+            this.materialData.textureStateChage = true; 
             this.materialData.bothside = val;
         }
 
@@ -858,6 +861,7 @@
        * @platform Web,Native
        */
         public set cullMode(value: number) {
+            this.materialData.textureStateChage = true; 
             this.materialData.cullFrontOrBack = value;
         }
 
@@ -881,6 +885,7 @@
          * @platform Web,Native
          */
         public set blendMode(value: BlendMode) {
+            this.materialData.textureStateChage = true; 
             this.materialData.blendMode = value;
             switch (value) {
             //his.materialData.blend_src = ContextConfig.SRC_ALPHA; 透明
@@ -927,7 +932,7 @@
                 return;
             }
             this.materialData.specularLevel = value;
-            this.materialData.materialDataNeedChange = true;
+            this.materialData.textureStateChage = true;
         }
 
         public get pointSize(): number {
