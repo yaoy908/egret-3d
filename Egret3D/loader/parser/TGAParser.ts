@@ -18,9 +18,9 @@
         /**
          * @language zh_CN
          * @param buffer 二进制流
-         * @returns TGATexture
+         * @returns MimapTexture
          */
-        public static parse(buffer:ArrayBuffer): TGATexture {
+        public static parse(buffer: ArrayBuffer): MimapTexture {
             var TGA_TYPE_NO_DATA = 0,
                 TGA_TYPE_INDEXED = 1,
                 TGA_TYPE_RGB = 2,
@@ -423,7 +423,9 @@
             var result = tgaParse(use_rle, use_pal, header, offset, content);
             var rgbaData = getTgaRGBA(header.width, header.height, result.pixel_data, result.palettes);
 
-            var texture: TGATexture = new TGATexture();
+            var texture: MimapTexture = new MimapTexture();
+            texture.width = header.width;
+            texture.height = header.height;
             texture.internalFormat = InternalFormat.PixelArray;
             texture.colorFormat = ContextConfig.ColorFormat_RGBA8888;
             texture.mimapData = [new MipmapData(rgbaData, header.width, header.height)];

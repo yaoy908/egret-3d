@@ -145,14 +145,11 @@
         "loader/URLLoader.ts",
         "loader/AssetManager.ts",
 
-        "loader/parser/DDS.ts",
         "loader/parser/DDSParser.ts",
         "loader/parser/PVR.ts",
         "loader/parser/PVRParser.ts",
-        "loader/parser/TGA.ts",
         "loader/parser/TGAParser.ts",
         "loader/parser/HDRParser.ts",
-        "loader/parser/HDRParser2.ts",
 
         "loader/parser/EAM/EAMParser.ts",
         "loader/parser/EAM/EAMVersion.ts",
@@ -260,10 +257,8 @@
 
         "texture/ITexture.ts",
         "texture/ImageTexture.ts",
-        "texture/DDSTextrue.ts",
-        "texture/TGATexture.ts",
         "texture/PVRTexture.ts",
-        "texture/HDRTexture.ts",
+        "texture/MimapTexture.ts",
         "texture/CubeTexture.ts",
         "texture/CheckerboardTexture.ts",
         "texture/VideoTexture.ts",
