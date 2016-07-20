@@ -1,13 +1,13 @@
 ﻿module egret3d {
 
-     /**
-     * @class egret3d.TGATexture
-     * @classdesc
-     * DDS 贴图模式对象
-     * @version Egret 3.0
-     * @platform Web,Native
-     */
-    export class DDSTexture extends ITexture {
+    /**
+    * @class egret3d.MimapTexture
+    * @classdesc
+    * MimapTexture 贴图对象
+    * @version Egret 3.0
+    * @platform Web,Native
+    */
+    export class MimapTexture extends ITexture {
 
         /**
         * @language zh_CN
@@ -44,7 +44,7 @@
             this.smooth = true;
         }
 
-      
+
         public upload(context3D: Context3DProxy) {
             if (!this.texture2D) {
                 this.texture2D = context3D.creatTexture2D();

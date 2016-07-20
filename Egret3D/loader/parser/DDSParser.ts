@@ -27,8 +27,7 @@
          * @param loadMipmaps 是否加载mipmaps
          * @returns DDSTexture
          */
-        public static parse(buffer: ArrayBuffer, loadMipmaps:boolean = true):DDSTexture {
-            var dds: DDS = new DDS();
+        public static parse(buffer: ArrayBuffer, loadMipmaps:boolean = true):MimapTexture {
             var headerLengthInt = 31; // The header length in 32 bit ints
             var off_magic = 0;
             var DDS_MAGIC = 0x20534444;
@@ -103,18 +102,24 @@
             var blockBytes: number;
             var fourCC = header[off_pfFourCC];
             var isRGBAUncompressed = false;
+            var mipmapCount: number = 1;
+            var format: number;
+            var isCubemap: boolean;
+            var width: number;
+            var height: number;
+
             switch (fourCC) {
                 case FOURCC_DXT1:
                     blockBytes = 8;
-                    dds.format = DDSFormat.RGB_S3TC_DXT1_FORMAT;
+                    format = DDSFormat.RGB_S3TC_DXT1_FORMAT;
                     break;
                 case FOURCC_DXT3:
                     blockBytes = 16;
-                    dds.format = DDSFormat.RGBA_S3TC_DXT3_FORMAT;
+                    format = DDSFormat.RGBA_S3TC_DXT3_FORMAT;
                     break;
                 case FOURCC_DXT5:
                     blockBytes = 16;
-                    dds.format = DDSFormat.RGBA_S3TC_DXT5_FORMAT;
+                    format = DDSFormat.RGBA_S3TC_DXT5_FORMAT;
                     break;
 
                 default:
@@ -125,41 +130,43 @@
                         && header[off_ABitMask] & 0xff000000) {
                         isRGBAUncompressed = true;
                         blockBytes = 64;
-                        dds.format = RGBA_FORMAT;
+                        format = RGBA_FORMAT;
                     } else {
                         console.error('DDSParser.parse: Unsupported FourCC code ', DDSParser.int32ToFourCC(fourCC));
                         return null;
                     }
             }
 
-            dds.mipmapCount = 1;
 
             if ((header[off_flags] & DDSD_MIPMAPCOUNT) && loadMipmaps !== false) {
-                dds.mipmapCount = Math.max(1, header[off_mipmapCount]);
+                mipmapCount = Math.max(1, header[off_mipmapCount]);
             }
 
-            dds.isCubemap = header[off_caps2] & DDSCAPS2_CUBEMAP ? true : false;
-            dds.width = header[off_width];
-            dds.height = header[off_height];
+            isCubemap = header[off_caps2] & DDSCAPS2_CUBEMAP ? true : false;
+            width = header[off_width];
+            height = header[off_height];
             var dataOffset = header[off_size] + 4;
 
             // Extract mipmaps buffers
 
-            var width = dds.width;
-            var height = dds.height;
-            var faces = dds.isCubemap ? 6 : 1;
+            var faces = isCubemap ? 6 : 1;
 
+            var mipmaps: Array<MipmapData> = new Array<MipmapData>();
             //是否软解DXT;
             var useSoftwareSolution: boolean = false;
-            if (dds.format == DDSFormat.RGB_S3TC_DXT1_FORMAT && ContextConfig.ColorFormat_DXT1_RGB == 0)
+            if (format == DDSFormat.RGB_S3TC_DXT1_FORMAT && ContextConfig.ColorFormat_DXT1_RGB == 0)
                 useSoftwareSolution = true;
-            else if (dds.format == DDSFormat.RGBA_S3TC_DXT3_FORMAT && ContextConfig.ColorFormat_DXT3_RGBA == 0)
+            else if (format == DDSFormat.RGBA_S3TC_DXT3_FORMAT && ContextConfig.ColorFormat_DXT3_RGBA == 0)
                 useSoftwareSolution = true;
-            else if (dds.format == DDSFormat.RGBA_S3TC_DXT5_FORMAT && ContextConfig.ColorFormat_DXT5_RGBA == 0)
+            else if (format == DDSFormat.RGBA_S3TC_DXT5_FORMAT && ContextConfig.ColorFormat_DXT5_RGBA == 0)
                 useSoftwareSolution = true;
 
+            var texture: MimapTexture = new MimapTexture();
+            texture.width = width;
+            texture.height = height;
+
             for (var face = 0; face < faces; face++) {
-                for (var i = 0; i < dds.mipmapCount; i++) {
+                for (var i = 0; i < mipmapCount; i++) {
 
                     var byteArray: Uint8Array;
 
@@ -172,21 +179,20 @@
                         byteArray = new Uint8Array(buffer, dataOffset, dataLength);
 
                         if (useSoftwareSolution) {
-                            byteArray = DDSParser.softSolutionDXT(width, height, dds.format, byteArray);
+                            byteArray = DDSParser.softSolutionDXT(width, height, format, byteArray);
                         }
                     }
 
                     var mipmap: MipmapData = new MipmapData(byteArray, width, height);
-                    dds.mipmaps.push(mipmap);
+                    mipmaps.push(mipmap);
                     dataOffset += dataLength;
                     width = Math.max(width * 0.5, 1);
                     height = Math.max(height * 0.5, 1);
                 }
-                width = dds.width;
-                height = dds.height;
+                width = width;
+                height = height;
             }
 
-            var texture: DDSTexture = new DDSTexture();
             
             if (useSoftwareSolution) {
                 texture.internalFormat = InternalFormat.PixelArray;
@@ -202,7 +208,7 @@
                     texture.colorFormat = ContextConfig.ColorFormat_DXT5_RGBA;
             }
             
-            texture.mimapData = dds.mipmaps;
+            texture.mimapData = mipmaps;
             return texture;
         }
        
