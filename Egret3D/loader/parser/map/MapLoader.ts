@@ -634,6 +634,7 @@
                     var lightmapMethod: LightmapMethod = new LightmapMethod(method.usePower);
                     material.diffusePass.addMethod(lightmapMethod);
                     lightmapMethod.lightTexture = defaultTexture;
+                    
 
                     var textureData: any = method.texturesData[0];
                     load = this.addMethodImgTask(textureData.path, lightmapMethod, textureData.attributeName);

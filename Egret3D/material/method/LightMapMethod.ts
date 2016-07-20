@@ -47,6 +47,7 @@
             this.texture = texture;
             if (this.materialData.lightTexture != this.texture) {
                 this.materialData.lightTexture = this.texture;
+                this.materialData.lightTexture.useMipmap = false;
                 this.materialData.textureChange = true;
             }
         }
