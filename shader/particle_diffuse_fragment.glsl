@@ -1,5 +1,6 @@
 ﻿uniform sampler2D diffuseTexture;
 vec4 diffuseColor ;
+vec4 globalColor = vec4(1.0, 1.0, 1.0, 1.0);//渐变色
 
 
 void calcUVCoord(){
