@@ -831,9 +831,8 @@ module egret3d {
 			"} \n" +
 			"float len = nextSegment - startSegment ; \n" +
 			"float ws = ( progress - startSegment ) / len ; \n" +
-			"vec4 color = mix(vec4(unpack_color(startColor).xyz,startAlpha / 256.0),vec4(unpack_color(nextColor).xyz, nextAlpha / 256.0),ws) ; \n" +
-			"color.w = clamp(color.w,0.0,1.0); \n" +
-			"diffuseColor *= color; \n" +
+			"globalColor = mix(vec4(unpack_color(startColor).xyz,startAlpha / 256.0),vec4(unpack_color(nextColor).xyz, nextAlpha / 256.0),ws) ; \n" +
+			"globalColor.w = clamp(globalColor.w,0.0,1.0); \n" +
 			"} \n",
 
 			"particle_color_vs":
@@ -843,6 +842,7 @@ module egret3d {
 			"particle_diffuse_fragment":
 			"uniform sampler2D diffuseTexture; \n" +
 			"vec4 diffuseColor ; \n" +
+			"vec4 globalColor = vec4(1.0, 1.0, 1.0, 1.0); \n" +
 			"void calcUVCoord(){ \n" +
 			"} \n" +
 			"void main() { \n" +
@@ -860,8 +860,8 @@ module egret3d {
 			"uniform float uniform_particleFsData[3]; \n" +
 			"void main() { \n" +
 			"float blendMode = uniform_particleFsData[2]; \n" +
-			"outColor.xyz = diffuseColor.xyz * materialSource.diffuse * varying_color.xyz ; \n" +
-			"outColor.w = materialSource.alpha * diffuseColor.w * varying_color.w; \n" +
+			"outColor.xyz = diffuseColor.xyz * materialSource.diffuse * varying_color.xyz * globalColor.xyz; \n" +
+			"outColor.w = materialSource.alpha * diffuseColor.w * varying_color.w * globalColor.w; \n" +
 			"outColor.xyz *= outColor.w; \n" +
 			"gl_FragColor = outColor; \n" +
 			"} \n",
