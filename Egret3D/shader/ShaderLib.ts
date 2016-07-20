@@ -551,18 +551,32 @@ module egret3d {
 			"lightMapSpecularPower_fs":
 			"uniform sampler2D lightTexture ; \n" +
 			"varying vec2 varying_uv1 ; \n" +
+			"vec4 decode_hdr( vec4 data ){ \n" +
+			"vec4 res = data ; \n" +
+			"res.xyz *= pow(2.0,data.w * 256.0 - 128.0); \n" +
+			"return res ; \n" +
+			"} \n" +
 			"void main(void){ \n" +
-			"vec3 lightmap = texture2D( lightTexture , varying_uv1 ).xyz * 2.8; \n" +
-			"diffuseColor.xyz *= lightmap ; \n" +
-			"specularColor.xyz *= lightmap; \n" +
+			"vec4 lightmap = texture2D( lightTexture , varying_uv1 ); \n" +
+			"lightmap.xyz = decode_hdr(lightmap).xyz; \n" +
+			"lightmap.xyz = pow(0.5 * lightmap.xyz, vec3(0.474)) ; \n" +
+			"diffuseColor.xyz *= lightmap.xyz ; \n" +
+			"specularColor.xyz *= lightmap.xyz ; \n" +
 			"} \n",
 
 			"lightMap_fs":
 			"uniform sampler2D lightTexture ; \n" +
 			"varying vec2 varying_uv1 ; \n" +
+			"vec4 decode_hdr( vec4 data ){ \n" +
+			"vec4 res = data ; \n" +
+			"res.xyz *= pow(2.0,data.w * 256.0 - 128.0); \n" +
+			"return res ; \n" +
+			"} \n" +
 			"void main(void){ \n" +
-			"vec3 lightmap = texture2D( lightTexture , varying_uv1 ).xyz * 2.8; \n" +
-			"diffuseColor.xyz *= lightmap ; \n" +
+			"vec4 lightmap = texture2D( lightTexture , varying_uv1 ); \n" +
+			"lightmap.xyz = decode_hdr(lightmap).xyz; \n" +
+			"lightmap.xyz = pow(0.5 * lightmap.xyz, vec3(0.474)) ; \n" +
+			"diffuseColor.xyz *= lightmap.xyz ; \n" +
 			"} \n",
 
 			"lineFog":

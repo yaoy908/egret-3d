@@ -371,7 +371,7 @@
                     this.data = TGAParser.parse(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_HDR:
-                    this.data = HDRParser.parse(this._xhr.response);
+                    this.data = HDRParser2.parseHDR(this._xhr.response);
                     break;
                 case URLLoader.DATAFORMAT_ESM:
                     this.data = ESMParser.parse(this._xhr.response);

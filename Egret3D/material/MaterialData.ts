@@ -81,7 +81,16 @@
         * @platform Web,Native
         */
         public drawMode: number = DrawMode.TRIANGLES; 
-  
+
+        /**
+        * @language zh_CN
+        * 渲染模式。
+        * @default DrawMode.TRIANGLES
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public useMipmap: boolean = true;
+
         /**
         * @language zh_CN
         * 阴影贴图。

@@ -152,6 +152,7 @@
         "loader/parser/TGA.ts",
         "loader/parser/TGAParser.ts",
         "loader/parser/HDRParser.ts",
+        "loader/parser/HDRParser2.ts",
 
         "loader/parser/EAM/EAMParser.ts",
         "loader/parser/EAM/EAMVersion.ts",

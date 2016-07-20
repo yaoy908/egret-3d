@@ -57,22 +57,7 @@
         * @private
         * context.creatTexture()接口生成的GPU纹理
         */
-        public texture: WebGLTexture;
-
-        /**
-         * @language zh_CN
-         * 是否使用mipmap
-         */
-        public useMipmap: boolean = true;
-
-         /**
-         * @language zh_CN
-         * 是否自动模糊
-        * @version Egret 3.0
-        * @platform Web,Native
-         */
-        public smooth: boolean = true;
-
+        public textureBuffer: WebGLTexture;
 
         /**
          * @language zh_CN
@@ -126,12 +111,13 @@
          */
         constructor() {
             this.border = 0;
-            this.useMipmap = true;
             this.imageData = null;
             this.colorFormat = ContextConfig.ColorFormat_RGBA8888;
             this.dataFormat = Context3DProxy.gl.UNSIGNED_BYTE;
             this.internalFormat = InternalFormat.PixelArray;
             this.mimapData = new Array<MipmapData>();
         }
+
+
     }
 }

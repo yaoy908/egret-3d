@@ -788,6 +788,7 @@
         public set smooth(val: boolean) {
             this.materialData.smooth = val;
         }
+
         /**
         * @language zh_CN
         * 返回材质 smooth 值。
@@ -799,6 +800,7 @@
         public get smooth(): boolean {
             return this.materialData.smooth;
         }
+
         /**
          * @language zh_CN
          * 设置材质 repeat 值。
@@ -810,6 +812,7 @@
         public set repeat(val: boolean) {
             this.materialData.repeat = val;
         }
+
         /**
         * @language zh_CN
         * 返回材质 repeat 值。
@@ -821,6 +824,7 @@
         public get repeat(): boolean {
             return this.materialData.repeat;
         }
+
         /**
         * @language zh_CN
         * 设置材质 bothside 值。
@@ -832,7 +836,9 @@
         public set bothside(val: boolean) {
             this.materialData.bothside = val;
         }
+
         /**
+
         * @language zh_CN
         * 返回材质 bothside 值。
        * 返回是否显示双面的开关。
