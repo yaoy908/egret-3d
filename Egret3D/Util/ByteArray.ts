@@ -479,6 +479,22 @@ module egret3d {
             return this.decodeUTF8(bytes);
         }
 
+
+        /**
+        * 读取一行字符串
+        * @returns 由指定长度的 UTF-8 字节组成的字符串
+        */
+        public readLine(): string {
+            var length: number = 0;
+            for (var i: number = this.position; i < this.length; ++i) {
+                if (this.data.getUint8(i) == 0x0A) {
+                    length = i - this.position + 1;
+                    break;
+                }
+            }
+            return this.readUTFBytes(length);
+        }
+
         //public readStandardString(length:number):string {
         //    if (!this.validate(length)) return null;
         //
@@ -672,7 +688,6 @@ module egret3d {
         public writeUTFBytes(value:string):void {
             this._writeUint8Array(this.encodeUTF8(value));
         }
-
 
         public toString():string {
             return "[ByteArray] length:" + this.length + ", bytesAvailable:" + this.bytesAvailable;

@@ -151,6 +151,7 @@
         "loader/parser/PVRParser.ts",
         "loader/parser/TGA.ts",
         "loader/parser/TGAParser.ts",
+        "loader/parser/HDRParser.ts",
 
         "loader/parser/EAM/EAMParser.ts",
         "loader/parser/EAM/EAMVersion.ts",
@@ -261,6 +262,7 @@
         "texture/DDSTextrue.ts",
         "texture/TGATexture.ts",
         "texture/PVRTexture.ts",
+        "texture/HDRTexture.ts",
         "texture/CubeTexture.ts",
         "texture/CheckerboardTexture.ts",
         "texture/VideoTexture.ts",
