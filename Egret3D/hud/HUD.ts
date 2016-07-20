@@ -35,6 +35,8 @@
         private _indexBuffer3D: IndexBuffer3D;
         private _vertexBuffer3D: VertexBuffer3D;
         private _changeTexture: boolean = false;
+        private _textureStage: boolean = false;
+        
         private _vertexFormat: number = VertexFormat.VF_POSITION | VertexFormat.VF_UV0;
         private _uv_scale: Float32Array = new Float32Array(2);
 
@@ -481,6 +483,10 @@
                 }
                 sampler2D.texture.upload(contextProxy);
                 contextProxy.setTexture2DAt(sampler2D.activeTextureIndex, sampler2D.uniformIndex, sampler2D.index, sampler2D.texture.texture2D);
+                if (this._textureStage) {
+                    sampler2D.texture.activeState(contextProxy);
+                    this._textureStage = false;
+                }
             }
 
             if (this._passUsage.uniform_ViewProjectionMatrix) {
