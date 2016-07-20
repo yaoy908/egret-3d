@@ -128,7 +128,10 @@
 
             var listLen: number;
             for (var j: number = 0; j < Layer.layerType.length; j++) {
-                listLen = this.softRenderItems[Layer.layerType[j]].length
+                listLen = this.softRenderItems[Layer.layerType[j]].length;
+               
+                this.softRenderItems[Layer.layerType[j]].sort(this.sortByOrder);
+                   
                 for (var i: number = 0; i < listLen; i++) {
                     this.renderList.push(this.softRenderItems[Layer.layerType[j]][i] );
                 }
@@ -196,5 +199,11 @@
 
             return 0;
         }
+
+
+        protected sortByOrder(a: IRender, b: IRender) {
+            return b.drawOrder - a.drawOrder;
+        }
+
     }
 }

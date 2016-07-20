@@ -480,6 +480,7 @@
             //console.log("---" + load.url + "---" + this._taskCount);
             if (this._taskCount <= 0) {
 
+                var subEmitters: ParticleEmitter[] = [];
                 for (var i: number = 0; i < this._mapXmlParser.nodeList.length; i++) {
                     var mapNodeData: MapNodeData = this._mapXmlParser.nodeList[i];
                     
@@ -488,6 +489,7 @@
                         for (var j: number = 0; j < mapNodeData.childs.length; ++j) {
                             var childData: any = mapNodeData.childs[j];
                             var childPatEmitter: Object3D = this.container.findObject3D(childData.name);
+                            subEmitters.push(<ParticleEmitter>childPatEmitter);
                             if (childPatEmitter instanceof ParticleEmitter) {
                                 patEmitter.addSubEmitter(Number(ParticleDataSubEmitterPhase[childData.phase]), <ParticleEmitter>childPatEmitter);
                             }
@@ -495,6 +497,16 @@
                     }
 
                 }
+
+                var tempEmitter: ParticleEmitter;
+                for (var i: number = 0; i < subEmitters.length; i++) {
+                    tempEmitter = subEmitters[i];
+                    if (tempEmitter && tempEmitter.parent) {
+                        tempEmitter.parent.removeChild(tempEmitter);
+                    }
+                }
+
+
 
                 this._event.eventType = LoaderEvent3D.LOADER_COMPLETE;
                 this._event.target = this;

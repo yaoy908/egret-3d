@@ -51,6 +51,16 @@
         public type: string ="" ;
 
         /**
+        * @language zh_CN
+        * 渲染排序的参数，数值越大，先渲染</p>
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public get drawOrder(): number {
+            return 0;
+        }
+
+        /**
         * @private
         * @version Egret 3.0
         * @platform Web,Native
