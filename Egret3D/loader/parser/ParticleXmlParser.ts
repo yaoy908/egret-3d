@@ -148,7 +148,7 @@
             }
 
             //fudge
-            var sortingFudge: Node = this.getNode(render, "sortingFudge");
+            var sortingFudge: Node = this.getNode(node, "sortingFudge");
             if (sortingFudge) {
                 property.sortingFudge = Number(sortingFudge.textContent);
             }

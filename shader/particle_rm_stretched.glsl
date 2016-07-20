@@ -9,12 +9,18 @@ mat4 getRenderModeMatrix(mat4 cameraMatrix, mat4 modelMatrix) {
 
 
 float updateStretchedBillBoard(vec4 startPos, vec4 newPos){
-	localPosition.x *= particleStateData.lengthScale; 
+	vec3 dirVector = newPos.xyz - startPos.xyz;
+
+	float lengthScale = particleStateData.lengthScale;
+	float speedScale = dirVector.x * dirVector.x + dirVector.y * dirVector.y + dirVector.z * dirVector.z;
+	speedScale = sqrt(speedScale) * 0.01 / currentTime;
+	localPosition.x *= particleStateData.lengthScale + speedScale * particleStateData.speedScale;
+
 	mat4 temp = uniform_ViewMatrix;
 	startPos = temp * startPos; 
 	newPos = temp * newPos; 
 
-	vec3 dirVector = newPos.xyz - startPos.xyz;
+
 	
 	float scaleBefore = dirVector.x * dirVector.x + dirVector.y * dirVector.y + dirVector.z * dirVector.z; 
 	scaleBefore = sqrt(scaleBefore);
