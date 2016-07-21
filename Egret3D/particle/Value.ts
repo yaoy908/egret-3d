@@ -495,8 +495,8 @@
             var radio: Vector3D = new Vector3D(0, 0, 0);
             for (var i: number = 0; i < num; i++) {
                 x = Math.random() * 2 * r - r;
-                y = Math.abs(Math.random() * 2 * r - r);
-                z = Math.random() * 2 * r - r;
+                y = Math.random() * 2 * r - r;
+                z = Math.abs(Math.random() * 2 * r - r);
                 pos = new Vector3D(x, y, z);
                 if (Vector3D.distance(radio, pos) > r) {
                     i--;

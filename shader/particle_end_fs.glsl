@@ -11,6 +11,7 @@ void main() {
 	//if(blendMode == 4.0){
 	//	outColor.xyz *= 1.8;
 	//}
+	outColor = clamp(outColor, 0.0, 1.0);
     gl_FragColor = outColor;
 }
 
