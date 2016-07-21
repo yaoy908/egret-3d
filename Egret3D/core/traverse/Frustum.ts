@@ -119,7 +119,7 @@
 
             /// 摄像机变化之后的顶点也变化;
             var vtx: Array<Vector3D> = new Array<Vector3D>();
-            var mat: Matrix4_4 = new Matrix4_4();
+            var mat: Matrix4_4 = Matrix4_4.helpMatrix ;
             mat.copyFrom(camera.modelMatrix);
             ///mat.invert(); /// 眼睛的世界矩阵;
 
