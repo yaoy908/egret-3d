@@ -12,7 +12,7 @@ vec2 getSheetOffset(float frame, float tileX, float tileY)
 	frame = floor(frame);
 	vec2 ret = vec2(0.0); 
 	ret.x = (1.0 / tileX) * mod(frame, tileX); 
-	ret.y = frame / tileY;
+	ret.y = frame / tileX;
 
 	ret.y = floor(ret.y);
 	ret.y = (1.0 / tileY) * ret.y; 
@@ -20,7 +20,7 @@ vec2 getSheetOffset(float frame, float tileX, float tileY)
 }
 
 void calcUVCoord() {
-	vec2 rectUV = vec2(1.0 / uniform_textureSheet[1], 1.0 / uniform_textureSheet[0]);
+	vec2 rectUV = vec2(1.0 / uniform_textureSheet[0], 1.0 / uniform_textureSheet[1]);
 	uv_0.xy *= rectUV;
 	
 	float frame = varying_textureSheetData.x + varying_textureSheetData.y;

@@ -10,7 +10,7 @@ vec2 getSheetOffset(float frame, float tileX, float tileY)
 	frame = floor(frame);
 	vec2 ret = vec2(0.0); 
 	ret.x = (1.0 / tileX) * mod(frame, tileX); 
-	ret.y = frame / tileY;
+	ret.y = frame / tileX;
 
 	ret.y = floor(ret.y);
 	ret.y = (1.0 / tileY) * ret.y; 
