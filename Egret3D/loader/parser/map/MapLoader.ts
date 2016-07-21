@@ -713,7 +713,8 @@
                         load = this.addMethodImgTask(textureData.path, terrainARGBMethod, textureData.attributeName);
 
                         if (i != 0) {
-                            terrainARGBMethod.setUVTitling(i - 1, textureData.uvTitlingX, textureData.uvTitlingY);
+                            
+                            terrainARGBMethod.setUVTitling(i - 1, Number(textureData.uvTitlingX), Number(textureData.uvTitlingY));
                         }
                     }
 
