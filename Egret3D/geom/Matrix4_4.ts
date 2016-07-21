@@ -22,7 +22,7 @@
         * @platform Web,Native
         */
         public rawData: Float32Array;
-        private static result: Float32Array = new Float32Array(16);
+        public static helpMatrix: Matrix4_4 = new Matrix4_4();
         /**
         * @language zh_CN
         * 构造
@@ -85,7 +85,7 @@
         * @platform Web,Native
         */
         public multiply(mat4: Matrix4_4) {
-            var a = this.rawData, b = mat4.rawData, r = Matrix4_4.result;
+            var a = this.rawData, b = mat4.rawData, r = Matrix4_4.helpMatrix;
 
             r[0] = a[0] * b[0] + a[1] * b[4] + a[2] * b[8] + a[3] * b[12];
             r[1] = a[0] * b[1] + a[1] * b[5] + a[2] * b[9] + a[3] * b[13];
@@ -744,8 +744,8 @@
         public decompose(orientationStyle: string = "eulerAngles", target: Vector3D[] = null): Vector3D[] {
             var q: Quaternion = MathUtil.CALCULATION_QUATERNION;
             var vec: Vector3D[] = target ? target : [new Vector3D(), new Vector3D(), new Vector3D()];
-            var m = this.clone();
-            var mr = m.rawData;
+            this.copyRawDataTo(Matrix4_4.helpMatrix.rawData);
+            var mr = Matrix4_4.helpMatrix.rawData;
 
             var pos: Vector3D = vec[0];
             pos.x = mr[12];
@@ -1188,22 +1188,22 @@
         */
         public transpose() {
            
-            for (var i: number = 0; i < Matrix4_4.result.length; i++ ){
-                Matrix4_4.result[i] = this.rawData[i] ;
+            for (var i: number = 0; i < Matrix4_4.helpMatrix.rawData.length; i++ ){
+                Matrix4_4.helpMatrix.rawData[i] = this.rawData[i] ;
             }
 
-            this.rawData[1] = Matrix4_4.result[4];
-            this.rawData[2] = Matrix4_4.result[8];
-            this.rawData[3] = Matrix4_4.result[12];
-            this.rawData[4] = Matrix4_4.result[1];
-            this.rawData[6] = Matrix4_4.result[9];
-            this.rawData[7] = Matrix4_4.result[13];
-            this.rawData[8] = Matrix4_4.result[2];
-            this.rawData[9] = Matrix4_4.result[6];
-            this.rawData[11] = Matrix4_4.result[14];
-            this.rawData[12] = Matrix4_4.result[3];
-            this.rawData[13] = Matrix4_4.result[7];
-            this.rawData[14] = Matrix4_4.result[11];
+            this.rawData[1] = Matrix4_4.helpMatrix.rawData[4];
+            this.rawData[2] = Matrix4_4.helpMatrix.rawData[8];
+            this.rawData[3] = Matrix4_4.helpMatrix.rawData[12];
+            this.rawData[4] = Matrix4_4.helpMatrix.rawData[1];
+            this.rawData[6] = Matrix4_4.helpMatrix.rawData[9];
+            this.rawData[7] = Matrix4_4.helpMatrix.rawData[13];
+            this.rawData[8] = Matrix4_4.helpMatrix.rawData[2];
+            this.rawData[9] = Matrix4_4.helpMatrix.rawData[6];
+            this.rawData[11] = Matrix4_4.helpMatrix.rawData[14];
+            this.rawData[12] = Matrix4_4.helpMatrix.rawData[3];
+            this.rawData[13] = Matrix4_4.helpMatrix.rawData[7];
+            this.rawData[14] = Matrix4_4.helpMatrix.rawData[11];
         }
                         
         /**
