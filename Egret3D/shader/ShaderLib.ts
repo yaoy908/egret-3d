@@ -856,6 +856,91 @@ module egret3d {
 			"} \n" +
 			"} \n",
 
+			"particle_end":
+			"float particle( ParticleData curParticle ){ \n" +
+			"return 1.0 ; \n" +
+			"} \n" +
+			"mat4 buildModelMatrix(vec4 quat, vec3 scale, vec3 position) \n" +
+			"{ \n" +
+			"mat4 ret = mat4( \n" +
+			"vec4(scale.x, 0.0, 0.0, 0.0), \n" +
+			"vec4(0.0, scale.y, 0.0, 0.0), \n" +
+			"vec4(0.0, 0.0, scale.z, 0.0), \n" +
+			"vec4(0.0, 0.0, 0.0, 1.0) \n" +
+			"); \n" +
+			"ret = buildMat4Quat(quat) * ret; \n" +
+			"ret[3][0] = position.x; \n" +
+			"ret[3][1] = position.y; \n" +
+			"ret[3][2] = position.z; \n" +
+			"return ret; \n" +
+			"} \n" +
+			"vec3 calcParticleMove(vec3 distanceXYZ){ \n" +
+			"if(velocityLimitVec2.y > TrueOrFalse){ \n" +
+			"vec3 temp = distanceXYZ * distanceXYZ; \n" +
+			"float distanceCurrent = sqrt(temp.x + temp.y + temp.z); \n" +
+			"float distanceLimit = velocityLimitVec2.x; \n" +
+			"if(distanceLimit < 0.0001){ \n" +
+			"return vec3(0.0); \n" +
+			"} \n" +
+			"if(distanceCurrent > distanceLimit){ \n" +
+			"distanceXYZ *= distanceLimit / distanceCurrent; \n" +
+			"} \n" +
+			"} \n" +
+			"return distanceXYZ; \n" +
+			"} \n" +
+			"mat4 getRenderModeMatrix(mat4 cameraMatrix, mat4 modelMatrix){ \n" +
+			"return cameraMatrix; \n" +
+			"} \n" +
+			"void updateStretchedBillBoard(vec4 startPos, vec4 newPos){ \n" +
+			"} \n" +
+			"void main(void) { \n" +
+			"if(discard_particle > TrueOrFalse){ \n" +
+			"outPosition = vec4(0.0,0.0,0.0,0.0); \n" +
+			"}else{ \n" +
+			"vec3 position_emitter = attribute_offsetPosition; \n" +
+			"vec3 velocityLocalVec3 = velocityBaseVec3 * currentTime; \n" +
+			"vec3 velocityWorldVec3 = vec3(0.0,0.0,0.0); \n" +
+			"vec3 velocityMultiVec3 = vec3(0.0,0.0,0.0); \n" +
+			"if(particleStateData.velocityOverWorldSpace < TrueOrFalse){ \n" +
+			"velocityLocalVec3 += velocityOverVec3; \n" +
+			"}else{ \n" +
+			"velocityWorldVec3 += velocityOverVec3; \n" +
+			"} \n" +
+			"if(particleStateData.velocityForceWorldSpace < TrueOrFalse){ \n" +
+			"velocityLocalVec3 += velocityForceVec3; \n" +
+			"}else{ \n" +
+			"velocityWorldVec3 += velocityForceVec3; \n" +
+			"} \n" +
+			"if(particleStateData.worldSpace > TrueOrFalse){ \n" +
+			"}else{ \n" +
+			"followTargetPosition.x = particleStateData.positionX; \n" +
+			"followTargetPosition.y = particleStateData.positionY; \n" +
+			"followTargetPosition.z = particleStateData.positionZ; \n" +
+			"followTargetRotation.x = particleStateData.rotationX; \n" +
+			"followTargetRotation.y = particleStateData.rotationY; \n" +
+			"followTargetRotation.z = particleStateData.rotationZ; \n" +
+			"followTargetRotation.w = particleStateData.rotationW; \n" +
+			"} \n" +
+			"mat4 followRotQuat = buildMat4Quat(followTargetRotation); \n" +
+			"velocityLocalVec3 = (followRotQuat * vec4(velocityLocalVec3, 1.0)).xyz; \n" +
+			"mat4 modelMatrix = buildModelMatrix(followTargetRotation, followTargetScale, followTargetPosition); \n" +
+			"position_emitter = (modelMatrix * vec4(position_emitter, 1.0)).xyz; \n" +
+			"velocityMultiVec3 = velocityLocalVec3 + velocityWorldVec3; \n" +
+			"velocityMultiVec3 = calcParticleMove(velocityMultiVec3); \n" +
+			"velocityMultiVec3.y -= 4.9 * currentTime * currentTime * particleStateData.gravity; \n" +
+			"vec3 origPosition = position_emitter; \n" +
+			"position_emitter += velocityMultiVec3; \n" +
+			"updateStretchedBillBoard(vec4(origPosition, 1.0), vec4(position_emitter, 1.0)); \n" +
+			"mat4 billboardMatrix = getRenderModeMatrix(uniform_cameraMatrix, modelMatrix); \n" +
+			"outPosition = billboardMatrix * localPosition; \n" +
+			"outPosition.xyz += position_emitter.xyz; \n" +
+			"outPosition = uniform_ViewMatrix * outPosition; \n" +
+			"} \n" +
+			"varying_posZ = outPosition.z; \n" +
+			"gl_Position = uniform_ProjectionMatrix * outPosition ; \n" +
+			"} \n" +
+			"	 \n",
+
 			"particle_end_fs":
 			"uniform float uniform_particleFsData[3]; \n" +
 			"void main() { \n" +
@@ -863,6 +948,7 @@ module egret3d {
 			"outColor.xyz = diffuseColor.xyz * materialSource.diffuse * varying_color.xyz * globalColor.xyz; \n" +
 			"outColor.w = materialSource.alpha * diffuseColor.w * varying_color.w * globalColor.w; \n" +
 			"outColor.xyz *= outColor.w; \n" +
+			"outColor = clamp(outColor, 0.0, 1.0); \n" +
 			"gl_FragColor = outColor; \n" +
 			"} \n",
 
@@ -964,6 +1050,22 @@ module egret3d {
 			"followTargetRotation = attribute_followRotation; \n" +
 			"} \n" +
 			"	 \n",
+
+			"particle_fs":
+			"uniform vec2 uniform_fadeOutParticleData; \n" +
+			"varying float varying_posZ; \n" +
+			"void fadeOutParticleByZ(){ \n" +
+			"if(varying_posZ > uniform_fadeOutParticleData.x){ \n" +
+			"discard; \n" +
+			"} \n" +
+			"float fadeAlpha = (uniform_fadeOutParticleData.x - varying_posZ) / uniform_fadeOutParticleData.x; \n" +
+			"fadeAlpha = clamp(fadeAlpha, 0.0, 1.0); \n" +
+			"fadeAlpha *= fadeAlpha; \n" +
+			"outColor.w *= fadeAlpha; \n" +
+			"if( diffuseColor.w <= materialSource.cutAlpha ){ \n" +
+			"discard; \n" +
+			"} \n" +
+			"} \n",
 
 			"particle_rm_billboard":
 			"mat4 getRenderModeMatrix(mat4 cameraMatrix, mat4 modelMatrix) { \n" +
@@ -1076,7 +1178,7 @@ module egret3d {
 			"frame = floor(frame); \n" +
 			"vec2 ret = vec2(0.0); \n" +
 			"ret.x = (1.0 / tileX) * mod(frame, tileX); \n" +
-			"ret.y = frame / tileY; \n" +
+			"ret.y = frame / tileX; \n" +
 			"ret.y = floor(ret.y); \n" +
 			"ret.y = (1.0 / tileY) * ret.y; \n" +
 			"return ret; \n" +
@@ -1098,7 +1200,7 @@ module egret3d {
 			"frame = floor(frame); \n" +
 			"vec2 ret = vec2(0.0); \n" +
 			"ret.x = (1.0 / tileX) * mod(frame, tileX); \n" +
-			"ret.y = frame / tileY; \n" +
+			"ret.y = frame / tileX; \n" +
 			"ret.y = floor(ret.y); \n" +
 			"ret.y = (1.0 / tileY) * ret.y; \n" +
 			"return ret; \n" +
@@ -1125,13 +1227,13 @@ module egret3d {
 			"frame = floor(frame); \n" +
 			"vec2 ret = vec2(0.0); \n" +
 			"ret.x = (1.0 / tileX) * mod(frame, tileX); \n" +
-			"ret.y = frame / tileY; \n" +
+			"ret.y = frame / tileX; \n" +
 			"ret.y = floor(ret.y); \n" +
 			"ret.y = (1.0 / tileY) * ret.y; \n" +
 			"return ret; \n" +
 			"} \n" +
 			"void calcUVCoord() { \n" +
-			"vec2 rectUV = vec2(1.0 / uniform_textureSheet[1], 1.0 / uniform_textureSheet[0]); \n" +
+			"vec2 rectUV = vec2(1.0 / uniform_textureSheet[0], 1.0 / uniform_textureSheet[1]); \n" +
 			"uv_0.xy *= rectUV; \n" +
 			"float frame = varying_textureSheetData.x + varying_textureSheetData.y; \n" +
 			"float currentTime = varying_particleData.x * uniform_textureSheet[2]; \n" +
@@ -1875,49 +1977,6 @@ module egret3d {
 			"float facing = clamp(dot( -normalize(ViewDir),normal),0.0,1.0); \n" +
 			"vec3 waterColor = mix(shallowWaterColor,deepWaterColor,facing); \n" +
 			"diffuseColor.xyz *= waterColor ; \n" +
-			"}  \n",
-
-			"wave_vs.2":
-			"attribute vec3 attribute_normal; \n" +
-			"attribute vec4 attribute_color; \n" +
-			"varying vec3 varying_ViewDir ; \n" +
-			"uniform mat4 uniform_NormalMatrix; \n" +
-			"uniform vec3 waveData[4]; \n" +
-			"uniform float time ; \n" +
-			"uniform sampler2D waveTexture; \n" +
-			"struct wave{ \n" +
-			"vec3 wave_xyz_intensity_0 ; \n" +
-			"vec3 wave_xyz_intensity_1 ; \n" +
-			"vec3 wave_xyz_speed_0 ; \n" +
-			"vec3 wave_xyz_speed_1 ; \n" +
-			"}; \n" +
-			"const float pi = 3.14 ; \n" +
-			"vec3 calcWave(vec2 X,float t,float A,vec2 K,float L) \n" +
-			"{ \n" +
-			"vec3 wave; \n" +
-			"float k = 2.0*pi/L; \n" +
-			"float W = sqrt(9.8*k); \n" +
-			"wave.xz = -((K/k)*A*sin(dot(K,X)-W*t)); \n" +
-			"wave.y = A*cos(dot(K,X)-W*t)/2.0-A/2.0; \n" +
-			"return wave; \n" +
-			"} \n" +
-			"void main(void){ \n" +
-			"vec2 bumpCoord1 = varying_uv0 + time *0.02 * 0.0001 ; \n" +
-			"vec2 bumpCoord2 = varying_uv0 * 2.0 + time * 0.02 * 0.0001; \n" +
-			"vec2 bumpCoord3 = varying_uv0 / 2.0 + time * 0.01 * 0.0001; \n" +
-			"vec3 vBumpTexA = texture2D(waveTexture, bumpCoord1).xyz; \n" +
-			"vec3 vBumpTexB = texture2D(waveTexture, bumpCoord2).xyz; \n" +
-			"vec3 vBumpTexC = texture2D(waveTexture, bumpCoord3).xyz; \n" +
-			"vec3 vBumpTex = normalize(2.0 * (vBumpTexA.xyz + vBumpTexB.xyz+vBumpTexC.xyz) - 3.0); \n" +
-			"vec3 wave = calcWave(e_position.xz,time*0.001,100.0,vec2(0.00001,0.1),5.0).xyz ; \n" +
-			"vec3 wave2 = calcWave(e_position.xz,time*0.001,-100.0,vec2(1.0,1.4),5.0).xyz ; \n" +
-			"e_position.y += vBumpTex.y * 50.0 ; \n" +
-			"mat3 normalMatrix = mat3(uniform_NormalMatrix); \n" +
-			"varying_eyeNormal = normalize(-attribute_normal); \n" +
-			"varying_ViewPose = vec4(e_position, 1.0) ; \n" +
-			"varying_ViewDir = normalize((uniform_eyepos.xyz - e_position)) ; \n" +
-			"outPosition = uniform_ModelViewMatrix * vec4(e_position, 1.0) ; \n" +
-			"varying_color = attribute_color; \n" +
 			"}  \n",
 
 			"wave_vs":
