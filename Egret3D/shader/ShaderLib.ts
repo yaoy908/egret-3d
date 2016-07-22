@@ -1110,6 +1110,7 @@ module egret3d {
 			"if(scaleBefore < Tiny){ \n" +
 			"return 0.0; \n" +
 			"} \n" +
+			"dirVector = newPos.xyz - startPos.xyz; \n" +
 			"float scaleAfter = dirVector.x * dirVector.x + dirVector.y * dirVector.y; \n" +
 			"scaleAfter = sqrt(scaleAfter); \n" +
 			"scaleAfter = scaleAfter / scaleBefore; \n" +
