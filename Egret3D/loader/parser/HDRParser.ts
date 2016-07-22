@@ -1,5 +1,8 @@
 ﻿module egret3d {
 
+    /**
+    * @private 
+    */
     export class HDRParser {
 
         private static radiancePattern = "#\\?RADIANCE"

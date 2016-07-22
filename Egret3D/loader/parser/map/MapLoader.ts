@@ -51,13 +51,45 @@
         private _taskCount: number = 0;
         private _event: LoaderEvent3D = new LoaderEvent3D();
 
+
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public huds: Array<HUD> = new Array<HUD>();
 
+        /**
+        * @language zh_CN
+        * 任务总数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public taskTotal: number = 0;
+
+        /**
+        * @language zh_CN
+        * 当前完成的任务个数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public taskCurrent: number = 0;
 
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public view3d: View3D;
 
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public lightDict: any = {};
 
          /**

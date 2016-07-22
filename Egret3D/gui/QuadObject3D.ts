@@ -1,4 +1,8 @@
 ﻿module egret3d {
+
+    /**
+    * @private
+    */
     class QuadData {
         public static singleQuadData: Array<number> = [
             -1.0, -1.0, 0.0, 0.0, 1.0,

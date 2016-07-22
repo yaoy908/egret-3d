@@ -1,4 +1,7 @@
 ﻿module egret3d {
+    /**
+    * @private
+    */
     export interface IDisplayObject {
         id: number;
         name: string;
