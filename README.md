@@ -38,3 +38,6 @@ Egret3D 3.1.5
 * 修复MapLoader资源重复加载问题
 * 修复BoundBox检测相交bug
 * 修复骨骼动画对重复new矩阵对象的bug
+
+#### 优化列表
+* 优化水渲染效果
