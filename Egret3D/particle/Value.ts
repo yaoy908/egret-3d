@@ -194,151 +194,189 @@
             return values;
         }
     }
-            
+
+
     /**
     * @private
-    *圆柱体.以Y轴为高 (parameters = [R, height])
+    * 圆锥体
     */
-    export class CylinderValueShape extends ValueShape {
+    export class ConeValueShape extends ValueShape {
         public valueType: ValueType = ValueType.vec3;
 
-        public radiusTop: number = 20;
-        public radiusBottom: number = 20;
-        public height: number = 20;
-
-        //目前没写完，只支持Volume和VolumeShell，后面慢慢补充
+        public radius: number = 20;
+        public angle: number = 20;
+        public length: number = 20;
         public coneType: number = ParticleConeShapeType.Volume;
-        //圆筒的尖端延长方向的交汇点，如果top和bottom的半径相等，这个值是null
+        //圆锥的尖端延长方向的交汇点，如果angle为0，则这个交汇点是为null，若angle为90，则交汇点为（0，0，0）
         public origPoint: Vector3D;
+        //用于记录这个点发出的粒子默认朝向
+        public directions: Vector3D[];
 
-        public calculate(num: number): any {
-            var pos: Vector3D;
-            var values: Vector3D[] = [];
-            if (this.radiusBottom == this.radiusTop) {
+        public calculate(count: number): any {
+            if (this.angle > 90) {
+                this.angle = 90;
+            }
+            if (this.radius <= 0) {
+                this.radius = 0.01;
+            }
+            if (this.angle == 90) {
+                this.origPoint = new Vector3D();
+            } else if (this.angle == 0) {
                 this.origPoint = null;
-                var angle: number;
-                for (var i: number = 0; i < num; i++) {
-                    pos = new Vector3D();
-                    angle = Math.random() * 2 * Math.PI;
-
-                    pos.x = Math.sin(angle) * this.radiusBottom;
-                    pos.z = Math.cos(angle) * this.radiusBottom;
-                    //体积
-                    if (this.coneType == ParticleConeShapeType.Volume) {
-                        var random: number = Math.random();
-                        pos.x *= random;
-                        pos.z *= random;
-                        pos.y = Math.random() * this.height - this.height * 0.5;
-                    }
-                    //体积边缘的壳
-                    else if (this.coneType == ParticleConeShapeType.VolumeShell) {
-                        pos.y = Math.random() * this.height - this.height * 0.5;
-                    }
-                    //底面
-                    else if (this.coneType == ParticleConeShapeType.Base) {
-                        pos.y = -this.height * 0.5;
-                        pos.x *= random;
-                        pos.z *= random;
-                    }
-                    //底的圈
-                    else if (this.coneType == ParticleConeShapeType.BaseShell) {
-                        pos.y = -this.height * 0.5;
-                    }
-                    values.push(pos);
-                }
             } else {
-                this.origPoint = new Vector3D(0,0,0);
-                var awayValue: number = this.radiusTop * this.height / Math.abs(this.radiusTop - this.radiusBottom);
-                this.origPoint.y = -(this.height / 2 + awayValue);
-                if (this.radiusTop < this.radiusBottom) {
-                    this.origPoint.y *= -1;
+                this.origPoint = new Vector3D();
+                this.origPoint.z = - this.radius / Math.tan(this.angle * Math.PI / 180);
+            }
+
+            var values: Vector3D[];
+            this.directions = [];
+            if (this.coneType == ParticleConeShapeType.Volume) {
+                if (this.angle == 90) {
+                    values = this.calculateBase(count);
+                } else {
+                    values = this.calculateVolume(count);
                 }
-                //圆筒中的位置
-                var angle: number;
-                var targetR: number;
-                
-                var radiusT_B: number = Math.abs(this.radiusBottom - this.radiusTop);
-                for (var i: number = 0; i < num; i++) {
-                    pos = new Vector3D();
-                    angle = Math.random() * 2 * Math.PI;
-                    if (this.coneType == ParticleConeShapeType.Base) {
-                        pos.y = - this.height * 0.5;
-                    } else if (this.coneType == ParticleConeShapeType.BaseShell) {
-                        pos.y = - this.height * 0.5;
-                    } else if (this.coneType == ParticleConeShapeType.Volume) {
-                        pos.y = Math.random() * this.height - this.height * 0.5;
-                    } else if (this.coneType == ParticleConeShapeType.VolumeShell) {
-                        pos.y = Math.random() * this.height - this.height * 0.5;
-                    }
-
-
-                    targetR = Math.abs(pos.y - this.origPoint.y);//点到原点的y距离
-
-                    if (this.radiusBottom < this.radiusTop) {
-                        targetR = radiusT_B * (this.height / 2 + pos.y) / this.height;
-                        targetR += this.radiusBottom;
-                    }
-                    else {
-                        targetR = radiusT_B * (this.height / 2 - pos.y) / this.height;
-                        targetR += this.radiusBottom;
-                    }
-
-
-                    pos.x = Math.sin(angle) * targetR;
-                    pos.z = Math.cos(angle) * targetR;
-                    if (this.coneType == ParticleConeShapeType.Volume || this.coneType == ParticleConeShapeType.Base) {
-                        var random: number = Math.random();
-                        pos.x *= random;
-                        pos.z *= random;
-                    }
-
-                    values.push(pos);
+            } else if (this.coneType == ParticleConeShapeType.VolumeShell) {
+                if (this.angle == 90) {
+                    values = this.calculateBaseShell(count);
+                } else {
+                    values = this.calculateVolumeShell(count);
                 }
-
-
+            } else if (this.coneType == ParticleConeShapeType.Base) {
+                values = this.calculateBase(count);
+            } else if (this.coneType == ParticleConeShapeType.BaseShell) {
+                values = this.calculateBaseShell(count);
             }
-            //unity中的圆筒默认是横着放的yz互换
-            if (this.origPoint) {
-                this.yz_zy(this.origPoint);
-            }
-            for (var i: number = 0, count: number = values.length; i < count; i++) {
-                this.yz_zy(values[i]);
-            }
-
-            //
             return values;
         }
 
-        private yz_zy(v: Vector3D): void {
-            v.y += this.height / 2;
-            v.setTo(v.x, v.z, v.y, v.w);
-        }
-        
+        //在底部圆的内部随机一个位置
+        private calculateBase(count:number): any {
+            var pos: Vector3D;
+            var dir: Vector3D;
+            var values: Vector3D[] = [];
+            var tempAngle: number;
+            var targetRadius: number;
+            for (var i: number = 0; i < count; i++) {
+                tempAngle = Math.random() * Math.PI * 2;
+                pos = new Vector3D();
+                pos.z = 0;
+                targetRadius = Math.random() * this.radius;
+                pos.x = Math.sin(tempAngle) * targetRadius;
+                pos.y = Math.cos(tempAngle) * targetRadius;
 
-        //获取从这个桶里面发射的粒子，沿着桶的发射朝向
-        public getDirection(point: Vector3D, dst: Vector3D): Vector3D {
-            if (dst == null) {
-                dst = new Vector3D();
-            }
-            dst.setTo(0, 1, 0);
-            if (point == null) {
-                return dst;
-            }
-            if (this.origPoint){
-                dst.copyFrom(point);
-                dst.decrementBy(this.origPoint);
-                dst.normalize();
-                if (this.radiusTop < this.radiusBottom) {
-                    dst.x *= -1;
-                    dst.y *= -1;
-                    dst.z *= -1;
+                if (this.origPoint) {
+                    dir = pos.subtract(this.origPoint);
+                    dir.normalize();
+                } else {
+                    dir = new Vector3D(0, 0, 1);
                 }
 
+                values.push(pos);
+                this.directions.push(dir);
             }
-            return dst;
-        }
-    }
 
+            return values;
+        }
+
+        //在底部圆的周围随机一个位置
+        private calculateBaseShell(count: number): any {
+            var pos: Vector3D;
+            var dir: Vector3D;
+            var values: Vector3D[] = [];
+            var tempAngle: number;
+            var targetRadius: number;
+            for (var i: number = 0; i < count; i++) {
+                tempAngle = Math.random() * Math.PI * 2;
+                pos = new Vector3D();
+                pos.z = 0;
+                targetRadius = this.radius;
+                pos.x = Math.sin(tempAngle) * targetRadius;
+                pos.y = Math.cos(tempAngle) * targetRadius;
+
+                if (this.origPoint) {
+                    dir = pos.subtract(this.origPoint);
+                    dir.normalize();
+                } else {
+                    dir = new Vector3D(0, 0, 1);
+                }
+
+                values.push(pos);
+                this.directions.push(dir);
+            }
+
+            return values;
+        }
+
+        //在圆锥体内随机一个位置
+        private calculateVolume(count: number): any {
+            var pos: Vector3D;
+            var dir: Vector3D;
+            var values: Vector3D[] = [];
+            var tempAngle: number;
+            var targetRadius: number;
+            for (var i: number = 0; i < count; i++) {
+                tempAngle = Math.random() * Math.PI * 2;
+                pos = new Vector3D();
+                pos.z = this.length * Math.random();
+                targetRadius = this.radius * Math.random();
+                if (this.origPoint) {
+                    targetRadius *= (pos.z - this.origPoint.z) / (-this.origPoint.z);
+                }
+                pos.x = Math.sin(tempAngle) * targetRadius;
+                pos.y = Math.cos(tempAngle) * targetRadius;
+
+                if (this.origPoint) {
+                    dir = pos.subtract(this.origPoint);
+                    dir.normalize();
+                } else {
+                    dir = new Vector3D(0, 0, 1);
+                }
+
+                values.push(pos);
+                this.directions.push(dir);
+            }
+
+            return values;
+        }
+
+        //在圆锥体圆筒壳随机一个位置
+        private calculateVolumeShell(count: number): any {
+            var pos: Vector3D;
+            var dir: Vector3D;
+            var values: Vector3D[] = [];
+            var tempAngle: number;
+            var targetRadius: number;
+            for (var i: number = 0; i < count; i++) {
+                tempAngle = Math.random() * Math.PI * 2;
+                pos = new Vector3D();
+                pos.z = this.length * Math.random();
+                targetRadius = this.radius;
+                if (this.origPoint) {
+                    targetRadius *= (pos.z - this.origPoint.z) / (-this.origPoint.z);
+                }
+                pos.x = Math.sin(tempAngle) * targetRadius;
+                pos.y = Math.cos(tempAngle) * targetRadius;
+
+                if (this.origPoint) {
+                    dir = pos.subtract(this.origPoint);
+                    dir.normalize();
+                } else {
+                    dir = new Vector3D(0, 0, 1);
+                }
+
+                values.push(pos);
+                this.directions.push(dir);
+            }
+
+            return values;
+        }
+
+
+
+    }
+            
+  
     /**
     * @private
     * 线性分布

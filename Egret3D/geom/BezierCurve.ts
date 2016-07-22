@@ -270,6 +270,9 @@
                 this.ctrlPoints.push(new Point(0, 0));
                 this.ctrlPoints.push(new Point(1, 0));
             }
+
+            this.ctrlPoints.length = BezierData.SegCount * 2;
+            this.posPoints.length = BezierData.SegCount * 2;
         }
 
         //___________压缩数据

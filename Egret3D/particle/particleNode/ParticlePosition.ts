@@ -78,16 +78,14 @@
                 hemiShape.r = node.hemiSphereRadius;
                 this._positions = hemiShape;
             } else if (node.type == ParticleDataShapeType.Cone) {
-                var coneShape: CylinderValueShape = new CylinderValueShape();
-                coneShape.radiusTop = node.coneRadiusTop;
-                coneShape.radiusBottom = node.coneRadiusBottom;
-                if (coneShape.coneType == ParticleConeShapeType.BaseShell) {
-                    coneShape.height = 0;
-                } else {
-                    coneShape.height = node.coneHeight;
-                }
+                var coneShape: ConeValueShape = new ConeValueShape();
+                coneShape.angle = node.coneAngle;
+                coneShape.length = node.coneLength;
+                coneShape.radius = node.coneRadius;
                 coneShape.coneType = node.coneType;
+
                 this._positions = coneShape;
+
             } else if (node.type == ParticleDataShapeType.Mesh) {
                 var meshShape: Mesh3DValueShape = new Mesh3DValueShape();
                 meshShape.geometry = node.geometry;
@@ -139,7 +137,7 @@
             var data: ParticleData = this._animationState.emitter.data;
 
             var recordPos: Vector3D = new Vector3D();//用于计算方向，缩放后的位置不能用于计算方向
-            var coneShape: CylinderValueShape = <CylinderValueShape>this._positions;
+            var coneShape: ConeValueShape = <ConeValueShape>this._positions;
             for (var i: number = 0; i < count; ++i) {
                 var pos: Vector3D = posArray[i];
                 recordPos.copyFrom(pos);
@@ -160,7 +158,7 @@
                     } else if (this._node.type == ParticleDataShapeType.HemiSphere) {
                         dir.copyFrom(recordPos);
                     } else if (this._node.type == ParticleDataShapeType.Cone) {
-                        dir = coneShape.getDirection(recordPos, dir);
+                        dir = coneShape.directions[i];
                     } else if (this._node.type == ParticleDataShapeType.Mesh) {
                         dir.copyFrom(meshNormalArray[i]);
                     }

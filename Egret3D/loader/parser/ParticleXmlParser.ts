@@ -267,14 +267,14 @@
             //cone
             var cone: Node = this.getNode(node, "cone");
             this.eachAttr(cone, function (label: string, value: string): void {
-                if (label == "coneHeight") {
-                    shape.coneHeight = Number(value);
-                } else if (label == "coneRadiusBottom") {
-                    shape.coneRadiusBottom = Number(value);
-                } else if (label == "coneRadiusTop") {
-                    shape.coneRadiusTop = Number(value);
-                } else if (label == "type") {
+                if (label == "type") {
                     shape.coneType = ParticleConeShapeType[value];
+                } else if (label == "length") {
+                    shape.coneLength = Number(value);
+                } else if (label == "radius") {
+                    shape.coneRadius = Number(value);
+                } else if (label == "angle") {
+                    shape.coneAngle = Number(value);
                 }
             });
 

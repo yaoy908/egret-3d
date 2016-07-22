@@ -206,9 +206,8 @@
 
             this.shape.hemiSphereRadius *= value;
 
-            this.shape.coneHeight *= value;
-            this.shape.coneRadiusBottom *= value;
-            this.shape.coneRadiusTop *= value;
+            this.shape.coneLength *= value;
+            this.shape.coneRadius *= value;
 
             //
             this.geometry.planeW *= value;
@@ -433,11 +432,12 @@
 
         //半球
         public hemiSphereRadius: number = 10;
+
         //圆筒状
-        public coneHeight: number = 10;
-        public coneRadiusBottom: number = 2;
-        public coneRadiusTop: number = 4;
         public coneType: number = ParticleConeShapeType.Volume;
+        public coneLength: number = 10;
+        public coneRadius: number = 10;
+        public coneAngle: number = 30;
 
         //mesh类型发射器的类型
         public meshType: number = ParticleMeshShapeType.Vertex;

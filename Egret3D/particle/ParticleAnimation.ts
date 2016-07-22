@@ -102,11 +102,12 @@
         * @version Egret 3.0
         * @platform Web,Native
         */
+
+
         public update(time: number, delay: number, geometry: Geometry) {
             if (!this._play) {
                 return;
             }
-          
             this.delay = delay; 
             this.animTime += this.delay;
             if (this.particleAnimationState)
