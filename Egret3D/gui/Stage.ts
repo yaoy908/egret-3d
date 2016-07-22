@@ -1,4 +1,8 @@
 ﻿module egret3d {
+
+    /**
+    * @private
+    */
     export class Stage implements IDisplayObject {
         id: number = -1;
         name: string = "root";

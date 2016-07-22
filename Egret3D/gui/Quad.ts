@@ -1,4 +1,8 @@
 ﻿module egret3d {
+
+    /**
+    * @private
+    */
     export class Quad extends EventDispatcher {
         public name: string = "" ;
         public id: number = -1 ;

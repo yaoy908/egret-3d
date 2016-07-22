@@ -1,4 +1,8 @@
 ﻿module egret3d {
+
+    /**
+    * @private
+    */
     export class QuadRenderItem {
         public id: number; 
         public geometry: Geometry;

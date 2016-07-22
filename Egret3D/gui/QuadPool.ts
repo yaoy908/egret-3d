@@ -1,4 +1,8 @@
 ﻿module egret3d{
+
+    /**
+    * @private
+    */
     export class QuadPool {
 
         public static numberLayer: number = 0;
