@@ -70,7 +70,7 @@
             var attr: Attr;
             for (var i: number = 0, count = item.attributes.length; i < count; i++) {
                 attr = item.attributes[i];
-                fun(attr.nodeName, attr.textContent);
+                fun(attr.name, attr.value);
             }
         }
     }
