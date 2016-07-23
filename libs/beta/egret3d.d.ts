@@ -11921,6 +11921,9 @@ declare module egret3d {
     }
 }
 declare module egret3d {
+    /**
+    * @private
+    */
     class HDRParser {
         private static radiancePattern;
         private static commentPattern;
@@ -12120,10 +12123,40 @@ declare module egret3d {
         private _textures;
         private _taskCount;
         private _event;
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         huds: Array<HUD>;
+        /**
+        * @language zh_CN
+        * 任务总数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         taskTotal: number;
+        /**
+        * @language zh_CN
+        * 当前完成的任务个数
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         taskCurrent: number;
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         view3d: View3D;
+        /**
+        * @private
+        * @language zh_CN
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         lightDict: any;
         /**
         * @language zh_CN
@@ -15961,18 +15994,21 @@ declare module egret3d {
     }
     /**
     * @private
-    *圆柱体.以Y轴为高 (parameters = [R, height])
+    * 圆锥体
     */
-    class CylinderValueShape extends ValueShape {
+    class ConeValueShape extends ValueShape {
         valueType: ValueType;
-        radiusTop: number;
-        radiusBottom: number;
-        height: number;
+        radius: number;
+        angle: number;
+        length: number;
         coneType: number;
         origPoint: Vector3D;
-        calculate(num: number): any;
-        private yz_zy(v);
-        getDirection(point: Vector3D, dst: Vector3D): Vector3D;
+        directions: Vector3D[];
+        calculate(count: number): any;
+        private calculateBase(count);
+        private calculateBaseShell(count);
+        private calculateVolume(count);
+        private calculateVolumeShell(count);
     }
     /**
     * @private
@@ -17610,10 +17646,10 @@ declare module egret3d {
         cubeD: number;
         sphereRadius: number;
         hemiSphereRadius: number;
-        coneHeight: number;
-        coneRadiusBottom: number;
-        coneRadiusTop: number;
         coneType: number;
+        coneLength: number;
+        coneRadius: number;
+        coneAngle: number;
         meshType: number;
         meshFile: string;
         geometry: Geometry;
@@ -18382,7 +18418,19 @@ declare module egret3d {
         * @platform Web,Native
         */
         constructor();
+        /**
+        * @language zh_CN
+        * @private
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         upload(context3D: Context3DProxy): void;
+        /**
+        * @language zh_CN
+        * @private
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         uploadForcing(context3D: Context3DProxy): void;
     }
 }

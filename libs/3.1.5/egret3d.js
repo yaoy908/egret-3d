@@ -4873,6 +4873,8 @@ var egret3d;
                 this.ctrlPoints.push(new egret3d.Point(0, 0));
                 this.ctrlPoints.push(new egret3d.Point(1, 0));
             }
+            this.ctrlPoints.length = BezierData.SegCount * 2;
+            this.posPoints.length = BezierData.SegCount * 2;
         };
         //___________压缩数据
         BezierData.compressFloats = function (floats, times) {
@@ -8116,6 +8118,7 @@ var egret3d;
                 "if(scaleBefore < Tiny){ \n" +
                 "return 0.0; \n" +
                 "} \n" +
+                "dirVector = newPos.xyz - startPos.xyz; \n" +
                 "float scaleAfter = dirVector.x * dirVector.x + dirVector.y * dirVector.y; \n" +
                 "scaleAfter = sqrt(scaleAfter); \n" +
                 "scaleAfter = scaleAfter / scaleBefore; \n" +
@@ -23339,6 +23342,9 @@ var egret3d;
 })(egret3d || (egret3d = {}));
 var egret3d;
 (function (egret3d) {
+    /**
+    * @private
+    */
     var HDRParser = (function () {
         function HDRParser() {
         }
@@ -24362,9 +24368,33 @@ var egret3d;
             this._textures = {};
             this._taskCount = 0;
             this._event = new egret3d.LoaderEvent3D();
+            /**
+            * @private
+            * @language zh_CN
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             this.huds = new Array();
+            /**
+            * @language zh_CN
+            * 任务总数
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             this.taskTotal = 0;
+            /**
+            * @language zh_CN
+            * 当前完成的任务个数
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             this.taskCurrent = 0;
+            /**
+            * @private
+            * @language zh_CN
+            * @version Egret 3.0
+            * @platform Web,Native
+            */
             this.lightDict = {};
             this.container = new egret3d.Object3D();
             if (name) {
@@ -31289,134 +31319,174 @@ var egret3d;
     egret3d.PlaneValueShape = PlaneValueShape;
     /**
     * @private
-    *圆柱体.以Y轴为高 (parameters = [R, height])
+    * 圆锥体
     */
-    var CylinderValueShape = (function (_super) {
-        __extends(CylinderValueShape, _super);
-        function CylinderValueShape() {
+    var ConeValueShape = (function (_super) {
+        __extends(ConeValueShape, _super);
+        function ConeValueShape() {
             _super.apply(this, arguments);
             this.valueType = ValueType.vec3;
-            this.radiusTop = 20;
-            this.radiusBottom = 20;
-            this.height = 20;
-            //目前没写完，只支持Volume和VolumeShell，后面慢慢补充
+            this.radius = 20;
+            this.angle = 20;
+            this.length = 20;
             this.coneType = egret3d.ParticleConeShapeType.Volume;
         }
-        CylinderValueShape.prototype.calculate = function (num) {
-            var pos;
-            var values = [];
-            if (this.radiusBottom == this.radiusTop) {
+        ConeValueShape.prototype.calculate = function (count) {
+            if (this.angle > 90) {
+                this.angle = 90;
+            }
+            if (this.radius <= 0) {
+                this.radius = 0.01;
+            }
+            if (this.angle == 90) {
+                this.origPoint = new egret3d.Vector3D();
+            }
+            else if (this.angle == 0) {
                 this.origPoint = null;
-                var angle;
-                for (var i = 0; i < num; i++) {
-                    pos = new egret3d.Vector3D();
-                    angle = Math.random() * 2 * Math.PI;
-                    pos.x = Math.sin(angle) * this.radiusBottom;
-                    pos.z = Math.cos(angle) * this.radiusBottom;
-                    //体积
-                    if (this.coneType == egret3d.ParticleConeShapeType.Volume) {
-                        var random = Math.random();
-                        pos.x *= random;
-                        pos.z *= random;
-                        pos.y = Math.random() * this.height - this.height * 0.5;
-                    }
-                    else if (this.coneType == egret3d.ParticleConeShapeType.VolumeShell) {
-                        pos.y = Math.random() * this.height - this.height * 0.5;
-                    }
-                    else if (this.coneType == egret3d.ParticleConeShapeType.Base) {
-                        pos.y = -this.height * 0.5;
-                        pos.x *= random;
-                        pos.z *= random;
-                    }
-                    else if (this.coneType == egret3d.ParticleConeShapeType.BaseShell) {
-                        pos.y = -this.height * 0.5;
-                    }
-                    values.push(pos);
-                }
             }
             else {
-                this.origPoint = new egret3d.Vector3D(0, 0, 0);
-                var awayValue = this.radiusTop * this.height / Math.abs(this.radiusTop - this.radiusBottom);
-                this.origPoint.y = -(this.height / 2 + awayValue);
-                if (this.radiusTop < this.radiusBottom) {
-                    this.origPoint.y *= -1;
+                this.origPoint = new egret3d.Vector3D();
+                this.origPoint.z = -this.radius / Math.tan(this.angle * Math.PI / 180);
+            }
+            var values;
+            this.directions = [];
+            if (this.coneType == egret3d.ParticleConeShapeType.Volume) {
+                if (this.angle == 90) {
+                    values = this.calculateBase(count);
                 }
-                //圆筒中的位置
-                var angle;
-                var targetR;
-                var radiusT_B = Math.abs(this.radiusBottom - this.radiusTop);
-                for (var i = 0; i < num; i++) {
-                    pos = new egret3d.Vector3D();
-                    angle = Math.random() * 2 * Math.PI;
-                    if (this.coneType == egret3d.ParticleConeShapeType.Base) {
-                        pos.y = -this.height * 0.5;
-                    }
-                    else if (this.coneType == egret3d.ParticleConeShapeType.BaseShell) {
-                        pos.y = -this.height * 0.5;
-                    }
-                    else if (this.coneType == egret3d.ParticleConeShapeType.Volume) {
-                        pos.y = Math.random() * this.height - this.height * 0.5;
-                    }
-                    else if (this.coneType == egret3d.ParticleConeShapeType.VolumeShell) {
-                        pos.y = Math.random() * this.height - this.height * 0.5;
-                    }
-                    targetR = Math.abs(pos.y - this.origPoint.y); //点到原点的y距离
-                    if (this.radiusBottom < this.radiusTop) {
-                        targetR = radiusT_B * (this.height / 2 + pos.y) / this.height;
-                        targetR += this.radiusBottom;
-                    }
-                    else {
-                        targetR = radiusT_B * (this.height / 2 - pos.y) / this.height;
-                        targetR += this.radiusBottom;
-                    }
-                    pos.x = Math.sin(angle) * targetR;
-                    pos.z = Math.cos(angle) * targetR;
-                    if (this.coneType == egret3d.ParticleConeShapeType.Volume || this.coneType == egret3d.ParticleConeShapeType.Base) {
-                        var random = Math.random();
-                        pos.x *= random;
-                        pos.z *= random;
-                    }
-                    values.push(pos);
+                else {
+                    values = this.calculateVolume(count);
                 }
             }
-            //unity中的圆筒默认是横着放的yz互换
-            if (this.origPoint) {
-                this.yz_zy(this.origPoint);
+            else if (this.coneType == egret3d.ParticleConeShapeType.VolumeShell) {
+                if (this.angle == 90) {
+                    values = this.calculateBaseShell(count);
+                }
+                else {
+                    values = this.calculateVolumeShell(count);
+                }
             }
-            for (var i = 0, count = values.length; i < count; i++) {
-                this.yz_zy(values[i]);
+            else if (this.coneType == egret3d.ParticleConeShapeType.Base) {
+                values = this.calculateBase(count);
             }
-            //
+            else if (this.coneType == egret3d.ParticleConeShapeType.BaseShell) {
+                values = this.calculateBaseShell(count);
+            }
             return values;
         };
-        CylinderValueShape.prototype.yz_zy = function (v) {
-            v.y += this.height / 2;
-            v.setTo(v.x, v.z, v.y, v.w);
-        };
-        //获取从这个桶里面发射的粒子，沿着桶的发射朝向
-        CylinderValueShape.prototype.getDirection = function (point, dst) {
-            if (dst == null) {
-                dst = new egret3d.Vector3D();
-            }
-            dst.setTo(0, 1, 0);
-            if (point == null) {
-                return dst;
-            }
-            if (this.origPoint) {
-                dst.copyFrom(point);
-                dst.decrementBy(this.origPoint);
-                dst.normalize();
-                if (this.radiusTop < this.radiusBottom) {
-                    dst.x *= -1;
-                    dst.y *= -1;
-                    dst.z *= -1;
+        //在底部圆的内部随机一个位置
+        ConeValueShape.prototype.calculateBase = function (count) {
+            var pos;
+            var dir;
+            var values = [];
+            var tempAngle;
+            var targetRadius;
+            for (var i = 0; i < count; i++) {
+                tempAngle = Math.random() * Math.PI * 2;
+                pos = new egret3d.Vector3D();
+                pos.z = 0;
+                targetRadius = Math.random() * this.radius;
+                pos.x = Math.sin(tempAngle) * targetRadius;
+                pos.y = Math.cos(tempAngle) * targetRadius;
+                if (this.origPoint) {
+                    dir = pos.subtract(this.origPoint);
+                    dir.normalize();
                 }
+                else {
+                    dir = new egret3d.Vector3D(0, 0, 1);
+                }
+                values.push(pos);
+                this.directions.push(dir);
             }
-            return dst;
+            return values;
         };
-        return CylinderValueShape;
+        //在底部圆的周围随机一个位置
+        ConeValueShape.prototype.calculateBaseShell = function (count) {
+            var pos;
+            var dir;
+            var values = [];
+            var tempAngle;
+            var targetRadius;
+            for (var i = 0; i < count; i++) {
+                tempAngle = Math.random() * Math.PI * 2;
+                pos = new egret3d.Vector3D();
+                pos.z = 0;
+                targetRadius = this.radius;
+                pos.x = Math.sin(tempAngle) * targetRadius;
+                pos.y = Math.cos(tempAngle) * targetRadius;
+                if (this.origPoint) {
+                    dir = pos.subtract(this.origPoint);
+                    dir.normalize();
+                }
+                else {
+                    dir = new egret3d.Vector3D(0, 0, 1);
+                }
+                values.push(pos);
+                this.directions.push(dir);
+            }
+            return values;
+        };
+        //在圆锥体内随机一个位置
+        ConeValueShape.prototype.calculateVolume = function (count) {
+            var pos;
+            var dir;
+            var values = [];
+            var tempAngle;
+            var targetRadius;
+            for (var i = 0; i < count; i++) {
+                tempAngle = Math.random() * Math.PI * 2;
+                pos = new egret3d.Vector3D();
+                pos.z = this.length * Math.random();
+                targetRadius = this.radius * Math.random();
+                if (this.origPoint) {
+                    targetRadius *= (pos.z - this.origPoint.z) / (-this.origPoint.z);
+                }
+                pos.x = Math.sin(tempAngle) * targetRadius;
+                pos.y = Math.cos(tempAngle) * targetRadius;
+                if (this.origPoint) {
+                    dir = pos.subtract(this.origPoint);
+                    dir.normalize();
+                }
+                else {
+                    dir = new egret3d.Vector3D(0, 0, 1);
+                }
+                values.push(pos);
+                this.directions.push(dir);
+            }
+            return values;
+        };
+        //在圆锥体圆筒壳随机一个位置
+        ConeValueShape.prototype.calculateVolumeShell = function (count) {
+            var pos;
+            var dir;
+            var values = [];
+            var tempAngle;
+            var targetRadius;
+            for (var i = 0; i < count; i++) {
+                tempAngle = Math.random() * Math.PI * 2;
+                pos = new egret3d.Vector3D();
+                pos.z = this.length * Math.random();
+                targetRadius = this.radius;
+                if (this.origPoint) {
+                    targetRadius *= (pos.z - this.origPoint.z) / (-this.origPoint.z);
+                }
+                pos.x = Math.sin(tempAngle) * targetRadius;
+                pos.y = Math.cos(tempAngle) * targetRadius;
+                if (this.origPoint) {
+                    dir = pos.subtract(this.origPoint);
+                    dir.normalize();
+                }
+                else {
+                    dir = new egret3d.Vector3D(0, 0, 1);
+                }
+                values.push(pos);
+                this.directions.push(dir);
+            }
+            return values;
+        };
+        return ConeValueShape;
     }(ValueShape));
-    egret3d.CylinderValueShape = CylinderValueShape;
+    egret3d.ConeValueShape = ConeValueShape;
     /**
     * @private
     * 线性分布
@@ -32187,15 +32257,10 @@ var egret3d;
                 this._positions = hemiShape;
             }
             else if (node.type == egret3d.ParticleDataShapeType.Cone) {
-                var coneShape = new egret3d.CylinderValueShape();
-                coneShape.radiusTop = node.coneRadiusTop;
-                coneShape.radiusBottom = node.coneRadiusBottom;
-                if (coneShape.coneType == egret3d.ParticleConeShapeType.BaseShell) {
-                    coneShape.height = 0;
-                }
-                else {
-                    coneShape.height = node.coneHeight;
-                }
+                var coneShape = new egret3d.ConeValueShape();
+                coneShape.angle = node.coneAngle;
+                coneShape.length = node.coneLength;
+                coneShape.radius = node.coneRadius;
                 coneShape.coneType = node.coneType;
                 this._positions = coneShape;
             }
@@ -32265,7 +32330,7 @@ var egret3d;
                         dir.copyFrom(recordPos);
                     }
                     else if (this._node.type == egret3d.ParticleDataShapeType.Cone) {
-                        dir = coneShape.getDirection(recordPos, dir);
+                        dir = coneShape.directions[i];
                     }
                     else if (this._node.type == egret3d.ParticleDataShapeType.Mesh) {
                         dir.copyFrom(meshNormalArray[i]);
@@ -34830,9 +34895,8 @@ var egret3d;
             this.shape.cubeD *= value;
             this.shape.sphereRadius *= value;
             this.shape.hemiSphereRadius *= value;
-            this.shape.coneHeight *= value;
-            this.shape.coneRadiusBottom *= value;
-            this.shape.coneRadiusTop *= value;
+            this.shape.coneLength *= value;
+            this.shape.coneRadius *= value;
             //
             this.geometry.planeW *= value;
             this.geometry.planeH *= value;
@@ -35040,10 +35104,10 @@ var egret3d;
             //半球
             this.hemiSphereRadius = 10;
             //圆筒状
-            this.coneHeight = 10;
-            this.coneRadiusBottom = 2;
-            this.coneRadiusTop = 4;
             this.coneType = ParticleConeShapeType.Volume;
+            this.coneLength = 10;
+            this.coneRadius = 10;
+            this.coneAngle = 30;
             //mesh类型发射器的类型
             this.meshType = ParticleMeshShapeType.Vertex;
         }
@@ -35845,17 +35909,17 @@ var egret3d;
             //cone
             var cone = this.getNode(node, "cone");
             this.eachAttr(cone, function (label, value) {
-                if (label == "coneHeight") {
-                    shape.coneHeight = Number(value);
-                }
-                else if (label == "coneRadiusBottom") {
-                    shape.coneRadiusBottom = Number(value);
-                }
-                else if (label == "coneRadiusTop") {
-                    shape.coneRadiusTop = Number(value);
-                }
-                else if (label == "type") {
+                if (label == "type") {
                     shape.coneType = egret3d.ParticleConeShapeType[value];
+                }
+                else if (label == "length") {
+                    shape.coneLength = Number(value);
+                }
+                else if (label == "radius") {
+                    shape.coneRadius = Number(value);
+                }
+                else if (label == "angle") {
+                    shape.coneAngle = Number(value);
                 }
             });
             //meshType
@@ -36990,6 +37054,12 @@ var egret3d;
             _super.call(this);
             this.smooth = true;
         }
+        /**
+        * @language zh_CN
+        * @private
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         MimapTexture.prototype.upload = function (context3D) {
             if (!this.texture2D) {
                 this.texture2D = context3D.creatTexture2D();
@@ -37006,6 +37076,12 @@ var egret3d;
                 }
             }
         };
+        /**
+        * @language zh_CN
+        * @private
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         MimapTexture.prototype.uploadForcing = function (context3D) {
             context3D.upLoadTextureData(0, this);
         };
@@ -37199,14 +37275,14 @@ var egret3d;
                 this.texture2D.mimapData = new Array();
                 this.texture2D.mimapData.push(new egret3d.MipmapData(this._pixelArray, this.width, this.height));
                 this.useMipmap = false;
-                this.texture2D.dataFormat = egret3d.Context3DProxy.gl.FLOAT;
+                this.texture2D.dataFormat = egret3d.Context3DProxy.gl.UNSIGNED_BYTE;
                 context3D.upLoadTextureData(0, this);
             }
         };
         CheckerboardTexture.prototype.buildCheckerboard = function () {
             if (!this._pixelArray) {
-                this._pixelArray = new Float32Array(this.width * this.height * 4);
-                var colors = [egret3d.Color.black(), egret3d.Color.white()];
+                this._pixelArray = new Uint8Array(this.width * this.height * 4);
+                var colors = [egret3d.Color.white(), egret3d.Color.black()];
                 var colorIndex = 0;
                 var blockSize = 4;
                 for (var y = 0; y < this.height; y++) {
@@ -37220,10 +37296,10 @@ var egret3d;
                             colors[1] = tmp;
                             colorIndex = 0;
                         }
-                        this._pixelArray[(y * (this.width * 4) + x * 4) + 0] = x * y / (32 * 32);
-                        this._pixelArray[(y * (this.width * 4) + x * 4) + 1] = x * y / (32 * 32);
-                        this._pixelArray[(y * (this.width * 4) + x * 4) + 2] = x * y / (32 * 32);
-                        this._pixelArray[(y * (this.width * 4) + x * 4) + 3] = x * y / (32 * 32);
+                        this._pixelArray[(y * (this.width * 4) + x * 4) + 0] = colors[colorIndex].r;
+                        this._pixelArray[(y * (this.width * 4) + x * 4) + 1] = colors[colorIndex].g;
+                        this._pixelArray[(y * (this.width * 4) + x * 4) + 2] = colors[colorIndex].b;
+                        this._pixelArray[(y * (this.width * 4) + x * 4) + 3] = colors[colorIndex].a;
                     }
                 }
             }
