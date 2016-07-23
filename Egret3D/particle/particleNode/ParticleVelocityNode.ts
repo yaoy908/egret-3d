@@ -11,7 +11,7 @@
     */
     export class ParticleVelocityNode extends AnimationNode {
 
-        private _velocityConstShape: ConstRandomValueShape;
+        private _constValue: ConstRandomValueShape;
         private attribute_velocity: GLSL.VarRegister;
 
         private _node: ParticleDataMoveSpeed;
@@ -40,9 +40,9 @@
         public initNode(data: ParticleDataNode): void {
             var node: ParticleDataMoveSpeed = this._node = <ParticleDataMoveSpeed>data;
             if (node.type == ParticleValueType.Const || node.type == ParticleValueType.RandomConst) {
-                this._velocityConstShape = new ConstRandomValueShape();
-                this._velocityConstShape.max = node.max;
-                this._velocityConstShape.min = node.min;
+                this._constValue = new ConstRandomValueShape();
+                this._constValue.max = node.max;
+                this._constValue.min = node.min;
             }
         }
         /**
@@ -59,7 +59,7 @@
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
 
-            var constList: Array<number> = this._velocityConstShape.calculate(count);
+            var constList: Array<number> = this._constValue.calculate(count);
             var directionVector: Vector3D[] = this._animationState.directionArray;
             var direction: Vector3D = new Vector3D();
 
@@ -104,6 +104,10 @@
 
                 }
             }
+
+            this._constValue.dispose();
+            this._constValue = null;
+
         }
     }
 } 

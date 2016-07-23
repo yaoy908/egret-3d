@@ -19,6 +19,8 @@
             new Error("asd");
             return null;
         }
+        public dispose(): void {
+        }
     }
         
     /**
@@ -211,6 +213,14 @@
         public origPoint: Vector3D;
         //用于记录这个点发出的粒子默认朝向
         public directions: Vector3D[];
+
+        public dispose(): void {
+            if (this.directions) {
+                this.directions.length = 0;
+            }
+            this.origPoint = null;
+            this.directions = null;
+        }
 
         public calculate(count: number): any {
             if (this.angle > 90) {

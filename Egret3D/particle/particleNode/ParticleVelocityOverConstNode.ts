@@ -11,7 +11,7 @@
     */
     export class ParticleVelocityOverConstNode extends AnimationNode {
 
-        private _velocityOverShape: Vec3ConstRandomValueShape;
+        private _overValue: Vec3ConstRandomValueShape;
         private attribute_velocityOver: GLSL.VarRegister;
         private particleAnimationState: ParticleAnimationState;
         constructor() {
@@ -37,14 +37,14 @@
         */
         public initNode(data: ParticleDataNode): void {
             var node: ParticleDataMoveSpeed = <ParticleDataMoveSpeed>data;
-            this._velocityOverShape = new Vec3ConstRandomValueShape();
-            this._velocityOverShape.maxX = node.velocityOver.max.x;
-            this._velocityOverShape.maxY = node.velocityOver.max.y;
-            this._velocityOverShape.maxZ = node.velocityOver.max.z;
+            this._overValue = new Vec3ConstRandomValueShape();
+            this._overValue.maxX = node.velocityOver.max.x;
+            this._overValue.maxY = node.velocityOver.max.y;
+            this._overValue.maxZ = node.velocityOver.max.z;
 
-            this._velocityOverShape.minX = node.velocityOver.min.x;
-            this._velocityOverShape.minY = node.velocityOver.min.y;
-            this._velocityOverShape.minZ = node.velocityOver.min.z;
+            this._overValue.minX = node.velocityOver.min.x;
+            this._overValue.minY = node.velocityOver.min.y;
+            this._overValue.minZ = node.velocityOver.min.z;
 
         }
         /**
@@ -61,7 +61,7 @@
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
 
-            var data: Array<Vector3D> = this._velocityOverShape.calculate(count);
+            var data: Array<Vector3D> = this._overValue.calculate(count);
             for (var i: number = 0; i < count; ++i) {
                 var over: Vector3D = data[i];
                
@@ -74,6 +74,13 @@
                     geometry.verticesData[index + 2] = over.z;
                 }
             }
+
+            this._overValue.dispose();
+            this._overValue = null;
+
+
         }
+
+
     }
 } 

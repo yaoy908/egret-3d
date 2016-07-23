@@ -109,14 +109,6 @@
 
 
         /**
-        * @private
-        * 计算用的矩阵
-        */
-        private rotationMat: Matrix4_4 = new Matrix4_4();
-
-
-        
-        /**
         * @language zh_CN
         * 填充顶点数据
         * @param geometry 网格数据
@@ -178,6 +170,8 @@
                 }
             }
 
+            this._positions.dispose();
+            this._positions = null;
         }
     }
 } 

@@ -104,6 +104,9 @@
                 }
             }
 
+            this._rotations.dispose();
+            this._rotations = null;
+
         }
     }
 } 

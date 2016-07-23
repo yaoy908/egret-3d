@@ -15,7 +15,7 @@
         * @private
         */
         private _node: ParticleDataMoveSpeed;
-        private _forceData: Vec3ConstRandomValueShape;
+        private _forceValue: Vec3ConstRandomValueShape;
         private attribute_accelerationSpeed: GLSL.VarRegister;
         constructor() {
             super();
@@ -40,14 +40,14 @@
         public initNode(data: ParticleDataNode): void {
             this._node = <ParticleDataMoveSpeed>data;
             var node: VelocityForceLifeTimeData = this._node.velocityForce;
-            this._forceData = new Vec3ConstRandomValueShape();
-            this._forceData.maxX = node.max.x;
-            this._forceData.maxY = node.max.y;
-            this._forceData.maxZ = node.max.z;
+            this._forceValue = new Vec3ConstRandomValueShape();
+            this._forceValue.maxX = node.max.x;
+            this._forceValue.maxY = node.max.y;
+            this._forceValue.maxZ = node.max.z;
 
-            this._forceData.minX = node.min.x;
-            this._forceData.minY = node.min.y;
-            this._forceData.minZ = node.min.z;
+            this._forceValue.minX = node.min.x;
+            this._forceValue.minY = node.min.y;
+            this._forceValue.minZ = node.min.z;
         }
 
 
@@ -63,7 +63,7 @@
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
 
-            var data: any[] = this._forceData.calculate(count);
+            var data: any[] = this._forceValue.calculate(count);
             for (var i: number = 0; i < count; ++i) {
                 var accSpeed: Vector3D = data[i] ; 
                 for (var j: number = 0; j < vertices; ++j) {
@@ -75,6 +75,11 @@
                     geometry.verticesData[index + 2] = accSpeed.z;
                 }
             }
+
+            this._forceValue.dispose();
+            this._forceValue = null;
         }
+
+
     }
 } 

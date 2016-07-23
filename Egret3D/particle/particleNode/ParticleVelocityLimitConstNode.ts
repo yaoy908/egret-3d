@@ -13,7 +13,7 @@
 
         private attribute_velocityLimit: GLSL.VarRegister;
         private _animationState: ParticleAnimationState;
-        private _velocityLimitShape: ConstRandomValueShape;
+        private _limitValue: ConstRandomValueShape;
 
         constructor() {
             super();
@@ -38,9 +38,9 @@
         */
         public initNode(data: ParticleDataNode): void {
             var node: ParticleDataMoveSpeed = <ParticleDataMoveSpeed>data;
-            this._velocityLimitShape = new ConstRandomValueShape();
-            this._velocityLimitShape.max = node.velocityLimit.max;
-            this._velocityLimitShape.min = node.velocityLimit.min;
+            this._limitValue = new ConstRandomValueShape();
+            this._limitValue.max = node.velocityLimit.max;
+            this._limitValue.min = node.velocityLimit.min;
 
 
         }
@@ -58,7 +58,7 @@
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
 
-            var data: Array<number> = this._velocityLimitShape.calculate(count);
+            var data: Array<number> = this._limitValue.calculate(count);
             for (var i: number = 0; i < count; ++i) {
                 var limit: number = data[i];
                
@@ -68,6 +68,11 @@
                     geometry.verticesData[index + 0] = limit;
                 }
             }
+
+            this._limitValue.dispose();
+            this._limitValue = null;
         }
+
+
     }
 } 

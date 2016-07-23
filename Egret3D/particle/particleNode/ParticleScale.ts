@@ -6,7 +6,7 @@
     */
     export class ParticleScale extends AnimationNode {
       
-        private _scale: ConstRandomValueShape;
+        private _scaleValue: ConstRandomValueShape;
         private _animationState: ParticleAnimationState;
         private _node: ParticleDataScaleBirth;
         constructor() {
@@ -25,9 +25,9 @@
         public initNode(data: ParticleDataNode): void {
             var node: ParticleDataScaleBirth = this._node = <ParticleDataScaleBirth>data;
 
-            this._scale = new ConstRandomValueShape();
-            this._scale.max = node.max;
-            this._scale.min = node.min;
+            this._scaleValue = new ConstRandomValueShape();
+            this._scaleValue.max = node.max;
+            this._scaleValue.min = node.min;
 
         }
 
@@ -43,7 +43,7 @@
         public build(geometry: Geometry, count: number) {
 
             this._animationState = <ParticleAnimationState>this.state;
-            var scaleArray: number[] = this._scale.calculate(count);
+            var scaleArray: number[] = this._scaleValue.calculate(count);
             var vertices: number = geometry.vertexCount / count;
             var index: number = 0;
 
@@ -81,6 +81,9 @@
 
                 }
             }
+
+            this._scaleValue.dispose();
+            this._scaleValue = null;
 
         }
     }

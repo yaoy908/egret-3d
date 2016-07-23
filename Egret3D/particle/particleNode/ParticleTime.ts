@@ -9,7 +9,7 @@
         /**
         * 所有单位粒子的生命周期
         */
-        private _life: ValueShape;
+        private _lifeValue: ValueShape;
         private attribute_time: GLSL.VarRegister;
         private _animationState: ParticleAnimationState;
 
@@ -50,7 +50,7 @@
             var lifeValue: ConstRandomValueShape = new ConstRandomValueShape();
             lifeValue.max = node.max;
             lifeValue.min = node.min;
-            this._life = lifeValue;
+            this._lifeValue = lifeValue;
 
            }
 
@@ -68,7 +68,7 @@
             this._animationState = <ParticleAnimationState>this.state;
             var emission: ParticleDataEmission = this._animationState.emitter.data.emission;
 
-            var lifeArray: Array<number> = this._life.calculate(count);
+            var lifeArray: Array<number> = this._lifeValue.calculate(count);
             
             var bornTimeArray: Array<number>;
             if (emission.type == ParticleValueType.Const) {
@@ -132,6 +132,9 @@
             //最后一个面片消失的时间
             this._animationState.circleTime = this._animationState.emitter.data.life.delay + lifeTime + bornTime;
 
+
+            this._lifeValue.dispose();
+            this._lifeValue = null;
         }
 
         /**
