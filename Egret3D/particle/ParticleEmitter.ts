@@ -519,6 +519,32 @@
 
 
 
+        /**
+        * @language zh_CN
+        * 克隆一个模型
+        * @returns 克隆后的粒子
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public clone(): ParticleEmitter {
+            var newParticle: ParticleEmitter = new ParticleEmitter(this.data, this.material);
+            var phaseList: number[] = [ParticleDataSubEmitterPhase.BIRTH, ParticleDataSubEmitterPhase.COLLISION, ParticleDataSubEmitterPhase.DEATH];
+            if (this._subEmitterNode) {
+                for (var j: number = 0; j < phaseList.length; j++)
+                {
+                    var phase: number = phaseList[j];
+                    var emitters: ParticleEmitter[] = this._subEmitterNode.getSubEmitters(phase);
+                    if (emitters && emitters.length > 0) {
+                        for (var i: number = 0; i < emitters.length; i++) {
+                            newParticle.addSubEmitter(phase, emitters[i]);
+                        }
+                    }
+
+                }
+            }
+
+            return newParticle;
+        }
 
 
 
