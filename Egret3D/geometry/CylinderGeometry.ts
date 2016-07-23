@@ -26,7 +26,7 @@
         public get height(): number {
             return this._height;
         }
-        
+
         private _radius: number;
         /**
         * @language zh_CN
@@ -71,7 +71,7 @@
             var rDeltaSegAngle: number = (2.0 * Math.PI / m_nSegments);
             var rSegmentLength: number = 1.0 / m_nSegments;
 
-            for (nCurrentSegment = 0; nCurrentSegment <= m_nSegments; nCurrentSegment++) {
+            for (nCurrentSegment = 0; nCurrentSegment < m_nSegments; nCurrentSegment++) {
                 var x0: number = this._radius * Math.sin(nCurrentSegment * rDeltaSegAngle);
 
                 var z0: number = this._radius * Math.cos(nCurrentSegment * rDeltaSegAngle);
@@ -84,12 +84,11 @@
 
             var len_base = this.verticesData.length / 17;
 
-            var topCenter = this.verticesData.length;
-            this.verticesData.push(0.0, 0.0 + (this._height / 2.0), 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
-
-            var buttomCenter = this.verticesData.length;
+            var topCenter = len_base;
             this.verticesData.push(0.0, 0.0 - (this._height / 2.0), 0.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
 
+            var buttomCenter = len_base + 1;
+            this.verticesData.push(0.0, 0.0 + (this._height / 2.0), 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1, 1, 1, 1, 1.0, 0.0, 0, 0);
 
 
             for (var i = 0; i < len_base; i++) {
