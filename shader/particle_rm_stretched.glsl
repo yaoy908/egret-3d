@@ -28,6 +28,7 @@ float updateStretchedBillBoard(vec4 startPos, vec4 newPos){
 	if(scaleBefore < Tiny){
 		return 0.0;
 	}
+	dirVector = newPos.xyz - startPos.xyz; 
 	float scaleAfter = dirVector.x * dirVector.x + dirVector.y * dirVector.y; 
 	scaleAfter = sqrt(scaleAfter); 
 	scaleAfter = scaleAfter / scaleBefore; 

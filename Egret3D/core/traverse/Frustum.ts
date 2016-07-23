@@ -219,7 +219,12 @@
             }
             return true;
         }
-                        
+
+
+        /**
+        * @private
+        **/
+        private _tempVector: Vector3D = new Vector3D();
         /**
         * @language zh_CN
         * 检测一个盒子是否在视椎体内
@@ -229,16 +234,15 @@
         * @platform Web,Native
         */
         public inBox(box: BoundBox): boolean {
-            var v: Array<Vector3D> = new Array<Vector3D>();
             var dis: number = 0;
-
-            var temp: Vector3D = new Vector3D();
-            for (var i: number = 0; i < this._plane.length; ++i) {
+            var planeCount: number = this._plane.length;
+            for (var i: number = 0; i < planeCount; ++i) {
                 var incount: number = box.vexData.length / 3;
-                for (var j: number = 0; j < box.vexData.length; j += 3) {
-                    temp.setTo(box.vexData[j], box.vexData[j + 1], box.vexData[j + 2]);
-                    temp.copyFrom(box.transform.transformVector(temp));
-                    dis = this._plane[i].distance(temp);
+                var vexDataLength: number = box.vexData.length;
+                for (var j: number = 0; j < vexDataLength; j += 3) {
+                    this._tempVector.setTo(box.vexData[j], box.vexData[j + 1], box.vexData[j + 2]);
+                    this._tempVector.copyFrom(box.transform.transformVector(this._tempVector));
+                    dis = this._plane[i].distance(this._tempVector);
                     if (dis > 0) {
                         incount--;
                     }

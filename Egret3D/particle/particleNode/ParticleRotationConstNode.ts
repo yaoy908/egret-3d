@@ -61,6 +61,8 @@
                 }
             }
 
+            this._rotation = null;
+
         }
     }
 } 

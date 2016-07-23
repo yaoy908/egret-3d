@@ -56,7 +56,7 @@
                 this.texture2D.mimapData = new Array<MipmapData>();
                 this.texture2D.mimapData.push(new MipmapData(this._pixelArray, this.width, this.height));
                 this.useMipmap = false;
-                this.texture2D.dataFormat = Context3DProxy.gl.FLOAT ;
+                this.texture2D.dataFormat = Context3DProxy.gl.UNSIGNED_BYTE ;
                 context3D.upLoadTextureData(0, this );
             }
         }
@@ -64,9 +64,9 @@
         private buildCheckerboard(): void {
             if (!this._pixelArray) {
 
-                this._pixelArray = new Float32Array(this.width * this.height * 4);
+                this._pixelArray = new Uint8Array(this.width * this.height * 4);
 
-                var colors: Color[] = [Color.black(), Color.white()];
+                var colors: egret3d.Color[] = [egret3d.Color.white(), egret3d.Color.black()];
 
                 var colorIndex = 0;
 
@@ -80,16 +80,16 @@
                         }
 
                         if ((y % blockSize) == 0 && x == 0) {
-                            var tmp: Color = colors[0];
+                            var tmp: egret3d.Color = colors[0];
                             colors[0] = colors[1];
                             colors[1] = tmp;
                             colorIndex = 0;
                         }
 
-                        this._pixelArray[(y * (this.width * 4) + x * 4) + 0] = x * y / (32*32) ;
-                        this._pixelArray[(y * (this.width * 4) + x * 4) + 1] = x * y / (32*32) ;
-                        this._pixelArray[(y * (this.width * 4) + x * 4) + 2] = x * y / (32*32) ;
-                        this._pixelArray[(y * (this.width * 4) + x * 4) + 3] = x * y / (32*32) ;
+                        this._pixelArray[(y * (this.width * 4) + x * 4) + 0] = colors[colorIndex].r;
+                        this._pixelArray[(y * (this.width * 4) + x * 4) + 1] = colors[colorIndex].g;
+                        this._pixelArray[(y * (this.width * 4) + x * 4) + 2] = colors[colorIndex].b;
+                        this._pixelArray[(y * (this.width * 4) + x * 4) + 3] = colors[colorIndex].a;
                     }
                 }
             }

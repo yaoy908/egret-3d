@@ -1,5 +1,8 @@
 ﻿module egret3d {
 
+    /**
+     * @private
+     */
     class FPSInfo{
         private static fps: number = 16.6666 ; //ms 
         private averageFPS: number = 0;

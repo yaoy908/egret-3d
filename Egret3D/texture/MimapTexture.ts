@@ -44,7 +44,12 @@
             this.smooth = true;
         }
 
-
+        /**
+        * @language zh_CN
+        * @private
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public upload(context3D: Context3DProxy) {
             if (!this.texture2D) {
                 this.texture2D = context3D.creatTexture2D();
@@ -63,6 +68,12 @@
             }
         }
 
+        /**
+        * @language zh_CN
+        * @private
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
         public uploadForcing(context3D: Context3DProxy) {
             context3D.upLoadTextureData(0, this);
         }

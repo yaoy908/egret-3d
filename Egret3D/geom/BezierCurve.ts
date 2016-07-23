@@ -67,25 +67,6 @@
             p0 = this.mix(p0, p1, t);
             return p0;
 
-            //var progress: number = 1.0 - t;
-            //var progress2: number = progress * progress;
-            //var progress3: number = progress2 * progress;
-            //var t2: number = t * t;
-            //var t3: number = t2 * t;
-           
-            //var res: number = p0 * progress3 + 3.0 * p1 * t * progress2 + 3.0 * p2 * t2 * progress + p3 * t3;
-            //return res;
-        }
-
-        private cubic_bezier2(p0: number, p1: number, p2: number, p3: number, t: number): number {
-            var progress: number = 1.0 - t;
-            var progress2: number = progress * progress;
-            var progress3: number = progress2 * progress;
-            var t2: number = t * t;
-            var t3: number = t2 * t;
-
-            var res: number = p0 * progress3 + 3.0 * p1 * t * progress2 + 3.0 * p2 * t2 * progress + p3 * t3;
-            return res;
         }
 
         private mix(num0:number, num1:number, t:number): number {
@@ -118,17 +99,6 @@
             return value;
         }
 
-        public merge(): Float32Array {
-            var res: Float32Array = new Float32Array(BezierData.SegCount * 4 * 2);
-            for (var i: number = 0, count: number = BezierData.SegCount * 2; i < count; i++) {
-                res[i * 4 + 0] = this.posPoints[i].x;
-                res[i * 4 + 1] = this.posPoints[i].y;
-                res[i * 4 + 2] = this.ctrlPoints[i].x;
-                res[i * 4 + 3] = this.ctrlPoints[i].y;
-            }
-
-            return res;
-        }
 
         public scaleBy(value: number): void {
             if (this.posPoints.length == 0)
@@ -145,16 +115,6 @@
             }
         }
 
-        //public compress(): Float32Array {
-        //    var floats: Array<number> = [];
-        //    for (var i: number = 0, count: number = this.posPoints.length; i < count; i++) {
-        //        floats.push(this.posPoints[i].x, this.posPoints[i].y);
-        //        floats.push(this.ctrlPoints[i].x, this.ctrlPoints[i].y);
-        //    }
-        //    var res: Float32Array = BezierData.compressFloats(floats);
-        //    return res;
-        //}
-
         public trySampler(): Float32Array {
             for (var i: number = 0, count: number = this.posPoints.length; i < count; i++) {
                 if (this.posPoints[i].y != 0 || this.ctrlPoints[i].y != 0) {
@@ -165,33 +125,8 @@
         }
 
         public sampler(): Float32Array {
-            //if (ignore0) {
-            //    var value: number = this.posPoints[0].y;
-
-            //    for (var i: number = 0, count: number = this.posPoints.length; i < count; i++) {
-            //        if (this.posPoints[i].y != value || this.ctrlPoints[i].y != value) {
-            //            return this.doSampler();
-            //        }
-            //    }
-            //    return null;
-
-            //}
             return this.doSampler();
-            
         }
-
-        private pushSameValue(value: number): Float32Array {
-            const SegmentCount: number = 9 + 1;
-            var res: Float32Array = new Float32Array(SegmentCount * BezierData.SegCount + 2 + 1);//10 + 10 + 2 + 1
-            for (var i: number = 0, count: number = BezierData.SegCount * BezierData.SegCount + 2; i < count; i++) {
-                res[i] = value;
-            }
-            //true
-            res[count + 2] = 1;
-            return res;
-        }
-
-
 
         private doSampler(): Float32Array {
             var floats: Array<number> = [];
@@ -223,36 +158,8 @@
             for (var j: number = 0, count = times.length; j < count; i++ , j++) {
                 res[i] = times[j];
             }
-            //false
-            //res[i] = 0;
             return res;
         }
-
-        //public compress(): Float32Array {
-
-
-        //    var floats: Array<number> = [];
-        //    var times: Array<number> = [];
-
-        //    var segmentTime: number;
-        //    var segmentStartTime: number = 0;
-        //    var segmentEndTime: number = 0;
-        //    //每段有10个数据，将该段曲线分为9小段
-        //    const SegmentCount: number = 9;
-        //    for (var i: number = 0, count: number = BezierData.SegCount; i < count; i++) {
-        //        floats.push(this.posPoints[i * 2].y);//第一个数字
-        //        segmentStartTime = this.posPoints[i * 2].x;
-        //        segmentEndTime = this.posPoints[i * 2 + 1].x;
-        //        segmentTime = segmentEndTime - segmentStartTime;//该段的时间
-        //        times.push(segmentTime);
-        //        for (var j: number = 1; j < SegmentCount; j++) {
-        //            floats.push(this.calc(segmentStartTime + segmentTime * j / SegmentCount));
-        //        }
-        //        floats.push(this.posPoints[i * 2 + 1].y);//第10个数字
-        //    }
-        //    var res: Float32Array = BezierData.compressFloats(floats, times);
-        //    return res;
-        //}
 
         public validate(): void {
             if (this.posPoints == null) {
@@ -270,6 +177,9 @@
                 this.ctrlPoints.push(new Point(0, 0));
                 this.ctrlPoints.push(new Point(1, 0));
             }
+
+            this.ctrlPoints.length = BezierData.SegCount * 2;
+            this.posPoints.length = BezierData.SegCount * 2;
         }
 
         //___________压缩数据

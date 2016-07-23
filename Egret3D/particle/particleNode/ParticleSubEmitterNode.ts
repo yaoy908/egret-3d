@@ -69,6 +69,27 @@
             }
         }
 
+
+        /**
+        * @language zh_CN
+        * 获取子粒子
+        * @param phase 某个阶段的子粒子
+        * @return ParticleEmitter列表
+        * @version Egret 3.0
+        * @platform Web,Native
+        */
+        public getSubEmitters(phase: number): ParticleEmitter[] {
+            if (phase == ParticleDataSubEmitterPhase.BIRTH) {
+                return this._birthPhase.playing.getKeys();
+            } else if (phase == ParticleDataSubEmitterPhase.COLLISION) {
+                return this._collisionPhase.playing.getKeys();
+            } else if (phase == ParticleDataSubEmitterPhase.DEATH) {
+                return this._deathPhase.playing.getKeys();
+            }
+            return null;
+        }
+
+
         /**
         * @language zh_CN
         * 填充顶点数据
